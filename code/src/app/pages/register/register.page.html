@@ -1,0 +1,127 @@
+<!-- <ion-header no-border>
+    <ion-toolbar>
+        <ion-title></ion-title>
+    </ion-toolbar>
+</ion-header> -->
+
+<ion-content padding>
+    <ion-grid class="grid-container-center">
+        <ion-row class="main-row-center">
+            <ion-grid>
+                <ion-row justify-content-center>
+                    <ion-col size="6">
+                        <ion-button (click)="registrarUsuarioGoogle()" color="google" expand="block">
+                            <ion-icon slot="start" name="logo-google"></ion-icon>
+                            Google
+                        </ion-button>
+                    </ion-col>
+                    <ion-col size="6">
+                        <ion-button (click)="registrarUsuarioFacebook()" color="facebook" expand="full">
+                            <ion-icon slot="start" name="logo-facebook"></ion-icon>
+                            Facebook
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+                <ion-row justify-content-center style="margin-top: 2rem;">
+                    <ion-col size="12">
+                        <form [formGroup]="registerForm">
+                            <ion-item>
+                                <ion-label position="floating">Nombres</ion-label>
+                                <ion-input type="text" formControlName="firstname"></ion-input>
+                            </ion-item>
+                            <div class="form-errors">
+                                <p class="form-error"
+                                    *ngIf="registerForm.get('firstname').hasError('required') && registerForm.get('firstname').touched">
+                                    {{errorMessages.firstname.required.message}}
+                                </p>
+                                <p class="form-error"
+                                    *ngIf="registerForm.get('firstname').hasError('minlength') && registerForm.get('firstname').touched">
+                                    {{errorMessages.firstname.minlength.message}}
+                                </p>
+                                <p class="form-error"
+                                    *ngIf="registerForm.get('firstname').hasError('maxlength') && registerForm.get('firstname').touched">
+                                    {{errorMessages.firstname.maxlength.message}}
+                                </p>
+                            </div>
+                            <ion-item>
+                                <ion-label position="floating">Apellidos</ion-label>
+                                <ion-input type="text" formControlName="lastname"></ion-input>
+                            </ion-item>
+                            <div class="form-errors">
+                                <p class="form-error"
+                                    *ngIf="registerForm.get('lastname').hasError('required') && registerForm.get('lastname').touched">
+                                    {{errorMessages.lastname.required.message}}
+                                </p>
+                                <p class="form-error"
+                                    *ngIf="registerForm.get('lastname').hasError('minlength') && registerForm.get('lastname').touched">
+                                    {{errorMessages.lastname.minlength.message}}
+                                </p>
+                                <p class="form-error"
+                                    *ngIf="registerForm.get('lastname').hasError('maxlength') && registerForm.get('lastname').touched">
+                                    {{errorMessages.lastname.maxlength.message}}
+                                </p>
+                            </div>
+                            <ion-item>
+                                <ion-label position="floating">Email</ion-label>
+                                <ion-input type="email" formControlName="email"></ion-input>
+                            </ion-item>
+                            <div class="form-errors">
+                                <p class="form-error"
+                                    *ngIf="registerForm.get('email').hasError('required') && registerForm.get('email').touched">
+                                    {{errorMessages.email.required.message}}
+                                </p>
+                                <p class="form-error"
+                                    *ngIf="registerForm.get('email').hasError('minlength') && registerForm.get('email').touched">
+                                    {{errorMessages.email.minlength.message}}
+                                </p>
+                                <p class="form-error"
+                                    *ngIf="registerForm.get('email').hasError('maxlength') && registerForm.get('email').touched">
+                                    {{errorMessages.email.maxlength.message}}
+                                </p>
+                                <p class="form-error"
+                                    *ngIf="registerForm.get('email').hasError('maxlength') && registerForm.get('email').touched">
+                                    {{errorMessages.email.email.message}}
+                                </p>
+                            </div>
+                            <ion-item>
+                                <ion-label position="floating">Contraseña</ion-label>
+                                <ion-input type="password" formControlName="password"></ion-input>
+                            </ion-item>
+                            <div class="form-errors">
+                                <p class="form-error"
+                                    *ngIf="registerForm.get('password').hasError('required') && registerForm.get('password').touched">
+                                    {{errorMessages.password.required.message}}
+                                </p>
+                                <p class="form-error"
+                                    *ngIf="registerForm.get('password').hasError('minlength') && registerForm.get('password').touched">
+                                    {{errorMessages.password.minlength.message}}
+                                </p>
+                                <p class="form-error"
+                                    *ngIf="registerForm.get('password').hasError('maxlength') && registerForm.get('password').touched">
+                                    {{errorMessages.password.maxlength.message}}
+                                </p>
+                                <p class="form-error"
+                                    *ngIf="registerForm.get('password').hasError('maxlength') && registerForm.get('password').touched">
+                                    {{errorMessages.password.pattern.message}}
+                                </p>
+                            </div>
+                            <div padding>
+                                <ion-button (click)="registrarUsuario()" [disabled]="!registerForm.valid"
+                                    color="primary" type="submit" expand="block">
+                                    Registrarme</ion-button>
+                            </div>
+                        </form>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>
+                        <div class="flex-center-all dont-have-account">
+                            <span>Ya tienes una cuenta?</span> <a color="primary" routerLink="/login">Iniciar Sesión</a>
+                        </div>
+                        <ion-button expand="full" routerLink="/home" routerDirection="root">Landing</ion-button>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-row>
+    </ion-grid>
+</ion-content>

@@ -1,0 +1,69 @@
+[
+    {
+        "icon": "paper",
+        "name": "Publicaciones",
+        "redirectTo": "",
+        "routeDirection": "root",
+        "children": [
+            {
+            "icon": "paper",
+            "name": "Problemas Sociales",
+            "redirectTo": "/social-problems",
+            "routeDirection": "root"
+            },
+            {
+                "icon": "paper",
+                "name": "Eventos",
+                "redirectTo": "/events",
+                "routeDirection": "root"
+                }
+        ]
+    },
+    {
+        "icon": "pint",
+        "name": "Servicios",
+        "redirectTo": "/public-services",
+        "routeDirection": "root",
+        "children": [
+            {
+                "icon": "pint",
+                "name": "Servicios Públicos",
+                "redirectTo": "/public-services",
+                "routeDirection": "root"
+            },
+            {
+                "icon": "people",
+                "name": "Directorio Barrial",
+                "redirectTo": "/directory-info",
+                "routeDirection": "root"
+            }
+        ]
+    },
+    {
+        "icon": "create",
+        "name": "Crear",
+        "redirectTo": "",
+        "routeDirection": "root",
+        "children": [
+           {
+            "icon": "create",
+            "name": "Emergencia",
+            "redirectTo": "/emergency-create",
+            "routeDirection": "root"
+           },
+           {
+            "icon": "create",
+            "name": "Problema Social",
+            "redirectTo": "/social-problem-create",
+            "routeDirection": "root"
+           }
+        ]
+    },
+    {
+        "icon": "person",
+        "name": "Mi Perfil",
+        "redirectTo": "/user-profile",
+        "routeDirection": "root",
+        "children": []
+    }
+]

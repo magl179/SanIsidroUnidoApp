@@ -1,0 +1,28 @@
+<app-header title="Eventos"></app-header>
+
+<ion-content>
+    <ion-card *ngFor="let post of elements; let i = index;">
+        <ion-card-header>
+            <ion-card-subtitle>2018-05-09 15:00:25</ion-card-subtitle>
+            <ion-card-title (click)="postDetail(i+1)">Event # {{i+1}}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+            industry's standard dummy text ever since the 1500s.
+        </ion-card-content>
+        <ion-row>
+            <ion-col>
+                <ion-item lines="none" button="true" class="container_events" [ngClass]="{'active': (i % 2) === 0}">
+                    <ion-icon slot="start" name="star"></ion-icon>
+                    <div>Asistire</div>
+                </ion-item>
+            </ion-col>
+            <ion-col>
+                <ion-item class="container_events" button="true" lines="none" [ngClass]="{'active': (i % 2) !== 0}">
+                    <ion-icon slot="start" name="star-outline"></ion-icon>
+                    <div>No Asistire</div>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+    </ion-card>
+</ion-content>

@@ -1,0 +1,65 @@
+<app-header title="Reportar Problema Social"></app-header>
+
+<ion-content padding>
+    <app-stepbar [progressSteps]="socialProblemFormStage" [currentStep]="currentStep"
+        (retornarCurrentStep)="updateCurrentStep($event)"></app-stepbar>
+    <section *ngIf="currentStep === 1
+    ">
+        <form>
+            <ion-item>
+                <ion-label position="floating">Titulo</ion-label>
+                <ion-input type="email"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label position="floating">Descripcion</ion-label>
+                <ion-textarea auto-grow="true"></ion-textarea>
+            </ion-item>
+            <div padding>
+                <ion-button color="primary" type="submit" expand="block" (click)="validarFase1()">Siguiente
+                </ion-button>
+            </div>
+        </form>
+    </section>
+    <section *ngIf="currentStep === 2
+    ">
+        <p class="ion-text-center">Si deseas agregar una o dos fotos, hazlo ahora</p>
+        <app-upload-image [maxImages]="2"></app-upload-image>
+        <div padding>
+            <ion-button color="primary" type="submit" expand="block" (click)="validarFase2()">Siguiente
+            </ion-button>
+        </div>
+    </section>
+    <section *ngIf="currentStep === 3
+    ">
+        <p class="ion-text-center">Escoge la ubicación donde se genero la emergencia</p>
+        <single-map idMapa="socialProblemReportMap" [zoomMap]="14" [enableGesture]="false" [puntoMapa]="postCoordinate"
+            (retornarCoordenadasEscogidas)="actualizarCoordenasMapa($event)"></single-map>
+        <p>Latitud PAGE EC: Market {{postCoordinate.latitude}}</p>
+        <p>Longitud PAGE EC: Market {{postCoordinate.longitude}}</p>
+        <p *ngIf="postCoordinate.address">Tu Dirección es: {{postCoordinate.address}}</p>
+        <div>
+            <ion-button color="primary" expand="full" type="submit" (click)="validarFase3()">Siguiente
+            </ion-button>
+        </div>
+    </section>
+    <section *ngIf="currentStep === 4
+    ">
+        <h2>Alerta de Ladrones</h2>
+        <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration
+            in some form, by injected humour, or randomised words which don't look even slightly believable. If you
+            are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden
+            in the middle of text.</p>
+        <p *ngIf="postCoordinate.address">Dirección de la Emergencia</p>
+        <p *ngIf="postCoordinate.address">{{postCoordinate.address}}</p>
+        <p *ngIf="!postCoordinate.address">Por favor escoge una ubicación</p>
+        <div class="section-img-thumb" *ngIf="socialProblemImages.length > 0">
+            <ion-thumbnail *ngFor="let image of socialProblemImages">
+                <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+            </ion-thumbnail>
+        </div>
+        <p *ngIf="socialProblemImages.length === 0">No hay imagenes en este post</p>
+        <div>
+            <ion-button [disabled]="!fullFormIsValid" expand="full">Reportar</ion-button>
+        </div>
+    </section>
+</ion-content>

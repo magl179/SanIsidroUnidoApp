@@ -1,0 +1,28 @@
+<app-header-back title="Evento" hrefDefault="/events"></app-header-back>
+
+<ion-content padding>
+    <ion-card class="detail-card">
+        <ion-card-header>
+            <ion-card-subtitle>2018-05-09 15:00:25</ion-card-subtitle>
+            <ion-card-title>Event # {{id}}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+        </ion-card-content>
+        <simple-map  claseMapa="map-events" idMapa="eventMap-detail-{{id}}" [coordsMap]="mapPoints" [enableGesture]="false"></simple-map>
+            <ion-row>
+                    <ion-col>
+                            <ion-item button="true" lines="none" class="container_events detail" [ngClass]="{'active': (i % 2) === 0}">
+                                <ion-icon slot="start" name="star" (click)="test()"></ion-icon>
+                                <div>Asistire</div>
+                            </ion-item>
+                        </ion-col>
+                        <ion-col>
+                                <ion-item class="container_events detail" button="true" lines="none" [ngClass]="{'active': (i % 2) !== 0}">
+                                    <ion-icon slot="start" name="star-outline"></ion-icon>
+                                    <div>No Asistire</div>
+                                </ion-item>
+                            </ion-col>
+                </ion-row>
+    </ion-card>
+</ion-content>

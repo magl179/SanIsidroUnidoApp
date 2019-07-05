@@ -1,0 +1,359 @@
+// http://ionicframework.com/docs/theming/
+@import '~@ionic/angular/css/core.css';
+@import '~@ionic/angular/css/normalize.css';
+@import '~@ionic/angular/css/structure.css';
+@import '~@ionic/angular/css/typography.css';
+@import '~@ionic/angular/css/display.css';
+@import '~@ionic/angular/css/padding.css';
+@import '~@ionic/angular/css/float-elements.css';
+@import '~@ionic/angular/css/text-alignment.css';
+@import '~@ionic/angular/css/text-transformation.css';
+@import '~@ionic/angular/css/flex-utils.css';
+
+.relative {
+    position: relative !important;
+}
+
+.flex-center-all {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu_content_app {
+    .menu_top_img {
+        margin-bottom: 1.5rem;
+        width: 100%;
+        height: 200px;
+    }
+}
+
+.item-sm {
+    --color: #424242;
+    padding-top: .4rem;
+    padding-bottom: .4rem;
+    font-weight: bold;
+}
+
+.item-sm ion-icon {
+    color: #424242;
+}
+
+.sub-item {
+    --color: #424242;
+    --background: #fff;
+    padding-left: 12px;
+    font-weight: normal !important;
+    font-size: smaller;
+}
+
+.item-sm.dark {
+    --color: #fff;
+    --background: #222222;
+}
+
+.grid-container-center {
+    height: 100% !important;
+}
+
+.main-row-center {
+    height: 100% !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.list-no-padding {
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+}
+
+
+// ESTILOS MAPA
+#mapId {
+    height: calc(90% - 44px);
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    box-shadow: 5px 5px 5px #888;
+    text-align: center;
+}
+
+#mapId::after {
+    font-family: 'Lato', sans-serif;
+    font-size: 24px;
+    font-weight: 300;
+}
+
+#mapId.swiping::after {
+    content: 'Para mover el mapa utiliza dos dedos';
+    color: #fff;
+    text-align: center;
+    font-family: 'Lato', sans-serif;
+    font-size: 24px;
+    font-weight: 300;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    position: absolute;
+    opacity: 1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(60, 50, 50, 0.5);
+    z-index: 9999;
+    pointer-events: none;
+}
+
+// Botones Alerta Confirmacion
+.alertButtons {
+    button.alert-button.cancel_button {
+        color: #aaa;
+    }
+
+    button.alert-button.confirm_button {
+        font-weight: bold;
+        color: #187ff5;
+    }
+}
+
+// Pagina Perfil Usuario
+.img-profile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+
+    img {
+        width: 50%;
+        border-radius: 50%;
+    }
+}
+
+.profile-options {
+    ion-button {
+        margin-top: 1.8rem;
+        margin-bottom: 1.8rem;
+    }
+}
+
+/* PAGINA FORMULARIO REPORTAR EMERGENCIA*/
+
+#emergencyReportMap {
+    display: block;
+    height: 200px;
+    width: 100%;
+}
+
+.section-img-thumb {
+    display: flex;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    justify-content: space-around;
+    align-items: center;
+
+    ion-thumbnail {
+        --size: 5rem;
+    }
+
+    img {
+        display: inline-block;
+    }
+}
+
+// Componente Subida Imagenes
+
+.section-buttons-load-image {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    .container_btn_camera,
+    .container_btn_gallery {
+        height: 5rem;
+        width: 5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: .9rem;
+
+        svg {
+            fill: currentColor;
+        }
+
+        p {
+            margin: 0;
+            margin-top: 5px;
+        }
+    }
+
+    .container_btn_camera {
+        background: #db4c3f;
+
+        svg.camera {
+            height: 30px;
+            width: 32px;
+        }
+    }
+
+    .container_btn_gallery {
+        background: #3880ff;
+
+        svg.gallery {
+            height: 25px;
+            width: 28px;
+        }
+    }
+
+    .camera-upload-container,
+    .gallery-upload-container {
+        height: 5rem;
+        width: 5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: .9rem;
+
+        svg {
+            fill: currentColor;
+        }
+
+        p {
+            margin: 0;
+            margin-top: 5px;
+        }
+    }
+}
+    // Pagina Problemas Sociales y Eventos Detail
+
+    .detail-card {
+        border: none;
+        box-shadow: none;
+
+        img {
+            max-height: 300px;
+        }
+
+        ion-card-header,
+        ion-card-content {
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+    }
+
+    // Pagina Problemas Sociales
+    .container_likes {
+        color: #616770;
+        transition: all .3s;
+
+        ion-button {
+            font-size: 1.1rem
+        }
+
+        ion-icon {
+            margin-right: 10px;
+            color: currentColor;
+        }
+
+        &.active {
+            color: #3880ff;
+        }
+
+        &.detail {
+            --padding-start: 0px;
+        }
+    }
+
+    #socialProblemReportMap {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+        height: 200px;
+    }
+
+    // Pagina Eventos
+    .container_events {
+        color: #616770;
+
+        ion-icon {
+            margin-right: 10px;
+            color: currentColor;
+        }
+
+        &.active {
+            color: #3880ff;
+        }
+
+        &.detail {
+            --padding-start: 0px;
+        }
+    }
+
+    .map-events {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+        height: 200px;
+    }
+
+    // Public Services
+
+    #public-services {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+
+// Formularios
+.form-errors{
+    p{
+        margin-left: 1rem;
+        color: #f04141;
+        font-size: .9rem;
+    }
+}
+
+.btn_eye_icon{
+    position: absolute;
+    right: 0; 
+    bottom: 2px; 
+    background: transparent;
+
+    ion-icon{
+        font-size: 24px;
+        color:#757575;
+    }
+}
+.btn_eye_icon:focus{
+    outline: none !important;
+}
+
+
+    // Helpers
+    .flex {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .column-flex {
+        flex-direction: column;
+    }
+
+    hr.gray {
+        background: #c8c7cc;
+    }
+
+    .mt-2r {
+        margin-top: 2rem;
+    }

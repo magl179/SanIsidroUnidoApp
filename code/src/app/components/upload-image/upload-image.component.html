@@ -1,0 +1,41 @@
+<div class="section-img-thumb" *ngIf="imagenesSubidas.length > 0">
+    <ion-thumbnail>
+        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+    </ion-thumbnail>
+    <ion-thumbnail>
+        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+    </ion-thumbnail>
+    <ion-thumbnail>
+        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+    </ion-thumbnail>
+    <ion-thumbnail>
+        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+    </ion-thumbnail>
+    <ion-thumbnail>
+        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+    </ion-thumbnail>
+    <ion-thumbnail>
+        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+    </ion-thumbnail>
+    <ion-thumbnail>
+        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+    </ion-thumbnail>
+    <ion-thumbnail *ngFor="let img of imagenesSubidas; let indice = index">
+        <img [src]="img">
+    </ion-thumbnail>                      
+</div>
+<p class="ion-text-center" *ngIf="imagenesSubidas.length == 0">Por favor sube alguna imagen</p>
+<div class="section-buttons-load-image">
+    <section class="container_btn_camera" (click)="loadImageFromCamera()">
+        <svg class="camera">
+            <use href="assets/font-awesome/sprites/solid.svg#camera"/>
+        </svg>
+        <p>Camara</p>
+    </section>
+    <section class="container_btn_gallery" (click)="loadImageFromGallery()">
+        <svg class="gallery">
+            <use href="assets/font-awesome/sprites/solid.svg#image"/>
+        </svg>
+        <p>Galeria</p>
+    </section>
+</div>

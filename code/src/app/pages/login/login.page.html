@@ -1,0 +1,98 @@
+<ion-content padding>
+    <ion-grid class="grid-container-center">
+        <ion-row class="main-row-center">
+            <ion-grid>
+                <ion-row justify-content-center>
+                    <ion-col size="6">
+                        <ion-button (click)="iniciarSesionGoogle()" color="google" expand="block">
+                            <ion-icon slot="start" name="logo-google"></ion-icon>
+                            Google
+                        </ion-button>
+                    </ion-col>
+                    <ion-col size="6">
+                        <ion-button (click)="iniciarSesionFacebook()" color="facebook" expand="block">
+                            <ion-icon slot="start" name="logo-facebook"></ion-icon>
+                            Facebook
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+                <ion-row justify-content-center style="margin-top: 2rem;">
+                    <ion-col size="12">
+                        <form [formGroup]="loginForm">
+                            <ion-item>
+                                <ion-label position="floating">Email</ion-label>
+                                <ion-input formControlName="email" type="email"></ion-input>
+                            </ion-item>
+                            <div class="form-errors">
+                                <p class="form-error"
+                                    *ngIf="loginForm.get('email').hasError('required') && loginForm.get('email').touched">
+                                    {{errorMessages.email.required.message}}
+                                </p>
+                                <p class="form-error"
+                                    *ngIf="loginForm.get('email').hasError('minlength') && loginForm.get('email').touched">
+                                    {{errorMessages.email.minlength.message}}
+                                </p>
+                                <p class="form-error"
+                                    *ngIf="loginForm.get('email').hasError('maxlength') && loginForm.get('email').touched">
+                                    {{errorMessages.email.maxlength.message}}
+                                </p>
+                                <p class="form-error"
+                                    *ngIf="loginForm.get('email').hasError('email') && loginForm.get('email').touched">
+                                    {{errorMessages.email.email.message}}
+                                </p>
+                            </div>
+                            
+                            <ion-item>
+                                <ion-label position="floating">Contraseña</ion-label>
+                                <ion-input formControlName="password" [type]="passwordTypeInput"></ion-input>
+                            </ion-item>
+                                  
+                            <!-- <ion-item style="position: relative;">
+                                <ion-label position="floating">
+                                    Senha
+                                </ion-label>
+                                <ion-input formControlName="password" name="password" [type]="passwordTypeInput">
+                                </ion-input>
+                                <button item-end class="btn_eye_icon">
+                                    <ion-icon (click)="togglePasswordMode()" [name]="iconpassword"></ion-icon>
+                                </button>
+                            </ion-item> -->
+                            <div class="form-errors">
+                                <p class="form-error"
+                                    *ngIf="loginForm.get('password').hasError('required') && loginForm.get('password').touched">
+                                    {{errorMessages.password.required.message}}
+                                </p>
+                                <p class="form-error"
+                                    *ngIf="loginForm.get('password').hasError('minlength') && loginForm.get('password').touched">
+                                    {{errorMessages.password.minlength.message}}
+                                </p>
+                                <p class="form-error"
+                                    *ngIf="loginForm.get('password').hasError('maxlength') && loginForm.get('password').touched">
+                                    {{errorMessages.password.maxlength.message}}
+                                </p>
+                                <p class="form-error"
+                                    *ngIf="loginForm.get('password').hasError('pattern') && loginForm.get('password').touched">
+                                    {{errorMessages.password.email.message}}
+                                </p>
+                            </div>
+                            <div padding>
+                                <ion-button (click)="iniciarSesion()" color="primary" type="submit" expand="block"
+                                    [disabled]="!loginForm.valid">
+                                    Iniciar Sesión
+                                </ion-button>
+                            </div>
+                        </form>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>
+                        <div class="flex-center-all already-have-account">
+                            <span>No tienes una cuenta?</span><a color="primary" routerLink="/register">Crear una</a>
+                        </div>
+                        <ion-button expand="full" routerLink="/home" routerDirection="root">Landing</ion-button>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-row>
+    </ion-grid>
+</ion-content>

@@ -1,0 +1,15 @@
+<app-header title="Directorio Barrial"></app-header>
+<ion-content padding>
+    <ion-list *ngIf="elements.length > 0">
+        <ion-item lines="none" *ngFor="let item of [1,1,1]">
+            <ion-thumbnail slot="start">
+              <img src="https://ionicframework.com/docs/demos/api/list/avatar-finn.png">
+            </ion-thumbnail>
+            <ion-label>
+                <h2>Juan Antonio</h2>
+                <p>Presidente</p>
+                <p>2495-351</p>
+            </ion-label>
+          </ion-item>
+    </ion-list>
+</ion-content>

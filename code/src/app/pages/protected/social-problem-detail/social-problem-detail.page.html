@@ -1,0 +1,25 @@
+<app-header-back title="Problema Social" hrefDefault="/social-problems"></app-header-back>
+
+<ion-content padding>
+    <ion-card class="detail-card">
+        <img style="border: 1px solid #ccc;" src="assets/img/slide-1.png" />
+        <ion-card-header>
+            <ion-card-subtitle>Basura | 2018-05-09 | Juan Rodriguez </ion-card-subtitle>
+            <ion-card-title>Problem # {{id}}</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+            industry's standard dummy text ever since the 1500s.
+            <p>ID PARAMETRO: {{id}}</p>
+        </ion-card-content>
+        <ion-row>
+            <ion-col>
+                <ion-item lines="none" class="container_likes detail" [ngClass]="{'active': (i % 2) === 0}">
+                    <ion-icon name="thumbs-up"></ion-icon>
+                    <div>12 Likes</div>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+    </ion-card>
+</ion-content>
