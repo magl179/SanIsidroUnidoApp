@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef} from '@angular/core';
 import { MenuManagedService } from '../../services/menu-managed.service';
 import { NavController} from '@ionic/angular';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
@@ -11,9 +11,12 @@ import { timer } from 'rxjs';
     styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-    loadingLogin: any;
+
+    @ViewChild('passwordEyeLogin') passwordEye;
     passwordTypeInput = 'password';
     iconpassword = 'eye-off';
+
+    loadingLogin: any;
     loginForm: FormGroup;
     errorMessages = null;
     loginFormFields = {
@@ -44,10 +47,13 @@ export class LoginPage implements OnInit {
         this.loadingLogin = await this.utilsService.createBasicLoading('Validando');
     }
 
-    public togglePasswordMode(): void{
+    togglePasswordMode() {
         this.passwordTypeInput = this.passwordTypeInput === 'text' ? 'password' : 'text';
         this.iconpassword = this.iconpassword === 'eye-off' ? 'eye' : 'eye-off';
+        console.log(this.passwordEye);
+        this.passwordEye.el.setFocus();
     }
+
 
     async iniciarSesion() {
         this.loadingLogin.present();
@@ -76,15 +82,15 @@ export class LoginPage implements OnInit {
         // Campo Email
         const emailInput = new FormControl('', Validators.compose([
             Validators.required,
-            Validators.minLength(this.loginFormFields.email.minlength),
-            Validators.maxLength(this.loginFormFields.email.maxlength),
+            // Validators.minLength(this.loginFormFields.email.minlength),
+            // Validators.maxLength(this.loginFormFields.email.maxlength),
             Validators.email
         ]));
         // Campo Contraseña
         const passwordInput = new FormControl('', Validators.compose([
             Validators.required,
-            Validators.minLength(this.loginFormFields.password.minlength),
-            Validators.maxLength(this.loginFormFields.password.maxlength)
+            // Validators.minLength(this.loginFormFields.password.minlength),
+            // Validators.maxLength(this.loginFormFields.password.maxlength)
         ]));
         // Añado Propiedades al Form
         this.loginForm = this.formBuilder.group({

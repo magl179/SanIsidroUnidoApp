@@ -41,22 +41,13 @@
                                     {{errorMessages.email.email.message}}
                                 </p>
                             </div>
-                            
                             <ion-item>
                                 <ion-label position="floating">Contraseña</ion-label>
-                                <ion-input formControlName="password" [type]="passwordTypeInput"></ion-input>
-                            </ion-item>
-                                  
-                            <!-- <ion-item style="position: relative;">
-                                <ion-label position="floating">
-                                    Senha
-                                </ion-label>
-                                <ion-input formControlName="password" name="password" [type]="passwordTypeInput">
-                                </ion-input>
-                                <button item-end class="btn_eye_icon">
-                                    <ion-icon (click)="togglePasswordMode()" [name]="iconpassword"></ion-icon>
+                                <ion-input #passwordEyeLogin formControlName="password" [type]="passwordTypeInput"></ion-input>
+                                <button item-end class="btn_eye_icon" (click)="togglePasswordMode()">
+                                    <ion-icon [name]="iconpassword"></ion-icon>
                                 </button>
-                            </ion-item> -->
+                            </ion-item>
                             <div class="form-errors">
                                 <p class="form-error"
                                     *ngIf="loginForm.get('password').hasError('required') && loginForm.get('password').touched">

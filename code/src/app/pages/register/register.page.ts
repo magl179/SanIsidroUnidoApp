@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild} from '@angular/core';
 // import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { MenuManagedService } from '../../services/menu-managed.service';
@@ -12,6 +12,10 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
     styleUrls: ['./register.page.scss'],
 })
 export class RegisterPage implements OnInit {
+    @ViewChild('passwordEyeRegister') passwordEye;
+    passwordTypeInput = 'password';
+    iconpassword = 'eye-off';
+
     registerForm: FormGroup;
     errorMessages = null;
     registerFormFields = {
@@ -51,6 +55,13 @@ export class RegisterPage implements OnInit {
     async ngOnInit() {
         await this.menuManagedService.desactivarMenu();
         this.loadingRegister = await this.utilsService.createBasicLoading('Validando');
+    }
+
+    togglePasswordMode() {
+        this.passwordTypeInput = this.passwordTypeInput === 'text' ? 'password' : 'text';
+        this.iconpassword = this.iconpassword === 'eye-off' ? 'eye' : 'eye-off';
+        console.log(this.passwordEye);
+        this.passwordEye.el.setFocus();
     }
 
 
@@ -96,18 +107,18 @@ export class RegisterPage implements OnInit {
         // Campo Email
         const emailInput = new FormControl('', Validators.compose([
             Validators.required,
-            Validators.minLength(this.registerFormFields.email.minlength),
-            Validators.maxLength(this.registerFormFields.email.maxlength),
+            // Validators.m/inLength(this.registerFormFields.email.minlength),
+            // Validators.maxLength(this.registerFormFields.email.maxlength),
             Validators.email
         ]));
         // Campo Contraseña
         const passwordInput = new FormControl('', Validators.compose([
             Validators.required,
             Validators.minLength(this.registerFormFields.password.minlength),
-            Validators.maxLength(this.registerFormFields.password.maxlength),
+            // Validators.maxLength(this.registerFormFields.password.maxlength),
             Validators.pattern(this.registerFormFields.password.pattern)
         ]));
-        // Añado Propiedades al Form
+        // Añado Propiedades al Forms
         this.registerForm = this.formBuilder.group({
             firstname: firstnameInput,
             lastname: lastnameInput,

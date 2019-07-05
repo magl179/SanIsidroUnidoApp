@@ -10,6 +10,11 @@
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
 
+body{
+    --webkit-user-select: text;
+    user-select: text;
+}
+
 .relative {
     position: relative !important;
 }
@@ -320,17 +325,18 @@
         margin-left: 1rem;
         color: #f04141;
         font-size: .9rem;
+        // margin: 0px;
     }
 }
 
 .btn_eye_icon{
     position: absolute;
     right: 0; 
-    bottom: 2px; 
+    bottom: 4px; 
     background: transparent;
 
     ion-icon{
-        font-size: 24px;
+        font-size: 22px;
         color:#757575;
     }
 }
@@ -356,4 +362,8 @@
 
     .mt-2r {
         margin-top: 2rem;
+    }
+
+    .full{
+        width: 100%;
     }

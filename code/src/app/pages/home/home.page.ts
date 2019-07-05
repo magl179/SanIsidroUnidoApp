@@ -19,11 +19,11 @@ export class HomePage implements OnInit {
     // }
 
     ngOnInit() {
+        this.menuManagedService.desactivarMenu();
         // setTimeout(() => {
         //     this.splash = false;
         //     console.log('Animation Ends');
         // }, 3500);
-    //     this.menuManagedService.desactivarMenu();
     }
 
 }

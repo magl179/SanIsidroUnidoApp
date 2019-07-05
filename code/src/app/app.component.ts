@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
 import { Platform, NavController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -44,9 +43,9 @@ export class AppComponent implements OnInit {
         await this.platform.ready().then(() => {
             this.statusBar.styleDefault();
             this.splashScreen.hide();
-            console.log('App ready show splash');
+            // console.log('App ready show splash');
             timer(3200).subscribe(() => this.showAppsplash = false);
-            console.log('Splash Doit hide splash');
+            // console.log('Splash Doit hide splash');
         });
     }
 
