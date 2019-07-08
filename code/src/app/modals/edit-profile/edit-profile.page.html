@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center" >Editar mi Perfil</ion-title>
+    <ion-buttons slot="end">
+        <ion-button (click)="closeModal()">
+            <ion-icon slot="icon-only" name="close"></ion-icon>
+          </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <div class="container">
+        <form>
+            <ion-item>
+                <ion-label position="floating">Nombres</ion-label>
+                <ion-input value="Juan Miguel"></ion-input>
+              </ion-item>
+              <div class="form-errors">
+                <p class="form-error">
+                  Error Message 1
+                </p>
+             </div>
+              <ion-item>
+                <ion-label position="floating">Apellidos</ion-label>
+                <ion-input value="Lopez Fernandez"></ion-input>
+              </ion-item>
+              <div class="form-errors">
+                <p class="form-error">
+                  Error Message 1
+                </p>
+             </div>
+              <ion-item>
+                <ion-label position="floating">Email</ion-label>
+                <ion-input value="juan@gmail.com"></ion-input>
+              </ion-item>
+              <div class="form-errors">
+                <p class="form-error">
+                  Error Message 1
+                </p>
+             </div>
+              <ion-item>
+                <ion-label position="floating">Telefono</ion-label>
+                <ion-input value="54787744"></ion-input>
+              </ion-item>
+              <div class="form-errors">
+                <p class="form-error">
+                  Error Message 1
+                </p>
+             </div>
+              <ion-button expand="block">Guardar</ion-button>
+        </form>
+    </div>
+</ion-content>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { MenuManagedService } from 'src/app/services/menu-managed.service';
 import { UtilsService } from '../../../services/utils.service';
+import { AuthService } from '../../../services/auth.service';
 
 
 @Component({
@@ -18,6 +19,7 @@ export class SocialProblemsPage implements OnInit {
         private navCtrl: NavController,
         private menuManagedService: MenuManagedService,
         private utilsService: UtilsService,
+        private authService: AuthService
     ) {
 
     }
@@ -30,6 +32,13 @@ export class SocialProblemsPage implements OnInit {
         setTimeout(() => {
             this.elements = [1, 1, 1];
             this.loading.dismiss();
+            this.authService.user.subscribe(user => {
+                if (user) {
+                    console.log('Usuario Logueado', user);
+                } else {
+                    console.log('Usuario no Logueado');
+                }
+            });
         }, 3000);
     }
 

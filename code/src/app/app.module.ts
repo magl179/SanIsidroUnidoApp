@@ -18,12 +18,13 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
+import { IonicStorageModule } from '@ionic/storage';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, BrowserAnimationsModule, IonicModule.forRoot(), AppRoutingModule,
-    HttpClientModule, SmComponentsModule, ReactiveFormsModule],
+    HttpClientModule, SmComponentsModule, ReactiveFormsModule, IonicStorageModule.forRoot()],
   providers: [
     StatusBar,
     SplashScreen,

@@ -1,5 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { UtilsService } from 'src/app/services/utils.service';
 
 const opcionesCamara: CameraOptions = {
     quality: 100,
@@ -18,15 +19,23 @@ export class UploadImageComponent implements OnInit {
     imagenB64: string;
 
     @Input() maxImages = 5;
+    @Output() retornarImagenesSubidas = new EventEmitter();
 
     constructor(
-        private camera: Camera
+        private camera: Camera,
+        private utilsService: UtilsService
     ) { }
 
     ngOnInit() {
         opcionesCamara.destinationType = this.camera.DestinationType.DATA_URL;
         opcionesCamara.encodingType = this.camera.EncodingType.JPEG;
         opcionesCamara.mediaType = this.camera.MediaType.PICTURE;
+    }
+
+    async obtenerImagenesSubidas() {
+        await this.retornarImagenesSubidas.emit({
+            total_img: this.imagenesSubidas
+        });
     }
 
     loadImageFromGallery() {
@@ -45,8 +54,8 @@ export class UploadImageComponent implements OnInit {
         }
     }
 
-    uploadImage() {
-        this.camera.getPicture(opcionesCamara)
+    async uploadImage() {
+        await this.camera.getPicture(opcionesCamara)
             .then(
                 (datosImagen) => {
                     // DatoImagen es un string codificado en base64 - BASE URI
@@ -55,7 +64,10 @@ export class UploadImageComponent implements OnInit {
                     this.imagenesSubidas.push(this.imagenB64);
                 }, err => {
                     console.log({ errorCapturarImagen: err });
-                    alert(JSON.stringify(err));
+                    this.utilsService.mostrarToast(JSON.stringify(err));
                 });
+        if (this.imagenesSubidas.length >= 1) {
+            this.obtenerImagenesSubidas();
+        }
     }
 }

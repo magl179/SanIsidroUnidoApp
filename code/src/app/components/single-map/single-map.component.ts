@@ -54,7 +54,7 @@ export class SingleMapComponent implements OnInit, AfterViewInit {
             Leaflet.control.scale().addTo(this.mapa);
             this.mapIsLoaded = true;
         });
-        this.mapa.setView([this.puntoMapa.latitude || -0.2188216, this.puntoMapa.longitude || -78.5135489], this.zoomMap || 15);;
+        this.mapa.setView([this.puntoMapa.latitude || -0.2188216, this.puntoMapa.longitude || -78.5135489], this.zoomMap || 15);
 
         Leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: 'www.tphangout.com',

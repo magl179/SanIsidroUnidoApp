@@ -6,11 +6,10 @@
                 <!-- Header Menu -->
                 <ion-item lines="none" color="primary">
                     <ion-avatar slot="start">
-                        <img src="https://www.w3schools.com/howto/img_avatar.png">
-                        <!-- <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y"> -->
+                        <img [src]="userApp.avatar || 'assets/img/default/img_avatar.png'"/>
                     </ion-avatar>
                     <ion-label>
-                        <h1>Juan Velazques</h1>
+                        <h1>{{userApp.firstname || 'None'}} {{userApp.lastname || 'None'}}</h1>
                         <p>Mi App</p>
                     </ion-label>
                 </ion-item>

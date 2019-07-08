@@ -48,3 +48,21 @@ export interface ReverseGeocodeResponse {
     readonly display_name: string;
     readonly boundingbox: string[];
 }
+
+export interface UserLogued {
+    id: number;
+    firstname?: string;
+    email: string;
+    lastname?: string;
+    avatar?: string;
+    state: string;
+    basic_service_image?: string;
+    cargo: string;
+    password?: string;
+    phone?: string;
+}
+
+export interface UserLogin {
+    email: string;
+    password: string;
+}

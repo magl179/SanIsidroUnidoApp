@@ -1,0 +1,15 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center">Solicitar Afiliación</ion-title>
+    <ion-buttons slot="end">
+        <ion-button (click)="closeModal()">
+            <ion-icon slot="icon-only" name="close"></ion-icon>
+          </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <app-upload-image [maxImages]="1" (retornarImagenesSubidas)="obtenerImagenesSubidas($event)"></app-upload-image>
+    <ion-button class="btn_send_request_membership" expand="block">Enviar</ion-button>
+</ion-content>

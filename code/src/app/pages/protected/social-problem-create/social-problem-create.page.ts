@@ -2,6 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import { UtilsService } from '../../../services/utils.service';
 import { MapaService } from 'src/app/services/mapa.service';
 import { PostUbicationItem } from 'src/app/interfaces/barrios';
+import { LocalizationService } from '../../../services/localization.service';
 
 @Component({
     selector: 'app-social-problem-create',
@@ -28,11 +29,12 @@ export class SocialProblemCreatePage implements OnInit {
 
     constructor(
         private utilsService: UtilsService,
-        private mapaService: MapaService
+        private mapaService: MapaService,
+        private localizationService: LocalizationService
     ) { }
 
     async ngOnInit() {
-        const coords = await this.utilsService.obtenerCoordenadas();
+        const coords = await this.localizationService.obtenerCoordenadas();
         this.postCoordinate.latitude = coords.latitud;
         this.postCoordinate.longitude = coords.longitud;
     }

@@ -2,37 +2,21 @@
 
 <ion-content>
     <!-- <p>Mi Perfil</p> -->
-    <div class="container-profile" style="background:pink;height:100%;">
+    <div class="container-profile">
        <div class="img-profile ion-padding-top">
             <img src="https://www.w3schools.com/howto/img_avatar.png" alt="">
        </div>
        <div class="ion-text-center">
-           <h3>Juan Antonio Velazquez</h3>
-           <p>juanvelazquez@gmail.com</p>
-           <p>249658-45</p>
+           <h3>{{userApp.firstname || 'Sin Nombre'}} {{userApp.lastname || 'Sin Apellidos'}}</h3>
+           <p>{{userApp.email || 'sin email'}}</p>
+           <p>{{userApp.phone || 'sin telefono'}}</p>
        </div>
        <div class="flex">
            <div class="profile-options">
-                <ion-button expand="block" color="primary">Editar mi Perfil</ion-button>
-                <ion-button expand="block" color="secondary">Cambiar mi Contraseña</ion-button>
-                <ion-button expand="block" color="tertiary">Solicitar Afiliación</ion-button>
+                <ion-button expand="block" color="primary" (click)="showProfileEditModal()">Editar mi Perfil</ion-button>
+                <ion-button expand="block" color="secondary" (click)="showChangePassModal()">Cambiar mi Contraseña</ion-button>
+                <ion-button expand="block" color="tertiary" (click)="showRequestMembershipModal()">Solicitar Afiliación</ion-button>
            </div>
        </div>
-       <!-- <ion-grid>
-           <ion-row class="flex">
-               <div class="profile-options">
-
-               </div>
-               <ion-col size="8">
-                    <ion-button expand="block" color="primary">Editar mi Perfil</ion-button>
-                </ion-col>
-                <ion-col size="8">
-                    <ion-button expand="block" color="secondary">Solicitar Afiliación</ion-button>
-                </ion-col>
-                <ion-col size="8">
-                    <ion-button expand="block" color="tertiary">Cambiar mi Contraseña</ion-button>
-                </ion-col> 
-           </ion-row>
-       </ion-grid> -->
     </div>
 </ion-content>

@@ -1,9 +1,12 @@
-import { Component, OnInit, ViewChild, ElementRef} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MenuManagedService } from '../../services/menu-managed.service';
-import { NavController} from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { UtilsService } from 'src/app/services/utils.service';
 import { timer } from 'rxjs';
+import { AuthService } from '../../services/auth.service';
+
+const urlLogueado = '/social-problems';
 
 @Component({
     selector: 'app-login',
@@ -36,7 +39,8 @@ export class LoginPage implements OnInit {
         public formBuilder: FormBuilder,
         private menuManagedService: MenuManagedService,
         private navCtrl: NavController,
-        private utilsService: UtilsService
+        private utilsService: UtilsService,
+        private authService: AuthService
     ) {
         this.crearFormulario();
         this.cargarMensajesError();
@@ -44,7 +48,6 @@ export class LoginPage implements OnInit {
 
     async ngOnInit() {
         await this.menuManagedService.desactivarMenu();
-        this.loadingLogin = await this.utilsService.createBasicLoading('Validando');
     }
 
     togglePasswordMode() {
@@ -54,25 +57,35 @@ export class LoginPage implements OnInit {
         this.passwordEye.el.setFocus();
     }
 
-
     async iniciarSesion() {
-        this.loadingLogin.present();
+        const loadingLoginValidation = await this.utilsService.createBasicLoading('Validando');
+        loadingLoginValidation.present();
+        // this.utilsService.mostrarToast(JSON.stringify(this.loginForm.value), 6000);
+        // email - password
+        // alert(JSON.stringify(this.loginForm.value));
+        console.log(this.loginForm.value);
         timer(1500).subscribe(() => {
-            this.loadingLogin.dismiss();
-            this.navCtrl.navigateRoot('/social-problems');
+            loadingLoginValidation.dismiss();
+            if (this.authService.login(this.loginForm.value.email, this.loginForm.value.password)) {
+                this.navCtrl.navigateRoot('/social-problems');
+            } else {
+                this.utilsService.mostrarToast('Fallo Iniciar Sesión');
+            }
         });
     }
     async iniciarSesionFacebook() {
-        this.loadingLogin.present();
+        const loadingFB = await this.utilsService.createBasicLoading('Validando');
+        loadingFB.present();
         timer(1500).subscribe(() => {
-            this.loadingLogin.dismiss();
+            loadingFB.dismiss();
             this.navCtrl.navigateRoot('/social-problems');
         });
     }
     async iniciarSesionGoogle() {
-        this.loadingLogin.present();
+        const loadingGoogle = await this.utilsService.createBasicLoading('Validando');
+        loadingGoogle.present();
         await timer(1500).subscribe(() => {
-            this.loadingLogin.dismiss();
+            loadingGoogle.dismiss();
             this.navCtrl.navigateRoot('/social-problems');
         });
     }

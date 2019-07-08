@@ -11,8 +11,6 @@ import { StepBarComponent } from './step-bar/step-bar.component';
 import { SimpleMapComponent } from './simple-map/simple-map.component';
 import { SplashSmComponent } from './splash-sm/splash-sm.component';
 
-
-
 @NgModule({
     declarations: [
         HeaderComponent,

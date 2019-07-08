@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuManagedService } from '../../services/menu-managed.service';
+import { UtilsService } from '../../services/utils.service';
 
 @Component({
     selector: 'app-home',
@@ -9,7 +9,7 @@ import { MenuManagedService } from '../../services/menu-managed.service';
 export class HomePage implements OnInit {
 
     constructor(
-        private menuManagedService: MenuManagedService
+        private utilsService: UtilsService
     ) { }
 
     // ionViewDidEnter() {
@@ -19,7 +19,7 @@ export class HomePage implements OnInit {
     // }
 
     ngOnInit() {
-        this.menuManagedService.desactivarMenu();
+        this.utilsService.desactivarMenu();
         // setTimeout(() => {
         //     this.splash = false;
         //     console.log('Animation Ends');
