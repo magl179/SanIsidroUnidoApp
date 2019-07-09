@@ -11,44 +11,52 @@
 
 <ion-content padding>
     <div class="container">
-        <form>
+        <form [formGroup]="editProfileForm">
             <ion-item>
                 <ion-label position="floating">Nombres</ion-label>
-                <ion-input value="Juan Miguel"></ion-input>
+                <ion-input formControlName="firstname"></ion-input>
               </ion-item>
               <div class="form-errors">
-                <p class="form-error">
-                  Error Message 1
-                </p>
-             </div>
+                    <p class="form-error"
+                        *ngIf="editProfileForm.get('firstname').hasError('required') && editProfileForm.get('firstname').touched">
+                        {{errorMessages.firstname.required.message}}
+                    </p>
+                </div>
               <ion-item>
                 <ion-label position="floating">Apellidos</ion-label>
-                <ion-input value="Lopez Fernandez"></ion-input>
+                <ion-input formControlName="lastname"></ion-input>
               </ion-item>
               <div class="form-errors">
-                <p class="form-error">
-                  Error Message 1
-                </p>
-             </div>
+                    <p class="form-error"
+                        *ngIf="editProfileForm.get('lastname').hasError('required') && editProfileForm.get('lastname').touched">
+                        {{errorMessages.lastname.required.message}}
+                    </p>
+                </div>
               <ion-item>
                 <ion-label position="floating">Email</ion-label>
-                <ion-input value="juan@gmail.com"></ion-input>
+                <ion-input formControlName="email"></ion-input>
               </ion-item>
               <div class="form-errors">
-                <p class="form-error">
-                  Error Message 1
+                    <p class="form-error"
+                    *ngIf="editProfileForm.get('email').hasError('required') && editProfileForm.get('email').touched">
+                    {{errorMessages.email.required.message}}
                 </p>
-             </div>
+                    <p class="form-error"
+                        *ngIf="editProfileForm.get('email').hasError('email') && editProfileForm.get('email').touched">
+                        {{errorMessages.email.email.message}}
+                    </p>
+                </div>
               <ion-item>
-                <ion-label position="floating">Telefono</ion-label>
-                <ion-input value="54787744"></ion-input>
+                <ion-label position="floating">Teléfono</ion-label>
+                <ion-input formControlName="phone"></ion-input>
               </ion-item>
               <div class="form-errors">
-                <p class="form-error">
-                  Error Message 1
+                    <p class="form-error"
+                    *ngIf="editProfileForm.get('phone').hasError('required') && editProfileForm.get('phone').touched">
+                    {{errorMessages.phone.required.message}}
                 </p>
-             </div>
-              <ion-button expand="block">Guardar</ion-button>
+            </div>
+              <ion-button class="btn_edit_profile" expand="block" [disabled]="!editProfileForm.valid" (click)="editUserProfileData()">Guardar</ion-button>
         </form>
     </div>
 </ion-content>

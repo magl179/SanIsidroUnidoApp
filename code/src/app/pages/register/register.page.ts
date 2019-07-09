@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 // import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
-import { MenuManagedService } from '../../services/menu-managed.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { timer } from 'rxjs';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
     selector: 'app-register',
@@ -46,14 +46,14 @@ export class RegisterPage implements OnInit {
         private navCtrl: NavController,
         public formBuilder: FormBuilder,
         private utilsService: UtilsService,
-        private menuManagedService: MenuManagedService
+        private authService: AuthService
     ) {
-        this.crearFormulario();
-        this.cargarMensajesError();
+        this.createForm();
+        this.loadErrorMessages();
     }
 
     async ngOnInit() {
-        await this.menuManagedService.desactivarMenu();
+        await this.utilsService.disabledMenu();
         this.loadingRegister = await this.utilsService.createBasicLoading('Validando');
     }
 
@@ -65,24 +65,42 @@ export class RegisterPage implements OnInit {
     }
 
 
-    async registrarUsuario() {
-        this.loadingRegister.present();
+    async registerUser() {
+        const loadingRegisterValidation = await this.utilsService.createBasicLoading('Validando');
+        loadingRegisterValidation.present();
+        console.log(this.registerForm.value);
         timer(1500).subscribe(() => {
-            this.loadingRegister.dismiss();
-            this.navCtrl.navigateRoot('/social-problems');
+            loadingRegisterValidation.dismiss();
+            const firstname = this.registerForm.value.firstname;
+            const lastname = this.registerForm.value.lastname;
+            const email = this.registerForm.value.email;
+            const password = this.registerForm.value.password;
+            if (this.authService.register(firstname, lastname, email, password)) {
+                this.navCtrl.navigateRoot('/social-problems');
+            } else {
+                this.utilsService.showToast('Fallo Registrar Usuario');
+            }
         });
     }
 
-    async registrarUsuarioFacebook() {
+    async registerFBUser() {
         const fbloading = await this.utilsService.createBasicLoading('Validando');
+        // LLamar Metodo Obtener Datos FB User
+        // en caso tener dato fb llamar a api mandando datos y esperar que me devuelva usuario registrado
+        // Si se registro redirigir a social problem
+        // En caso error mostrar toast comunicando error
         fbloading.present();
         timer(1500).subscribe(() => {
             fbloading.dismiss();
             this.navCtrl.navigateRoot('/social-problems');
         });
     }
-    async registrarUsuarioGoogle() {
+    async registerGoogleUser() {
         const googleloading = await this.utilsService.createBasicLoading('Validando');
+        // LLamar Metodo Obtener Datos FB User
+        // en caso tener dato fb llamar a api mandando datos y esperar que me devuelva usuario registrado
+        // Si se registro redirigir a social problem
+        // En caso error mostrar toast comunicando error
         googleloading.present();
         await timer(1500).subscribe(() => {
             googleloading.dismiss();
@@ -91,7 +109,7 @@ export class RegisterPage implements OnInit {
     }
 
     // Función Crea el Formulario
-    crearFormulario() {
+    createForm() {
         // Campo Email
         const firstnameInput = new FormControl('', Validators.compose([
             Validators.required,
@@ -107,15 +125,12 @@ export class RegisterPage implements OnInit {
         // Campo Email
         const emailInput = new FormControl('', Validators.compose([
             Validators.required,
-            // Validators.m/inLength(this.registerFormFields.email.minlength),
-            // Validators.maxLength(this.registerFormFields.email.maxlength),
             Validators.email
         ]));
         // Campo Contraseña
         const passwordInput = new FormControl('', Validators.compose([
             Validators.required,
             Validators.minLength(this.registerFormFields.password.minlength),
-            // Validators.maxLength(this.registerFormFields.password.maxlength),
             Validators.pattern(this.registerFormFields.password.pattern)
         ]));
         // Añado Propiedades al Forms
@@ -127,7 +142,7 @@ export class RegisterPage implements OnInit {
         });
     }
 
-    cargarMensajesError() {
+    loadErrorMessages() {
         this.errorMessages = {
             firstname: {
                 required: {

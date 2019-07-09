@@ -13,6 +13,8 @@ import { ChangePasswordPage } from '../../../modals/change-password/change-passw
 import { ChangePasswordPageModule } from '../../../modals/change-password/change-password.module';
 import { RequestMembershipPage } from 'src/app/modals/request-membership/request-membership.page';
 import { RequestMembershipPageModule } from '../../../modals/request-membership/request-membership.module';
+import { ChangeProfileImagePage } from '../../../modals/change-profile-image/change-profile-image.page';
+import { ChangeProfileImagePageModule } from '../../../modals/change-profile-image/change-profile-image.module';
 
 const routes: Routes = [
     {
@@ -25,7 +27,8 @@ const routes: Routes = [
     entryComponents: [
         EditProfilePage,
         ChangePasswordPage,
-        RequestMembershipPage
+        RequestMembershipPage,
+        ChangeProfileImagePage
         // iMPORTAR PAGINA
     ],
     imports: [
@@ -36,7 +39,8 @@ const routes: Routes = [
         SmComponentsModule,
         EditProfilePageModule,
         ChangePasswordPageModule,
-        RequestMembershipPageModule
+        RequestMembershipPageModule,
+        ChangeProfileImagePageModule
     ],
     declarations: [UserProfilePage]
 })

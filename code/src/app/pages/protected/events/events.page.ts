@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { MenuManagedService } from 'src/app/services/menu-managed.service';
-import { LoadingController } from '@ionic/angular';
 import { UtilsService } from '../../../services/utils.service';
 
 @Component({
@@ -16,7 +14,6 @@ export class EventsPage implements OnInit {
 
     constructor(
         private navCtrl: NavController,
-        private menuManagedService: MenuManagedService,
         private utilsService: UtilsService
     ) { }
 
@@ -30,7 +27,7 @@ export class EventsPage implements OnInit {
     }
 
     ionViewWillEnter() {
-        this.menuManagedService.activarMenu();
+        this.utilsService.enableMenu();
     }
     postDetail(id) {
         // this.navCtrl.navigateRoot('/social-problem-detail', id);

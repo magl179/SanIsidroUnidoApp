@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MenuManagedService } from '../../services/menu-managed.service';
 import { NavController } from '@ionic/angular';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { UtilsService } from 'src/app/services/utils.service';
@@ -37,17 +36,16 @@ export class LoginPage implements OnInit {
 
     constructor(
         public formBuilder: FormBuilder,
-        private menuManagedService: MenuManagedService,
         private navCtrl: NavController,
         private utilsService: UtilsService,
         private authService: AuthService
     ) {
-        this.crearFormulario();
-        this.cargarMensajesError();
+        this.createForm();
+        this.loadErrorMessages();
     }
 
     async ngOnInit() {
-        await this.menuManagedService.desactivarMenu();
+        await this.utilsService.disabledMenu();
     }
 
     togglePasswordMode() {
@@ -57,41 +55,38 @@ export class LoginPage implements OnInit {
         this.passwordEye.el.setFocus();
     }
 
-    async iniciarSesion() {
+    async loginUser() {
         const loadingLoginValidation = await this.utilsService.createBasicLoading('Validando');
         loadingLoginValidation.present();
-        // this.utilsService.mostrarToast(JSON.stringify(this.loginForm.value), 6000);
-        // email - password
-        // alert(JSON.stringify(this.loginForm.value));
         console.log(this.loginForm.value);
         timer(1500).subscribe(() => {
             loadingLoginValidation.dismiss();
             if (this.authService.login(this.loginForm.value.email, this.loginForm.value.password)) {
-                this.navCtrl.navigateRoot('/social-problems');
+                this.navCtrl.navigateRoot(urlLogueado);
             } else {
-                this.utilsService.mostrarToast('Fallo Iniciar Sesión');
+                this.utilsService.showToast('Fallo Iniciar Sesión');
             }
         });
     }
-    async iniciarSesionFacebook() {
+    async loginUserByFB() {
         const loadingFB = await this.utilsService.createBasicLoading('Validando');
         loadingFB.present();
         timer(1500).subscribe(() => {
             loadingFB.dismiss();
-            this.navCtrl.navigateRoot('/social-problems');
+            this.navCtrl.navigateRoot(urlLogueado);
         });
     }
-    async iniciarSesionGoogle() {
+    async loginUserByGoogle() {
         const loadingGoogle = await this.utilsService.createBasicLoading('Validando');
         loadingGoogle.present();
         await timer(1500).subscribe(() => {
             loadingGoogle.dismiss();
-            this.navCtrl.navigateRoot('/social-problems');
+            this.navCtrl.navigateRoot(urlLogueado);
         });
     }
 
     // Función Crea el Formulario
-    crearFormulario() {
+    createForm() {
         // Campo Email
         const emailInput = new FormControl('', Validators.compose([
             Validators.required,
@@ -112,7 +107,7 @@ export class LoginPage implements OnInit {
         });
     }
 
-    cargarMensajesError() {
+    loadErrorMessages() {
         this.errorMessages = {
             email: {
                 required: {

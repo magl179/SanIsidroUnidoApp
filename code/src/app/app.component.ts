@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Platform, NavController } from '@ionic/angular';
+import { Platform, NavController, MenuController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { timer } from 'rxjs';
@@ -16,7 +16,6 @@ import { UtilsService } from './services/utils.service';
 })
 export class AppComponent implements OnInit {
 
-    // componentesMenu: Observable<MenuComponente[]>;
     showAppsplash = true;
     componentesMenu: MenuComponente[];
     automaticClose = true;
@@ -29,7 +28,8 @@ export class AppComponent implements OnInit {
         private statusBar: StatusBar,
         private alertController: AlertController,
         private authService: AuthService,
-        private utilsService: UtilsService
+        private utilsService: UtilsService,
+        private menuCtrl: MenuController
     ) {
         this.initializeApp();
     }
@@ -86,7 +86,10 @@ export class AppComponent implements OnInit {
                     handler: async () => {
                         console.log('Confirm Okay');
                         await this.authService.logout();
-                        this.navCtrl.navigateRoot('/login');
+                        await this.menuCtrl.close();
+                        timer(400).subscribe(() => {
+                            this.navCtrl.navigateRoot('/login');
+                        });
                     }
                 }
             ]

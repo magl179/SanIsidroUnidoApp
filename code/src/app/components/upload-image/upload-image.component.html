@@ -1,40 +1,33 @@
-<div class="section-img-thumb" *ngIf="imagenesSubidas.length > 0">
-    <ion-thumbnail>
-        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-    </ion-thumbnail>
-    <ion-thumbnail>
-        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-    </ion-thumbnail>
-    <ion-thumbnail>
-        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-    </ion-thumbnail>
-    <ion-thumbnail>
-        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-    </ion-thumbnail>
-    <ion-thumbnail>
-        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-    </ion-thumbnail>
-    <ion-thumbnail>
-        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-    </ion-thumbnail>
-    <ion-thumbnail>
-        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-    </ion-thumbnail>
-    <ion-thumbnail *ngFor="let img of imagenesSubidas; let indice = index">
-        <img [src]="img">
-    </ion-thumbnail>                      
-</div>
-<p class="ion-text-center text-img-empty" *ngIf="imagenesSubidas.length == 0">Por favor sube alguna imagen</p>
+<ion-grid *ngIf="uploadedImages.length > 0">
+    <ion-row>
+        <ion-col size="6" *ngFor="let image of uploadedImages; let i = index;">
+                <ion-item-sliding>
+                        <ion-item>
+                                <ion-card>
+                                        <img [src]="image">
+                                    </ion-card>
+                        </ion-item>
+                        <ion-item-options side="end">
+                            <ion-item-option (click)="deleteImage(i)" color="danger" expandable="true">
+                                <ion-icon slot="icon-only" name="trash"></ion-icon>
+                            </ion-item-option>
+                        </ion-item-options>
+                    </ion-item-sliding>
+        </ion-col>
+    </ion-row>
+</ion-grid>
+
+<p class="ion-text-center text-img-empty" *ngIf="uploadedImages.length === 0">Por favor sube alguna imagen</p>
 <div class="section-buttons-load-image">
     <section class="container_btn_camera" (click)="loadImageFromCamera()">
         <svg class="camera">
-            <use href="assets/font-awesome/sprites/solid.svg#camera"/>
+            <use href="assets/font-awesome/sprites/solid.svg#camera" />
         </svg>
         <p>Camara</p>
     </section>
     <section class="container_btn_gallery" (click)="loadImageFromGallery()">
         <svg class="gallery">
-            <use href="assets/font-awesome/sprites/solid.svg#image"/>
+            <use href="assets/font-awesome/sprites/solid.svg#image" />
         </svg>
         <p>Galeria</p>
     </section>

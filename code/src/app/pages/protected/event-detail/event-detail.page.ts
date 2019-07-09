@@ -5,9 +5,9 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { SimpleUbicationItem } from 'src/app/interfaces/barrios';
 
 @Component({
-  selector: 'app-event-detail',
-  templateUrl: './event-detail.page.html',
-  styleUrls: ['./event-detail.page.scss'],
+    selector: 'app-event-detail',
+    templateUrl: './event-detail.page.html',
+    styleUrls: ['./event-detail.page.scss'],
 })
 export class EventDetailPage implements OnInit {
 
@@ -23,13 +23,13 @@ export class EventDetailPage implements OnInit {
         private route: ActivatedRoute,
         private utilsService: UtilsService) { }
 
-  ngOnInit() {
-    this.id = this.route.snapshot.paramMap.get('id');
-    console.log('ID RECIBIDO:', this.id);
-  }
-    
+    ngOnInit() {
+        this.id = this.route.snapshot.paramMap.get('id');
+        console.log('ID RECIBIDO:', this.id);
+    }
+
     test() {
-        this.utilsService.mostrarToast();
+        this.utilsService.showToast();
     }
 
 }

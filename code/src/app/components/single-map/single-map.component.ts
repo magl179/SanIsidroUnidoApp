@@ -1,7 +1,6 @@
 import { Component, OnInit, EventEmitter, Input, Output, AfterViewInit } from '@angular/core';
 import * as Leaflet from 'leaflet';
 import { GestureHandling } from 'leaflet-gesture-handling';
-import { UtilsService } from '../../services/utils.service';
 import { PostUbicationItem } from 'src/app/interfaces/barrios';
 
 @Component({
@@ -11,23 +10,21 @@ import { PostUbicationItem } from 'src/app/interfaces/barrios';
 })
 export class SingleMapComponent implements OnInit, AfterViewInit {
 
-    @Input() idMapa: string;
+    @Input() idMap: string;
     @Input() zoomMap: number;
-    @Input() puntoMapa: PostUbicationItem;
+    @Input() mapPoints: PostUbicationItem;
     @Input() enableGesture = false;
-    @Output() retornarCoordenadasEscogidas = new EventEmitter();
+    @Output() returnCoordinateChoosen = new EventEmitter();
 
-    mapa: any;
+    map: any;
     mapIsLoaded = false;
 
-    constructor(
-        private utilsService: UtilsService
-    ) { }
+    constructor() { }
 
-    async ngOnInit() {}
+    async ngOnInit() { }
 
     async ngAfterViewInit() {
-        await this.iniciarMapa();
+        await this.initializeMap();
     }
 
     onTwoFingerDrag(e) {
@@ -38,52 +35,49 @@ export class SingleMapComponent implements OnInit, AfterViewInit {
         }
     }
 
-    async iniciarMapa() {    
+    async initializeMap() {
         if (this.enableGesture) {
             Leaflet.Map.addInitHook('addHandler', 'gestureHandling', GestureHandling);
         }
-        this.mapa = await Leaflet.map(this.idMapa, {
+        this.map = await Leaflet.map(this.idMap, {
             gestureHandling: this.enableGesture,
             fadeAnimation: false,
             zoomAnimation: false,
             markerZoomAnimation: false
         });
 
-        await this.mapa.on('load', (e) => {
+        await this.map.on('load', (e) => {
             console.log('MAPA SINGLE CARGADO');
-            Leaflet.control.scale().addTo(this.mapa);
+            Leaflet.control.scale().addTo(this.map);
             this.mapIsLoaded = true;
         });
-        this.mapa.setView([this.puntoMapa.latitude || -0.2188216, this.puntoMapa.longitude || -78.5135489], this.zoomMap || 15);
+        this.map.setView([this.mapPoints.latitude || -0.2188216, this.mapPoints.longitude || -78.5135489], this.zoomMap || 15);
 
         Leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: 'www.tphangout.com',
             maxZoom: 18,
             updateWhenIdle: true,
             reuseTiles: true
-        }).addTo(this.mapa);
+        }).addTo(this.map);
 
-        const mainMarker = await Leaflet.marker([this.puntoMapa.latitude || -0.2188216, this.puntoMapa.longitude || -78.5135489], {
-            title: this.puntoMapa.address || 'No hay direccion',
+        const mainMarker = await Leaflet.marker([this.mapPoints.latitude || -0.2188216, this.mapPoints.longitude || -78.5135489], {
+            title: this.mapPoints.address || 'No hay direccion',
             draggable: true
         });
         mainMarker.on('dragend', async (e) => {
             const position = await e.target.getLatLng();
-            this.puntoMapa.latitude = position.lat;
-            this.puntoMapa.longitude = position.lng;
-            this.enviarCoordenadasMarker();
+            this.mapPoints.latitude = position.lat;
+            this.mapPoints.longitude = position.lng;
+            this.sendMarkerCoordinate();
         });
-        this.mapa.addLayer(mainMarker);
-        // this.enviarCoordenadasMarker();
+        this.map.addLayer(mainMarker);
     }
-    
+
     // Cuando se lance el evento click en la plantilla llamaremos a este método
-    async enviarCoordenadasMarker() {
-        // Usamos el método emit
-        // console.log({ ecM: this.puntoMapa });
-        await this.retornarCoordenadasEscogidas.emit({
-            lat: this.puntoMapa.latitude,
-            lng: this.puntoMapa.longitude
+    async sendMarkerCoordinate() {
+        await this.returnCoordinateChoosen.emit({
+            lat: this.mapPoints.latitude,
+            lng: this.mapPoints.longitude
         });
     }
 

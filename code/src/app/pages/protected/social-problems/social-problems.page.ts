@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { MenuManagedService } from 'src/app/services/menu-managed.service';
 import { UtilsService } from '../../../services/utils.service';
 import { AuthService } from '../../../services/auth.service';
 
@@ -17,7 +16,6 @@ export class SocialProblemsPage implements OnInit {
 
     constructor(
         private navCtrl: NavController,
-        private menuManagedService: MenuManagedService,
         private utilsService: UtilsService,
         private authService: AuthService
     ) {
@@ -43,7 +41,7 @@ export class SocialProblemsPage implements OnInit {
     }
 
     ionViewWillEnter() {
-        this.menuManagedService.activarMenu();
+        this.utilsService.enableMenu();
     }
 
     postDetail(id) {

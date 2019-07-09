@@ -1,5 +1,10 @@
 <app-header title="Servicios Públicos"></app-header>
 <ion-content>
-    <multiple-map *ngIf="publicServicesPoints.length > 0"  idMapa="public-services" [zoomMap]="12" [puntosMapa]="publicServicesPoints" [enableGesture]="false" (estadoCargaMapa)="desactivarLoading($event)"></multiple-map>
-    <!-- <p *ngIf="publicServicesPoints.length === 0">Traendo datos mapa</p> -->
+    <multiple-map *ngIf="publicServicesPoints.length > 0"
+        idMap="public-services" 
+        [zoomMap]="12" 
+        [mapPoints]="publicServicesPoints" 
+        [enableGesture]="true" 
+        (returnMapLoaded)="disabledLoading($event)">
+    </multiple-map>
 </ion-content>

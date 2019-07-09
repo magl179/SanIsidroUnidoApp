@@ -10,48 +10,45 @@ import { SimpleUbicationItem } from 'src/app/interfaces/barrios';
 })
 export class SimpleMapComponent implements AfterViewInit {
 
-    @Input() idMapa: string;
-    @Input() claseMapa: string;
-    // @Input() markerText: string;
+    @Input() idMap: string;
     @Input() coordsMap: SimpleUbicationItem = {
         latitude: null,
         longitude: null,
         title: null
     };
     @Input() enableGesture = false;
-    mapa: any;
-    mapsList: any[];
+    map: any;
 
     constructor() { }
 
     async ngAfterViewInit() {
-        await this.iniciarMapa();
+        await this.initializeMap();
     }
 
-    async iniciarMapa() {
+    async initializeMap() {
         if (this.enableGesture) {
             Leaflet.Map.addInitHook('addHandler', 'gestureHandling', GestureHandling);
         }
-        this.mapa = Leaflet.map(this.idMapa, {
+        this.map = Leaflet.map(this.idMap, {
             gestureHandling: this.enableGesture,
             fadeAnimation: false,
             zoomAnimation: false,
             markerZoomAnimation: false
         });
-        this.mapa.on('load', (e) => {
+        this.map.on('load', (e) => {
             console.log('MAPA SIMPLE CARGADO');
-            Leaflet.control.scale().addTo(this.mapa);
+            Leaflet.control.scale().addTo(this.map);
         });
 
-        this.mapa.setView([this.coordsMap.latitude, this.coordsMap.longitude], 12);
+        this.map.setView([this.coordsMap.latitude, this.coordsMap.longitude], 12);
         Leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: 'www.tphangout.com',
             maxZoom: 18,
             updateWhenIdle: true,
             reuseTiles: true
-        }).addTo(this.mapa);
+        }).addTo(this.map);
 
-        Leaflet.marker([this.coordsMap.latitude, this.coordsMap.longitude]).addTo(this.mapa)
+        Leaflet.marker([this.coordsMap.latitude, this.coordsMap.longitude]).addTo(this.map)
             .bindPopup(this.coordsMap.title);
     }
 

@@ -2,56 +2,65 @@
 
 <ion-content padding>
     <app-stepbar [progressSteps]="socialProblemFormStage" [currentStep]="currentStep"
-        (retornarCurrentStep)="updateCurrentStep($event)"></app-stepbar>
-    <section *ngIf="currentStep === 1
+        (returnCurrentStep)="updateCurrentStep($event)"></app-stepbar>
+    <section *ngIf="currentStep === 3
     ">
-        <form>
+    <form [formGroup]="socialProblemForm">
             <ion-item>
                 <ion-label position="floating">Titulo</ion-label>
-                <ion-input type="email"></ion-input>
+                <ion-input formControlName="title" type="email"></ion-input>
             </ion-item>
+            <div class="form-errors">
+                <p class="form-error"
+                    *ngIf="socialProblemForm.get('title').hasError('required') && socialProblemForm.get('title').touched">
+                    {{errorMessages.title.required.message}}
+                </p>
+            </div>
             <ion-item>
                 <ion-label position="floating">Descripcion</ion-label>
-                <ion-textarea auto-grow="true"></ion-textarea>
+                <ion-textarea formControlName="description" auto-grow="true"></ion-textarea>
             </ion-item>
+            <div class="form-errors">
+                <p class="form-error"
+                    *ngIf="socialProblemForm.get('description').hasError('required') && socialProblemForm.get('description').touched">
+                    {{errorMessages.description.required.message}}
+                </p>
+            </div>
             <div padding>
-                <ion-button color="primary" type="submit" expand="block" (click)="validarFase1()">Siguiente
+                <ion-button color="primary" type="submit" expand="block" (click)="validatePhase3()">Siguiente
                 </ion-button>
             </div>
         </form>
     </section>
-    <section *ngIf="currentStep === 2
+    <section *ngIf="currentStep === 1
     ">
-        <p class="ion-text-center">Si deseas agregar una o dos fotos, hazlo ahora</p>
-        <app-upload-image [maxImages]="2"></app-upload-image>
+        <p class="ion-text-center">Puedes agregar hasta 2 imagene</p>
+        <app-upload-image [maxImages]="2" (retornarImagenesSubidas)="getUploadedImages()"></app-upload-image>
         <div padding>
-            <ion-button color="primary" type="submit" expand="block" (click)="validarFase2()">Siguiente
+            <ion-button color="primary" type="submit" expand="block" (click)="validatePhase1()">Siguiente
             </ion-button>
         </div>
     </section>
-    <section *ngIf="currentStep === 3
+    <section *ngIf="currentStep === 2
     ">
         <p class="ion-text-center">Escoge la ubicación donde se genero la emergencia</p>
-        <single-map idMapa="socialProblemReportMap" [zoomMap]="14" [enableGesture]="false" [puntoMapa]="postCoordinate"
-            (retornarCoordenadasEscogidas)="actualizarCoordenasMapa($event)"></single-map>
-        <p>Latitud PAGE EC: Market {{postCoordinate.latitude}}</p>
-        <p>Longitud PAGE EC: Market {{postCoordinate.longitude}}</p>
-        <p *ngIf="postCoordinate.address">Tu Dirección es: {{postCoordinate.address}}</p>
+        <single-map idMap="socialProblemReportMap" [zoomMap]="14" [mapPoints]="socialProblemCoordinate"
+            (returnCoordinateChoosen)="updateMapCoordinate($event)"></single-map>
+        <p>Latitud PAGE EC: Market {{socialProblemCoordinate.latitude}}</p>
+        <p>Longitud PAGE EC: Market {{socialProblemCoordinate.longitude}}</p>
+        <p *ngIf="socialProblemCoordinate.address">Tu Dirección es: {{socialProblemCoordinate.address}}</p>
         <div>
-            <ion-button color="primary" expand="full" type="submit" (click)="validarFase3()">Siguiente
+            <ion-button color="primary" expand="full" type="submit" (click)="validatePhase2()">Siguiente
             </ion-button>
         </div>
     </section>
     <section *ngIf="currentStep === 4
     ">
-        <h2>Alerta de Ladrones</h2>
-        <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration
-            in some form, by injected humour, or randomised words which don't look even slightly believable. If you
-            are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden
-            in the middle of text.</p>
-        <p *ngIf="postCoordinate.address">Dirección de la Emergencia</p>
-        <p *ngIf="postCoordinate.address">{{postCoordinate.address}}</p>
-        <p *ngIf="!postCoordinate.address">Por favor escoge una ubicación</p>
+        <h2>{{socialProblemForm.get('title').value || 'Ingresa un Titulo'}}</h2>
+        <p>{{socialProblemForm.get('title').value || 'Ingresa una descripción'}}</p>
+        <p *ngIf="socialProblemCoordinate.address">Dirección de la Emergencia</p>
+        <p *ngIf="socialProblemCoordinate.address">{{socialProblemCoordinate.address}}</p>
+        <p *ngIf="!socialProblemCoordinate.address">Por favor escoge una ubicación</p>
         <div class="section-img-thumb" *ngIf="socialProblemImages.length > 0">
             <ion-thumbnail *ngFor="let image of socialProblemImages">
                 <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
@@ -59,7 +68,7 @@
         </div>
         <p *ngIf="socialProblemImages.length === 0">No hay imagenes en este post</p>
         <div>
-            <ion-button [disabled]="!fullFormIsValid" expand="full">Reportar</ion-button>
+            <ion-button expand="full" (click)="sendSocialProblem()">Reportar</ion-button>
         </div>
     </section>
 </ion-content>

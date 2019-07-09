@@ -2,7 +2,7 @@
 
 <ion-content padding>
     <app-stepbar [progressSteps]="emergencyFormStage" [currentStep]="currentStep"
-        (retornarCurrentStep)="updateCurrentStep($event)"></app-stepbar>
+        (returnCurrentStep)="updateCurrentStep($event)"></app-stepbar>
     <section *ngIf="currentStep === 3
     ">
         <form [formGroup]="emergencyForm">
@@ -27,7 +27,7 @@
                 </p>
             </div>
             <div padding>
-                <ion-button color="primary" type="submit" expand="block" (click)="validarFase1()">Siguiente
+                <ion-button color="primary" type="submit" expand="block" (click)="validatePhase3()">Siguiente
                 </ion-button>
             </div>
         </form>
@@ -35,22 +35,25 @@
     <section *ngIf="currentStep === 1
     ">
         <p class="ion-text-center">Si deseas agregar una o dos fotos, hazlo ahora</p>
-        <app-upload-image [maxImages]="2" (retornarImagenesSubidas)="obtenerImagenesSubidas()"></app-upload-image>
+        <app-upload-image [maxImages]="2" (returnUploadedImages)="getUploadedImages()"></app-upload-image>
         <div padding>
-            <ion-button color="primary" type="submit" expand="block" (click)="validarFase2()">Siguiente
+            <ion-button color="primary" type="submit" expand="block" (click)="validatePhase1()">Siguiente
             </ion-button>
         </div>
     </section>
     <section *ngIf="currentStep === 2
     ">
         <p class="ion-text-center">Escoge la ubicación donde se genero la emergencia</p>
-        <single-map idMapa="emergencyReportMap" [zoomMap]="14" [enableGesture]="false" [puntoMapa]="emergencyPostCoordinate"
-            (retornarCoordenadasEscogidas)="actualizarCoordenasMapa($event)"></single-map>
+        <single-map idMap="emergencyReportMap" 
+        [zoomMap]="14" 
+        [enableGesture]="false" 
+        [mapPoints]="emergencyPostCoordinate"
+        (returnCoordinateChoosen)="updateMapCoordinate($event)"></single-map>
         <p>Latitud PAGE EC: Market {{emergencyPostCoordinate.latitude}}</p>
         <p>Longitud PAGE EC: Market {{emergencyPostCoordinate.longitude}}</p>
         <p *ngIf="emergencyPostCoordinate.address">Tu Dirección es: {{emergencyPostCoordinate.address}}</p>
         <div>
-            <ion-button color="primary" expand="full" type="submit" (click)="validarFase3()">Siguiente
+            <ion-button color="primary" expand="full" type="submit" (click)="validatePhase2()">Siguiente
             </ion-button>
         </div>
     </section>
@@ -68,7 +71,7 @@
         </div>
         <p *ngIf="emergencyImages.length === 0">No hay imagenes en este post</p>
         <div>
-            <ion-button expand="full" (click)="enviarReporteEmergencia()">Reportar</ion-button>
+            <ion-button expand="full" (click)="sendEmergencyReport()">Reportar</ion-button>
         </div>
     </section>
 </ion-content>

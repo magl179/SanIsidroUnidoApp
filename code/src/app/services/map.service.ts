@@ -1,5 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { HttpClient} from '@angular/common/http';
 import * as Leaflet from 'leaflet';
 import { ReverseGeocodeResponse } from '../interfaces/barrios';
 import { Observable } from 'rxjs';
@@ -11,20 +11,18 @@ const REVERSE_GEOCODING_ENDPOINT = 'https://nominatim.openstreetmap.org/reverse'
 @Injectable({
     providedIn: 'root'
 })
-export class MapaService implements OnInit {
+export class MapService implements OnInit {
 
     constructor(private http: HttpClient) { }
 
-    ngOnInit() {
-        // console.log(this.getMarkers());
-    }
+    ngOnInit() {}
 
     getMarkers() {
         return this.http.get<any[]>('assets/data/markers.json');
     }
 
     createIcon(ownIcon) {
-        const iconoMapa = new Leaflet.Icon({
+        const iconMap = new Leaflet.Icon({
             iconUrl: ownIcon,
             shadowUrl: shadowIcon,
             iconSize: [25, 41],
@@ -32,29 +30,17 @@ export class MapaService implements OnInit {
             popupAnchor: [1, -34],
             shadowSize: [41, 41]
         });
-        return iconoMapa;
+        return iconMap;
     }
 
-    async crearMarcador(markers, puntoUbicacion) {
-        const iconData = markers.filter((marker) => marker.color === puntoUbicacion.iconColor);
-        const iconMapa = this.crearIcono(iconData[0].iconURL);
+    async createMarker(markers, locationPoint) {
+        const iconData = markers.filter((marker) => marker.color === locationPoint.iconColor);
+        const iconMapa = this.createIcon(iconData[0].iconURL);
         const newIcon = new Leaflet.marker([
-            puntoUbicacion.latitude,
-            puntoUbicacion.longitude
+            locationPoint.latitude,
+            locationPoint.longitude
         ], { icon: iconMapa });
         return newIcon;
-    }
-
-    crearIcono(ownIcon) {
-        const iconoMapa = new Leaflet.Icon({
-            iconUrl: ownIcon,
-            shadowUrl: shadowIcon,
-            iconSize: [25, 41],
-            iconAnchor: [12, 41],
-            popupAnchor: [1, -34],
-            shadowSize: [41, 41]
-        });
-        return iconoMapa;
     }
 
     getAddress(coords): Observable<ReverseGeocodeResponse> {

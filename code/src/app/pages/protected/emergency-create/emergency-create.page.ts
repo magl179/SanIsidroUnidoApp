@@ -1,9 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
 import { UtilsService } from '../../../services/utils.service';
-import { MapaService } from 'src/app/services/mapa.service';
+import { MapService } from 'src/app/services/map.service';
 import { PostUbicationItem } from 'src/app/interfaces/barrios';
 import { LocalizationService } from '../../../services/localization.service';
-import { FormGroup, FormBuilder, FormControl, Validators  } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
 
 // type PaneType = 'left' | 'right';
@@ -32,38 +32,37 @@ export class EmergencyCreatePage implements OnInit {
     emergencyForm: FormGroup;
     errorMessages = null;
     emergencyFormFields = {
-        email: {
+        title: {
             required: true,
             minlength: 3,
             maxlength: 15
         },
-        password: {
+        description: {
             required: true,
             minlength: 8,
             maxlength: 30
         }
     };
-    
     // puntosUbicacion: SimpleUbicationItem;
 
     constructor(
         private utilsService: UtilsService,
-        private mapaService: MapaService,
+        private mapService: MapService,
         public formBuilder: FormBuilder,
         private localizationService: LocalizationService
     ) {
-        this.crearFormulario();
-        this.cargarMensajesError();
-     }
+        this.createForm();
+        this.loadErrorMessages();
+    }
 
     async ngOnInit() {
-        const coords = await this.localizationService.obtenerCoordenadas();
+        const coords = await this.localizationService.getCoordinate();
         this.emergencyPostCoordinate.latitude = coords.latitud;
         this.emergencyPostCoordinate.longitude = coords.longitud;
         console.log(this.emergencyForm.get('title').value);
     }
 
-    crearFormulario() {
+    createForm() {
         const titleEmergency = new FormControl('', Validators.compose([
             Validators.required,
         ]));
@@ -76,17 +75,17 @@ export class EmergencyCreatePage implements OnInit {
         });
     }
 
-    cargarMensajesError() {
+    loadErrorMessages() {
         this.errorMessages = {
             title: {
                 required: {
                     message: 'El titulo es Obligatorio'
                 },
                 minlength: {
-                    message: `El titulo debe contener minimo ${this.emergencyFormFields.email.minlength} caracteres`
+                    message: `El titulo debe contener minimo ${this.emergencyFormFields.title.minlength} caracteres`
                 },
                 maxlength: {
-                    message: `El titulo debe contener máximo ${this.emergencyFormFields.email.maxlength} caracteres`
+                    message: `El titulo debe contener máximo ${this.emergencyFormFields.title.maxlength} caracteres`
                 }
             },
             description: {
@@ -94,28 +93,28 @@ export class EmergencyCreatePage implements OnInit {
                     message: 'La descripción es Obligatoria'
                 },
                 minlength: {
-                    message: `La descripción debe contener minimo ${this.emergencyFormFields.password.minlength} caracteres`
+                    message: `La descripción debe contener minimo ${this.emergencyFormFields.description.minlength} caracteres`
                 },
                 maxlength: {
-                    message: `La descripción debe contener máximo ${this.emergencyFormFields.password.maxlength} caracteres`
+                    message: `La descripción debe contener máximo ${this.emergencyFormFields.description.maxlength} caracteres`
                 }
             }
         };
 
     }
 
-    obtenerImagenesSubidas(event) {
+    getUploadedImages(event) {
         console.log(event);
         this.emergencyImages = event.total_img;
     }
 
 
-    retrocederEtapa() {
+    previosStep() {
         if (this.currentStep > 1) {
             this.currentStep--;
         }
     }
-    avanzarEtapa() {
+    nextStep() {
         const tamanioEtapas = Object.keys(this.emergencyFormStage).length;
         if (this.currentStep < (tamanioEtapas)) {
             this.currentStep++;
@@ -123,23 +122,23 @@ export class EmergencyCreatePage implements OnInit {
     }
 
 
-    validarFase1() {
-        this.avanzarEtapa();
+    validatePhase1() {
+        this.nextStep();
     }
 
-    validarFase2() {
-        this.avanzarEtapa();
+    validatePhase2() {
+        this.nextStep();
     }
-    validarFase3() {
-        this.avanzarEtapa();
+    validatePhase3() {
+        this.nextStep();
     }
 
-    actualizarCoordenasMapa(event) {
+    updateMapCoordinate(event) {
         console.log({ datosHijo: event });
         if (event.lat !== null && event.lng !== null) {
             this.emergencyPostCoordinate.latitude = event.lat;
             this.emergencyPostCoordinate.longitude = event.lng;
-            this.obtenerDireccionUsuario(this.emergencyPostCoordinate.latitude, this.emergencyPostCoordinate.longitude);
+            this.getUserAddress(this.emergencyPostCoordinate.latitude, this.emergencyPostCoordinate.longitude);
         }
 
     }
@@ -148,8 +147,8 @@ export class EmergencyCreatePage implements OnInit {
         this.currentStep = event.currentStep;
     }
 
-    obtenerDireccionUsuario(latitud, longitud) {
-        this.mapaService.getAddress({
+    getUserAddress(latitud, longitud) {
+        this.mapService.getAddress({
             lat: latitud,
             lng: longitud,
             zoom: 14
@@ -162,21 +161,23 @@ export class EmergencyCreatePage implements OnInit {
             });
     }
 
-    async enviarReporteEmergencia() {
+    async sendEmergencyReport() {
         if (this.emergencyForm.valid !== true) {
-            await this.utilsService.mostrarToast('Ingresa un titulo y una descripción', 2500);
-            return;
-        }
-        if (this.emergencyImages.length === 0) {
-            await this.utilsService.mostrarToast('Sube alguna imagen por favor', 2500);
-            return;
-        }
-        if (this.emergencyPostCoordinate.address === null || this.emergencyPostCoordinate.address === null) {
-            await this.utilsService.mostrarToast('No se pudo obtener tu ubicación', 2500);
+            await this.utilsService.showToast('Ingresa un titulo y una descripción', 2500);
             return;
         }
 
-        await this.utilsService.mostrarToast('Post Emergencia Valido', 2500);
+        if (this.emergencyPostCoordinate.address === null || this.emergencyPostCoordinate.address === null) {
+            await this.utilsService.showToast('No se pudo obtener tu ubicación', 2500);
+            return;
+        }
+
+        if (this.emergencyImages.length === 0) {
+            await this.utilsService.showToast('Sube alguna imagen por favor', 2500);
+            return;
+        }
+
+        await this.utilsService.showToast('Post Emergencia Valido', 2500);
     }
 
 

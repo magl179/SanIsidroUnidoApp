@@ -10,6 +10,6 @@
 </ion-header>
 
 <ion-content padding>
-    <app-upload-image [maxImages]="1" (retornarImagenesSubidas)="obtenerImagenesSubidas($event)"></app-upload-image>
-    <ion-button class="btn_send_request_membership" expand="block">Enviar</ion-button>
+    <app-upload-image [maxImages]="1" (returnUploadedImages)="getUploadedImages($event)"></app-upload-image>
+    <ion-button class="btn_send_request_membership" expand="block" (click)="sendRequestMembership()" [disabled]="publicServiceImg.length === 0">Enviar</ion-button>
 </ion-content>

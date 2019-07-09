@@ -4,12 +4,13 @@ import { ModalController } from '@ionic/angular';
 import { EditProfilePage } from 'src/app/modals/edit-profile/edit-profile.page';
 import { ChangePasswordPage } from 'src/app/modals/change-password/change-password.page';
 import { RequestMembershipPage } from 'src/app/modals/request-membership/request-membership.page';
+import { ChangeProfileImagePage } from 'src/app/modals/change-profile-image/change-profile-image.page';
 
 
 @Component({
-  selector: 'app-user-profile',
-  templateUrl: './user-profile.page.html',
-  styleUrls: ['./user-profile.page.scss'],
+    selector: 'app-user-profile',
+    templateUrl: './user-profile.page.html',
+    styleUrls: ['./user-profile.page.scss'],
 })
 export class UserProfilePage implements OnInit {
 
@@ -19,10 +20,10 @@ export class UserProfilePage implements OnInit {
         private authService: AuthService,
         private modalCtrl: ModalController) {
         this.loadUserData();
-   }
+    }
 
     async ngOnInit() { }
-    
+
     async loadUserData() {
         await this.authService.user.subscribe(user => {
             if (user) {
@@ -72,6 +73,25 @@ export class UserProfilePage implements OnInit {
     async showRequestMembershipModal() {
         const modal = await this.modalCtrl.create({
             component: RequestMembershipPage,
+            componentProps: {
+                nombre: 'Stalin',
+                pais: 'Ecuador'
+            }
+        });
+        await modal.present();
+
+        const { data } = await modal.onDidDismiss();
+
+        if (data == null) {
+            console.log('No hay datos que Retorne el Modal');
+        } else {
+            console.log('Retorno de Datos del Modal: ', data);
+        }
+    }
+
+    async showRequestChangeUserProfileModal() {
+        const modal = await this.modalCtrl.create({
+            component: ChangeProfileImagePage,
             componentProps: {
                 nombre: 'Stalin',
                 pais: 'Ecuador'

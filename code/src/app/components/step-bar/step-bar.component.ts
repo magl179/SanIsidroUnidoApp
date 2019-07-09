@@ -8,25 +8,20 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 export class StepBarComponent implements OnInit {
 
     @Input() progressSteps: any;
-    @Input() currentStep: any;
-    @Output() retornarCurrentStep = new EventEmitter();
-
-    // @Input() itemActive: number;
+    @Input() currentStep = 1;
+    @Output() returnCurrentStep = new EventEmitter();
 
     constructor() { }
 
-    ngOnInit() {
-        // console.log({ps: this.progressSteps});
-        // console.log({cs: this.currentStep});
-    }
-    
+    ngOnInit() { }
+
     getSizeOfObject(obj) {
         return Object.keys(obj).length || 0;
     }
 
     changeCurrentStep(currentStep) {
         // Usamos el método emit
-        this.retornarCurrentStep.emit({
+        this.returnCurrentStep.emit({
             currentStep: currentStep + 1
         });
     }

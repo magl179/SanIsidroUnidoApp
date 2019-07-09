@@ -32,7 +32,7 @@ export class UtilsService {
         return item;
     }
 
-    async mostrarToast(message?: string, duration?: number, position?: any, color?: string, cssClass?: string, header?: string) {
+    async showToast(message?: string, duration?: number, position?: any, color?: string, cssClass?: string, header?: string) {
         this.toastItem = await this.toastCtrl.create({
             animated: true,
             message: message || 'Test Message Toast',
@@ -56,12 +56,12 @@ export class UtilsService {
         return this.http.get<MenuComponente[]>('/assets/data/menu.json');
     }
 
-    async activarMenu() {
+    async enableMenu() {
         const menus = await this.menuCtrl.getMenus();
         this.menuCtrl.enable(true, 'menu_principal_app');
     }
 
-    async desactivarMenu() {
+    async disabledMenu() {
         const menus = await this.menuCtrl.getMenus();
         this.menuCtrl.enable(false, 'menu_principal_app');
     }

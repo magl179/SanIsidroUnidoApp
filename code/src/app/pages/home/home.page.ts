@@ -19,7 +19,7 @@ export class HomePage implements OnInit {
     // }
 
     ngOnInit() {
-        this.utilsService.desactivarMenu();
+        this.utilsService.disabledMenu();
         // setTimeout(() => {
         //     this.splash = false;
         //     console.log('Animation Ends');

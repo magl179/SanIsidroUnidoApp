@@ -1,3 +1,35 @@
 .text-img-empty{
     margin-bottom: 2rem;
 }
+.img_uploaded{
+    height: 5rem;
+    width: 5rem;
+}
+.img_upload_more{
+    font-size: 25px !important;
+    position: absolute;
+    right: -5px;
+    top: -20px;
+}
+
+.container_image_delete {
+    color: #616770;
+    transition: all .3s;
+
+    ion-button {
+        font-size: 1.1rem
+    }
+
+    ion-icon {
+        margin-right: 10px;
+        color: red;
+    }
+
+    &.active {
+        color: #3880ff;
+    }
+
+    &.detail {
+        --padding-start: 0px;
+    }
+}

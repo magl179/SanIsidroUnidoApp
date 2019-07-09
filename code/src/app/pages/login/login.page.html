@@ -4,13 +4,13 @@
             <ion-grid>
                 <ion-row justify-content-center>
                     <ion-col size="6">
-                        <ion-button (click)="iniciarSesionGoogle()" color="google" expand="block">
+                        <ion-button (click)="loginUserByGoogle()" color="google" expand="block">
                             <ion-icon slot="start" name="logo-google"></ion-icon>
                             Google
                         </ion-button>
                     </ion-col>
                     <ion-col size="6">
-                        <ion-button (click)="iniciarSesionFacebook()" color="facebook" expand="block">
+                        <ion-button (click)="loginUserByFB()" color="facebook" expand="block">
                             <ion-icon slot="start" name="logo-facebook"></ion-icon>
                             Facebook
                         </ion-button>
@@ -67,7 +67,7 @@
                                 </p>
                             </div>
                             <div padding>
-                                <ion-button (click)="iniciarSesion()" color="primary" type="submit" expand="block"
+                                <ion-button (click)="loginUser()" color="primary" type="submit" expand="block"
                                     [disabled]="!loginForm.valid">
                                     Iniciar Sesión
                                 </ion-button>

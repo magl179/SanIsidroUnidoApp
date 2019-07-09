@@ -4,14 +4,18 @@ import { LoginAuthGuard } from './guards/login.guard';
 import { NoLoginAuthGuard } from './guards/no-login.guard';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'home', loadChildren: './pages/home/home.module#HomePageModule' },
+    { path: '', redirectTo: 'login', pathMatch: 'full' },
+    { path: 'home', loadChildren: './pages/home/home.module#HomePageModule' },
     {
         path: 'login',
         loadChildren: './pages/login/login.module#LoginPageModule',
         canActivate: [NoLoginAuthGuard]
     },
-  { path: 'register', loadChildren: './pages/register/register.module#RegisterPageModule' },
+    {
+        path: 'register',
+        loadChildren: './pages/register/register.module#RegisterPageModule',
+        canActivate: [NoLoginAuthGuard]
+    },
     {
         path: 'social-problems',
         loadChildren: './pages/protected/social-problems/social-problems.module#SocialProblemsPageModule', canActivate: [LoginAuthGuard]
@@ -31,13 +35,13 @@ const routes: Routes = [
         loadChildren: './pages/protected/user-profile/user-profile.module#UserProfilePageModule',
         canActivate: [LoginAuthGuard]
     },
-// tslint:disable-next-line: max-line-length
+    // tslint:disable-next-line: max-line-length
     {
         path: 'social-problem-detail/:id',
         loadChildren: './pages/protected/social-problem-detail/social-problem-detail.module#SocialProblemDetailPageModule',
         canActivate: [LoginAuthGuard]
     },
-// tslint:disable-next-line: max-line-length
+    // tslint:disable-next-line: max-line-length
     {
         path: 'social-problem-create',
         loadChildren: './pages/protected/social-problem-create/social-problem-create.module#SocialProblemCreatePageModule',

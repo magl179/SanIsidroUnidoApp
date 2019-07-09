@@ -32,7 +32,7 @@ export class PublicServicesPage implements OnInit {
         }, 2000);
     }
 
-    desactivarLoading(event) {
+    disabledLoading(event) {
         console.log({ datosHijoPS: event });
     }
 

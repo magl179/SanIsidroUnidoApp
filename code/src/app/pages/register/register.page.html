@@ -10,13 +10,13 @@
             <ion-grid>
                 <ion-row justify-content-center>
                     <ion-col size="6">
-                        <ion-button (click)="registrarUsuarioGoogle()" color="google" expand="block">
+                        <ion-button (click)="registerGoogleUser()" color="google" expand="block">
                             <ion-icon slot="start" name="logo-google"></ion-icon>
                             Google
                         </ion-button>
                     </ion-col>
                     <ion-col size="6">
-                        <ion-button (click)="registrarUsuarioFacebook()" color="facebook" expand="full">
+                        <ion-button (click)="registerFBUser()" color="facebook" expand="full">
                             <ion-icon slot="start" name="logo-facebook"></ion-icon>
                             Facebook
                         </ion-button>
@@ -109,7 +109,7 @@
                                 </p>
                             </div>
                             <div padding>
-                                <ion-button (click)="registrarUsuario()" [disabled]="!registerForm.valid"
+                                <ion-button (click)="registerUser()" [disabled]="!registerForm.valid"
                                     color="primary" type="submit" expand="block">
                                     Registrarme</ion-button>
                             </div>

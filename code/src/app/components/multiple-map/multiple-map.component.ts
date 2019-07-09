@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, AfterViewInit, Output, EventEmitter } from '@angular/core';
 import * as Leaflet from 'leaflet';
 import { GestureHandling } from 'leaflet-gesture-handling';
-import { MapaService } from 'src/app/services/mapa.service';
+import { MapService } from 'src/app/services/map.service';
 import { UtilsService } from '../../services/utils.service';
 
 import { UbicationItem } from 'src/app/interfaces/barrios';
@@ -15,25 +15,25 @@ const shadowIcon = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/
 })
 export class MultipleMapComponent implements OnInit, AfterViewInit {
 
-    @Input() idMapa: string;
+    @Input() idMap: string;
     @Input() zoomMap: number;
-    @Input() puntosMapa: UbicationItem[] = [];
+    @Input() mapPoints: UbicationItem[] = [];
     @Input() enableGesture = false;
-    @Output() estadoCargaMapa = new EventEmitter();
+    @Output() returnMapLoaded = new EventEmitter();
 
-    mapa: any;
+    map: any;
     mapMarkers: any[] = null;
     mapIsLoaded = false;
 
     constructor(
-        private mapaService: MapaService
+        private mapService: MapService
     ) { }
 
     async ngOnInit() { }
 
     async ngAfterViewInit() {
-        this.mapMarkers = await this.mapaService.getMarkers().toPromise();
-        await this.iniciarMapa();
+        this.mapMarkers = await this.mapService.getMarkers().toPromise();
+        await this.initializeMap();
     }
 
     onTwoFingerDrag(e) {
@@ -44,39 +44,37 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
         }
     }
 
-    async iniciarMapa() {
-        // console.log({ datosPadre: this.puntosMapa });
+    async initializeMap() {
         if (this.enableGesture) {
             Leaflet.Map.addInitHook('addHandler', 'gestureHandling', GestureHandling);
         }
-        this.mapa = Leaflet.map(this.idMapa, {
+        this.map = Leaflet.map(this.idMap, {
             gestureHandling: this.enableGesture,
             fadeAnimation: false,
             zoomAnimation: false,
             markerZoomAnimation: false
         });
-        this.mapa.on('load', (e) => {
-            Leaflet.control.scale().addTo(this.mapa);
-            this.puntosMapa.forEach(async (marcador) => {
-                const punto = await this.mapaService.crearMarcador(this.mapMarkers, marcador);
+        this.map.on('load', (e) => {
+            Leaflet.control.scale().addTo(this.map);
+            this.mapPoints.forEach(async (marcador) => {
+                const punto = await this.mapService.createMarker(this.mapMarkers, marcador);
                 punto.bindPopup(marcador.title)
-                    .addTo(this.mapa);
+                    .addTo(this.map);
             });
             this.mapIsLoaded = true;
-            this.enviarEstadoCargaMapa();
+            this.sendMapLoaded();
         });
-        this.mapa.setView([-0.1548643, -78.4822049], this.zoomMap);
+        this.map.setView([-0.1548643, -78.4822049], this.zoomMap);
         Leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: 'www.tphangout.com',
             maxZoom: 18,
             updateWhenIdle: true,
             reuseTiles: true
-        }).addTo(this.mapa);
+        }).addTo(this.map);
     }
 
-    async enviarEstadoCargaMapa() {
-        // console.log({ cargaMapa: this.mapIsLoaded });
-        await this.estadoCargaMapa.emit({
+    async sendMapLoaded() {
+        await this.returnMapLoaded.emit({
             mapisLoad: this.mapIsLoaded
         });
     }
