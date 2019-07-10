@@ -19,12 +19,15 @@ import { Camera } from '@ionic-native/camera/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { IonicStorageModule } from '@ionic/storage';
+import { PopNotificationsComponent } from './components/pop-notifications/pop-notifications.component';
+import { ShowListNotificationsPage } from './modals/show-list-notifications/show-list-notifications.page';
+import { ShowListNotificationsPageModule } from './modals/show-list-notifications/show-list-notifications.module';
 
 @NgModule({
   declarations: [AppComponent],
-  entryComponents: [],
+  entryComponents: [PopNotificationsComponent, ShowListNotificationsPage],
   imports: [BrowserModule, BrowserAnimationsModule, IonicModule.forRoot(), AppRoutingModule,
-    HttpClientModule, SmComponentsModule, ReactiveFormsModule, IonicStorageModule.forRoot()],
+    HttpClientModule, SmComponentsModule, ReactiveFormsModule, IonicStorageModule.forRoot(), ShowListNotificationsPageModule],
   providers: [
     StatusBar,
     SplashScreen,

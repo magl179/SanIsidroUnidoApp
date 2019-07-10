@@ -10,6 +10,9 @@ import { UploadImageComponent } from './upload-image/upload-image.component';
 import { StepBarComponent } from './step-bar/step-bar.component';
 import { SimpleMapComponent } from './simple-map/simple-map.component';
 import { SplashSmComponent } from './splash-sm/splash-sm.component';
+import { PopNotificationsComponent } from './pop-notifications/pop-notifications.component';
+import { ListNotificationsComponent } from './list-notifications/list-notifications.component';
+
 
 @NgModule({
     declarations: [
@@ -20,7 +23,9 @@ import { SplashSmComponent } from './splash-sm/splash-sm.component';
         UploadImageComponent,
         StepBarComponent,
         SimpleMapComponent,
-        SplashSmComponent
+        SplashSmComponent,
+        PopNotificationsComponent,
+        ListNotificationsComponent
     ],
     imports: [
         CommonModule,
@@ -34,7 +39,9 @@ import { SplashSmComponent } from './splash-sm/splash-sm.component';
         UploadImageComponent,
         StepBarComponent,
         SimpleMapComponent,
-        SplashSmComponent
+        SplashSmComponent,
+        PopNotificationsComponent,
+        ListNotificationsComponent
     ]
 })
 export class SmComponentsModule { }

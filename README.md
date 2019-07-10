@@ -46,3 +46,6 @@ Se incluyen los siguientes directorios:
 | ------ | ------ |
 | Stalin Maza | stalinct97@gmail.com |
 | Josué Cando | developer@gmail.com |
+
+## Bugs
+

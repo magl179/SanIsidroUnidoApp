@@ -3,6 +3,11 @@
         <ion-buttons menu-id="menu_principal_app" slot="start">
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
-        <ion-title class="ion-text-center">{{title}}</ion-title>
+        <ion-title (click)="testiconNoti()" class="ion-text-center">{{title}}</ion-title>
+        <ion-buttons slot="end">
+            <ion-button size="large" slot="icon-only" (click)="MostrarPopover($event)">
+                <ion-icon [name]="notificationsIcon"></ion-icon>
+            </ion-button>
+          </ion-buttons>
     </ion-toolbar>
 </ion-header>

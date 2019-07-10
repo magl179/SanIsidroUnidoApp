@@ -5,8 +5,8 @@
             <ion-content class="menu_content_app">
                 <!-- Header Menu -->
                 <ion-item lines="none" color="primary">
-                    <ion-avatar slot="start">
-                        <img [src]="userApp.avatar || 'assets/img/default/img_avatar.png'"/>
+                    <ion-avatar slot="start" (click)="closeMenu()">
+                        <img [src]="userApp.avatar || 'assets/img/default/img_avatar.png'" />
                     </ion-avatar>
                     <ion-label>
                         <h1>{{userApp.firstname || 'None'}} {{userApp.lastname || 'None'}}</h1>

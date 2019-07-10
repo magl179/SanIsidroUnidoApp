@@ -103,9 +103,14 @@ export class EmergencyCreatePage implements OnInit {
 
     }
 
-    getUploadedImages(event) {
-        console.log(event);
+    async getUploadedImages(event) {
         this.emergencyImages = event.total_img;
+        await this.utilsService.showToast('update emergency images');
+
+    }
+
+    deleteImage(pos) {
+        this.emergencyImages.splice(pos, 1);
     }
 
 

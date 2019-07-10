@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
     showAppsplash = true;
     componentesMenu: MenuComponente[];
     automaticClose = true;
-    userApp = {};
+    userApp: any = {};
 
     constructor(
         private platform: Platform,
@@ -64,6 +64,10 @@ export class AppComponent implements OnInit {
 
     cerrarSesion() {
         this.confirmarCierreSesion();
+    }
+
+    closeMenu() {
+        this.menuCtrl.close();
     }
 
     async confirmarCierreSesion() {

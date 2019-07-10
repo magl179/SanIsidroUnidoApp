@@ -16,10 +16,11 @@ const opcionesCamara: CameraOptions = {
 })
 export class UploadImageComponent implements OnInit {
 
-    uploadedImages = [];
+    // uploadedImages = [];
     imagenB64: string;
 
-    @Input() maxImages = 5;
+    @Input() maxImages = 3;
+    @Input() uploadedImages = [];
     @Output() returnUploadedImages = new EventEmitter();
 
     constructor(
@@ -45,7 +46,13 @@ export class UploadImageComponent implements OnInit {
         console.log({ gallery: opcionesCamara });
         if (this.uploadedImages.length < this.maxImages) {
             this.uploadImage();
+        } else {
+            this.utilsService.showToast('Ya no puedes subir más imagenes', 1500);
         }
+    }
+
+    getUploadImagePercent() {
+        return (this.uploadedImages.length * 1) / (this.maxImages);
     }
 
     loadImageFromCamera() {
@@ -53,6 +60,8 @@ export class UploadImageComponent implements OnInit {
         console.log({ cm: opcionesCamara });
         if (this.uploadedImages.length < this.maxImages) {
             this.uploadImage();
+        } else {
+            this.utilsService.showToast('Ya no puedes subir más imagenes', 1500);
         }
     }
 
@@ -67,17 +76,16 @@ export class UploadImageComponent implements OnInit {
                     (datosImagen) => {
                         // DatoImagen es un string codificado en base64 - BASE URI
                         this.imagenB64 = `data:image/jpeg;base64,${datosImagen}`;
-                        // console.log({ datosImagenCamara: datosImagen });
                         this.uploadedImages.push(this.imagenB64);
                     }, err => {
                         console.log({ errorCapturarImagen: err });
-                        this.utilsService.showToast(JSON.stringify(err));
                     });
             if (this.uploadedImages.length >= 1) {
                 this.getUploadedImages();
+                this.utilsService.showToast('Imagenes Enviadas al Padre', 1500);
             }
         } else {
-            this.utilsService.showToast('Cordova no esta disponible');
+            this.utilsService.showToast('Cordova no esta disponible', 1500);
         }
 
     }

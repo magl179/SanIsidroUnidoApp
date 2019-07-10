@@ -29,4 +29,8 @@ export class ChangeProfileImagePage implements OnInit {
         alert(JSON.stringify(this.profileUserImg));
     }
 
+    deleteImage(pos) {
+        this.profileUserImg.splice(pos, 1);
+    }
+
 }

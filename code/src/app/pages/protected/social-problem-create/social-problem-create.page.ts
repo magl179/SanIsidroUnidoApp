@@ -117,6 +117,9 @@ export class SocialProblemCreatePage implements OnInit {
         await this.utilsService.showToast('Post Problema Social Valido', 2500);
     }
 
+    deleteImage(pos) {
+        this.socialProblemImages.splice(pos, 1);
+    }
 
     previousStep() {
         if (this.currentStep > 1) {

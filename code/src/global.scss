@@ -345,7 +345,16 @@ body{
 }
 
 
+
+
     // Helpers
+    .icon-close{
+        font-size: 35px !important;
+    }
+    .sm-thumbnail{
+        height: 140px;
+        width: 140px;
+    }
     .flex {
         display: flex;
         justify-content: center;

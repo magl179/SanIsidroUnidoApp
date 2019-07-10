@@ -26,6 +26,10 @@ export class RequestMembershipPage implements OnInit {
         this.publicServiceImg = event.total_img;
     }
 
+    deleteImage(pos) {
+        this.publicServiceImg.splice(pos, 1);
+    }
+
     sendRequestMembership() {
         alert(JSON.stringify(this.publicServiceImg));
     }

@@ -1,0 +1,17 @@
+<ion-list class="list-notifications">
+        <ion-list-header *ngIf="showListHeader">
+            <ion-label>
+                <h2>Notificaciones</h2>
+            </ion-label>
+        </ion-list-header>
+        <ion-item [lines]="getLinesState(i)" *ngFor="let noti of notificationsRequested; let i = index;">
+            <ion-avatar slot="start">
+                <img [src]="noti.user_img">
+            </ion-avatar>
+            <ion-label class="notifications_description">
+                <h2 class="title">{{noti.title}}</h2>
+                <h3 class="author">{{noti.author}}</h3>
+                <p class="description ion-text-wrap">{{noti.description}}</p>
+            </ion-label>
+        </ion-item>
+    </ion-list>

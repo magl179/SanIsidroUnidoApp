@@ -1,15 +1,35 @@
 <ion-header>
-        <ion-toolbar color="primary">
-          <ion-title class="ion-text-center">Cambiar Imagen Perfil</ion-title>
-          <ion-buttons slot="end">
-              <ion-button (click)="closeModal()">
-                  <ion-icon slot="icon-only" name="close"></ion-icon>
-                </ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-      
-      <ion-content padding>
-          <app-upload-image [maxImages]="1" (returnUploadedImages)="getUploadedImages($event)"></app-upload-image>
-          <ion-button class="btn_send_request_membership" expand="block" (click)="sendRequestChangeUserProfile()" [disabled]="profileUserImg.length === 0">Enviar</ion-button>
-      </ion-content>
+    <ion-toolbar color="primary">
+        <ion-title class="ion-text-center">Cambiar Imagen Perfil</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="closeModal()">
+                <ion-icon slot="icon-only" name="close"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-grid *ngIf="profileUserImg.length > 0">
+        <ion-row class="ion-justify-content-center">
+            <ion-col size="6" *ngFor="let image of profileUserImg; let i = index;">
+                <ion-item-sliding>
+                    <ion-item>
+                        <ion-card>
+                            <img [src]="image">
+                        </ion-card>
+                    </ion-item>
+                    <ion-item-options side="end">
+                        <ion-item-option (click)="deleteImage(i)" color="danger" expandable="true">
+                            <ion-icon slot="icon-only" name="trash"></ion-icon>
+                        </ion-item-option>
+                    </ion-item-options>
+                </ion-item-sliding>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+    <app-upload-image [uploadedImages]="profileUserImg" [maxImages]="1"
+        (returnUploadedImages)="getUploadedImages($event)"></app-upload-image>
+    <ion-button class="btn_send_request_membership" expand="block" (click)="sendRequestChangeUserProfile()"
+        [disabled]="profileUserImg.length === 0">Enviar</ion-button>
+</ion-content>
