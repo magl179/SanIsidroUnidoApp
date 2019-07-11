@@ -1,4 +1,4 @@
-# Repositorio de la Parte Móvil del Proyecto App Puengasi
+# Repositorio de la Parte Móvil del Proyecto Puengasi Unido
 
 ## Objetivo
 
@@ -38,14 +38,20 @@ Se incluyen los siguientes directorios:
 # Docente Tutor 
 | Nombre  | Email |
 | ------ | ------ |
-| Ing. Byron Loarte | tutor@gmail.com |
+| Ing. Byron Loarte | byron.loarteb@epn.edu.ec |
 
 ## Desarrolladores
 
 | Nombre  | Email |
 | ------ | ------ |
 | Stalin Maza | stalinct97@gmail.com |
-| Josué Cando | developer@gmail.com |
+| Josué Cando | josuericardocando@gmail.com |
+
+## Recomendaciones
+
+- Para poder observar la aplicación de la mejor manera se debe tener el Navegador con el WebView actualizado
 
 ## Bugs
+
+
 

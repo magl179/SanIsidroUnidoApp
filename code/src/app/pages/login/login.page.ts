@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { UtilsService } from 'src/app/services/utils.service';
 import { timer } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
+import { SocialDataService } from '../../services/social-data.service';
 
 const urlLogueado = '/social-problems';
 
@@ -40,7 +41,8 @@ export class LoginPage implements OnInit {
         public formBuilder: FormBuilder,
         private navCtrl: NavController,
         private utilsService: UtilsService,
-        private authService: AuthService
+        private authService: AuthService,
+        private socialDataService: SocialDataService
     ) {
         this.createForm();
         this.loadErrorMessages();
@@ -57,6 +59,13 @@ export class LoginPage implements OnInit {
         this.passwordEye.el.setFocus();
     }
 
+    setLoginUserData(user) {
+        this.authService.setUser(user);
+        const tokenID = user.tokenID;
+        this.authService.setToken(tokenID);
+        this.navCtrl.navigateRoot(urlLogueado);
+    }
+
     async loginUser() {
         const loadingLoginValidation = await this.utilsService.createBasicLoading('Validando');
         loadingLoginValidation.present();
@@ -65,31 +74,59 @@ export class LoginPage implements OnInit {
             loadingLoginValidation.dismiss();
             const email = this.loginForm.value.email;
             const password = this.loginForm.value.password;
-            this.authService.login(email, password).subscribe(data => {
-                this.authService.setUser(data);
-                const token = '2312321323123';
-                this.authService.setToken(token);
-                this.navCtrl.navigateRoot(urlLogueado);
+            this.authService.login('formulario', {email, password, socialID: null}).subscribe(data => {
+                if (data) {
+                    data.tokenID = '2312321323123';
+                    this.setLoginUserData(data);
+                }
             }, err => {
-                    this.utilsService.showToast('Fallo Iniciar Sesión');
-                    console.log('Error Login', err);
+                this.utilsService.showToast('Fallo Iniciar Sesión');
+                console.log('Error Login', err);
             });
         });
     }
     async loginUserByFB() {
         const loadingFB = await this.utilsService.createBasicLoading('Validando');
         loadingFB.present();
-        timer(1500).subscribe(() => {
+        timer(1000).subscribe(() => {
             loadingFB.dismiss();
-            this.navCtrl.navigateRoot(urlLogueado);
+            this.socialDataService.testFBLoginFake().subscribe(fbData => {
+                if (fbData) {
+                    const user = this.socialDataService.getOwnFacebookUser(fbData);
+                    const email = user.email;
+                    const socialID = user.token_id;
+                    this.authService.login('google', {email, socialID, password: null}).subscribe(loginData => {
+                        this.setLoginUserData(loginData);
+                    });
+                } else {
+                    this.utilsService.showToast('No se pudo obtener los datos con Facebook');
+                }
+            }, err => {
+                this.utilsService.showToast('Fallo Iniciar Sesión con Facebook');
+                console.log('Error Login', err);
+            });
         });
     }
     async loginUserByGoogle() {
         const loadingGoogle = await this.utilsService.createBasicLoading('Validando');
         loadingGoogle.present();
-        await timer(1500).subscribe(() => {
+        await timer(1000).subscribe(() => {
             loadingGoogle.dismiss();
-            this.navCtrl.navigateRoot(urlLogueado);
+            this.socialDataService.testGoogleLoginFake().subscribe(googleData => {
+                if (googleData) {
+                    const user = this.socialDataService.getOwnGoogleUser(googleData);
+                    const email = user.email;
+                    const socialID = user.token_id;
+                    this.authService.login(user.email, {email, socialID, password: null}).subscribe(loginData => {
+                        this.setLoginUserData(loginData);
+                    });
+                } else {
+                    this.utilsService.showToast('No se pudo obtener los datos con Google');
+                }
+            }, err => {
+                this.utilsService.showToast('Fallo Iniciar Sesión con Google');
+                console.log('Error Login', err);
+            });
         });
     }
 
@@ -139,11 +176,6 @@ export class LoginPage implements OnInit {
                 }
             }
         };
-    }
-
-
-    onClearBDD() {
-        this.utilsService.clearBDD();
     }
 
 }

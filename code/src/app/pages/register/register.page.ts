@@ -5,6 +5,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { timer } from 'rxjs';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { SocialDataService } from '../../services/social-data.service';
 
 const urlLogueado = '/social-problems';
 
@@ -50,7 +51,8 @@ export class RegisterPage implements OnInit {
         private navCtrl: NavController,
         public formBuilder: FormBuilder,
         private utilsService: UtilsService,
-        private authService: AuthService
+        private authService: AuthService,
+        private socialDataService: SocialDataService
     ) {
         this.createForm();
         this.loadErrorMessages();
@@ -68,6 +70,12 @@ export class RegisterPage implements OnInit {
         this.passwordEye.el.setFocus();
     }
 
+    setLoginUserData(user) {
+        this.authService.setUser(user);
+        const tokenID = user.tokenID;
+        this.authService.setToken(tokenID);
+        this.navCtrl.navigateRoot(urlLogueado);
+    }
 
     async registerUser() {
         const loadingRegisterValidation = await this.utilsService.createBasicLoading('Validando');
@@ -79,55 +87,78 @@ export class RegisterPage implements OnInit {
             const lastname = this.registerForm.value.lastname;
             const email = this.registerForm.value.email;
             const password = this.registerForm.value.password;
-            this.authService.register(firstname, lastname, email, password).subscribe(data => {
-                this.authService.setUser(data);
-                const token = '2312321323123';
-                this.authService.setToken(token);
-                this.navCtrl.navigateRoot(urlLogueado);
+            this.authService.register('formulario', { firstname, lastname, email, password, socialID: null }).subscribe(data => {
+                if (data) {
+                    data.tokenID = '2312321323123';
+                    this.setLoginUserData(data);
+                }
             }, err => {
                     this.utilsService.showToast('Fallo Iniciar Sesión');
                     console.log('Error Login', err);
             });
         });
-        // const loadingRegisterValidation = await this.utilsService.createBasicLoading('Validando');
-        // loadingRegisterValidation.present();
-        // console.log(this.registerForm.value);
-        // timer(1500).subscribe(() => {
-        //     loadingRegisterValidation.dismiss();
-        //     const firstname = this.registerForm.value.firstname;
-        //     const lastname = this.registerForm.value.lastname;
-        //     const email = this.registerForm.value.email;
-        //     const password = this.registerForm.value.password;
-        //     if (this.authService.register(firstname, lastname, email, password)) {
-        //         this.navCtrl.navigateRoot('/social-problems');
-        //     } else {
-        //         this.utilsService.showToast('Fallo Registrar Usuario');
-        //     }
-        // });
     }
 
     async registerFBUser() {
         const fbloading = await this.utilsService.createBasicLoading('Validando');
-        // LLamar Metodo Obtener Datos FB User
-        // en caso tener dato fb llamar a api mandando datos y esperar que me devuelva usuario registrado
-        // Si se registro redirigir a social problem
-        // En caso error mostrar toast comunicando error
         fbloading.present();
         timer(1500).subscribe(() => {
             fbloading.dismiss();
-            this.navCtrl.navigateRoot('/social-problems');
+            this.socialDataService.testFBLoginFake().subscribe(fbData => {
+                if (fbData) {
+                    const user = this.socialDataService.getOwnFacebookUser(fbData);
+                    const socialID = user.token_id;
+                    const firstname = this.registerForm.value.firstname;
+                    const lastname = user.lastname;
+                    const email = user.email;
+                    const avatar = user.avatar;
+                    const registerData = { firstname, lastname, email, socialID, avatar, password: null };
+
+                    this.authService.register('facebook', registerData).subscribe( data => {
+                        if (data) {
+                            this.setLoginUserData(data);
+                        } else {
+                            this.utilsService.showToast('Ocurrio un error al crear el usuario');
+                        }
+                    });
+                } else {
+                    this.utilsService.showToast('No se pudo obtener los datos con Facebook');
+                }
+            }, err => {
+                this.utilsService.showToast('Fallo Traer los datos de Facebook');
+                console.log('Error Login', err);
+            });
         });
     }
     async registerGoogleUser() {
         const googleloading = await this.utilsService.createBasicLoading('Validando');
-        // LLamar Metodo Obtener Datos FB User
-        // en caso tener dato fb llamar a api mandando datos y esperar que me devuelva usuario registrado
-        // Si se registro redirigir a social problem
-        // En caso error mostrar toast comunicando error
         googleloading.present();
         await timer(1500).subscribe(() => {
             googleloading.dismiss();
-            this.navCtrl.navigateRoot('/social-problems');
+            this.socialDataService.testGoogleLoginFake().subscribe(googleData => {
+                if (googleData) {
+                    const user = this.socialDataService.getOwnFacebookUser(googleData);
+                    const socialID = user.token_id;
+                    const firstname = this.registerForm.value.firstname;
+                    const lastname = user.lastname;
+                    const email = user.email;
+                    const avatar = user.avatar;
+                    const registerData = { firstname, lastname, email, socialID, avatar, password: null };
+
+                    this.authService.register('google', registerData).subscribe( data => {
+                        if (data) {
+                            this.setLoginUserData(data);
+                        } else {
+                            this.utilsService.showToast('Ocurrio un error al crear el usuario');
+                        }
+                    });
+                } else {
+                    this.utilsService.showToast('No se pudo obtener los datos con Google');
+                }
+            }, err => {
+                this.utilsService.showToast('Fallo Traer los datos de Google');
+                console.log('Error Login', err);
+            });
         });
     }
 

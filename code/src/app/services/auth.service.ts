@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs';
-import { UserLogued } from 'src/app/interfaces/barrios';
+// import { UserLogued } from 'src/app/interfaces/barrios';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
@@ -23,31 +23,37 @@ export class AuthService {
         private http: HttpClient
     ) { }
 
-    login(email: string, password: string): Observable<any> {
+    login(provider: string, loginData: {}): Observable<any> {
         const urlApi = 'http://localhost:3000/api/Users/login?include=user';
         const urlTest = 'assets/data/user.json';
         return this.http.get(urlTest).pipe(map(data => data));
         /*return this.http
         .post(
           url_api,
-          { email, password },
+          {
+              provider: provider,
+              email: loginData.email,
+              password: loginData.password,
+              socialID: loginData.socialID
+           },
           { headers: this.headers }
         )*/
     }
 
-    register(firstname, lastname, email, password): Observable<any> {
+    register(provider: string, registerData: {}): Observable<any> {
         const urlApi = 'http://localhost:3000/api/Users';
         const urlTest = 'assets/data/user.json';
         /*  return this.htttp
       .post<UserInterface>(
         url_api,
         {
-          name: name,
-          email: email,
-          password: password
+          provider: provider,
+          firstname: registerData.firstname,
+          email: registerData.email,
+          password: registerData.password
         },
         { headers: this.headers }*/
-        return this.http.get(urlTest).pipe(map(data => data));
+        return this.http.get(urlTest).pipe(map( data => data));
     }
 
     async logout() {

@@ -33,22 +33,21 @@ export class ListNotificationsComponent implements OnInit {
 
     async ngOnInit() {
         await this.notificationsList.reverse();
-        // await this.retornarNotiSolicitadas();
-        // console.log(this.notificationsRequested);
-        // console.log(this.maxNotifications);
+        await this.cargarNotificacionesSolicitadas()
     }
 
     getLinesState(indice) {
         return ((indice + 1) !== this.notificationsRequested.length) ? 'full' : 'none';
     }
 
-    retornarNotiSolicitadas() {
+    cargarNotificacionesSolicitadas() {
         if (this.maxNotifications === 0) {
             this.notificationsRequested = this.notificationsList;
         } else {
             // inicio-fin
             this.notificationsRequested = this.notificationsList.slice(0, (this.maxNotifications));
         }
+        console.log(this.notificationsRequested);
     }
 
 }

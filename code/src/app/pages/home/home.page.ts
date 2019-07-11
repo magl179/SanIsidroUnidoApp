@@ -12,18 +12,12 @@ export class HomePage implements OnInit {
         private utilsService: UtilsService
     ) { }
 
-    // ionViewDidEnter() {
-    //     setTimeout(() => {
-    //         this.splash = false;
-    //     }, this.animationDuration);
-    // }
-
     ngOnInit() {
         this.utilsService.disabledMenu();
-        // setTimeout(() => {
-        //     this.splash = false;
-        //     console.log('Animation Ends');
-        // }, 3500);
+    }
+
+    onClearBDD() {
+        this.utilsService.clearBDD();
     }
 
 }
