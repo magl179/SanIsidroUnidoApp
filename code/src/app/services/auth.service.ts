@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { Storage } from '@ionic/storage';
-import { Observable } from 'rxjs';
-// import { UserLogued } from 'src/app/interfaces/barrios';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
@@ -26,7 +24,14 @@ export class AuthService {
     login(provider: string, loginData: {}): Observable<any> {
         const urlApi = 'http://localhost:3000/api/Users/login?include=user';
         const urlTest = 'assets/data/user.json';
-        return this.http.get(urlTest).pipe(map(data => data));
+        // return this.http.get(urlTest).pipe(map(data => data));
+        console.log('Login Data Passed', loginData);
+        if (provider === 'formulario') {
+            return this.http.get(urlTest).pipe(map(data => data));
+        } else {
+            return this.http.get(urlTest).pipe(map(data => loginData));
+        }
+
         /*return this.http
         .post(
           url_api,
@@ -43,6 +48,13 @@ export class AuthService {
     register(provider: string, registerData: {}): Observable<any> {
         const urlApi = 'http://localhost:3000/api/Users';
         const urlTest = 'assets/data/user.json';
+
+        console.log('Register Data Passed', registerData);
+        if (provider === 'formulario') {
+            return this.http.get(urlTest).pipe(map(data => data));
+        } else {
+            return this.http.get(urlTest).pipe(map(data => registerData));
+        }
         /*  return this.htttp
       .post<UserInterface>(
         url_api,

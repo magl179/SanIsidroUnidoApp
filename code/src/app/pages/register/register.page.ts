@@ -93,41 +93,30 @@ export class RegisterPage implements OnInit {
                     this.setLoginUserData(data);
                 }
             }, err => {
-                    this.utilsService.showToast('Fallo Iniciar Sesión');
-                    console.log('Error Login', err);
+                this.utilsService.showToast('Fallo Iniciar Sesión');
+                console.log('Error Login', err);
             });
         });
     }
 
     async registerFBUser() {
-        const fbloading = await this.utilsService.createBasicLoading('Validando');
-        fbloading.present();
-        timer(1500).subscribe(() => {
-            fbloading.dismiss();
-            this.socialDataService.testFBLoginFake().subscribe(fbData => {
-                if (fbData) {
-                    const user = this.socialDataService.getOwnFacebookUser(fbData);
-                    const socialID = user.token_id;
-                    const firstname = this.registerForm.value.firstname;
-                    const lastname = user.lastname;
-                    const email = user.email;
-                    const avatar = user.avatar;
-                    const registerData = { firstname, lastname, email, socialID, avatar, password: null };
-
-                    this.authService.register('facebook', registerData).subscribe( data => {
-                        if (data) {
-                            this.setLoginUserData(data);
-                        } else {
-                            this.utilsService.showToast('Ocurrio un error al crear el usuario');
-                        }
-                    });
-                } else {
-                    this.utilsService.showToast('No se pudo obtener los datos con Facebook');
-                }
-            }, err => {
-                this.utilsService.showToast('Fallo Traer los datos de Facebook');
-                console.log('Error Login', err);
-            });
+        await this.socialDataService.loginByFacebook();
+        this.socialDataService.fbLoginData.subscribe(fbData => {
+            if (fbData) {
+                const user = this.socialDataService.getOwnFacebookUser(fbData);
+                this.authService.register('facebook', user).subscribe(registerData => {
+                    if (registerData) {
+                        this.setLoginUserData(registerData);
+                    } else {
+                        this.utilsService.showToast('Ocurrio un error al crear el usuario');
+                    }
+                });
+            } else {
+                this.utilsService.showToast('No se pudo obtener los datos con Facebook');
+            }
+        }, err => {
+            this.utilsService.showToast('Fallo Obtener Datos de Facebook');
+            console.log('Error Login', err);
         });
     }
     async registerGoogleUser() {
@@ -145,7 +134,7 @@ export class RegisterPage implements OnInit {
                     const avatar = user.avatar;
                     const registerData = { firstname, lastname, email, socialID, avatar, password: null };
 
-                    this.authService.register('google', registerData).subscribe( data => {
+                    this.authService.register('google', registerData).subscribe(data => {
                         if (data) {
                             this.setLoginUserData(data);
                         } else {

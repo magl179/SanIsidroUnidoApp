@@ -1,4 +1,4 @@
-# Repositorio de la Parte Móvil del Proyecto San Isidrp Unido
+# Repositorio de la Parte Móvil del Proyecto San Isidro Unido
 
 ## Objetivo
 
@@ -52,6 +52,8 @@ Se incluyen los siguientes directorios:
 - Para poder observar la aplicación de la mejor manera se debe tener el Navegador con el WebView actualizado
 
 ## Bugs
+
+- Plugin de Google Plus esta en deprecación no permite el inicio de sesión, se están analizando otras opciones
 
 
 

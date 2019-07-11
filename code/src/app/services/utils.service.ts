@@ -35,16 +35,16 @@ export class UtilsService {
     }
 
     async showToast(message?: string, duration?: number, position?: any, color?: string, cssClass?: string, header?: string) {
-        this.toastItem = await this.toastCtrl.create({
+        const toastItem = await this.toastCtrl.create({
             animated: true,
             message: message || 'Test Message Toast',
-            duration: duration || 2000,
+            duration: duration || 1000,
             color: color || 'dark',
             cssClass: cssClass || '',
             header: header || '',
             position: position || 'top'
         });
-        this.toastItem.present();
+        toastItem.present();
     }
 
     async createBasicLoading(message: string = 'Cargando') {

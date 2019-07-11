@@ -17,7 +17,7 @@ export class LoginAuthGuard implements CanActivate {
 
     async canActivate() {
         const isAuthenticated = await this.authService.isAuthenticated();
-        console.log({tengo_auth: isAuthenticated});
+        // console.log({tengo_auth: isAuthenticated});
         if (isAuthenticated === false) {
             this.navCtrl.navigateRoot('/login');
             return false;

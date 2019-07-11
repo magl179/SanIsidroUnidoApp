@@ -14,6 +14,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SmComponentsModule } from './components/sm-components.module';
 
+import { GooglePlus } from '@ionic-native/google-plus/ngx';
+import { Facebook } from '@ionic-native/facebook/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
@@ -35,7 +37,9 @@ import { ShowListNotificationsPageModule } from './modals/show-list-notification
       AndroidPermissions,
       Camera,
       Geolocation,
-      LocationAccuracy
+      LocationAccuracy,
+      GooglePlus,
+      Facebook
   ],
   bootstrap: [AppComponent]
 })

@@ -59,25 +59,25 @@ export class LoginPage implements OnInit {
         this.passwordEye.el.setFocus();
     }
 
-    setLoginUserData(user) {
-        this.authService.setUser(user);
+    async setLoginUserData(user) {
+        await this.authService.setUser(user);
         const tokenID = user.tokenID;
-        this.authService.setToken(tokenID);
+        await this.authService.setToken(tokenID);
         this.navCtrl.navigateRoot(urlLogueado);
     }
 
     async loginUser() {
         const loadingLoginValidation = await this.utilsService.createBasicLoading('Validando');
         loadingLoginValidation.present();
-        console.log(this.loginForm.value);
-        timer(1500).subscribe(() => {
+        // console.log(this.loginForm.value);
+        timer(1500).subscribe(async () => {
             loadingLoginValidation.dismiss();
             const email = this.loginForm.value.email;
             const password = this.loginForm.value.password;
-            this.authService.login('formulario', {email, password, socialID: null}).subscribe(data => {
+            await this.authService.login('formulario', { email, password, token_id: null }).subscribe(async data => {
                 if (data) {
                     data.tokenID = '2312321323123';
-                    this.setLoginUserData(data);
+                    await this.setLoginUserData(data);
                 }
             }, err => {
                 this.utilsService.showToast('Fallo Iniciar Sesión');
@@ -86,16 +86,11 @@ export class LoginPage implements OnInit {
         });
     }
     async loginUserByFB() {
-        const loadingFB = await this.utilsService.createBasicLoading('Validando');
-        loadingFB.present();
-        timer(1000).subscribe(() => {
-            loadingFB.dismiss();
-            this.socialDataService.testFBLoginFake().subscribe(fbData => {
+            await this.socialDataService.loginByFacebook();
+            this.socialDataService.fbLoginData.subscribe(fbData => {
                 if (fbData) {
                     const user = this.socialDataService.getOwnFacebookUser(fbData);
-                    const email = user.email;
-                    const socialID = user.token_id;
-                    this.authService.login('google', {email, socialID, password: null}).subscribe(loginData => {
+                    this.authService.login('facebook', user).subscribe(loginData => {
                         this.setLoginUserData(loginData);
                     });
                 } else {
@@ -105,28 +100,23 @@ export class LoginPage implements OnInit {
                 this.utilsService.showToast('Fallo Iniciar Sesión con Facebook');
                 console.log('Error Login', err);
             });
-        });
     }
     async loginUserByGoogle() {
-        const loadingGoogle = await this.utilsService.createBasicLoading('Validando');
-        loadingGoogle.present();
-        await timer(1000).subscribe(() => {
-            loadingGoogle.dismiss();
-            this.socialDataService.testGoogleLoginFake().subscribe(googleData => {
-                if (googleData) {
-                    const user = this.socialDataService.getOwnGoogleUser(googleData);
-                    const email = user.email;
-                    const socialID = user.token_id;
-                    this.authService.login(user.email, {email, socialID, password: null}).subscribe(loginData => {
-                        this.setLoginUserData(loginData);
-                    });
-                } else {
-                    this.utilsService.showToast('No se pudo obtener los datos con Google');
-                }
-            }, err => {
-                this.utilsService.showToast('Fallo Iniciar Sesión con Google');
-                console.log('Error Login', err);
-            });
+        console.log('called loginby google since login page');
+        await this.socialDataService.loginByGoogle();
+        console.log('called social service loginby google');
+        this.socialDataService.googleLoginData.subscribe(async googleData => {
+            if (googleData) {
+                const user = this.socialDataService.getOwnGoogleUser(googleData);
+                this.authService.login('google', user).subscribe(loginData => {
+                    this.setLoginUserData(loginData);
+                });
+            } else {
+                await this.utilsService.showToast('No se pudo obtener los datos con Google');
+            }
+        }, async err => {
+            await this.utilsService.showToast('Fallo Iniciar Sesión con Google');
+            console.log('Error Login', err);
         });
     }
 

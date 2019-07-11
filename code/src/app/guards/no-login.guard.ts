@@ -17,7 +17,7 @@ export class NoLoginAuthGuard implements CanActivate {
 
     async canActivate() {
         const isAuthenticated = await this.authService.isAuthenticated();
-        console.log({tengo_auth: isAuthenticated});
+        // console.log({tengo_auth: isAuthenticated});
         if (isAuthenticated === true) {
             this.navCtrl.navigateRoot('/social-problems');
             return false;

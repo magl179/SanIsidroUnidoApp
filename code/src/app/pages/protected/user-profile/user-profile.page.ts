@@ -30,6 +30,7 @@ export class UserProfilePage implements OnInit {
                 this.userApp = user;
             }
         });
+        console.log({ userProfile: this.userApp });
     }
 
     async showProfileEditModal() {
