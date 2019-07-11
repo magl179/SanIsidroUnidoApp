@@ -33,9 +33,9 @@ export class ListNotificationsComponent implements OnInit {
 
     async ngOnInit() {
         await this.notificationsList.reverse();
-        await this.retornarNotiSolicitadas();
-        console.log(this.notificationsRequested);
-        console.log(this.maxNotifications);
+        // await this.retornarNotiSolicitadas();
+        // console.log(this.notificationsRequested);
+        // console.log(this.maxNotifications);
     }
 
     getLinesState(indice) {

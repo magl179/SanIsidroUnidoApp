@@ -11,6 +11,7 @@ import { SimpleUbicationItem } from 'src/app/interfaces/barrios';
 export class SimpleMapComponent implements AfterViewInit {
 
     @Input() idMap: string;
+    @Input() classMap = '';
     @Input() coordsMap: SimpleUbicationItem = {
         latitude: null,
         longitude: null,

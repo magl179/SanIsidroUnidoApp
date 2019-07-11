@@ -101,10 +101,6 @@
                                 </p>
                                 <p class="form-error"
                                     *ngIf="registerForm.get('password').hasError('maxlength') && registerForm.get('password').touched">
-                                    {{errorMessages.password.maxlength.message}}
-                                </p>
-                                <p class="form-error"
-                                    *ngIf="registerForm.get('password').hasError('maxlength') && registerForm.get('password').touched">
                                     {{errorMessages.password.pattern.message}}
                                 </p>
                             </div>

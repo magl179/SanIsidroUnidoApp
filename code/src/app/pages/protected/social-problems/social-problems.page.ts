@@ -30,14 +30,7 @@ export class SocialProblemsPage implements OnInit {
         setTimeout(() => {
             this.elements = [1, 1, 1];
             this.loading.dismiss();
-            this.authService.user.subscribe(user => {
-                if (user) {
-                    console.log('Usuario Logueado', user);
-                } else {
-                    console.log('Usuario no Logueado');
-                }
-            });
-        }, 3000);
+        }, 1500);
     }
 
     ionViewWillEnter() {

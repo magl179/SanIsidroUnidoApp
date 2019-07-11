@@ -56,7 +56,7 @@ export class EditProfilePage implements OnInit {
                 this.currentUser = user;
             }
         });
-        console.log({ userEdit: this.currentUser });
+        // console.log({ userEdit: this.currentUser });
     }
 
     closeModal() {

@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
     showAppsplash = true;
     componentesMenu: MenuComponente[];
     automaticClose = true;
-    userApp: any = {};
+    userApp: any = null;
 
     constructor(
         private platform: Platform,
@@ -36,7 +36,6 @@ export class AppComponent implements OnInit {
 
     ngOnInit() {
         this.utilsService.getMenuOptions().subscribe((data) => {
-            // console.log(data);
             this.componentesMenu = data;
             this.componentesMenu[0].open = false;
         });
@@ -54,10 +53,10 @@ export class AppComponent implements OnInit {
     }
 
     async comprobarUsuarioLogueado() {
-        await this.authService.checkUser();
-        await this.authService.user.subscribe(user => {
-            if (user) {
-                this.userApp = user;
+        // this.userApp = await this.authService.getCurrentUser();
+        await this.authService.user.subscribe(data => {
+            if (data) {
+                this.userApp = data;
             }
         });
     }

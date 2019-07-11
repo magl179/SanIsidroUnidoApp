@@ -6,6 +6,8 @@ import { timer } from 'rxjs';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 
+const urlLogueado = '/social-problems';
+
 @Component({
     selector: 'app-register',
     templateUrl: './register.page.html',
@@ -32,13 +34,15 @@ export class RegisterPage implements OnInit {
         email: {
             required: true,
             minlength: 3,
-            maxlength: 30
+            maxlength: 30,
+            // tslint:disable-next-line: max-line-length
+            pattern: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         },
         password: {
             required: true,
             minlength: 8,
             maxlength: 35,
-            pattern: '((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,30})'
+            pattern: /((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,30})/
         }
     };
     loadingRegister: any;
@@ -75,12 +79,31 @@ export class RegisterPage implements OnInit {
             const lastname = this.registerForm.value.lastname;
             const email = this.registerForm.value.email;
             const password = this.registerForm.value.password;
-            if (this.authService.register(firstname, lastname, email, password)) {
-                this.navCtrl.navigateRoot('/social-problems');
-            } else {
-                this.utilsService.showToast('Fallo Registrar Usuario');
-            }
+            this.authService.register(firstname, lastname, email, password).subscribe(data => {
+                this.authService.setUser(data);
+                const token = '2312321323123';
+                this.authService.setToken(token);
+                this.navCtrl.navigateRoot(urlLogueado);
+            }, err => {
+                    this.utilsService.showToast('Fallo Iniciar Sesión');
+                    console.log('Error Login', err);
+            });
         });
+        // const loadingRegisterValidation = await this.utilsService.createBasicLoading('Validando');
+        // loadingRegisterValidation.present();
+        // console.log(this.registerForm.value);
+        // timer(1500).subscribe(() => {
+        //     loadingRegisterValidation.dismiss();
+        //     const firstname = this.registerForm.value.firstname;
+        //     const lastname = this.registerForm.value.lastname;
+        //     const email = this.registerForm.value.email;
+        //     const password = this.registerForm.value.password;
+        //     if (this.authService.register(firstname, lastname, email, password)) {
+        //         this.navCtrl.navigateRoot('/social-problems');
+        //     } else {
+        //         this.utilsService.showToast('Fallo Registrar Usuario');
+        //     }
+        // });
     }
 
     async registerFBUser() {
@@ -125,7 +148,7 @@ export class RegisterPage implements OnInit {
         // Campo Email
         const emailInput = new FormControl('', Validators.compose([
             Validators.required,
-            Validators.email
+            Validators.pattern(this.registerFormFields.email.pattern)
         ]));
         // Campo Contraseña
         const passwordInput = new FormControl('', Validators.compose([
@@ -173,10 +196,7 @@ export class RegisterPage implements OnInit {
                 minlength: {
                     message: `El Email debe contener minimo ${this.registerFormFields.email.minlength} caracteres`
                 },
-                maxlength: {
-                    message: `El Email debe contener máximo ${this.registerFormFields.email.maxlength} caracteres`
-                },
-                email: {
+                pattern: {
                     message: `Ingresa un email válido`
                 }
             },
@@ -186,9 +206,6 @@ export class RegisterPage implements OnInit {
                 },
                 minlength: {
                     message: `La Contraseña debe contener minimo ${this.registerFormFields.password.minlength} caracteres`
-                },
-                maxlength: {
-                    message: `La Contraseña debe contener máximo ${this.registerFormFields.password.maxlength} caracteres`
                 },
                 pattern: {
                     message: `Ingresa una contraseña segura`

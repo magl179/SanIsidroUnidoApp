@@ -1,103 +1,110 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Storage } from '@ionic/storage';
+import { Observable } from 'rxjs';
 import { UserLogued } from 'src/app/interfaces/barrios';
-
-const userAuthTB = 'pg_user_auth';
-
-const defaultUser: UserLogued = {
-    id: null,
-    email: null,
-    password: null,
-    firstname: null,
-    lastname: null,
-    state: null,
-    avatar: null,
-    basic_service_image: null,
-    cargo: null,
-    phone: null
-};
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
 
-    user = new BehaviorSubject(defaultUser);
-    authState = new BehaviorSubject(false);
+    headers: HttpHeaders = new HttpHeaders({
+        'Content-Type': 'application/json'
+    });
+
+    user = new BehaviorSubject(null);
+    authToken = new BehaviorSubject(null);
 
     constructor(
-        private storage: Storage
+        private storage: Storage,
+        private http: HttpClient
     ) { }
 
-    async login(email: string, password: string) {
-        // recibir datos
-        // llamar api loguear
-        // recibir datos usuario
-
-        // guardar usuario en storage
-        // retornar error
-        let loginCorrect = false;
-        const userResult: UserLogued = {
-            id: 5,
-            email,
-            password,
-            firstname: 'Juan',
-            lastname: 'Caceres',
-            state: 'activo',
-            avatar: 'assets/img/default/img_avatar.png',
-            basic_service_image: '',
-            cargo: 'Morador Afiliado',
-            phone: ''
-        };
-        await this.storage.set(userAuthTB, userResult).then(res => {
-            this.user.next(userResult);
-            this.authState.next(true);
-            loginCorrect = true;
-        });
-        return loginCorrect;
+    login(email: string, password: string): Observable<any> {
+        const urlApi = 'http://localhost:3000/api/Users/login?include=user';
+        const urlTest = 'assets/data/user.json';
+        return this.http.get(urlTest).pipe(map(data => data));
+        /*return this.http
+        .post(
+          url_api,
+          { email, password },
+          { headers: this.headers }
+        )*/
     }
 
-    async register(firstname, lastname, email, password) {
-        let registerCorrect = false;
-        const userResult: UserLogued = {
-            id: 5,
-            email,
-            password,
-            firstname,
-            lastname,
-            state: 'activo',
-            avatar: 'assets/img/default/img_avatar.png',
-            basic_service_image: '',
-            cargo: 'Morador Afiliado',
-            phone: ''
-        };
-        await this.storage.set(userAuthTB, userResult).then(res => {
-            this.user.next(userResult);
-            this.authState.next(true);
-            registerCorrect = true;
-        });
-        return registerCorrect;
+    register(firstname, lastname, email, password): Observable<any> {
+        const urlApi = 'http://localhost:3000/api/Users';
+        const urlTest = 'assets/data/user.json';
+        /*  return this.htttp
+      .post<UserInterface>(
+        url_api,
+        {
+          name: name,
+          email: email,
+          password: password
+        },
+        { headers: this.headers }*/
+        return this.http.get(urlTest).pipe(map(data => data));
     }
 
-    logout() {
-        return this.storage.remove(userAuthTB).then(res => {
-            this.user.next(null);
-            this.authState.next(false);
-        });
+    async logout() {
+        const accessToken = await this.storage.get('accessToken');
+        const urlApi = `http://localhost:3000/api/Users/logout?access_token=${accessToken}`;
+        await this.removeUser();
+        await this.removeToken();
     }
 
     async isAuthenticated() {
-        await this.checkUser();
-        return this.authState.value;
+        const user = await this.getCurrentUser();
+        if (user) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    checkUser() {
-        return this.storage.get(userAuthTB).then(res => {
+    async getCurrentUser() {
+        await this.storage.get('currentUser').then(res => {
             if (res) {
                 this.user.next(res);
-                this.authState.next(true);
             }
         });
+        // console.log('Auth Get Current User', this.user.value);
+        return this.user.value;
     }
+
+    async getToken() {
+        await this.storage.get('accessToken').then(res => {
+            if (res) {
+                this.authToken.next(res);
+            }
+        });
+        return this.authToken.value;
+    }
+
+    async setUser(user) {
+        await this.storage.set('currentUser', user);
+        this.user.next(user);
+    }
+
+
+    async setToken(token) {
+        await this.storage.set('accessToken', token);
+        this.authToken.next(token);
+    }
+
+    async removeUser() {
+        await this.storage.remove('currentUser');
+        this.user.next(null);
+    }
+
+    async removeToken() {
+        await this.storage.remove('accessToken');
+        this.authToken.next(null);
+    }
+
+
 }

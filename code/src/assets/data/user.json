@@ -1,0 +1,12 @@
+{
+    "id": 5,
+    "email": "testmail.gmail.com",
+    "password": "6464545545454czxczxcxzczxcxzcxc",
+    "firstname": "Juan",
+    "lastname": "Caceres",
+    "state": "activo",
+    "avatar": "assets/img/default/img_avatar.png",
+    "basic_service_image": "",
+    "cargo": "Morador Afiliado",
+    "phone": ""
+}

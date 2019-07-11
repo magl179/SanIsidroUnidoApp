@@ -23,15 +23,13 @@ export class EventsPage implements OnInit {
         setTimeout(() => {
             this.elements = [1, 1, 1, 1];
             this.loading.dismiss();
-        }, 3500);
+        }, 1500);
     }
 
     ionViewWillEnter() {
         this.utilsService.enableMenu();
     }
     postDetail(id) {
-        // this.navCtrl.navigateRoot('/social-problem-detail', id);
-        // this.navCtrl.navigateRoot(`/social-problem-detail/${id}`);
         this.navCtrl.navigateForward(`/event-detail/${id}`);
     }
 

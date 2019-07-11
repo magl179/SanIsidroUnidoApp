@@ -25,7 +25,9 @@ export class LoginPage implements OnInit {
         email: {
             required: true,
             minlength: 3,
-            maxlength: 15
+            maxlength: 15,
+            // tslint:disable-next-line: max-line-length
+            pattern: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         },
         password: {
             required: true,
@@ -61,11 +63,17 @@ export class LoginPage implements OnInit {
         console.log(this.loginForm.value);
         timer(1500).subscribe(() => {
             loadingLoginValidation.dismiss();
-            if (this.authService.login(this.loginForm.value.email, this.loginForm.value.password)) {
+            const email = this.loginForm.value.email;
+            const password = this.loginForm.value.password;
+            this.authService.login(email, password).subscribe(data => {
+                this.authService.setUser(data);
+                const token = '2312321323123';
+                this.authService.setToken(token);
                 this.navCtrl.navigateRoot(urlLogueado);
-            } else {
-                this.utilsService.showToast('Fallo Iniciar Sesión');
-            }
+            }, err => {
+                    this.utilsService.showToast('Fallo Iniciar Sesión');
+                    console.log('Error Login', err);
+            });
         });
     }
     async loginUserByFB() {
@@ -90,15 +98,11 @@ export class LoginPage implements OnInit {
         // Campo Email
         const emailInput = new FormControl('', Validators.compose([
             Validators.required,
-            // Validators.minLength(this.loginFormFields.email.minlength),
-            // Validators.maxLength(this.loginFormFields.email.maxlength),
-            Validators.email
+            Validators.pattern(this.loginFormFields.email.pattern)
         ]));
         // Campo Contraseña
         const passwordInput = new FormControl('', Validators.compose([
             Validators.required,
-            // Validators.minLength(this.loginFormFields.password.minlength),
-            // Validators.maxLength(this.loginFormFields.password.maxlength)
         ]));
         // Añado Propiedades al Form
         this.loginForm = this.formBuilder.group({
@@ -135,6 +139,11 @@ export class LoginPage implements OnInit {
                 }
             }
         };
-
     }
+
+
+    onClearBDD() {
+        this.utilsService.clearBDD();
+    }
+
 }

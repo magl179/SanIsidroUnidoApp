@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ToastController, LoadingController, MenuController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { MenuComponente } from '../interfaces/barrios';
+import { Storage } from '@ionic/storage';
 
 @Injectable({
     providedIn: 'root'
@@ -19,7 +20,8 @@ export class UtilsService {
         private toastCtrl: ToastController,
         private loadingCtrl: LoadingController,
         private http: HttpClient,
-        private menuCtrl: MenuController
+        private menuCtrl: MenuController,
+        private storage: Storage
     ) { }
 
     ramdomValue(tamanio) {
@@ -64,6 +66,10 @@ export class UtilsService {
     async disabledMenu() {
         const menus = await this.menuCtrl.getMenus();
         this.menuCtrl.enable(false, 'menu_principal_app');
+    }
+
+    clearBDD() {
+        this.storage.clear();
     }
 
 }
