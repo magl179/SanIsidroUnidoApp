@@ -3,13 +3,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
-import { GooglePlus } from '@ionic-native/google-plus/ngx';
+import { GooglePlus as Google } from '@ionic-native/google-plus/ngx';
 import { Platform } from '@ionic/angular';
 import { UtilsService } from './utils.service';
 import { environment } from 'src/environments/environment';
-
-import { AngularFireAuth } from '@angular/fire/auth';
-import * as firebase from 'firebase/app';
 
 @Injectable({
     providedIn: 'root'
@@ -22,10 +19,9 @@ export class SocialDataService {
     constructor(
         private http: HttpClient,
         private facebook: Facebook,
-        private googlePlus: GooglePlus,
+        private google: Google,
         private platform: Platform,
-        private utilsService: UtilsService,
-        private afAuth: AngularFireAuth
+        private utilsService: UtilsService
     ) { }
 
 
@@ -39,7 +35,7 @@ export class SocialDataService {
         return this.http.get(urlTest).pipe(map(data => data));
     }
 
-    async loginByGoogleWeb(){
+    /*async loginByGoogleWeb(){
         try{
             let provider = new firebase.auth.GoogleAuthProvider();
             const credential = await this.afAuth.auth.signInWithPopup(provider);
@@ -49,7 +45,7 @@ export class SocialDataService {
             await this.utilsService.showToast('Ocurrio algun error', err);
         }
         console.log('Web login'); 
-      }
+      }*/
 
     getOwnGoogleWebUser(googleUser: any) {
         const appUser = {
@@ -96,7 +92,7 @@ export class SocialDataService {
     async loginByGoogle() {
         if (this.platform.is('cordova')) {
             console.log('login is cordova');
-            this.googlePlus.login({
+            this.google.login({
                 offline: true,
                 webClientId: environment.googleClientID
             }).then(data => {
@@ -130,7 +126,7 @@ export class SocialDataService {
 
     async closeGoogleSession() {
         try {
-            await this.googlePlus.logout();
+            await this.google.logout();
             console.log('Google Logout Succesfull');
         } catch (err) {
             console.log(err);

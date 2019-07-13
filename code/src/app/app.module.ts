@@ -25,9 +25,6 @@ import { PopNotificationsComponent } from './components/pop-notifications/pop-no
 import { ShowListNotificationsPage } from './modals/show-list-notifications/show-list-notifications.page';
 import { ShowListNotificationsPageModule } from './modals/show-list-notifications/show-list-notifications.module';
 
-import { AngularFireModule } from '@angular/fire';
-import { AngularFireAuthModule } from '@angular/fire/auth';
-import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [AppComponent],
@@ -41,17 +38,15 @@ import { environment } from '../environments/environment';
     SmComponentsModule, 
     ReactiveFormsModule, 
     IonicStorageModule.forRoot(), 
-    ShowListNotificationsPageModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFireAuthModule,
+    ShowListNotificationsPageModule
     ],
   providers: [
     StatusBar,
     SplashScreen,
       { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-      AndroidPermissions,
-      Camera,
+      AndroidPermissions,      
       Geolocation,
+      Camera,
       LocationAccuracy,
       GooglePlus,
       Facebook

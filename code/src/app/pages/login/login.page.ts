@@ -86,9 +86,9 @@ export class LoginPage implements OnInit {
         });
     }
 
-    loginUserByGoogleWeb(){
+    /*loginUserByGoogleWeb(){
         this.socialDataService.loginByGoogleWeb();
-    }
+    }*/
 
     async loginUserByFB() {
             await this.socialDataService.loginByFacebook();
