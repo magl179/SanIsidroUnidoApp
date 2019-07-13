@@ -120,21 +120,10 @@ export class RegisterPage implements OnInit {
         });
     }
     async registerGoogleUser() {
-        const googleloading = await this.utilsService.createBasicLoading('Validando');
-        googleloading.present();
-        await timer(1500).subscribe(() => {
-            googleloading.dismiss();
-            this.socialDataService.testGoogleLoginFake().subscribe(googleData => {
+            this.socialDataService.loginByGoogle();
+            this.socialDataService.googleLoginData.subscribe(googleData => {
                 if (googleData) {
-                    const user = this.socialDataService.getOwnFacebookUser(googleData);
-                    const socialID = user.token_id;
-                    const firstname = this.registerForm.value.firstname;
-                    const lastname = user.lastname;
-                    const email = user.email;
-                    const avatar = user.avatar;
-                    const registerData = { firstname, lastname, email, socialID, avatar, password: null };
-
-                    this.authService.register('google', registerData).subscribe(data => {
+                    this.authService.register('google', googleData).subscribe(data => {
                         if (data) {
                             this.setLoginUserData(data);
                         } else {
@@ -148,7 +137,6 @@ export class RegisterPage implements OnInit {
                 this.utilsService.showToast('Fallo Traer los datos de Google');
                 console.log('Error Login', err);
             });
-        });
     }
 
     // Función Crea el Formulario

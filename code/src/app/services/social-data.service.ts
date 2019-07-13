@@ -64,24 +64,17 @@ export class SocialDataService {
     }
 
     async loginByGoogle() {
-        console.log('call login by google');
         if (this.platform.is('cordova')) {
-            console.log('is cordova');
-            try {
-                const loginGoogle = await this.googlePlus.login({
-                    scopes: 'profile email',
-                    webClientId: environment.googleClientID,
-                    offline: true
-                });
-                console.log('Login by Google');
-                await this.getGoogleData(loginGoogle.accessToken);
-                if (this.googleLoginData.value !== null) {
-                    await this.closeGoogleSession();
-                }
-            } catch (error) {
-                await this.utilsService.showToast('Ocurrio un error por favor intentalo más tarde', null, 'bottom');
-                console.log('err gg login', error);
-            }
+            console.log('login is cordova');
+            this.googlePlus.trySilentLogin({
+                offline: true,
+                webClientId: environment.googleClientID
+            }).then(data => {
+                console.log('Luego del Login then', data);
+            }).catch(err => {
+                console.log(err);
+            });
+            console.log('Luego del Login');
         } else {
             await this.utilsService.showToast('Cordova Google no esta disponible', null, 'bottom');
         }
@@ -93,7 +86,12 @@ export class SocialDataService {
         await this.http.get(`https://www.googleapis.com/plus/v1/people/me?access_token=${token}`).subscribe(
             (profile: any) => {
                 console.log('Datos Google', profile);
-                this.googleLoginData.next(profile);
+                if (profile) {
+                    this.googleLoginData.next(profile);
+                    this.closeGoogleSession();
+                } else {
+                    console.log('datos vacios google');
+                }
             },
             err => {
                 console.log(err);
@@ -102,7 +100,7 @@ export class SocialDataService {
 
     async closeGoogleSession() {
         try {
-            const closeSession = await this.googlePlus.logout();
+            await this.googlePlus.logout();
             console.log('Google Logout Succesfull');
         } catch (err) {
             console.log(err);

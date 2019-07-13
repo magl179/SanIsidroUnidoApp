@@ -82,7 +82,7 @@
     "tslint": "~5.17.0",
     "typescript": "~3.1.6"
   },
-  "description": "An Ionic project",
+  "description": "San Isidro Unido",
   "cordova": {
     "plugins": {
       "cordova-plugin-geolocation": {},
@@ -102,8 +102,8 @@
       "cordova-plugin-nativestorage": {},
       "cordova-sqlite-storage": {},
       "cordova-plugin-googleplus": {
-        "REVERSED_CLIENT_ID": "1051963029462-mht230ntj5grq6k0ng3get34kfq3ldvu.apps.googleusercontent.com",
-        "PLAY_SERVICES_VERSION": "11.8.0"
+        "REVERSED_CLIENT_ID": "com.googleusercontent.apps.1051963029462-mht230ntj5grq6k0ng3get34kfq3ldvu",
+        "PLAY_SERVICES_VERSION": "11.+"
       },
       "cordova-plugin-facebook4": {
         "APP_ID": "207116460208551",

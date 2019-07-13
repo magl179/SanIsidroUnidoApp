@@ -102,9 +102,7 @@ export class LoginPage implements OnInit {
             });
     }
     async loginUserByGoogle() {
-        console.log('called loginby google since login page');
         await this.socialDataService.loginByGoogle();
-        console.log('called social service loginby google');
         this.socialDataService.googleLoginData.subscribe(async googleData => {
             if (googleData) {
                 const user = this.socialDataService.getOwnGoogleUser(googleData);
