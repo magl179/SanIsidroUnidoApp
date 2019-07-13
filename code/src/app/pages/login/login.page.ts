@@ -85,8 +85,14 @@ export class LoginPage implements OnInit {
             });
         });
     }
+
+    loginUserByGoogleWeb(){
+        this.socialDataService.loginByGoogleWeb();
+    }
+
     async loginUserByFB() {
             await this.socialDataService.loginByFacebook();
+            // await this.socialDataService.loginByGoogleWeb();
             this.socialDataService.fbLoginData.subscribe(fbData => {
                 if (fbData) {
                     const user = this.socialDataService.getOwnFacebookUser(fbData);
@@ -102,21 +108,25 @@ export class LoginPage implements OnInit {
             });
     }
     async loginUserByGoogle() {
-        await this.socialDataService.loginByGoogle();
-        this.socialDataService.googleLoginData.subscribe(async googleData => {
-            if (googleData) {
-                const user = this.socialDataService.getOwnGoogleUser(googleData);
-                this.authService.login('google', user).subscribe(loginData => {
-                    this.setLoginUserData(loginData);
+        try{
+                await this.socialDataService.loginByGoogle();
+                this.socialDataService.googleLoginData.subscribe(async googleData => {
+                    if (googleData) {
+                        const user = this.socialDataService.getOwnGoogleUser(googleData);
+                        this.authService.login('google', user).subscribe(loginData => {
+                            this.setLoginUserData(loginData);
+                        });
+                    } else {
+                        await this.utilsService.showToast('No se pudo obtener los datos con Google');
+                    }
+                }, async err => {
+                    await this.utilsService.showToast('Fallo Iniciar Sesión con Google');
+                    console.log('Error Login', err);
                 });
-            } else {
-                await this.utilsService.showToast('No se pudo obtener los datos con Google');
+            } catch(err){
+                console.log('Error Login', err);
             }
-        }, async err => {
-            await this.utilsService.showToast('Fallo Iniciar Sesión con Google');
-            console.log('Error Login', err);
-        });
-    }
+        }
 
     // Función Crea el Formulario
     createForm() {

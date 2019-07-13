@@ -8,6 +8,9 @@ import { Platform } from '@ionic/angular';
 import { UtilsService } from './utils.service';
 import { environment } from 'src/environments/environment';
 
+import { AngularFireAuth } from '@angular/fire/auth';
+import * as firebase from 'firebase/app';
+
 @Injectable({
     providedIn: 'root'
 })
@@ -21,7 +24,8 @@ export class SocialDataService {
         private facebook: Facebook,
         private googlePlus: GooglePlus,
         private platform: Platform,
-        private utilsService: UtilsService
+        private utilsService: UtilsService,
+        private afAuth: AngularFireAuth
     ) { }
 
 
@@ -33,6 +37,32 @@ export class SocialDataService {
     testGoogleLoginFake(): Observable<any> {
         const urlTest = 'assets/data/google.json';
         return this.http.get(urlTest).pipe(map(data => data));
+    }
+
+    async loginByGoogleWeb(){
+        try{
+            let provider = new firebase.auth.GoogleAuthProvider();
+            const credential = await this.afAuth.auth.signInWithPopup(provider);
+            console.log('Credential', credential);
+        } catch(err) {
+            console.log('Ocurrio algun error', err);
+            await this.utilsService.showToast('Ocurrio algun error', err);
+        }
+        console.log('Web login'); 
+      }
+
+    getOwnGoogleWebUser(googleUser: any) {
+        const appUser = {
+            firstname: googleUser.given_name,
+            lastname: googleUser.family_name,
+            email: googleUser.email,
+            token_id: googleUser.id,
+            provider: 'google',
+            avatar: googleUser.picture,
+            password: null
+        };
+        console.log('OWN GOOGLE DATA', appUser);
+        return appUser;
     }
 
     getOwnGoogleUser(googleUser: any) {
@@ -66,7 +96,7 @@ export class SocialDataService {
     async loginByGoogle() {
         if (this.platform.is('cordova')) {
             console.log('login is cordova');
-            this.googlePlus.trySilentLogin({
+            this.googlePlus.login({
                 offline: true,
                 webClientId: environment.googleClientID
             }).then(data => {

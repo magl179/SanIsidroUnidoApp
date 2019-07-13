@@ -25,11 +25,26 @@ import { PopNotificationsComponent } from './components/pop-notifications/pop-no
 import { ShowListNotificationsPage } from './modals/show-list-notifications/show-list-notifications.page';
 import { ShowListNotificationsPageModule } from './modals/show-list-notifications/show-list-notifications.module';
 
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { environment } from '../environments/environment';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [PopNotificationsComponent, ShowListNotificationsPage],
-  imports: [BrowserModule, BrowserAnimationsModule, IonicModule.forRoot(), AppRoutingModule,
-    HttpClientModule, SmComponentsModule, ReactiveFormsModule, IonicStorageModule.forRoot(), ShowListNotificationsPageModule],
+  imports: [
+      BrowserModule, 
+      BrowserAnimationsModule, 
+      IonicModule.forRoot(), 
+      AppRoutingModule,
+    HttpClientModule, 
+    SmComponentsModule, 
+    ReactiveFormsModule, 
+    IonicStorageModule.forRoot(), 
+    ShowListNotificationsPageModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireAuthModule,
+    ],
   providers: [
     StatusBar,
     SplashScreen,

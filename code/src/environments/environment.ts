@@ -4,7 +4,16 @@
 
 export const environment = {
     production: false,
-    googleClientID: '1051963029462-mht230ntj5grq6k0ng3get34kfq3ldvu.apps.googleusercontent.com'
+    googleClientID: '1051963029462-mht230ntj5grq6k0ng3get34kfq3ldvu.apps.googleusercontent.com',
+    firebaseConfig : {
+        apiKey: 'AIzaSyDkGCA_vXvIeQs0QcgIuP45AmUC_iYl-j8',
+        authDomain: 'myionic2project-c7adf.firebaseapp.com',
+        databaseURL: 'https://myionic2project-c7adf.firebaseio.com',
+        projectId: 'myionic2project-c7adf',
+        storageBucket: 'myionic2project-c7adf.appspot.com',
+        messagingSenderId: '522134390512',
+        appId: '1:522134390512:web:8dede20c94a34a01'
+      }
 };
 
 /*

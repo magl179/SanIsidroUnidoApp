@@ -5,14 +5,12 @@
                 <ion-row justify-content-center>
                     <ion-col size="6">
                         <ion-button (click)="loginUserByGoogle()" color="google" expand="block">
-                            <ion-icon slot="start" name="logo-google"></ion-icon>
-                            Google
+                            <ion-icon slot="icon-only" name="logo-google"></ion-icon>
                         </ion-button>
                     </ion-col>
                     <ion-col size="6">
                         <ion-button (click)="loginUserByFB()" color="facebook" expand="block">
-                            <ion-icon slot="start" name="logo-facebook"></ion-icon>
-                            Facebook
+                            <ion-icon slot="icon-only" name="logo-facebook"></ion-icon>  
                         </ion-button>
                     </ion-col>
                 </ion-row>
@@ -75,13 +73,15 @@
                         </form>
                     </ion-col>
                 </ion-row>
-                <ion-row>
-                    <ion-col>
+                <ion-row style="margin-top: 1rem;">
+                    <ion-col size="12">
                         <div class="flex-center-all already-have-account">
                             <span>No tienes una cuenta?</span><a color="primary" routerLink="/register">Crear una</a>
                         </div>
-                        <ion-button expand="full" routerLink="/home" routerDirection="root">Landing</ion-button>
                        
+                    </ion-col>
+                    <ion-col size="12">
+                        <ion-button expand="full" routerLink="/home" routerDirection="root">Landing</ion-button>
                     </ion-col>
                 </ion-row>
             </ion-grid>

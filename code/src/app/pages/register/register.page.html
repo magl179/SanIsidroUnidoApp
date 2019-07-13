@@ -1,9 +1,3 @@
-<!-- <ion-header no-border>
-    <ion-toolbar>
-        <ion-title></ion-title>
-    </ion-toolbar>
-</ion-header> -->
-
 <ion-content padding>
     <ion-grid class="grid-container-center">
         <ion-row class="main-row-center">
@@ -11,14 +5,12 @@
                 <ion-row justify-content-center>
                     <ion-col size="6">
                         <ion-button (click)="registerGoogleUser()" color="google" expand="block">
-                            <ion-icon slot="start" name="logo-google"></ion-icon>
-                            Google
+                            <ion-icon slot="icon-only" name="logo-google"></ion-icon>
                         </ion-button>
                     </ion-col>
                     <ion-col size="6">
                         <ion-button (click)="registerFBUser()" color="facebook" expand="full">
-                            <ion-icon slot="start" name="logo-facebook"></ion-icon>
-                            Facebook
+                            <ion-icon slot="icon-only" name="logo-facebook"></ion-icon>
                         </ion-button>
                     </ion-col>
                 </ion-row>
@@ -112,11 +104,13 @@
                         </form>
                     </ion-col>
                 </ion-row>
-                <ion-row>
-                    <ion-col>
+                <ion-row style="margin-top: 1rem;">
+                    <ion-col size="12">
                         <div class="flex-center-all dont-have-account">
                             <span>Ya tienes una cuenta?</span> <a color="primary" routerLink="/login">Iniciar Sesión</a>
                         </div>
+                    </ion-col>
+                    <ion-col size="12">
                         <ion-button expand="full" routerLink="/home" routerDirection="root">Landing</ion-button>
                     </ion-col>
                 </ion-row>
