@@ -92,14 +92,14 @@ export class SocialDataService {
     async loginByGoogle() {
         if (this.platform.is('cordova')) {
             console.log('login is cordova');
-            this.google.login({
-                offline: true,
-                webClientId: environment.googleClientID
-            }).then(data => {
-                console.log('Luego del Login then', data);
-            }).catch(err => {
-                console.log(err);
-            });
+            try {
+                const loginGoogle = await this.google.login({});
+                console.log({ respuestaLoginGoogle: loginGoogle });
+                await this.getGoogleData(loginGoogle.accessToken);
+            } catch (error) {
+                console.log(error);
+                await this.utilsService.showToast('Eror con Google');
+            }
             console.log('Luego del Login');
         } else {
             await this.utilsService.showToast('Cordova Google no esta disponible', null, 'bottom');
@@ -107,27 +107,31 @@ export class SocialDataService {
     }
 
     // Función Obtener Datos de Google
-    async getGoogleData(token) {
+    getGoogleData(token) {
         // Pedir Info a Google Plus Api pasandole el access token
-        await this.http.get(`https://www.googleapis.com/plus/v1/people/me?access_token=${token}`).subscribe(
-            (profile: any) => {
-                console.log('Datos Google', profile);
-                if (profile) {
-                    this.googleLoginData.next(profile);
-                    this.closeGoogleSession();
-                } else {
-                    console.log('datos vacios google');
-                }
-            },
-            err => {
-                console.log(err);
-            });
+         try {
+            this.http.get(`https://www.googleapis.com/plus/v1/people/me?access_token=${token}`).subscribe(
+                async (profile: any) => {
+                    console.log('Datos Google', profile);
+                    if (profile) {
+                        this.googleLoginData.next(profile);
+                        await this.closeGoogleSession();
+                    } else {
+                        this.utilsService.showToast('No se pudo obtener los datos con Google');
+                    }
+                },
+                err => {
+                    console.log(err);
+                });
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     async closeGoogleSession() {
         try {
-            await this.google.logout();
             console.log('Google Logout Succesfull');
+            await this.google.logout();
         } catch (err) {
             console.log(err);
         }
@@ -173,6 +177,8 @@ export class SocialDataService {
             if (profile !== null) {
                 this.fbLoginData.next(profile);
                 this.closeFacebookSession();
+            }else{
+                 this.utilsService.showToast('No se pudo obtener los datos con Facebook');
             }
         } catch (err) {
             console.log(err);

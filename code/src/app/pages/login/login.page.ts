@@ -92,15 +92,12 @@ export class LoginPage implements OnInit {
 
     async loginUserByFB() {
             await this.socialDataService.loginByFacebook();
-            // await this.socialDataService.loginByGoogleWeb();
             this.socialDataService.fbLoginData.subscribe(fbData => {
                 if (fbData) {
                     const user = this.socialDataService.getOwnFacebookUser(fbData);
                     this.authService.login('facebook', user).subscribe(loginData => {
                         this.setLoginUserData(loginData);
                     });
-                } else {
-                    this.utilsService.showToast('No se pudo obtener los datos con Facebook');
                 }
             }, err => {
                 this.utilsService.showToast('Fallo Iniciar Sesión con Facebook');
@@ -108,24 +105,18 @@ export class LoginPage implements OnInit {
             });
     }
     async loginUserByGoogle() {
-        try{
                 await this.socialDataService.loginByGoogle();
                 this.socialDataService.googleLoginData.subscribe(async googleData => {
                     if (googleData) {
                         const user = this.socialDataService.getOwnGoogleUser(googleData);
-                        this.authService.login('google', user).subscribe(loginData => {
+                        await this.authService.login('google', user).subscribe(loginData => {
                             this.setLoginUserData(loginData);
                         });
-                    } else {
-                        await this.utilsService.showToast('No se pudo obtener los datos con Google');
                     }
-                }, async err => {
-                    await this.utilsService.showToast('Fallo Iniciar Sesión con Google');
+                }, err => {
+                    this.utilsService.showToast('Fallo Iniciar Sesión con Google');
                     console.log('Error Login', err);
                 });
-            } catch(err){
-                console.log('Error Login', err);
-            }
         }
 
     // Función Crea el Formulario

@@ -10,3 +10,5 @@ Client id in google develper tool is : 123-xyz.apps.googleusercontent.com
 and command below is with reverse client id
 
 cordova plugin add cordova-plugin-googleplus --save --variable REVERSED_CLIENT_ID=com.googleusercontent.apps.123-xyz
+
+Problema Popup fue con el google play services todos deben tener la versión 11.8.0

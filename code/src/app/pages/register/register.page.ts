@@ -101,38 +101,29 @@ export class RegisterPage implements OnInit {
 
     async registerFBUser() {
         await this.socialDataService.loginByFacebook();
-        this.socialDataService.fbLoginData.subscribe(fbData => {
+        this.socialDataService.fbLoginData.subscribe(async fbData => {
             if (fbData) {
                 const user = this.socialDataService.getOwnFacebookUser(fbData);
-                this.authService.register('facebook', user).subscribe(registerData => {
+                await this.authService.register('facebook', user).subscribe(registerData => {
                     if (registerData) {
                         this.setLoginUserData(registerData);
-                    } else {
-                        this.utilsService.showToast('Ocurrio un error al crear el usuario');
                     }
                 });
-            } else {
-                this.utilsService.showToast('No se pudo obtener los datos con Facebook');
-            }
+            } 
         }, err => {
             this.utilsService.showToast('Fallo Obtener Datos de Facebook');
             console.log('Error Login', err);
         });
     }
     async registerGoogleUser() {
-            this.socialDataService.loginByGoogle();
-            this.socialDataService.googleLoginData.subscribe(googleData => {
+            await this.socialDataService.loginByGoogle();
+            this.socialDataService.googleLoginData.subscribe(async googleData => {
                 if (googleData) {
-                    this.authService.register('google', googleData).subscribe(data => {
-                        if (data) {
-                            this.setLoginUserData(data);
-                        } else {
-                            this.utilsService.showToast('Ocurrio un error al crear el usuario');
-                        }
-                    });
-                } else {
-                    this.utilsService.showToast('No se pudo obtener los datos con Google');
-                }
+                        const user = this.socialDataService.getOwnGoogleUser(googleData);
+                        await this.authService.register('google', user).subscribe(registerData => {
+                            this.setLoginUserData(registerData);
+                        });
+                  }
             }, err => {
                 this.utilsService.showToast('Fallo Traer los datos de Google');
                 console.log('Error Login', err);
