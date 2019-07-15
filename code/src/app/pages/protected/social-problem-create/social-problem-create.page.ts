@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UtilsService } from '../../../services/utils.service';
 import { MapService } from 'src/app/services/map.service';
-import { PostUbicationItem } from 'src/app/interfaces/barrios';
+import { IPostUbicationItem } from 'src/app/interfaces/barrios';
 import { LocalizationService } from '../../../services/localization.service';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
@@ -36,7 +36,7 @@ export class SocialProblemCreatePage implements OnInit {
         { title: 'Paso 3' }, { title: 'Paso 4' }
     ];
     socialProblemImages = [];
-    socialProblemCoordinate: PostUbicationItem = {
+    socialProblemCoordinate: IPostUbicationItem = {
         latitude: null,
         longitude: null,
         address: null
@@ -55,8 +55,8 @@ export class SocialProblemCreatePage implements OnInit {
 
     async ngOnInit() {
         const coords = await this.localizationService.getCoordinate();
-        this.socialProblemCoordinate.latitude = coords.latitud;
-        this.socialProblemCoordinate.longitude = coords.longitud;
+        this.socialProblemCoordinate.latitude = coords.latitude;
+        this.socialProblemCoordinate.longitude = coords.longitude;
     }
 
     createForm() {

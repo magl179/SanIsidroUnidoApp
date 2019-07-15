@@ -4,7 +4,7 @@ import { GestureHandling } from 'leaflet-gesture-handling';
 import { MapService } from 'src/app/services/map.service';
 import { UtilsService } from '../../services/utils.service';
 
-import { UbicationItem } from 'src/app/interfaces/barrios';
+import { IUbicationItem } from 'src/app/interfaces/barrios';
 
 const shadowIcon = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png';
 
@@ -17,7 +17,7 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
 
     @Input() idMap: string;
     @Input() zoomMap: number;
-    @Input() mapPoints: UbicationItem[] = [];
+    @Input() mapPoints: IUbicationItem[] = [];
     @Input() enableGesture = false;
     @Output() returnMapLoaded = new EventEmitter();
 

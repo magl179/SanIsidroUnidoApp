@@ -1,7 +1,7 @@
 import { Component, Input, AfterViewInit } from '@angular/core';
 import * as Leaflet from 'leaflet';
 import { GestureHandling } from 'leaflet-gesture-handling';
-import { SimpleUbicationItem } from 'src/app/interfaces/barrios';
+import { ISimpleUbicationItem } from 'src/app/interfaces/barrios';
 
 @Component({
     selector: 'simple-map',
@@ -12,7 +12,7 @@ export class SimpleMapComponent implements AfterViewInit {
 
     @Input() idMap: string;
     @Input() classMap = '';
-    @Input() coordsMap: SimpleUbicationItem = {
+    @Input() coordsMap: ISimpleUbicationItem = {
         latitude: null,
         longitude: null,
         title: null

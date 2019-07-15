@@ -70,7 +70,7 @@ export class AuthService {
 
     async logout() {
         const accessToken = await this.storage.get('accessToken');
-        const urlApi = `http://localhost:3000/api/Users/logout?access_token=${accessToken}`;
+        // const urlApi = `http://localhost:3000/api/Users/logout?access_token=${accessToken}`;
         await this.removeUser();
         await this.removeToken();
     }
@@ -90,7 +90,6 @@ export class AuthService {
                 this.user.next(res);
             }
         });
-        // console.log('Auth Get Current User', this.user.value);
         return this.user.value;
     }
 
@@ -123,6 +122,5 @@ export class AuthService {
         await this.storage.remove('accessToken');
         this.authToken.next(null);
     }
-
 
 }

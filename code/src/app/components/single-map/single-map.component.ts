@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Input, Output, AfterViewInit } from '@angular/core';
 import * as Leaflet from 'leaflet';
 import { GestureHandling } from 'leaflet-gesture-handling';
-import { PostUbicationItem } from 'src/app/interfaces/barrios';
+import { IPostUbicationItem } from 'src/app/interfaces/barrios';
 
 @Component({
     selector: 'single-map',
@@ -12,7 +12,7 @@ export class SingleMapComponent implements OnInit, AfterViewInit {
 
     @Input() idMap: string;
     @Input() zoomMap: number;
-    @Input() mapPoints: PostUbicationItem;
+    @Input() mapPoints: IPostUbicationItem;
     @Input() enableGesture = false;
     @Output() returnCoordinateChoosen = new EventEmitter();
 

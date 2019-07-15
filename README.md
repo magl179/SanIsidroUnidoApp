@@ -53,7 +53,7 @@ Se incluyen los siguientes directorios:
 
 ## Bugs
 
-- Plugin de Google Plus esta en deprecación no permite el inicio de sesión, se están analizando otras opciones
+- Plugin de Google Plus esta en deprecación no permite el inicio de sesión, se están analizando otras opciones **SOLUCIÓN:** Usar la misma versión de la Google Play Services para todos los servicios que lo requirean como el Plugin Location Accuracy y el Plugin de Google+
 
 
 

@@ -3,8 +3,8 @@ import { NavController } from '@ionic/angular';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { UtilsService } from 'src/app/services/utils.service';
 import { timer } from 'rxjs';
-import { AuthService } from '../../services/auth.service';
-import { SocialDataService } from '../../services/social-data.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { SocialDataService } from 'src/app/services/social-data.service';
 
 const urlLogueado = '/social-problems';
 
@@ -94,7 +94,7 @@ export class LoginPage implements OnInit {
             await this.socialDataService.loginByFacebook();
             this.socialDataService.fbLoginData.subscribe(fbData => {
                 if (fbData) {
-                    const user = this.socialDataService.getOwnFacebookUser(fbData);
+                    const user = this.socialDataService.getDataFacebookParsed(fbData);
                     this.authService.login('facebook', user).subscribe(loginData => {
                         this.setLoginUserData(loginData);
                     });
@@ -108,7 +108,7 @@ export class LoginPage implements OnInit {
                 await this.socialDataService.loginByGoogle();
                 this.socialDataService.googleLoginData.subscribe(async googleData => {
                     if (googleData) {
-                        const user = this.socialDataService.getOwnGoogleUser(googleData);
+                        const user = this.socialDataService.getDataGoogleParsed(googleData);
                         await this.authService.login('google', user).subscribe(loginData => {
                             this.setLoginUserData(loginData);
                         });

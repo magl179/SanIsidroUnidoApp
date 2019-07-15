@@ -1,7 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient} from '@angular/common/http';
 import * as Leaflet from 'leaflet';
-import { ReverseGeocodeResponse } from '../interfaces/barrios';
+import { IReverseGeocodeResponse, IMarkers } from '../interfaces/barrios';
 import { Observable } from 'rxjs';
 
 
@@ -18,7 +18,7 @@ export class MapService implements OnInit {
     ngOnInit() {}
 
     getMarkers() {
-        return this.http.get<any[]>('assets/data/markers.json');
+        return this.http.get<IMarkers[]>('assets/data/markers.json');
     }
 
     createIcon(ownIcon) {
@@ -43,19 +43,18 @@ export class MapService implements OnInit {
         return newIcon;
     }
 
-    getAddress(coords): Observable<ReverseGeocodeResponse> {
+    getAddress(coords): Observable<IReverseGeocodeResponse> {
         // ReverseGeocodeResponse
         const lat = coords.lat || '';
         const lng = coords.lng || '';
         const zoom = coords.zoom || 16;
-        const addressdetails = 0;
         const addressParams = {
             format: 'json',
             zoom: zoom.toString(),
-            addressdetails: addressdetails.toString(),
+            addressdetails: '0',
             lat: lat.toString(),
             lon: lng.toString()
         };
-        return this.http.get<ReverseGeocodeResponse>(REVERSE_GEOCODING_ENDPOINT, { params: addressParams });
+        return this.http.get<IReverseGeocodeResponse>(REVERSE_GEOCODING_ENDPOINT, { params: addressParams });
     }
 }

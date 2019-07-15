@@ -1,20 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { ToastController, LoadingController, MenuController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
-import { MenuComponente } from '../interfaces/barrios';
+import { IMenuComponent } from 'src/app/interfaces/barrios';
 import { Storage } from '@ionic/storage';
 
 @Injectable({
     providedIn: 'root'
 })
-export class UtilsService {
-
-    misCoordenadas: {latitud: number, longitud: number} = {
-        latitud: null,
-        longitud: null
-    };
-
-    toastItem: any;
+export class UtilsService implements OnInit {
 
     constructor(
         private toastCtrl: ToastController,
@@ -23,6 +16,8 @@ export class UtilsService {
         private menuCtrl: MenuController,
         private storage: Storage
     ) { }
+
+    async ngOnInit() { }
 
     ramdomValue(tamanio) {
         return Math.floor(Math.random() * tamanio);
@@ -55,16 +50,16 @@ export class UtilsService {
     }
 
     getMenuOptions() {
-        return this.http.get<MenuComponente[]>('/assets/data/menu.json');
+        return this.http.get<IMenuComponent[]>('/assets/data/menu.json');
     }
 
     async enableMenu() {
-        const menus = await this.menuCtrl.getMenus();
+        await this.menuCtrl.getMenus();
         this.menuCtrl.enable(true, 'menu_principal_app');
     }
 
     async disabledMenu() {
-        const menus = await this.menuCtrl.getMenus();
+        await this.menuCtrl.getMenus();
         this.menuCtrl.enable(false, 'menu_principal_app');
     }
 

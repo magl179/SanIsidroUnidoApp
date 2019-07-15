@@ -4,7 +4,7 @@
     <!-- <p>Mi Perfil</p> -->
     <div class="container-profile">
        <div class="img-profile ion-padding-top">
-            <img src="https://www.w3schools.com/howto/img_avatar.png" alt="">
+            <img [src]="userApp.avatar || 'assets/img/default/img_avatar.png'" alt="User Profile Image">
        </div>
        <div class="ion-text-center">
            <h3>{{userApp.firstname || 'Sin Nombre'}} {{userApp.lastname || 'Sin Apellidos'}}</h3>

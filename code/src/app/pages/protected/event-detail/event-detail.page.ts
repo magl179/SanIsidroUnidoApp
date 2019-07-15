@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UtilsService } from 'src/app/services/utils.service';
 
-import { SimpleUbicationItem } from 'src/app/interfaces/barrios';
+import { ISimpleUbicationItem } from 'src/app/interfaces/barrios';
 
 @Component({
     selector: 'app-event-detail',
@@ -13,7 +13,7 @@ export class EventDetailPage implements OnInit {
 
     id: string;
 
-    mapPoints: SimpleUbicationItem = {
+    mapPoints: ISimpleUbicationItem = {
         latitude: 0.0456696,
         longitude: -78.14502999999999,
         title: 'Ubicación del Evento'

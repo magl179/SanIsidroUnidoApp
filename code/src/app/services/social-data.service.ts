@@ -6,7 +6,7 @@ import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
 import { GooglePlus as Google } from '@ionic-native/google-plus/ngx';
 import { Platform } from '@ionic/angular';
 import { UtilsService } from './utils.service';
-import { environment } from 'src/environments/environment';
+// import { environment } from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -35,33 +35,7 @@ export class SocialDataService {
         return this.http.get(urlTest).pipe(map(data => data));
     }
 
-    /*async loginByGoogleWeb(){
-        try{
-            let provider = new firebase.auth.GoogleAuthProvider();
-            const credential = await this.afAuth.auth.signInWithPopup(provider);
-            console.log('Credential', credential);
-        } catch(err) {
-            console.log('Ocurrio algun error', err);
-            await this.utilsService.showToast('Ocurrio algun error', err);
-        }
-        console.log('Web login'); 
-      }*/
-
-    getOwnGoogleWebUser(googleUser: any) {
-        const appUser = {
-            firstname: googleUser.given_name,
-            lastname: googleUser.family_name,
-            email: googleUser.email,
-            token_id: googleUser.id,
-            provider: 'google',
-            avatar: googleUser.picture,
-            password: null
-        };
-        console.log('OWN GOOGLE DATA', appUser);
-        return appUser;
-    }
-
-    getOwnGoogleUser(googleUser: any) {
+    getDataGoogleParsed(googleUser: any) {
         const appUser = {
             firstname: googleUser.displayName,
             lastname: googleUser.name.givenName,
@@ -75,7 +49,7 @@ export class SocialDataService {
         return appUser;
     }
 
-    getOwnFacebookUser(fbUser: any) {
+    getDataFacebookParsed(fbUser: any) {
         const appUser = {
             firstname: fbUser.first_name,
             lastname: fbUser.last_name,
@@ -89,6 +63,7 @@ export class SocialDataService {
         return appUser;
     }
 
+    // LOGIN SOCIAL
     async loginByGoogle() {
         if (this.platform.is('cordova')) {
             console.log('login is cordova');
@@ -106,10 +81,46 @@ export class SocialDataService {
         }
     }
 
-    // Función Obtener Datos de Google
+    async  loginByFacebook() {
+        if (this.platform.is('cordova')) {
+            const permisos = ['public_profile', 'email'];
+            try {
+                const respuestaLogin: FacebookLoginResponse = await this.facebook.login(permisos);
+                const userId = await respuestaLogin.authResponse.userID;
+                const accessToken = await respuestaLogin.authResponse.accessToken;
+                await this.getFacebookData(accessToken, userId, permisos);
+                console.log('Respuesta Login', respuestaLogin);
+            } catch (err) {
+                console.log(err);
+                await this.utilsService.showToast('Ocurrio un error al conectarse con facebook', null, 'bottom');
+            }
+        } else {
+            console.log('Cordova FACE no esta disponible');
+            await this.utilsService.showToast('Cordova no Disponible', null, 'bottom');
+        }
+    }
+
+    // GET SOCIAL DATA
+
+    async getFacebookData(accessToken: string, userId: string, permisos: any) {
+        try {
+            // tslint:disable-next-line: max-line-length
+            const profile: any = await this.facebook.api(`${userId}?fields=id,name,first_name,last_name,email,picture&access_token=${accessToken}`, permisos);
+            console.log('Datos Perfil Usuario', profile);
+            profile.image = `https://graph.facebook.com/${userId}/picture?type=large`;
+            if (profile !== null) {
+                this.fbLoginData.next(profile);
+                this.closeFacebookSession();
+            } else {
+                this.utilsService.showToast('No se pudo obtener los datos con Facebook');
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     getGoogleData(token) {
-        // Pedir Info a Google Plus Api pasandole el access token
-         try {
+        try {
             this.http.get(`https://www.googleapis.com/plus/v1/people/me?access_token=${token}`).subscribe(
                 async (profile: any) => {
                     console.log('Datos Google', profile);
@@ -128,58 +139,11 @@ export class SocialDataService {
         }
     }
 
+    // Close Session
     async closeGoogleSession() {
         try {
             console.log('Google Logout Succesfull');
             await this.google.logout();
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-
-    async  loginByFacebook() {
-        // Verificar Si Existe Cordova
-        if (this.platform.is('cordova')) {
-            // Añadir los permisos en un array
-            const permisos = ['public_profile', 'email'];
-            // En un TRY-CATCH ejecutamos la consulta y capturamos el 	error
-            try {
-                // ejecutar el login de facebook y lo guardo en una variable
-                const respuestaLogin: FacebookLoginResponse = await this.facebook.login(permisos);
-                // guardo el userID del Usuario que hace la petición
-                const userId = await respuestaLogin.authResponse.userID;
-                // guardo el access token que me retorna la petición de logueo
-                const accessToken = await respuestaLogin.authResponse.accessToken;
-                // llamo función para obtener datos de Facebook, le paso el access token, los permisos y el userId
-                await this.getFacebookData(accessToken, userId, permisos);
-                console.log('Respuesta Login', respuestaLogin);
-            } catch (err) {
-                console.log(err);
-                await this.utilsService.showToast('Ocurrio un error al conectarse con facebook', null, 'bottom');
-            }
-        } else {
-            console.log('Cordova FACE no esta disponible');
-            await this.utilsService.showToast('Cordova no Disponible', null, 'bottom');
-        }
-    }
-
-    async getFacebookData(accessToken: string, userId: string, permisos: any) {
-        try {
-            // guardo la respuesta de la petición de datos a la API FB
-            // tslint:disable-next-line: max-line-length
-            const profile: any = await this.facebook.api(`${userId}?fields=id,name,first_name,last_name,email,picture&access_token=${accessToken}`, permisos);
-            // Imprimo los datos que trae, en el caso de este ejemplo
-            // en las notas adicionales especifico el formato dato que retorna
-            console.log('Datos Perfil Usuario', profile);
-            // Añadir campo image y traer imagen grande usuario
-            profile.image = `https://graph.facebook.com/${userId}/picture?type=large`;
-            if (profile !== null) {
-                this.fbLoginData.next(profile);
-                this.closeFacebookSession();
-            }else{
-                 this.utilsService.showToast('No se pudo obtener los datos con Facebook');
-            }
         } catch (err) {
             console.log(err);
         }

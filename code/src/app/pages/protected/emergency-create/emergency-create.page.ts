@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
 import { UtilsService } from '../../../services/utils.service';
 import { MapService } from 'src/app/services/map.service';
-import { PostUbicationItem } from 'src/app/interfaces/barrios';
+import { IPostUbicationItem } from 'src/app/interfaces/barrios';
 import { LocalizationService } from '../../../services/localization.service';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
@@ -24,7 +24,7 @@ export class EmergencyCreatePage implements OnInit {
         { title: 'Paso 3' }, { title: 'Paso 4' }
     ];
     emergencyImages = [];
-    emergencyPostCoordinate: PostUbicationItem = {
+    emergencyPostCoordinate: IPostUbicationItem = {
         latitude: null,
         longitude: null,
         address: null
@@ -57,8 +57,8 @@ export class EmergencyCreatePage implements OnInit {
 
     async ngOnInit() {
         const coords = await this.localizationService.getCoordinate();
-        this.emergencyPostCoordinate.latitude = coords.latitud;
-        this.emergencyPostCoordinate.longitude = coords.longitud;
+        this.emergencyPostCoordinate.latitude = coords.latitude;
+        this.emergencyPostCoordinate.longitude = coords.longitude;
         console.log(this.emergencyForm.get('title').value);
     }
 

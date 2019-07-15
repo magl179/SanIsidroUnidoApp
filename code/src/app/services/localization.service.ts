@@ -4,18 +4,17 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { Platform } from '@ionic/angular';
 import { UtilsService } from './utils.service';
+import { ISimpleCoordinates } from '../interfaces/barrios';
 
 @Injectable({
     providedIn: 'root'
 })
 export class LocalizationService {
 
-    misCoordenadas: {latitud: number, longitud: number} = {
-        latitud: null,
-        longitud: null
+    misCoordenadas: ISimpleCoordinates = {
+        latitude: null,
+        longitude: null
     };
-
-    toastItem: any;
 
     constructor(
         private geolocation: Geolocation,
@@ -28,8 +27,8 @@ export class LocalizationService {
     async getCoordinate() {
         let canGetLocation = false;
         await this.geolocation.getCurrentPosition().then((resp) => {
-            this.misCoordenadas.latitud = resp.coords.latitude;
-            this.misCoordenadas.longitud = resp.coords.longitude;
+            this.misCoordenadas.latitude = resp.coords.latitude;
+            this.misCoordenadas.longitude = resp.coords.longitude;
             canGetLocation = true;
             console.log('UTILS SERVICE OBTUVE COORDENADAS');
         }).catch((error) => {
@@ -41,16 +40,15 @@ export class LocalizationService {
         return this.misCoordenadas;
     }
 
-    // Check if application having GPS access permission
     async checkGPSPermissions() {
         if (this.platform.is('cordova')) {
             await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
                 result => {
                     if (result.hasPermission) {
-                        // If having permission show 'Turn On GPS' dialogue
-                        this.askTurnOnGsPS();
+                        // Pedir encender GPS
+                        this.askTurnOnGPS();
                     } else {
-                        // If not having permission ask for permission
+                        // Pedir Permiso GPS
                         this.getGPSPermission();
                     }
                 },
@@ -69,12 +67,11 @@ export class LocalizationService {
                 this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION)
                     .then(
                         () => {
-                            // call method to turn on GPS
-                            this.askTurnOnGsPS();
+                            // Metodo Encender GPS
+                            this.askTurnOnGPS();
                         },
                         error => {
-                            // Show alert if user click on 'No Thanks'
-                            this.utilsService.showToast('requestPermission Error requesting location permissions ' + error);
+                            this.utilsService.showToast('No diste permisos ubicación: ' + error);
                         }
                     );
             }
@@ -82,7 +79,7 @@ export class LocalizationService {
     }
 
 
-    askTurnOnGsPS() {
+    askTurnOnGPS() {
         this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
             () => {
                 // When GPS Turned ON call method to get Accurate location coordinates

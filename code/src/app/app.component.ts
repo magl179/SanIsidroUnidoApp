@@ -3,12 +3,11 @@ import { Platform, NavController, MenuController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { timer } from 'rxjs';
-import { MenuComponente } from './interfaces/barrios';
-
+import { IMenuComponent } from './interfaces/barrios';
 import { AlertController } from '@ionic/angular';
 import { AuthService } from './services/auth.service';
 import { UtilsService } from './services/utils.service';
-
+import { ConnectionService } from 'ng-connection-service';
 
 @Component({
     selector: 'app-root',
@@ -17,7 +16,7 @@ import { UtilsService } from './services/utils.service';
 export class AppComponent implements OnInit {
 
     showAppsplash = true;
-    componentesMenu: MenuComponente[];
+    componentesMenu: IMenuComponent[];
     automaticClose = true;
     userApp: any = null;
 
@@ -29,7 +28,8 @@ export class AppComponent implements OnInit {
         private alertController: AlertController,
         private authService: AuthService,
         private utilsService: UtilsService,
-        private menuCtrl: MenuController
+        private menuCtrl: MenuController,
+        private connectionService: ConnectionService
     ) {
         this.initializeApp();
     }
@@ -48,7 +48,18 @@ export class AppComponent implements OnInit {
             await this.splashScreen.hide();
             timer(3200).subscribe(() => {
                 this.showAppsplash = false;
+                this.comprobarRed();
             });
+        });
+    }
+
+    comprobarRed() {
+        this.connectionService.monitor().subscribe(isConnected => {
+            if (isConnected) {
+                this.utilsService.showToast('You are Online', 1000);
+            } else {
+                this.utilsService.showToast('You are Offline', 1000);
+            }
         });
     }
 

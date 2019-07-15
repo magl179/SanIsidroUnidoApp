@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UtilsService } from '../../../services/utils.service';
 
-import { UbicationItem } from 'src/app/interfaces/barrios';
+import { IUbicationItem } from 'src/app/interfaces/barrios';
 
 @Component({
     selector: 'app-public-services',
@@ -10,7 +10,7 @@ import { UbicationItem } from 'src/app/interfaces/barrios';
 })
 export class PublicServicesPage implements OnInit {
 
-    publicServicesPoints: UbicationItem[] = [];
+    publicServicesPoints: IUbicationItem[] = [];
     loading: any;
 
     constructor(

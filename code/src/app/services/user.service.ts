@@ -1,9 +1,32 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class UserService {
 
-  constructor() { }
+    constructor(
+        private http: HttpClient
+    ) { }
+
+
+    sendChangeUserPassRequest(userToken: string, newPassword: string): Observable<any> {
+        return this.http.post('url_post_change_pass', {}, {
+            headers: {}
+        });
+    }
+
+    sendChangeUserImageRequest(userToken: string, password: string, image: string): Observable<any> {
+        return this.http.post('url_post_change_image', {}, {
+            headers: {}
+        });
+    }
+
+    sendRequestUserMembership(userToken: string, image: string) {
+        return this.http.post('url_post_request_membership', {}, {
+            headers: {}
+        });
+    }
 }

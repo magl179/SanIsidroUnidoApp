@@ -103,13 +103,13 @@ export class RegisterPage implements OnInit {
         await this.socialDataService.loginByFacebook();
         this.socialDataService.fbLoginData.subscribe(async fbData => {
             if (fbData) {
-                const user = this.socialDataService.getOwnFacebookUser(fbData);
+                const user = this.socialDataService.getDataFacebookParsed(fbData);
                 await this.authService.register('facebook', user).subscribe(registerData => {
                     if (registerData) {
                         this.setLoginUserData(registerData);
                     }
                 });
-            } 
+            }
         }, err => {
             this.utilsService.showToast('Fallo Obtener Datos de Facebook');
             console.log('Error Login', err);
@@ -119,7 +119,7 @@ export class RegisterPage implements OnInit {
             await this.socialDataService.loginByGoogle();
             this.socialDataService.googleLoginData.subscribe(async googleData => {
                 if (googleData) {
-                        const user = this.socialDataService.getOwnGoogleUser(googleData);
+                        const user = this.socialDataService.getDataGoogleParsed(googleData);
                         await this.authService.register('google', user).subscribe(registerData => {
                             this.setLoginUserData(registerData);
                         });
