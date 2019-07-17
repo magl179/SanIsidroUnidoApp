@@ -55,12 +55,12 @@ export class UtilsService implements OnInit {
 
     async enableMenu() {
         await this.menuCtrl.getMenus();
-        this.menuCtrl.enable(true, 'menu_principal_app');
+        this.menuCtrl.enable(true, 'main_app_menu');
     }
 
     async disabledMenu() {
         await this.menuCtrl.getMenus();
-        this.menuCtrl.enable(false, 'menu_principal_app');
+        this.menuCtrl.enable(false, 'main_app_menu');
     }
 
     clearBDD() {

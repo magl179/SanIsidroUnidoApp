@@ -1,7 +1,7 @@
 <ion-app>
     <splash-sm *ngIf="showAppsplash"></splash-sm>
-    <ion-split-pane contentId="principal_router_outlet">
-        <ion-menu side="start" menuId="menu_principal_app" contentId="principal_router_outlet">
+    <ion-split-pane contentId="main_router_outlet">
+        <ion-menu side="start" menuId="main_app_menu" contentId="main_router_outlet">
             <ion-content class="menu_content_app">
                 <!-- Header Menu -->
                 <ion-item lines="none" color="primary">
@@ -16,7 +16,7 @@
                 <!-- <ion-item lines="none" class="menu_top_img">
                     <img src="assets/img/slide-1.png">
                 </ion-item> -->
-                <ion-list class="list-no-padding" *ngFor="let c of componentesMenu;let i = index;">
+                <ion-list class="list-no-padding" *ngFor="let c of menuComponents;let i = index;">
                     <!-- Items Without Children-->
                     <ion-menu-toggle autoHide="false" *ngIf="c.redirectTo">
                         <ion-item class="item-sm" tapable *ngIf="c.children==undefined || c.children?.length == 0"
@@ -53,12 +53,12 @@
                 </ion-list>
                 <!--ITEM TO CLOSE SESSION-->
                 <hr class="gray">
-                <ion-item class="item-sm" tapable lines="none" (click)="cerrarSesion()">
+                <ion-item class="item-sm" tapable lines="none" (click)="closeAppSession()">
                     <ion-icon slot="start" name="log-out"></ion-icon>
                     <ion-label>Cerrar Sesión</ion-label>
                 </ion-item>
             </ion-content>
         </ion-menu>
-        <ion-router-outlet id="principal_router_outlet"></ion-router-outlet>
+        <ion-router-outlet id="main_router_outlet"></ion-router-outlet>
     </ion-split-pane>
 </ion-app>

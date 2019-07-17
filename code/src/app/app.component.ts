@@ -7,7 +7,7 @@ import { IMenuComponent } from './interfaces/barrios';
 import { AlertController } from '@ionic/angular';
 import { AuthService } from './services/auth.service';
 import { UtilsService } from './services/utils.service';
-import { ConnectionService } from 'ng-connection-service';
+import { NotificationsService } from './services/notifications.service';
 
 @Component({
     selector: 'app-root',
@@ -16,7 +16,7 @@ import { ConnectionService } from 'ng-connection-service';
 export class AppComponent implements OnInit {
 
     showAppsplash = true;
-    componentesMenu: IMenuComponent[];
+    menuComponents: IMenuComponent[];
     automaticClose = true;
     userApp: any = null;
 
@@ -29,42 +29,31 @@ export class AppComponent implements OnInit {
         private authService: AuthService,
         private utilsService: UtilsService,
         private menuCtrl: MenuController,
-        private connectionService: ConnectionService
+        private pushNotificationService: NotificationsService
     ) {
         this.initializeApp();
     }
 
     ngOnInit() {
         this.utilsService.getMenuOptions().subscribe((data) => {
-            this.componentesMenu = data;
-            this.componentesMenu[0].open = false;
+            this.menuComponents = data;
+            this.menuComponents[0].open = false;
         });
     }
 
     async initializeApp() {
-        await this.comprobarUsuarioLogueado();
+        await this.checkUserLoggedIn();
         await this.platform.ready().then(async () => {
             await this.statusBar.styleDefault();
             await this.splashScreen.hide();
             timer(3200).subscribe(() => {
                 this.showAppsplash = false;
-                this.comprobarRed();
+                this.pushNotificationService.initialConfig();
             });
         });
     }
 
-    comprobarRed() {
-        this.connectionService.monitor().subscribe(isConnected => {
-            if (isConnected) {
-                this.utilsService.showToast('You are Online', 1000);
-            } else {
-                this.utilsService.showToast('You are Offline', 1000);
-            }
-        });
-    }
-
-    async comprobarUsuarioLogueado() {
-        // this.userApp = await this.authService.getCurrentUser();
+    async checkUserLoggedIn() {
         await this.authService.user.subscribe(data => {
             if (data) {
                 this.userApp = data;
@@ -72,15 +61,15 @@ export class AppComponent implements OnInit {
         });
     }
 
-    cerrarSesion() {
-        this.confirmarCierreSesion();
+    closeAppSession() {
+        this.confirmCloseSession();
     }
 
     closeMenu() {
         this.menuCtrl.close();
     }
 
-    async confirmarCierreSesion() {
+    async confirmCloseSession() {
         const alert = await this.alertController.create({
             header: 'Cerrar Sesión',
             // subHeader: 'Subtitle',
@@ -113,9 +102,9 @@ export class AppComponent implements OnInit {
     }
 
     toggleSection(index, hasChild) {
-        this.componentesMenu[index].open = !this.componentesMenu[index].open;
-        if (this.automaticClose && this.componentesMenu[index].open) {
-            this.componentesMenu
+        this.menuComponents[index].open = !this.menuComponents[index].open;
+        if (this.automaticClose && this.menuComponents[index].open) {
+            this.menuComponents
                 .filter((item, itemIndex) => {
                     if (hasChild) {
                         return itemIndex !== index && item.children.length > 0;

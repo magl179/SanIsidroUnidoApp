@@ -18,7 +18,6 @@ export class RegisterPage implements OnInit {
     @ViewChild('passwordEyeRegister') passwordEye;
     passwordTypeInput = 'password';
     iconpassword = 'eye-off';
-
     registerForm: FormGroup;
     errorMessages = null;
     registerFormFields = {

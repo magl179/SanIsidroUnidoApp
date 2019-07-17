@@ -3,7 +3,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { UtilsService } from 'src/app/services/utils.service';
 import { Platform } from '@ionic/angular';
 
-const opcionesCamara: CameraOptions = {
+const cameraOptions: CameraOptions = {
     quality: 100,
     correctOrientation: true,
     saveToPhotoAlbum: false
@@ -30,9 +30,9 @@ export class UploadImageComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        opcionesCamara.destinationType = this.camera.DestinationType.DATA_URL;
-        opcionesCamara.encodingType = this.camera.EncodingType.JPEG;
-        opcionesCamara.mediaType = this.camera.MediaType.PICTURE;
+        cameraOptions.destinationType = this.camera.DestinationType.DATA_URL;
+        cameraOptions.encodingType = this.camera.EncodingType.JPEG;
+        cameraOptions.mediaType = this.camera.MediaType.PICTURE;
     }
 
     async getUploadedImages() {
@@ -42,8 +42,8 @@ export class UploadImageComponent implements OnInit {
     }
 
     loadImageFromGallery() {
-        opcionesCamara.sourceType = this.camera.PictureSourceType.PHOTOLIBRARY;
-        console.log({ gallery: opcionesCamara });
+        cameraOptions.sourceType = this.camera.PictureSourceType.PHOTOLIBRARY;
+        console.log({ gallery: cameraOptions });
         if (this.uploadedImages.length < this.maxImages) {
             this.uploadImage();
         } else {
@@ -56,8 +56,8 @@ export class UploadImageComponent implements OnInit {
     }
 
     loadImageFromCamera() {
-        opcionesCamara.sourceType = this.camera.PictureSourceType.CAMERA;
-        console.log({ cm: opcionesCamara });
+        cameraOptions.sourceType = this.camera.PictureSourceType.CAMERA;
+        console.log({ cm: cameraOptions });
         if (this.uploadedImages.length < this.maxImages) {
             this.uploadImage();
         } else {
@@ -71,7 +71,7 @@ export class UploadImageComponent implements OnInit {
 
     async uploadImage() {
         if (this.platform.is('cordova')) {
-            await this.camera.getPicture(opcionesCamara)
+            await this.camera.getPicture(cameraOptions)
                 .then(
                     (datosImagen) => {
                         // DatoImagen es un string codificado en base64 - BASE URI

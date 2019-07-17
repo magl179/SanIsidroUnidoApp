@@ -12,7 +12,6 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 })
 export class SocialProblemCreatePage implements OnInit {
 
-
     currentStep = 1;
     fullFormIsValid = false;
 
