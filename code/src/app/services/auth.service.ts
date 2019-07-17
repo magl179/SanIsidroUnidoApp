@@ -103,6 +103,7 @@ export class AuthService {
     }
 
     async setUser(user) {
+        user.id = user.id || 1;
         await this.storage.set('currentUser', user);
         this.user.next(user);
     }

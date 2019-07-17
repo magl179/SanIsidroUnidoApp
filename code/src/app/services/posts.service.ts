@@ -25,5 +25,13 @@ export class PostsService {
         });
     }
 
+    getSocialProblems():Observable<any> {
+        return this.http.get('assets/data/socialProblems.json');
+    }
+
+    getEvents():Observable<any> {
+        return this.http.get('assets/data/socialProblems.json');
+    }
+
 
 }

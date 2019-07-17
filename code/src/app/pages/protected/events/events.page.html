@@ -11,14 +11,14 @@
             industry's standard dummy text ever since the 1500s.
         </ion-card-content>
         <ion-row>
-            <ion-col>
-                <ion-item lines="none" button="true" class="container_events" [ngClass]="{'active': (i % 2) === 0}">
+            <ion-col size="6">
+                <ion-item lines="none" detail="false" button="true" class="container_events" [ngClass]="{'active': (i % 2) === 0}">
                     <ion-icon slot="start" name="star"></ion-icon>
                     <div>Asistire</div>
                 </ion-item>
             </ion-col>
-            <ion-col>
-                <ion-item class="container_events" button="true" lines="none" [ngClass]="{'active': (i % 2) !== 0}">
+            <ion-col size="6">
+                <ion-item class="container_events" detail="false" button="true" lines="none" [ngClass]="{'active': (i % 2) !== 0}">
                     <ion-icon slot="start" name="star-outline"></ion-icon>
                     <div>No Asistire</div>
                 </ion-item>

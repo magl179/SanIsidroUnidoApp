@@ -22,13 +22,15 @@ export interface IPublicServicesComponente {
 export interface IUserLogued {
     id: number;
     firstname?: string;
-    email: string;
     lastname?: string;
-    avatar?: string;
+    email: string;
+    password?: string;
+    token_id?: string;
+    provider?: string;
     state: string;
+    avatar?: string;
     basic_service_image?: string;
     cargo: string;
-    password?: string;
     phone?: string;
 }
 
@@ -37,7 +39,7 @@ export interface IUserLogin {
     password: string;
 }
 
-// POSTS
+// CREATE POSTS
 
 export interface IEmergencyPost {
     title: string;
@@ -94,4 +96,17 @@ export interface IMarkers {
     iconName: string;
     iconURL: string;
     shadow: string;
+}
+
+// READ POSTS
+
+export interface ISocialProblem {
+    id: number;
+    title: string;
+    description: string;
+    category_id: number;
+    created_at: string;
+    user_id: number;
+    likes: number;
+    images?: [];
 }
