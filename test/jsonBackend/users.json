@@ -1,0 +1,50 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "firstname": "Lizeth",
+            "lastname": "McCullough",
+            "email": "garnett.harber@gmail.com",
+            "avatar": "https://lorempixel.com/640/480/?29124",
+            "state": "active",
+            "password": "baumbach.zelma",
+            "cargo": "morador_invitado",
+            "basic_service_image": "https://lorempixel.com/640/480/?29124",
+            "phone": "+1.946.405.9941",
+            "created_at": "2018-01-15 18:00:54",
+            "socialProfiles": [
+                {"id": 1, "user_id": 2, "social_id": "token_id","provider": "facebook","created_at": "2018-01-15 18:00:54"}
+            ]
+        },
+        {
+            "id": 2,
+            "firstname": "Lizeth",
+            "lastname": "McCullough",
+            "email": "garnett.harber@gmail.com",
+            "avatar": "https://lorempixel.com/640/480/?29124",
+            "state": "active",
+            "password": "baumbach.zelma",
+            "cargo": "morador_invitado",
+            "basic_service_image": "https://lorempixel.com/640/480/?29124",
+            "phone": "+1.946.405.9941",
+            "created_at": "2018-01-15 18:00:54",
+            "socialProfiles": []
+        },
+        {
+            "id": 3,
+            "firstname": "Lizeth",
+            "lastname": "McCullough",
+            "email": "garnett.harber@gmail.com",
+            "avatar": "https://lorempixel.com/640/480/?29124",
+            "state": "active",
+            "password": "baumbach.zelma",
+            "cargo": "morador_invitado",
+            "basic_service_image": "https://lorempixel.com/640/480/?29124",
+            "phone": "+1.946.405.9941",
+            "created_at": "2018-01-15 18:00:54",
+            "socialProfiles": [
+                {"id": 1, "user_id": 3, "social_id": "token_id","provider": "google","created_at": "2018-01-15 18:00:54"}
+            ]
+        }
+    ]
+}

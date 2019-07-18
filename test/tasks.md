@@ -95,11 +95,11 @@ al barrio
 
 **Sprint 5**
 
-- Instalar el Plugin de OneSignal
+- _Instalar el Plugin de OneSignal_
 
-- Configurar Plugin Onesignal
+- _Configurar Plugin Onesignal_
 
-- Configurar Google App Key
+- _Configurar Google App Key_
 
 - Configurar Servicio Notificaciones sobre afiliación barrial aprobada o no
 
@@ -107,9 +107,9 @@ al barrio
 
 - Configurar Servicio Notificaciones Aprobación o no de una Emergencia
 
-- Diseño de la interfaz Visualización Problemas Sociales
+- _Diseño de la interfaz Visualización Problemas Sociales_
 
-- Configurar Servicio para traer el listado de problemas sociales públicos desde una API
+- _Configurar Servicio para traer el listado de problemas sociales públicos desde una API_
 
 - Validar datos traídos de la API
 

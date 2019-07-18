@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "name": "social_problem",
+        "description": "Problema Social",
+        "created_at": "2019-09-17 21:52:32"
+    },
+    {
+        "id": 1,
+        "name": "event",
+        "description": "Eventos",
+        "created_at": "2019-09-17 21:52:32"
+    },
+    {
+        "id": 1,
+        "name": "emergency",
+        "description": "Emergencia",
+        "created_at": "2019-09-17 21:52:32"
+    }
+]
