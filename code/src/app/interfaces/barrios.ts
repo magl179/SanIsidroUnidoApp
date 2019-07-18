@@ -105,8 +105,25 @@ export interface ISocialProblem {
     title: string;
     description: string;
     category_id: number;
-    created_at: string;
+    date: string;
+    time: string;
+    ubication: IPostUbicationItem;
     user_id: number;
     likes: number;
     images?: [];
 }
+
+export interface IEvent {
+    id: number;
+    title: string;
+    description: string;
+    category_id: number;
+    date: string;
+    time: string;
+    ubication: IPostUbicationItem;
+    user_id?: number;
+    assist: boolean;
+    notassist: boolean;
+    images?: [];
+}
+

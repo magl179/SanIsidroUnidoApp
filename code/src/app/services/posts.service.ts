@@ -25,12 +25,20 @@ export class PostsService {
         });
     }
 
-    getSocialProblems():Observable<any> {
+    getSocialProblems(): Observable<any> {
         return this.http.get('assets/data/socialProblems.json');
     }
 
-    getEvents():Observable<any> {
+    getEvents(): Observable<any> {
+        return this.http.get('assets/data/events.json');
+    }
+
+    getSocialProblem(id: number): Observable<any> {
         return this.http.get('assets/data/socialProblems.json');
+    }
+
+    getEvent(id: number): Observable<any> {
+        return this.http.get('assets/data/events.json');
     }
 
 

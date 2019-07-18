@@ -12,14 +12,14 @@
         <simple-map classMap="event-map-detail map-center" idMap="eventMap-detail-{{id}}" [coordsMap]="mapPoints"></simple-map>
             <ion-row>
                     <ion-col>
-                            <ion-item button="true" lines="none" class="container_events detail" [ngClass]="{'active': (i % 2) === 0}">
-                                <ion-icon slot="start" name="star" (click)="test()"></ion-icon>
+                            <ion-item lines="none" detail="false" button="true" class="container_events detail" [ngClass]="{'active': (i % 2) === 0}">
+                                <!-- <ion-icon slot="start" name="star" (click)="test()"></ion-icon> -->
                                 <div>Asistire</div>
                             </ion-item>
                         </ion-col>
                         <ion-col>
-                                <ion-item class="container_events detail" button="true" lines="none" [ngClass]="{'active': (i % 2) !== 0}">
-                                    <ion-icon slot="start" name="star-outline"></ion-icon>
+                                <ion-item lines="none" detail="false" button="true" class="container_events detail" [ngClass]="{'active': (i % 2) !== 0}">
+                                    <!-- <ion-icon slot="start" name="star-outline"></ion-icon> -->
                                     <div>No Asistire</div>
                                 </ion-item>
                             </ion-col>
