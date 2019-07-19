@@ -61,7 +61,8 @@ const routes: Routes = [
         path: 'event-detail/:id',
         loadChildren: './pages/protected/event-detail/event-detail.module#EventDetailPageModule',
         canActivate: [LoginAuthGuard]
-    },
+    },  { path: 'tutorial', loadChildren: './pages/tutorial/tutorial.module#TutorialPageModule' },
+
 ];
 
 @NgModule({

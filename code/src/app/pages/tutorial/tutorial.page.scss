@@ -1,0 +1,18 @@
+ion-slide {
+    display: block;
+}
+
+p{
+    font-size: .9rem;
+}
+
+img {
+    width: 100px;
+    height: 120px;
+}
+
+ion-slides {
+    --bullet-background: #CED1DF;
+    --bullet-background-active: #8890B2;
+    position: relative;
+}

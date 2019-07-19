@@ -4,7 +4,7 @@
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-title (click)="testiconNoti()" class="ion-text-center">{{title}}</ion-title>
-        <ion-buttons slot="end">
+        <ion-buttons slot="end" *ngIf="showNoti">
             <ion-button size="large" slot="icon-only" (click)="MostrarPopover($event)">
                 <ion-icon [name]="notificationsIcon"></ion-icon>
             </ion-button>

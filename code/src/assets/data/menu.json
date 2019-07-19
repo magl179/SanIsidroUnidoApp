@@ -20,13 +20,13 @@
         ]
     },
     {
-        "icon": "pint",
+        "icon": "medkit",
         "name": "Servicios",
         "redirectTo": "/public-services",
         "routeDirection": "root",
         "children": [
             {
-                "icon": "pint",
+                "icon": "filing",
                 "name": "Servicios Públicos",
                 "redirectTo": "/public-services",
                 "routeDirection": "root"
@@ -63,6 +63,13 @@
         "icon": "person",
         "name": "Mi Perfil",
         "redirectTo": "/user-profile",
+        "routeDirection": "root",
+        "children": []
+    },
+    {
+        "icon": "help-circle-outline",
+        "name": "Tutorial",
+        "redirectTo": "/tutorial",
         "routeDirection": "root",
         "children": []
     }

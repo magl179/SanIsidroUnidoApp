@@ -11,6 +11,7 @@ import { PopNotificationsComponent } from '../pop-notifications/pop-notification
 export class HeaderComponent implements OnInit {
 
     @Input() title: string;
+    @Input() showNoti = true;
     notificationsIcon = 'notifications-outline';
 
     constructor(
