@@ -1,15 +1,25 @@
 <app-header title="Directorio Barrial"></app-header>
 <ion-content padding>
-    <ion-list *ngIf="elements.length > 0">
-        <ion-item lines="none" *ngFor="let item of [1,1,1]">
+    <ion-list *ngIf="boardMembers.length > 0">
+        <ion-item lines="none" *ngFor="let people of boardMembers">
             <ion-thumbnail slot="start">
-              <img src="https://ionicframework.com/docs/demos/api/list/avatar-finn.png">
+              <img class="circle" [src]="people.avatar || 'https://ionicframework.com/docs/demos/api/list/avatar-finn.png'">
             </ion-thumbnail>
-            <ion-label>
-                <h2>Juan Antonio</h2>
-                <p>Presidente</p>
-                <p>2495-351</p>
+            <ion-label class="profile_item ion-text-center">
+                <h2 class="title">
+                    <!-- <ion-icon name="contact"></ion-icon> -->
+                    <span class="profile_detail">{{people.name}}</span>
+                </h2>
+                <h5 class="subtitle">
+                    <span class="profile_detail">{{people.position}}</span>
+                </h5>
+                <p class="phone">
+                    <ion-icon name="call"></ion-icon>
+                    <span class="profile_detail">{{people.phone}}</span>
+                </p>
             </ion-label>
           </ion-item>
     </ion-list>
+      
+  
 </ion-content>

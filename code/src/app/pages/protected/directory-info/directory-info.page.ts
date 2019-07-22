@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UtilsService } from '../../../services/utils.service';
+import { DirectivesService } from 'src/app/services/directives.service';
 // import { trigger, style, state, query, stagger, animate, transition } from '@angular/animations';
 
 @Component({
@@ -9,20 +10,23 @@ import { UtilsService } from '../../../services/utils.service';
 })
 export class DirectoryInfoPage implements OnInit {
 
-    elements = [];
+    boardMembers = [];
     loading: any;
 
     constructor(
-        private utilsService: UtilsService
+        private utilsService: UtilsService,
+        private directivesService: DirectivesService
     ) { }
 
     async ngOnInit() {
         this.loading = await this.utilsService.createBasicLoading('Cargando Datos');
         this.loading.present();
-        setTimeout(() => {
-            this.elements = [1, 1, 1];
-            this.loading.dismiss();
-        }, 3000);
+        this.directivesService.getDirectivesData().subscribe(data => {
+            if (data) {
+                this.boardMembers = data;
+                this.loading.dismiss();
+            }
+        });
     }
 
 }
