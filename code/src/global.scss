@@ -377,6 +377,20 @@ body {
     }
 }
 
+.item-form{
+    .input_item{
+        display: inline-block; width: 90%;
+    }
+    .feedback-icon{
+        display: inline-flex; 
+        justify-content:center;
+        width: 10%;
+        ion-item{
+            display: inline-block; width: 100%;--padding-start: 0px;
+        }
+    }
+}
+
 .btn_eye_icon {
     position: absolute;
     right: 0;
@@ -393,7 +407,10 @@ body {
     outline: none !important;
 }
 
+
+
 // Helpers
+
 .icon-close {
     font-size: 35px !important;
 }
@@ -438,4 +455,18 @@ hr.gray {
 
 .swiper-pagination {
     bottom: -4px !important;
+}
+
+.icon-help-input{
+    position: absolute;
+    right: 0;
+    bottom: 4px;
+    background: transparent;
+    font-size: 18px;
+    ion-icon.error{
+        color: #f04141
+    }
+    ion-icon.success{
+        color: #10dc60;
+    }
 }

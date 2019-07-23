@@ -10,17 +10,32 @@
                     </ion-col>
                     <ion-col size="6">
                         <ion-button (click)="loginUserByFB()" color="facebook" expand="block">
-                            <ion-icon slot="icon-only" name="logo-facebook"></ion-icon>  
+                            <ion-icon slot="icon-only" name="logo-facebook"></ion-icon>
                         </ion-button>
                     </ion-col>
                 </ion-row>
                 <ion-row class="login-form-container">
+
                     <ion-col size="12">
                         <form [formGroup]="loginForm">
-                            <ion-item>
-                                <ion-label position="floating">Email</ion-label>
-                                <ion-input formControlName="email" type="email"></ion-input>
-                            </ion-item>
+                            <div class="item-form">
+                                <ion-item class="input_item">
+                                    <ion-label position="floating">Email</ion-label>
+                                    <ion-input formControlName="email" type="email"></ion-input>
+                                </ion-item>
+                                <div class="feedback-icon">
+                                    <ion-item lines="none">
+                                        <button class="icon-help-input">
+                                            <ion-icon name="close-circle" class="error"
+                                                *ngIf="loginForm.get('email').touched && loginForm.get('email').invalid">
+                                            </ion-icon>
+                                            <ion-icon name="checkmark-circle" class="success"
+                                                *ngIf="loginForm.get('email').touched &&loginForm.get('email').valid">
+                                            </ion-icon>
+                                        </button>
+                                    </ion-item>
+                                </div>
+                            </div>
                             <div class="form-errors">
                                 <p class="form-error"
                                     *ngIf="loginForm.get('email').hasError('required') && loginForm.get('email').touched">
@@ -35,17 +50,36 @@
                                     {{errorMessages.email.maxlength.message}}
                                 </p>
                                 <p class="form-error"
-                                    *ngIf="loginForm.get('email').hasError('email') && loginForm.get('email').touched">
-                                    {{errorMessages.email.email.message}}
+                                    *ngIf="loginForm.get('email').hasError('pattern') && loginForm.get('email').touched">
+                                    {{errorMessages.email.pattern.message}}
                                 </p>
                             </div>
-                            <ion-item>
-                                <ion-label position="floating">Contraseña</ion-label>
-                                <ion-input #passwordEyeLogin formControlName="password" [type]="passwordTypeInput"></ion-input>
-                                <button item-end class="btn_eye_icon" (click)="togglePasswordMode()">
-                                    <ion-icon [name]="iconpassword"></ion-icon>
-                                </button>
-                            </ion-item>
+                            <div class="item-form">
+                                    <ion-item class="input_item">
+                                            <ion-label position="floating">Contraseña</ion-label>
+                                            <ion-input #passwordEyeLogin formControlName="password" [type]="passwordTypeInput">
+                                            </ion-input>
+                                            <button item-end class="btn_eye_icon" (click)="togglePasswordMode()">
+                                                    <ion-icon [name]="iconpassword"></ion-icon>
+                                            </button>
+                                    </ion-item>
+                                    <div class="feedback-icon">
+                                        <ion-item lines="none">
+                                            <button class="icon-help-input">
+                                                <ion-icon name="close-circle" class="error"
+                                                    *ngIf="loginForm.get('password').touched && loginForm.get('password').invalid">
+                                                </ion-icon>
+                                                <ion-icon name="checkmark-circle" class="success"
+                                                    *ngIf="loginForm.get('password').touched &&loginForm.get('password').valid">
+                                                </ion-icon>
+                                            </button>
+                                        </ion-item>
+                                    </div>
+                                </div>
+                            <!-- <ion-item>
+                               
+                              
+                            </ion-item> -->
                             <div class="form-errors">
                                 <p class="form-error"
                                     *ngIf="loginForm.get('password').hasError('required') && loginForm.get('password').touched">
@@ -78,7 +112,7 @@
                         <div class="flex-center-all already-have-account">
                             <span>No tienes una cuenta?</span><a color="primary" routerLink="/register">Crear una</a>
                         </div>
-                       
+
                     </ion-col>
                     <!-- <ion-col size="12">
                         <ion-button expand="full" routerLink="/home" routerDirection="root">Landing</ion-button>

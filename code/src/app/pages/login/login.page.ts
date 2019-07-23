@@ -149,7 +149,7 @@ export class LoginPage implements OnInit {
                 maxlength: {
                     message: `El Email debe contener máximo ${this.loginFormFields.email.maxlength} caracteres`
                 },
-                email: {
+                pattern: {
                     message: `Ingresa un email válido`
                 }
             },
