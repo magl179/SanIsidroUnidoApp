@@ -1,0 +1,44 @@
+[
+    { 
+        "title": "Title Noti 1", 
+        "author": "Juan Manuel", 
+        "user_img": "assets/img/default/img_avatar.png", 
+        "description": "Descripcion de la Noti" 
+    },
+    { 
+        "title": "Title Noti 2", 
+        "author": "Rosa Mendez", 
+        "user_img": "assets/img/default/img_avatar.png", 
+        "description": "Descripcion de la Noti" 
+    },
+    { 
+        "title": "Title Noti 3", 
+        "author": "Juan Manuel", 
+        "user_img": "assets/img/default/img_avatar.png", 
+        "description": "Descripcion de la Noti" 
+    },
+    { 
+        "title": "Title Noti 4", 
+        "author": "Juan Manuel", 
+        "user_img": "assets/img/default/img_avatar.png", 
+        "description": "Descripcion de la Noti" 
+    },
+    { 
+        "title": "Title Noti 5", 
+        "author": "Juan Manuel", 
+        "user_img": "assets/img/default/img_avatar.png", 
+        "description": "Descripcion de la Noti" 
+    },
+    { 
+        "title": "Title Noti  6", 
+        "author": "Juan Manuel", 
+        "user_img": "assets/img/default/img_avatar.png", 
+        "description": "Descripcion de la Noti" 
+    },
+    { 
+        "title": "Title Noti 7", 
+        "author": "Juan Manuel", 
+        "user_img": "assets/img/default/img_avatar.png", 
+        "description": "Descripcion de la Noti" 
+    }
+]

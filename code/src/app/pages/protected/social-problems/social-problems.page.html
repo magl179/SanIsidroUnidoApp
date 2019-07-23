@@ -1,19 +1,21 @@
 <app-header title="Problemas Sociales"></app-header>
 
 <ion-content>
-     <ion-card *ngFor="let socialProblem of socialProblemsList; let i = index;">
+    <ion-card *ngFor="let socialProblem of socialProblemsList; let i = index;">
         <ion-card-header>
-            <ion-card-subtitle>{{socialProblem.category_id}} | {{socialProblem.date}} | {{socialProblem.user_id}}</ion-card-subtitle>
+            <ion-card-subtitle class="post_user">User ID: {{socialProblem.user_id}}
+            </ion-card-subtitle>
+            <ion-card-subtitle>Category ID: {{socialProblem.category_id}} | Date: {{socialProblem.date}}
+            </ion-card-subtitle>
             <ion-card-title (click)="postDetail(socialProblem.id)">{{socialProblem.title}}</ion-card-title>
         </ion-card-header>
-        <ion-card-content> {{socialProblem.description}} </ion-card-content>
-        <ion-row>
-            <ion-col>
-                <ion-item button="true" lines="none" class="container_likes" [ngClass]="{'active': socialProblem.user_id === currentUser.id}">  
-                    <ion-icon slot="start" name="thumbs-up"></ion-icon>
-                    <div>{{socialProblem.likes}} Likes</div>
-                </ion-item>
-            </ion-col>
-        </ion-row>
+        <ion-card-content class="post_description">
+            <p class="post_content">{{socialProblem.description}} </p>
+            <div class="likes_item" [ngClass]="{'active': socialProblem.user_id === currentUser.id}">
+                    <ion-ripple-effect></ion-ripple-effect>
+                <ion-icon slot="start" name="thumbs-up"></ion-icon>
+                <span class="counter">11</span>
+            </div>
+        </ion-card-content>
     </ion-card>
 </ion-content>

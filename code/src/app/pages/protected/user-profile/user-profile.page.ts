@@ -15,6 +15,8 @@ import { ChangeProfileImagePage } from 'src/app/modals/change-profile-image/chan
 export class UserProfilePage implements OnInit {
 
     userApp = null;
+    sizeOptions = 4;
+    canRequestAfiliation = true;
 
     constructor(
         private authService: AuthService,
@@ -22,8 +24,13 @@ export class UserProfilePage implements OnInit {
         this.loadUserData();
     }
 
-    async ngOnInit() { }
+    async ngOnInit() {
+        this.checkRolUser();
+     }
 
+    async checkRolUser() {
+        this.sizeOptions = (this.canRequestAfiliation) ? 4 : 6;
+    }
     async loadUserData() {
         await this.authService.user.subscribe(user => {
             if (user) {
@@ -33,7 +40,7 @@ export class UserProfilePage implements OnInit {
         console.log({ userProfile: this.userApp });
     }
 
-    async showProfileEditModal() {
+    async showEditProfileModal() {
         const modal = await this.modalCtrl.create({
             component: EditProfilePage,
             componentProps: {
@@ -90,7 +97,7 @@ export class UserProfilePage implements OnInit {
         // }
     }
 
-    async showRequestChangeUserProfileModal() {
+    async showChangeUserImageProfileModal() {
         const modal = await this.modalCtrl.create({
             component: ChangeProfileImagePage,
             componentProps: {

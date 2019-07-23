@@ -9,7 +9,9 @@
         <ion-card-content>
                 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
         </ion-card-content>
-        <simple-map classMap="event-map-detail map-center" idMap="eventMap-detail-{{id}}" [coordsMap]="mapPoints"></simple-map>
+        <div>
+            <simple-map classMap="event-map-detail map-center" idMap="eventMap-detail-{{id}}" [coordsMap]="mapPoints"></simple-map>
+        </div>
             <ion-row>
                     <ion-col>
                             <ion-item lines="none" detail="false" button="true" class="container_events detail" [ngClass]="{'active': (i % 2) === 0}">

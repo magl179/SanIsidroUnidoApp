@@ -1,7 +1,7 @@
 <ion-list class="list-notifications">
         <ion-list-header *ngIf="showListHeader">
             <ion-label>
-                <h2>Notificaciones</h2>
+                <h2 class="title_list">Notificaciones</h2>
             </ion-label>
         </ion-list-header>
         <ion-item [lines]="getLinesState(i)" *ngFor="let noti of notificationsRequested; let i = index;">

@@ -18,7 +18,7 @@ export class PublicServicesPage implements OnInit {
     ) { }
 
     async ngOnInit() {
-        this.loading = await this.utilsService.createBasicLoading('Cargando Problemas');
+        this.loading = await this.utilsService.createBasicLoading('Cargando Listado Servicios');
         this.loading.present();
         setTimeout(async () => {
             this.publicServicesPoints = [

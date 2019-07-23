@@ -1,8 +1,7 @@
 ## Listado Tareas Interno
 
 #### GLOSARIO
-- Cursiva: Actividad con funcionalidad a medias
-- Tachado: Actividad con funcionalidad en un 75% finalizada
+- Tachado: Actividad con funcionalidad en un 50% finalizada
 - Normal: no realizada todavía
 
 #### Tareas
@@ -19,7 +18,7 @@
 
 - ~~Configurar Servicio Login con Formulario~~
 
-- _Validar Credenciales Formulario_
+- Validar Credenciales Formulario
 
 - Configurar Conexión Login con la API
 
@@ -28,13 +27,13 @@
 
 **Sprint 2**
 
-- _Diseño de la interfaz del módulo de datos de contacto de la directiva_
+- ~~Diseño de la interfaz del módulo de datos de contacto de la directiva~~
 
-- Configurar el Servicio para traer el listado de miembros de la directiva desde una API
+- ~~Configurar el Servicio para traer el listado de miembros de la directiva desde una API~~
 
 - Validar datos traídos de la API
 
-- Despliegue de los datos obtenidos en la Interfaz
+- ~~Despliegue de los datos obtenidos en la Interfaz~~
 
 - ~~Diseño Interfaz de Reporte de Emergencia~~
 
@@ -42,17 +41,17 @@
 
 - ~~Configuración de Acceso a la Cámara para subida de Imágenes~~
 
-- _Validación de campos requeridos_
+- Validación de campos requeridos
 
 **Sprint 3**
 
-- _Diseñar la Interfaz del Perfil Usuario_
+- ~~Diseñar la Interfaz del Perfil Usuario~~
 
-- _Diseñar la Interfaz de Edición del Perfil Usuario_
+- ~~Diseñar la Interfaz de Edición del Perfil Usuario~~
 
-- _Diseñar Interfaz Cambiar Contraseña_
+- ~~Diseñar Interfaz Cambiar Contraseña~~
 
-- _Diseñar Interfaz Cambiar Imagen Perfil_
+- ~~Diseñar Interfaz Cambiar Imagen Perfil~~
 
 - Validación de campos requeridos
 
@@ -70,22 +69,21 @@
 
 - ~~Configurar Servicio para traer el listado de servicios públicos desde una API~~
 
-- _Validar datos traídos de la API_
+- Validar datos traídos de la API
 
-- Despliegue de los datos obtenidos en el Mapa
+- ~~Despliegue de los datos obtenidos en el Mapa~~
 
 - Configurar Servicio para crear reportes de problemas barriales a través de una API
 
-- Validar datos retornados de la API
-al barrio
+- Validar datos retornados de la API al barrio
 
 - Configurar Autenticación con Roles
 
 - ~~Configurar Autenticación con Sesión Iniciada~~
 
-- _Diseñar la Interfaz de Solicitud de Afiliación_
+- ~~Diseñar la Interfaz de Solicitud de Afiliación~~
 
-- _Configuración de Acceso a la Cámara para subida de Imágenes_
+- ~~Configuración de Acceso a la Cámara para subida de Imágenes~~
 
 - _Validación de campos requeridos_
 
@@ -95,11 +93,11 @@ al barrio
 
 **Sprint 5**
 
-- _Instalar el Plugin de OneSignal_
+- ~~Instalar el Plugin de OneSignal~~
 
-- _Configurar Plugin Onesignal_
+- ~~Configurar Plugin Onesignal~~
 
-- _Configurar Google App Key_
+- ~~Configurar Google App Key~~
 
 - Configurar Servicio Notificaciones sobre afiliación barrial aprobada o no
 
@@ -107,15 +105,15 @@ al barrio
 
 - Configurar Servicio Notificaciones Aprobación o no de una Emergencia
 
-- _Diseño de la interfaz Visualización Problemas Sociales_
+- ~~Diseño de la interfaz Visualización Problemas Sociales~~
 
-- _Configurar Servicio para traer el listado de problemas sociales públicos desde una API_
+- ~~Configurar Servicio para traer el listado de problemas sociales públicos desde una API~~
 
 - Validar datos traídos de la API
 
-- Despliegue de los datos obtenidos en la Interfaz
+- ~~Despliegue de los datos obtenidos en la Interfaz~~
 
-- Diseño de la interfaz Visualización Eventos
+- ~~Diseño de la interfaz Visualización Eventos~~
 
 - Configurar Servicio para traer el listado de eventos desde una API
 

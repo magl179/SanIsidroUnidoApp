@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { NotificationsService } from '../../services/notifications.service';
 
 @Component({
     selector: 'app-list-notifications',
@@ -7,12 +8,12 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ListNotificationsComponent implements OnInit {
 
-
     @Input() showListHeader = true;
     @Input() maxNotifications = 0;
 
     notificationsRequested = [];
-    notificationsList = [
+    notificationsList: { title: string, author: string, user_img: string, description: string }[] = [];
+    notificationsList2: {title: string, author: string, user_img: string, description: string}[] = [
         // tslint:disable-next-line: max-line-length
         { title: 'Title Noti 1', author: 'Juan Manuel', user_img: 'assets/img/default/img_avatar.png', description: 'Descripcion de la Noti' },
         // tslint:disable-next-line: max-line-length
@@ -29,25 +30,37 @@ export class ListNotificationsComponent implements OnInit {
         { title: 'Title Noti 7', author: 'Juan Manuel', user_img: 'assets/img/default/img_avatar.png', description: 'Descripcion de la Noti' }
     ];
 
-    constructor() { }
+    constructor(
+        private notiService: NotificationsService
+    ) { }
 
     async ngOnInit() {
         await this.notificationsList.reverse();
-        await this.cargarNotificacionesSolicitadas()
+        await this.getNotifications();
     }
 
     getLinesState(indice) {
         return ((indice + 1) !== this.notificationsRequested.length) ? 'full' : 'none';
     }
 
-    cargarNotificacionesSolicitadas() {
+    getNotifications() {
+        this.notiService.getNotifications().subscribe(async data => {
+            console.log('Data noti: ', data);
+            if (data) {
+                this.notificationsList = data;
+            }
+            this.cargarNotificacionesSolicitadas();
+        });
+    }
+
+    async cargarNotificacionesSolicitadas() {
+        console.log('Noti Solicited Load', this.notificationsList);
         if (this.maxNotifications === 0) {
             this.notificationsRequested = this.notificationsList;
         } else {
-            // inicio-fin
             this.notificationsRequested = this.notificationsList.slice(0, (this.maxNotifications));
         }
-        console.log(this.notificationsRequested);
+        console.log('Noti Requested', this.notificationsRequested);
     }
 
 }

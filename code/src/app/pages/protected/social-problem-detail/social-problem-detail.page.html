@@ -4,21 +4,23 @@
     <ion-card class="detail-card">
         <img style="border: 1px solid #ccc;" src="assets/img/default/slide-1.png" />
         <ion-card-header>
-            <ion-card-subtitle>Basura | 2018-05-09 | Juan Rodriguez </ion-card-subtitle>
+            <ion-card-subtitle class="post_user">User ID: 5
+            </ion-card-subtitle>
+            <ion-card-subtitle>Category ID: 5 | Date: 2018-05-14
+            </ion-card-subtitle>
             <ion-card-title>Problem # {{id}}</ion-card-title>
         </ion-card-header>
-        <ion-card-content>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-            industry's standard dummy text ever since the 1500s.
-            <p>ID PARAMETRO: {{id}}</p>
+        <ion-card-content class="post_description">
+            <p class="post_content">
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                    industry's standard dummy text ever since the 1500s.
+                    <span>ID PARAMETRO: {{id}}</span>
+            </p>
+            <div class="likes_item" [ngClass]="{'active': (id % 2) === 0}">
+                <ion-ripple-effect></ion-ripple-effect>
+                <ion-icon slot="start" name="thumbs-up"></ion-icon>
+                <span class="counter">11</span>
+            </div>
         </ion-card-content>
-        <ion-row>
-            <ion-col>
-                <ion-item lines="none" class="container_likes detail" [ngClass]="{'active': (i % 2) === 0}">
-                    <ion-icon name="thumbs-up"></ion-icon>
-                    <div>12 Likes</div>
-                </ion-item>
-            </ion-col>
-        </ion-row>
     </ion-card>
 </ion-content>
