@@ -6,20 +6,48 @@
     <section *ngIf="currentStep === 3
     ">
         <form [formGroup]="emergencyForm">
-            <ion-item>
-                <ion-label position="floating">Titulo</ion-label>
-                <ion-input formControlName="title" type="email"></ion-input>
-            </ion-item>
+            <div class="item-form">
+                <ion-item class="input_item">
+                    <ion-label position="floating">Titulo</ion-label>
+                    <ion-input formControlName="title" type="email"></ion-input>
+                </ion-item>
+                <div class="feedback-icon">
+                    <ion-item lines="none">
+                        <button class="icon-help-input" disabled>
+                            <ion-icon name="close-circle" class="error"
+                                *ngIf="emergencyForm.get('title').touched && emergencyForm.get('title').invalid">
+                            </ion-icon>
+                            <ion-icon name="checkmark-circle" class="success"
+                                *ngIf="emergencyForm.get('title').touched && emergencyForm.get('title').valid">
+                            </ion-icon>
+                        </button>
+                    </ion-item>
+                </div>
+            </div>
             <div class="form-errors">
                 <p class="form-error"
                     *ngIf="emergencyForm.get('title').hasError('required') && emergencyForm.get('title').touched">
                     {{errorMessages.title.required.message}}
                 </p>
             </div>
-            <ion-item>
-                <ion-label position="floating">Descripcion</ion-label>
-                <ion-textarea formControlName="description" auto-grow="true"></ion-textarea>
-            </ion-item>
+            <div class="item-form">
+                <ion-item class="input_item">
+                    <ion-label position="floating">Descripcion</ion-label>
+                    <ion-textarea formControlName="description" auto-grow="true"></ion-textarea>
+                </ion-item>
+                <div class="feedback-icon">
+                    <ion-item lines="none">
+                        <button class="icon-help-input" disabled>
+                            <ion-icon name="close-circle" class="error"
+                                *ngIf="emergencyForm.get('description').touched && emergencyForm.get('description').invalid">
+                            </ion-icon>
+                            <ion-icon name="checkmark-circle" class="success"
+                                *ngIf="emergencyForm.get('description').touched && emergencyForm.get('description').valid">
+                            </ion-icon>
+                        </button>
+                    </ion-item>
+                </div>
+            </div>
             <div class="form-errors">
                 <p class="form-error"
                     *ngIf="emergencyForm.get('description').hasError('required') && emergencyForm.get('description').touched">
@@ -38,22 +66,23 @@
         <ion-grid *ngIf="emergencyImages.length > 0">
             <ion-row>
                 <ion-col size="6" *ngFor="let image of emergencyImages; let i = index;">
-                        <ion-item-sliding>
-                                <ion-item>
-                                        <ion-card>
-                                                <img [src]="image">
-                                            </ion-card>
-                                </ion-item>
-                                <ion-item-options side="end">
-                                    <ion-item-option (click)="deleteImage(i)" color="danger" expandable="true">
-                                        <ion-icon slot="icon-only" name="trash"></ion-icon>
-                                    </ion-item-option>
-                                </ion-item-options>
-                            </ion-item-sliding>
+                    <ion-item-sliding>
+                        <ion-item>
+                            <ion-card>
+                                <img [src]="image">
+                            </ion-card>
+                        </ion-item>
+                        <ion-item-options side="end">
+                            <ion-item-option (click)="deleteImage(i)" color="danger" expandable="true">
+                                <ion-icon slot="icon-only" name="trash"></ion-icon>
+                            </ion-item-option>
+                        </ion-item-options>
+                    </ion-item-sliding>
                 </ion-col>
             </ion-row>
         </ion-grid>
-        <app-upload-image [uploadedImages]="emergencyImages" [maxImages]="2" (returnUploadedImages)="getUploadedImages($event)"></app-upload-image>
+        <app-upload-image [uploadedImages]="emergencyImages" [maxImages]="2"
+            (returnUploadedImages)="getUploadedImages($event)"></app-upload-image>
         <div padding>
             <ion-button color="primary" type="submit" expand="block" (click)="validatePhase1()">Siguiente
             </ion-button>
@@ -62,11 +91,8 @@
     <section *ngIf="currentStep === 2
     ">
         <p class="ion-text-center">Escoge la ubicación donde se genero la emergencia</p>
-        <single-map idMap="emergencyReportMap" 
-        [zoomMap]="14" 
-        [enableGesture]="false" 
-        [mapPoints]="emergencyPostCoordinate"
-        (returnCoordinateChoosen)="updateMapCoordinate($event)"></single-map>
+        <single-map idMap="emergencyReportMap" [zoomMap]="14" [enableGesture]="false"
+            [mapPoints]="emergencyPostCoordinate" (returnCoordinateChoosen)="updateMapCoordinate($event)"></single-map>
         <p>Latitud PAGE EC: Market {{emergencyPostCoordinate.latitude}}</p>
         <p>Longitud PAGE EC: Market {{emergencyPostCoordinate.longitude}}</p>
         <p *ngIf="emergencyPostCoordinate.address">Tu Dirección es: {{emergencyPostCoordinate.address}}</p>

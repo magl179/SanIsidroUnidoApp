@@ -17,6 +17,7 @@ const urlLogueado = '/social-problems';
 export class RegisterPage implements OnInit {
     @ViewChild('passwordEyeRegister') passwordEye;
     passwordTypeInput = 'password';
+    passwordStrength = '';
     iconpassword = 'eye-off';
     registerForm: FormGroup;
     errorMessages = null;

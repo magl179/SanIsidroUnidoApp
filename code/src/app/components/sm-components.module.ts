@@ -12,7 +12,7 @@ import { SimpleMapComponent } from './simple-map/simple-map.component';
 import { SplashSmComponent } from './splash-sm/splash-sm.component';
 import { PopNotificationsComponent } from './pop-notifications/pop-notifications.component';
 import { ListNotificationsComponent } from './list-notifications/list-notifications.component';
-
+import { StrengthPassbarComponent } from './strength-passbar/strength-passbar.component';
 
 @NgModule({
     declarations: [
@@ -25,7 +25,8 @@ import { ListNotificationsComponent } from './list-notifications/list-notificati
         SimpleMapComponent,
         SplashSmComponent,
         PopNotificationsComponent,
-        ListNotificationsComponent
+        ListNotificationsComponent,
+        StrengthPassbarComponent
     ],
     imports: [
         CommonModule,
@@ -41,7 +42,8 @@ import { ListNotificationsComponent } from './list-notifications/list-notificati
         SimpleMapComponent,
         SplashSmComponent,
         PopNotificationsComponent,
-        ListNotificationsComponent
+        ListNotificationsComponent,
+        StrengthPassbarComponent
     ]
 })
 export class SmComponentsModule { }

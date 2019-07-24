@@ -1,62 +1,119 @@
 <ion-header>
-  <ion-toolbar color="primary">
-    <ion-title class="ion-text-center" >Editar mi Perfil</ion-title>
-    <ion-buttons slot="end">
-        <ion-button (click)="closeModal()">
-            <ion-icon slot="icon-only" name="close"></ion-icon>
-          </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
+    <ion-toolbar color="primary">
+        <ion-title class="ion-text-center">Editar mi Perfil</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="closeModal()">
+                <ion-icon slot="icon-only" name="close"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
     <div class="container">
         <form [formGroup]="editProfileForm">
-            <ion-item>
-                <ion-label position="floating">Nombres</ion-label>
-                <ion-input formControlName="firstname"></ion-input>
-              </ion-item>
-              <div class="form-errors">
-                    <p class="form-error"
-                        *ngIf="editProfileForm.get('firstname').hasError('required') && editProfileForm.get('firstname').touched">
-                        {{errorMessages.firstname.required.message}}
-                    </p>
+            <div class="item-form">
+                <ion-item class="input_item">
+                    <ion-label position="floating">Nombres</ion-label>
+                    <ion-input formControlName="firstname"></ion-input>
+                </ion-item>
+                <div class="feedback-icon">
+                    <ion-item lines="none">
+                        <button class="icon-help-input" disabled>
+                            <ion-icon name="close-circle" class="error"
+                                *ngIf="editProfileForm.get('firstname').touched && editProfileForm.get('firstname').invalid">
+                            </ion-icon>
+                            <ion-icon name="checkmark-circle" class="success"
+                                *ngIf="editProfileForm.get('firstname').touched && editProfileForm.get('firstname').valid">
+                            </ion-icon>
+                        </button>
+                    </ion-item>
                 </div>
-              <ion-item>
-                <ion-label position="floating">Apellidos</ion-label>
-                <ion-input formControlName="lastname"></ion-input>
-              </ion-item>
-              <div class="form-errors">
-                    <p class="form-error"
-                        *ngIf="editProfileForm.get('lastname').hasError('required') && editProfileForm.get('lastname').touched">
-                        {{errorMessages.lastname.required.message}}
-                    </p>
+            </div>
+            <div class="form-errors">
+                <p class="form-error"
+                    *ngIf="editProfileForm.get('firstname').hasError('required') && editProfileForm.get('firstname').touched">
+                    {{errorMessages.firstname.required.message}}
+                </p>
+            </div>
+            <div class="item-form">
+                <ion-item class="input_item">
+                    <ion-label position="floating">Apellidos</ion-label>
+                    <ion-input formControlName="lastname"></ion-input>
+                </ion-item>
+                <div class="feedback-icon">
+                    <ion-item lines="none">
+                        <button class="icon-help-input" disabled>
+                            <ion-icon name="close-circle" class="error"
+                                *ngIf="editProfileForm.get('lastname').touched && editProfileForm.get('lastname').invalid">
+                            </ion-icon>
+                            <ion-icon name="checkmark-circle" class="success"
+                                *ngIf="editProfileForm.get('lastname').touched && editProfileForm.get('lastname').valid">
+                            </ion-icon>
+                        </button>
+                    </ion-item>
                 </div>
-              <ion-item>
-                <ion-label position="floating">Email</ion-label>
-                <ion-input formControlName="email"></ion-input>
-              </ion-item>
-              <div class="form-errors">
-                    <p class="form-error"
+            </div>
+            <div class="form-errors">
+                <p class="form-error"
+                    *ngIf="editProfileForm.get('lastname').hasError('required') && editProfileForm.get('lastname').touched">
+                    {{errorMessages.lastname.required.message}}
+                </p>
+            </div>
+            <div class="item-form">
+                <ion-item class="input_item">
+                    <ion-label position="floating">Email</ion-label>
+                    <ion-input formControlName="email"></ion-input>
+                </ion-item>
+                <div class="feedback-icon">
+                    <ion-item lines="none">
+                        <button class="icon-help-input" disabled>
+                            <ion-icon name="close-circle" class="error"
+                                *ngIf="editProfileForm.get('email').touched && editProfileForm.get('email').invalid">
+                            </ion-icon>
+                            <ion-icon name="checkmark-circle" class="success"
+                                *ngIf="editProfileForm.get('email').touched && editProfileForm.get('email').valid">
+                            </ion-icon>
+                        </button>
+                    </ion-item>
+                </div>
+            </div>
+            <div class="form-errors">
+                <p class="form-error"
                     *ngIf="editProfileForm.get('email').hasError('required') && editProfileForm.get('email').touched">
                     {{errorMessages.email.required.message}}
                 </p>
-                    <p class="form-error"
-                        *ngIf="editProfileForm.get('email').hasError('email') && editProfileForm.get('email').touched">
-                        {{errorMessages.email.email.message}}
-                    </p>
+                <p class="form-error"
+                    *ngIf="editProfileForm.get('email').hasError('email') && editProfileForm.get('email').touched">
+                    {{errorMessages.email.email.message}}
+                </p>
+            </div>
+            <div class="item-form">
+                <ion-item class="input_item">
+                    <ion-label position="floating">Teléfono</ion-label>
+                    <ion-input formControlName="phone"></ion-input>
+                </ion-item>
+                <div class="feedback-icon">
+                    <ion-item lines="none">
+                        <button class="icon-help-input" disabled>
+                            <ion-icon name="close-circle" class="error"
+                                *ngIf="editProfileForm.get('phone').touched && editProfileForm.get('phone').invalid">
+                            </ion-icon>
+                            <ion-icon name="checkmark-circle" class="success"
+                                *ngIf="editProfileForm.get('phone').touched && editProfileForm.get('phone').valid">
+                            </ion-icon>
+                        </button>
+                    </ion-item>
                 </div>
-              <ion-item>
-                <ion-label position="floating">Teléfono</ion-label>
-                <ion-input formControlName="phone"></ion-input>
-              </ion-item>
-              <div class="form-errors">
-                    <p class="form-error"
+            </div>
+            <div class="form-errors">
+                <p class="form-error"
                     *ngIf="editProfileForm.get('phone').hasError('required') && editProfileForm.get('phone').touched">
                     {{errorMessages.phone.required.message}}
                 </p>
             </div>
-              <ion-button class="btn_edit_profile" expand="block" [disabled]="!editProfileForm.valid" (click)="editUserProfileData()">Guardar</ion-button>
+            <ion-button class="btn_edit_profile" expand="block" [disabled]="!editProfileForm.valid"
+                (click)="editUserProfileData()">Guardar</ion-button>
         </form>
     </div>
 </ion-content>

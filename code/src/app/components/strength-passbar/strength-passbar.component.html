@@ -1,0 +1,4 @@
+<p class="strength_bar" [ngStyle]="{'text-align': align, 'width': width + '%'}">
+  <!-- <span>Seguridad: </span> -->
+  <span [ngStyle]="{'color': barLevels[score].color}">{{barLevels[score].title}}</span>
+</p>

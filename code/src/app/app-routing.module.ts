@@ -62,6 +62,7 @@ const routes: Routes = [
         loadChildren: './pages/protected/event-detail/event-detail.module#EventDetailPageModule',
         canActivate: [LoginAuthGuard]
     },  { path: 'tutorial', loadChildren: './pages/tutorial/tutorial.module#TutorialPageModule' },
+  { path: 'about', loadChildren: './pages/about/about.module#AboutPageModule' },
 
 ];
 

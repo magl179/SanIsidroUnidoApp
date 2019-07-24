@@ -9,6 +9,8 @@ import { Storage } from '@ionic/storage';
 })
 export class UtilsService implements OnInit {
 
+
+
     constructor(
         private toastCtrl: ToastController,
         private loadingCtrl: LoadingController,

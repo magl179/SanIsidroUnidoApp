@@ -67,9 +67,16 @@
         "children": []
     },
     {
-        "icon": "help-circle-outline",
+        "icon": "play-circle",
         "name": "Tutorial",
         "redirectTo": "/tutorial",
+        "routeDirection": "root",
+        "children": []
+    },
+    {
+        "icon": "information-circle-outline",
+        "name": "Información",
+        "redirectTo": "/about",
         "routeDirection": "root",
         "children": []
     }
