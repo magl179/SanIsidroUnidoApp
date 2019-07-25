@@ -201,10 +201,10 @@ export class RegisterPage implements OnInit {
             },
             password: {
                 required: {
-                    message: 'La Contraseña es Obligatoria'
+                    message: 'La Contraseña es obligatoria'
                 },
                 minlength: {
-                    message: `La Contraseña debe contener minimo ${this.registerFormFields.password.minlength} caracteres`
+                    message: `La Contraseña debe contener al menos ${this.registerFormFields.password.minlength} caracteres`
                 },
                 pattern: {
                     message: `Ingresa una contraseña segura`

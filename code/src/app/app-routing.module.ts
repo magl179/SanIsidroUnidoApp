@@ -61,15 +61,24 @@ const routes: Routes = [
         path: 'event-detail/:id',
         loadChildren: './pages/protected/event-detail/event-detail.module#EventDetailPageModule',
         canActivate: [LoginAuthGuard]
-    },  { path: 'tutorial', loadChildren: './pages/tutorial/tutorial.module#TutorialPageModule' },
-  { path: 'about', loadChildren: './pages/about/about.module#AboutPageModule' },
+    },
+    {
+        path: 'tutorial',
+        loadChildren: './pages/tutorial/tutorial.module#TutorialPageModule',
+        canActivate: [LoginAuthGuard]
+    },
+    {
+        path: 'about',
+        loadChildren: './pages/about/about.module#AboutPageModule',
+        canActivate: [LoginAuthGuard]
+    },
 
 ];
 
 @NgModule({
-  imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
-  ],
-  exports: [RouterModule]
+    imports: [
+        RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    ],
+    exports: [RouterModule]
 })
 export class AppRoutingModule { }

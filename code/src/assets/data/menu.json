@@ -1,22 +1,20 @@
-[
-    {
-        "icon": "paper",
+[{
+        "icon": "list-box",
         "name": "Publicaciones",
         "redirectTo": "",
         "routeDirection": "root",
-        "children": [
-            {
-            "icon": "paper",
-            "name": "Problemas Sociales",
-            "redirectTo": "/social-problems",
-            "routeDirection": "root"
+        "children": [{
+                "icon": "megaphone",
+                "name": "Problemas Sociales",
+                "redirectTo": "/social-problems",
+                "routeDirection": "root"
             },
             {
-                "icon": "paper",
+                "icon": "calendar",
                 "name": "Eventos",
                 "redirectTo": "/events",
                 "routeDirection": "root"
-                }
+            }
         ]
     },
     {
@@ -24,8 +22,7 @@
         "name": "Servicios",
         "redirectTo": "/public-services",
         "routeDirection": "root",
-        "children": [
-            {
+        "children": [{
                 "icon": "filing",
                 "name": "Servicios Públicos",
                 "redirectTo": "/public-services",
@@ -45,18 +42,18 @@
         "redirectTo": "",
         "routeDirection": "root",
         "children": [
-           {
-            "icon": "create",
-            "name": "Emergencia",
-            "redirectTo": "/emergency-create",
-            "routeDirection": "root"
-           },
-           {
-            "icon": "create",
-            "name": "Problema Social",
-            "redirectTo": "/social-problem-create",
-            "routeDirection": "root"
-           }
+            {
+                "icon": "create",
+                "name": "Emergencia",
+                "redirectTo": "/emergency-create",
+                "routeDirection": "root"
+            },
+            {
+                "icon": "create",
+                "name": "Problema Social",
+                "redirectTo": "/social-problem-create",
+                "routeDirection": "root"
+            }
         ]
     },
     {
@@ -67,17 +64,23 @@
         "children": []
     },
     {
-        "icon": "play-circle",
-        "name": "Tutorial",
-        "redirectTo": "/tutorial",
+        "icon": "help-circle",
+        "name": "Ayuda",
+        "redirectTo": "",
         "routeDirection": "root",
-        "children": []
-    },
-    {
-        "icon": "information-circle-outline",
-        "name": "Información",
-        "redirectTo": "/about",
-        "routeDirection": "root",
-        "children": []
+        "children": [
+            {
+                "icon": "play-circle",
+                "name": "Tutorial",
+                "redirectTo": "/tutorial",
+                "routeDirection": "root"
+            },
+            {
+                "icon": "information-circle",
+                "name": "Información",
+                "redirectTo": "/about",
+                "routeDirection": "root"
+            }
+        ]
     }
 ]

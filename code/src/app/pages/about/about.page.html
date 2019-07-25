@@ -1,18 +1,12 @@
-<app-header title="Acerca de San Isidro Unido" [showNoti]="false"></app-header>
+<app-header title="Información" [showNoti]="false"></app-header>
 
 <ion-content>
-    <!-- <ion-grid>
-        <ion-row justify-content-center align-items-center style='height: 100%'>
-            <h3>San Isidro Unido</h3>
-            <p>Versión: 1.0.1</p>
-            <p>OneSignal Device ID: {{infodeviceID || 'No hay un valor para ID Dispositivo'}} </p>
-        </ion-row>
-    </ion-grid> -->
     <ion-grid style="height: 100%">
         <ion-row justify-content-center align-items-center style="height: 100%;flex-direction: column;">
             <h3>San Isidro Unido</h3>
             <p>Versión: 1.0.1</p>
-            <p>OneSignal Device ID: {{infodeviceID || 'No hay un valor para ID Dispositivo'}} </p>
+            <p>OneSignal Device ID </p>
+            <p>{{infodeviceID || 'No hay un valor para ID Dispositivo'}} </p>
         </ion-row>
     </ion-grid>
 </ion-content>

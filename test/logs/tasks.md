@@ -119,4 +119,4 @@
 
 - Validar datos traídos de la API
 
-- Despliegue de los datos obtenidos en la Interfaz
+- ~~Despliegue de los datos obtenidos en la Interfaz~~

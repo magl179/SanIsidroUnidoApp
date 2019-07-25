@@ -134,8 +134,8 @@ body {
     padding-bottom: 2rem;
 
     .item_img {
-        width: 180px;
-        height: 180px;
+        width: 150px;
+        height: 150px;
         // background:red;
         position: relative;
     }
@@ -337,6 +337,7 @@ body {
 .container_events {
     color: #616770;
     font-weight: bold;
+
     ion-icon {
         margin-right: 10px;
         color: currentColor;
@@ -370,23 +371,27 @@ body {
 // Formularios
 .form-errors {
     p {
-        margin-left: 1rem;
+        // margin-left: 1rem;
         color: #f04141;
-        font-size: .9rem;
-        // margin: 0px;
+        font-size: .8rem;
     }
 }
 
-.item-form{
-    .input_item{
-        display: inline-block; width: 90%;
+.item-form {
+    .input_item {
+        display: inline-block;
+        width: 90%;
     }
-    .feedback-icon{
-        display: inline-flex; 
-        justify-content:center;
+
+    .feedback-icon {
+        display: inline-flex;
+        justify-content: center;
         width: 10%;
-        ion-item{
-            display: inline-block; width: 100%;--padding-start: 0px;
+
+        ion-item {
+            display: inline-block;
+            width: 100%;
+            --padding-start: 0px;
         }
     }
 }
@@ -457,16 +462,18 @@ hr.gray {
     bottom: -4px !important;
 }
 
-.icon-help-input{
+.icon-help-input {
     position: absolute;
     right: 0;
     bottom: 4px;
     background: transparent;
     font-size: 18px;
-    ion-icon.error{
+
+    ion-icon.error {
         color: #f04141
     }
-    ion-icon.success{
+
+    ion-icon.success {
         color: #10dc60;
     }
 }

@@ -1,12 +1,16 @@
 <app-header title="Tutorial" [showNoti]="false"></app-header>
 <ion-content padding>
-    <ion-slides pager="true">
-        <ion-slide *ngFor="let slide of slides" text-center>
-            <img [src]="slide.img" class="slide-img">
-            <h3>{{slide.title}}</h3>
-            <p>{{slide.desc}}</p>
-        </ion-slide>
-    </ion-slides>
+    <!-- <div style="height: 100%"> -->
+        <!-- <div justify-content-center align-items-center style="display: flex;height: 100%;flex-direction: column;"> -->
+            <ion-slides pager="true">
+                <ion-slide *ngFor="let slide of slides" text-center>
+                    <img [src]="slide.img" class="slide-img">
+                    <h3>{{slide.title}}</h3>
+                    <p>{{slide.desc}}</p>
+                </ion-slide>
+            </ion-slides>
+        <!-- </div> -->
+    <!-- </div> -->
 </ion-content>
 <ion-footer no-border text-center>
     <ion-grid fixed>

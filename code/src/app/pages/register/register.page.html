@@ -139,8 +139,6 @@
                                     </ion-item>
                                 </div>
                             </div>
-                            <app-strength-passbar *ngIf="registerForm.get('password').touched"
-                                [text]="registerForm.value.password" [width]="90"></app-strength-passbar>
                             <div class="form-errors">
                                 <p class="form-error"
                                     *ngIf="registerForm.get('password').hasError('required') && registerForm.get('password').touched">
