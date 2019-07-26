@@ -1,20 +1,16 @@
-<!-- <splash-sm *ngIf="splash"></splash-sm> -->
+<app-header title="Inicio"></app-header>
 <ion-content>
-    <ion-item lines="none">
-        <img class="full" src="assets/img/slide-1.png">
-    </ion-item>
     <ion-grid class="ion-padding-top">
         <ion-row class="ion-justify-content-center">
-            <ion-col size="9">
-                <ion-button expand="block" color="primary" routerLink="/register" routerDirection="forward">Crear una
-                    Cuenta</ion-button>
-            </ion-col>
-        </ion-row>
-        <ion-row class="ion-justify-content-center">
-            <ion-col size="9">
-                <ion-button expand="block" color="secondary" routerLink="/login" routerDirection="forward">Ya tengo una
-                    Cuenta</ion-button>
-                    <ion-button expand="full" (click)="onClearBDD()">Clear BDD</ion-button>
+            <ion-col size="6" *ngFor="let service of servicesList" class="service_item">
+                <a [routerLink]="service.url"> 
+                    <ion-card>
+                        <h2 class="title">{{service.title}}</h2>
+                        <div class="icon">
+                                <img class="img" [src]="service.icon">
+                        </div>
+                    </ion-card>
+                </a>
             </ion-col>
         </ion-row>
     </ion-grid>

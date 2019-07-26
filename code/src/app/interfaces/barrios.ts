@@ -63,6 +63,7 @@ export interface IPostUbicationItem {
 
 // LOCALIZATION
 export interface IUbicationItem {
+    id: number;
     latitude: number;
     longitude: number;
     title: string;

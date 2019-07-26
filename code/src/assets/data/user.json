@@ -10,5 +10,9 @@
     "avatar": "assets/img/default/img_avatar.png",
     "basic_service_image": "",
     "cargo": "Morador Afiliado",
-    "phone": ""
+    "phone": "",
+    "roles": [
+        "admin",
+        "morador_afiliado"
+    ]
 }

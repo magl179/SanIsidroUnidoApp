@@ -28,31 +28,31 @@ import { ShowListNotificationsPageModule } from './modals/show-list-notification
 
 
 @NgModule({
-  declarations: [AppComponent],
-  entryComponents: [PopNotificationsComponent, ShowListNotificationsPage],
-  imports: [
-      BrowserModule, 
-      BrowserAnimationsModule, 
-      IonicModule.forRoot(), 
-      AppRoutingModule,
-    HttpClientModule, 
-    SmComponentsModule, 
-    ReactiveFormsModule, 
-    IonicStorageModule.forRoot(), 
-    ShowListNotificationsPageModule
+    declarations: [AppComponent],
+    entryComponents: [PopNotificationsComponent, ShowListNotificationsPage],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        IonicModule.forRoot(),
+        AppRoutingModule,
+        HttpClientModule,
+        SmComponentsModule,
+        ReactiveFormsModule,
+        IonicStorageModule.forRoot(),
+        ShowListNotificationsPageModule
     ],
-  providers: [
-    StatusBar,
-    SplashScreen,
-      { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-      AndroidPermissions,      
-      Geolocation,
-      Camera,
-      LocationAccuracy,
-      GooglePlus,
-      Facebook,
-      OneSignal
-  ],
-  bootstrap: [AppComponent]
+    providers: [
+        StatusBar,
+        SplashScreen,
+        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+        AndroidPermissions,
+        Geolocation,
+        Camera,
+        LocationAccuracy,
+        GooglePlus,
+        Facebook,
+        OneSignal
+    ],
+    bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

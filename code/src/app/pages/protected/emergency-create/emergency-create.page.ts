@@ -59,7 +59,7 @@ export class EmergencyCreatePage implements OnInit {
         const coords = await this.localizationService.getCoordinate();
         this.emergencyPostCoordinate.latitude = coords.latitude;
         this.emergencyPostCoordinate.longitude = coords.longitude;
-        console.log(this.emergencyForm.get('title').value);
+        // console.log(this.emergencyForm.get('title').value);
     }
 
     createForm() {

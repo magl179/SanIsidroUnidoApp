@@ -1,8 +1,13 @@
 <ion-header no-border>
-  <ion-toolbar color="primary">
-    <ion-buttons slot="start">
-        <ion-back-button [defaultHref]="hrefDefault" text=""></ion-back-button>
-    </ion-buttons>
-    <ion-title class="ion-text-center">{{title}}</ion-title>
-  </ion-toolbar>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button [defaultHref]="hrefDefault" text=""></ion-back-button>
+        </ion-buttons>
+        <ion-title class="ion-text-center">{{title}}</ion-title>
+        <ion-buttons slot="end" *ngIf="showNoti">
+            <ion-button size="large" slot="icon-only" (click)="MostrarPopover($event)">
+                <ion-icon class="icon_noti" [name]="notificationsIcon"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
 </ion-header>

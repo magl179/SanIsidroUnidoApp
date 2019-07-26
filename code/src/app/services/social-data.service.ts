@@ -43,7 +43,11 @@ export class SocialDataService {
             token_id: googleUser.id,
             provider: 'google',
             avatar: googleUser.image.url,
-            password: null
+            password: null,
+            roles: [
+                'admin',
+                'morador_invitado'
+            ]
         };
         console.log('OWN GOOGLE DATA', appUser);
         return appUser;
@@ -57,7 +61,11 @@ export class SocialDataService {
             token_id: fbUser.id,
             provider: 'facebook',
             avatar: fbUser.image,
-            password: null
+            password: null,
+            roles: [
+                'admin',
+                'morador_invitado'
+            ]
         };
         console.log('OWN FB DATA', appUser);
         return appUser;

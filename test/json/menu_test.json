@@ -1,0 +1,87 @@
+[
+    {
+        "icon": "list-box",
+        "name": "Publicaciones",
+        "redirectTo": "",
+        "routeDirection": "root",
+        "children": [{
+                "icon": "megaphone",
+                "name": "Problemas Sociales",
+                "redirectTo": "/social-problems",
+                "routeDirection": "root"
+            },
+            {
+                "icon": "calendar",
+                "name": "Eventos",
+                "redirectTo": "/events",
+                "routeDirection": "root"
+            }
+        ]
+    },
+    {
+        "icon": "medkit",
+        "name": "Servicios",
+        "redirectTo": "/public-services",
+        "routeDirection": "root",
+        "children": [{
+                "icon": "filing",
+                "name": "Servicios Públicos",
+                "redirectTo": "/public-services",
+                "routeDirection": "root"
+            },
+            {
+                "icon": "people",
+                "name": "Directorio Barrial",
+                "redirectTo": "/directory-info",
+                "routeDirection": "root"
+            }
+        ]
+    },
+    {
+        "icon": "create",
+        "name": "Reportar",
+        "redirectTo": "",
+        "routeDirection": "root",
+        "children": [
+            {
+                "icon": "create",
+                "name": "Emergencia",
+                "redirectTo": "/emergency-create",
+                "routeDirection": "root"
+            },
+            {
+                "icon": "create",
+                "name": "Problema Social",
+                "redirectTo": "/social-problem-create",
+                "routeDirection": "root"
+            }
+        ]
+    },
+    {
+        "icon": "person",
+        "name": "Mi Perfil",
+        "redirectTo": "/user-profile",
+        "routeDirection": "root",
+        "children": []
+    },
+    {
+        "icon": "help-circle",
+        "name": "Ayuda",
+        "redirectTo": "",
+        "routeDirection": "root",
+        "children": [
+            {
+                "icon": "play-circle",
+                "name": "Tutorial",
+                "redirectTo": "/tutorial",
+                "routeDirection": "root"
+            },
+            {
+                "icon": "information-circle",
+                "name": "Información",
+                "redirectTo": "/about",
+                "routeDirection": "root"
+            }
+        ]
+    }
+]

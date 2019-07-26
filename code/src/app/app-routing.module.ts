@@ -5,7 +5,11 @@ import { NoLoginAuthGuard } from './guards/no-login.guard';
 
 const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
-    { path: 'home', loadChildren: './pages/home/home.module#HomePageModule' },
+    {
+        path: 'home',
+        loadChildren: './pages/home/home.module#HomePageModule',
+        canActivate: [LoginAuthGuard]
+    },
     {
         path: 'login',
         loadChildren: './pages/login/login.module#LoginPageModule',

@@ -1,0 +1,32 @@
+[
+    {
+        "title": "Reportar Emergencia",
+        "icon": "https://banner2.kisspng.com/20180325/svq/kisspng-computer-icons-webcam-download-web-camera-5ab74e027af8e9.5389996915219624985037.jpg",
+        "url": "/emergency-create"
+    },
+    {
+        "title": "Reportar Problema",
+        "icon": "https://banner2.kisspng.com/20180325/svq/kisspng-computer-icons-webcam-download-web-camera-5ab74e027af8e9.5389996915219624985037.jpg",
+        "url": "/social-problem-create"
+    },
+    {
+        "title": "Servicios Públicos",
+        "icon": "https://banner2.kisspng.com/20180325/svq/kisspng-computer-icons-webcam-download-web-camera-5ab74e027af8e9.5389996915219624985037.jpg",
+        "url": "/public-services"
+    },
+    {
+        "title": "Directorio Barrial",
+        "icon": "https://banner2.kisspng.com/20180325/svq/kisspng-computer-icons-webcam-download-web-camera-5ab74e027af8e9.5389996915219624985037.jpg",
+        "url": "/directory-info"
+    },
+    {
+        "title": "Problemas Sociales",
+        "icon": "https://banner2.kisspng.com/20180325/svq/kisspng-computer-icons-webcam-download-web-camera-5ab74e027af8e9.5389996915219624985037.jpg",
+        "url": "/social-problems"
+    },
+    {
+        "title": "Eventos",
+        "icon": "https://banner2.kisspng.com/20180325/svq/kisspng-computer-icons-webcam-download-web-camera-5ab74e027af8e9.5389996915219624985037.jpg",
+        "url": "/events"
+    }
+]

@@ -6,7 +6,7 @@ import { timer } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { SocialDataService } from 'src/app/services/social-data.service';
 
-const urlLogueado = '/social-problems';
+const urlLogueado = '/home';
 
 @Component({
     selector: 'app-login',

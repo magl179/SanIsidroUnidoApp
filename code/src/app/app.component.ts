@@ -47,7 +47,7 @@ export class AppComponent implements OnInit {
             await this.statusBar.styleDefault();
             await this.splashScreen.hide();
             timer(3200).subscribe(async () => {
-                this.showAppsplash = false;               
+                this.showAppsplash = false;
                 await this.pushNotificationService.initialConfig();
             });
         });

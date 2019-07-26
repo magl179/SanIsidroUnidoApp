@@ -1,60 +1,10 @@
-[{
-        "icon": "list-box",
-        "name": "Publicaciones",
-        "redirectTo": "",
-        "routeDirection": "root",
-        "children": [{
-                "icon": "megaphone",
-                "name": "Problemas Sociales",
-                "redirectTo": "/social-problems",
-                "routeDirection": "root"
-            },
-            {
-                "icon": "calendar",
-                "name": "Eventos",
-                "redirectTo": "/events",
-                "routeDirection": "root"
-            }
-        ]
-    },
+[
     {
-        "icon": "medkit",
-        "name": "Servicios",
-        "redirectTo": "/public-services",
+        "icon": "home",
+        "name": "Inicio",
+        "redirectTo": "/home",
         "routeDirection": "root",
-        "children": [{
-                "icon": "filing",
-                "name": "Servicios Públicos",
-                "redirectTo": "/public-services",
-                "routeDirection": "root"
-            },
-            {
-                "icon": "people",
-                "name": "Directorio Barrial",
-                "redirectTo": "/directory-info",
-                "routeDirection": "root"
-            }
-        ]
-    },
-    {
-        "icon": "create",
-        "name": "Crear",
-        "redirectTo": "",
-        "routeDirection": "root",
-        "children": [
-            {
-                "icon": "create",
-                "name": "Emergencia",
-                "redirectTo": "/emergency-create",
-                "routeDirection": "root"
-            },
-            {
-                "icon": "create",
-                "name": "Problema Social",
-                "redirectTo": "/social-problem-create",
-                "routeDirection": "root"
-            }
-        ]
+        "children": []
     },
     {
         "icon": "person",
@@ -64,23 +14,17 @@
         "children": []
     },
     {
-        "icon": "help-circle",
-        "name": "Ayuda",
-        "redirectTo": "",
+        "icon": "play-circle",
+        "name": "Tutorial",
+        "redirectTo": "/tutorial",
         "routeDirection": "root",
-        "children": [
-            {
-                "icon": "play-circle",
-                "name": "Tutorial",
-                "redirectTo": "/tutorial",
-                "routeDirection": "root"
-            },
-            {
-                "icon": "information-circle",
-                "name": "Información",
-                "redirectTo": "/about",
-                "routeDirection": "root"
-            }
-        ]
+        "children": []
+    },
+    {
+        "icon": "information-circle",
+        "name": "Información",
+        "redirectTo": "/about",
+        "routeDirection": "root",
+        "children": []
     }
 ]
