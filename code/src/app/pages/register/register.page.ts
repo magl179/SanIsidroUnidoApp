@@ -101,12 +101,12 @@ export class RegisterPage implements OnInit {
 
     async registerFBUser() {
         await this.socialDataService.loginByFacebook();
-        this.socialDataService.fbLoginData.subscribe(async fbData => {
+        await this.socialDataService.fbLoginData.subscribe(async fbData => {
             if (fbData) {
                 const user = await this.socialDataService.getDataFacebookParsed(fbData);
-                await this.authService.register('facebook', user).subscribe(registerData => {
+                await this.authService.register('facebook', user).subscribe(async registerData => {
                     if (registerData) {
-                        this.setLoginUserData(registerData);
+                        await this.setLoginUserData(registerData);
                     }
                 });
             }
@@ -117,11 +117,11 @@ export class RegisterPage implements OnInit {
     }
     async registerGoogleUser() {
             await this.socialDataService.loginByGoogle();
-            this.socialDataService.googleLoginData.subscribe(async googleData => {
+            await this.socialDataService.googleLoginData.subscribe(async googleData => {
                 if (googleData) {
                         const user = await this.socialDataService.getDataGoogleParsed(googleData);
-                        await this.authService.register('google', user).subscribe(registerData => {
-                            this.setLoginUserData(registerData);
+                        await this.authService.register('google', user).subscribe(async registerData => {
+                            await this.setLoginUserData(registerData);
                         });
                   }
             }, err => {

@@ -128,3 +128,11 @@ export interface IEvent {
     images?: [];
 }
 
+// Compartir Publicaciones
+export interface IPostShare {
+    title: string;
+    description: string;
+    image?: string;
+    url?: string;
+}
+

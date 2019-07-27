@@ -92,29 +92,29 @@ export class LoginPage implements OnInit {
 
     async loginUserByFB() {
             await this.socialDataService.loginByFacebook();
-            this.socialDataService.fbLoginData.subscribe(fbData => {
+            await this.socialDataService.fbLoginData.subscribe(async fbData => {
                 if (fbData) {
                     const user = this.socialDataService.getDataFacebookParsed(fbData);
-                    this.authService.login('facebook', user).subscribe(loginData => {
-                        this.setLoginUserData(loginData);
+                    await this.authService.login('facebook', user).subscribe(async loginData => {
+                        await this.setLoginUserData(loginData);
                     });
                 }
-            }, err => {
-                this.utilsService.showToast('Fallo Iniciar Sesión con Facebook');
+            }, async err => {
+                await this.utilsService.showToast('Fallo Iniciar Sesión con Facebook');
                 console.log('Error Login', err);
             });
     }
     async loginUserByGoogle() {
                 await this.socialDataService.loginByGoogle();
-                this.socialDataService.googleLoginData.subscribe(async googleData => {
+                await this.socialDataService.googleLoginData.subscribe(async googleData => {
                     if (googleData) {
                         const user = this.socialDataService.getDataGoogleParsed(googleData);
-                        await this.authService.login('google', user).subscribe(loginData => {
-                            this.setLoginUserData(loginData);
+                        await this.authService.login('google', user).subscribe(async loginData => {
+                            await this.setLoginUserData(loginData);
                         });
                     }
-                }, err => {
-                    this.utilsService.showToast('Fallo Iniciar Sesión con Google');
+                }, async err => {
+                    await this.utilsService.showToast('Fallo Iniciar Sesión con Google');
                     console.log('Error Login', err);
                 });
         }

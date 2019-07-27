@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NavController, IonSegment } from '@ionic/angular';
 import { UtilsService } from '../../../services/utils.service';
 import { AuthService } from '../../../services/auth.service';
 import { PostsService } from '../../../services/posts.service';
-import { ISocialProblem, IUserLogued} from 'src/app/interfaces/barrios';
+import { ISocialProblem, IUserLogued, IPostShare} from 'src/app/interfaces/barrios';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-social-problems',
@@ -12,8 +13,11 @@ import { ISocialProblem, IUserLogued} from 'src/app/interfaces/barrios';
 })
 export class SocialProblemsPage implements OnInit {
 
+    @ViewChild(IonSegment) segment: IonSegment;
+    subcategory = '';
     loading: any;
     elements: any = [];
+    socialProblems: Observable<any>;
     currentUser: IUserLogued = null;
 
     socialProblemsList: ISocialProblem[];
@@ -28,6 +32,7 @@ export class SocialProblemsPage implements OnInit {
     }
 
     async ngOnInit() {
+        this.segment.value = 'todos';
         this.loading = await this.utilsService.createBasicLoading('Cargando Publicaciones');
         this.loading.present();
         this.currentUser = await this.authService.getCurrentUser();
@@ -37,9 +42,6 @@ export class SocialProblemsPage implements OnInit {
             }
             this.loading.dismiss();
         });
-        // setTimeout(() => {
-        //     this.elements = [1, 1, 1];
-        // }, 1500);
     }
 
     ionViewWillEnter() {
@@ -48,6 +50,17 @@ export class SocialProblemsPage implements OnInit {
 
     postDetail(id) {
         this.navCtrl.navigateForward(`/social-problem-detail/${id}`);
+    }
+
+    async sharePost(post: ISocialProblem) {
+        const sharePost: IPostShare = {
+            title: post.title,
+            description: post.description,
+            image: 'no_image',
+            url: ''
+
+        };
+        await this.utilsService.compartirRedSocial(sharePost);
     }
 
 }

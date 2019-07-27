@@ -416,6 +416,60 @@ body {
 
 // Helpers
 
+.card_social {
+    outline: none;
+
+    .options {
+        // background:purple;
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+        margin-top: .7rem;
+        margin-bottom: .7rem;
+
+        .option_button {
+            // background: yellow;
+            width: 70%;
+            display: flex;
+            justify-content: center;
+
+        }
+
+        .option_actions {
+            // background:green;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 30%;
+
+            .btn_icon {
+                ion-icon {
+                    font-size: 1.3rem;
+                }
+            }
+
+            .active {
+                color: #3880ff;
+            }
+        }
+    }
+}
+
+.btn {
+    // color:white;
+    // background:blue;
+    outline: none;
+    padding: .9rem 2rem;
+    border-radius: 25px;
+    width: 80%;
+    text-transform: uppercase;
+}
+
+.primary {
+    background: #3880ff;
+    color: white;
+}
+
 .icon-close {
     font-size: 35px !important;
 }

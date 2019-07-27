@@ -19,12 +19,15 @@ import { Facebook } from '@ionic-native/facebook/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
 import { OneSignal } from '@ionic-native/onesignal/ngx';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { IonicStorageModule } from '@ionic/storage';
 import { PopNotificationsComponent } from './components/pop-notifications/pop-notifications.component';
 import { ShowListNotificationsPage } from './modals/show-list-notifications/show-list-notifications.page';
 import { ShowListNotificationsPageModule } from './modals/show-list-notifications/show-list-notifications.module';
+import { PipesModule } from './pipes/pipes.module';
+
 
 
 @NgModule({
@@ -39,7 +42,8 @@ import { ShowListNotificationsPageModule } from './modals/show-list-notification
         SmComponentsModule,
         ReactiveFormsModule,
         IonicStorageModule.forRoot(),
-        ShowListNotificationsPageModule
+        ShowListNotificationsPageModule,
+        PipesModule
     ],
     providers: [
         StatusBar,
@@ -51,7 +55,8 @@ import { ShowListNotificationsPageModule } from './modals/show-list-notification
         LocationAccuracy,
         GooglePlus,
         Facebook,
-        OneSignal
+        OneSignal,
+        SocialSharing
     ],
     bootstrap: [AppComponent]
 })

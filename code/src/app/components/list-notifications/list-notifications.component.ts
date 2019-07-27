@@ -1,5 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { NotificationsService } from '../../services/notifications.service';
+import { Observable } from 'rxjs';
+import { NavController, IonSegment } from '@ionic/angular';
 
 @Component({
     selector: 'app-list-notifications',
@@ -10,6 +12,7 @@ export class ListNotificationsComponent implements OnInit {
 
     @Input() showListHeader = true;
     @Input() maxNotifications = 0;
+    @ViewChild(IonSegment) segment: IonSegment;
 
     notificationsRequested = [];
     notificationsList: { title: string, author: string, user_img: string, description: string }[] = [];
@@ -35,6 +38,7 @@ export class ListNotificationsComponent implements OnInit {
     ) { }
 
     async ngOnInit() {
+        this.segment.value = 'todos';
         await this.notificationsList.reverse();
         await this.getNotifications();
     }

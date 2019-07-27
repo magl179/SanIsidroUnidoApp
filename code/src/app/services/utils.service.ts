@@ -1,8 +1,9 @@
 import { Injectable, OnInit } from '@angular/core';
-import { ToastController, LoadingController, MenuController } from '@ionic/angular';
+import { ToastController, LoadingController, MenuController, Platform } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
-import { IMenuComponent } from 'src/app/interfaces/barrios';
+import { IMenuComponent, IPostShare} from 'src/app/interfaces/barrios';
 import { Storage } from '@ionic/storage';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 
 @Injectable({
     providedIn: 'root'
@@ -16,13 +17,45 @@ export class UtilsService implements OnInit {
         private loadingCtrl: LoadingController,
         private http: HttpClient,
         private menuCtrl: MenuController,
-        private storage: Storage
+        private storage: Storage,
+        private platform: Platform,
+        private socialSharing: SocialSharing
     ) { }
 
     async ngOnInit() { }
 
     ramdomValue(tamanio) {
         return Math.floor(Math.random() * tamanio);
+    }
+
+    async compartirRedSocial(publicacion: IPostShare) {
+        // Verificar Si Existe Cordova
+        if (this.platform.is('cordova')) {
+            await this.socialSharing.share(
+                publicacion.title, // message
+                publicacion.description, // subject
+                (publicacion.image) ? publicacion.image : '', // file image or [] images
+                publicacion.url || '' // url to share
+            );
+        } else {
+            // tslint:disable-next-line: no-string-literal
+            if (navigator['share']) {
+                // tslint:disable-next-line: no-string-literal
+                await navigator['share']({
+                    title: publicacion.title,
+                    text: publicacion.description,
+                    url: publicacion.url || ''
+                }).then(() => {
+                    console.log('Compartido Correctamente');
+                }).catch(err => {
+                    console.log('Error al compartir');
+                });
+            } else {
+                console.log('Tu dispositivo no soporta la función de compartir');
+                await this.showToast('Tu dispositivo no soporta la función de compartir');
+            }
+        }
+
     }
 
     async ramdomItem(array) {

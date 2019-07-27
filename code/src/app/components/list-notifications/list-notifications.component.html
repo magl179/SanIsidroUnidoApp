@@ -1,3 +1,19 @@
+<ion-toolbar mode="md">
+        <ion-segment color="tertiary" scrollable mode="md">        
+            <ion-segment-button value="todos" mode="md">
+                <ion-label>Todas</ion-label>
+            </ion-segment-button>        
+            <ion-segment-button value="emergency" mode="md">
+                <ion-label>Emergencia</ion-label>
+            </ion-segment-button>        
+            <ion-segment-button value="social_problem" mode="md">
+                <ion-label>Problema Social</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="event" mode="md">
+                <ion-label>Eventos</ion-label>
+            </ion-segment-button>      
+        </ion-segment>
+</ion-toolbar>
 <ion-list class="list-notifications">
         <ion-list-header *ngIf="showListHeader">
             <ion-label>
