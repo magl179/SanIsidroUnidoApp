@@ -21,9 +21,9 @@ export class MapService implements OnInit {
         return this.http.get<IMarkers[]>('assets/data/markers.json');
     }
 
-    createIcon(ownIcon) {
+    createIcon(ownIconURL) {
         const iconMap = new Leaflet.Icon({
-            iconUrl: ownIcon,
+            iconUrl: ownIconURL,
             shadowUrl: shadowIcon,
             iconSize: [25, 41],
             iconAnchor: [12, 41],
@@ -31,6 +31,33 @@ export class MapService implements OnInit {
             shadowSize: [41, 41]
         });
         return iconMap;
+    }
+
+    async getCustomIcon(color) {
+        let markerIcon = null;
+        const markerData = await this.getMarkers().toPromise();
+        if (markerData) {
+            const iconData = markerData.filter((dataMarker) => {
+                return dataMarker.color === color;
+            });
+            console.log('iconed data custom icon', iconData);
+            if (iconData && iconData.length > 0) {
+                markerIcon = await this.createIcon(iconData[0].iconURL);
+            }
+        }
+        // await this.getMarkers().subscribe(async data => {
+        //     console.log('get custom icon data', data);
+        //     if (data) {
+        //         const iconData = data.filter((dataMarker) => {
+        //             return dataMarker.color === color;
+        //         });
+        //         console.log('iconed data custom icon', iconData);
+        //         if (iconData && iconData.length > 0) {
+        //             markerIcon = await this.createIcon(iconData[0].iconURL);
+        //         }
+        //    }
+        // });
+        return markerIcon;
     }
 
     async createMarker(markers, locationPoint) {
