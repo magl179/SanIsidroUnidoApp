@@ -67,7 +67,8 @@ export interface IUbicationItem {
     latitude: number;
     longitude: number;
     title: string;
-    iconColor: string;
+    description?: string;
+    iconColor?: string;
 }
 
 export interface ISimpleCoordinates {

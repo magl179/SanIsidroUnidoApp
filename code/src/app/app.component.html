@@ -9,8 +9,9 @@
                         <img [src]="userApp?.avatar || 'assets/img/default/img_avatar.png'" />
                     </ion-avatar>
                     <ion-label>
-                        <h1>{{userApp?.firstname || 'None'}} {{userApp?.lastname || 'None'}}</h1>
-                        <p>&copy; San Isidro Unido</p>
+                        <h1>{{userApp?.firstname || 'Firstname'}} {{userApp?.lastname || 'Lastname'}}</h1>
+                        <p>{{userApp?.email || 'example@gmail.com'}}</p> 
+                        <p class="network_avalaible"> <span>Red: </span> <ion-badge [color]="(isConnected)?'success':'danger'">{{ (isConnected)?'disponible':'no disponible' }}</ion-badge></p>
                     </ion-label>
                 </ion-item>
                 <ion-list class="list-no-padding" *ngFor="let c of menuComponents;let i = index;">

@@ -1,18 +1,23 @@
 <app-header-back title="Servicios Públicos"></app-header-back>
 <ion-content>
-    <div>
+    <!-- <div>
         <ion-searchbar type="text" animated (ionInput)="searchPublicServices($event)"></ion-searchbar>
         <ion-list *ngIf="publicServicesPoints && publicServicesPoints.length > 0">
             <ion-item *ngFor="let service of filterPublicServices; let i = index;" (click)="showPublicService(service.id)">
                   {{ service.title }}
             </ion-item>
         </ion-list>
-    </div>
+    </div> -->
     <multiple-map *ngIf="publicServicesPoints.length > 0"
         idMap="public-services" 
         [zoomMap]="12" 
         [mapPoints]="publicServicesPoints" 
         [enableGesture]="true" 
-        (returnMapLoaded)="disabledLoading($event)">
+        (returnMapLoaded)="manageDataMap($event)">
     </multiple-map>
+    <div style="text-align:center" *ngIf="publicServiceSelected">
+        <p>Servicio: {{publicServiceSelected.title}}</p>
+        <p>Latitud: {{publicServiceSelected.latitude}}</p>
+        <p>Longitud: {{publicServiceSelected.longitude}}</p>
+    </div>
 </ion-content>

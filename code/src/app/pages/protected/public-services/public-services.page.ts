@@ -13,22 +13,36 @@ export class PublicServicesPage implements OnInit {
     publicServicesPoints: IUbicationItem[] = [];
     filterPublicServices = [];
     isPublicServiceAvalaible = false;
+    publicServiceSelected = null;
     loading: any;
+    loadingwasDismiss
 
     constructor(
         private utilsService: UtilsService
     ) { }
 
     async ngOnInit() {
-        // this.loading = await this.utilsService.createBasicLoading('Cargando Listado Servicios');
-        // this.loading.present();
+        this.loading = await this.utilsService.createBasicLoading('Cargando Listado Servicios');
+        this.loading.present();
         setTimeout(async () => {
             this.publicServicesPoints = [
-                { id: 1, title: 'San Jose de Moran', latitude: -0.0756493, longitude: -78.433859, iconColor: 'purple' },
-                { id: 2, title: 'Terminal de Carcelen', latitude: -0.0999525, longitude: -78.4740685, iconColor: 'green' },
-                { id: 3, title: 'Parque Bicentenario', latitude: -0.1384017, longitude: -78.4856772, iconColor: 'blue' },
-                { id: 4, title: 'Plaza de Toros', latitude: -0.1548643, longitude: -78.4822049, iconColor: 'yellow' }];
-            // this.loading.dismiss();
+                {
+                    id: 1, title: 'Centro de Salud Equidad', latitude: -0.0756493, longitude: -78.433859,
+                    description: '<h1>Centro de Salud Equidad</h1><p>Carlos Mantilla y de las viñas</p><p>2054784</p>'
+                },
+                {
+                    id: 2, title: 'Terminal de Carcelen', latitude: -0.0999525, longitude: -78.4740685,
+                    description: '<h1>Terminal de Carcelen</h1><p>Av Galo Plaza Lasso y Eloy Alfaro</p><p>2054784</p>'
+                },
+                {
+                    id: 3, title: 'Parque Bicentenario', latitude: -0.1384017, longitude: -78.4856772,
+                    description: '<h1>Parque Bicentenario</h1><p>Av 10 de Agosto y Amazonas</p><p>2054784</p>'
+                },
+                {
+                    id: 4, title: 'Plaza de Toros', latitude: -0.1548643, longitude: -78.4822049,
+                    description: '<h1>Plaza de Toros</h1><p>Av 10 de Agosto y Amazonas</p><p>2054784</p>'
+                }];
+            this.loading.dismiss();
         }, 2000);
     }
 
@@ -50,8 +64,11 @@ export class PublicServicesPage implements OnInit {
         await this.utilsService.showToast(`Mostrar Servicio Público con el ID: ${indice}`);
     }
 
-    disabledLoading(event) {
-        // console.log({ datosHijoPS: event });
+    manageDataMap(event) {
+        console.log({ datosHijoPS: event });
+        if (event.serviceSelected) {
+            this.publicServiceSelected = event.serviceSelected;
+        }
     }
 
 }

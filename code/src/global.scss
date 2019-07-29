@@ -365,7 +365,7 @@ body {
 #public-services {
     display: block;
     width: 100%;
-    height: 50%;
+    height: 80%;
 }
 
 // Formularios
@@ -529,5 +529,28 @@ hr.gray {
 
     ion-icon.success {
         color: #10dc60;
+    }
+}
+
+//Leaflet Override
+.leaflet-popup-content-wrapper, .leaflet-popup-tip{
+    background:#2c3e50;
+    color:#fff;
+}
+.leaflet-popup-content{
+    text-align: center;
+    h1{
+        font-size: 18px;
+    }
+}
+
+// Network
+.network_avalaible{
+    display: flex;
+    align-items: center;
+    margin-top: .7rem !important;
+    margin-bottom: .7rem !important;
+    span{
+        margin-right: 1rem;
     }
 }

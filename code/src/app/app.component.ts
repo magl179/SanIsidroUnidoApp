@@ -8,6 +8,7 @@ import { AlertController } from '@ionic/angular';
 import { AuthService } from './services/auth.service';
 import { UtilsService } from './services/utils.service';
 import { NotificationsService } from './services/notifications.service';
+import { NetworkService } from 'src/app/services/network.service';
 
 @Component({
     selector: 'app-root',
@@ -16,6 +17,7 @@ import { NotificationsService } from './services/notifications.service';
 export class AppComponent implements OnInit {
 
     showAppsplash = true;
+    isConnected = false;
     menuComponents: IMenuComponent[];
     automaticClose = true;
     userApp: any = null;
@@ -29,7 +31,8 @@ export class AppComponent implements OnInit {
         private authService: AuthService,
         private utilsService: UtilsService,
         private menuCtrl: MenuController,
-        private pushNotificationService: NotificationsService
+        private pushNotificationService: NotificationsService,
+        private networkService: NetworkService
     ) {
         this.initializeApp();
     }
@@ -49,6 +52,12 @@ export class AppComponent implements OnInit {
             timer(3200).subscribe(async () => {
                 this.showAppsplash = false;
                 await this.pushNotificationService.initialConfig();
+                this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
+                    this.isConnected = connected;
+                    if (!this.isConnected) {
+                        this.utilsService.showToast('No tienes conexión a Internet', 3000);
+                    }
+                });
             });
         });
     }

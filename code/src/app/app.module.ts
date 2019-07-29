@@ -20,6 +20,7 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
 import { OneSignal } from '@ionic-native/onesignal/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { Network } from '@ionic-native/network/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { IonicStorageModule } from '@ionic/storage';
@@ -56,7 +57,8 @@ import { PipesModule } from './pipes/pipes.module';
         GooglePlus,
         Facebook,
         OneSignal,
-        SocialSharing
+        SocialSharing,
+        Network
     ],
     bootstrap: [AppComponent]
 })
