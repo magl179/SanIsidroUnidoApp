@@ -17,7 +17,7 @@ import { NetworkService } from 'src/app/services/network.service';
 export class AppComponent implements OnInit {
 
     showAppsplash = true;
-    isConnected = false;
+    isConnected = true;
     menuComponents: IMenuComponent[];
     automaticClose = true;
     userApp: any = null;

@@ -21,6 +21,13 @@ export class EventsPage implements OnInit {
         private postService: PostsService
     ) { }
 
+
+    getFullDate(date, time) {
+        const fulldate = `${date} ${time}`;
+        console.log('GET FULL DATE', fulldate);
+        return fulldate;
+    }
+
     async ngOnInit() {
         this.loading = await this.utilsService.createBasicLoading('Cargando Publicaciones');
         this.loading.present();

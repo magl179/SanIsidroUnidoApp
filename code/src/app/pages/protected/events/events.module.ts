@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { EventsPage } from './events.page';
 import { SmComponentsModule } from 'src/app/components/sm-components.module';
-
+import { PipesModule } from 'src/app/pipes/pipes.module';
 
 
 const routes: Routes = [
@@ -23,7 +23,8 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    SmComponentsModule
+        SmComponentsModule,
+    PipesModule
   ],
   declarations: [EventsPage]
 })

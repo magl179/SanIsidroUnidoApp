@@ -2,7 +2,9 @@
 <ion-content>
     <ion-card *ngFor="let event of eventsList; let i = index;">
         <ion-card-header>
-            <ion-card-subtitle>{{event.date}} {{event.time}}</ion-card-subtitle>
+            <ion-card-subtitle>
+                {{getFullDate(event.date, event.time) | simpleBeatifulDate}}
+            </ion-card-subtitle>
             <ion-card-title (click)="postDetail(event.id)">{{event.title}}</ion-card-title>
         </ion-card-header>
         <ion-card-content> {{event.description}} </ion-card-content>

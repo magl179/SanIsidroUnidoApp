@@ -1,9 +1,11 @@
 import { Injectable, OnInit } from '@angular/core';
 import { ToastController, LoadingController, MenuController, Platform } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
-import { IMenuComponent, IPostShare} from 'src/app/interfaces/barrios';
+import { IMenuComponent, IPostShare } from 'src/app/interfaces/barrios';
 import { Storage } from '@ionic/storage';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+
+declare var moment: any;
 
 @Injectable({
     providedIn: 'root'
@@ -26,6 +28,34 @@ export class UtilsService implements OnInit {
 
     ramdomValue(tamanio) {
         return Math.floor(Math.random() * tamanio);
+    }
+
+
+    getBeatifulDate(stringDate: string) {
+        moment.locale('es');
+        let beatifulDate = null;
+        if (moment(stringDate).isValid()) {
+            console.log('Valid Date');
+            const currentDate = moment(new Date());
+            const lastDate = moment(new Date(stringDate));
+            // Fecha Pasada, Fecha Actual
+            const diffDays = currentDate.diff(lastDate, 'days');
+            console.log('Diferencia entre dias: ', diffDays);
+            if (diffDays <= 8) {
+                // console.log('Fecha Anterior', lastDate.fromNow());
+                beatifulDate = lastDate.fromNow();
+            } else if (currentDate.year() === lastDate.year()) {
+                // console.log('Fecha Anterior: ', lastDate.format('D MMMM'));
+                beatifulDate = lastDate.format('D MMMM');
+
+            } else {
+                // console.log('Fecha Anterior', lastDate.format('LL'));
+                beatifulDate = lastDate.format('LL');
+            }
+        } else {
+            console.log('Invalid Date', stringDate);
+        }
+        return beatifulDate;
     }
 
     async compartirRedSocial(publicacion: IPostShare) {

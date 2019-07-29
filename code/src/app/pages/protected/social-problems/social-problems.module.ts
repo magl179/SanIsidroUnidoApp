@@ -8,7 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { SocialProblemsPage } from './social-problems.page';
 
 import { SmComponentsModule } from 'src/app/components/sm-components.module';
-
+import { PipesModule } from 'src/app/pipes/pipes.module';
 const routes: Routes = [
   {
     path: '',
@@ -22,7 +22,8 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    SmComponentsModule
+    SmComponentsModule,
+    PipesModule
   ],
   declarations: [SocialProblemsPage]
 })
