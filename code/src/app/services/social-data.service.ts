@@ -37,8 +37,8 @@ export class SocialDataService {
 
     getDataGoogleParsed(googleUser: any) {
         const appUser = {
-            firstname: googleUser.displayName,
-            lastname: googleUser.name.givenName,
+            firstname: googleUser.name.givenName,
+            lastname: googleUser.displayName,
             email: googleUser.emails[0].value,
             token_id: googleUser.id,
             provider: 'google',

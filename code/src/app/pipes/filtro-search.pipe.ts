@@ -9,8 +9,9 @@ export class FiltroSearchPipe implements PipeTransform {
         arreglo: any,
         texto: any,
         columna: string): any[] {
-
+        console.log('Arreglo Entrante: ', arreglo);
         if (texto === '') {
+            arreglo.exists = 1;
             return arreglo;
         }
 
@@ -18,17 +19,21 @@ export class FiltroSearchPipe implements PipeTransform {
 
 
         let arregloFiltrado = arreglo.filter(item => {
-            return item[columna].toLowerCase().includes(texto);
+            console.log('item: ', item);
+            console.log('item-columna: ', item[columna].toString().toLowerCase());
+            console.log('texto: ', texto);
+            console.log('columna: ', columna);
+            return item[columna].toString().toLowerCase().includes(texto);
         });
-
-
+        console.log('Arreglo Filtrado', arregloFiltrado);
 
         if (arregloFiltrado.length === 0) {
-            const elemento = {};
-            elemento[columna] = 'No hay elementos que coincidan con la busqueda';
+            const elemento: any = {};
+            // tslint:disable-next-line: no-string-literal
+            elemento.exists = -1;
             arregloFiltrado = [elemento];
         }
-        console.log(arregloFiltrado);
+        console.log('Arreglo Filtrado', arregloFiltrado);
 
         return arregloFiltrado;
 

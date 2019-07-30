@@ -55,7 +55,6 @@
     "leaflet": "^1.5.1",
     "leaflet-gesture-handling": "^1.1.8",
     "leaflet-search": "^2.9.8",
-    "ng-connection-service": "^1.0.4",
     "onesignal-cordova-plugin": "^2.4.7",
     "rxjs": "~6.5.1",
     "tslib": "^1.9.0",
@@ -125,7 +124,7 @@
       "cordova-plugin-inappbrowser": {},
       "onesignal-cordova-plugin": {},
       "cordova-plugin-x-socialsharing": {
-        "ANDROID_SUPPORT_V4_VERSION": "24.1.1+"
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
       },
       "cordova-plugin-network-information": {}
     },

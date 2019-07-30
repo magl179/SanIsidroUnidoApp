@@ -20,7 +20,7 @@ export class SocialProblemsPage implements OnInit {
     socialProblems: Observable<any>;
     currentUser: IUserLogued = null;
 
-    socialProblemsList: ISocialProblem[];
+    socialProblemsList: ISocialProblem[] = [];
 
     constructor(
         private navCtrl: NavController,
@@ -28,11 +28,10 @@ export class SocialProblemsPage implements OnInit {
         private postService: PostsService,
         private authService: AuthService
     ) {
-
     }
-
+    
     async ngOnInit() {
-        this.segment.value = 'todos';
+        this.segment.value = 'all';
         this.loading = await this.utilsService.createBasicLoading('Cargando Publicaciones');
         this.loading.present();
         this.currentUser = await this.authService.getCurrentUser();
@@ -46,6 +45,18 @@ export class SocialProblemsPage implements OnInit {
 
     ionViewWillEnter() {
         this.utilsService.enableMenu();
+    }
+
+    segmentChanged(event) {
+        const valorSegmento = event.detail.value;
+        console.log(valorSegmento);
+        if (valorSegmento === 'all') {
+            this.subcategory = '';
+            console.log(this.subcategory);
+            return;
+        }
+        this.subcategory = valorSegmento;
+        console.log(this.subcategory);
     }
 
     postDetail(id) {

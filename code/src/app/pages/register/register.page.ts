@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-// import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { UtilsService } from 'src/app/services/utils.service';
 import { timer } from 'rxjs';

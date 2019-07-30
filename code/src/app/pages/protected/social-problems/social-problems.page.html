@@ -1,53 +1,63 @@
 <app-header-back title="Problemas Sociales"></app-header-back>
 
 <ion-toolbar mode="md">
-    <ion-segment color="tertiary" scrollable mode="md">
-        <ion-segment-button value="todos" mode="md">
+    <ion-segment color="tertiary" scrollable mode="md" (ionChange)="segmentChanged($event)">
+        <ion-segment-button value="all" mode="md">
             <ion-label>Todos</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="transport_transit" mode="md">
+        <ion-segment-button value="1" mode="md">
             <ion-label>Transporte & Transito</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="green_areas" mode="md">
+        <ion-segment-button value="2" mode="md">
             <ion-label>Espacios Verdes</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="security" mode="md">
+        <ion-segment-button value="3" mode="md">
             <ion-label>Seguridad</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="animal_protection" mode="md">
+        <ion-segment-button value="4" mode="md">
             <ion-label>Protección Animal</ion-label>
         </ion-segment-button>
     </ion-segment>
 </ion-toolbar>
 
 <ion-content>
-    <ion-card class="card_social" *ngFor="let socialProblem of socialProblemsList; let i = index;">
-        <ion-card-header>
-            <ion-card-title>{{socialProblem.title}}</ion-card-title>
-            <ion-card-subtitle class="post_user">User ID: {{socialProblem.user_id}}
-            </ion-card-subtitle>
-            <ion-card-subtitle>Category ID: {{socialProblem.category_id}} | {{socialProblem.date | beafitulDate}}
-            </ion-card-subtitle>
-        </ion-card-header>
-        <ion-card-content class="post_description">
-            <p class="post_content">{{socialProblem.description}} </p>
-            <p>Likes: 11</p>
-        </ion-card-content>
-        <div class="options">
-            <div class="option_button">
-                <button class="btn primary" (click)="postDetail(socialProblem.id)">
-                    Ver más
-                    <ion-ripple-effect></ion-ripple-effect>
-                </button>
-            </div>
-            <div class="option_actions" >
-                <div class="btn_icon" [ngClass]="{'active': socialProblem.user_id === currentUser.id}">
-                    <ion-icon slot="icon-only" [name]="(socialProblem.user_id === currentUser.id)?'heart':'heart-empty'"></ion-icon>
+    <ion-card class="card_social"
+        *ngFor="let socialProblem of (socialProblemsList) | filtroSearch:subcategory:'category_id'; let i = index;">
+        <div *ngIf="socialProblem.exists === -1">
+            <ion-card-header class="ion-text-center">
+                <ion-card-title>No hay publicaciones en esta categoria :(</ion-card-title>
+            </ion-card-header>
+        </div>
+        <div *ngIf="socialProblem.exists !== -1">
+            <ion-card-header>
+                <ion-card-title>{{socialProblem.title}}</ion-card-title>
+                <ion-card-subtitle class="post_user">User ID: {{socialProblem.user_id}}
+                </ion-card-subtitle>
+                <ion-card-subtitle>Category ID: {{socialProblem.category_id}} | {{socialProblem.date | beafitulDate}}
+                </ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content class="post_description">
+                <p class="post_content">{{socialProblem.description}} </p>
+                <p>Likes: 11</p>
+            </ion-card-content>
+            <div class="options">
+                <div class="option_button">
+                    <button class="btn primary" (click)="postDetail(socialProblem.id)">
+                        Ver más
+                        <ion-ripple-effect></ion-ripple-effect>
+                    </button>
                 </div>
-                <div (click)="sharePost(socialProblem)" class="btn_icon">
-                    <ion-icon slot="icon-only" name="share" style="font-size:1.3rem;"></ion-icon>
+                <div class="option_actions">
+                    <div class="btn_icon" [ngClass]="{'active': socialProblem.user_id === currentUser.id}">
+                        <ion-icon slot="icon-only"
+                            [name]="(socialProblem.user_id === currentUser.id)?'heart':'heart-empty'"></ion-icon>
+                    </div>
+                    <div (click)="sharePost(socialProblem)" class="btn_icon">
+                        <ion-icon slot="icon-only" name="share" style="font-size:1.3rem;"></ion-icon>
+                    </div>
                 </div>
             </div>
         </div>
+
     </ion-card>
 </ion-content>

@@ -25,65 +25,82 @@ export class LocalizationService {
     ) { }
 
     async getCoordinate() {
-        let canGetLocation = false;
-        await this.geolocation.getCurrentPosition().then((resp) => {
-            this.misCoordenadas.latitude = resp.coords.latitude;
-            this.misCoordenadas.longitude = resp.coords.longitude;
-            canGetLocation = true;
-            console.log('UTILS SERVICE OBTUVE COORDENADAS');
-        }).catch((error) => {
-            this.utilsService.showToast('Error getting location' + error);
-        });
-        if (canGetLocation === false) {
-            await this.checkGPSPermissions();
+        try {
+            if (this.platform.is('cordova')) {
+                console.log('call before get coordinate');
+                await this.checkGPSPermissions();
+            } else {
+                if (navigator.geolocation) {
+                    await navigator.geolocation.getCurrentPosition((position) => {
+                        this.misCoordenadas.latitude = position.coords.latitude;
+                        this.misCoordenadas.longitude = position.coords.longitude;
+                    });
+                  }
+            }
+            return this.misCoordenadas;
+        } catch (err) {
+            console.log('Error: ', err);
+            this.utilsService.showToast('Error getting location' + err);
         }
-        return this.misCoordenadas;
     }
 
     async checkGPSPermissions() {
         if (this.platform.is('cordova')) {
-            await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
-                result => {
+            return await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
+                async result => {
                     if (result.hasPermission) {
                         // Pedir encender GPS
-                        this.askTurnOnGPS();
+                        await this.askTurnOnGPS();
+                        console.log('pedir encender gps');
                     } else {
                         // Pedir Permiso GPS
-                        this.getGPSPermission();
+                        await this.requestGPSPermission();
+                        console.log('obtener permisos gps');
                     }
                 },
                 err => {
                     this.utilsService.showToast('Fails to Android Permissions: ' + err);
                 }
             );
+        } else {
+            return;
         }
     }
 
-    getGPSPermission() {
-        this.locationAccuracy.canRequest().then((canRequest: boolean) => {
+    requestGPSPermission() {
+        return this.locationAccuracy.canRequest().then((canRequest: boolean) => {
             if (canRequest) {
+                return;
             } else {
                 // Show 'GPS Permission Request' dialogue
                 this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION)
                     .then(
-                        () => {
+                        async () => {
                             // Metodo Encender GPS
-                            this.askTurnOnGPS();
+                            await this.askTurnOnGPS();
+                            console.log('pedir encender gps');
                         },
                         error => {
-                            this.utilsService.showToast('No diste permisos ubicación: ' + error);
+                            this.utilsService.showToast('Error al pedir permisos al GPS: ' + error);
                         }
                     );
             }
         });
     }
 
-
     askTurnOnGPS() {
-        this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
-            () => {
+        return this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
+            async () => {
                 // When GPS Turned ON call method to get Accurate location coordinates
                 console.log('You can request ubication');
+                const currentCoords = await this.geolocation.getCurrentPosition();
+                console.log('call after get coordinate');
+                if (currentCoords) {
+                    this.misCoordenadas.latitude = currentCoords.coords.latitude;
+                    this.misCoordenadas.longitude = currentCoords.coords.longitude;
+                    console.log('coordenadas obtenidas');
+                }
+                return;
             },
             error => {
                 this.utilsService.showToast('Error requesting location permissions ' + JSON.stringify(error));
