@@ -507,9 +507,20 @@ hr.gray {
     height: 200px;
 }
 
+.container-app{
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 16px;
+}
+
 .map-center {
     margin-left: auto;
     margin-right: auto;
+}
+
+.padding-none{
+    padding: 0px !important;
 }
 
 .swiper-pagination {

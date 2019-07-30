@@ -49,15 +49,10 @@ export class AppComponent implements OnInit {
         await this.platform.ready().then(async () => {
             await this.statusBar.styleDefault();
             await this.splashScreen.hide();
-            timer(3200).subscribe(async () => {
+            timer(3000).subscribe(async () => {
                 this.showAppsplash = false;
                 await this.pushNotificationService.initialConfig();
-                this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
-                    this.isConnected = connected;
-                    if (!this.isConnected) {
-                        this.utilsService.showToast('Por favor enciende tu conexión a Internet', 2500);
-                    }
-                });
+                await this.checkInitialStateNetwork();
             });
         });
     }
@@ -123,5 +118,22 @@ export class AppComponent implements OnInit {
                 })
                 .map(item => item.open = false);
         }
+    }
+
+    async checkInitialStateNetwork() {
+        console.log('network check state');
+        await this.networkService.testNetworkConnection();
+        const isOnline = this.networkService.getNetworkTestValue();
+        this.isConnected = isOnline;
+        if (!isOnline) {
+            this.utilsService.showToast('Por favor enciende tu conexión a Internet', 2000);
+            console.log('No tienes conexion a Internet');
+        }
+        this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
+            this.isConnected = connected;
+            if (!this.isConnected) {
+                this.utilsService.showToast('Por favor enciende tu conexión a Internet', 2500);
+            }
+        });
     }
 }

@@ -6,6 +6,7 @@ import { timer } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { SocialDataService } from 'src/app/services/social-data.service';
 
+
 const urlLogueado = '/home';
 
 @Component({
@@ -16,6 +17,8 @@ const urlLogueado = '/home';
 export class LoginPage implements OnInit {
 
     @ViewChild('passwordEyeLogin') passwordEye;
+    // apphasConnection = false;
+
     passwordTypeInput = 'password';
     iconpassword = 'eye-off';
 

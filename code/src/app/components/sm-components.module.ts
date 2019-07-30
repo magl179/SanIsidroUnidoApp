@@ -13,6 +13,7 @@ import { SplashSmComponent } from './splash-sm/splash-sm.component';
 import { PopNotificationsComponent } from './pop-notifications/pop-notifications.component';
 import { ListNotificationsComponent } from './list-notifications/list-notifications.component';
 import { StrengthPassbarComponent } from './strength-passbar/strength-passbar.component';
+import { NetworkStateBarComponent } from './network-state-bar/network-state-bar.component';
 
 @NgModule({
     declarations: [
@@ -26,7 +27,8 @@ import { StrengthPassbarComponent } from './strength-passbar/strength-passbar.co
         SplashSmComponent,
         PopNotificationsComponent,
         ListNotificationsComponent,
-        StrengthPassbarComponent
+        StrengthPassbarComponent,
+        NetworkStateBarComponent
     ],
     imports: [
         CommonModule,
@@ -43,7 +45,8 @@ import { StrengthPassbarComponent } from './strength-passbar/strength-passbar.co
         SplashSmComponent,
         PopNotificationsComponent,
         ListNotificationsComponent,
-        StrengthPassbarComponent
+        StrengthPassbarComponent,
+        NetworkStateBarComponent
     ]
 })
 export class SmComponentsModule { }

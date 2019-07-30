@@ -112,4 +112,5 @@
     <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
         <string>Nosotros usamos tu localizacion para ofrecerte al 100% las caracteristicas de la aplicacion.</string>
     </edit-config>
+    <allow-navigation href="http://localhost:8100" sessionid="c54f1e13" />
 </widget>

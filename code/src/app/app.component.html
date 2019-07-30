@@ -11,9 +11,9 @@
                     <ion-label>
                         <h1>{{userApp?.firstname || 'Firstname'}} {{userApp?.lastname || 'Lastname'}}</h1>
                         <p>{{userApp?.email || 'example@gmail.com'}}</p> 
-                        <!-- <p class="network_avalaible">
+                        <p class="network_avalaible">
                             <span>Red: </span> <ion-badge [color]="(isConnected)?'success':'danger'">{{ (isConnected)?'disponible':'no disponible' }}</ion-badge>
-                        </p> -->
+                        </p>
                     </ion-label>
                 </ion-item>
                 <ion-list class="list-no-padding" *ngFor="let c of menuComponents;let i = index;">
@@ -53,10 +53,6 @@
                 </ion-list>
                 <!--ITEM TO CLOSE SESSION-->
                 <hr class="gray">
-                <!-- <ion-item class="item-sm" tapable lines="none" routerLink="/tutorial" routerDirection="root" routerLinkActive="is_active">
-                    <ion-icon slot="start" name="help"></ion-icon>
-                    <ion-label>Tutorial</ion-label>
-                </ion-item> -->
                 <ion-item class="item-sm" tapable lines="none" (click)="closeAppSession()">
                     <ion-icon slot="start" name="log-out"></ion-icon>
                     <ion-label>Cerrar Sesión</ion-label>
