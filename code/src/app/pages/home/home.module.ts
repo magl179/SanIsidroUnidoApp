@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 
 import { HomePage } from './home.page';
 import { SmComponentsModule } from '../../components/sm-components.module';
+import { DirectivesModule } from '../../directives/directives.module';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { SmComponentsModule } from '../../components/sm-components.module';
         component: HomePage
       }
     ]),
-    SmComponentsModule
+        SmComponentsModule,
+        DirectivesModule
   ],
   declarations: [HomePage]
 })

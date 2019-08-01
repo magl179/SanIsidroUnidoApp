@@ -15,6 +15,7 @@ import { RequestMembershipPage } from 'src/app/modals/request-membership/request
 import { RequestMembershipPageModule } from '../../../modals/request-membership/request-membership.module';
 import { ChangeProfileImagePage } from '../../../modals/change-profile-image/change-profile-image.page';
 import { ChangeProfileImagePageModule } from '../../../modals/change-profile-image/change-profile-image.module';
+import { DirectivesModule } from '../../../directives/directives.module';
 
 const routes: Routes = [
     {
@@ -40,7 +41,8 @@ const routes: Routes = [
         EditProfilePageModule,
         ChangePasswordPageModule,
         RequestMembershipPageModule,
-        ChangeProfileImagePageModule
+        ChangeProfileImagePageModule,
+        DirectivesModule
     ],
     declarations: [UserProfilePage]
 })

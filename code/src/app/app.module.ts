@@ -28,7 +28,7 @@ import { PopNotificationsComponent } from './components/pop-notifications/pop-no
 import { ShowListNotificationsPage } from './modals/show-list-notifications/show-list-notifications.page';
 import { ShowListNotificationsPageModule } from './modals/show-list-notifications/show-list-notifications.module';
 import { PipesModule } from './pipes/pipes.module';
-
+import { DirectivesModule } from './directives/directives.module';
 
 
 @NgModule({
@@ -44,7 +44,8 @@ import { PipesModule } from './pipes/pipes.module';
         ReactiveFormsModule,
         IonicStorageModule.forRoot(),
         ShowListNotificationsPageModule,
-        PipesModule
+        PipesModule,
+        DirectivesModule
     ],
     providers: [
         StatusBar,

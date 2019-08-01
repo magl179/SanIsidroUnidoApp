@@ -35,6 +35,7 @@ export class NetworkService {
                 fromEvent(window, 'offline').pipe(mapTo(false))
             );
         }
+        this.testNetworkConnection();
     }
 
     public getNetworkType(): string {
@@ -45,9 +46,13 @@ export class NetworkService {
         return this.online;
     }
 
+    private getNetworkTestRequest(): Observable<any> {
+        return this.http.get('https://jsonplaceholder.typicode.com/todos/1');
+    }
+
     public async testNetworkConnection() {
         try {
-            this.http.get('https://jsonplaceholder.typicode.com/todos/1').subscribe(
+            this.getNetworkTestRequest().subscribe(
             success => {
                 console.log('Request to Google Test  success', success);
                 this.hasConnection.next(true);

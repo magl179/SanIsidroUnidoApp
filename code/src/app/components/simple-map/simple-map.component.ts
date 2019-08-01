@@ -3,6 +3,9 @@ import * as Leaflet from 'leaflet';
 import { GestureHandling } from 'leaflet-gesture-handling';
 import { ISimpleUbicationItem } from 'src/app/interfaces/barrios';
 
+const tileURL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+const tileAtribution = '&copy; <a target=_blank" href="https://www.openstreetmap.org/copyright">© Colaboradores de OpenStreetMap</a>';
+
 @Component({
     selector: 'simple-map',
     templateUrl: './simple-map.component.html',
@@ -41,9 +44,9 @@ export class SimpleMapComponent implements AfterViewInit {
             Leaflet.control.scale().addTo(this.map);
         });
 
-        this.map.setView([this.coordsMap.latitude, this.coordsMap.longitude], 12);
-        Leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: 'www.tphangout.com',
+        this.map.setView([this.coordsMap.latitude, this.coordsMap.longitude], 13);
+        Leaflet.tileLayer(tileURL, {
+            attribution: tileAtribution,
             maxZoom: 18,
             updateWhenIdle: true,
             reuseTiles: true

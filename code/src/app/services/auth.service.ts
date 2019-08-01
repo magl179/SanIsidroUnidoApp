@@ -65,7 +65,7 @@ export class AuthService {
           password: registerData.password
         },
         { headers: this.headers }*/
-        return this.http.get(urlTest).pipe(map( data => data));
+        return this.http.get(urlTest).pipe(map(data => data));
     }
 
     async logout() {
@@ -82,6 +82,10 @@ export class AuthService {
         } else {
             return false;
         }
+    }
+
+    getUserSubject() {
+        return this.user.asObservable();
     }
 
     async getCurrentUser() {
@@ -122,6 +126,16 @@ export class AuthService {
     async removeToken() {
         await this.storage.remove('accessToken');
         this.authToken.next(null);
+    }
+
+    hasRoles(allowedRoles: string[]): boolean {
+        let hasRole = false;
+        for (const oneRole of allowedRoles) {
+            if (this.user.value && this.user.value.roles.includes(oneRole.toLowerCase())) {
+                hasRole = true;
+            }
+        }
+        return hasRole;
     }
 
 }

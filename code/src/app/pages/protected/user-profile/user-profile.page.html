@@ -14,23 +14,24 @@
        <div class="ion-text-center">
            <h3>{{userApp.firstname || 'Sin Nombre'}} {{userApp.lastname || 'Sin Apellidos'}}</h3>
            <p>{{userApp.email || 'sin email'}}</p>
+           <p>Roles: {{ userApp.roles | json}}</p>
            <p *ngIf="userApp.phone">{{userApp.phone || 'sin telefono'}}</p>
        </div>
        <ion-grid>
            <ion-row>
-               <ion-col [size]="sizeOptions" class="user_profile_options">
+               <ion-col class="user_profile_options">
                     <div class="icon_option" (click)="showEditProfileModal()">
                         <ion-icon name="create"></ion-icon>
                     </div>
                     <p class="title_option">Editar Perfil</p>
                </ion-col>
-               <ion-col [size]="sizeOptions" class="user_profile_options">
+               <ion-col class="user_profile_options">
                     <div class="icon_option" (click)="showChangePassModal()">
                         <ion-icon name="key"></ion-icon>      
                     </div>
                     <p class="title_option">Cambiar Contraseña</p>
                </ion-col>
-               <ion-col [size]="sizeOptions" class="user_profile_options">
+               <ion-col class="user_profile_options" *appHasRole="['morador_invitado']">
                     <div class="icon_option" (click)="showRequestMembershipModal()">
                         <ion-icon name="document"></ion-icon>
                     </div>

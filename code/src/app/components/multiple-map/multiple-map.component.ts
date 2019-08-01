@@ -7,8 +7,9 @@ import { UtilsService } from '../../services/utils.service';
 import { IUbicationItem } from 'src/app/interfaces/barrios';
 import { LocalizationService } from '../../services/localization.service';
 
-const shadowIcon = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png';
-const iconsColors = ['red', 'orange', 'yellow', 'purple'];
+// const iconsColors = ['red', 'orange', 'yellow', 'purple'];
+const tileURL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+const tileAtribution = '&copy; <a target=_blank" href="https://www.openstreetmap.org/copyright">© Colaboradores de OpenStreetMap</a>';
 
 @Component({
     selector: 'multiple-map',
@@ -71,6 +72,7 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
     }
 
     async initializeMap() {
+        // Verificar si se habilita el gesture handling
         console.log('Iniciar Mapa Múltiple');
         if (this.enableGesture) {
             Leaflet.Map.addInitHook('addHandler', 'gestureHandling', GestureHandling);
@@ -83,30 +85,31 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
             markerZoomAnimation: false,
             zoomControl: false
         });
-        console.log('Map Created');
+
         // Agregar Evento On al Mapa
         this.map.on('load', (e) => {
             console.log('Map Loaded');
             this.mapIsLoaded = true;
+            // Enviar informacion mapa al padre
             this.sendMapInfo();
+            // apagar el loading
             this.mapLoading.dismiss();
         });
         // Configurar la vista centrada
         Leaflet.control.zoom({ position: 'topright' }).addTo(this.map);
         this.map.setView([-0.1548643, -78.4822049], this.zoomMap);
         // Agregar la capa del Mapa
-        Leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: 'San Isidro Unido',
+        Leaflet.tileLayer(tileURL, {
+            attribution: tileAtribution,
             maxZoom: 18,
             updateWhenIdle: true,
             reuseTiles: true
         }).addTo(this.map);
+
         // Añadir Polilinea al Mapa
-
-
         this.currentPolyline.addTo(this.map);
         // Añadir el control de escala
-        Leaflet.control.scale({position: 'bottomleft'	}).addTo(this.map);
+        Leaflet.control.scale({ position: 'bottomleft' }).addTo(this.map);
         // Si obtuve coordenadas añadir el marcador
         if (this.currentCoordinate !== null) {
             // tslint:disable-next-line: max-line-length

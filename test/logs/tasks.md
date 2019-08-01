@@ -1,10 +1,11 @@
-## Listado Tareas Interno
+## Listado Tareas Interno Aplicación Móvil
 
 #### GLOSARIO
 - Tachado: Actividad con funcionalidad en un 50% finalizada
 - Normal: no realizada todavía
 
 #### Tareas
+
 
 **Sprint 1**
 
@@ -61,7 +62,7 @@
 
 - ~~Configuración de Acceso a la Cámara para subida de Imágenes~~
 
-- _Validación de campos requeridos_
+- Validación de campos requeridos
 
 **Sprint 4**
 
@@ -77,7 +78,7 @@
 
 - Validar datos retornados de la API al barrio
 
-- Configurar Autenticación con Roles
+- ~~Configurar Autenticación con Roles~~
 
 - ~~Configurar Autenticación con Sesión Iniciada~~
 
@@ -85,7 +86,7 @@
 
 - ~~Configuración de Acceso a la Cámara para subida de Imágenes~~
 
-- _Validación de campos requeridos_
+- Validación de campos requeridos
 
 - Configurar Servicio para crear solicitudes de afiliación al barrio a través de una API
 

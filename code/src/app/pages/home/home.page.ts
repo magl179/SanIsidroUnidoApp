@@ -1,6 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { UtilsService } from '../../services/utils.service';
 import { DataAppService } from '../../services/data-app.service';
+import { AuthService } from '../../services/auth.service';
+
+export interface MenuServices {
+    title: string;
+    icon: string;
+    url: string;
+    valid_roles: string[];
+}
 
 @Component({
     selector: 'app-home',
@@ -9,52 +17,19 @@ import { DataAppService } from '../../services/data-app.service';
 })
 export class HomePage implements OnInit {
 
-    servicesList = [];
-    servicesList2 = [
-        {
-            title: 'Reportar Emergencia',
-            // tslint:disable-next-line: max-line-length
-            icon: 'https://banner2.kisspng.com/20180325/svq/kisspng-computer-icons-webcam-download-web-camera-5ab74e027af8e9.5389996915219624985037.jpg',
-            url: '/social-problems'
-        },
-        {
-            title: 'Reportar Problema',
-            // tslint:disable-next-line: max-line-length
-            icon: 'https://banner2.kisspng.com/20180325/svq/kisspng-computer-icons-webcam-download-web-camera-5ab74e027af8e9.5389996915219624985037.jpg',
-            url: '/social-problems'
-        },
-        {
-            title: 'Servicios Públicos',
-            // tslint:disable-next-line: max-line-length
-            icon: 'https://banner2.kisspng.com/20180325/svq/kisspng-computer-icons-webcam-download-web-camera-5ab74e027af8e9.5389996915219624985037.jpg',
-            url: '/social-problems'
-        },
-        {
-            title: 'Directorio Barrial',
-            // tslint:disable-next-line: max-line-length
-            icon: 'https://banner2.kisspng.com/20180325/svq/kisspng-computer-icons-webcam-download-web-camera-5ab74e027af8e9.5389996915219624985037.jpg',
-            url: '/social-problems'
-        },
-        {
-            title: 'Problemas Sociales',
-            // tslint:disable-next-line: max-line-length
-            icon: 'https://banner2.kisspng.com/20180325/svq/kisspng-computer-icons-webcam-download-web-camera-5ab74e027af8e9.5389996915219624985037.jpg',
-            url: '/social-problems'
-        },
-        {
-            title: 'Eventos',
-            // tslint:disable-next-line: max-line-length
-            icon: 'https://banner2.kisspng.com/20180325/svq/kisspng-computer-icons-webcam-download-web-camera-5ab74e027af8e9.5389996915219624985037.jpg',
-            url: '/social-problems'
-        },
-    ];
+    userAuthenticated = {};
+    servicesList: MenuServices[] = [];
 
     constructor(
         private utilsService: UtilsService,
-        private dataService: DataAppService
+        private dataService: DataAppService,
+        private authService: AuthService
     ) { }
 
     async ngOnInit() {
+        await this.authService.getUserSubject().subscribe(authState => {
+            this.userAuthenticated = authState;
+        });
         await this.dataService.getHomeOptions().subscribe((data) => {
             this.servicesList = data;
         });

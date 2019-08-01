@@ -3,7 +3,7 @@
     <ion-grid class="ion-padding-top">
         <ion-row class="ion-justify-content-center">
             <ion-col size="6" *ngFor="let service of servicesList" class="service_item">
-                <a [routerLink]="service.url"> 
+                <a [routerLink]="service.url" *appHasRole="service.valid_roles"> 
                     <ion-card>
                         <div class="icon">
                                 <h2 class="title">{{service.title}}</h2>
@@ -11,6 +11,13 @@
                         </div>
                     </ion-card>
                 </a>
+                <!-- <p>{{ authService.hasRoles[service.valid_roles] }}</p> -->
+                <p>{{service.valid_roles | json}}</p>
+                <p *appHasRole="['morador_afiliado']">Soy Morador Afiliado</p>
+                <p *appHasRole="['morador_invitado']">Soy Morador Invitado</p>
+                <p *appHasRole="['policia_comunitaria']">Soy Policia Comunitaria</p>
+                <!-- <p>{{ authService.getCurrentUser() | json }}</p> -->
+                <!-- <p *appHasRole="service.valid_roles"> content solo admin</p> -->
             </ion-col>
         </ion-row>
     </ion-grid>

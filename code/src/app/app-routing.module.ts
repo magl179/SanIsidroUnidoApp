@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { LoginAuthGuard } from './guards/login.guard';
 import { NoLoginAuthGuard } from './guards/no-login.guard';
+import { HasRoleGuard } from './guards/has-role.guard';
 
 const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -49,12 +50,14 @@ const routes: Routes = [
     {
         path: 'social-problem-create',
         loadChildren: './pages/protected/social-problem-create/social-problem-create.module#SocialProblemCreatePageModule',
-        canActivate: [LoginAuthGuard]
+        canActivate: [LoginAuthGuard, HasRoleGuard],
+        data: { roles: ['morador_afiliado']}
     },
     {
         path: 'emergency-create',
         loadChildren: './pages/protected/emergency-create/emergency-create.module#EmergencyCreatePageModule',
-        canActivate: [LoginAuthGuard]
+        canActivate: [LoginAuthGuard, HasRoleGuard],
+        data: {roles: ['morador_afiliado']}
     },
     {
         path: 'events',
