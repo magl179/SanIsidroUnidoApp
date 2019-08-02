@@ -21,6 +21,47 @@
 </ion-toolbar>
 
 <ion-content>
+    <div *ngIf="socialProblemsList === null || socialProblemsList.length === 0">
+        <ion-card *ngFor="let items of [1,1,1,1]" class="card_social animated flash slow infinite">
+                <ion-card-header>
+                        <ion-card-title>
+                                <ion-skeleton-text width="40%"></ion-skeleton-text>
+                        </ion-card-title>
+                        <ion-card-subtitle class="post_user">
+                                <ion-skeleton-text width="40%"></ion-skeleton-text>
+                        </ion-card-subtitle>
+                        <ion-card-subtitle>
+                                <ion-skeleton-text width="50%"></ion-skeleton-text>
+                        </ion-card-subtitle>
+                    </ion-card-header>
+                    <ion-card-content class="post_description">
+                        <p class="post_content">
+                                <ion-skeleton-text width="70%"></ion-skeleton-text>
+                                <ion-skeleton-text width="70%"></ion-skeleton-text>
+                        </p>
+                        <p>
+                                <ion-skeleton-text width="20%"></ion-skeleton-text>
+                        </p>
+                    </ion-card-content>
+                    <div class="options">
+                        <div class="option_button">
+                            <button class="btn primary">
+                                    <ion-skeleton-text width="70%"></ion-skeleton-text>
+                                <ion-ripple-effect></ion-ripple-effect>
+                            </button>
+                        </div>
+                        <div class="option_actions">
+                                <div class="btn_icon" style="width: 50%;height: 30px;">
+                                        <ion-skeleton-text width="55%"></ion-skeleton-text>
+                                </div>
+                                <div class="btn_icon" style="width: 50%;height: 30px;">
+                                        <ion-skeleton-text width="55%"></ion-skeleton-text>
+                                </div>
+                        </div>
+                    </div>
+        </ion-card>
+    </div>
+        
     <ion-card class="card_social"
         *ngFor="let socialProblem of (socialProblemsList) | filtroSearch:subcategory:'category_id'; let i = index;">
         <div *ngIf="socialProblem.exists === -1">

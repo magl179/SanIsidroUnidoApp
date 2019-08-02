@@ -13,7 +13,7 @@ export class EventsPage implements OnInit {
     loading: any;
     elements: any = [];
 
-    eventsList: IEvent = null;
+    eventsList: IEvent[] = [];
 
     constructor(
         private navCtrl: NavController,
@@ -24,21 +24,16 @@ export class EventsPage implements OnInit {
 
     getFullDate(date, time) {
         const fulldate = `${date} ${time}`;
-        console.log('GET FULL DATE', fulldate);
         return fulldate;
     }
 
     async ngOnInit() {
-        this.loading = await this.utilsService.createBasicLoading('Cargando Publicaciones');
-        this.loading.present();
-        // setTimeout(() => {
-        //     this.elements = [1, 1, 1, 1];
-        //     this.loading.dismiss();
-        // }, 1500);
         this.postService.getEvents().subscribe(data => {
             if (data) {
-                this.eventsList = data;
-                this.loading.dismiss();
+                setTimeout(() => {
+                    this.eventsList = data;
+                    console.log('events lenght: ', data.length);
+                }, 3500);
             }
         });
     }

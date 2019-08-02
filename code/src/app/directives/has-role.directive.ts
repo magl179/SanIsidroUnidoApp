@@ -2,9 +2,9 @@ import { Directive, Input, TemplateRef, ViewContainerRef, OnInit } from '@angula
 import { AuthService } from '../services/auth.service';
 
 @Directive({
-  selector: '[appHasRole]'
+    selector: '[appHasRole]'
 })
-export class HasRoleDirective implements OnInit{
+export class HasRoleDirective implements OnInit {
 
     @Input('appHasRole') roles: string[];
 
@@ -13,15 +13,14 @@ export class HasRoleDirective implements OnInit{
         private templateRef: TemplateRef<any>,
         private viewContainer: ViewContainerRef
     ) { }
-    
+
     ngOnInit() {
-        this.authService.getUserSubject().subscribe(_ => {
-            if (this.authService.hasRoles(this.roles)) {
-                this.viewContainer.createEmbeddedView(this.templateRef);
-            } else {
-                this.viewContainer.clear();
-            }
-        });
+        console.log('Llamado Has Role directive with roles:', this.roles);
+        if (this.authService.hasRoles(this.roles)) {
+            this.viewContainer.createEmbeddedView(this.templateRef);
+        } else {
+            this.viewContainer.clear();
+        }
     }
 
 }

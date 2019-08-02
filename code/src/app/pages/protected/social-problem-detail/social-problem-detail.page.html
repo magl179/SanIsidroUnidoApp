@@ -1,7 +1,41 @@
 <app-header-back title="Problema Social" hrefDefault="/social-problems"></app-header-back>
 
 <ion-content padding>
-    <ion-card class="card_social detail-card">
+    <!-- <div> -->
+    <div  *ngIf="socialProblem === null">
+        <ion-card class="card_social detail-card animated flash slow infinite">
+            <ion-skeleton-text animated style="width: 80%" style="height: 300px;"></ion-skeleton-text>
+            <ion-card-header>
+                <ion-card-title>
+                    <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+                </ion-card-title>
+                <ion-card-subtitle class="post_user">
+                    <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+                </ion-card-subtitle>
+                <ion-card-subtitle>
+                    <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+                </ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content class="post_description">
+                <p class="post_content">
+                    <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                </p>
+            </ion-card-content>
+            <div class="options detail">
+                    <div class="option_actions">
+                        <div class="btn_icon" style="width: 50%;height: 30px;">
+                                <ion-skeleton-text width="100%"></ion-skeleton-text>
+                        </div>
+                        <div class="btn_icon" style="width: 50%;height: 30px;">
+                                <ion-skeleton-text width="100%"></ion-skeleton-text>
+                        </div>
+                    </div>
+                </div>
+        </ion-card>
+    </div>
+    <ion-card class="card_social detail-card" *ngIf="socialProblem !== null">
         <img style="border: 1px solid #ccc;" src="assets/img/default/slide-1.png" />
         <ion-card-header>
             <ion-card-title>Problem {{idPost}}</ion-card-title>
@@ -12,14 +46,12 @@
         </ion-card-header>
         <ion-card-content class="post_description">
             <p class="post_content">
-               {{socialProblem.description}}
+                {{socialProblem.description}}
                 <span>ID PARAMETRO: {{id}}</span>
             </p>
             <p>Likes: 11</p>
         </ion-card-content>
-        <div class="options">
-            <div class="option_button">
-            </div>
+        <div class="options detail">
             <div class="option_actions">
                 <div class="btn_icon" [ngClass]="{'active': ((idPost % 2) === 0)}">
                     <ion-icon slot="icon-only" [name]="((idPost % 2) === 0) ?'heart':'heart-empty'"></ion-icon>

@@ -12,17 +12,7 @@ export class SocialProblemDetailPage implements OnInit {
 
     id: string;
     idPost: number;
-    socialProblem: ISocialProblem = {
-        id: 5,
-        title: 'Problema',
-        description: 'Descripcion del Problema',
-        category_id: 5,
-        user_id: 1,
-        date: '2018-05-15',
-        time: '18:00:25',
-        ubication: null,
-        likes: 11
-    };
+    socialProblem: ISocialProblem = null;
 
     constructor(
         private route: ActivatedRoute,
@@ -32,6 +22,19 @@ export class SocialProblemDetailPage implements OnInit {
         this.id = this.route.snapshot.paramMap.get('id');
         this.idPost = Number(this.id);
         console.log('ID RECIBIDO:', this.id);
+        setTimeout(() => {
+            this.socialProblem = {
+                id: 5,
+                title: 'Problema',
+                description: 'Descripcion del Problema',
+                category_id: 5,
+                user_id: 1,
+                date: '2018-05-15',
+                time: '18:00:25',
+                ubication: null,
+                likes: 11
+            };
+        }, 4000);
     }
 
     async sharePost(post: ISocialProblem) {

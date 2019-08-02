@@ -418,7 +418,8 @@ body {
 
 .card_social {
     outline: none;
-
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
     .options {
         // background:purple;
         display: flex;
@@ -426,6 +427,14 @@ body {
         justify-content: space-around;
         margin-top: .7rem;
         margin-bottom: .7rem;
+
+        &.detail{
+            justify-content: flex-start;
+            width: 100%;
+            div:nth-child(1){
+                margin-right: 2rem;
+            }
+        }
 
         .option_button {
             // background: yellow;
@@ -441,6 +450,7 @@ body {
             justify-content: space-around;
             align-items: center;
             width: 30%;
+           
 
             .btn_icon {
                 ion-icon {
@@ -565,3 +575,113 @@ hr.gray {
         margin-right: 1rem;
     }
 }
+
+// ANIMACION FADEIN
+
+.animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+  }
+
+  .animated.infinite {
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+  }
+
+
+  .animated.fast {
+    -webkit-animation-duration: 800ms;
+    animation-duration: 800ms;
+  }
+
+  .animated.slow {
+    -webkit-animation-duration: 2s;
+    animation-duration: 2s;
+  }
+
+  @-webkit-keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+  
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+  
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .fadeIn {
+    -webkit-animation-name: fadeIn;
+    animation-name: fadeIn;
+  }
+
+//   ANIMACION FLASH
+
+  @-webkit-keyframes flash {
+    from,
+    50%,
+    to {
+      opacity: 1;
+    }
+  
+    25%,
+    75% {
+      opacity: 0.5;
+    }
+  }
+  
+  @keyframes flash {
+    from,
+    50%,
+    to {
+      opacity: 1;
+    }
+  
+    25%,
+    75% {
+      opacity: 0.5;
+    }
+  }
+  
+  .flash {
+    -webkit-animation-name: flash;
+    animation-name: flash;
+  }
+
+//   FADE OUT
+
+@-webkit-keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+  
+    to {
+      opacity: 0;
+    }
+  }
+  
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+  
+    to {
+      opacity: 0;
+    }
+  }
+  
+  .fadeOut {
+    -webkit-animation-name: fadeOut;
+    animation-name: fadeOut;
+  }

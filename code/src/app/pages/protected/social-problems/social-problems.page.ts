@@ -37,7 +37,9 @@ export class SocialProblemsPage implements OnInit {
         this.currentUser = await this.authService.getCurrentUser();
         this.postService.getSocialProblems().subscribe(data => {
             if (data) {
-                this.socialProblemsList = data;
+                setTimeout(() => {
+                    this.socialProblemsList = data;
+                }, 3000);
             }
             this.loading.dismiss();
         });
