@@ -39,7 +39,7 @@ provider VARCHAR(255) NOT NULL,
 CREATE TABLE IF NOT EXISTS devices (
 id int(255) auto_increment not null,
 device_id VARCHAR(255) NOT NULL,
-description VARCHAR(255) NULL,
+description TEXT NULL,
 user_id INT NOT NULL,
   CONSTRAINT pk_devices PRIMARY KEY(id),
   CONSTRAINT fk_devices_user FOREIGN KEY(user_id) REFERENCES users(id)
@@ -51,7 +51,7 @@ user_id INT NOT NULL,
 CREATE TABLE IF NOT EXISTS public_services (
 id int(255) auto_increment not null,
 name VARCHAR(45) NOT NULL,
-description VARCHAR(255) NOT NULL,
+description TEXT NOT NULL,
 ubication VARCHAR(256) NULL,
   CONSTRAINT pk_public_services PRIMARY KEY(id)
   )ENGINE=InnoDb DEFAULT CHARSET=utf8mb4;
@@ -73,7 +73,8 @@ phone_number VARCHAR(10) NOT NULL,
 CREATE TABLE IF NOT EXISTS categories (
 id int(255) auto_increment not null,
 name VARCHAR(45) NOT NULL,
-description VARCHAR(45) NULL,
+slug VARCHAR(45) NOT NULL,
+description TEXT(150) NULL,
   CONSTRAINT pk_categories PRIMARY KEY(id)
   )ENGINE=InnoDb DEFAULT CHARSET=utf8mb4;
 
@@ -84,7 +85,7 @@ description VARCHAR(45) NULL,
 CREATE TABLE IF NOT EXISTS posts (
 id int(255) auto_increment not null,
 title VARCHAR(45) NOT NULL,
-description VARCHAR(45) NOT NULL,
+description VARCHAR(256) NOT NULL,
 date DATE NOT NULL,
 time TIME NOT NULL,
 ubication VARCHAR(256) NULL,
@@ -99,7 +100,7 @@ category_id INT NOT NULL,
 -- -----------------------------------------------------
 -- Table imagenes
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS imagenes (
+CREATE TABLE IF NOT EXISTS images (
 id int(255) auto_increment not null,
 url VARCHAR(50) NOT NULL,
 post_id INT NOT NULL,
@@ -114,7 +115,8 @@ post_id INT NOT NULL,
 CREATE TABLE IF NOT EXISTS subcategory (
 id int(255) auto_increment not null,
 name VARCHAR(45) NOT NULL,
-description VARCHAR(80) NULL,
+slug VARCHAR(45) NOT NULL,
+description TEXT NULL,
 category_id INT NOT NULL,
   CONSTRAINT pk_subcategory PRIMARY KEY(id),
   CONSTRAINT fk_subcategory_of_category FOREIGN KEY(category_id) REFERENCES categories(id)
