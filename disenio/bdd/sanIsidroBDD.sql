@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS public_services (
 id int(255) auto_increment not null,
 name VARCHAR(45) NOT NULL,
 description TEXT NOT NULL,
-ubication VARCHAR(256) NULL,
+ubication JSON NULL,
   CONSTRAINT pk_public_services PRIMARY KEY(id)
   )ENGINE=InnoDb DEFAULT CHARSET=utf8mb4;
 
@@ -88,7 +88,7 @@ title VARCHAR(45) NOT NULL,
 description VARCHAR(256) NOT NULL,
 date DATE NOT NULL,
 time TIME NOT NULL,
-ubication VARCHAR(256) NULL,
+ubication JSON NULL,
 user_id INT NOT NULL,
 category_id INT NOT NULL,
   CONSTRAINT pk_posts PRIMARY KEY(id),
@@ -102,7 +102,7 @@ category_id INT NOT NULL,
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS images (
 id int(255) auto_increment not null,
-url VARCHAR(50) NOT NULL,
+url VARCHAR(256) NOT NULL,
 post_id INT NOT NULL,
   CONSTRAINT pk_imagenes PRIMARY KEY(id),
  CONSTRAINT fk_imagenes_posts FOREIGN KEY(post_id) REFERENCES posts(id)
@@ -112,7 +112,7 @@ post_id INT NOT NULL,
 -- -----------------------------------------------------
 -- Table subcategory
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS subcategory (
+CREATE TABLE IF NOT EXISTS subcategories (
 id int(255) auto_increment not null,
 name VARCHAR(45) NOT NULL,
 slug VARCHAR(45) NOT NULL,

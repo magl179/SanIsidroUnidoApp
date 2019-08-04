@@ -37,7 +37,7 @@ INSERT INTO images VALUES
 (null, 'https://images.pexels.com/photos/2182981/pexels-photo-2182981.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', 2),
 (null, 'https://images.pexels.com/photos/2182981/pexels-photo-2182981.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', 3);
 /*id,name, slug, description, category_id*/
-INSERT into subcategory VALUES
+INSERT into subcategories VALUES
 (null, 'Transporte y Transito', 'transport_transit', 'SubCat Espacios Publicos', 1),
 (null, 'Espacios Verdes', 'green_areas', 'SubCat Espacios Verdes', 1),
 (null, 'Seguridad', 'security', 'SubCat Seguridad', 1),
