@@ -201,5 +201,6 @@ attendance TINYINT NULL,
 nonattendance TINYINT NULL,
 CONSTRAINT pk_details PRIMARY KEY(id),
 CONSTRAINT fk_details_posts FOREIGN KEY(post_id) REFERENCES posts(id),
-CONSTRAINT fk_details_users FOREIGN KEY(user_id) REFERENCES users(id)
+CONSTRAINT fk_details_users FOREIGN KEY(user_id) REFERENCES users(id),
+CONSTRAINT uq_detail_post_id UNIQUE(post_id)
 )ENGINE=InnoDb DEFAULT CHARSET=utf8mb4;

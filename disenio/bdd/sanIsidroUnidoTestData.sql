@@ -5,6 +5,21 @@ INSERT INTO users  VALUES
 (null,'Ana', 'Jimenez', 'ana@gmail.com', 'https://www.w3schools.com/howto/img_avatar2.png', null, 1, '', ''),
 (null,'Ramiro', 'Gonzales', 'ramiro@hotmail.com', 'https://www.w3schools.com/howto/img_avatar.png', null, 0, '', ''),
 (null,'Viviana', 'Bonilla', 'vivi97@hotmail.com', 'https://www.w3schools.com/howto/img_avatar2.png', 'jose123', 1, '', '');
+
+
+-- id, name, slug, description
+INSERT INTO roles VALUES
+(null, 'Morador Afiliado', 'morador_afiliado', 'Rol de un morador afiliado'),
+(null, 'Morador Invitado', 'morador_afiliado', 'Rol de un morador invitado'),
+(null, 'Policia Comunitario', 'policia_comunitario', 'Rol de un policia comunitario');
+
+-- id, user_id, role_id, position
+INSERT into role_user VALUES
+(null, 1, 3, 'Policia'),
+(null, 2, 2, ''),
+(null, 3, 1, '');
+
+
 /* ID, USERID, SOCIALID, PROVIDER */
 INSERT INTO social_profiles VALUES
 (null, 2, '487asasd8a7ddldskfkds4', 'facebook'),
