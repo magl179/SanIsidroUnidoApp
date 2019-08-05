@@ -2,7 +2,7 @@ DROP DATABASE IF EXISTS sanisidrounido;
 
 CREATE DATABASE IF NOT EXISTS sanisidrounido;
 
-USE sanisidrounido ;
+USE sanisidrounido;
 
 -- -----------------------------------------------------
 -- Table users
