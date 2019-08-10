@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { UtilsService } from '../../../services/utils.service';
 import { IUbicationItem } from 'src/app/interfaces/barrios';
+import { PublicService } from 'src/app/interfaces/models';
+import { PostsService } from '../../../services/posts.service';
+
+// import { environment}
 
 @Component({
     selector: 'app-public-services',
@@ -10,13 +14,15 @@ import { IUbicationItem } from 'src/app/interfaces/barrios';
 export class PublicServicesPage implements OnInit {
 
     publicServicesPoints: IUbicationItem[] = [];
+    publicServices: PublicService[] = [];
     filterPublicServices = [];
     isPublicServiceAvalaible = false;
     publicServiceSelected = null;
     loading: any;
 
     constructor(
-        private utilsService: UtilsService
+        private utilsService: UtilsService,
+        private postService: PostsService
     ) { }
 
     async ngOnInit() {
@@ -38,6 +44,9 @@ export class PublicServicesPage implements OnInit {
                 description: '<h1>Plaza de Toros</h1><p>Av 10 de Agosto y Amazonas</p><p>2054784</p>'
             }
         ];
+        this.postService.getPublicServices().subscribe(response => {
+            this.publicServices = response.data;
+        });
     }
 
     searchPublicServices(event) {

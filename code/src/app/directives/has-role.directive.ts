@@ -15,7 +15,7 @@ export class HasRoleDirective implements OnInit {
     ) { }
 
     ngOnInit() {
-        console.log('Llamado Has Role directive with roles:', this.roles);
+        // console.log('Llamado Has Role directive with roles:', this.roles);
         if (this.authService.hasRoles(this.roles)) {
             this.viewContainer.createEmbeddedView(this.templateRef);
         } else {

@@ -3,6 +3,8 @@ import { UtilsService } from '../../../services/utils.service';
 import { DirectivesService } from 'src/app/services/directives.service';
 // import { trigger, style, state, query, stagger, animate, transition } from '@angular/animations';
 import Preloader from 'src/app/helpers/preloader-image';
+import { PostsService } from '../../../services/posts.service';
+import { Directive } from 'src/app/interfaces/models';
 
 @Component({
     selector: 'app-directory-info',
@@ -11,27 +13,37 @@ import Preloader from 'src/app/helpers/preloader-image';
 })
 export class DirectoryInfoPage implements OnInit {
 
-    boardMembers = [];
+    boardMembers: Directive[] = [];
     loading: any;
     imgLoaded = false;
 
     constructor(
         private utilsService: UtilsService,
-        private directivesService: DirectivesService
+        private directivesService: DirectivesService,
+        private postService: PostsService
     ) { }
 
     async ngOnInit() {
-        this.directivesService.getDirectivesData().subscribe(data => {
-            if (data) {
-                const imagesPath = data.map(el => el.avatar);
+        this.postService.getDirectives().subscribe(response => {
+            if (response) {
+                // if (response.data.avatar !== null) {
+                const imagesPath = response.data.filter(user => {
+                    console.log('user', user);
+                    return user.avatar !== null;
+                }).map(el => {
+                    console.log('el', el);
+                    return el.avatar;
+                });
                 Preloader.preloadImages({
                     images: imagesPath,
                     completed: () => {
-                        setTimeout(() => {
-                            this.boardMembers = data;
-                        }, 2500);
+                        // setTimeout(() => {
+                        this.boardMembers = response.data;
+                        // }, 2500);
                     }
                 });
+                // }
+
             }
         });
     }

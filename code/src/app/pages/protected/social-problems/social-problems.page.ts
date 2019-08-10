@@ -3,7 +3,7 @@ import { NavController, IonSegment } from '@ionic/angular';
 import { UtilsService } from '../../../services/utils.service';
 import { AuthService } from '../../../services/auth.service';
 import { PostsService } from '../../../services/posts.service';
-import { ISocialProblem, IUserLogued, IPostShare} from 'src/app/interfaces/barrios';
+import { ISocialProblem, IUserLogued, IPostShare } from 'src/app/interfaces/barrios';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -13,6 +13,12 @@ import { Observable } from 'rxjs';
 })
 export class SocialProblemsPage implements OnInit {
 
+    subcategorias = [
+        { title: 'Transporte&Tránsito', slug: 'transport_transit' },
+        { title: 'Seguridad', slug: 'security' },
+        { title: 'EspaciosVerdes', slug: 'green_areas' },
+        { title: 'Transporte&Tránsito', slug: 'transport_transit' }
+    ];
     @ViewChild(IonSegment) segment: IonSegment;
     subcategory = '';
     loading: any;
@@ -29,7 +35,7 @@ export class SocialProblemsPage implements OnInit {
         private authService: AuthService
     ) {
     }
-    
+
     async ngOnInit() {
         this.segment.value = 'all';
         this.loading = await this.utilsService.createBasicLoading('Cargando Publicaciones');

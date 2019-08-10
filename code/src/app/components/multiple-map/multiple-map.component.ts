@@ -4,7 +4,7 @@ import * as LeafletSearch from 'leaflet-search';
 import { GestureHandling } from 'leaflet-gesture-handling';
 import { MapService } from 'src/app/services/map.service';
 import { UtilsService } from '../../services/utils.service';
-import { IUbicationItem } from 'src/app/interfaces/barrios';
+import { PublicService } from 'src/app/interfaces/models';
 import { LocalizationService } from '../../services/localization.service';
 
 // const iconsColors = ['red', 'orange', 'yellow', 'purple'];
@@ -20,7 +20,7 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
 
     @Input() idMap: string;
     @Input() zoomMap: number;
-    @Input() mapPoints: IUbicationItem[] = [];
+    @Input() mapPoints: PublicService[] = [];
     @Input() enableGesture = false;
     @Output() returnMapLoaded = new EventEmitter();
 
@@ -124,22 +124,26 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
                 currentPoint = new Leaflet.Marker(new Leaflet.latLng([this.currentCoordinate.latitude, this.currentCoordinate.longitude]), { title: 'Mi Posición Actual' });
                 // console.log('no customed icon current marker');
             }
-            currentPoint.addTo(this.map).bindPopup('Tu estas aqúi').openPopup();
+            currentPoint.addTo(this.map).bindPopup('Mi Ubicación').openPopup();
             // this.markersLayer.addLayer(currentPoint);
         }
         console.log('map points', this.mapPoints);
         //
         await this.mapPoints.forEach(async point => {
             let punto = null;
+            const title = `<h1>${point.name}<h1>`;
+            // const description = `<p>${point.description}</p>`;
+            const fullDescription = `<div><h1>${point.name}</h1><p>${point.description}</p></div>`;
             const markerIcon = await this.mapService.getCustomIcon('orange');
             if (markerIcon) {
                 // tslint:disable-next-line: max-line-length
-                punto = new Leaflet.Marker(new Leaflet.latLng([point.latitude, point.longitude]), { title: point.title, icon: markerIcon });
+                punto = new Leaflet.Marker(new Leaflet.latLng([point.ubication.latitude, point.ubication.longitude]), { title, icon: markerIcon });
             } else {
-                punto = new Leaflet.Marker(new Leaflet.latLng([point.latitude, point.longitude]), { title: point.title });
+                // tslint:disable-next-line: max-line-length
+                punto = new Leaflet.Marker(new Leaflet.latLng([point.ubication.latitude, point.ubication.longitude]), { title });
             }
             punto.on('click', (e) => { this.showInfo(e); });
-            punto.bindPopup(point.description);
+            punto.bindPopup(fullDescription);
             this.markersLayer.addLayer(punto);
         });
 
@@ -156,6 +160,7 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
             // marker: false,
             moveToLocation: (latlng, title, map) => {
                 console.log(latlng);
+                console.log(`Move Location => current: ${this.currentCoordinate} destino: ${latlng}`);
                 console.log(title);
                 console.log(map);
                 this.map.setView(latlng, 13);
@@ -193,7 +198,7 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
         console.log(e);
         console.log(this.mapPoints);
         this.mapPoints.forEach((point) => {
-            if (point.latitude === e.latlng.lat && point.longitude === e.latlng.lng) {
+            if (point.ubication.latitude === e.latlng.lat && point.ubication.longitude === e.latlng.lng) {
                 selectedMarker = point;
             }
         });

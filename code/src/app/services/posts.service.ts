@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { IEmergencyPost, ISocialProblemPost } from '../interfaces/barrios';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -39,6 +40,14 @@ export class PostsService {
 
     getEvent(id: number): Observable<any> {
         return this.http.get('assets/data/events.json');
+    }
+
+    getPublicServices(): Observable<any> {
+        return this.http.get(`${environment.apiBaseURL}/servicios-publicos`);
+    }
+
+    getDirectives(): Observable<any> {
+        return this.http.get(`${environment.apiBaseURL}/directivos`);
     }
 
 

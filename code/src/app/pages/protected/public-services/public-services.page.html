@@ -8,10 +8,10 @@
             </ion-item>
         </ion-list>
     </div> -->
-    <multiple-map *ngIf="publicServicesPoints.length > 0"
+    <multiple-map *ngIf="publicServices.length > 0"
         idMap="public-services" 
         [zoomMap]="12" 
-        [mapPoints]="publicServicesPoints" 
+        [mapPoints]="publicServices" 
         [enableGesture]="false" 
         (returnMapLoaded)="manageDataMap($event)">
     </multiple-map>
