@@ -14,15 +14,7 @@ export class DataAppService {
     getMenuOptions() {
         return this.http.get<IMenuComponent[]>('/assets/data/menu.json');
     }
-
-    getDirectivaData() {
-        return this.http.get<any>('url_to_api_to_get_directiva_data.json');
-    }
-
-    getPublicServicesData() {
-        return this.http.get<any>('url_to_api_to_get_public_services_data.json');
-    }
-
+    
     getHomeOptions() {
         return this.http.get<any>('/assets/data/home_options.json');
     }

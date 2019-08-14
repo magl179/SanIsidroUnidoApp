@@ -76,26 +76,31 @@ export class RegisterPage implements OnInit {
         this.navCtrl.navigateRoot(urlLogueado);
     }
 
+    async manageRegister() {
+        await this.utilsService.showToast("Registro Correcto, por favor inicia sesión");
+        this.navCtrl.navigateRoot('/login');
+    }
+
     async registerUser() {
-        const loadingRegisterValidation = await this.utilsService.createBasicLoading('Validando');
+        const loadingRegisterValidation = await this.utilsService.createBasicLoading('Registrando Usuario');
         loadingRegisterValidation.present();
         console.log(this.registerForm.value);
-        timer(1500).subscribe(() => {
-            loadingRegisterValidation.dismiss();
-            const firstname = this.registerForm.value.firstname;
-            const lastname = this.registerForm.value.lastname;
-            const email = this.registerForm.value.email;
-            const password = this.registerForm.value.password;
-            this.authService.register('formulario', { firstname, lastname, email, password, socialID: null }).subscribe(data => {
-                if (data) {
-                    data.tokenID = '2312321323123';
-                    this.setLoginUserData(data);
-                }
-            }, err => {
-                this.utilsService.showToast('Fallo Iniciar Sesión');
-                console.log('Error Login', err);
-            });
+        // timer(1500).subscribe(() => {
+        const firstname = this.registerForm.value.firstname;
+        const lastname = this.registerForm.value.lastname;
+        const email = this.registerForm.value.email;
+        const password = this.registerForm.value.password;
+        loadingRegisterValidation.dismiss();
+        this.authService.register('formulario', { firstname, lastname, email, password, socialID: null }).subscribe(async res => {
+           
+            if (res.code === 200) {
+                await this.manageRegister();
+            }
+        }, err => {
+            this.utilsService.showToast(err.error.message);
+            console.log('Error Login', err.error);
         });
+        // });
     }
 
     async registerFBUser() {
@@ -105,7 +110,8 @@ export class RegisterPage implements OnInit {
                 const user = await this.socialDataService.getDataFacebookParsed(fbData);
                 await this.authService.register('facebook', user).subscribe(async registerData => {
                     if (registerData) {
-                        await this.setLoginUserData(registerData);
+                        this.manageRegister();
+                        // await this.setLoginUserData(registerData);
                     }
                 });
             }
@@ -115,18 +121,19 @@ export class RegisterPage implements OnInit {
         });
     }
     async registerGoogleUser() {
-            await this.socialDataService.loginByGoogle();
-            await this.socialDataService.googleLoginData.subscribe(async googleData => {
-                if (googleData) {
-                        const user = await this.socialDataService.getDataGoogleParsed(googleData);
-                        await this.authService.register('google', user).subscribe(async registerData => {
-                            await this.setLoginUserData(registerData);
-                        });
-                  }
-            }, err => {
-                this.utilsService.showToast('Fallo Traer los datos de Google');
-                console.log('Error Login', err);
-            });
+        await this.socialDataService.loginByGoogle();
+        await this.socialDataService.googleLoginData.subscribe(async googleData => {
+            if (googleData) {
+                const user = await this.socialDataService.getDataGoogleParsed(googleData);
+                await this.authService.register('google', user).subscribe(async registerData => {
+                    // await this.setLoginUserData(registerData);
+                    this.manageRegister();
+                });
+            }
+        }, err => {
+            this.utilsService.showToast('Fallo Traer los datos de Google');
+            console.log('Error Login', err);
+        });
     }
 
     // Función Crea el Formulario
@@ -151,8 +158,8 @@ export class RegisterPage implements OnInit {
         // Campo Contraseña
         const passwordInput = new FormControl('', Validators.compose([
             Validators.required,
-            Validators.minLength(this.registerFormFields.password.minlength),
-            Validators.pattern(this.registerFormFields.password.pattern)
+            // Validators.minLength(this.registerFormFields.password.minlength),
+            // Validators.pattern(this.registerFormFields.password.pattern)
         ]));
         // Añado Propiedades al Forms
         this.registerForm = this.formBuilder.group({

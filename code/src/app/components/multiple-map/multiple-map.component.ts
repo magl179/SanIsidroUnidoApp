@@ -4,7 +4,7 @@ import * as LeafletSearch from 'leaflet-search';
 import { GestureHandling } from 'leaflet-gesture-handling';
 import { MapService } from 'src/app/services/map.service';
 import { UtilsService } from '../../services/utils.service';
-import { PublicService } from 'src/app/interfaces/models';
+import { IPublicService } from 'src/app/interfaces/models';
 import { LocalizationService } from '../../services/localization.service';
 
 // const iconsColors = ['red', 'orange', 'yellow', 'purple'];
@@ -20,7 +20,7 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
 
     @Input() idMap: string;
     @Input() zoomMap: number;
-    @Input() mapPoints: PublicService[] = [];
+    @Input() mapPoints: IPublicService[] = [];
     @Input() enableGesture = false;
     @Output() returnMapLoaded = new EventEmitter();
 
@@ -131,7 +131,7 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
         //
         await this.mapPoints.forEach(async point => {
             let punto = null;
-            const title = `<h1>${point.name}<h1>`;
+            const title = `<h1>${point.name}</h1>`;
             // const description = `<p>${point.description}</p>`;
             const fullDescription = `<div><h1>${point.name}</h1><p>${point.description}</p></div>`;
             const markerIcon = await this.mapService.getCustomIcon('orange');

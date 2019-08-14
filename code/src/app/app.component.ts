@@ -58,11 +58,15 @@ export class AppComponent implements OnInit {
     }
 
     async checkUserLoggedIn() {
-        await this.authService.user.subscribe(data => {
-            if (data) {
-                this.userApp = data;
+        await this.authService.getUserSubject().subscribe(res => {
+            if (res) {
+                this.userApp = res.user;
+                this.authService.checkValidToken();
             }
+        }, err => {
+                console.log('Error', err);
         });
+        // await this.authService.checkValidToken();
     }
 
     closeAppSession() {

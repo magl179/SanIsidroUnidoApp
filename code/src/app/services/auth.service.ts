@@ -1,19 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { catchError, tap } from 'rxjs/operators';
 import { map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
 
-    headers: HttpHeaders = new HttpHeaders({
+    authHeaders = new HttpHeaders({
         'Content-Type': 'application/json'
     });
 
-    user = new BehaviorSubject(null);
+    authUser = new BehaviorSubject(null);
     authToken = new BehaviorSubject(null);
 
     constructor(
@@ -21,56 +24,71 @@ export class AuthService {
         private http: HttpClient
     ) { }
 
-    login(provider: string, loginData: {}): Observable<any> {
-        const urlApi = 'http://localhost:3000/api/Users/login?include=user';
-        const urlTest = 'assets/data/user.json';
-        // return this.http.get(urlTest).pipe(map(data => data));
-        console.log('Login Data Passed', loginData);
-        if (provider === 'formulario') {
-            return this.http.get(urlTest).pipe(map(data => data));
-        } else {
-            return this.http.get(urlTest).pipe(map(data => loginData));
+    login(provider: string, loginData: any, getToken = null): Observable<any> {
+        //Añadir Proveedor Datos
+        loginData.provider = provider;
+        const urlApi = `${environment.apiBaseURL}/login`;
+        if (getToken !== null) {
+            loginData.getToken = true;
         }
-
-        /*return this.http
-        .post(
-          url_api,
-          {
-              provider: provider,
-              email: loginData.email,
-              password: loginData.password,
-              socialID: loginData.socialID
-           },
-          { headers: this.headers }
-        )*/
+        return this.http.post(urlApi, loginData, {
+            headers: this.authHeaders
+        }).pipe(
+            catchError(err => {
+                return throwError(err);
+            })
+        );
     }
 
-    register(provider: string, registerData: {}): Observable<any> {
-        const urlApi = 'http://localhost:3000/api/Users';
-        const urlTest = 'assets/data/user.json';
+    register(provider: string, registerData: any): Observable<any> {
+        const urlApi = `${environment.apiBaseURL}/registro`;
+        registerData.provider = provider;
+        return this.http.post(urlApi, registerData, {
+            headers: this.authHeaders
+        }).pipe(
+            catchError(err => {
+                return throwError(err);
+            })
+        );
+    }
 
-        console.log('Register Data Passed', registerData);
-        if (provider === 'formulario') {
-            return this.http.get(urlTest).pipe(map(data => data));
-        } else {
-            return this.http.get(urlTest).pipe(map(data => registerData));
-        }
-        /*  return this.htttp
-      .post<UserInterface>(
-        url_api,
-        {
-          provider: provider,
-          firstname: registerData.firstname,
-          email: registerData.email,
-          password: registerData.password
-        },
-        { headers: this.headers }*/
-        return this.http.get(urlTest).pipe(map(data => data));
+    tokenIsValid() {
+        const urlApi = `${environment.apiBaseURL}/check-token`;
+        this.authHeaders.set('Authorization', this.authToken.value);
+        return this.http.post(urlApi, {}, {
+            headers: this.authHeaders
+        }).pipe(
+            catchError(err => {
+                return throwError(err);
+            })
+        );//data.token
+    }
+
+    async checkValidToken() {
+        await this.checkAuthToken();
+        console.log('Auth Token', this.authToken.value);
+        this.getTokenSubject().subscribe(token => {
+            if (token) {
+                this.tokenIsValid().subscribe((res: any) => {
+                    if (res.code === 200 && res.data.token == 'valid') {
+                        console.log('Token Válido');
+                    } else {
+                        console.log('Token Inválido');
+                    }
+                });
+            }else {
+                console.log('No hay token guardado');
+            }
+        });
+        // if (this.authToken.value !== null) { 
+           
+        // } else {
+        //     console.log('No hay token guardado');
+        // }
     }
 
     async logout() {
         const accessToken = await this.storage.get('accessToken');
-        // const urlApi = `http://localhost:3000/api/Users/logout?access_token=${accessToken}`;
         await this.removeUser();
         await this.removeToken();
     }
@@ -85,31 +103,42 @@ export class AuthService {
     }
 
     getUserSubject() {
-        return this.user.asObservable();
+        return this.authUser.asObservable();
+    }
+    getTokenSubject() {
+        return this.authToken.asObservable();
     }
 
-    async getCurrentUser() {
+    async checkAuthUser() {
         await this.storage.get('currentUser').then(res => {
             if (res) {
-                this.user.next(res);
+                this.authUser.next(res);
             }
         });
-        return this.user.value;
     }
 
-    async getToken() {
+    async checkAuthToken() {
         await this.storage.get('accessToken').then(res => {
             if (res) {
                 this.authToken.next(res);
             }
         });
+    }
+
+    async getCurrentUser() {
+        await this.checkAuthUser();
+        return this.authUser.value;
+    }
+
+    async getToken() {
+        await this.checkAuthToken();
         return this.authToken.value;
     }
 
     async setUser(user) {
         user.id = user.id || 1;
         await this.storage.set('currentUser', user);
-        this.user.next(user);
+        this.authUser.next(user);
     }
 
 
@@ -120,7 +149,7 @@ export class AuthService {
 
     async removeUser() {
         await this.storage.remove('currentUser');
-        this.user.next(null);
+        this.authUser.next(null);
     }
 
     async removeToken() {
@@ -128,11 +157,18 @@ export class AuthService {
         this.authToken.next(null);
     }
 
+    getUserRoles() {
+        return this.authUser.value.user.roles.map(role => role.slug);
+    }
+
     hasRoles(allowedRoles: string[]): boolean {
         let hasRole = false;
-        for (const oneRole of allowedRoles) {
-            if (this.user.value && this.user.value.roles.includes(oneRole.toLowerCase())) {
-                hasRole = true;
+        if (this.authUser.value.user) {
+            let userRoles = this.getUserRoles();
+            for (const oneRole of allowedRoles) {
+                if (userRoles.includes(oneRole.toLowerCase())) {
+                    hasRole = true;
+                }
             }
         }
         return hasRole;

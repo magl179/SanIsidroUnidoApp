@@ -91,16 +91,16 @@
             <div class="item-form">
                 <ion-item class="input_item">
                     <ion-label position="floating">Teléfono</ion-label>
-                    <ion-input formControlName="phone"></ion-input>
+                    <ion-input formControlName="number_phone"></ion-input>
                 </ion-item>
                 <div class="feedback-icon">
                     <ion-item lines="none">
                         <button class="icon-help-input" disabled>
                             <ion-icon name="close-circle" class="error"
-                                *ngIf="editProfileForm.get('phone').touched && editProfileForm.get('phone').invalid">
+                                *ngIf="editProfileForm.get('number_phone').touched && editProfileForm.get('number_phone').invalid">
                             </ion-icon>
                             <ion-icon name="checkmark-circle" class="success"
-                                *ngIf="editProfileForm.get('phone').touched && editProfileForm.get('phone').valid">
+                                *ngIf="editProfileForm.get('number_phone').touched && editProfileForm.get('number_phone').valid">
                             </ion-icon>
                         </button>
                     </ion-item>
@@ -108,8 +108,8 @@
             </div>
             <div class="form-errors">
                 <p class="form-error"
-                    *ngIf="editProfileForm.get('phone').hasError('required') && editProfileForm.get('phone').touched">
-                    {{errorMessages.phone.required.message}}
+                    *ngIf="editProfileForm.get('number_phone').hasError('required') && editProfileForm.get('number_phone').touched">
+                    {{errorMessages.number_phone.required.message}}
                 </p>
             </div>
             <ion-button class="btn_edit_profile" expand="block" [disabled]="!editProfileForm.valid"

@@ -568,6 +568,14 @@ hr.gray {
     }
 }
 
+.leaflet-control-search .search-tip{
+    h1{
+        font-size: 14px !important;
+        margin: auto !important;
+        padding: 8px;
+    }
+}
+
 // Network
 .network_avalaible{
     display: flex;

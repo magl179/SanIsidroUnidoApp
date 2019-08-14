@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UtilsService } from '../../../services/utils.service';
 import { IUbicationItem } from 'src/app/interfaces/barrios';
-import { PublicService } from 'src/app/interfaces/models';
+import { IPublicService } from 'src/app/interfaces/models';
 import { PostsService } from '../../../services/posts.service';
 
 // import { environment}
@@ -14,7 +14,7 @@ import { PostsService } from '../../../services/posts.service';
 export class PublicServicesPage implements OnInit {
 
     publicServicesPoints: IUbicationItem[] = [];
-    publicServices: PublicService[] = [];
+    publicServices: IPublicService[] = [];
     filterPublicServices = [];
     isPublicServiceAvalaible = false;
     publicServiceSelected = null;

@@ -14,7 +14,7 @@
        <div class="ion-text-center">
            <h3>{{userApp.firstname || 'Sin Nombre'}} {{userApp.lastname || 'Sin Apellidos'}}</h3>
            <p>{{userApp.email || 'sin email'}}</p>
-           <p>Roles: {{ userApp.roles | json}}</p>
+           <p>Roles: {{ getRoles() | json}}</p>
            <p *ngIf="userApp.phone">{{userApp.phone || 'sin telefono'}}</p>
        </div>
        <ion-grid>
@@ -39,13 +39,5 @@
                </ion-col>
            </ion-row>
        </ion-grid>
-       <!-- <div class="flex">
-           <div class="profile-options">
-                <ion-button expand="block" color="primary" (click)="showEditProfileModal()">Editar mi Perfil</ion-button>
-                <ion-button expand="block" color="secondary" (click)="showChangePassModal()">Cambiar mi Contraseña</ion-button>
-                <ion-button expand="block" color="tertiary" (click)="showRequestMembershipModal()">Solicitar Afiliación</ion-button>
-                <ion-button expand="block" color="warning" (click)="showChangeUserImageProfileModal()">Cambiar Imagen Perfil</ion-button>
-           </div>
-       </div> -->
     </div>
 </ion-content>

@@ -1,6 +1,6 @@
 <app-header-back title="Directorio Barrial"></app-header-back>
 <ion-content padding>
-    <ion-list *ngIf="boardMembers.length === 0 || boardMembers === null">
+    <ion-list *ngIf="directives.length === 0 || directives === null">
         <ion-item lines="none" *ngFor="let skeleton of [1,1,1,1,1,1,1,1]" class="animated flash slow infinite">
             <ion-thumbnail slot="start">
                 <ion-skeleton-text class="circle"></ion-skeleton-text>
@@ -18,8 +18,8 @@
             </ion-label>
         </ion-item>
     </ion-list>
-    <ion-list *ngIf="boardMembers.length > 0">
-        <ion-item lines="none" *ngFor="let people of boardMembers">
+    <ion-list *ngIf="directives.length > 0">
+        <ion-item lines="none" *ngFor="let people of directives">
             <ion-thumbnail slot="start">
                 <img class="circle" [src]="people.avatar || '/assets/img/default/img_avatar.png'">
                 <!-- <ion-img class="circle" [src]="people.avatar || '/assets/img/default/img_avatar.png'"></ion-img> -->

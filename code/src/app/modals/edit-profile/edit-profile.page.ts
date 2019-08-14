@@ -3,6 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { AuthService } from '../../services/auth.service';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { UtilsService } from '../../services/utils.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
     selector: 'app-edit-profile',
@@ -41,6 +42,7 @@ export class EditProfilePage implements OnInit {
         private modalCtrl: ModalController,
         private authService: AuthService,
         public formBuilder: FormBuilder,
+        private userService: UserService,
         private utilsService: UtilsService) {
         this.createForm();
         this.loadErrorMessages();
@@ -51,12 +53,11 @@ export class EditProfilePage implements OnInit {
     }
 
     async loadUserData() {
-        await this.authService.user.subscribe(user => {
-            if (user) {
-                this.currentUser = user;
+        await this.authService.getUserSubject().subscribe(res => {
+            if (res) {
+                this.currentUser = res.user;
             }
         });
-        // console.log({ userEdit: this.currentUser });
     }
 
     closeModal() {
@@ -64,7 +65,12 @@ export class EditProfilePage implements OnInit {
     }
 
     editUserProfileData() {
-        this.utilsService.showToast(JSON.stringify(this.editProfileForm.value));
+        // this.utilsService.showToast(JSON.stringify(this.editProfileForm.value));
+        this.userService.sendEditProfileRequest(this.editProfileForm.value).subscribe(res => {
+            alert('Datos Actualizados correctamente');
+        }, err => {
+                console.log('error al actualizar datos usuario', err);
+        });
     }
 
     // Función Crea el Formulario
@@ -82,13 +88,14 @@ export class EditProfilePage implements OnInit {
             Validators.email
         ]));
         // Campo Contraseña
-        const phone = new FormControl(this.currentUser.phone || '', Validators.compose([]));
+        const number_phone = new FormControl(this.currentUser.number_phone || '',
+            Validators.compose([]));
         // Añado Propiedades al Form
         this.editProfileForm = this.formBuilder.group({
             firstname,
             lastname,
             email,
-            phone,
+            number_phone,
         });
     }
 
@@ -112,7 +119,7 @@ export class EditProfilePage implements OnInit {
                     message: `Ingresa un email válido`
                 }
             },
-            phone: {}
+            number_phone: {}
         };
 
     }

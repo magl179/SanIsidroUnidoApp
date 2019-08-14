@@ -1,30 +1,65 @@
 <app-header-back title="Evento" hrefDefault="/events"></app-header-back>
 
 <ion-content padding>
-    <ion-card class="detail-card">
+    <ion-card class="detail-card animated flash slow infinite" *ngIf="!event">
         <ion-card-header>
-            <ion-card-subtitle>2018-05-09 15:00:25</ion-card-subtitle>
-            <ion-card-title>Event # {{id}}</ion-card-title>
+            <ion-card-subtitle>
+                <ion-skeleton-text width="30%"></ion-skeleton-text>
+            </ion-card-subtitle>
+            <ion-card-title>
+                <ion-skeleton-text width="10%"></ion-skeleton-text>
+            </ion-card-title>
         </ion-card-header>
         <ion-card-content>
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+            <ion-skeleton-text width="100%"></ion-skeleton-text>
+            <ion-skeleton-text width="100%"></ion-skeleton-text>
+            <ion-skeleton-text width="100%"></ion-skeleton-text>
         </ion-card-content>
         <div>
-            <simple-map classMap="event-map-detail map-center" idMap="eventMap-detail-{{id}}" [coordsMap]="mapPoints"></simple-map>
+            <ion-skeleton-text width="100%" style="height: 200px;"></ion-skeleton-text>
         </div>
-            <ion-row>
-                    <ion-col>
-                            <ion-item lines="none" detail="false" button="true" class="container_events detail" [ngClass]="{'active': (i % 2) === 0}">
-                                <!-- <ion-icon slot="start" name="star" (click)="test()"></ion-icon> -->
-                                <div>Asistire</div>
-                            </ion-item>
-                        </ion-col>
-                        <ion-col>
-                                <ion-item lines="none" detail="false" button="true" class="container_events detail" [ngClass]="{'active': (i % 2) !== 0}">
-                                    <!-- <ion-icon slot="start" name="star-outline"></ion-icon> -->
-                                    <div>No Asistire</div>
-                                </ion-item>
-                            </ion-col>
-                </ion-row>
+        <ion-row>
+            <ion-col>
+                <ion-item lines="none" detail="false" button="true" class="container_events detail"
+                    [ngClass]="{'active': (i % 2) === 0}">
+                    <!-- <ion-icon slot="start" name="star" (click)="test()"></ion-icon> -->
+                    <ion-skeleton-text width="50%"></ion-skeleton-text>
+                </ion-item>
+            </ion-col>
+            <ion-col>
+                <ion-item lines="none" detail="false" button="true" class="container_events detail"
+                    [ngClass]="{'active': (i % 2) !== 0}">
+                    <ion-skeleton-text width="50%"></ion-skeleton-text>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+    </ion-card>
+    <ion-card class="detail-card" *ngIf="event">
+        <ion-card-header>
+            <ion-card-subtitle>{{event.date}} {{event.time}}</ion-card-subtitle>
+            <ion-card-title>{{ event.title }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            {{ event.description}}
+        </ion-card-content>
+        <div>
+            <simple-map classMap="event-map-detail map-center" idMap="eventMap-detail-{{id}}" [coordsMap]="mapPoints">
+            </simple-map>
+        </div>
+        <ion-row>
+            <ion-col>
+                <ion-item lines="none" detail="false" button="true" class="container_events detail"
+                    [ngClass]="{'active': (i % 2) === 0}">
+                    <!-- <ion-icon slot="start" name="star" (click)="test()"></ion-icon> -->
+                    <div>Asistire</div>
+                </ion-item>
+            </ion-col>
+            <ion-col>
+                <ion-item lines="none" detail="false" button="true" class="container_events detail"
+                    [ngClass]="{'active': (i % 2) !== 0}">
+                    <div>No Asistire</div>
+                </ion-item>
+            </ion-col>
+        </ion-row>
     </ion-card>
 </ion-content>

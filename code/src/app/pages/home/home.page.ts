@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UtilsService } from '../../services/utils.service';
-import { DataAppService } from '../../services/data-app.service';
+import { DataAppService } from '../../services/local-data.service';
 import { AuthService } from '../../services/auth.service';
 
 export interface MenuServices {
@@ -27,8 +27,8 @@ export class HomePage implements OnInit {
     ) { }
 
     async ngOnInit() {
-        await this.authService.getUserSubject().subscribe(authState => {
-            this.userAuthenticated = authState;
+        await this.authService.getUserSubject().subscribe(res => {
+            this.userAuthenticated = res.user;
         });
         await this.dataService.getHomeOptions().subscribe((data) => {
             this.servicesList = data;

@@ -1,54 +1,100 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { IEmergencyPost, ISocialProblemPost } from '../interfaces/barrios';
 import { environment } from 'src/environments/environment';
+import { IEmergencyReported, ISocialProblemReported } from 'src/app/interfaces/models';
+import { AuthService } from './auth.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class PostsService {
+export class PostsService implements OnInit{
+
+    //DatosUsuario
+    currentUser = null;
+    tokenUser = null;
+    //Cabeceras
+    headersApp = new HttpHeaders({
+        'Content-Type': 'application/json'
+    });
+    //Paginas Actuales
+    currentPage = {
+        events: 0,
+        socialProblems: 0
+    }
+    //Categorias Actuales
+    currentCategory = {
+        socialProblem: ''
+    }
+    socialProblemsCurrentSubcategory = '';
+    socialProblemsSubcategoriesPage = 0;
+    // categoriesPostsPagesNumber = 0;
 
     constructor(
-        private http: HttpClient
+        private http: HttpClient,
+        private auth: AuthService
     ) { }
 
-
-    sendEmergencyReport(userToken: string, emergencyPost: IEmergencyPost): Observable<any> {
-        return this.http.post('url_post_emergency_App', {}, {
-            headers: {}
+    resetSocialProblemsPage() {
+        this.currentPage.socialProblems = 0;
+    }
+    resetEventsPage() {
+        this.currentPage.events = 0;
+    }
+    async ngOnInit() {
+        this.tokenUser = await this.auth.getToken();
+        this.currentUser = await this.auth.getCurrentUser();
+    }
+    //MÉTODOS POST
+    sendEmergencyReport(emergencyPost: IEmergencyReported): Observable<any> {
+        this.headersApp.set('Authorization', this.tokenUser);
+        return this.http.post(`${environment.apiBaseURL}/emergencias`, emergencyPost, {
+            headers: this.headersApp
         });
     }
 
-    sendSocialProblemReport(userToken: string, socialProblemPost: ISocialProblemPost): Observable<any> {
-        return this.http.post('url_post_emergency_App', {}, {
-            headers: {}
+    sendSocialProblemReport(socialProblemPost: ISocialProblemReported): Observable<any> {
+        this.headersApp.set('Authorization', this.tokenUser);
+        return this.http.post(`${environment.apiBaseURL}/problemas-sociales`, socialProblemPost, {
+            headers: this.headersApp
         });
+    }
+    // MÉTODOS GET
+    getSocialProblemsTest(): Observable<any> {
+        return this.http.get(`assets/data/socialProblems.json`);
     }
 
     getSocialProblems(): Observable<any> {
-        return this.http.get('assets/data/socialProblems.json');
+        this.currentPage.socialProblems++;
+        console.log('Social Problems Page', this.currentPage.socialProblems);
+        return this.http.get(`${environment.apiBaseURL}/problemas-sociales?page=${this.currentPage.socialProblems}`);
     }
 
-    getEvents(): Observable<any> {
+    getEventsTest(): Observable<any> {
         return this.http.get('assets/data/events.json');
+    }
+    getEvents(): Observable<any> {
+        this.currentPage.events++;
+        console.log('Events Page', this.currentPage.events);
+        return this.http.get(`${environment.apiBaseURL}/eventos?page=${this.currentPage.events}`);
     }
 
     getSocialProblem(id: number): Observable<any> {
-        return this.http.get('assets/data/socialProblems.json');
+        return this.http.get(`${environment.apiBaseURL}/posts/${id}`);
     }
 
     getEvent(id: number): Observable<any> {
-        return this.http.get('assets/data/events.json');
+        return this.http.get(`${environment.apiBaseURL}/posts/${id}`);
     }
 
     getPublicServices(): Observable<any> {
         return this.http.get(`${environment.apiBaseURL}/servicios-publicos`);
     }
 
-    getDirectives(): Observable<any> {
-        return this.http.get(`${environment.apiBaseURL}/directivos`);
+    getSubcategoriesByCategory(category: string): Observable<any> {
+        const url = `${environment.apiBaseURL}/categorias/${category}/subcategorias`;
+        return this.http.get(url);
     }
-
 
 }

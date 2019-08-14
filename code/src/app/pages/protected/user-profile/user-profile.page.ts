@@ -32,31 +32,24 @@ export class UserProfilePage implements OnInit {
         this.sizeOptions = (this.canRequestAfiliation) ? 4 : 6;
     }
     async loadUserData() {
-        await this.authService.user.subscribe(user => {
-            if (user) {
-                this.userApp = user;
+        await this.authService.getUserSubject().subscribe(res => {
+            if (res) {
+                this.userApp = res.user;
             }
         });
-        console.log({ userProfile: this.userApp });
+        // console.log({ userProfile: this.userApp });
+    }
+
+    getRoles() {
+        return this.userApp.roles.map(role => role.slug);
     }
 
     async showEditProfileModal() {
         const modal = await this.modalCtrl.create({
             component: EditProfilePage,
-            componentProps: {
-                nombre: 'Stalin',
-                pais: 'Ecuador'
-            }
+            componentProps: {}
         });
         await modal.present();
-
-        // const { data } = await modal.onDidDismiss();
-
-        // if (data == null) {
-        //     console.log('No hay datos que Retorne el Modal');
-        // } else {
-        //     console.log('Retorno de Datos del Modal: ', data);
-        // }
     }
 
     async showChangePassModal() {

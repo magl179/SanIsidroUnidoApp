@@ -47,9 +47,9 @@ export class ChangePasswordPage implements OnInit {
     }
 
     async loadUserData() {
-        await this.authService.user.subscribe(user => {
-            if (user) {
-                this.currentUser = user;
+        await this.authService.getUserSubject().subscribe(res => {
+            if (res) {
+                this.currentUser = res.user;
             }
         });
         // console.log({ userEdit: this.currentUser });
@@ -59,10 +59,10 @@ export class ChangePasswordPage implements OnInit {
     async createForm() {
         await this.loadUserData();
         // Campo Email
-        const password = new FormControl(this.currentUser.firstname || '', Validators.compose([
+        const password = new FormControl('', Validators.compose([
             Validators.required
         ]));
-        const confirmPassword = new FormControl(this.currentUser.lastname || '', Validators.compose([
+        const confirmPassword = new FormControl('', Validators.compose([
             Validators.required
         ]));
         // Añado Propiedades al Form

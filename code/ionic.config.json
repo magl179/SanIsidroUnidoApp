@@ -1,7 +1,7 @@
 {
-  "name": "tesisTest",
-  "integrations": {
-    "cordova": {}
-  },
-  "type": "angular"
+    "name": "tesisTest",
+    "integrations": {
+        "cordova": {}
+    },
+    "type": "angular"
 }

@@ -1,17 +1,18 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { NavController, IonSegment } from '@ionic/angular';
 import { UtilsService } from '../../../services/utils.service';
 import { AuthService } from '../../../services/auth.service';
 import { PostsService } from '../../../services/posts.service';
 import { ISocialProblem, IUserLogued, IPostShare } from 'src/app/interfaces/barrios';
 import { Observable } from 'rxjs';
+import { UserService } from '../../../services/user.service';
 
 @Component({
     selector: 'app-social-problems',
     templateUrl: './social-problems.page.html',
     styleUrls: ['./social-problems.page.scss'],
 })
-export class SocialProblemsPage implements OnInit {
+export class SocialProblemsPage implements OnInit, OnDestroy {
 
     subcategorias = [
         { title: 'Transporte&Tránsito', slug: 'transport_transit' },
@@ -23,36 +24,59 @@ export class SocialProblemsPage implements OnInit {
     subcategory = '';
     loading: any;
     elements: any = [];
-    socialProblems: Observable<any>;
+    // socialProblems: Observable<any>;
     currentUser: IUserLogued = null;
 
-    socialProblemsList: ISocialProblem[] = [];
+    socialProblems: ISocialProblem[] = [];
 
     constructor(
         private navCtrl: NavController,
         private utilsService: UtilsService,
         private postService: PostsService,
-        private authService: AuthService
+        private authService: AuthService,
+        private userService: UserService
     ) {
     }
 
     async ngOnInit() {
         this.segment.value = 'all';
-        this.loading = await this.utilsService.createBasicLoading('Cargando Publicaciones');
-        this.loading.present();
         this.currentUser = await this.authService.getCurrentUser();
-        this.postService.getSocialProblems().subscribe(data => {
-            if (data) {
-                setTimeout(() => {
-                    this.socialProblemsList = data;
-                }, 3000);
-            }
-            this.loading.dismiss();
-        });
+        this.loadSocialProblems();
+    }
+
+    ngOnDestroy(){
+        this.postService.resetSocialProblemsPage();
     }
 
     ionViewWillEnter() {
         this.utilsService.enableMenu();
+    }
+
+    loadSocialProblems(event?) {
+        this.postService.getSocialProblems().subscribe(res => {
+            const socialProblems = res.social_problems;
+            if (socialProblems) {
+                console.log('data', res);
+                if (socialProblems.data.length === 0) {
+                    if (event) {
+                        event.target.disabled = true;
+                        event.target.complete();
+                    }
+                    return;
+                }
+                this.socialProblems.push(...socialProblems.data);
+                if (event) {
+                    event.target.complete();
+                }
+            }
+        },
+        err => {
+            console.log(err);
+        });
+    }
+
+    getInfiniteScrollData(event) {
+        this.loadSocialProblems(event);
     }
 
     segmentChanged(event) {

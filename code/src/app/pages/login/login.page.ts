@@ -18,6 +18,10 @@ export class LoginPage implements OnInit {
 
     @ViewChild('passwordEyeLogin') passwordEye;
     // apphasConnection = false;
+    loginData = {
+        token: null,
+        user: null
+    };
 
     passwordTypeInput = 'password';
     iconpassword = 'eye-off';
@@ -69,29 +73,46 @@ export class LoginPage implements OnInit {
         this.navCtrl.navigateRoot(urlLogueado);
     }
 
+
+    manageLogin(provider, data, res) {
+        // console.log('login token cifrado', res);
+        this.loginData.token = res.data;
+        //Obtener Usuario Identificado
+        this.authService.login(provider, data, true).subscribe(async res => {
+            console.log('login token descifrado', res);
+            if (res.code === 200) {
+                this.loginData.user = res.data;
+                await this.authService.setUser(this.loginData.user);
+                await this.authService.setToken(this.loginData.token);
+                this.navCtrl.navigateRoot('/home');
+            } else {
+                this.utilsService.showToast('Fallo Iniciar Sesión 2'); 
+            }
+        }, err => {
+            this.utilsService.showToast(err.error.message);
+            console.log('Error Login', err);
+        });
+    }
+   
+
     async loginUser() {
         const loadingLoginValidation = await this.utilsService.createBasicLoading('Validando');
         loadingLoginValidation.present();
-        // console.log(this.loginForm.value);
-        timer(1500).subscribe(async () => {
-            loadingLoginValidation.dismiss();
             const email = this.loginForm.value.email;
             const password = this.loginForm.value.password;
-            await this.authService.login('formulario', { email, password, token_id: null }).subscribe(async data => {
-                if (data) {
-                    data.tokenID = '2312321323123';
-                    await this.setLoginUserData(data);
+            loadingLoginValidation.dismiss();
+            await this.authService.login('formulario', { email, password }).subscribe(res => {
+                console.log('Login First Response', res);
+                if (res.code === 200) {
+                    this.manageLogin('formulario', { email, password }, res);
+                } else {
+                    this.utilsService.showToast('Fallo Iniciar Sesión 1');
                 }
             }, err => {
-                this.utilsService.showToast('Fallo Iniciar Sesión');
-                console.log('Error Login', err);
+                this.utilsService.showToast(err.error.message);
+                console.log('Error Login', err.error);
             });
-        });
     }
-
-    /*loginUserByGoogleWeb(){
-        this.socialDataService.loginByGoogleWeb();
-    }*/
 
     async loginUserByFB() {
             await this.socialDataService.loginByFacebook();

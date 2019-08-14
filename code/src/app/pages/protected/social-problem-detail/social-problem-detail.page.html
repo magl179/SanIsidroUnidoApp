@@ -36,20 +36,20 @@
         </ion-card>
     </div>
     <ion-card class="card_social detail-card" *ngIf="socialProblem !== null">
-        <img style="border: 1px solid #ccc;" src="assets/img/default/slide-1.png" />
+        <img *ngIf="socialProblem.images.length === 0"style="border: 1px solid #ccc;" src="assets/img/default/slide-1.png" />
+        <img *ngIf="socialProblem.images.length > 0 "style="border: 1px solid #ccc;" [src]="socialProblem.images[0].url" />
         <ion-card-header>
             <ion-card-title>Problem {{idPost}}</ion-card-title>
-            <ion-card-subtitle class="post_user">User ID: {{socialProblem.user_id}}
+            <ion-card-subtitle class="post_user" *ngIf="userPost">{{userPost.firstname}} {{userPost.lastname}}
             </ion-card-subtitle>
-            <ion-card-subtitle>Category ID: {{socialProblem.category_id}} | Date: {{socialProblem.date}}
+            <ion-card-subtitle>Category ID: {{socialProblem.category_id}} | {{socialProblem.date | beafitulDate}}
             </ion-card-subtitle>
         </ion-card-header>
         <ion-card-content class="post_description">
             <p class="post_content">
                 {{socialProblem.description}}
-                <span>ID PARAMETRO: {{id}}</span>
             </p>
-            <p>Likes: 11</p>
+            <!-- <p>Likes: 11</p> -->
         </ion-card-content>
         <div class="options detail">
             <div class="option_actions">

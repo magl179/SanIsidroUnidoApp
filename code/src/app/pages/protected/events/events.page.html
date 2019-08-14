@@ -1,7 +1,8 @@
 <app-header-back title="Eventos"></app-header-back>
 <ion-content>
-    <div *ngIf="eventsList === null || eventsList.length === 0">
-        <ion-card class="event_item" *ngFor="let event of [1,1,1,1,1,1,1];" class="animated flash slow infinite">
+    <!-- Tarjetas Animacion hasta cargar datos-->
+    <div *ngIf="!eventsList || eventsList.length === 0">
+        <ion-card *ngFor="let event of [1,1,1,1,1,1,1];" class="event_item animated flash slow infinite">
             <ion-card-header>
                 <ion-card-subtitle>
                     <ion-skeleton-text width="60%"></ion-skeleton-text>
@@ -31,7 +32,8 @@
             </ion-row>
         </ion-card>
     </div>
-    <div *ngIf="eventsList !== null || eventsList.length > 0">
+    <!-- Tarjetas con Datos -->
+    <div *ngIf="eventsList  && eventsList.length > 0">
         <ion-card class="event_item" *ngFor="let event of eventsList; let i = index;">
             <ion-card-header>
                 <ion-card-subtitle>
@@ -58,4 +60,9 @@
             </ion-row>
         </ion-card>
     </div>
+    <!-- Scroll Infinito -->
+    <ion-infinite-scroll threshold="150px" (ionInfinite)="getInfiniteScrollData($event)">
+        <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando Publicaciones...">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
 </ion-content>

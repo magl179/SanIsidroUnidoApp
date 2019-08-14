@@ -4,7 +4,7 @@ import { DirectivesService } from 'src/app/services/directives.service';
 // import { trigger, style, state, query, stagger, animate, transition } from '@angular/animations';
 import Preloader from 'src/app/helpers/preloader-image';
 import { PostsService } from '../../../services/posts.service';
-import { Directive } from 'src/app/interfaces/models';
+import { IDirective } from 'src/app/interfaces/models';
 
 @Component({
     selector: 'app-directory-info',
@@ -13,7 +13,7 @@ import { Directive } from 'src/app/interfaces/models';
 })
 export class DirectoryInfoPage implements OnInit {
 
-    boardMembers: Directive[] = [];
+    directives: IDirective[] = [];
     loading: any;
     imgLoaded = false;
 
@@ -24,7 +24,7 @@ export class DirectoryInfoPage implements OnInit {
     ) { }
 
     async ngOnInit() {
-        this.postService.getDirectives().subscribe(response => {
+        this.directivesService.getDirectives().subscribe(response => {
             if (response) {
                 // if (response.data.avatar !== null) {
                 const imagesPath = response.data.filter(user => {
@@ -38,7 +38,7 @@ export class DirectoryInfoPage implements OnInit {
                     images: imagesPath,
                     completed: () => {
                         // setTimeout(() => {
-                        this.boardMembers = response.data;
+                        this.directives = response.data;
                         // }, 2500);
                     }
                 });
