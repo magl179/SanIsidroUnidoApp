@@ -14,6 +14,8 @@ import { ChangeProfileImagePage } from 'src/app/modals/change-profile-image/chan
 })
 export class UserProfilePage implements OnInit {
 
+    userProfileSubscription;
+
     userApp = null;
     sizeOptions = 4;
     canRequestAfiliation = true;
@@ -21,7 +23,19 @@ export class UserProfilePage implements OnInit {
     constructor(
         private authService: AuthService,
         private modalCtrl: ModalController) {
-        this.loadUserData();
+        // this.loadUserData();
+    }
+
+    ionViewWillEnter() {
+        this.userProfileSubscription = this.authService.getUserSubject().subscribe(res => {
+            if (res) {
+                this.userApp = res.user;
+            }
+        });
+    }
+
+    ionViewWillLeave() {
+        this.userProfileSubscription.unsubscribe();
     }
 
     async ngOnInit() {
@@ -37,7 +51,6 @@ export class UserProfilePage implements OnInit {
                 this.userApp = res.user;
             }
         });
-        // console.log({ userProfile: this.userApp });
     }
 
     getRoles() {

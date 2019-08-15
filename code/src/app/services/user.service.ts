@@ -22,9 +22,9 @@ export class UserService implements OnInit {
         private http: HttpClient,
         private auth: AuthService
     ) {
-        this.auth.getUserSubject().subscribe(user => {
-            if (user) {
-                this.currentUser = user;
+        this.auth.getUserSubject().subscribe(res => {
+            if (res) {
+                this.currentUser = res.user;
             }
         });
         this.auth.getTokenSubject().subscribe(token => {
@@ -35,61 +35,57 @@ export class UserService implements OnInit {
     }
 
     async ngOnInit() {
-        // this.tokenUser = await this.auth.getToken();
-        // await this.auth.getUserSubject().subscribe(user => {
-        //     if (user) {
-        //         this.currentUser = user;
-        //     }
-        // });
-        // await this.auth.getTokenSubject().subscribe(token => {
-        //     if (token) {
-        //         this.tokenUser = token;
-        //     }
-        // });
-        // this.currentUser = await this.auth.getCurrentUser();
         console.log('User', this.currentUser);
     }
 
     sendChangeUserPassRequest(newPassword: string): Observable<any> {
-        this.headersApp.set('Authorization', this.tokenUser);
+        const headers = this.headersApp.set('Authorization', this.tokenUser);
         const user_id = this.currentUser.id;
         return this.http.patch(`${environment.apiBaseURL}/usuarios/${user_id}/cambiar-contrasenia`, {
             password: newPassword
-        }, {
-                headers: this.headersApp
-            });
+        }, { headers: this.headersApp });
     }
 
     sendChangeUserImageRequest(image: string): Observable<any> {
-        this.headersApp.set('Authorization', this.tokenUser);
+        const headers = this.headersApp.set('Authorization', this.tokenUser);
         const user_id = this.currentUser.id;
         return this.http.patch(`${environment.apiBaseURL}/usuarios/${user_id}/cambiar-avatar`, {
             avatar: image
-        }, {
-                headers: this.headersApp
-            });
+        }, { headers });
     }
 
     sendEditProfileRequest(profile: IEditProfile): Observable<any> {
         console.log('current user', this.currentUser);
-        this.headersApp.set('Authorization', this.tokenUser);
+        const headers = this.headersApp.set('Authorization', this.tokenUser);
         const user_id = this.currentUser.id;
-        return this.http.put(`${environment.apiBaseURL}/usuarios/${user_id}`, profile, {
-            headers: this.headersApp
-        });
+        return this.http.patch(`${environment.apiBaseURL}/usuarios/${user_id}`, profile, { headers });
     }
 
     sendRequestUserMembership(image: string) {
-        this.headersApp.set('Authorization', this.tokenUser);
+        const headers = this.headersApp.set('Authorization', this.tokenUser);
         const user_id = this.currentUser.id;
         return this.http.patch(`${environment.apiBaseURL}/usuarios/${user_id}/solicitar-afiliacion`, {
             basic_service_image: image
-        }, {
-                headers: this.headersApp
-            });
+        }, { headers });
+    }
+
+    sendRequestAddUserDevice(device_id: string, description: string) {
+        const headers = this.headersApp.set('Authorization', this.tokenUser);
+        const user_id = this.currentUser.id;
+        return this.http.patch(`${environment.apiBaseURL}/usuarios/${user_id}/agregar-dispositivo`, {
+            device_id, description
+        }, { headers });
     }
 
     getUserInfo(id: number): Observable<any> {
         return this.http.get(`${environment.apiBaseURL}/usuarios/${id}`);
+    }
+
+    getNotificationsUser() {
+        // const headers = this.headersApp;
+        const user_id = this.currentUser.id;
+        console.log('User noti', this.currentUser);
+        console.log('User id noti', user_id);
+        return this.http.get(`${environment.apiBaseURL}/usuarios/${user_id}/notificaciones`);
     }
 }

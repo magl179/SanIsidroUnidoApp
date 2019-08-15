@@ -6,6 +6,8 @@ import { BehaviorSubject } from 'rxjs';
 import { Platform } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { UserService } from './user.service';
+import { AuthService } from './auth.service';
 
 
 @Injectable({
@@ -14,14 +16,17 @@ import { Observable } from 'rxjs';
 export class NotificationsService {
 
     messagesList: OSNotificationPayload[] = [];
-    userId = new BehaviorSubject<string>(null);
+    currentUser = null;
+    userDeviceID = new BehaviorSubject<string>(null);
     pushListener = new EventEmitter<OSNotificationPayload>();
 
     constructor(
         private oneSignal: OneSignal,
         private storage: Storage,
         private platform: Platform,
-        private http: HttpClient
+        private http: HttpClient,
+        private userService: UserService,
+        private authService: AuthService
     ) {
         this.loadMessages();
     }
@@ -59,7 +64,7 @@ export class NotificationsService {
 
     // GET UNIQUE ID SUSCRIPTOR
     getIDSubscriptor() {
-        return this.userId.asObservable();
+        return this.userDeviceID.asObservable();
     }
 
     // Función Obtener ID Suscriptor
@@ -67,9 +72,23 @@ export class NotificationsService {
         console.log('INITIAL FUNCTION GET ONESIGNAL ID SUBSCRIPTOR: ');
         this.oneSignal.provideUserConsent(true);
         const deviceID = await this.oneSignal.getIds();
-        this.userId.next(deviceID.userId);
+        this.userDeviceID.next(deviceID.userId);
         console.log('DEVICE SUBSCRIPTOR: ', deviceID);
         console.log('ID SUBSCRIPTOR: ', deviceID.userId);
+        this.authService.getUserSubject().subscribe(user => {
+            if (user) {
+                console.log('usuario autenticado, puedo añadir dispositivo');
+                this.userService.sendRequestAddUserDevice(this.userDeviceID.value, 'Dispositivo Usuario').subscribe(
+                    res => {
+                        console.log('Dispositivo Añadido Correctamente');
+                    }, err => {
+                        console.log('Ocurrio un error al añadir el dispositivo', err);
+                    }
+                );
+            }
+        });
+       
+        // this.
         // this.oneSignal.getIds().then( res=> {
         //     console.log(res.userId) . //===>ESTE ES TU ID
         //     this.userId.next(res.userId);

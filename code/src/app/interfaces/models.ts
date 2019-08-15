@@ -67,6 +67,12 @@ export interface IEventDetail{
 }
 
 //INTERFACES NO EXPORTADAS
+interface Notification {
+    user_id: number;
+    title: string;
+    description: string;
+}
+
 
 interface IBaseReportSend {
     title: string;

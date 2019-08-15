@@ -48,16 +48,16 @@ export class PostsService implements OnInit{
     }
     //MÉTODOS POST
     sendEmergencyReport(emergencyPost: IEmergencyReported): Observable<any> {
-        this.headersApp.set('Authorization', this.tokenUser);
+        const headers = this.headersApp.set('Authorization', this.tokenUser);
         return this.http.post(`${environment.apiBaseURL}/emergencias`, emergencyPost, {
-            headers: this.headersApp
+            headers
         });
     }
 
     sendSocialProblemReport(socialProblemPost: ISocialProblemReported): Observable<any> {
-        this.headersApp.set('Authorization', this.tokenUser);
+        const headers = this.headersApp.set('Authorization', this.tokenUser);
         return this.http.post(`${environment.apiBaseURL}/problemas-sociales`, socialProblemPost, {
-            headers: this.headersApp
+            headers
         });
     }
     // MÉTODOS GET

@@ -67,9 +67,11 @@ export class EditProfilePage implements OnInit {
     editUserProfileData() {
         // this.utilsService.showToast(JSON.stringify(this.editProfileForm.value));
         this.userService.sendEditProfileRequest(this.editProfileForm.value).subscribe(res => {
-            alert('Datos Actualizados correctamente');
+            this.utilsService.showToast('Datos Actualizados Correctamente');
+            this.authService.updateAuthInfo(res.data.token, res.data.user)
         }, err => {
-                console.log('error al actualizar datos usuario', err);
+            this.utilsService.showToast('Datos No se pudieron actualizar :(');
+            console.log('error al actualizar datos usuario', err);
         });
     }
 

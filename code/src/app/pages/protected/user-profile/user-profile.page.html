@@ -4,18 +4,18 @@
     <!-- <p>Mi Perfil</p> -->
     <div class="container-profile">
        <div class="img-profile ion-padding-top">
-           <div class="item_img">
+           <div class="item_img" *ngIf="userApp">
                 <img [src]="userApp.avatar || 'assets/img/default/img_avatar.png'" alt="User Profile Image" />
                 <div class="upload_image" (click)="showChangeUserImageProfileModal()">
                     <ion-icon name="camera"></ion-icon>
                 </div>
            </div>
        </div>
-       <div class="ion-text-center">
+       <div class="ion-text-center" *ngIf="userApp">
            <h3>{{userApp.firstname || 'Sin Nombre'}} {{userApp.lastname || 'Sin Apellidos'}}</h3>
            <p>{{userApp.email || 'sin email'}}</p>
            <p>Roles: {{ getRoles() | json}}</p>
-           <p *ngIf="userApp.phone">{{userApp.phone || 'sin telefono'}}</p>
+           <p *ngIf="userApp.number_phone">{{userApp.number_phone || 'sin telefono'}}</p>
        </div>
        <ion-grid>
            <ion-row>

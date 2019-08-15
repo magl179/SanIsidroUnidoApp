@@ -10,7 +10,7 @@ export class FiltroSearchPipe implements PipeTransform {
         texto: any,
         columna: string): any[] {
         console.log('Arreglo Entrante: ', arreglo);
-        if (texto === '') {
+        if (texto === '' || texto === null) {
             arreglo.exists = 1;
             return arreglo;
         }

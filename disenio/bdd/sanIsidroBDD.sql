@@ -91,6 +91,21 @@ CONSTRAINT pk_categories PRIMARY KEY(id)
 )ENGINE=InnoDb DEFAULT CHARSET=utf8mb4;
 
 
+
+-- -----------------------------------------------------
+-- Table subcategory
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS subcategories (
+id int(255) auto_increment not null,
+name VARCHAR(45) NOT NULL,
+slug VARCHAR(45) NOT NULL,
+description TEXT NULL,
+category_id INT NOT NULL,
+created_at datetime,
+updated_at datetime,
+CONSTRAINT pk_subcategory PRIMARY KEY(id),
+CONSTRAINT fk_subcategory_of_category FOREIGN KEY(category_id) REFERENCES categories(id)
+)ENGINE=InnoDb DEFAULT CHARSET=utf8mb4;
 -- -----------------------------------------------------
 -- Table posts
 -- -----------------------------------------------------
@@ -103,11 +118,13 @@ time TIME NOT NULL,
 ubication JSON NULL,
 user_id INT NOT NULL,
 category_id INT NOT NULL,
+subcategory_id INT NULL,
 created_at datetime,
 updated_at datetime,
 CONSTRAINT pk_posts PRIMARY KEY(id),
 CONSTRAINT fk_posts_users FOREIGN KEY(user_id) REFERENCES users(id),
-CONSTRAINT fk_posts_categories FOREIGN KEY(category_id) REFERENCES categories(id)
+CONSTRAINT fk_posts_categories FOREIGN KEY(category_id) REFERENCES categories(id),
+CONSTRAINT fk_posts_subcategories FOREIGN KEY(subcategory_id) REFERENCES subcategories(id)
 )ENGINE=InnoDb DEFAULT CHARSET=utf8mb4;
 
 
@@ -124,21 +141,6 @@ CONSTRAINT pk_imagenes PRIMARY KEY(id),
 CONSTRAINT fk_imagenes_posts FOREIGN KEY(post_id) REFERENCES posts(id)
 )ENGINE=InnoDb DEFAULT CHARSET=utf8mb4;
 
-
--- -----------------------------------------------------
--- Table subcategory
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS subcategories (
-id int(255) auto_increment not null,
-name VARCHAR(45) NOT NULL,
-slug VARCHAR(45) NOT NULL,
-description TEXT NULL,
-category_id INT NOT NULL,
-created_at datetime,
-updated_at datetime,
-CONSTRAINT pk_subcategory PRIMARY KEY(id),
-CONSTRAINT fk_subcategory_of_category FOREIGN KEY(category_id) REFERENCES categories(id)
-)ENGINE=InnoDb DEFAULT CHARSET=utf8mb4;
 
 
 -- -----------------------------------------------------
@@ -222,15 +224,24 @@ CREATE TABLE IF NOT EXISTS details (
 id int(255) auto_increment not null,
 post_id INT NOT NULL,
 user_id INT NOT NULL,
-date DATE NULL,
-time TIME NULL,
-like_count TINYINT NULL,
-attendance TINYINT NULL,
-nonattendance TINYINT NULL,
+type VARCHAR(10) NOT NULL,
 created_at datetime,
 updated_at datetime,
 CONSTRAINT pk_details PRIMARY KEY(id),
 CONSTRAINT fk_details_posts FOREIGN KEY(post_id) REFERENCES posts(id),
-CONSTRAINT fk_details_users FOREIGN KEY(user_id) REFERENCES users(id),
-CONSTRAINT uq_detail_post_id UNIQUE(post_id)
+CONSTRAINT fk_details_users FOREIGN KEY(user_id) REFERENCES users(id)
+)ENGINE=InnoDb DEFAULT CHARSET=utf8mb4;
+
+
+CREATE TABLE IF NOT EXISTS mobile_notifications (
+id int(255) auto_increment not null,
+user_id INT NOT NULL,
+title VARCHAR(50) NOT NULL,
+message TEXT NOT NULL,
+state TINYINT NOT NULL DEFAULT 0,
+type VARCHAR(40) NOT NULL,
+created_at datetime,
+updated_at datetime,
+CONSTRAINT pk_details PRIMARY KEY(id),
+CONSTRAINT fk_mobile_notification_user FOREIGN KEY(user_id) REFERENCES users(id)
 )ENGINE=InnoDb DEFAULT CHARSET=utf8mb4;

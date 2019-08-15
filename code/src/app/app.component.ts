@@ -61,12 +61,12 @@ export class AppComponent implements OnInit {
         await this.authService.getUserSubject().subscribe(res => {
             if (res) {
                 this.userApp = res.user;
-                this.authService.checkValidToken();
+                // this.authService.checkValidToken();
+                // this.checkInfoLocal()
             }
         }, err => {
                 console.log('Error', err);
         });
-        // await this.authService.checkValidToken();
     }
 
     closeAppSession() {

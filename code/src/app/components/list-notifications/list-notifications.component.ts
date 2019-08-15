@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { NotificationsService } from '../../services/notifications.service';
 import { Observable } from 'rxjs';
 import { NavController, IonSegment } from '@ionic/angular';
+import { UserService } from '../../services/user.service';
 
 @Component({
     selector: 'app-list-notifications',
@@ -12,10 +13,10 @@ export class ListNotificationsComponent implements OnInit {
 
     @Input() showListHeader = true;
     @Input() maxNotifications = 0;
-    @ViewChild(IonSegment) segment: IonSegment;
+    // @ViewChild(IonSegment) segment: IonSegment;
 
     notificationsRequested = [];
-    notificationsList: { title: string, author: string, user_img: string, description: string }[] = [];
+    notificationsList: { id: number, user: any, title: string, user_id: string, message: string, state: number, type: string, created_at: string, updated_at: string }[] = [];
     notificationsList2: {title: string, author: string, user_img: string, description: string}[] = [
         // tslint:disable-next-line: max-line-length
         { title: 'Title Noti 1', author: 'Juan Manuel', user_img: 'assets/img/default/img_avatar.png', description: 'Descripcion de la Noti' },
@@ -34,11 +35,12 @@ export class ListNotificationsComponent implements OnInit {
     ];
 
     constructor(
-        private notiService: NotificationsService
+        private notiService: NotificationsService,
+        private usersService: UserService
     ) { }
 
     async ngOnInit() {
-        this.segment.value = 'todos';
+        // this.segment.value = 'todos';
         await this.notificationsList.reverse();
         await this.getNotifications();
     }
@@ -48,12 +50,18 @@ export class ListNotificationsComponent implements OnInit {
     }
 
     getNotifications() {
-        this.notiService.getNotifications().subscribe(async data => {
-            console.log('Data noti: ', data);
-            if (data) {
-                this.notificationsList = data;
-            }
-            this.cargarNotificacionesSolicitadas();
+        // this.notiService.getNotifications().subscribe(async data => {
+        //     console.log('Data noti: ', data);
+        //     if (data) {
+        //         this.notificationsList = data;
+        //     }
+        //     this.cargarNotificacionesSolicitadas();
+        // });
+        this.usersService.getNotificationsUser().subscribe((res: any) => {
+            if (res.code === 200) {
+                this.notificationsList = res.data;
+                this.cargarNotificacionesSolicitadas();
+           } 
         });
     }
 

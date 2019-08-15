@@ -63,7 +63,7 @@
     </div>
     <!-- Tarjeta con Datos Cargados -->
     <ion-card class="card_social"
-        *ngFor="let socialProblem of (socialProblems) | filtroSearch:subcategory:'category_id'; let i = index;">
+        *ngFor="let socialProblem of (socialProblems) | filtroSearch:subcategory:'subcategory_id'; let i = index;">
         <div *ngIf="socialProblem.exists === -1">
             <ion-card-header class="ion-text-center">
                 <ion-card-title>No hay publicaciones en esta categoria :( </ion-card-title>
@@ -72,14 +72,14 @@
         <div *ngIf="socialProblem.exists !== -1">
             <ion-card-header>
                 <ion-card-title>{{socialProblem.title}}</ion-card-title>
-                <ion-card-subtitle class="post_user">User ID: {{socialProblem.user_id}}
+                <ion-card-subtitle class="post_user">{{socialProblem.user.firstname}} {{socialProblem.user.lastname}}
                 </ion-card-subtitle>
-                <ion-card-subtitle>Category ID: {{socialProblem.category_id}} | {{socialProblem.date | beafitulDate}}
+                <ion-card-subtitle>{{socialProblem.category.name}} | {{socialProblem.date | beafitulDate}}
                 </ion-card-subtitle>
             </ion-card-header>
             <ion-card-content class="post_description">
                 <p class="post_content">{{socialProblem.description}} </p>
-                <p>Likes: 11</p>
+                <p>Likes: {{socialProblem.details.length}}</p>
             </ion-card-content>
             <div class="options">
                 <div class="option_button">
