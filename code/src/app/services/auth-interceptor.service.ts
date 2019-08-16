@@ -21,12 +21,12 @@ export class AuthInterceptorService implements HttpInterceptor {
         // console.log('Angular Interceptor', request);
         return next.handle(request).pipe(
             tap(data => {
-                console.log('response success', data);
+                // console.log('response success', data);
                 return data;
             }),
             catchError(
                 (err) => {
-                    console.log('response unsuccess', err);
+                    // console.log('response unsuccess', err);
                     if (err.status === 401) {
                         this.logoutUser();
                     }
@@ -37,8 +37,7 @@ export class AuthInterceptorService implements HttpInterceptor {
     }
 
     logoutUser() {
-        this.authService.removeToken();
-        this.authService.removeUser();
+        this.authService.removeAuthInfo();
         this.navCtrl.navigateRoot('/login');
     }
 

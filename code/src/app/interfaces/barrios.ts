@@ -113,6 +113,9 @@ export interface ISocialProblem {
     user_id: number;
     likes: number;
     images?: [];
+    category?: any;
+    user?: any;
+    details?: any;
 }
 
 export interface IEvent {
@@ -127,6 +130,7 @@ export interface IEvent {
     assist: boolean;
     notassist: boolean;
     images?: [];
+    details?: any;
 }
 
 // Compartir Publicaciones

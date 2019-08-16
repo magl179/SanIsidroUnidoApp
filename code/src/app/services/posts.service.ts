@@ -9,11 +9,11 @@ import { AuthService } from './auth.service';
 @Injectable({
     providedIn: 'root'
 })
-export class PostsService implements OnInit{
+export class PostsService implements OnInit {
 
     //DatosUsuario
-    currentUser = null;
-    tokenUser = null;
+    AuthUser = null;
+    AuthToken = null;
     //Cabeceras
     headersApp = new HttpHeaders({
         'Content-Type': 'application/json'
@@ -33,7 +33,7 @@ export class PostsService implements OnInit{
 
     constructor(
         private http: HttpClient,
-        private auth: AuthService
+        private authService: AuthService
     ) { }
 
     resetSocialProblemsPage() {
@@ -43,19 +43,25 @@ export class PostsService implements OnInit{
         this.currentPage.events = 0;
     }
     async ngOnInit() {
-        this.tokenUser = await this.auth.getToken();
-        this.currentUser = await this.auth.getCurrentUser();
+        this.authService.getAuthToken().subscribe(token => {
+            this.AuthToken = token;
+        });
+        this.authService.getAuthUser().subscribe(user => {
+            this.AuthUser = user;
+        });
+        // this.AuthToken = await this.auth.getToken();
+        // this.AuthUser = await this.auth.getCurrentUser();
     }
     //MÉTODOS POST
     sendEmergencyReport(emergencyPost: IEmergencyReported): Observable<any> {
-        const headers = this.headersApp.set('Authorization', this.tokenUser);
+        const headers = this.headersApp.set('Authorization', this.AuthToken);
         return this.http.post(`${environment.apiBaseURL}/emergencias`, emergencyPost, {
             headers
         });
     }
 
     sendSocialProblemReport(socialProblemPost: ISocialProblemReported): Observable<any> {
-        const headers = this.headersApp.set('Authorization', this.tokenUser);
+        const headers = this.headersApp.set('Authorization', this.AuthToken);
         return this.http.post(`${environment.apiBaseURL}/problemas-sociales`, socialProblemPost, {
             headers
         });
@@ -81,11 +87,11 @@ export class PostsService implements OnInit{
     }
 
     getSocialProblem(id: number): Observable<any> {
-        return this.http.get(`${environment.apiBaseURL}/posts/${id}`);
+        return this.http.get(`${environment.apiBaseURL}/problemas-sociales/${id}`);
     }
 
     getEvent(id: number): Observable<any> {
-        return this.http.get(`${environment.apiBaseURL}/posts/${id}`);
+        return this.http.get(`${environment.apiBaseURL}/eventos/${id}`);
     }
 
     getPublicServices(): Observable<any> {

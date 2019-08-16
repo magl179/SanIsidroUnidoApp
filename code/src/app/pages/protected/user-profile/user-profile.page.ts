@@ -14,9 +14,10 @@ import { ChangeProfileImagePage } from 'src/app/modals/change-profile-image/chan
 })
 export class UserProfilePage implements OnInit {
 
-    userProfileSubscription;
+    //Guardar Subscripcion Usuario
+    
 
-    userApp = null;
+    AuthUser = null;
     sizeOptions = 4;
     canRequestAfiliation = true;
 
@@ -27,16 +28,14 @@ export class UserProfilePage implements OnInit {
     }
 
     ionViewWillEnter() {
-        this.userProfileSubscription = this.authService.getUserSubject().subscribe(res => {
-            if (res) {
-                this.userApp = res.user;
-            }
+        this.authService.getAuthUser().subscribe(res => {
+                this.AuthUser = res.user;
         });
     }
 
-    ionViewWillLeave() {
-        this.userProfileSubscription.unsubscribe();
-    }
+    // ionViewWillLeave() {
+    //     this.userProfileSubscription.unsubscribe();
+    // }
 
     async ngOnInit() {
         this.checkRolUser();
@@ -45,16 +44,21 @@ export class UserProfilePage implements OnInit {
     async checkRolUser() {
         this.sizeOptions = (this.canRequestAfiliation) ? 4 : 6;
     }
-    async loadUserData() {
-        await this.authService.getUserSubject().subscribe(res => {
-            if (res) {
-                this.userApp = res.user;
-            }
-        });
-    }
+    // async loadUserData() {
+    //     await this.authService.getUserSubject().subscribe(res => {
+    //         if (res) {
+    //             this.userApp = res.user;
+    //         }
+    //     });
+    // }
 
     getRoles() {
-        return this.userApp.roles.map(role => role.slug);
+        console.log('get roles', this.AuthUser);
+        if (this.AuthUser) {
+            return this.AuthUser.roles.map(role => role.slug);
+        }
+        return [];
+        // return this.AuthUser.roles.map(role => role.slug);
     }
 
     async showEditProfileModal() {
@@ -74,14 +78,6 @@ export class UserProfilePage implements OnInit {
             }
         });
         await modal.present();
-
-        // const { data } = await modal.onDidDismiss();
-
-        // if (data == null) {
-        //     console.log('No hay datos que Retorne el Modal');
-        // } else {
-        //     console.log('Retorno de Datos del Modal: ', data);
-        // }
     }
 
     async showRequestMembershipModal() {
@@ -93,14 +89,6 @@ export class UserProfilePage implements OnInit {
             }
         });
         await modal.present();
-
-        // const { data } = await modal.onDidDismiss();
-
-        // if (data == null) {
-        //     console.log('No hay datos que Retorne el Modal');
-        // } else {
-        //     console.log('Retorno de Datos del Modal: ', data);
-        // }
     }
 
     async showChangeUserImageProfileModal() {
@@ -112,14 +100,6 @@ export class UserProfilePage implements OnInit {
             }
         });
         await modal.present();
-
-        // const { data } = await modal.onDidDismiss();
-
-        // if (data == null) {
-        //     console.log('No hay datos que Retorne el Modal');
-        // } else {
-        //     console.log('Retorno de Datos del Modal: ', data);
-        // }
     }
 
 }

@@ -12,7 +12,7 @@ import { UserService } from '../../services/user.service';
 })
 export class EditProfilePage implements OnInit {
 
-    currentUser = null;
+    AuthUser = null;
     editProfileForm: FormGroup;
     errorMessages = null;
     editProfileFormFields = {
@@ -53,9 +53,9 @@ export class EditProfilePage implements OnInit {
     }
 
     async loadUserData() {
-        await this.authService.getUserSubject().subscribe(res => {
+        await this.authService.getAuthUser().subscribe(res => {
             if (res) {
-                this.currentUser = res.user;
+                this.AuthUser = res.user;
             }
         });
     }
@@ -79,26 +79,21 @@ export class EditProfilePage implements OnInit {
     async createForm() {
         await this.loadUserData();
         // Campo Email
-        const firstname = new FormControl(this.currentUser.firstname || '', Validators.compose([
+        const firstname = new FormControl(this.AuthUser.firstname || '', Validators.compose([
             Validators.required
         ]));
-        const lastname = new FormControl(this.currentUser.lastname || '', Validators.compose([
+        const lastname = new FormControl(this.AuthUser.lastname || '', Validators.compose([
             Validators.required
         ]));
-        const email = new FormControl(this.currentUser.email || '', Validators.compose([
+        const email = new FormControl(this.AuthUser.email || '', Validators.compose([
             Validators.required,
             Validators.email
         ]));
         // Campo Contraseña
-        const number_phone = new FormControl(this.currentUser.number_phone || '',
+        const number_phone = new FormControl(this.AuthUser.number_phone || '',
             Validators.compose([]));
         // Añado Propiedades al Form
-        this.editProfileForm = this.formBuilder.group({
-            firstname,
-            lastname,
-            email,
-            number_phone,
-        });
+        this.editProfileForm = this.formBuilder.group({firstname, lastname, email, number_phone});
     }
 
     loadErrorMessages() {

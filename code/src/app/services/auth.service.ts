@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, tap } from 'rxjs/operators';
-import { map } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
+// import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import { NavController } from '@ionic/angular';
+// import { NavController } from '@ionic/angular';
 
+const TOKEN_ITEM_NAME = "accessToken";
+const USER_ITEM_NAME = "currentUser";
 
 @Injectable({
     providedIn: 'root'
@@ -21,11 +23,15 @@ export class AuthService {
 
     constructor(
         private storage: Storage,
-        private http: HttpClient,
-        private navCtrl: NavController
-    ) { 
+        private http: HttpClient
+    ) {
+        this.verificarAuthInfo();
     }
-
+    //CERRAR SESION
+    async logout() {
+        await this.removeAuthInfo();
+    }
+    // Iniciar Sesion
     login(provider: string, loginData: any, getToken = null): Observable<any> {
         //Añadir Proveedor Datos
         loginData.provider = provider;
@@ -37,24 +43,13 @@ export class AuthService {
             headers: this.authHeaders
         });
     }
-
+    // Registrar Usuario
     register(provider: string, registerData: any): Observable<any> {
         const urlApi = `${environment.apiBaseURL}/registro`;
         registerData.provider = provider;
         return this.http.post(urlApi, registerData, {
             headers: this.authHeaders
         });
-    }
-
-    updateAuthInfo(token, user) {
-        this.setToken(token);
-        this.setUser(user);
-        this.checkInfoLocal();
-    }
-    //Actualizar toda la información desde LS
-    checkInfoLocal() {
-        this.checkAuthToken();
-        this.checkAuthUser();
     }
     //COMPROBAR EN EL API SI TOKEN ES VÁLIDO
     tokenIsValid(token) {
@@ -68,9 +63,9 @@ export class AuthService {
     }
     //VERIFICAR SI SE DEBE CHECKEAR VALIDEZ TOKEN
     async checkValidToken() {
-        await this.checkAuthToken();
+        await this.verificarAuthInfo();
         // console.log('Auth Token', this.authToken.value);
-        this.getTokenSubject().subscribe(token => {
+        this.getAuthToken().subscribe(token => {
             if (token) {
                 this.tokenIsValid(token).subscribe((res: any) => {
                     if (res.code === 200 && res.data.token == 'valid') {
@@ -79,91 +74,82 @@ export class AuthService {
                         console.log('Token Inválido');
                     }
                 });
-            }else {
+            } else {
                 console.log('No hay token guardado');
             }
         });
     }
-    //CERRAR SESION
-    async logout() {
-        const accessToken = await this.storage.get('accessToken');
-        await this.removeUser();
-        await this.removeToken();
+    // Actualizar Informacion Local Storage
+    updateAuthInfo(token, user) {
+        this.setTokenLocalStorage(token);
+        this.setUserLocalStorage(user);
+    }
+    //Obtener la información desde Local Storage
+    async verificarAuthInfo() {
+        await this.getUserLocalStorage();
+        await this.getTokenLocalStorage();
+    }
+    // Eliminar historia del Local Storage
+    removeAuthInfo() {
+        this.removeTokenLocalStorage();
+        this.removeUserLocalStorage();
     }
     //Verificar Usuario Autenticado
     async isAuthenticated() {
-        const user = await this.getCurrentUser();
-        if (user) {
-            return true;
-        } else {
-            return false;
-        }
+        const itemUser = await this.storage.get(USER_ITEM_NAME);
+        const isAuthenticated = !!itemUser;
+        return isAuthenticated;
     }
-   
-    // aCTUALIZAR DATOS DESDE LOCAL STORAGE
-    async checkAuthUser() {
-        await this.storage.get('currentUser').then(res => {
-            if (res) {
-                this.authUser.next(res);
-            }
-        });
-    }
-    
-    async checkAuthToken() {
-        await this.storage.get('accessToken').then(res => {
-            if (res) {
-                this.authToken.next(res);
-            }
-        });
-    }
-     //Retornar Datos como Observables
-     getUserSubject() {
+
+    //Retornar Datos como Observables
+    getAuthUser() {
         return this.authUser.asObservable();
     }
-    getTokenSubject() {
+    getAuthToken() {
         return this.authToken.asObservable();
     }
-    //Obtener Datos como una Promesa
-    async getCurrentUser() {
-        await this.checkInfoLocal();
-        return this.authUser.value;
+  
+    // Traer Token Local Storage
+    async getUserLocalStorage() {
+        const user = await this.storage.get(USER_ITEM_NAME)
+        this.authUser.next(user);
+        console.log('get user ls value', this.authUser.value);
     }
-    async getToken() {
-        await this.checkInfoLocal();
-        return this.authToken.value;
+    // Traer Usuario Local Storage
+    async getTokenLocalStorage() {
+        const token = await this.storage.get(TOKEN_ITEM_NAME);
+        this.authToken.next(token);
+        console.log('get token ls value', this.authToken.value);
     }
-
-    //Actualizar  DATOS LOCAL STORAGE
-    async setUser(user) {
-        // user.id = user.id || 1;
-        await this.storage.set('currentUser', user);
+    // Guardar Usuario Local Storage
+    async setUserLocalStorage(user) {
+        await this.storage.set(USER_ITEM_NAME, user);
         this.authUser.next(user);
     }
-
-    async setToken(token) {
-        await this.storage.set('accessToken', token);
+    // Guardar Token Local Storage
+    async setTokenLocalStorage(token) {
+        await this.storage.set(TOKEN_ITEM_NAME, token);
         this.authToken.next(token);
     }
-    // Eliminar Datos Local Storage
-    async removeUser() {
-        await this.storage.remove('currentUser');
+    // Eliminar Usuario Local Storage
+    async removeUserLocalStorage() {
+        await this.storage.remove(USER_ITEM_NAME);
         this.authUser.next(null);
     }
-
-    async removeToken() {
-        await this.storage.remove('accessToken');
+    // Eliminar Token Local Storage
+    async removeTokenLocalStorage() {
+        await this.storage.remove(TOKEN_ITEM_NAME);
         this.authToken.next(null);
     }
-
-    //Verificar Roles Usuario
-
+    //Obtener Roles Usuario
     getUserRoles() {
         return this.authUser.value.user.roles.map(role => role.slug);
     }
-
+    // Verificar Roles
     hasRoles(allowedRoles: string[]): boolean {
         let hasRole = false;
-        if (this.authUser.value.user) {
+        // console.log('USER', this.authUser.value);
+        if (this.isAuthenticated()) {
             let userRoles = this.getUserRoles();
             for (const oneRole of allowedRoles) {
                 if (userRoles.includes(oneRole.toLowerCase())) {

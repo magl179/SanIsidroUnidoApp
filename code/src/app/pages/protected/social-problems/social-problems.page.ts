@@ -25,7 +25,7 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
     loading: any;
     elements: any = [];
     // socialProblems: Observable<any>;
-    currentUser: IUserLogued = null;
+    AuthUser: IUserLogued = null;
 
     socialProblems: ISocialProblem[] = [];
 
@@ -40,7 +40,10 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
 
     async ngOnInit() {
         this.segment.value = 'all';
-        this.currentUser = await this.authService.getCurrentUser();
+        this.authService.getAuthUser().subscribe(user => {
+            this.AuthUser = user;
+        });
+        // this.AuthUser = await this.authService.getCurrentUser();
         this.loadSocialProblems();
     }
 

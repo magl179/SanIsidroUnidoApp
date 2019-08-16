@@ -46,6 +46,7 @@
             <simple-map classMap="event-map-detail map-center" idMap="eventMap-detail-{{id}}" [coordsMap]="mapPoints">
             </simple-map>
         </div>
+        <p *ngIf="event">Likes: {{event.details.length}}</p>
         <ion-row>
             <ion-col>
                 <ion-item lines="none" detail="false" button="true" class="container_events detail"

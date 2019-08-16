@@ -19,7 +19,7 @@ export class ChangePasswordPage implements OnInit {
     passwordConfirmTypeInput = 'password';
     iconConfirmpassword = 'eye-off';
 
-    currentUser = null;
+    // currentUser = null;
     changePassForm: FormGroup;
     errorMessages = null;
     changePassFormFields = {
@@ -32,7 +32,8 @@ export class ChangePasswordPage implements OnInit {
             minlength: 8
         }
     };
-
+    //Usuario Autenticado
+    AuthUser = null;
     constructor(
         private modalCtrl: ModalController,
         public formBuilder: FormBuilder,
@@ -46,18 +47,17 @@ export class ChangePasswordPage implements OnInit {
     ngOnInit() {
     }
 
-    async loadUserData() {
-        await this.authService.getUserSubject().subscribe(res => {
+    async loadAuthData() {
+        await this.authService.getAuthUser().subscribe(res => {
             if (res) {
-                this.currentUser = res.user;
+                this.AuthUser = res.user;
             }
         });
-        // console.log({ userEdit: this.currentUser });
     }
 
     // Función Crea el Formulario
     async createForm() {
-        await this.loadUserData();
+        await this.loadAuthData();
         // Campo Email
         const password = new FormControl('', Validators.compose([
             Validators.required

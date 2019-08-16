@@ -17,10 +17,10 @@ export class HasRoleGuard implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot): boolean {
         const roles = route.data.roles as Array<string>;
         if (this.authService.hasRoles(roles)) {
-            console.log('User has roles', roles);
+            // console.log('User has roles', roles);
             return true;
         } else {
-            console.log('user not has roles', roles);
+            // console.log('user not has roles', roles);
             this.navCtrl.navigateRoot('/home');
             return false;
         }

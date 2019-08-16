@@ -58,11 +58,9 @@ export class AppComponent implements OnInit {
     }
 
     async checkUserLoggedIn() {
-        await this.authService.getUserSubject().subscribe(res => {
+        await this.authService.getAuthUser().subscribe(res => {
             if (res) {
                 this.userApp = res.user;
-                // this.authService.checkValidToken();
-                // this.checkInfoLocal()
             }
         }, err => {
                 console.log('Error', err);
@@ -125,18 +123,18 @@ export class AppComponent implements OnInit {
     }
 
     async checkInitialStateNetwork() {
-        console.log('network check state');
+        // console.log('network check state');
         await this.networkService.testNetworkConnection();
         const isOnline = this.networkService.getNetworkTestValue();
         this.isConnected = isOnline;
         if (!isOnline) {
-            this.utilsService.showToast('Por favor enciende tu conexión a Internet', 2000);
+            this.utilsService.showToast('Por favor enciende tu conexión a Internet');
             console.log('No tienes conexion a Internet');
         }
         this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
             this.isConnected = connected;
             if (!this.isConnected) {
-                this.utilsService.showToast('Por favor enciende tu conexión a Internet', 2500);
+                this.utilsService.showToast('Por favor enciende tu conexión a Internet');
             }
         });
     }

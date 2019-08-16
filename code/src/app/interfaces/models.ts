@@ -64,6 +64,7 @@ export interface IEventDetail{
     category_id: number;
     created_at: string;
     updated_at: string;
+    details?: any;
 }
 
 //INTERFACES NO EXPORTADAS

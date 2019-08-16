@@ -58,7 +58,7 @@ export class NotificationsService {
             console.log('Antes GET ONESIGNAL SUBSCRIPTOR');
             this.getOneSignalIDSubscriptor();
         } else {
-            console.log('Cordova no está disponible para usar OneSignal en Android');
+            console.log('Onesignal sin Cordova Disponible');
         }
     }
 
@@ -75,7 +75,7 @@ export class NotificationsService {
         this.userDeviceID.next(deviceID.userId);
         console.log('DEVICE SUBSCRIPTOR: ', deviceID);
         console.log('ID SUBSCRIPTOR: ', deviceID.userId);
-        this.authService.getUserSubject().subscribe(user => {
+        this.authService.getAuthUser().subscribe(user => {
             if (user) {
                 console.log('usuario autenticado, puedo añadir dispositivo');
                 this.userService.sendRequestAddUserDevice(this.userDeviceID.value, 'Dispositivo Usuario').subscribe(

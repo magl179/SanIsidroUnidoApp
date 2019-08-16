@@ -15,7 +15,7 @@ export class SocialProblemDetailPage implements OnInit {
     id: string;
     idPost: number;
     socialProblem: ISocialProblem = null;
-    userPost = null;
+    AuthUser = null;
 
     constructor(
         private route: ActivatedRoute,
@@ -30,7 +30,7 @@ export class SocialProblemDetailPage implements OnInit {
             this.socialProblem = res.data;
             console.log('res post', res);
             console.log('Dato post', this.socialProblem);
-            this.getUserPostInfo();
+            // this.getUserPostInfo();
             // (() => {
             // });
         });
@@ -47,13 +47,13 @@ export class SocialProblemDetailPage implements OnInit {
         await this.utilsService.compartirRedSocial(sharePost);
     }
 
-    getUserPostInfo() {
-        this.userService.getUserInfo(this.socialProblem.user_id).subscribe((res: any )=> {
-            this.userPost = res.data;
-            console.log('userPost', this.userPost);
-        }, err =>{
-                console.log(err);
-        })
-    }
+    // getUserPostInfo() {
+    //     this.userService.getUserInfo(this.socialProblem.user_id).subscribe((res: any )=> {
+    //         this.userPost = res.data;
+    //         console.log('userPost', this.userPost);
+    //     }, err =>{
+    //             console.log(err);
+    //     })
+    // }
 
 }

@@ -46,6 +46,7 @@ export class RegisterPage implements OnInit {
         }
     };
     loadingRegister: any;
+
     constructor(
         private navCtrl: NavController,
         public formBuilder: FormBuilder,
@@ -69,12 +70,12 @@ export class RegisterPage implements OnInit {
         this.passwordEye.el.setFocus();
     }
 
-    setLoginUserData(user) {
-        this.authService.setUser(user);
-        const tokenID = user.tokenID;
-        this.authService.setToken(tokenID);
-        this.navCtrl.navigateRoot(urlLogueado);
-    }
+    // setLoginUserData(user) {
+    //     this.authService.setUser(user);
+    //     const tokenID = user.tokenID;
+    //     this.authService.setToken(tokenID);
+    //     this.navCtrl.navigateRoot(urlLogueado);
+    // }
 
     async manageRegister() {
         await this.utilsService.showToast("Registro Correcto, por favor inicia sesión");
@@ -90,7 +91,7 @@ export class RegisterPage implements OnInit {
         const lastname = this.registerForm.value.lastname;
         const email = this.registerForm.value.email;
         const password = this.registerForm.value.password;
-        loadingRegisterValidation.dismiss();
+        // loadingRegisterValidation.dismiss();
         this.authService.register('formulario', { firstname, lastname, email, password, socialID: null }).subscribe(async res => {
            
             if (res.code === 200) {
@@ -99,6 +100,8 @@ export class RegisterPage implements OnInit {
         }, err => {
             this.utilsService.showToast(err.error.message);
             console.log('Error Login', err.error);
+        }, () => {
+            loadingRegisterValidation.dismiss()
         });
         // });
     }

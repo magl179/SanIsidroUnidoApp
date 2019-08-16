@@ -89,9 +89,9 @@
                     </button>
                 </div>
                 <div class="option_actions">
-                    <div class="btn_icon" [ngClass]="{'active': socialProblem.user_id === currentUser.id}">
+                    <div class="btn_icon" [ngClass]="{'active': socialProblem.user_id === AuthUser.id}">
                         <ion-icon slot="icon-only"
-                            [name]="(socialProblem.user_id === currentUser.id)?'heart':'heart-empty'"></ion-icon>
+                            [name]="(socialProblem.user_id === AuthUser.id)?'heart':'heart-empty'"></ion-icon>
                     </div>
                     <div (click)="sharePost(socialProblem)" class="btn_icon">
                         <ion-icon slot="icon-only" name="share" style="font-size:1.3rem;"></ion-icon>

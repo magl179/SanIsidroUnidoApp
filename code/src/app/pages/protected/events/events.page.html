@@ -35,13 +35,14 @@
     <!-- Tarjetas con Datos -->
     <div *ngIf="eventsList  && eventsList.length > 0">
         <ion-card class="event_item" *ngFor="let event of eventsList; let i = index;">
-            <ion-card-header>
+            <ion-card-header (click)="postDetail(event.id)">
                 <ion-card-subtitle>
                     {{getFullDate(event.date, event.time) | simpleBeatifulDate}}
                 </ion-card-subtitle>
-                <ion-card-title (click)="postDetail(event.id)">{{event.title}}</ion-card-title>
+                <ion-card-title>{{event.title}}</ion-card-title>
             </ion-card-header>
             <ion-card-content> {{event.description}} </ion-card-content>
+            <p *ngIf="event">Likes: {{event.details.length}}</p>
             <ion-row>
                 <ion-col size="6">
                     <ion-item lines="none" detail="false" button="true" class="container_events"

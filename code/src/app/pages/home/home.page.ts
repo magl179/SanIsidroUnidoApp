@@ -17,7 +17,7 @@ export interface MenuServices {
 })
 export class HomePage implements OnInit {
 
-    userAuthenticated = {};
+    // AuthUser = {};
     servicesList: MenuServices[] = [];
 
     constructor(
@@ -27,9 +27,9 @@ export class HomePage implements OnInit {
     ) { }
 
     async ngOnInit() {
-        await this.authService.getUserSubject().subscribe(res => {
-            this.userAuthenticated = res.user;
-        });
+        // await this.authService.getAuthUser().subscribe(res => {
+        //     this.AuthUser = res.user;
+        // });
         await this.dataService.getHomeOptions().subscribe((data) => {
             this.servicesList = data;
             console.log('items home: ', data.length);

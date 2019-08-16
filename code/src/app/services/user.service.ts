@@ -11,8 +11,8 @@ import { catchError } from 'rxjs/operators';
 })
 export class UserService implements OnInit {
 
-    tokenUser = null;
-    currentUser = null;
+    AuthUser = null;
+    AuthToken = null;
 
     headersApp = new HttpHeaders({
         'Content-Type': 'application/json'
@@ -20,58 +20,55 @@ export class UserService implements OnInit {
 
     constructor(
         private http: HttpClient,
-        private auth: AuthService
+        private authService: AuthService
     ) {
-        this.auth.getUserSubject().subscribe(res => {
-            if (res) {
-                this.currentUser = res.user;
-            }
+        this.authService.getAuthToken().subscribe(token => {
+            // this.AuthToken = token;
+            this.AuthToken = (token) ? token : null;
         });
-        this.auth.getTokenSubject().subscribe(token => {
-            if (token) {
-                this.tokenUser = token;
-            }
+        this.authService.getAuthUser().subscribe(res => {
+            this.AuthUser = (res) ? res.user: null;
         });
     }
 
     async ngOnInit() {
-        console.log('User', this.currentUser);
+        // console.log('User', this.currentUser);
     }
 
     sendChangeUserPassRequest(newPassword: string): Observable<any> {
-        const headers = this.headersApp.set('Authorization', this.tokenUser);
-        const user_id = this.currentUser.id;
+        const headers = this.headersApp.set('Authorization', this.AuthToken);
+        const user_id = this.AuthUser.id;
         return this.http.patch(`${environment.apiBaseURL}/usuarios/${user_id}/cambiar-contrasenia`, {
             password: newPassword
         }, { headers: this.headersApp });
     }
 
     sendChangeUserImageRequest(image: string): Observable<any> {
-        const headers = this.headersApp.set('Authorization', this.tokenUser);
-        const user_id = this.currentUser.id;
+        const headers = this.headersApp.set('Authorization', this.AuthToken);
+        const user_id = this.AuthUser.id;
         return this.http.patch(`${environment.apiBaseURL}/usuarios/${user_id}/cambiar-avatar`, {
             avatar: image
         }, { headers });
     }
 
     sendEditProfileRequest(profile: IEditProfile): Observable<any> {
-        console.log('current user', this.currentUser);
-        const headers = this.headersApp.set('Authorization', this.tokenUser);
-        const user_id = this.currentUser.id;
+        // console.log('current user', this.currentUser);
+        const headers = this.headersApp.set('Authorization', this.AuthToken);
+        const user_id = this.AuthUser.id;
         return this.http.patch(`${environment.apiBaseURL}/usuarios/${user_id}`, profile, { headers });
     }
 
     sendRequestUserMembership(image: string) {
-        const headers = this.headersApp.set('Authorization', this.tokenUser);
-        const user_id = this.currentUser.id;
+        const headers = this.headersApp.set('Authorization', this.AuthToken);
+        const user_id = this.AuthUser.id;
         return this.http.patch(`${environment.apiBaseURL}/usuarios/${user_id}/solicitar-afiliacion`, {
             basic_service_image: image
         }, { headers });
     }
 
     sendRequestAddUserDevice(device_id: string, description: string) {
-        const headers = this.headersApp.set('Authorization', this.tokenUser);
-        const user_id = this.currentUser.id;
+        const headers = this.headersApp.set('Authorization', this.AuthToken);
+        const user_id = this.AuthUser.id;
         return this.http.patch(`${environment.apiBaseURL}/usuarios/${user_id}/agregar-dispositivo`, {
             device_id, description
         }, { headers });
@@ -83,9 +80,9 @@ export class UserService implements OnInit {
 
     getNotificationsUser() {
         // const headers = this.headersApp;
-        const user_id = this.currentUser.id;
-        console.log('User noti', this.currentUser);
-        console.log('User id noti', user_id);
+        const user_id = this.AuthUser.id;
+        // console.log('User noti', this.currentUser);
+        // console.log('User id noti', user_id);
         return this.http.get(`${environment.apiBaseURL}/usuarios/${user_id}/notificaciones`);
     }
 }
