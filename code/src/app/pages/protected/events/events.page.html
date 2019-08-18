@@ -34,31 +34,61 @@
     </div>
     <!-- Tarjetas con Datos -->
     <div *ngIf="eventsList  && eventsList.length > 0">
-        <ion-card class="event_item" *ngFor="let event of eventsList; let i = index;">
+        <ion-card class="card-event" *ngFor="let event of eventsList; let i = index;">
             <ion-card-header (click)="postDetail(event.id)">
-                <ion-card-subtitle>
-                    {{getFullDate(event.date, event.time) | simpleBeatifulDate}}
+                <ion-card-subtitle class="event-subtitle">
+                    <p class="post-fulldate">
+                            <ion-icon class="icon" name="calendar"></ion-icon>
+                            <span>{{getFullDate(event.date, event.time) | simpleBeatifulDate}}</span> 
+                    </p>
+                    <p class="post-ubication-address flex-right" *ngIf="event.ubication">
+                            <ion-icon class="icon" name="navigate"></ion-icon>
+                            <span>{{ event.ubication.address || 'Direccion no encontrada'}}</span>         
+                    </p>                
                 </ion-card-subtitle>
+                <!-- <ion-card-subtitle class="post-ubication-address" *ngIf="event.ubication">
+                        <ion-icon name="navigate"></ion-icon>
+                        <span>{{ event.ubication.address || 'Sin Ubicación'}}</span>                    
+                </ion-card-subtitle> -->
                 <ion-card-title>{{event.title}}</ion-card-title>
             </ion-card-header>
-            <ion-card-content> {{event.description}} </ion-card-content>
-            <p *ngIf="event">Likes: {{event.details.length}}</p>
-            <ion-row>
+            <ion-card-content>
+                <p class="post-description"> {{event.description | truncate: 50}}</p>
+                <p class="post-see-more" (click)="postDetail(event.id)">Ver más...</p>
+                <p class="post-num-likes">{{event.details.length}} {{(event.details.length !== 1) ? 'personas asistirán': 'persona asistirá'}}</p>
+            </ion-card-content>
+            <div class="action-buttons">
+                    <div class="action-button pair">
+                        <div class="btn-like" [ngClass]="{'active': (checkLikePost(event.details))}" (click)="toggleAssistance((checkLikePost(event.details)), event.id)">
+                            <ion-icon slot="icon-only" class="icon-like"
+                                [name]="(checkLikePost(event.details))?'heart':'heart-empty'"></ion-icon>
+                        </div>
+                        <div class="btn-share" (click)="sharePost(event)">
+                                <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
+                        </div>
+                    </div>
+                    <div class="action-button">
+                        <div class="btn-more">
+                            <ion-icon class="icon-more" slot="icon-only" name="more"></ion-icon>
+                        </div>
+                    </div>
+                </div>
+            <!-- <ion-row>
                 <ion-col size="6">
                     <ion-item lines="none" detail="false" button="true" class="container_events"
                         [ngClass]="{'active': event.assist}">
-                        <!-- <ion-icon slot="start" [name]="(event.assist) ? 'star' : 'star-outline'"></ion-icon> -->
+                        <ion-icon slot="start" [name]="(event.assist) ? 'star' : 'checkmark'"></ion-icon>
                         <div>Asistire</div>
                     </ion-item>
                 </ion-col>
                 <ion-col size="6">
                     <ion-item class="container_events" detail="false" button="true" lines="none"
                         [ngClass]="{'active': event.notassist}">
-                        <!-- <ion-icon slot="start" [name]="(event.notassist) ? 'star' : 'star-outline'"></ion-icon> -->
+                        <ion-icon slot="start" [name]="(event.notassist) ? 'star' : 'star-outline'"></ion-icon>
                         <div>No Asistire</div>
                     </ion-item>
                 </ion-col>
-            </ion-row>
+            </ion-row> -->
         </ion-card>
     </div>
     <!-- Scroll Infinito -->

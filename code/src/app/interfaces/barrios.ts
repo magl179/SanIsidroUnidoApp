@@ -102,42 +102,7 @@ export interface IMarkers {
 
 // READ POSTS
 
-export interface ISocialProblem {
-    id: number;
-    title: string;
-    description: string;
-    category_id: number;
-    date: string;
-    time: string;
-    ubication: IPostUbicationItem;
-    user_id: number;
-    likes: number;
-    images?: [];
-    category?: any;
-    user?: any;
-    details?: any;
-}
 
-export interface IEvent {
-    id: number;
-    title: string;
-    description: string;
-    category_id: number;
-    date: string;
-    time: string;
-    ubication: IPostUbicationItem;
-    user_id?: number;
-    assist: boolean;
-    notassist: boolean;
-    images?: [];
-    details?: any;
-}
 
-// Compartir Publicaciones
-export interface IPostShare {
-    title: string;
-    description: string;
-    image?: string;
-    url?: string;
-}
+
 

@@ -3,12 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FiltroSearchPipe } from './filtro-search.pipe';
 import { BeafitulDatePipe } from './beafitul-date.pipe';
 import { SimpleBeatifulDatePipe } from './simple-beatiful-date.pipe';
+import { TruncatePipe } from './truncate.pipe';
 
 @NgModule({
     declarations: [
         FiltroSearchPipe,
         BeafitulDatePipe,
-        SimpleBeatifulDatePipe
+        SimpleBeatifulDatePipe,
+        TruncatePipe
     ],
     imports: [
         CommonModule
@@ -16,7 +18,8 @@ import { SimpleBeatifulDatePipe } from './simple-beatiful-date.pipe';
     exports: [
         FiltroSearchPipe,
         BeafitulDatePipe,
-        SimpleBeatifulDatePipe
+        SimpleBeatifulDatePipe,
+        TruncatePipe
   ]
 })
 export class PipesModule { }

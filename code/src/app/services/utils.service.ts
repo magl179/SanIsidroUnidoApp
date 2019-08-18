@@ -30,6 +30,16 @@ export class UtilsService implements OnInit {
         return Math.floor(Math.random() * tamanio);
     }
 
+    getUsersFromDetails($details) {
+        return $details.map(detail => detail.user_id);
+    }
+
+    checkUserInDetails(user_id: number, users_id: number[]) {
+        // return users_id.includes(user_id);
+        // return users_id.includes(user_id);
+        return users_id.includes(user_id);
+        // return (users_id.indexOf(user_id) === -1);
+    }
 
     getBeatifulDate(stringDate: string) {
         moment.locale('es');

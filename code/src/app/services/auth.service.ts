@@ -25,7 +25,7 @@ export class AuthService {
         private storage: Storage,
         private http: HttpClient
     ) {
-        this.verificarAuthInfo();
+        // this.verificarAuthInfo();
     }
     //CERRAR SESION
     async logout() {
@@ -55,29 +55,23 @@ export class AuthService {
     tokenIsValid(token) {
         const urlApi = `${environment.apiBaseURL}/check-token`;
         const headers = this.authHeaders.set('Authorization', token);
-        return this.http.post(urlApi, {}, { headers }).pipe(
-            catchError(err => {
-                return throwError(err);
-            })
-        );
+        return this.http.post(urlApi, {}, { headers });
     }
     //VERIFICAR SI SE DEBE CHECKEAR VALIDEZ TOKEN
     async checkValidToken() {
-        await this.verificarAuthInfo();
-        // console.log('Auth Token', this.authToken.value);
-        this.getAuthToken().subscribe(token => {
-            if (token) {
-                this.tokenIsValid(token).subscribe((res: any) => {
-                    if (res.code === 200 && res.data.token == 'valid') {
-                        console.log('Token Válido');
-                    } else {
-                        console.log('Token Inválido');
-                    }
+        if (this.tokenExists()) {
+            const itemToken = await this.storage.get(TOKEN_ITEM_NAME);
+            if (itemToken) {
+                console.log('item token to check', itemToken);
+                this.tokenIsValid(itemToken).subscribe( res=> {
+                    console.log('Token Válido');
+                }, err => {
+                    console.log('Error Validar Token', err);
                 });
             } else {
-                console.log('No hay token guardado');
+                console.log('No existe Token');
             }
-        });
+        }
     }
     // Actualizar Informacion Local Storage
     updateAuthInfo(token, user) {
@@ -88,6 +82,7 @@ export class AuthService {
     async verificarAuthInfo() {
         await this.getUserLocalStorage();
         await this.getTokenLocalStorage();
+        await this.checkValidToken();
     }
     // Eliminar historia del Local Storage
     removeAuthInfo() {
@@ -99,6 +94,12 @@ export class AuthService {
         const itemUser = await this.storage.get(USER_ITEM_NAME);
         const isAuthenticated = !!itemUser;
         return isAuthenticated;
+    }
+
+    async tokenExists() {
+        const itemToken = await this.storage.get(TOKEN_ITEM_NAME);
+        const tokenExists = !!itemToken;
+        return tokenExists;
     }
 
     //Retornar Datos como Observables
@@ -113,13 +114,13 @@ export class AuthService {
     async getUserLocalStorage() {
         const user = await this.storage.get(USER_ITEM_NAME)
         this.authUser.next(user);
-        console.log('get user ls value', this.authUser.value);
+        // console.log('get user ls value', this.authUser.value);
     }
     // Traer Usuario Local Storage
     async getTokenLocalStorage() {
         const token = await this.storage.get(TOKEN_ITEM_NAME);
         this.authToken.next(token);
-        console.log('get token ls value', this.authToken.value);
+        // console.log('get token ls value', this.authToken.value);
     }
     // Guardar Usuario Local Storage
     async setUserLocalStorage(user) {

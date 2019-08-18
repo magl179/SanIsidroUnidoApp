@@ -3,7 +3,7 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/c
 import { Observable, of, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
 import { NavController } from '@ionic/angular';
-import { tap, catchError } from 'rxjs/operators';
+import { tap, catchError, map } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -20,7 +20,7 @@ export class AuthInterceptorService implements HttpInterceptor {
         const request = req.clone();
         // console.log('Angular Interceptor', request);
         return next.handle(request).pipe(
-            tap(data => {
+            map(data => {
                 // console.log('response success', data);
                 return data;
             }),

@@ -1,6 +1,6 @@
 <app-header-back title="Directorio Barrial"></app-header-back>
 <ion-content padding>
-    <ion-list *ngIf="directives.length === 0 || directives === null">
+    <ion-list *ngIf="(directives.length === 0 || directives === null) && !loadDirectives">
         <ion-item lines="none" *ngFor="let skeleton of [1,1,1,1,1,1,1,1]" class="animated flash slow infinite">
             <ion-thumbnail slot="start">
                 <ion-skeleton-text class="circle"></ion-skeleton-text>
@@ -38,4 +38,5 @@
             </ion-label>
         </ion-item>
     </ion-list>
+    <p *ngIf="loadDirectives && directives.length === 0">No hay listado disponible</p>
 </ion-content>

@@ -316,14 +316,6 @@ body {
     }
 }
 
-.post_user {
-    font-weight: bold;
-}
-
-.post_date {
-    font-size: .9rem;
-}
-
 
 #socialProblemReportMap {
     display: block;
@@ -416,53 +408,137 @@ body {
 
 // Helpers
 
-.card_social {
+.card_social, .card-event {
     outline: none;
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
-    .options {
-        // background:purple;
+    .post_user {
+        font-weight: bold;
+    }
+    
+    .post_date {
+        font-size: .9rem;
+    }
+    .problem-subtitle, .event-subtitle{
         display: flex;
-        width: 100%;
-        justify-content: space-around;
-        margin-top: .7rem;
-        margin-bottom: .7rem;
-
+        justify-content: space-between;
+        padding: 12px 0;
+        padding-bottom: 0px;
         &.detail{
-            justify-content: flex-start;
-            width: 100%;
-            div:nth-child(1){
-                margin-right: 2rem;
-            }
-        }
-
-        .option_button {
-            // background: yellow;
-            width: 70%;
-            display: flex;
-            justify-content: center;
-
-        }
-
-        .option_actions {
-            // background:green;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            width: 30%;
-           
-
-            .btn_icon {
-                ion-icon {
-                    font-size: 1.3rem;
-                }
-            }
-
-            .active {
-                color: #3880ff;
-            }
+            padding-bottom: 0px;
         }
     }
+    .post-description{
+        color: #000;
+    }
+    .full{
+        width: 100%;
+    }
+    .flex-right{
+        justify-content: flex-end;
+    }
+    .post-ubication-address{
+        // padding: 12px 0;
+        display: flex;
+        align-items: center;
+        .icon{
+            font-size: 1.2rem;
+            margin-right: .8rem;
+        }
+    }
+    .post-fulldate{
+        // padding: 10px 0;
+        display: flex;
+        align-items: center;
+        .icon{
+            font-size: 1.2rem;
+            margin-right: .8rem;
+        }
+    }
+    .post-see-more{
+        margin-top: 1rem
+    }
+    .post-num-likes{
+        margin-top: 1rem;
+    }
+    .action-buttons{
+        display: flex;
+        width: 100%;
+        padding: 1rem;
+        justify-content: space-between;
+        &.detail{
+            padding: 1rem 0;
+        }
+    }
+    .action-button.pair{
+        display: flex;
+        justify-content: space-between;
+    }
+    .action-button.pair div:nth-child(2){
+        margin-left: 2rem;
+    }
+    .icon-share, .icon-like, .icon-more{
+        font-size: 1.3rem !important;
+    }
+
+    .icon-more{
+        transform: rotate(180deg);
+        display: inline-block;
+    }
+
+    .btn-like{
+        &.active{
+            color: #ed4956;
+        }
+    }
+    .btn-share{
+        color: #1da1f2;
+    }
+
+    // .options {
+    //     // background:purple;
+    //     display: flex;
+    //     width: 100%;
+    //     justify-content: space-around;
+    //     margin-top: .7rem;
+    //     margin-bottom: .7rem;
+
+    //     &.detail{
+    //         justify-content: flex-start;
+    //         width: 100%;
+    //         div:nth-child(1){
+    //             margin-right: 2rem;
+    //         }
+    //     }
+
+    //     .option_button {
+    //         // background: yellow;
+    //         width: 70%;
+    //         display: flex;
+    //         justify-content: center;
+
+    //     }
+       
+
+    //     .option_actions {
+    //         // background:green;
+    //         display: flex;
+    //         justify-content: space-around;
+    //         align-items: center;
+    //         width: 30%;
+           
+
+    //         .btn_icon {
+    //             ion-icon {
+    //                 font-size: 1.3rem;
+    //             }
+    //         }
+
+    //         .active {
+    //             color: #3880ff;
+    //         }
+    //     }
+    // }
 }
 
 .btn {

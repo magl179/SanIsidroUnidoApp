@@ -1,4 +1,23 @@
 //INTERFACES RECIBIR DATOS
+// Compartir Publicaciones
+export interface IPostShare {
+    title: string;
+    description: string;
+    image?: string;
+    url?: string;
+}
+export interface IMenuServices {
+    title: string;
+    icon: string;
+    url: string;
+    valid_roles: string[];
+}
+export interface IHomeOptions {
+    title: string;
+    icon: string;
+    url: string;
+    valid_roles: string[];
+};
 export interface IPublicService {
     id: number;
     name: string;
@@ -20,6 +39,37 @@ export interface IDirective {
     created_at: string;
     updated_at: string;
     roles?: IRole[];
+}
+
+export interface ISocialProblem {
+    id: number;
+    title: string;
+    description: string;
+    category_id: number;
+    date: string;
+    time: string;
+    ubication: IUbication;
+    user_id: number;
+    likes: number;
+    images?: [];
+    category?: any;
+    user?: any;
+    details?: any;
+}
+
+export interface IEvent {
+    id: number;
+    title: string;
+    description: string;
+    category_id: number;
+    date: string;
+    time: string;
+    ubication: IUbication;
+    user_id?: number;
+    assist: boolean;
+    notassist: boolean;
+    images?: [];
+    details?: any;
 }
 
 // INTERFACES ENVIAR DATOS
@@ -65,6 +115,12 @@ export interface IEventDetail{
     created_at: string;
     updated_at: string;
     details?: any;
+}
+
+export interface ICreateDetail{
+    type: string,
+    user_id: number,
+    post_id : number
 }
 
 //INTERFACES NO EXPORTADAS

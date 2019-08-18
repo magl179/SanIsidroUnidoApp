@@ -16,6 +16,7 @@ export class DirectoryInfoPage implements OnInit {
     directives: IDirective[] = [];
     loading: any;
     imgLoaded = false;
+    loadDirectives = false;
 
     constructor(
         private utilsService: UtilsService,
@@ -45,6 +46,12 @@ export class DirectoryInfoPage implements OnInit {
                 // }
 
             }
+        },
+            err => {
+                console.log('Error al traer directivos');
+            },
+            () => {
+                this.loadDirectives = true;
         });
     }
 

@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { IEmergencyPost, ISocialProblemPost } from '../interfaces/barrios';
 import { environment } from 'src/environments/environment';
-import { IEmergencyReported, ISocialProblemReported } from 'src/app/interfaces/models';
+import { IEmergencyReported, ISocialProblemReported, ICreateDetail } from 'src/app/interfaces/models';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -34,7 +34,15 @@ export class PostsService implements OnInit {
     constructor(
         private http: HttpClient,
         private authService: AuthService
-    ) { }
+    ) {
+        this.authService.getAuthToken().subscribe(token => {
+            this.AuthToken = token;
+        });
+        this.authService.getAuthUser().subscribe(res => {
+            this.AuthUser = res.user;
+        });
+        // console.log('ng on init posts service', this.AuthToken);
+     }
 
     resetSocialProblemsPage() {
         this.currentPage.socialProblems = 0;
@@ -43,12 +51,8 @@ export class PostsService implements OnInit {
         this.currentPage.events = 0;
     }
     async ngOnInit() {
-        this.authService.getAuthToken().subscribe(token => {
-            this.AuthToken = token;
-        });
-        this.authService.getAuthUser().subscribe(user => {
-            this.AuthUser = user;
-        });
+      
+        // console.log('ng on init posts service', this.AuthToken);
         // this.AuthToken = await this.auth.getToken();
         // this.AuthUser = await this.auth.getCurrentUser();
     }
@@ -63,6 +67,20 @@ export class PostsService implements OnInit {
     sendSocialProblemReport(socialProblemPost: ISocialProblemReported): Observable<any> {
         const headers = this.headersApp.set('Authorization', this.AuthToken);
         return this.http.post(`${environment.apiBaseURL}/problemas-sociales`, socialProblemPost, {
+            headers
+        });
+    }
+    sendCreateDetailToPost(detailInfo: ICreateDetail) {
+        console.log('auth token', this.AuthToken);
+        const headers = this.headersApp.set('Authorization', this.AuthToken);
+        return this.http.post(`${environment.apiBaseURL}/details`, detailInfo, {
+            headers
+        });
+    }
+    sendDeleteDetailToPost(post_id: number) {
+        const headers = this.headersApp.set('Authorization', this.AuthToken);
+        console.log('auth token', this.AuthToken);
+        return this.http.delete(`${environment.apiBaseURL}/details/${post_id}`, {
             headers
         });
     }

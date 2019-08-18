@@ -20,6 +20,9 @@
     </ion-segment>
 </ion-toolbar>
 <ion-content>
+    <p *ngIf="socialProblems.length === 0 && socialProblemsLoaded">
+        No hay publicaciones disponibles
+    </p>
     <!-- Animacion Tarjeta hasta tener los Datos Cargados -->
     <div *ngIf="socialProblems === null || socialProblems.length === 0">
         <ion-card *ngFor="let items of [1,1,1,1]" class="card_social animated flash slow infinite">
@@ -71,30 +74,32 @@
         </div>
         <div *ngIf="socialProblem.exists !== -1">
             <ion-card-header>
+                <ion-card-subtitle class="post_user problem-subtitle">
+                    <span>{{socialProblem.user.firstname}} {{socialProblem.user.lastname}}</span>
+                    <span>{{socialProblem.date | beafitulDate}}</span>
+                </ion-card-subtitle>
                 <ion-card-title>{{socialProblem.title}}</ion-card-title>
-                <ion-card-subtitle class="post_user">{{socialProblem.user.firstname}} {{socialProblem.user.lastname}}
-                </ion-card-subtitle>
-                <ion-card-subtitle>{{socialProblem.category.name}} | {{socialProblem.date | beafitulDate}}
-                </ion-card-subtitle>
             </ion-card-header>
-            <ion-card-content class="post_description">
-                <p class="post_content">{{socialProblem.description}} </p>
-                <p>Likes: {{socialProblem.details.length}}</p>
+            <ion-card-content>
+                <p class="post-description">{{socialProblem.description | truncate: 50}} </p>
+                <!-- <p style="color:black;">Likes: {{socialProblem.details.length}}</p> -->
+                <p class="post-see-more" (click)="postDetail(socialProblem.id)">Ver más...</p>
+                <p class="post-num-likes">{{socialProblem.details.length}} me gusta</p>
             </ion-card-content>
-            <div class="options">
-                <div class="option_button">
-                    <button class="btn primary" (click)="postDetail(socialProblem.id)">
-                        Ver más
-                        <ion-ripple-effect></ion-ripple-effect>
-                    </button>
-                </div>
-                <div class="option_actions">
-                    <div class="btn_icon" [ngClass]="{'active': socialProblem.user_id === AuthUser.id}">
-                        <ion-icon slot="icon-only"
-                            [name]="(socialProblem.user_id === AuthUser.id)?'heart':'heart-empty'"></ion-icon>
+            <div class="action-buttons">
+                <div class="action-button pair">
+                    <!-- <div class="btn-like" [class.active]="(checkLikePost(socialProblem.details,1))"> -->
+                    <div class="btn-like" [ngClass]="{'active': (checkLikePost(socialProblem.details))}" (click)="toggleLike((checkLikePost(socialProblem.details)), socialProblem.id)">
+                        <ion-icon slot="icon-only" class="icon-like"
+                            [name]="(checkLikePost(socialProblem.details,2))?'heart':'heart-empty'"></ion-icon>
                     </div>
-                    <div (click)="sharePost(socialProblem)" class="btn_icon">
-                        <ion-icon slot="icon-only" name="share" style="font-size:1.3rem;"></ion-icon>
+                    <div class="btn-share" (click)="sharePost(socialProblem)">
+                            <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
+                        </div>
+                </div>
+                <div class="action-button">
+                    <div class="btn-more">
+                        <ion-icon class="icon-more" slot="icon-only" name="more"></ion-icon>
                     </div>
                 </div>
             </div>
@@ -102,7 +107,7 @@
     </ion-card>
     <!-- Scroll Infinito -->
     <ion-infinite-scroll threshold="150px" (ionInfinite)="getInfiniteScrollData($event)">
-            <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando Publicaciones...">
-            </ion-infinite-scroll-content>
+        <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando Publicaciones...">
+        </ion-infinite-scroll-content>
     </ion-infinite-scroll>
 </ion-content>

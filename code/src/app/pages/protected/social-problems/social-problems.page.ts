@@ -3,9 +3,11 @@ import { NavController, IonSegment } from '@ionic/angular';
 import { UtilsService } from '../../../services/utils.service';
 import { AuthService } from '../../../services/auth.service';
 import { PostsService } from '../../../services/posts.service';
-import { ISocialProblem, IUserLogued, IPostShare } from 'src/app/interfaces/barrios';
+// import { IUserLogued } from 'src/app/interfaces/barrios';
 import { Observable } from 'rxjs';
 import { UserService } from '../../../services/user.service';
+import { finalize } from 'rxjs/operators';
+import { ISocialProblem, IPostShare } from 'src/app/interfaces/models';
 
 @Component({
     selector: 'app-social-problems',
@@ -25,9 +27,10 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
     loading: any;
     elements: any = [];
     // socialProblems: Observable<any>;
-    AuthUser: IUserLogued = null;
+    AuthUser = null;
 
     socialProblems: ISocialProblem[] = [];
+    socialProblemsLoaded = false;
 
     constructor(
         private navCtrl: NavController,
@@ -40,15 +43,68 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
 
     async ngOnInit() {
         this.segment.value = 'all';
-        this.authService.getAuthUser().subscribe(user => {
-            this.AuthUser = user;
+        this.authService.getAuthUser().pipe(
+            finalize(() => {
+                this.socialProblemsLoaded = true;
+            })
+        ).subscribe(res => {
+            this.AuthUser = res.user;
+        },
+        err => {
+            console.log('Error al traer los problemas sociales');    
         });
         // this.AuthUser = await this.authService.getCurrentUser();
         this.loadSocialProblems();
     }
 
     ngOnDestroy(){
+        this.resetSocialProblems();
+    }
+
+    resetSocialProblems() {
+        this.socialProblems = [];
         this.postService.resetSocialProblemsPage();
+    }
+
+    checkLikePost($details):boolean {
+        if ($details && $details.length > 0) {
+            const likes_user = this.utilsService.getUsersFromDetails($details);
+            const user_made_like = this.utilsService.checkUserInDetails(this.AuthUser.id, likes_user);
+            // console.log('checkLikePost');
+            // console.log('user made like', user_made_like);
+            // console.log('user authenticated id', this.AuthUser.id);
+            return user_made_like;
+        }
+        else {
+            // console.log('no paso tamanio details');
+            return false;
+        }
+    }
+
+    toggleLike(like: boolean, id: number) {
+        console.log((like) ? 'quitar like' : 'dar like');
+        if (like) {
+            this.postService.sendDeleteDetailToPost(id).subscribe(res => {
+                console.log('detalle eliminado correctamente');
+                this.resetSocialProblems();
+                this.loadSocialProblems();
+            }, err => {
+                    console.log('detalle no se pudo eliminar', err);
+            });
+        } else {
+            const detailInfo = {
+                type: 'like',
+                user_id: this.AuthUser.id,
+                post_id : id
+            }
+            this.postService.sendCreateDetailToPost(detailInfo).subscribe(res => {
+                console.log('detalle creado correctamente');
+                this.resetSocialProblems();
+                this.loadSocialProblems();
+            }, err => {
+                    console.log('detalle no se pudo crear', err);
+            });
+        }
     }
 
     ionViewWillEnter() {
@@ -102,11 +158,19 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
         const sharePost: IPostShare = {
             title: post.title,
             description: post.description,
-            image: 'no_image',
+            image:  this.getImages(post.images),
             url: ''
 
         };
         await this.utilsService.compartirRedSocial(sharePost);
+    }
+
+    getImages($imagesArray) {
+        if ($imagesArray.length === 0) {
+            return '';
+        } else {
+            return $imagesArray[0].url;
+        }
     }
 
 }

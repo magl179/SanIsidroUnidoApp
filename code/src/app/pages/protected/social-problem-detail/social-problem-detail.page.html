@@ -39,27 +39,33 @@
         <img *ngIf="socialProblem.images.length === 0"style="border: 1px solid #ccc;" src="assets/img/default/slide-1.png" />
         <img *ngIf="socialProblem.images.length > 0 "style="border: 1px solid #ccc;" [src]="socialProblem.images[0].url" />
         <ion-card-header>
+            <ion-card-subtitle class="post_user problem-subtitle" *ngIf="socialProblem">
+                <span> {{socialProblem.user.firstname}} {{socialProblem.user.lastname}}</span>
+                <span>{{socialProblem.date | beafitulDate}}</span>  
+            </ion-card-subtitle>
             <ion-card-title>Problem {{idPost}}</ion-card-title>
-            <ion-card-subtitle class="post_user" *ngIf="socialProblem">{{socialProblem.user.firstname}} {{socialProblem.user.lastname}}
-            </ion-card-subtitle>
-            <ion-card-subtitle>Category ID: {{socialProblem.category_id}} | {{socialProblem.date | beafitulDate}}
-            </ion-card-subtitle>
         </ion-card-header>
-        <ion-card-content class="post_description">
-            <p class="post_content">
+        <ion-card-content>
+            <p class="post_description">
                 {{socialProblem.description}}
             </p>
-            <p>Likes: {{socialProblem.details.length}}</p>
+            <p class="post-num-likes">{{socialProblem.details.length}} me gusta</p>
         </ion-card-content>
-        <div class="options detail">
-            <div class="option_actions">
-                <div class="btn_icon" [ngClass]="{'active': ((idPost % 2) === 0)}">
-                    <ion-icon slot="icon-only" [name]="((idPost % 2) === 0) ?'heart':'heart-empty'"></ion-icon>
+        <div class="action-buttons detail">
+                <div class="action-button pair">
+                    <div class="btn-like" [ngClass]="{'active': (checkLikePost(socialProblem.details))}" (click)="toggleLike((checkLikePost(socialProblem.details)))">
+                        <ion-icon slot="icon-only" class="icon-like"
+                            [name]="(checkLikePost(socialProblem.details))?'heart':'heart-empty'"></ion-icon>
+                    </div>
+                    <div class="btn-share" (click)="sharePost(socialProblem)">
+                            <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
+                        </div>
                 </div>
-                <div (click)="sharePost(socialProblem)" class="btn_icon">
-                    <ion-icon slot="icon-only" name="share" style="font-size:1.3rem;"></ion-icon>
+                <div class="action-button">
+                    <div class="btn-more">
+                        <ion-icon class="icon-more" slot="icon-only" name="more"></ion-icon>
+                    </div>
                 </div>
             </div>
-        </div>
     </ion-card>
 </ion-content>

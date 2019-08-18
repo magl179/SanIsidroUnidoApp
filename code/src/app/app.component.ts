@@ -45,10 +45,11 @@ export class AppComponent implements OnInit {
     }
 
     async initializeApp() {
-        await this.checkUserLoggedIn();
+        await this.authService.verificarAuthInfo();
         await this.platform.ready().then(async () => {
             await this.statusBar.styleDefault();
             await this.splashScreen.hide();
+            await this.checkUserLoggedIn();
             timer(3000).subscribe(async () => {
                 this.showAppsplash = false;
                 await this.pushNotificationService.initialConfig();

@@ -5,6 +5,8 @@ import { timer } from 'rxjs';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { SocialDataService } from '../../services/social-data.service';
+import { LocalDataService } from '../../services/local-data.service';
+import { finalize } from 'rxjs/operators';
 
 const urlLogueado = '/home';
 
@@ -20,47 +22,20 @@ export class RegisterPage implements OnInit {
     iconpassword = 'eye-off';
     registerForm: FormGroup;
     errorMessages = null;
-    registerFormFields = {
-        firstname: {
-            required: true,
-            minlength: 3,
-            maxlength: 30
-        },
-        lastname: {
-            required: true,
-            minlength: 3,
-            maxlength: 30
-        },
-        email: {
-            required: true,
-            minlength: 3,
-            maxlength: 30,
-            // tslint:disable-next-line: max-line-length
-            pattern: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        },
-        password: {
-            required: true,
-            minlength: 8,
-            maxlength: 35,
-            pattern: /((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,30})/
-        }
-    };
-    loadingRegister: any;
 
     constructor(
         private navCtrl: NavController,
         public formBuilder: FormBuilder,
         private utilsService: UtilsService,
         private authService: AuthService,
-        private socialDataService: SocialDataService
+        private socialDataService: SocialDataService,
+        private localDataService: LocalDataService
     ) {
         this.createForm();
-        this.loadErrorMessages();
     }
 
     async ngOnInit() {
         await this.utilsService.disabledMenu();
-        this.loadingRegister = await this.utilsService.createBasicLoading('Validando');
     }
 
     togglePasswordMode() {
@@ -69,13 +44,6 @@ export class RegisterPage implements OnInit {
         console.log(this.passwordEye);
         this.passwordEye.el.setFocus();
     }
-
-    // setLoginUserData(user) {
-    //     this.authService.setUser(user);
-    //     const tokenID = user.tokenID;
-    //     this.authService.setToken(tokenID);
-    //     this.navCtrl.navigateRoot(urlLogueado);
-    // }
 
     async manageRegister() {
         await this.utilsService.showToast("Registro Correcto, por favor inicia sesión");
@@ -92,16 +60,18 @@ export class RegisterPage implements OnInit {
         const email = this.registerForm.value.email;
         const password = this.registerForm.value.password;
         // loadingRegisterValidation.dismiss();
-        this.authService.register('formulario', { firstname, lastname, email, password, socialID: null }).subscribe(async res => {
-           
+        this.authService.register('formulario', { firstname, lastname, email, password, socialID: null }).pipe(
+            finalize(() => {
+                // console.log('login form complete subscribe');
+                loadingRegisterValidation.dismiss()
+            })
+        ).subscribe(async res => { 
             if (res.code === 200) {
                 await this.manageRegister();
             }
         }, err => {
             this.utilsService.showToast(err.error.message);
             console.log('Error Login', err.error);
-        }, () => {
-            loadingRegisterValidation.dismiss()
         });
         // });
     }
@@ -141,49 +111,45 @@ export class RegisterPage implements OnInit {
 
     // Función Crea el Formulario
     createForm() {
+        //Cargar Validaciones
+        const validations = this.localDataService.getFormValidations();
         // Campo Email
-        const firstnameInput = new FormControl('', Validators.compose([
+        const firstname = new FormControl('', Validators.compose([
             Validators.required,
-            Validators.minLength(this.registerFormFields.firstname.minlength),
-            Validators.maxLength(this.registerFormFields.firstname.maxlength)
+            Validators.minLength(3)
         ]));
         // Campo Email
-        const lastnameInput = new FormControl('', Validators.compose([
+        const lastname = new FormControl('', Validators.compose([
             Validators.required,
-            Validators.minLength(this.registerFormFields.lastname.minlength),
-            Validators.maxLength(this.registerFormFields.lastname.maxlength)
+            Validators.minLength(3),
         ]));
         // Campo Email
-        const emailInput = new FormControl('', Validators.compose([
+        const email = new FormControl('', Validators.compose([
             Validators.required,
-            Validators.pattern(this.registerFormFields.email.pattern)
+            Validators.email
         ]));
         // Campo Contraseña
-        const passwordInput = new FormControl('', Validators.compose([
+        const password = new FormControl('', Validators.compose([
             Validators.required,
-            // Validators.minLength(this.registerFormFields.password.minlength),
-            // Validators.pattern(this.registerFormFields.password.pattern)
+            Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,20}$/)
         ]));
         // Añado Propiedades al Forms
-        this.registerForm = this.formBuilder.group({
-            firstname: firstnameInput,
-            lastname: lastnameInput,
-            email: emailInput,
-            password: passwordInput
-        });
+        this.registerForm = this.formBuilder.group({ firstname, lastname, email, password });
+        // Cargo Mensajes de Validaciones
+        this.errorMessages = this.localDataService.getFormMessagesValidations(validations);
     }
 
-    loadErrorMessages() {
+    /*loadErrorMessages(validations) {
         this.errorMessages = {
             firstname: {
                 required: {
                     message: 'El Nombre es Obligatorio'
                 },
                 minlength: {
-                    message: `El Nombre debe contener minimo ${this.registerFormFields.email.minlength} caracteres`
+                    message: `El Nombre debe contener minimo ${validations.firstname.minlength} caracteres`
                 },
                 maxlength: {
-                    message: `El Nombre debe contener máximo ${this.registerFormFields.email.maxlength} caracteres`
+                    message: `El Nombre debe contener máximo ${validations.firstname.maxlength} caracteres`
                 }
             },
             lastname: {
@@ -221,5 +187,5 @@ export class RegisterPage implements OnInit {
             }
         };
 
-    }
+    }*/
 }

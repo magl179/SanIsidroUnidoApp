@@ -34,33 +34,44 @@
             </ion-col>
         </ion-row>
     </ion-card>
-    <ion-card class="detail-card" *ngIf="event">
+    <ion-card class="card-event detail-card" *ngIf="event">
         <ion-card-header>
-            <ion-card-subtitle>{{event.date}} {{event.time}}</ion-card-subtitle>
+            <ion-card-subtitle class="event-subtitle">
+                    <p class="post-fulldate">
+                            <ion-icon class="icon" name="calendar"></ion-icon>
+                            <span>{{getFullDate(event.date, event.time) | simpleBeatifulDate}}</span> 
+                    </p>
+                    <p class="post-ubication-address flex-right" *ngIf="event.ubication">
+                            <ion-icon class="icon" name="navigate"></ion-icon>
+                            <span>{{ event.ubication.address || 'Direccion no encontrada'}}</span>         
+                    </p>                
+                </ion-card-subtitle>
             <ion-card-title>{{ event.title }}</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-            {{ event.description}}
+            <p class="post-description"> {{event.description | truncate: 50}}</p>
         </ion-card-content>
         <div>
             <simple-map classMap="event-map-detail map-center" idMap="eventMap-detail-{{id}}" [coordsMap]="mapPoints">
             </simple-map>
+            <p class="post-num-likes">{{event.details.length}} {{(event.details.length !== 1) ? 'personas asistirán': 'persona asistirá'}}</p>
         </div>
-        <p *ngIf="event">Likes: {{event.details.length}}</p>
-        <ion-row>
-            <ion-col>
-                <ion-item lines="none" detail="false" button="true" class="container_events detail"
-                    [ngClass]="{'active': (i % 2) === 0}">
-                    <!-- <ion-icon slot="start" name="star" (click)="test()"></ion-icon> -->
-                    <div>Asistire</div>
-                </ion-item>
-            </ion-col>
-            <ion-col>
-                <ion-item lines="none" detail="false" button="true" class="container_events detail"
-                    [ngClass]="{'active': (i % 2) !== 0}">
-                    <div>No Asistire</div>
-                </ion-item>
-            </ion-col>
-        </ion-row>
+        <!-- <p *ngIf="event">Likes: {{event.details.length}}</p> -->
+        <div class="action-buttons detail">
+                <div class="action-button pair">
+                    <div class="btn-like" [ngClass]="{'active': (checkLikePost(event.details))}" (click)="toggleAssistance((checkLikePost(event.details)))">
+                        <ion-icon slot="icon-only" class="icon-like"
+                            [name]="(checkLikePost(event.details))?'heart':'heart-empty'"></ion-icon>
+                    </div>
+                    <div class="btn-share" (click)="sharePost(event)">
+                            <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
+                    </div>
+                </div>
+                <div class="action-button">
+                    <div class="btn-more">
+                        <ion-icon class="icon-more" slot="icon-only" name="more"></ion-icon>
+                    </div>
+                </div>
+            </div>
     </ion-card>
 </ion-content>

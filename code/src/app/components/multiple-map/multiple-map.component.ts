@@ -90,10 +90,10 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
         this.map.on('load', (e) => {
             console.log('Map Loaded');
             this.mapIsLoaded = true;
-            // Enviar informacion mapa al padre
-            this.sendMapInfo();
             // apagar el loading
             this.mapLoading.dismiss();
+            // Enviar informacion mapa al padre
+            this.sendMapInfo();
         });
         // Configurar la vista centrada
         Leaflet.control.zoom({ position: 'topright' }).addTo(this.map);
@@ -129,7 +129,7 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
         }
         console.log('map points', this.mapPoints);
         //
-        await this.mapPoints.forEach(async point => {
+        this.mapPoints.forEach(async point => {
             let punto = null;
             const title = `<h1>${point.name}</h1>`;
             // const description = `<p>${point.description}</p>`;
@@ -146,9 +146,6 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
             punto.bindPopup(fullDescription);
             this.markersLayer.addLayer(punto);
         });
-
-
-
 
         const searchControl = new LeafletSearch({
             position: 'topleft',
@@ -170,15 +167,11 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
                     console.log('tatlng: ', this.latlngsOrigDest);
                     this.currentPolyline.setLatLngs(this.latlngsOrigDest);
                     this.currentPolyline.redraw();
-                    // map.addLayer(lineRoute);
                 }
             }
         });
+
         this.map.addLayer(this.markersLayer);
-
-        // this.map.addLayer(this.currentUserLayer);
-
-
 
         this.map.addControl(searchControl);
         searchControl.on('search:collapsed', (e) => {

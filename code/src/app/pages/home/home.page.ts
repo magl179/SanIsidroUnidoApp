@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { UtilsService } from '../../services/utils.service';
-import { DataAppService } from '../../services/local-data.service';
+import { LocalDataService } from '../../services/local-data.service';
 import { AuthService } from '../../services/auth.service';
-
-export interface MenuServices {
-    title: string;
-    icon: string;
-    url: string;
-    valid_roles: string[];
-}
+import { IHomeOptions } from 'src/app/interfaces/models';
+// export interface MenuServices {
+//     title: string;
+//     icon: string;
+//     url: string;
+//     valid_roles: string[];
+// }
 
 @Component({
     selector: 'app-home',
@@ -17,12 +17,11 @@ export interface MenuServices {
 })
 export class HomePage implements OnInit {
 
-    // AuthUser = {};
-    servicesList: MenuServices[] = [];
+    servicesList: IHomeOptions[] = [];
 
     constructor(
         private utilsService: UtilsService,
-        private dataService: DataAppService,
+        private localDataService: LocalDataService,
         private authService: AuthService
     ) { }
 
@@ -30,7 +29,7 @@ export class HomePage implements OnInit {
         // await this.authService.getAuthUser().subscribe(res => {
         //     this.AuthUser = res.user;
         // });
-        await this.dataService.getHomeOptions().subscribe((data) => {
+        await this.localDataService.getHomeOptions().subscribe((data) => {
             this.servicesList = data;
             console.log('items home: ', data.length);
         });

@@ -5,6 +5,9 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { timer } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { SocialDataService } from 'src/app/services/social-data.service';
+import { LocalDataService } from '../../services/local-data.service';
+import { finalize } from 'rxjs/operators';
+
 
 
 const urlLogueado = '/home';
@@ -26,33 +29,20 @@ export class LoginPage implements OnInit {
     passwordTypeInput = 'password';
     iconpassword = 'eye-off';
 
-    loadingLogin: any;
+    //loadingLogin: any;
     loginForm: FormGroup;
     errorMessages = null;
-    loginFormFields = {
-        email: {
-            required: true,
-            minlength: 3,
-            maxlength: 15,
-            // tslint:disable-next-line: max-line-length
-            pattern: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        },
-        password: {
-            required: true,
-            minlength: 8,
-            maxlength: 30
-        }
-    };
 
     constructor(
         public formBuilder: FormBuilder,
         private navCtrl: NavController,
         private utilsService: UtilsService,
         private authService: AuthService,
-        private socialDataService: SocialDataService
+        private socialDataService: SocialDataService,
+        private localDataService: LocalDataService
     ) {
         this.createForm();
-        this.loadErrorMessages();
+        //this.loadErrorMessages();
     }
 
     async ngOnInit() {
@@ -65,14 +55,6 @@ export class LoginPage implements OnInit {
         console.log(this.passwordEye);
         this.passwordEye.el.setFocus();
     }
-
-    // async setLoginUserData(user) {
-    //     await this.authService.setUser(user);
-    //     const tokenID = user.tokenID;
-    //     await this.authService.setToken(tokenID);
-    //     this.navCtrl.navigateRoot(urlLogueado);
-    // }
-
 
     manageLogin(provider, data, res) {
         // console.log('login token cifrado', res);
@@ -94,27 +76,25 @@ export class LoginPage implements OnInit {
         });
     }
    
-
     async loginUser() {
         const loadingLoginValidation = await this.utilsService.createBasicLoading('Validando');
         loadingLoginValidation.present();
-            const email = this.loginForm.value.email;
-            const password = this.loginForm.value.password;
+        const email = this.loginForm.value.email;
+        const password = this.loginForm.value.password;
             // loadingLoginValidation.dismiss();
-        await this.authService.login('formulario', { email, password }).subscribe(res => {
-            // loading.then(() => { this.loadingController.dismiss(); });
+        await this.authService.login('formulario', { email, password }).pipe(
+            finalize(() => {
+                // console.log('login form complete subscribe');
+                loadingLoginValidation.dismiss()
+            })
+        ).subscribe(res => {
                 console.log('Login First Response', res);
                 if (res.code === 200) {
                     this.manageLogin('formulario', { email, password }, res);
-                } else {
-                    this.utilsService.showToast('Fallo Iniciar Sesión 1');
-                }
+                } 
             }, err => {
                 this.utilsService.showToast(err.error.message);
                 console.log('Error Login', err.error);
-            },
-            () => {
-                loadingLoginValidation.dismiss()
             });
     }
 
@@ -141,6 +121,7 @@ export class LoginPage implements OnInit {
                 console.log('Error Login', err);
             });
     }
+
     async loginUserByGoogle() {
                 await this.socialDataService.loginByGoogle();
                 await this.socialDataService.googleLoginData.subscribe(async googleData => {
@@ -167,23 +148,24 @@ export class LoginPage implements OnInit {
 
     // Función Crea el Formulario
     createForm() {
+        //Cargar Validaciones
+        const validations = this.localDataService.getFormValidations();
         // Campo Email
-        const emailInput = new FormControl('', Validators.compose([
-            Validators.required,
-            Validators.pattern(this.loginFormFields.email.pattern)
+        const email = new FormControl('', Validators.compose([
+            Validators.required,    
+            Validators.email
         ]));
         // Campo Contraseña
-        const passwordInput = new FormControl('', Validators.compose([
-            Validators.required,
+        const password= new FormControl('', Validators.compose([
+            Validators.required
         ]));
         // Añado Propiedades al Form
-        this.loginForm = this.formBuilder.group({
-            email: emailInput,
-            password: passwordInput
-        });
+        this.loginForm = this.formBuilder.group({ email, password });
+         // Cargo Mensajes de Validaciones
+        this.errorMessages = this.localDataService.getFormMessagesValidations(validations);
     }
 
-    loadErrorMessages() {
+    /*loadErrorMessages() {
         this.errorMessages = {
             email: {
                 required: {
@@ -211,6 +193,6 @@ export class LoginPage implements OnInit {
                 }
             }
         };
-    }
+    }*/
 
 }
