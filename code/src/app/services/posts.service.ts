@@ -50,14 +50,10 @@ export class PostsService implements OnInit {
     resetEventsPage() {
         this.currentPage.events = 0;
     }
-    async ngOnInit() {
-      
-        // console.log('ng on init posts service', this.AuthToken);
-        // this.AuthToken = await this.auth.getToken();
-        // this.AuthUser = await this.auth.getCurrentUser();
-    }
+    ngOnInit() {}
     //MÉTODOS POST
     sendEmergencyReport(emergencyPost: IEmergencyReported): Observable<any> {
+        emergencyPost.user_id = this.AuthUser.id;
         const headers = this.headersApp.set('Authorization', this.AuthToken);
         return this.http.post(`${environment.apiBaseURL}/emergencias`, emergencyPost, {
             headers
@@ -65,6 +61,7 @@ export class PostsService implements OnInit {
     }
 
     sendSocialProblemReport(socialProblemPost: ISocialProblemReported): Observable<any> {
+        socialProblemPost.user_id = this.AuthUser.id;
         const headers = this.headersApp.set('Authorization', this.AuthToken);
         return this.http.post(`${environment.apiBaseURL}/problemas-sociales`, socialProblemPost, {
             headers

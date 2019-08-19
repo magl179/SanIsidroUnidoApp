@@ -7,6 +7,7 @@ import { AuthService } from '../../services/auth.service';
 import { SocialDataService } from '../../services/social-data.service';
 import { LocalDataService } from '../../services/local-data.service';
 import { finalize } from 'rxjs/operators';
+import { ILoginUser } from '../../interfaces/models';
 
 const urlLogueado = '/home';
 
@@ -22,6 +23,10 @@ export class RegisterPage implements OnInit {
     iconpassword = 'eye-off';
     registerForm: FormGroup;
     errorMessages = null;
+    loginData = {
+        token: null,
+        user: null
+    };
 
     constructor(
         private navCtrl: NavController,
@@ -41,51 +46,72 @@ export class RegisterPage implements OnInit {
     togglePasswordMode() {
         this.passwordTypeInput = this.passwordTypeInput === 'text' ? 'password' : 'text';
         this.iconpassword = this.iconpassword === 'eye-off' ? 'eye' : 'eye-off';
-        console.log(this.passwordEye);
+        // console.log(this.passwordEye);
         this.passwordEye.el.setFocus();
     }
 
-    async manageRegister() {
-        await this.utilsService.showToast("Registro Correcto, por favor inicia sesión");
-        this.navCtrl.navigateRoot('/login');
+    async manageRegister(loginData, res) {
+        // await this.utilsService.showToast("Has sido registrado correctamente, por favor inicia sesión");
+        // this.navCtrl.navigateRoot('/login');
+         // console.log('login token cifrado', res);
+         this.loginData.token = res.data;
+         //Obtener Usuario Identificado
+         this.authService.login(loginData, true).subscribe(async res => {
+             console.log('login token descifrado', res);
+             if (res.code === 200) {
+                 this.loginData.user = res.data;
+                 await this.authService.setUserLocalStorage(this.loginData.user);
+                 await this.authService.setTokenLocalStorage(this.loginData.token);
+                 this.navCtrl.navigateRoot('/home');
+             } else {
+                 this.utilsService.showToast('Fallo Iniciar Sesión 2'); 
+             }
+         }, err => {
+             this.utilsService.showToast(err.error.message);
+             console.log('Error Login', err);
+         });
     }
 
     async registerUser() {
         const loadingRegisterValidation = await this.utilsService.createBasicLoading('Registrando Usuario');
         loadingRegisterValidation.present();
         console.log(this.registerForm.value);
-        // timer(1500).subscribe(() => {
+        // Datos Formulario Registro
         const firstname = this.registerForm.value.firstname;
         const lastname = this.registerForm.value.lastname;
         const email = this.registerForm.value.email;
         const password = this.registerForm.value.password;
-        // loadingRegisterValidation.dismiss();
-        this.authService.register('formulario', { firstname, lastname, email, password, socialID: null }).pipe(
+        const user = {
+            firstname, lastname, email, password, social_id: null, provider: 'formulario'
+        };
+        // Método para registrar al usuario
+        this.authService.register(user).pipe(
             finalize(() => {
-                // console.log('login form complete subscribe');
                 loadingRegisterValidation.dismiss()
             })
         ).subscribe(async res => { 
             if (res.code === 200) {
-                await this.manageRegister();
+                await this.manageRegister({provider: 'formulario', email, password }, res);
             }
         }, err => {
             this.utilsService.showToast(err.error.message);
             console.log('Error Login', err.error);
         });
-        // });
     }
 
     async registerFBUser() {
         await this.socialDataService.loginByFacebook();
         await this.socialDataService.fbLoginData.subscribe(async fbData => {
             if (fbData) {
-                const user = await this.socialDataService.getDataFacebookParsed(fbData);
-                await this.authService.register('facebook', user).subscribe(async registerData => {
-                    if (registerData) {
-                        this.manageRegister();
+                const user = await this.socialDataService.getFacebookDataParsed(fbData);
+                await this.authService.register(user).subscribe(res=> {
+                    // if (registerData) {
+                        this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'facebook'}, res);
                         // await this.setLoginUserData(registerData);
-                    }
+                    // }
+                }, err => {
+                    this.utilsService.showToast(err.error.message);
+                    console.log('Error Login', err.error);
                 });
             }
         }, err => {
@@ -97,10 +123,13 @@ export class RegisterPage implements OnInit {
         await this.socialDataService.loginByGoogle();
         await this.socialDataService.googleLoginData.subscribe(async googleData => {
             if (googleData) {
-                const user = await this.socialDataService.getDataGoogleParsed(googleData);
-                await this.authService.register('google', user).subscribe(async registerData => {
+                const user = await this.socialDataService.getGoogleDataParsed(googleData);
+                await this.authService.register(user).subscribe(res => {
                     // await this.setLoginUserData(registerData);
-                    this.manageRegister();
+                    this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'google' }, res);
+                }, err => {
+                    this.utilsService.showToast(err.error.message);
+                    console.log('Error Login', err.error);
                 });
             }
         }, err => {
@@ -131,7 +160,7 @@ export class RegisterPage implements OnInit {
         // Campo Contraseña
         const password = new FormControl('', Validators.compose([
             Validators.required,
-            Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,20}$/)
+            // Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,20}$/)
         ]));
         // Añado Propiedades al Forms
         this.registerForm = this.formBuilder.group({ firstname, lastname, email, password });

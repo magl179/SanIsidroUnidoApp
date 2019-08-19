@@ -51,3 +51,18 @@ Se incluyen los siguientes directorios:
 
 - Para poder observar la aplicación de la mejor manera se debe tener el Navegador con el WebView actualizado
 
+# Validaciones
+
+### Validar Contraseña
+
+La validación verifica que la contraseña ingresada sea mínimo 8 caracteres y máximo 20 en donde se debe ingresar mínimo una letra mayúscula, una letra minúscula, un numero y un carácter especial
+
+```php
+
+```
+
+/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,20}$/g/
+
+```
+
+```

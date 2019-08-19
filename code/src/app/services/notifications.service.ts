@@ -8,6 +8,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UserService } from './user.service';
 import { AuthService } from './auth.service';
+import { UtilsService } from './utils.service';
 
 
 @Injectable({
@@ -19,6 +20,7 @@ export class NotificationsService {
     currentUser = null;
     userDeviceID = new BehaviorSubject<string>(null);
     pushListener = new EventEmitter<OSNotificationPayload>();
+    AuthUser = null;
 
     constructor(
         private oneSignal: OneSignal,
@@ -26,9 +28,11 @@ export class NotificationsService {
         private platform: Platform,
         private http: HttpClient,
         private userService: UserService,
-        private authService: AuthService
+        private authService: AuthService,
+        private utilsService: UtilsService
     ) {
         this.loadMessages();
+        this.loadUser();
     }
 
     async initialConfig() {
@@ -67,6 +71,24 @@ export class NotificationsService {
         return this.userDeviceID.asObservable();
     }
 
+    loadUser() {
+        this.authService.getAuthUser().subscribe(res => {
+            this.AuthUser = res.user;
+        });
+    }
+
+    registrarDispositivoUsuarioApi() {
+        this.userService.sendRequestAddUserDevice(this.userDeviceID.value, 'Dispositivo Usuario').subscribe(
+            res => {
+                console.log('Dispositivo Añadido Correctamente');
+                this.utilsService.showToast('Dispositivo Añadido Correctamente');
+            }, err => {
+                this.utilsService.showToast('Ocurrio un error al añadir el dispositivo');
+                console.log('Ocurrio un error al añadir el dispositivo', err);
+            }
+        );
+    }
+
     // Función Obtener ID Suscriptor
     async getOneSignalIDSubscriptor() {
         console.log('INITIAL FUNCTION GET ONESIGNAL ID SUBSCRIPTOR: ');
@@ -75,18 +97,11 @@ export class NotificationsService {
         this.userDeviceID.next(deviceID.userId);
         console.log('DEVICE SUBSCRIPTOR: ', deviceID);
         console.log('ID SUBSCRIPTOR: ', deviceID.userId);
-        this.authService.getAuthUser().subscribe(user => {
-            if (user) {
-                console.log('usuario autenticado, puedo añadir dispositivo');
-                this.userService.sendRequestAddUserDevice(this.userDeviceID.value, 'Dispositivo Usuario').subscribe(
-                    res => {
-                        console.log('Dispositivo Añadido Correctamente');
-                    }, err => {
-                        console.log('Ocurrio un error al añadir el dispositivo', err);
-                    }
-                );
+        // this.authService.getAuthUser().subscribe(user => {
+            if (this.AuthUser) {
+                this.registrarDispositivoUsuarioApi()
             }
-        });
+        // });
        
         // this.
         // this.oneSignal.getIds().then( res=> {

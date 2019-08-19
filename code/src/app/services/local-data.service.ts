@@ -58,6 +58,16 @@ export class LocalDataService {
                 required: true,
                 minlength: 8,
                 maxlength: 30
+            },
+            title: {
+                required: true,
+                minlength: 3,
+                maxlength: 15
+            },
+            description: {
+                required: true,
+                minlength: 8,
+                maxlength: 30
             }
         }
     }
@@ -140,6 +150,28 @@ export class LocalDataService {
                 },
                 pattern: {
                     message: `Ingresa una contraseña segura`
+                }
+            },
+            title: {
+                required: {
+                    message: 'El Título es Obligatorio'
+                },
+                minlength: {
+                    message: `El Título debe contener al menos ${validations.password.minlength} caracteres`
+                },
+                maxlength: {
+                    message: `El Título debe contener máximo ${validations.password.minlength} caracteres`
+                }
+            },
+            description: {
+                required: {
+                    message: 'La descripción es Obligatoria'
+                },
+                minlength: {
+                    message: `La descripción debe contener al menos ${validations.password.minlength} caracteres`
+                },
+                maxlength: {
+                    message: `La descripción debe contener máximo ${validations.password.minlength} caracteres`
                 }
             }
         }

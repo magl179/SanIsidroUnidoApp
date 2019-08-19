@@ -4,6 +4,10 @@ import { MapService } from 'src/app/services/map.service';
 import { IPostUbicationItem } from 'src/app/interfaces/barrios';
 import { LocalizationService } from '../../../services/localization.service';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { IEmergencyReported, IUbication } from 'src/app/interfaces/models';
+import { PostsService } from '../../../services/posts.service';
+import { LocalDataService } from '../../../services/local-data.service';
+import { finalize } from 'rxjs/operators';
 
 
 // type PaneType = 'left' | 'right';
@@ -24,35 +28,36 @@ export class EmergencyCreatePage implements OnInit {
         { title: 'Paso 3' }, { title: 'Paso 4' }
     ];
     emergencyImages = [];
-    emergencyPostCoordinate: IPostUbicationItem = {
+    emergencyPostCoordinate: IUbication = {
         latitude: null,
         longitude: null,
         address: null
     };
     emergencyForm: FormGroup;
     errorMessages = null;
-    emergencyFormFields = {
-        title: {
-            required: true,
-            minlength: 3,
-            maxlength: 15
-        },
-        description: {
-            required: true,
-            minlength: 8,
-            maxlength: 30
-        }
-    };
+    // emergencyFormFields = {
+    //     title: {
+    //         required: true,
+    //         minlength: 3,
+    //         maxlength: 15
+    //     },
+    //     description: {
+    //         required: true,
+    //         minlength: 8,
+    //         maxlength: 30
+    //     }
+    // };
     // puntosUbicacion: SimpleUbicationItem;
 
     constructor(
         private utilsService: UtilsService,
         private mapService: MapService,
         public formBuilder: FormBuilder,
-        private localizationService: LocalizationService
+        private localizationService: LocalizationService,
+        private postService: PostsService,
+        private localDataService: LocalDataService
     ) {
         this.createForm();
-        this.loadErrorMessages();
     }
 
     async ngOnInit() {
@@ -63,44 +68,16 @@ export class EmergencyCreatePage implements OnInit {
     }
 
     createForm() {
-        const titleEmergency = new FormControl('', Validators.compose([
+        const validations = this.localDataService.getFormValidations();
+        const title= new FormControl('', Validators.compose([
             Validators.required,
         ]));
-        const descriptionEmergency = new FormControl('', Validators.compose([
+        const description = new FormControl('', Validators.compose([
             Validators.required,
         ]));
-        this.emergencyForm = this.formBuilder.group({
-            title: titleEmergency,
-            description: descriptionEmergency
-        });
-    }
 
-    loadErrorMessages() {
-        this.errorMessages = {
-            title: {
-                required: {
-                    message: 'El titulo es Obligatorio'
-                },
-                minlength: {
-                    message: `El titulo debe contener minimo ${this.emergencyFormFields.title.minlength} caracteres`
-                },
-                maxlength: {
-                    message: `El titulo debe contener máximo ${this.emergencyFormFields.title.maxlength} caracteres`
-                }
-            },
-            description: {
-                required: {
-                    message: 'La descripción es Obligatoria'
-                },
-                minlength: {
-                    message: `La descripción debe contener minimo ${this.emergencyFormFields.description.minlength} caracteres`
-                },
-                maxlength: {
-                    message: `La descripción debe contener máximo ${this.emergencyFormFields.description.maxlength} caracteres`
-                }
-            }
-        };
-
+        this.emergencyForm = this.formBuilder.group({ title, description });
+        this.errorMessages = this.localDataService.getFormMessagesValidations(validations);
     }
 
     async getUploadedImages(event) {
@@ -167,6 +144,8 @@ export class EmergencyCreatePage implements OnInit {
     }
 
     async sendEmergencyReport() {
+        const loadingEmergencyReport = await this.utilsService.createBasicLoading('Enviando Reporte');
+       
         if (this.emergencyForm.valid !== true) {
             await this.utilsService.showToast('Ingresa un titulo y una descripción', 2500);
             return;
@@ -182,7 +161,24 @@ export class EmergencyCreatePage implements OnInit {
             return;
         }
 
-        await this.utilsService.showToast('Post Emergencia Valido', 2500);
+        // await this.utilsService.showToast('Post Emergencia Valido', 2500);
+        loadingEmergencyReport.present();
+        const socialProblem: IEmergencyReported = {
+            title: this.emergencyForm.value.title,
+            description: this.emergencyForm.value.description,
+            ubication: this.emergencyPostCoordinate
+        };
+        // await this.utilsService.showToast('Post Problema Social Valido', 2500);
+        this.postService.sendEmergencyReport(socialProblem).pipe(
+            finalize(() => {
+                loadingEmergencyReport.dismiss()
+            })
+        ).subscribe(async res => {
+            await this.utilsService.showToast("El Reporte fue enviado correctamente");
+        }, err => {
+            this.utilsService.showToast(err.error.message);
+            console.log('Error Reportar Emergencia', err.error);
+        });
     }
 
 

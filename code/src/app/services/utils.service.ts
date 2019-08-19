@@ -1,8 +1,9 @@
 import { Injectable, OnInit } from '@angular/core';
 import { ToastController, LoadingController, MenuController, Platform } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
-import { IMenuComponent, IPostShare } from 'src/app/interfaces/barrios';
+import { IMenuComponent } from 'src/app/interfaces/barrios';
 import { Storage } from '@ionic/storage';
+import { IPostShare } from 'src/app/interfaces/models';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 
 declare var moment: any;

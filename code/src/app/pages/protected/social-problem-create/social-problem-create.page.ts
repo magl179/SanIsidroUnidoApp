@@ -4,6 +4,11 @@ import { MapService } from 'src/app/services/map.service';
 import { IPostUbicationItem } from 'src/app/interfaces/barrios';
 import { LocalizationService } from '../../../services/localization.service';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { LocalDataService } from '../../../services/local-data.service';
+import { PostsService } from '../../../services/posts.service';
+import { environment } from 'src/environments/environment';
+import { ISocialProblemReported, IUbication } from 'src/app/interfaces/models';
+import { finalize } from 'rxjs/operators';
 
 @Component({
     selector: 'app-social-problem-create',
@@ -12,94 +17,73 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 })
 export class SocialProblemCreatePage implements OnInit {
 
-    currentStep = 1;
+    currentStep = 3
     fullFormIsValid = false;
 
     socialProblemForm: FormGroup;
     errorMessages = null;
-    emergencyFormFields = {
-        title: {
-            required: true,
-            minlength: 3,
-            maxlength: 15
-        },
-        description: {
-            required: true,
-            minlength: 8,
-            maxlength: 30
-        }
-    };
+    // emergencyFormFields = {
+    //     title: {
+    //         required: true,
+    //         minlength: 3,
+    //         maxlength: 15
+    //     },
+    //     description: {
+    //         required: true,
+    //         minlength: 8,
+    //         maxlength: 30
+    //     }
+    // };
     // activePane: PaneType = 'left';
     socialProblemFormStage = [
         { title: 'Paso 1' }, { title: 'Paso 2' },
         { title: 'Paso 3' }, { title: 'Paso 4' }
     ];
     socialProblemImages = [];
-    socialProblemCoordinate: IPostUbicationItem = {
+    socialProblemCoordinate: IUbication = {
         latitude: null,
         longitude: null,
         address: null
     };
+    subcategories = [];
     // puntosUbicacion: SimpleUbicationItem;
 
     constructor(
         private utilsService: UtilsService,
         private mapService: MapService,
         public formBuilder: FormBuilder,
-        private localizationService: LocalizationService
+        private localizationService: LocalizationService,
+        private localDataService: LocalDataService,
+        private postService: PostsService
     ) {
         this.createForm();
-        this.loadErrorMessages();
     }
 
     async ngOnInit() {
         const coords = await this.localizationService.getCoordinate();
         this.socialProblemCoordinate.latitude = coords.latitude;
         this.socialProblemCoordinate.longitude = coords.longitude;
-    }
-
-    createForm() {
-        const titleEmergency = new FormControl('', Validators.compose([
-            Validators.required,
-        ]));
-        const descriptionEmergency = new FormControl('', Validators.compose([
-            Validators.required,
-        ]));
-        this.socialProblemForm = this.formBuilder.group({
-            title: titleEmergency,
-            description: descriptionEmergency
+        this.postService.getSubcategoriesByCategory(environment.slugCategories.socialProblem).subscribe(res => {
+            this.subcategories = res.data;
+            console.log('subcategories', res.data);
         });
     }
 
-    loadErrorMessages() {
-        this.errorMessages = {
-            title: {
-                required: {
-                    message: 'El titulo es Obligatorio'
-                },
-                minlength: {
-                    message: `El titulo debe contener minimo ${this.emergencyFormFields.title.minlength} caracteres`
-                },
-                maxlength: {
-                    message: `El titulo debe contener máximo ${this.emergencyFormFields.title.maxlength} caracteres`
-                }
-            },
-            description: {
-                required: {
-                    message: 'La descripción es Obligatoria'
-                },
-                minlength: {
-                    message: `La descripción debe contener minimo ${this.emergencyFormFields.description.minlength} caracteres`
-                },
-                maxlength: {
-                    message: `La descripción debe contener máximo ${this.emergencyFormFields.description.maxlength} caracteres`
-                }
-            }
-        };
-
+    createForm() {
+        const validations = this.localDataService.getFormValidations();
+        const title = new FormControl('', Validators.compose([
+            Validators.required,
+        ]));
+        const description = new FormControl('', Validators.compose([
+            Validators.required,
+        ]));
+        this.socialProblemForm = this.formBuilder.group({ title, description });
+        this.localDataService.getFormMessagesValidations(validations); 
     }
 
     async sendSocialProblem() {
+        const loadingReportSocialProblem = await this.utilsService.createBasicLoading('Enviando Reporte');
+        
         if (this.socialProblemForm.valid !== true) {
             await this.utilsService.showToast('Ingresa un titulo y una descripción', 2500);
             return;
@@ -113,8 +97,25 @@ export class SocialProblemCreatePage implements OnInit {
             return;
         }
 
-        await this.utilsService.showToast('Post Problema Social Valido', 2500);
+        loadingReportSocialProblem.present();
+        const socialProblem: ISocialProblemReported = {
+            title: this.socialProblemForm.value.title,
+            description: this.socialProblemForm.value.description,
+            ubication: this.socialProblemCoordinate
+        };
+        // await this.utilsService.showToast('Post Problema Social Valido', 2500);
+        this.postService.sendSocialProblemReport(socialProblem).pipe(
+            finalize(() => {
+                loadingReportSocialProblem.dismiss()
+            })
+        ).subscribe(async res => {
+            await this.utilsService.showToast("El Reporte fue enviado correctamente");
+        }, err => {
+            this.utilsService.showToast(err.error.message);
+            console.log('Error Reportar Problema Social', err.error);
+        });
     }
+
 
     deleteImage(pos) {
         this.socialProblemImages.splice(pos, 1);

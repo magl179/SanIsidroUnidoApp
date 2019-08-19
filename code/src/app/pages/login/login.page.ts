@@ -56,11 +56,11 @@ export class LoginPage implements OnInit {
         this.passwordEye.el.setFocus();
     }
 
-    manageLogin(provider, data, res) {
+    manageLogin(loginData, res) {
         // console.log('login token cifrado', res);
         this.loginData.token = res.data;
         //Obtener Usuario Identificado
-        this.authService.login(provider, data, true).subscribe(async res => {
+        this.authService.login(loginData, true).subscribe(async res => {
             console.log('login token descifrado', res);
             if (res.code === 200) {
                 this.loginData.user = res.data;
@@ -81,16 +81,15 @@ export class LoginPage implements OnInit {
         loadingLoginValidation.present();
         const email = this.loginForm.value.email;
         const password = this.loginForm.value.password;
-            // loadingLoginValidation.dismiss();
-        await this.authService.login('formulario', { email, password }).pipe(
+        const loginData = { email, password, provider: 'formulario' };
+        await this.authService.login(loginData).pipe(
             finalize(() => {
-                // console.log('login form complete subscribe');
                 loadingLoginValidation.dismiss()
             })
         ).subscribe(res => {
                 console.log('Login First Response', res);
                 if (res.code === 200) {
-                    this.manageLogin('formulario', { email, password }, res);
+                    this.manageLogin(loginData, res);
                 } 
             }, err => {
                 this.utilsService.showToast(err.error.message);
@@ -102,12 +101,13 @@ export class LoginPage implements OnInit {
             await this.socialDataService.loginByFacebook();
             await this.socialDataService.fbLoginData.subscribe(async fbData => {
                 if (fbData) {
-                    const user = this.socialDataService.getDataFacebookParsed(fbData);
-                    const social_id = user.token_id, email = user.email;
-                    await this.authService.login('facebook', user).subscribe(res => {
+                    const user = this.socialDataService.getFacebookDataParsed(fbData);
+                    // const social_id = user.social_id, email = user.email;
+                    const { social_id, email } = user;
+                    await this.authService.login(user).subscribe(res => {
                         console.log('Login First Response', res);
                         if (res.code === 200) {
-                            this.manageLogin('facebook', {social_id, email} , res);
+                            this.manageLogin({provider: 'facebook', social_id, email} , res);
                         } else {
                             this.utilsService.showToast('Fallo Iniciar Sesión 1');
                         }
@@ -126,12 +126,12 @@ export class LoginPage implements OnInit {
                 await this.socialDataService.loginByGoogle();
                 await this.socialDataService.googleLoginData.subscribe(async googleData => {
                     if (googleData) {
-                        const user = this.socialDataService.getDataGoogleParsed(googleData);
-                        const social_id = user.token_id, email = user.email;
+                        const user = this.socialDataService.getGoogleDataParsed(googleData);
+                        const { social_id, email } = user;
                         await this.authService.login('google', user).subscribe(res => {
                             console.log('Login First Response', res);
                             if (res.code === 200) {
-                                this.manageLogin('google', {social_id, email} , res);
+                                this.manageLogin({social_id, email, provider: 'google'} , res);
                             } else {
                                 this.utilsService.showToast('Fallo Iniciar Sesión 1');
                             }

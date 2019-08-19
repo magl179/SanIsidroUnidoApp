@@ -78,6 +78,7 @@ export interface IEmergencyReported extends IBaseReportSend {
 }
 
 export interface ISocialProblemReported extends IBaseReportSend {
+    subcategory?: number;
 }
 
 export interface ILoginUser {
@@ -85,6 +86,7 @@ export interface ILoginUser {
     provider: string;
     social_id?: string;
     password?: string;
+    getToken?: boolean;
 }
 
 export interface IRegisterUser {
@@ -134,7 +136,7 @@ interface Notification {
 interface IBaseReportSend {
     title: string;
     description: string;
-    user_id: number;
+    user_id?: number;
     ubication: IUbication;
 }
 
@@ -155,7 +157,7 @@ interface IRoleUser {
     position?: string;
 }
 
-interface IUbication {
+export interface IUbication {
     latitude: number;
     longitude: number;
     address: string;

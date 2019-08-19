@@ -35,37 +35,29 @@ export class SocialDataService {
         return this.http.get(urlTest).pipe(map(data => data));
     }
 
-    getDataGoogleParsed(googleUser: any) {
+    getGoogleDataParsed(googleUser: any) {
         const appUser = {
             firstname: googleUser.name.givenName,
             lastname: googleUser.displayName,
             email: googleUser.emails[0].value,
-            token_id: googleUser.id,
+            social_id: googleUser.id,
             provider: 'google',
             avatar: googleUser.image.url,
-            password: null,
-            roles: [
-                'admin',
-                'morador_invitado'
-            ]
+            password: null
         };
         console.log('OWN GOOGLE DATA', appUser);
         return appUser;
     }
 
-    getDataFacebookParsed(fbUser: any) {
+    getFacebookDataParsed(fbUser: any) {
         const appUser = {
             firstname: fbUser.first_name,
             lastname: fbUser.last_name,
             email: fbUser.email,
-            token_id: fbUser.id,
+            social_id: fbUser.id,
             provider: 'facebook',
             avatar: fbUser.image,
-            password: null,
-            roles: [
-                'admin',
-                'morador_invitado'
-            ]
+            password: null
         };
         console.log('OWN FB DATA', appUser);
         return appUser;

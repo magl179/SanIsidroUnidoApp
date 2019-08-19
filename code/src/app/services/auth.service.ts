@@ -6,6 +6,7 @@ import { catchError } from 'rxjs/operators';
 // import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 // import { NavController } from '@ionic/angular';
+import { ILoginUser, IRegisterUser } from '../interfaces/models';
 
 const TOKEN_ITEM_NAME = "accessToken";
 const USER_ITEM_NAME = "currentUser";
@@ -32,10 +33,18 @@ export class AuthService {
         await this.removeAuthInfo();
     }
     // Iniciar Sesion
-    login(provider: string, loginData: any, getToken = null): Observable<any> {
-        //Añadir Proveedor Datos
-        loginData.provider = provider;
+    login(loginData: any, getToken = null): Observable<any> {
+        // URL API LOGIN
         const urlApi = `${environment.apiBaseURL}/login`;
+        // const loginBody: ILoginUser = {
+        //     provider,
+        //     email: loginData.email
+        // }
+        // if (provider == 'formulario') {
+        //     loginBody.password = loginData.password
+        // } else {
+        //     loginBody.social_id = loginData.token_id
+        // }
         if (getToken !== null) {
             loginData.getToken = true;
         }
@@ -44,9 +53,9 @@ export class AuthService {
         });
     }
     // Registrar Usuario
-    register(provider: string, registerData: any): Observable<any> {
+    
+    register(registerData: IRegisterUser): Observable<any> {
         const urlApi = `${environment.apiBaseURL}/registro`;
-        registerData.provider = provider;
         return this.http.post(urlApi, registerData, {
             headers: this.authHeaders
         });
