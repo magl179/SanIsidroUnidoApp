@@ -162,7 +162,7 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
             url: ''
 
         };
-        await this.utilsService.compartirRedSocial(sharePost);
+        await this.utilsService.shareSocial(sharePost);
     }
 
     getImages($imagesArray) {

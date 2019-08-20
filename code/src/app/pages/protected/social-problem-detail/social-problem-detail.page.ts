@@ -102,7 +102,7 @@ export class SocialProblemDetailPage implements OnInit {
             url: ''
 
         };
-        await this.utilsService.compartirRedSocial(sharePost);
+        await this.utilsService.shareSocial(sharePost);
     }
 
     getImages($imagesArray) {

@@ -90,9 +90,9 @@ export class RegisterPage implements OnInit {
                 loadingRegisterValidation.dismiss()
             })
         ).subscribe(async res => { 
-            if (res.code === 200) {
+            //if (res.code === 200) {
                 await this.manageRegister({provider: 'formulario', email, password }, res);
-            }
+            //}
         }, err => {
             this.utilsService.showToast(err.error.message);
             console.log('Error Login', err.error);
@@ -104,9 +104,9 @@ export class RegisterPage implements OnInit {
         await this.socialDataService.fbLoginData.subscribe(async fbData => {
             if (fbData) {
                 const user = await this.socialDataService.getFacebookDataParsed(fbData);
-                await this.authService.register(user).subscribe(res=> {
+                await this.authService.register(user).subscribe(async res=> {
                     // if (registerData) {
-                        this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'facebook'}, res);
+                        await this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'facebook'}, res);
                         // await this.setLoginUserData(registerData);
                     // }
                 }, err => {
@@ -124,9 +124,9 @@ export class RegisterPage implements OnInit {
         await this.socialDataService.googleLoginData.subscribe(async googleData => {
             if (googleData) {
                 const user = await this.socialDataService.getGoogleDataParsed(googleData);
-                await this.authService.register(user).subscribe(res => {
+                await this.authService.register(user).subscribe(async res => {
                     // await this.setLoginUserData(registerData);
-                    this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'google' }, res);
+                    await this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'google' }, res);
                 }, err => {
                     this.utilsService.showToast(err.error.message);
                     console.log('Error Login', err.error);

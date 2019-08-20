@@ -37,6 +37,12 @@
                     </div>
                     <p class="title_option">Solicitar Afiliación</p>
                </ion-col>
+                <ion-col class="user_profile_options" *appHasDevice>
+                    <div class="icon_option" (click)="addDeviceToUser()">
+                        <ion-icon name="notifications"></ion-icon>
+                    </div>
+                    <p class="title_option">Añadir Mi Dispositivo</p>
+               </ion-col>
            </ion-row>
        </ion-grid>
     </div>

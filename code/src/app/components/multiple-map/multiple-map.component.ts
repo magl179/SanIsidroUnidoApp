@@ -9,7 +9,7 @@ import { LocalizationService } from '../../services/localization.service';
 
 // const iconsColors = ['red', 'orange', 'yellow', 'purple'];
 const tileURL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-const tileAtribution = '&copy; <a target=_blank" href="https://www.openstreetmap.org/copyright">© Colaboradores de OpenStreetMap</a>';
+const tileAtribution = '&copy; <a target=_blank" href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
 
 @Component({
     selector: 'multiple-map',

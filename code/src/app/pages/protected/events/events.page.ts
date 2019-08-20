@@ -85,7 +85,7 @@ export class EventsPage implements OnInit, OnDestroy {
             url: ''
 
         };
-        await this.utilsService.compartirRedSocial(sharePost);
+        await this.utilsService.shareSocial(sharePost);
     }
 
     getImages($imagesArray) {

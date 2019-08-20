@@ -4,6 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { UtilsService } from '../../services/utils.service';
 import { UserService } from '../../services/user.service';
+import { LocalDataService } from 'src/app/services/local-data.service';
 
 @Component({
     selector: 'app-edit-profile',
@@ -42,10 +43,11 @@ export class EditProfilePage implements OnInit {
         private modalCtrl: ModalController,
         private authService: AuthService,
         public formBuilder: FormBuilder,
+        private localDataService: LocalDataService,
         private userService: UserService,
         private utilsService: UtilsService) {
         this.createForm();
-        this.loadErrorMessages();
+        //this.loadErrorMessages();
     }
 
     async ngOnInit() {
@@ -78,6 +80,7 @@ export class EditProfilePage implements OnInit {
     // Función Crea el Formulario
     async createForm() {
         await this.loadUserData();
+        const validations = this.localDataService.getFormValidations();
         // Campo Email
         const firstname = new FormControl(this.AuthUser.firstname || '', Validators.compose([
             Validators.required
@@ -94,31 +97,7 @@ export class EditProfilePage implements OnInit {
             Validators.compose([]));
         // Añado Propiedades al Form
         this.editProfileForm = this.formBuilder.group({firstname, lastname, email, number_phone});
-    }
-
-    loadErrorMessages() {
-        this.errorMessages = {
-            firstname: {
-                required: {
-                    message: 'Los Nombres son Obligatorios'
-                }
-            },
-            lastname: {
-                required: {
-                    message: 'Los Apellidos es Obligatorio'
-                }
-            },
-            email: {
-                required: {
-                    message: 'El Email es Obligatorio'
-                },
-                email: {
-                    message: `Ingresa un email válido`
-                }
-            },
-            number_phone: {}
-        };
-
+        this.errorMessages = this.localDataService.getFormMessagesValidations(validations);
     }
 
 }

@@ -69,12 +69,12 @@ export class UtilsService implements OnInit {
         return beatifulDate;
     }
 
-    async compartirRedSocial(publicacion: IPostShare) {
+    async shareSocial(publicacion: IPostShare) {
         // Verificar Si Existe Cordova
         if (this.platform.is('cordova')) {
             await this.socialSharing.share(
-                publicacion.title, // message
-                publicacion.description, // subject
+                publicacion.description, // message
+                publicacion.title, // subject
                 (publicacion.image) ? publicacion.image : '', // file image or [] images
                 publicacion.url || '' // url to share
             );
@@ -83,8 +83,8 @@ export class UtilsService implements OnInit {
             if (navigator['share']) {
                 // tslint:disable-next-line: no-string-literal
                 await navigator['share']({
-                    title: publicacion.title,
                     text: publicacion.description,
+                    title: publicacion.title,
                     url: publicacion.url || ''
                 }).then(() => {
                     console.log('Compartido Correctamente');

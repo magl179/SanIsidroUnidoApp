@@ -52,7 +52,7 @@ export class LoginPage implements OnInit {
     togglePasswordMode() {
         this.passwordTypeInput = this.passwordTypeInput === 'text' ? 'password' : 'text';
         this.iconpassword = this.iconpassword === 'eye-off' ? 'eye' : 'eye-off';
-        console.log(this.passwordEye);
+        // console.log(this.passwordEye);
         this.passwordEye.el.setFocus();
     }
 
@@ -87,10 +87,10 @@ export class LoginPage implements OnInit {
                 loadingLoginValidation.dismiss()
             })
         ).subscribe(res => {
-                console.log('Login First Response', res);
-                if (res.code === 200) {
+                // console.log('Login First Response', res);
+                //if (res.code === 200) {
                     this.manageLogin(loginData, res);
-                } 
+                //} //
             }, err => {
                 this.utilsService.showToast(err.error.message);
                 console.log('Error Login', err.error);
@@ -105,12 +105,12 @@ export class LoginPage implements OnInit {
                     // const social_id = user.social_id, email = user.email;
                     const { social_id, email } = user;
                     await this.authService.login(user).subscribe(res => {
-                        console.log('Login First Response', res);
-                        if (res.code === 200) {
+                        // console.log('Login First Response', res);
+                        //if (res.code === 200) {
                             this.manageLogin({provider: 'facebook', social_id, email} , res);
-                        } else {
-                            this.utilsService.showToast('Fallo Iniciar Sesión 1');
-                        }
+                        //} else {
+                          //  this.utilsService.showToast('Fallo Iniciar Sesión 1');
+                        //}
                     }, err => {
                         this.utilsService.showToast(err.error.message);
                         console.log('Error Login', err.error);
@@ -128,13 +128,14 @@ export class LoginPage implements OnInit {
                     if (googleData) {
                         const user = this.socialDataService.getGoogleDataParsed(googleData);
                         const { social_id, email } = user;
-                        await this.authService.login('google', user).subscribe(res => {
+                        await this.authService.login(user).subscribe(async res => {
                             console.log('Login First Response', res);
-                            if (res.code === 200) {
-                                this.manageLogin({social_id, email, provider: 'google'} , res);
-                            } else {
-                                this.utilsService.showToast('Fallo Iniciar Sesión 1');
-                            }
+                            //if (res.code === 200) {
+                                await this.manageLogin({social_id, email, provider: 'google'} , res);
+                            //} 
+                            //else {
+                                //this.utilsService.showToast('Fallo Iniciar Sesión 1');
+                            //}
                         }, err => {
                             this.utilsService.showToast(err.error.message);
                             console.log('Error Login', err.error);

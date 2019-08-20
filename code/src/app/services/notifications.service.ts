@@ -71,9 +71,35 @@ export class NotificationsService {
         return this.userDeviceID.asObservable();
     }
 
+     //Obtener Roles Usuario
+    getUserDevices() {
+        return this.AuthUser.value.user.devices.map(device => device.device_id);
+    }
+
+    hasDevices(){
+        if(this.AuthUser && this.userDeviceID.value && this.AuthUser.devices && this.AuthUser.devices.length > 0){
+             let hasDevice = false;
+            // console.log('USER', this.authUser.value);
+            //if (this.isAuthenticated()) {
+                let userDevices = this.getUserDevices();
+                for (const oneDevice of userDevices) {
+                    if (userDevices.includes(this.userDeviceID.value)) {
+                        hasDevice = true;
+                    }
+                }
+            //}
+            return hasDevice;
+        }else{
+            return false;
+        }
+    }
+
     loadUser() {
         this.authService.getAuthUser().subscribe(res => {
-            this.AuthUser = res.user;
+            console.log('Noti res user', res);
+            if (res) {
+                this.AuthUser = res.user;
+            }
         });
     }
 
@@ -99,7 +125,7 @@ export class NotificationsService {
         console.log('ID SUBSCRIPTOR: ', deviceID.userId);
         // this.authService.getAuthUser().subscribe(user => {
             if (this.AuthUser) {
-                this.registrarDispositivoUsuarioApi()
+                this.registrarDispositivoUsuarioApi();
             }
         // });
        

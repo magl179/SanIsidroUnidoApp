@@ -77,8 +77,11 @@ export class SocialProblemCreatePage implements OnInit {
         const description = new FormControl('', Validators.compose([
             Validators.required,
         ]));
-        this.socialProblemForm = this.formBuilder.group({ title, description });
-        this.localDataService.getFormMessagesValidations(validations); 
+        const subcategory = new FormControl('', Validators.compose([
+            Validators.required,
+        ]));
+        this.socialProblemForm = this.formBuilder.group({ title, description, subcategory });
+        this.errorMessages = this.localDataService.getFormMessagesValidations(validations); 
     }
 
     async sendSocialProblem() {

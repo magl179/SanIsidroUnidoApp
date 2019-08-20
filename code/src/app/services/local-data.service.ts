@@ -173,6 +173,28 @@ export class LocalDataService {
                 maxlength: {
                     message: `La descripción debe contener máximo ${validations.password.minlength} caracteres`
                 }
+            },
+            category: {
+                required: {
+                    message: 'La Categoria es Obligatoria'
+                },
+                minlength: {
+                    message: `La Categoria debe contener al menos ${validations.password.minlength} caracteres`
+                },
+                maxlength: {
+                    message: `La Categoria debe contener máximo ${validations.password.minlength} caracteres`
+                }
+            },
+            subcategory: {
+                required: {
+                    message: 'La Subcategoria es Obligatoria'
+                },
+                minlength: {
+                    message: `La Subcategoria debe contener al menos ${validations.password.minlength} caracteres`
+                },
+                maxlength: {
+                    message: `La Subcategoria debe contener máximo ${validations.password.minlength} caracteres`
+                }
             }
         }
     }

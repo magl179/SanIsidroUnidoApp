@@ -53,7 +53,7 @@ export class UserProfilePage implements OnInit {
     // }
 
     getRoles() {
-        console.log('get roles', this.AuthUser);
+        //console.log('get roles', this.AuthUser);
         if (this.AuthUser) {
             return this.AuthUser.roles.map(role => role.slug);
         }
@@ -100,6 +100,10 @@ export class UserProfilePage implements OnInit {
             }
         });
         await modal.present();
+    }
+
+    addDeviceToUser(){
+
     }
 
 }
