@@ -2,6 +2,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { ToastController, LoadingController, MenuController, Platform } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { IMenuComponent } from 'src/app/interfaces/barrios';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Storage } from '@ionic/storage';
 import { IPostShare } from 'src/app/interfaces/models';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
@@ -16,6 +17,7 @@ export class UtilsService implements OnInit {
 
 
     constructor(
+        private iab: InAppBrowser,
         private toastCtrl: ToastController,
         private loadingCtrl: LoadingController,
         private http: HttpClient,
@@ -41,6 +43,11 @@ export class UtilsService implements OnInit {
         return users_id.includes(user_id);
         // return (users_id.indexOf(user_id) === -1);
     }
+
+    openInBrowser(url) {
+        const navegador = this.iab.create(url, '_system');
+    }
+
 
     getBeatifulDate(stringDate: string) {
         moment.locale('es');

@@ -17,7 +17,7 @@ import { NetworkService } from 'src/app/services/network.service';
 export class AppComponent implements OnInit {
 
     showAppsplash = true;
-    isConnected = true;
+    isConnected = false;
     menuComponents: IMenuComponent[];
     automaticClose = true;
     userApp: any = null;
@@ -37,6 +37,10 @@ export class AppComponent implements OnInit {
         this.initializeApp();
     }
 
+    // ionViewWillEnter() {
+    //     this.checkInitialStateNetwork();
+    // }
+
     ngOnInit() {
         this.utilsService.getMenuOptions().subscribe((data) => {
             this.menuComponents = data;
@@ -46,6 +50,7 @@ export class AppComponent implements OnInit {
 
     async initializeApp() {
         await this.authService.verificarAuthInfo();
+        await this.checkInitialStateNetwork();
         await this.platform.ready().then(async () => {
             await this.statusBar.styleDefault();
             await this.splashScreen.hide();
@@ -53,7 +58,7 @@ export class AppComponent implements OnInit {
             timer(3000).subscribe(async () => {
                 this.showAppsplash = false;
                 await this.pushNotificationService.initialConfig();
-                await this.checkInitialStateNetwork();
+               
             });
         });
     }
@@ -125,15 +130,16 @@ export class AppComponent implements OnInit {
 
     async checkInitialStateNetwork() {
         // console.log('network check state');
-        await this.networkService.testNetworkConnection();
-        const isOnline = this.networkService.getNetworkTestValue();
-        this.isConnected = isOnline;
-        if (!isOnline) {
-            this.utilsService.showToast('Por favor enciende tu conexión a Internet');
-            console.log('No tienes conexion a Internet');
-        }
+        // await this.networkService.testNetworkConnection();
+        // const isOnline = this.networkService.getNetworkTestValue();
+        // this.isConnected = isOnline;
+        // if (!isOnline) {
+        //     this.utilsService.showToast('Por favor enciende tu conexión a Internet');
+        //     console.log('No tienes conexion a Internet');
+        // }
         this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
             this.isConnected = connected;
+            console.log('Network status', connected);
             if (!this.isConnected) {
                 this.utilsService.showToast('Por favor enciende tu conexión a Internet');
             }

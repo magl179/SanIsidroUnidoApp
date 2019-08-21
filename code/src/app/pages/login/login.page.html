@@ -1,7 +1,7 @@
 <ion-content>
     <!-- <div class="container-app"> -->
     <ion-grid class="grid-container-center padding-none">
-        <network-state-bar></network-state-bar>
+        <network-state-bar [networkStatus]="appNetworkConnection"></network-state-bar>
         <ion-row class="main-row-center">
             <ion-grid class="ion-padding">
                 <ion-row justify-content-center>

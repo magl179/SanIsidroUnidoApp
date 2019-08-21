@@ -3,47 +3,93 @@
 <ion-content padding>
     <!-- <p>Mi Perfil</p> -->
     <div class="container-profile">
-       <div class="img-profile ion-padding-top">
-           <div class="item_img" *ngIf="AuthUser">
+        <div class="img-profile ion-padding-top">
+            <div class="item_img" *ngIf="AuthUser">
                 <img [src]="AuthUser.avatar || 'assets/img/default/img_avatar.png'" alt="User Profile Image" />
                 <div class="upload_image" (click)="showChangeUserImageProfileModal()">
                     <ion-icon name="camera"></ion-icon>
                 </div>
-           </div>
-       </div>
-       <div class="ion-text-center" *ngIf="AuthUser">
-           <h3>{{AuthUser.firstname || 'Sin Nombre'}} {{AuthUser.lastname || 'Sin Apellidos'}}</h3>
-           <p>{{AuthUser.email || 'sin email'}}</p>
-           <p>Roles: {{ getRoles() | json}}</p>
-           <p *ngIf="AuthUser.number_phone">{{AuthUser.number_phone || 'sin telefono'}}</p>
-       </div>
-       <ion-grid>
-           <ion-row>
-               <ion-col class="user_profile_options">
+            </div>
+        </div>
+        <div class="ion-text-center" *ngIf="AuthUser">
+            <h3>{{AuthUser.firstname || 'Sin Nombre'}} {{AuthUser.lastname || 'Sin Apellidos'}}</h3>
+            <p>{{AuthUser.email || 'sin email'}}</p>
+            <p>Roles: {{ getRoles() | json}}</p>
+            <p *ngIf="AuthUser.number_phone">{{AuthUser.number_phone || 'sin telefono'}}</p>
+        </div>
+        <ion-grid>
+            <ion-row>
+                <ion-col class="user_profile_options">
                     <div class="icon_option" (click)="showEditProfileModal()">
                         <ion-icon name="create"></ion-icon>
                     </div>
                     <p class="title_option">Editar Perfil</p>
-               </ion-col>
-               <ion-col class="user_profile_options">
+                </ion-col>
+                <ion-col class="user_profile_options">
                     <div class="icon_option" (click)="showChangePassModal()">
-                        <ion-icon name="key"></ion-icon>      
+                        <ion-icon name="key"></ion-icon>
                     </div>
                     <p class="title_option">Cambiar Contraseña</p>
-               </ion-col>
-               <ion-col class="user_profile_options" *appHasRole="['morador_invitado']">
+                </ion-col>
+                <ion-col class="user_profile_options" *appHasRole="['morador_invitado']">
                     <div class="icon_option" (click)="showRequestMembershipModal()">
                         <ion-icon name="document"></ion-icon>
                     </div>
                     <p class="title_option">Solicitar Afiliación</p>
-               </ion-col>
-                <ion-col class="user_profile_options" *appHasDevice>
+                </ion-col>
+                <!-- <ion-col class="user_profile_options" *appHasDevice>
                     <div class="icon_option" (click)="addDeviceToUser()">
                         <ion-icon name="notifications"></ion-icon>
                     </div>
                     <p class="title_option">Añadir Mi Dispositivo</p>
-               </ion-col>
-           </ion-row>
-       </ion-grid>
+                </ion-col> -->
+            </ion-row>
+        </ion-grid>
+        <div *ngIf="AuthUser && AuthUser.social_profiles">
+            <p>Perfiles Sociales {{ AuthUser.social_profiles.length}}</p>
+        </div>
+        <ion-list>
+            <ion-list-header>
+                <ion-label>Redes Sociales Asociadas</ion-label>
+            </ion-list-header>
+            <ion-item-sliding *ngFor="let item of [1,1,1]; let i = index">
+                <ion-item>
+                    <ion-label>
+                        <p>Google</p>
+                    </ion-label>
+                </ion-item>
+                <ion-item-options side="end">
+                    <ion-item-option color="danger">Eliminar</ion-item-option>
+                </ion-item-options>
+            </ion-item-sliding>
+        </ion-list>
+        <div *ngIf="AuthUser && AuthUser.devices">
+                <p>Perfiles Sociales {{ AuthUser.devices.length}}</p>
+            </div>
+        <ion-list>
+            <ion-list-header>
+                <ion-label>Dispositivos Asociados</ion-label>
+            </ion-list-header>
+            <ion-item-sliding *ngFor="let item of [1,1,1]; let i = index">
+                <ion-item>
+                    <ion-label>
+                        <p>Samsung j{{ i+1 }}</p>
+                        <span></span>
+                    </ion-label>
+                </ion-item>
+                <ion-item-options side="end">
+                    <ion-item-option color="danger">Eliminar</ion-item-option>
+                </ion-item-options>
+            </ion-item-sliding>
+        </ion-list>
+        
+        <div *ngIf="DeviceUser">
+            <p>DeviceUser: {{DeviceUser.phone_id}}</p>
+            <p>DeviceUser: {{DeviceUser.phone_model}}</p>
+            <p>DeviceUser: {{DeviceUser.phone_platform}}</p>
+        </div>
+        <div *ngIf="!DeviceUser">
+            No se pudo obtener info device user
+        </div>
     </div>
 </ion-content>

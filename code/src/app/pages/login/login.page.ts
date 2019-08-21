@@ -7,6 +7,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import { SocialDataService } from 'src/app/services/social-data.service';
 import { LocalDataService } from '../../services/local-data.service';
 import { finalize } from 'rxjs/operators';
+import { NetworkService } from '../../services/network.service';
+import { NotificationsService } from 'src/app/services/notifications.service';
 
 
 
@@ -20,6 +22,7 @@ const urlLogueado = '/home';
 export class LoginPage implements OnInit {
 
     @ViewChild('passwordEyeLogin') passwordEye;
+    appNetworkConnection = false;
     // apphasConnection = false;
     loginData = {
         token: null,
@@ -39,13 +42,18 @@ export class LoginPage implements OnInit {
         private utilsService: UtilsService,
         private authService: AuthService,
         private socialDataService: SocialDataService,
-        private localDataService: LocalDataService
+        private localDataService: LocalDataService,
+        private networkService: NetworkService,
+        private notificationsService: NotificationsService
     ) {
         this.createForm();
         //this.loadErrorMessages();
     }
 
     async ngOnInit() {
+        this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
+            this.appNetworkConnection = connected;
+        });
         await this.utilsService.disabledMenu();
     }
 
@@ -66,6 +74,7 @@ export class LoginPage implements OnInit {
                 this.loginData.user = res.data;
                 await this.authService.setUserLocalStorage(this.loginData.user);
                 await this.authService.setTokenLocalStorage(this.loginData.token);
+                await this.notificationsService.registrarDispositivoUsuarioApi();
                 this.navCtrl.navigateRoot('/home');
             } else {
                 this.utilsService.showToast('Fallo Iniciar Sesión 2'); 
@@ -166,34 +175,5 @@ export class LoginPage implements OnInit {
         this.errorMessages = this.localDataService.getFormMessagesValidations(validations);
     }
 
-    /*loadErrorMessages() {
-        this.errorMessages = {
-            email: {
-                required: {
-                    message: 'El Email es Obligatorio'
-                },
-                minlength: {
-                    message: `El Email debe contener minimo ${this.loginFormFields.email.minlength} caracteres`
-                },
-                maxlength: {
-                    message: `El Email debe contener máximo ${this.loginFormFields.email.maxlength} caracteres`
-                },
-                pattern: {
-                    message: `Ingresa un email válido`
-                }
-            },
-            password: {
-                required: {
-                    message: 'La Contraseña es Obligatoria'
-                },
-                minlength: {
-                    message: `La Contraseña debe contener minimo ${this.loginFormFields.password.minlength} caracteres`
-                },
-                maxlength: {
-                    message: `La Contraseña debe contener máximo ${this.loginFormFields.password.maxlength} caracteres`
-                }
-            }
-        };
-    }*/
-
+    
 }

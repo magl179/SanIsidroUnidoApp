@@ -62,7 +62,7 @@ export class AuthService {
     }
     //COMPROBAR EN EL API SI TOKEN ES VÁLIDO
     tokenIsValid(token) {
-        const urlApi = `${environment.apiBaseURL}/check-token`;
+        const urlApi = `${environment.apiBaseURL}/verificar-token`;
         const headers = this.authHeaders.set('Authorization', token);
         return this.http.post(urlApi, {}, { headers });
     }

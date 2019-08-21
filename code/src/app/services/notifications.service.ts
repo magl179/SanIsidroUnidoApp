@@ -9,6 +9,15 @@ import { Observable } from 'rxjs';
 import { UserService } from './user.service';
 import { AuthService } from './auth.service';
 import { UtilsService } from './utils.service';
+import { IPhoneUser} from 'src/app/interfaces/models';
+import { Device } from '@ionic-native/device/ngx';
+
+
+const USER_DEVICE_DEFAULT: IPhoneUser = {
+    phone_id: '',
+    phone_model: '',
+    phone_platform: ''
+};
 
 
 @Injectable({
@@ -16,13 +25,23 @@ import { UtilsService } from './utils.service';
 })
 export class NotificationsService {
 
+
     messagesList: OSNotificationPayload[] = [];
     currentUser = null;
     userDeviceID = new BehaviorSubject<string>(null);
+    //userDeviceModel = new BehaviorSubject<string>(null);
+    //userDevicePlatform = new BehaviorSubject<string>(null);
     pushListener = new EventEmitter<OSNotificationPayload>();
     AuthUser = null;
+    /*userDeviceDefault = {
+        phoneUUID: '',
+        phoneModel: '',
+        phonePlatform: ''
+    };*/
+    userDevice = new BehaviorSubject<IPhoneUser>(USER_DEVICE_DEFAULT);
 
     constructor(
+        private device: Device,
         private oneSignal: OneSignal,
         private storage: Storage,
         private platform: Platform,
@@ -71,6 +90,10 @@ export class NotificationsService {
         return this.userDeviceID.asObservable();
     }
 
+    getUserDevice(){
+        return this.userDevice.asObservable();
+    }
+
      //Obtener Roles Usuario
     getUserDevices() {
         return this.AuthUser.value.user.devices.map(device => device.device_id);
@@ -103,8 +126,8 @@ export class NotificationsService {
         });
     }
 
-    registrarDispositivoUsuarioApi() {
-        this.userService.sendRequestAddUserDevice(this.userDeviceID.value, 'Dispositivo Usuario').subscribe(
+    async registrarDispositivoUsuarioApi() {
+        await this.userService.sendRequestAddUserDevice(this.userDevice.value).subscribe(
             res => {
                 console.log('Dispositivo Añadido Correctamente');
                 this.utilsService.showToast('Dispositivo Añadido Correctamente');
@@ -121,12 +144,21 @@ export class NotificationsService {
         this.oneSignal.provideUserConsent(true);
         const deviceID = await this.oneSignal.getIds();
         this.userDeviceID.next(deviceID.userId);
+        const userDevice: IPhoneUser = USER_DEVICE_DEFAULT;
+        userDevice.phone_id = deviceID.userId; 
+        userDevice.phone_model = this.device.model; 
+        userDevice.phone_platform = this.device.platform;
+        userDevice.description = `${this.device.platform} ${this.device.model}`
+        this.userDevice.next(userDevice); 
+        /* phoneUUID: '',
+        phoneModel: '',
+            phonePlatform: ''*/
         console.log('DEVICE SUBSCRIPTOR: ', deviceID);
-        console.log('ID SUBSCRIPTOR: ', deviceID.userId);
+        console.log('USERDEVICE', this.userDevice.value);
         // this.authService.getAuthUser().subscribe(user => {
-            if (this.AuthUser) {
-                this.registrarDispositivoUsuarioApi();
-            }
+            //if (this.AuthUser) {
+             //   this.registrarDispositivoUsuarioApi();
+            //}
         // });
        
         // this.

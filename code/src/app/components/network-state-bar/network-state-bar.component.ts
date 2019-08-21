@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { NetworkService } from 'src/app/services/network.service';
 
 @Component({
@@ -8,18 +8,19 @@ import { NetworkService } from 'src/app/services/network.service';
 })
 export class NetworkStateBarComponent implements OnInit {
 
-    apphasConnection = false;
+    // apphasConnection = false;
+    @Input() networkStatus = false;
     constructor(
         private networkService: NetworkService
   ) { }
 
     async ngOnInit() {
-        await this.networkService.testNetworkConnection();
-        const isOnline = this.networkService.getNetworkTestValue();
-        this.apphasConnection = isOnline;
-        this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
-            this.apphasConnection = connected;
-        });
+        // await this.networkService.testNetworkConnection();
+        // const isOnline = this.networkService.getNetworkTestValue();
+        // this.apphasConnection = isOnline;
+        // this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
+        //     this.apphasConnection = connected;
+        // });
   }
 
 }

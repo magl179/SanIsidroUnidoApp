@@ -8,6 +8,10 @@ import { SocialDataService } from '../../services/social-data.service';
 import { LocalDataService } from '../../services/local-data.service';
 import { finalize } from 'rxjs/operators';
 import { ILoginUser } from '../../interfaces/models';
+import { CheckboxValidator } from 'src/app/helpers/checkbox.validator';
+import { NetworkService } from '../../services/network.service';
+import { NotificationsService } from '../../services/notifications.service';
+
 
 const urlLogueado = '/home';
 
@@ -18,6 +22,8 @@ const urlLogueado = '/home';
 })
 export class RegisterPage implements OnInit {
     @ViewChild('passwordEyeRegister') passwordEye;
+    appNetworkConnection = false;
+
     passwordTypeInput = 'password';
     passwordStrength = '';
     iconpassword = 'eye-off';
@@ -34,12 +40,17 @@ export class RegisterPage implements OnInit {
         private utilsService: UtilsService,
         private authService: AuthService,
         private socialDataService: SocialDataService,
-        private localDataService: LocalDataService
+        private localDataService: LocalDataService,
+        private networkService: NetworkService,
+        private notificationsService: NotificationsService
     ) {
         this.createForm();
     }
 
     async ngOnInit() {
+        this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
+            this.appNetworkConnection = connected;
+        });
         await this.utilsService.disabledMenu();
     }
 
@@ -62,6 +73,7 @@ export class RegisterPage implements OnInit {
                  this.loginData.user = res.data;
                  await this.authService.setUserLocalStorage(this.loginData.user);
                  await this.authService.setTokenLocalStorage(this.loginData.token);
+                 await this.notificationsService.registrarDispositivoUsuarioApi();
                  this.navCtrl.navigateRoot('/home');
              } else {
                  this.utilsService.showToast('Fallo Iniciar Sesión 2'); 
@@ -97,6 +109,10 @@ export class RegisterPage implements OnInit {
             this.utilsService.showToast(err.error.message);
             console.log('Error Login', err.error);
         });
+    }
+
+    goToTermConditions() {
+        this.utilsService.openInBrowser('https://www.google.com');
     }
 
     async registerFBUser() {
@@ -159,11 +175,14 @@ export class RegisterPage implements OnInit {
         ]));
         // Campo Contraseña
         const password = new FormControl('', Validators.compose([
-            Validators.required,
+            Validators.required
             // Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,20}$/)
         ]));
+        const termconditions = new FormControl(false, Validators.compose([
+            CheckboxValidator.isChecked, Validators.required
+        ]));
         // Añado Propiedades al Forms
-        this.registerForm = this.formBuilder.group({ firstname, lastname, email, password });
+        this.registerForm = this.formBuilder.group({ firstname, lastname, email, password, termconditions });
         // Cargo Mensajes de Validaciones
         this.errorMessages = this.localDataService.getFormMessagesValidations(validations);
     }

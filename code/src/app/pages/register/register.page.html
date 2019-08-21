@@ -153,6 +153,29 @@
                                     {{errorMessages.password.pattern.message}}
                                 </p>
                             </div>
+                            <div class="item-form">
+                                <!-- <ion-item lines="none">
+                                    <ion-label slot="end">He leído y acepto los términos y condiciones</ion-label>
+                                    <ion-checkbox slot="start"></ion-checkbox>
+                                  </ion-item> -->
+                                  <div class="item item-checkbox">
+                                    <!-- <label class="checkbox">
+                                      <input type="checkbox">
+                                    </label> -->
+                                    <ion-checkbox color="primary" formControlName="termconditions"></ion-checkbox>
+                                    <span class="label">
+                                        He leído y acepto los <span class="link" (click)="goToTermConditions()">términos y condiciones de uso</span>
+                                    </span>                                    
+                                  </div>
+                            </div>
+
+                            <div class="form-errors">
+                                <p class="form-error"
+                                    *ngIf="registerForm.get('termconditions').hasError('required') && registerForm.get('termconditions').touched">
+                                    {{errorMessages.termconditions.required.message}}
+                                </p>
+                            </div>
+                            
                             <div padding>
                                 <ion-button (click)="registerUser()" [disabled]="!registerForm.valid" color="primary"
                                     type="submit" expand="block">

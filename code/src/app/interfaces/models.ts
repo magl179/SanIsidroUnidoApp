@@ -168,3 +168,11 @@ interface IPhones {
     public_service_id: number;
     phone_number: string;
 }
+
+export interface IPhoneUser {
+    phone_id: string;
+    phone_model?: string;
+    phone_platform?: string
+    description?: string;
+    user_id?: number;
+}

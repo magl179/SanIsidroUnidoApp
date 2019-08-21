@@ -78,7 +78,8 @@ const routes: Routes = [
         path: 'about',
         loadChildren: './pages/about/about.module#AboutPageModule',
         canActivate: [LoginAuthGuard]
-    },
+    },  { path: 'configuration', loadChildren: './pages/protected/configuration/configuration.module#ConfigurationPageModule' },
+
 
 ];
 

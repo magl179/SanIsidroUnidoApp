@@ -195,6 +195,11 @@ export class LocalDataService {
                 maxlength: {
                     message: `La Subcategoria debe contener máximo ${validations.password.minlength} caracteres`
                 }
+            },
+            termconditions: {
+                required: {
+                    message: 'Por favor acepta los términos y condiciones'
+                }
             }
         }
     }

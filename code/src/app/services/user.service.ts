@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { environment } from 'src/environments/environment';
 import { IEditProfile } from 'src/app/interfaces/models';
 import { catchError } from 'rxjs/operators';
+import { IPhoneUser } from '../interfaces/models';
 
 @Injectable({
     providedIn: 'root'
@@ -66,12 +67,22 @@ export class UserService implements OnInit {
         }, { headers });
     }
 
-    sendRequestAddUserDevice(device_id: string, description: string) {
+    sendRequestAddUserDevice(device: IPhoneUser) {
         const headers = this.headersApp.set('Authorization', this.AuthToken);
         const user_id = this.AuthUser.id;
-        return this.http.patch(`${environment.apiBaseURL}/usuarios/${user_id}/agregar-dispositivo`, {
-            device_id, description
-        }, { headers });
+        return this.http.post(`${environment.apiBaseURL}/usuarios/${user_id}/agregar-dispositivo`, { device }, { headers });
+    }
+
+    sendRequestDeleteUserDevice(device_id: number) {
+        const headers = this.headersApp.set('Authorization', this.AuthToken);
+        const user_id = this.AuthUser.id;
+        return this.http.delete(`${environment.apiBaseURL}/usuarios/${user_id}/dispositivos/${device_id}`, { headers });
+    }
+
+    sendRequestDeleteSocialProfile(social_profile_id: number) {
+        const headers = this.headersApp.set('Authorization', this.AuthToken);
+        const user_id = this.AuthUser.id;
+        return this.http.delete(`${environment.apiBaseURL}/perfiles-sociales/${user_id}`, { headers });
     }
 
     getUserInfo(id: number): Observable<any> {

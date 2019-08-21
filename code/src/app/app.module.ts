@@ -19,7 +19,9 @@ import { Facebook } from '@ionic-native/facebook/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
 import { OneSignal } from '@ionic-native/onesignal/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { Device } from '@ionic-native/device/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
@@ -62,6 +64,8 @@ import { AuthInterceptorService } from 'src/app/services/auth-interceptor.servic
         OneSignal,
         SocialSharing,
         Network,
+        Device,
+        InAppBrowser,
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptorService,

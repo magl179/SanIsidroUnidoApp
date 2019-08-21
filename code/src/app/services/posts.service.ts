@@ -70,14 +70,14 @@ export class PostsService implements OnInit {
     sendCreateDetailToPost(detailInfo: ICreateDetail) {
         console.log('auth token', this.AuthToken);
         const headers = this.headersApp.set('Authorization', this.AuthToken);
-        return this.http.post(`${environment.apiBaseURL}/details`, detailInfo, {
+        return this.http.post(`${environment.apiBaseURL}/detalles`, detailInfo, {
             headers
         });
     }
     sendDeleteDetailToPost(post_id: number) {
         const headers = this.headersApp.set('Authorization', this.AuthToken);
         console.log('auth token', this.AuthToken);
-        return this.http.delete(`${environment.apiBaseURL}/details/${post_id}`, {
+        return this.http.delete(`${environment.apiBaseURL}/detalles/${post_id}`, {
             headers
         });
     }
