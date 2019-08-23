@@ -40,8 +40,9 @@ export class UserService implements OnInit {
         const headers = this.headersApp.set('Authorization', this.AuthToken);
         const user_id = this.AuthUser.id;
         return this.http.patch(`${environment.apiBaseURL}/usuarios/${user_id}/cambiar-contrasenia`, {
-            password: newPassword
-        }, { headers: this.headersApp });
+            password: newPassword,
+            password_confirmation: newPassword
+        }, { headers });
     }
 
     sendChangeUserImageRequest(image: string): Observable<any> {
@@ -70,7 +71,7 @@ export class UserService implements OnInit {
     sendRequestAddUserDevice(device: IPhoneUser) {
         const headers = this.headersApp.set('Authorization', this.AuthToken);
         const user_id = this.AuthUser.id;
-        return this.http.post(`${environment.apiBaseURL}/usuarios/${user_id}/agregar-dispositivo`, { device }, { headers });
+        return this.http.post(`${environment.apiBaseURL}/usuarios/${user_id}/dispositivos`, { device }, { headers });
     }
 
     sendRequestDeleteUserDevice(device_id: number) {
@@ -82,7 +83,7 @@ export class UserService implements OnInit {
     sendRequestDeleteSocialProfile(social_profile_id: number) {
         const headers = this.headersApp.set('Authorization', this.AuthToken);
         const user_id = this.AuthUser.id;
-        return this.http.delete(`${environment.apiBaseURL}/perfiles-sociales/${user_id}`, { headers });
+        return this.http.delete(`${environment.apiBaseURL}/usuarios/${user_id}/perfiles-sociales/${social_profile_id}`, { headers });
     }
 
     getUserInfo(id: number): Observable<any> {

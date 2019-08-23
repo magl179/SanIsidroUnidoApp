@@ -81,7 +81,7 @@ export class NotificationsService {
             console.log('Antes GET ONESIGNAL SUBSCRIPTOR');
             this.getOneSignalIDSubscriptor();
         } else {
-            console.log('Onesignal sin Cordova Disponible');
+            console.log('Onesignal sin Cordova');
         }
     }
 
@@ -96,7 +96,7 @@ export class NotificationsService {
 
      //Obtener Roles Usuario
     getUserDevices() {
-        return this.AuthUser.value.user.devices.map(device => device.device_id);
+        return this.AuthUser.value.user.devices.map(device => device.phone_id);
     }
 
     hasDevices(){
@@ -119,23 +119,45 @@ export class NotificationsService {
 
     loadUser() {
         this.authService.getAuthUser().subscribe(res => {
-            console.log('Noti res user', res);
+            // console.log('Noti res user', res);
             if (res) {
                 this.AuthUser = res.user;
             }
         });
     }
 
-    async registrarDispositivoUsuarioApi() {
-        await this.userService.sendRequestAddUserDevice(this.userDevice.value).subscribe(
-            res => {
-                console.log('Dispositivo Añadido Correctamente');
+    async registerUserDevice() {
+        if (this.platform.is('cordova')) {
+            await this.userService.sendRequestAddUserDevice(this.userDevice.value)
+            .subscribe((res: any) => {
                 this.utilsService.showToast('Dispositivo Añadido Correctamente');
+                this.authService.updateAuthInfo(res.data.token, res.data.user)
             }, err => {
-                this.utilsService.showToast('Ocurrio un error al añadir el dispositivo');
+                this.utilsService.showToast('Ocurrio un error al añadir el dispositivo :( ');
                 console.log('Ocurrio un error al añadir el dispositivo', err);
-            }
-        );
+            });
+            // .subscribe(
+            //     res => {
+            //         console.log('Dispositivo Añadido Correctamente');
+            //         this.utilsService.showToast('Dispositivo Añadido Correctamente');
+            //     }, err => {
+            //         this.utilsService.showToast('Ocurrio un error al añadir el dispositivo');
+            //         console.log('Ocurrio un error al añadir el dispositivo', err);
+            //     }
+            // );
+        } else {
+            console.log('No hay cordova RDU');
+        }
+    }
+
+    async removeUserDevice(device_id) {
+        await this.userService.sendRequestDeleteUserDevice(device_id).subscribe((res: any) => {
+            this.utilsService.showToast('Dispositivo eliminado Correctamente');
+            this.authService.updateAuthInfo(res.data.token, res.data.user)
+        }, err => {
+            this.utilsService.showToast('Ocurrio un error al eliminar el dispositivo :( ');
+            console.log('Ocurrio un error al eliminar el dispositivo', err);
+        });
     }
 
     // Función Obtener ID Suscriptor
@@ -146,8 +168,8 @@ export class NotificationsService {
         this.userDeviceID.next(deviceID.userId);
         const userDevice: IPhoneUser = USER_DEVICE_DEFAULT;
         userDevice.phone_id = deviceID.userId; 
-        userDevice.phone_model = this.device.model; 
-        userDevice.phone_platform = this.device.platform;
+        userDevice.phone_model = this.device.model || 'Modelo Generico'; 
+        userDevice.phone_platform = this.device.platform || 'Sistema Generico';
         userDevice.description = `${this.device.platform} ${this.device.model}`
         this.userDevice.next(userDevice); 
         /* phoneUUID: '',

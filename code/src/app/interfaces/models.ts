@@ -36,8 +36,8 @@ export interface IDirective {
     state: number;
     basic_service_image?: any;
     number_phone?: any;
-    created_at: string;
-    updated_at: string;
+    created_at?: string;
+    updated_at?: string;
     roles?: IRole[];
 }
 
@@ -55,6 +55,25 @@ export interface ISocialProblem {
     category?: any;
     user?: any;
     details?: any;
+}
+
+export interface ISocialProfile{
+    id: Number;
+    user_id: number;
+    social_id: string;
+    provider: string;
+    created_at?: string;
+    updated_at?: string;
+}
+
+export interface IDeviceUser{
+    id: Number;
+    phone_id: number;
+    phone_model?: string;
+    description?: string;
+    user_id: number;
+    created_at?: string;
+    updated_at?: string;
 }
 
 export interface IEvent {
@@ -114,8 +133,8 @@ export interface IEventDetail{
     ubication: IUbication;
     user_id: number;
     category_id: number;
-    created_at: string;
-    updated_at: string;
+    created_at?: string;
+    updated_at?: string;
     details?: any;
 }
 
@@ -146,8 +165,8 @@ interface IRole {
     name: string;
     slug: string;
     description: string;
-    created_at: string;
-    updated_at: string;
+    created_at?: string;
+    updated_at?: string;
     role_user?: IRoleUser;
 }
 
@@ -175,4 +194,23 @@ export interface IPhoneUser {
     phone_platform?: string
     description?: string;
     user_id?: number;
+}
+
+export interface IUser {
+    id: number;
+    firstname: string;
+    lastname: string;
+    email: string;
+    email_verified_at?: any;
+    avatar?: string;
+    password?: any;
+    state: number;
+    basic_service_image?: any;
+    number_phone?: any;
+    position_id?: any;
+    created_at?: string;
+    updated_at?: string;
+    devices?: IDeviceUser[];
+    social_profiles: ISocialProfile[];
+    roles: IRole[];
 }

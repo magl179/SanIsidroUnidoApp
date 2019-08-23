@@ -3,6 +3,7 @@ import { UtilsService } from '../../../services/utils.service';
 import { IUbicationItem } from 'src/app/interfaces/barrios';
 import { IPublicService } from 'src/app/interfaces/models';
 import { PostsService } from '../../../services/posts.service';
+import { NetworkService } from 'src/app/services/network.service';
 
 // import { environment}
 
@@ -13,19 +14,24 @@ import { PostsService } from '../../../services/posts.service';
 })
 export class PublicServicesPage implements OnInit {
 
+    appNetworkConnection = false;
     publicServicesPoints: IUbicationItem[] = [];
     publicServices: IPublicService[] = [];
     filterPublicServices = [];
     isPublicServiceAvalaible = false;
     publicServiceSelected = null;
-    loading: any;
+    // loading: any;
 
     constructor(
         private utilsService: UtilsService,
+        private networkService: NetworkService,
         private postService: PostsService
     ) { }
 
     async ngOnInit() {
+        this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
+            this.appNetworkConnection = connected;
+        });
         this.postService.getPublicServices().subscribe(response => {
             this.publicServices = response.data;
         });

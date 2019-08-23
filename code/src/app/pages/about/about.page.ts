@@ -29,9 +29,6 @@ export class AboutPage implements OnInit {
                 this.infodeviceID = data;
             }
         });
-        await this.networkService.testNetworkConnection();
-        const isOnline = this.networkService.getNetworkTestValue();
-        this.isConnected = isOnline;
         this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
             this.isConnected = connected;
         });

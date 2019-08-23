@@ -6,6 +6,7 @@ import { PostsService } from '../../../services/posts.service';
 import { UserService } from '../../../services/user.service';
 import { AuthService } from '../../../services/auth.service';
 import { IPostShare, ISocialProblem } from '../../../interfaces/models';
+import { NetworkService } from 'src/app/services/network.service';
 
 @Component({
     selector: 'app-social-problem-detail',
@@ -18,16 +19,21 @@ export class SocialProblemDetailPage implements OnInit {
     idPost: number;
     socialProblem: ISocialProblem = null;
     AuthUser = null;
+    appNetworkConnection = false;
 
     constructor(
         private route: ActivatedRoute,
         private utilsService: UtilsService,
         private postService: PostsService,
         private userService: UserService,
+        private networkService: NetworkService,
         private authService: AuthService) { }
 
     async ngOnInit() {
         this.id = this.route.snapshot.paramMap.get('id');
+        this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
+            this.appNetworkConnection = connected;
+        });
         // this.idPost = Number(this.id);
         this.authService.getAuthUser().subscribe(res => {
             this.AuthUser = res.user;

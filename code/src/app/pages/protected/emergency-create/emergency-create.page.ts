@@ -8,6 +8,8 @@ import { IEmergencyReported, IUbication } from 'src/app/interfaces/models';
 import { PostsService } from '../../../services/posts.service';
 import { LocalDataService } from '../../../services/local-data.service';
 import { finalize } from 'rxjs/operators';
+import { fakeAsync } from '@angular/core/testing';
+import { NetworkService } from '../../../services/network.service';
 
 
 // type PaneType = 'left' | 'right';
@@ -20,6 +22,7 @@ import { finalize } from 'rxjs/operators';
 })
 export class EmergencyCreatePage implements OnInit {
 
+    appNetworkConnection = false;
     currentStep = 1;
     emergencyPostValid = false;
     // activePane: PaneType = 'left';
@@ -55,6 +58,7 @@ export class EmergencyCreatePage implements OnInit {
         public formBuilder: FormBuilder,
         private localizationService: LocalizationService,
         private postService: PostsService,
+        private networkService: NetworkService,
         private localDataService: LocalDataService
     ) {
         this.createForm();
@@ -64,6 +68,9 @@ export class EmergencyCreatePage implements OnInit {
         const coords = await this.localizationService.getCoordinate();
         this.emergencyPostCoordinate.latitude = coords.latitude;
         this.emergencyPostCoordinate.longitude = coords.longitude;
+        this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
+            this.appNetworkConnection = connected;
+        });
         // console.log(this.emergencyForm.get('title').value);
     }
 

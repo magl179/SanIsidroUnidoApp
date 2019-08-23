@@ -71,7 +71,7 @@ export class AuthService {
         if (this.tokenExists()) {
             const itemToken = await this.storage.get(TOKEN_ITEM_NAME);
             if (itemToken) {
-                console.log('item token to check', itemToken);
+                // console.log('item token to check', itemToken);
                 this.tokenIsValid(itemToken).subscribe( res=> {
                     console.log('Token Válido');
                 }, err => {

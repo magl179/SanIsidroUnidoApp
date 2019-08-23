@@ -73,7 +73,7 @@ export class RegisterPage implements OnInit {
                  this.loginData.user = res.data;
                  await this.authService.setUserLocalStorage(this.loginData.user);
                  await this.authService.setTokenLocalStorage(this.loginData.token);
-                 await this.notificationsService.registrarDispositivoUsuarioApi();
+                 await this.notificationsService.registerUserDevice();
                  this.navCtrl.navigateRoot('/home');
              } else {
                  this.utilsService.showToast('Fallo Iniciar Sesión 2'); 

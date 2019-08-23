@@ -7,6 +7,7 @@ import { IEventDetail } from 'src/app/interfaces/models';
 import { PostsService } from '../../../services/posts.service';
 import { AuthService } from '../../../services/auth.service';
 import { IEvent, IPostShare } from '../../../interfaces/models';
+import { NetworkService } from '../../../services/network.service';
 
 
 @Component({
@@ -17,6 +18,7 @@ import { IEvent, IPostShare } from '../../../interfaces/models';
 export class EventDetailPage implements OnInit {
 
     id: string;
+    appNetworkConnection = false;
     AuthUser = null;
     event:IEventDetail = null;
 
@@ -30,11 +32,15 @@ export class EventDetailPage implements OnInit {
         private route: ActivatedRoute,
         private utilsService: UtilsService,
         private postService: PostsService,
-    private authService: AuthService) { }
+        private networkService: NetworkService,
+        private authService: AuthService) { }
 
     ngOnInit() {
         this.id = this.route.snapshot.paramMap.get('id');
         console.log('ID RECIBIDO:', this.id);
+        this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
+            this.appNetworkConnection = connected;
+        });
         this.authService.getAuthUser().subscribe(res => {
             this.AuthUser = res.user; 
         });

@@ -9,6 +9,7 @@ import { AuthService } from './services/auth.service';
 import { UtilsService } from './services/utils.service';
 import { NotificationsService } from './services/notifications.service';
 import { NetworkService } from 'src/app/services/network.service';
+import { environment } from '../environments/environment';
 
 @Component({
     selector: 'app-root',
@@ -145,4 +146,9 @@ export class AppComponent implements OnInit {
             }
         });
     }
+
+    getImageURL(image_name) {
+        return `${environment.apiBaseURL}/${environment.image_blob_url}/${image_name}`;
+    }
+
 }

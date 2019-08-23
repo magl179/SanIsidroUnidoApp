@@ -7,6 +7,12 @@ import { RequestMembershipPage } from 'src/app/modals/request-membership/request
 import { ChangeProfileImagePage } from 'src/app/modals/change-profile-image/change-profile-image.page';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { IPhoneUser } from '../../../interfaces/models';
+import { NetworkService } from 'src/app/services/network.service';
+import { environment } from '../../../../environments/environment';
+import { UserService } from '../../../services/user.service';
+import { UtilsService } from '../../../services/utils.service';
+
+// const imageServeURL = `${environment.apiBaseURL}/${environment.image_blob_url}/`;
 
 @Component({
     selector: 'app-user-profile',
@@ -16,8 +22,8 @@ import { IPhoneUser } from '../../../interfaces/models';
 export class UserProfilePage implements OnInit {
 
     //Guardar Subscripcion Usuario
-    
-
+    appNetworkConnection = false;
+    // imageServeURL = `${environment.apiBaseURL}/${environment.image_blob_url}/`;
     AuthUser = null;
     sizeOptions = 4;
     canRequestAfiliation = true;
@@ -26,13 +32,22 @@ export class UserProfilePage implements OnInit {
     constructor(
         private authService: AuthService,
         private modalCtrl: ModalController,
-        private notificationsService: NotificationsService) {
+        private userService: UserService,
+        private utilsService: UtilsService,
+        private notificationsService: NotificationsService,
+        private networkService: NetworkService) {
         // this.loadUserData();
+    }
+
+    getImageURL(image_name) {
+        return `${environment.apiBaseURL}/${environment.image_blob_url}/${image_name}`;
     }
 
     ionViewWillEnter() {
         this.authService.getAuthUser().subscribe(res => {
+            if (res) {                
                 this.AuthUser = res.user;
+            }
         });
         this.notificationsService.getUserDevice().subscribe(userdevice => {
             if(userdevice){
@@ -46,6 +61,9 @@ export class UserProfilePage implements OnInit {
     // }
 
     async ngOnInit() {
+        this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
+            this.appNetworkConnection = connected;
+        });
         this.checkRolUser();
      }
 
@@ -103,8 +121,22 @@ export class UserProfilePage implements OnInit {
         await modal.present();
     }
 
-    addDeviceToUser(){
+    addDeviceToUser() {
+        this.notificationsService.registerUserDevice();
+    }
 
+    removeDevicetoUser($device_id) {
+        this.notificationsService.removeUserDevice($device_id);
+    }
+
+    removeSocialProfileToUser($social_profile_id) {
+        this.userService.sendRequestDeleteSocialProfile($social_profile_id).subscribe((res: any) => {
+            this.utilsService.showToast('Perfil Social Desconectado Correctamente');
+            this.authService.updateAuthInfo(res.data.token, res.data.user)
+        }, err => {
+            this.utilsService.showToast('Perfil Social no se pudo eliminar desconectar :(');
+            console.log('error al desconectar perfil social imagen usuario', err);
+        });
     }
 
 }

@@ -18,6 +18,8 @@ export class UploadImageComponent implements OnInit {
 
     // uploadedImages = [];
     imagenB64: string;
+    imagejpg: string;
+    
 
     @Input() maxImages = 3;
     @Input() uploadedImages = [];
@@ -33,6 +35,9 @@ export class UploadImageComponent implements OnInit {
         cameraOptions.destinationType = this.camera.DestinationType.DATA_URL;
         cameraOptions.encodingType = this.camera.EncodingType.JPEG;
         cameraOptions.mediaType = this.camera.MediaType.PICTURE;
+        // cameraOptions.destinationType = this.camera.DestinationType.FILE_URI;
+        // cameraOptions.encodingType = this.camera.EncodingType.JPEG;
+        // cameraOptions.mediaType = this.camera.MediaType.PICTURE;
     }
 
     async getUploadedImages() {
@@ -77,6 +82,8 @@ export class UploadImageComponent implements OnInit {
                         // DatoImagen es un string codificado en base64 - BASE URI
                         this.imagenB64 = `data:image/jpeg;base64,${datosImagen}`;
                         this.uploadedImages.push(this.imagenB64);
+                        // this.uploadedImages.push(datosImagen);
+                        // console.log('imagen subida', datosImagen);
                     }, err => {
                         console.log({ errorCapturarImagen: err });
                     });

@@ -19,31 +19,12 @@ export class NoLoginAuthGuard implements CanActivate {
 
     async canActivate() {
         const userAuthenticated = await this.authService.isAuthenticated();
-        console.log('login auth', userAuthenticated);
+        // console.log('login auth', userAuthenticated);
         if (userAuthenticated) {
             this.navCtrl.navigateRoot('/home');
             return false;
         } else {
             return true;
         }
-        // return 
-        // return this.authService.getAuthUser().pipe(
-        //     take(1),
-        //     map(user => {
-        //         console.log('No login Auth', user);
-        //         if (user) {
-                   
-        //         } else {
-        //             return true;
-        //         }
-        //     })
-        // );
-        // const isAuthenticated = await this.authService.isAuthenticated();
-        // // console.log({tengo_auth: isAuthenticated});
-        // if (isAuthenticated === true) {
-        //     this.navCtrl.navigateRoot('/home');
-        //     return false;
-        // }
-        // return true;
     }
 }

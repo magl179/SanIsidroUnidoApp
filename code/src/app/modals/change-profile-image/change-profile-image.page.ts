@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { UserService } from '../../services/user.service';
 import { UtilsService } from '../../services/utils.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
     selector: 'app-change-profile-image',
@@ -14,7 +15,8 @@ export class ChangeProfileImagePage implements OnInit {
     constructor(
         private modalCtrl: ModalController,
         private userService: UserService,
-        private utilsService: UtilsService
+        private utilsService: UtilsService,
+        private authService: AuthService
     ) { }
 
     ngOnInit() {
@@ -32,9 +34,11 @@ export class ChangeProfileImagePage implements OnInit {
     sendRequestChangeUserProfile() {
         // alert(JSON.stringify(this.profileUserImg));
         this.userService.sendChangeUserImageRequest(this.profileUserImg[0]).subscribe(res => {
-            alert('Imagen Cambiada correctamente');
+            this.utilsService.showToast('Imagen Actualizada Correctamente');
+            this.authService.updateAuthInfo(res.data.token, res.data.user)
         }, err => {
-                console.log('error al cambiar imagen usuario', err);
+            this.utilsService.showToast('Imagen No se pudo actualizar :(');
+            console.log('error al actualizar imagen usuario', err);
         });
     }
 

@@ -1,5 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
-import { ToastController, LoadingController, MenuController, Platform } from '@ionic/angular';
+import { ToastController, LoadingController, MenuController, Platform, PopoverController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { IMenuComponent } from 'src/app/interfaces/barrios';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
@@ -22,6 +22,7 @@ export class UtilsService implements OnInit {
         private loadingCtrl: LoadingController,
         private http: HttpClient,
         private menuCtrl: MenuController,
+        private popoverCtrl: PopoverController,
         private storage: Storage,
         private platform: Platform,
         private socialSharing: SocialSharing
@@ -123,6 +124,11 @@ export class UtilsService implements OnInit {
             position: position || 'top'
         });
         toastItem.present();
+    }
+
+    async showPopover() {
+        
+       
     }
 
     async createBasicLoading(message: string = 'Cargando') {

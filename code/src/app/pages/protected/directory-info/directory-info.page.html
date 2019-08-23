@@ -1,42 +1,45 @@
 <app-header-back title="Directorio Barrial"></app-header-back>
 <ion-content padding>
-    <ion-list *ngIf="(directives.length === 0 || directives === null) && !loadDirectives">
-        <ion-item lines="none" *ngFor="let skeleton of [1,1,1,1,1,1,1,1]" class="animated flash slow infinite">
-            <ion-thumbnail slot="start">
-                <ion-skeleton-text class="circle"></ion-skeleton-text>
-            </ion-thumbnail>
-            <ion-label class="profile_item ion-text-center">
-                <h2 class="title">
-                    <ion-skeleton-text width="100%"></ion-skeleton-text>
-                </h2>
-                <h5 class="subtitle">
-                    <ion-skeleton-text width="100%"></ion-skeleton-text>
-                </h5>
-                <p class="phone">
-                    <ion-skeleton-text width="100%"></ion-skeleton-text>
-                </p>
-            </ion-label>
-        </ion-item>
-    </ion-list>
-    <ion-list *ngIf="directives.length > 0">
-        <ion-item lines="none" *ngFor="let people of directives">
-            <ion-thumbnail slot="start">
-                <img class="circle" [src]="people.avatar || '/assets/img/default/img_avatar.png'">
-                <!-- <ion-img class="circle" [src]="people.avatar || '/assets/img/default/img_avatar.png'"></ion-img> -->
-            </ion-thumbnail>
-            <ion-label class="profile_item ion-text-center">
-                <h2 class="title">
-                    <span class="profile_detail">{{people.firstname}} {{people.lastname}}</span>
-                </h2>
-                <h5 class="subtitle">
-                    <span class="profile_detail">{{people.roles[0].role_user.position || 'Sin posicion'}}</span>
-                </h5>
-                <p class="phone">
-                    <ion-icon name="call"></ion-icon>
-                    <span class="profile_detail">{{people.number_phone || 'Sin Telefono'}}</span>
-                </p>
-            </ion-label>
-        </ion-item>
-    </ion-list>
-    <p *ngIf="loadDirectives && directives.length === 0">No hay listado disponible</p>
+    <app-network-banner *ngIf="!appNetworkConnection" networkConnection="appNetworkConnection"></app-network-banner>
+    <div *ngIf="appNetworkConnection">
+        <ion-list *ngIf="(directives.length === 0 || directives === null) && !loadDirectives">
+            <ion-item lines="none" *ngFor="let skeleton of [1,1,1,1,1,1,1,1]" class="animated flash slow infinite">
+                <ion-thumbnail slot="start">
+                    <ion-skeleton-text class="circle"></ion-skeleton-text>
+                </ion-thumbnail>
+                <ion-label class="profile_item ion-text-center">
+                    <h2 class="title">
+                        <ion-skeleton-text width="100%"></ion-skeleton-text>
+                    </h2>
+                    <h5 class="subtitle">
+                        <ion-skeleton-text width="100%"></ion-skeleton-text>
+                    </h5>
+                    <p class="phone">
+                        <ion-skeleton-text width="100%"></ion-skeleton-text>
+                    </p>
+                </ion-label>
+            </ion-item>
+        </ion-list>
+        <ion-list *ngIf="directives.length > 0">
+            <ion-item lines="none" *ngFor="let people of directives">
+                <ion-thumbnail slot="start">
+                    <img class="circle" [src]="people.avatar || '/assets/img/default/img_avatar.png'">
+                    <!-- <ion-img class="circle" [src]="people.avatar || '/assets/img/default/img_avatar.png'"></ion-img> -->
+                </ion-thumbnail>
+                <ion-label class="profile_item ion-text-center">
+                    <h2 class="title">
+                        <span class="profile_detail">{{people.firstname}} {{people.lastname}}</span>
+                    </h2>
+                    <h5 class="subtitle">
+                        <span class="profile_detail">{{people.roles[0].role_user.position || 'Sin posicion'}}</span>
+                    </h5>
+                    <p class="phone">
+                        <ion-icon name="call"></ion-icon>
+                        <span class="profile_detail">{{people.number_phone || 'Sin Telefono'}}</span>
+                    </p>
+                </ion-label>
+            </ion-item>
+        </ion-list>
+        <p *ngIf="loadDirectives && directives.length === 0">No hay listado disponible</p>
+    </div>
 </ion-content>

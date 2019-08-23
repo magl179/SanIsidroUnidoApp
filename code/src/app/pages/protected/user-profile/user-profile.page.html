@@ -2,10 +2,11 @@
 
 <ion-content padding>
     <!-- <p>Mi Perfil</p> -->
-    <div class="container-profile">
+    <app-network-banner *ngIf="!appNetworkConnection" networkConnection="appNetworkConnection"></app-network-banner>
+    <div class="container-profile" *ngIf="appNetworkConnection">
         <div class="img-profile ion-padding-top">
             <div class="item_img" *ngIf="AuthUser">
-                <img [src]="AuthUser.avatar || 'assets/img/default/img_avatar.png'" alt="User Profile Image" />
+                <img [src]="getImageURL(AuthUser.avatar) || 'assets/img/default/img_avatar.png'" alt="User Profile Image" />
                 <div class="upload_image" (click)="showChangeUserImageProfileModal()">
                     <ion-icon name="camera"></ion-icon>
                 </div>
@@ -37,51 +38,49 @@
                     </div>
                     <p class="title_option">Solicitar Afiliación</p>
                 </ion-col>
-                <!-- <ion-col class="user_profile_options" *appHasDevice>
+                <ion-col class="user_profile_options" *appHasDevice>
                     <div class="icon_option" (click)="addDeviceToUser()">
                         <ion-icon name="notifications"></ion-icon>
                     </div>
-                    <p class="title_option">Añadir Mi Dispositivo</p>
-                </ion-col> -->
+                    <p class="title_option">Asociar Mi Dispositivo</p>
+                </ion-col>
             </ion-row>
         </ion-grid>
-        <div *ngIf="AuthUser && AuthUser.social_profiles">
-            <p>Perfiles Sociales {{ AuthUser.social_profiles.length}}</p>
-        </div>
-        <ion-list>
-            <ion-list-header>
-                <ion-label>Redes Sociales Asociadas</ion-label>
-            </ion-list-header>
-            <ion-item-sliding *ngFor="let item of [1,1,1]; let i = index">
-                <ion-item>
-                    <ion-label>
-                        <p>Google</p>
-                    </ion-label>
-                </ion-item>
-                <ion-item-options side="end">
-                    <ion-item-option color="danger">Eliminar</ion-item-option>
-                </ion-item-options>
-            </ion-item-sliding>
-        </ion-list>
-        <div *ngIf="AuthUser && AuthUser.devices">
-                <p>Perfiles Sociales {{ AuthUser.devices.length}}</p>
+
+        <div class="list-items-container">
+            <p class="title">Redes Sociales Asociadas</p>
+            <div  class="list-items" *ngIf="AuthUser && AuthUser.social_profiles && AuthUser.social_profiles.length > 0">
+                <div class="list-item" *ngFor="let social_profile of AuthUser.social_profiles; let i = index">
+                    <div class="item-left">
+                        <img class="icon" src="/assets/img/svg/google.svg" *ngIf="(social_profile.provider | lowercase) === 'google'">
+                        <img class="icon" src="/assets/img/svg/facebook.svg" *ngIf="(social_profile.provider | lowercase) === 'facebook'">
+                        <span class="label">Stalin Maza</span>
+                    </div>
+                    <div class="item-right">
+                            <ion-button color="light" class="ion-text-capitalize" (click)="removeSocialProfileToUser(social_profile.id)">Desconectar Cuenta</ion-button>
+                    </div>
+                </div>
             </div>
-        <ion-list>
-            <ion-list-header>
-                <ion-label>Dispositivos Asociados</ion-label>
-            </ion-list-header>
-            <ion-item-sliding *ngFor="let item of [1,1,1]; let i = index">
-                <ion-item>
-                    <ion-label>
-                        <p>Samsung j{{ i+1 }}</p>
-                        <span></span>
-                    </ion-label>
-                </ion-item>
-                <ion-item-options side="end">
-                    <ion-item-option color="danger">Eliminar</ion-item-option>
-                </ion-item-options>
-            </ion-item-sliding>
-        </ion-list>
+        </div>
+
+        <div class="list-items-container">
+                <p class="title">Dispositivos asociados</p>
+                <div  class="list-items" *ngIf="AuthUser && AuthUser.devices && AuthUser.devices.length > 0">
+                    <div class="list-item" *ngFor="let device of AuthUser.devices; let i = index">
+                        <div class="item-left">
+                            <img class="icon" src="/assets/img/svg/smartphone.svg">
+                            <div class="label">
+                                <p>{{device.phone_model}}</p>
+                                <!-- <p>{{device.phone_model}}</p> -->
+                            </div>
+
+                        </div>
+                        <div class="item-right">
+                            <ion-button color="light" class="ion-text-capitalize" (click)="removeDevicetoUser(device.id)">Desconectar Dispositivo</ion-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         
         <div *ngIf="DeviceUser">
             <p>DeviceUser: {{DeviceUser.phone_id}}</p>

@@ -4,6 +4,7 @@ import { UtilsService } from '../../../services/utils.service';
 import { IEvent, IPostShare } from 'src/app/interfaces/models';
 import { PostsService } from '../../../services/posts.service';
 import { AuthService } from '../../../services/auth.service';
+import { NetworkService } from '../../../services/network.service';
 @Component({
     selector: 'app-events',
     templateUrl: './events.page.html',
@@ -11,7 +12,8 @@ import { AuthService } from '../../../services/auth.service';
 })
 export class EventsPage implements OnInit, OnDestroy {
 
-    loading: any;
+    appNetworkConnection = false;
+    // loading: any;
     elements: any = [];
     AuthUser = null;
     eventsList: IEvent[] = [];
@@ -20,7 +22,8 @@ export class EventsPage implements OnInit, OnDestroy {
         private navCtrl: NavController,
         private utilsService: UtilsService,
         private postService: PostsService,
-        private authService: AuthService
+        private authService: AuthService,
+        private networkService: NetworkService
     ) { }
 
 
@@ -30,6 +33,9 @@ export class EventsPage implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
+            this.appNetworkConnection = connected;
+        });
         this.authService.getAuthUser().subscribe(res => {
             this.AuthUser = res.user; 
         });

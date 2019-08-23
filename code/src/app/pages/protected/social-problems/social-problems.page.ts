@@ -8,6 +8,8 @@ import { Observable } from 'rxjs';
 import { UserService } from '../../../services/user.service';
 import { finalize } from 'rxjs/operators';
 import { ISocialProblem, IPostShare } from 'src/app/interfaces/models';
+import { environment } from '../../../../environments/environment';
+import { NetworkService } from 'src/app/services/network.service';
 
 @Component({
     selector: 'app-social-problems',
@@ -16,15 +18,17 @@ import { ISocialProblem, IPostShare } from 'src/app/interfaces/models';
 })
 export class SocialProblemsPage implements OnInit, OnDestroy {
 
-    subcategorias = [
-        { title: 'Transporte&Tránsito', slug: 'transport_transit' },
-        { title: 'Seguridad', slug: 'security' },
-        { title: 'EspaciosVerdes', slug: 'green_areas' },
-        { title: 'Transporte&Tránsito', slug: 'transport_transit' }
-    ];
+    // subcategorias = [
+    //     { title: 'Transporte&Tránsito', slug: 'transport_transit' },
+    //     { title: 'Seguridad', slug: 'security' },
+    //     { title: 'EspaciosVerdes', slug: 'green_areas' },
+    //     { title: 'Transporte&Tránsito', slug: 'transport_transit' }
+    // ];
+    appNetworkConnection = false;
+    subcategories = environment.subcategoriesSocialProblems;
     @ViewChild(IonSegment) segment: IonSegment;
     subcategory = '';
-    loading: any;
+    // loading: any;
     elements: any = [];
     // socialProblems: Observable<any>;
     AuthUser = null;
@@ -37,12 +41,16 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
         private utilsService: UtilsService,
         private postService: PostsService,
         private authService: AuthService,
-        private userService: UserService
+        private userService: UserService,
+        private networkService: NetworkService
     ) {
     }
 
     async ngOnInit() {
         this.segment.value = 'all';
+        this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
+            this.appNetworkConnection = connected;
+        });
         this.authService.getAuthUser().pipe(
             finalize(() => {
                 this.socialProblemsLoaded = true;
@@ -53,7 +61,7 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
         err => {
             console.log('Error al traer los problemas sociales');    
         });
-        // this.AuthUser = await this.authService.getCurrentUser();
+       
         this.loadSocialProblems();
     }
 
@@ -70,13 +78,9 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
         if ($details && $details.length > 0) {
             const likes_user = this.utilsService.getUsersFromDetails($details);
             const user_made_like = this.utilsService.checkUserInDetails(this.AuthUser.id, likes_user);
-            // console.log('checkLikePost');
-            // console.log('user made like', user_made_like);
-            // console.log('user authenticated id', this.AuthUser.id);
             return user_made_like;
         }
         else {
-            // console.log('no paso tamanio details');
             return false;
         }
     }

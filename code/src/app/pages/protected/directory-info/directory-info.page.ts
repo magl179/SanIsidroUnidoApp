@@ -5,6 +5,8 @@ import { DirectivesService } from 'src/app/services/directives.service';
 import Preloader from 'src/app/helpers/preloader-image';
 import { PostsService } from '../../../services/posts.service';
 import { IDirective } from 'src/app/interfaces/models';
+import { NetworkService } from 'src/app/services/network.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
     selector: 'app-directory-info',
@@ -17,16 +19,24 @@ export class DirectoryInfoPage implements OnInit {
     loading: any;
     imgLoaded = false;
     loadDirectives = false;
+    appNetworkConnection = false;
 
     constructor(
         private utilsService: UtilsService,
         private directivesService: DirectivesService,
-        private postService: PostsService
+        private postService: PostsService,
+        private networkService: NetworkService
     ) { }
 
     async ngOnInit() {
-        this.directivesService.getDirectives().subscribe(response => {
-            if (response) {
+        this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
+            this.appNetworkConnection = connected;
+        });
+        this.directivesService.getDirectives().pipe(
+            finalize(() => {
+                this.loadDirectives = true;
+            })
+        ).subscribe((response: any) => {
                 // if (response.data.avatar !== null) {
                 const imagesPath = response.data.filter(user => {
                     console.log('user', user);
@@ -43,16 +53,9 @@ export class DirectoryInfoPage implements OnInit {
                         // }, 2500);
                     }
                 });
-                // }
-
-            }
-        },
-            err => {
+        },err => {
                 console.log('Error al traer directivos');
-            },
-            () => {
-                this.loadDirectives = true;
-        });
+            });
     }
 
     imageWasLoaded() {

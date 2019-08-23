@@ -8,11 +8,18 @@ export const environment = {
     onesignal_id : '2ffbdcc2-223e-4527-9164-9583ea47d0b4',
     firebase_app_id: '522134390512',
     apiBaseURL: 'http://192.168.1.6/github/SanIsidroWeb/public/api/v1',
-    slugCategories: {
-        socialProblem: 'social_problems',
-        emergencies: 'emergencies',
-        events: 'events'
-    }
+    categories: [
+        { name: 'Problemas Sociales', slug: 'social_problems' },
+        { name: 'Emergencias', slug: 'emergencies' },
+        { name: 'Eventos', slug: 'events' }
+    ],
+    subcategoriesSocialProblems: [
+        { name: 'Protección Animal', slug: 'animal_protection' },
+        { name: 'Seguridad', slug: 'security' },
+        { name: 'Areás Verdes', slug: 'green_areas' },
+        { name: 'Transporte & Tránsito', slug: 'transport_transit' }
+    ],
+    image_blob_url: 'imagenes-blob'
 };
 
 /*

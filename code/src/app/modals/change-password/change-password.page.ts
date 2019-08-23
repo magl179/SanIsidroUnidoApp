@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { UtilsService } from 'src/app/services/utils.service';
 import { MustMatch } from 'src/app/helpers/must-match.validator';
 import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
     selector: 'app-change-password',
@@ -38,6 +39,7 @@ export class ChangePasswordPage implements OnInit {
         private modalCtrl: ModalController,
         public formBuilder: FormBuilder,
         private authService: AuthService,
+        private userService: UserService,
         private utilsService: UtilsService
     ) {
         this.createForm();
@@ -113,6 +115,13 @@ export class ChangePasswordPage implements OnInit {
 
     sendRequestChangePass() {
         this.utilsService.showToast(JSON.stringify(this.changePassForm.value));
+        this.userService.sendChangeUserPassRequest(this.changePassForm.value.password).subscribe(res => {
+            this.utilsService.showToast('Contraseña Actualizada Correctamente');
+            this.authService.updateAuthInfo(res.data.token, res.data.user)
+        }, err => {
+            this.utilsService.showToast('Contraseña No se pudo actualizar :( ');
+            console.log('error al actualizar contraseña usuario', err);
+        });
     }
 
 }

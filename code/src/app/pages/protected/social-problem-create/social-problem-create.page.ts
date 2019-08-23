@@ -9,6 +9,7 @@ import { PostsService } from '../../../services/posts.service';
 import { environment } from 'src/environments/environment';
 import { ISocialProblemReported, IUbication } from 'src/app/interfaces/models';
 import { finalize } from 'rxjs/operators';
+import { NetworkService } from 'src/app/services/network.service';
 
 @Component({
     selector: 'app-social-problem-create',
@@ -19,7 +20,7 @@ export class SocialProblemCreatePage implements OnInit {
 
     currentStep = 3
     fullFormIsValid = false;
-
+    appNetworkConnection = false;
     socialProblemForm: FormGroup;
     errorMessages = null;
     // emergencyFormFields = {
@@ -54,6 +55,7 @@ export class SocialProblemCreatePage implements OnInit {
         public formBuilder: FormBuilder,
         private localizationService: LocalizationService,
         private localDataService: LocalDataService,
+        private networkService: NetworkService,
         private postService: PostsService
     ) {
         this.createForm();
@@ -63,9 +65,12 @@ export class SocialProblemCreatePage implements OnInit {
         const coords = await this.localizationService.getCoordinate();
         this.socialProblemCoordinate.latitude = coords.latitude;
         this.socialProblemCoordinate.longitude = coords.longitude;
-        this.postService.getSubcategoriesByCategory(environment.slugCategories.socialProblem).subscribe(res => {
+        this.postService.getSubcategoriesByCategory(environment.categories[0].slug).subscribe(res => {
             this.subcategories = res.data;
             console.log('subcategories', res.data);
+        });
+        this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
+            this.appNetworkConnection = connected;
         });
     }
 

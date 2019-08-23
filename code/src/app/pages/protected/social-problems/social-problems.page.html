@@ -5,10 +5,10 @@
         <ion-segment-button value="all" mode="md">
             <ion-label>Todos</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="1" mode="md">
-            <ion-label>Transporte & Transito</ion-label>
+        <ion-segment-button *ngFor="let sub of subcategories" [value]="sub.slug" mode="md">
+            <ion-label>{{sub.name}}</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="2" mode="md">
+        <!-- <ion-segment-button value="2" mode="md">
             <ion-label>Espacios Verdes</ion-label>
         </ion-segment-button>
         <ion-segment-button value="3" mode="md">
@@ -16,95 +16,99 @@
         </ion-segment-button>
         <ion-segment-button value="4" mode="md">
             <ion-label>Protección Animal</ion-label>
-        </ion-segment-button>
+        </ion-segment-button> -->
     </ion-segment>
 </ion-toolbar>
 <ion-content>
-    <p *ngIf="socialProblems.length === 0 && socialProblemsLoaded">
-        No hay publicaciones disponibles
-    </p>
-    <!-- Animacion Tarjeta hasta tener los Datos Cargados -->
-    <div *ngIf="socialProblems === null || socialProblems.length === 0">
-        <ion-card *ngFor="let items of [1,1,1,1]" class="card_social animated flash slow infinite">
-            <ion-card-header>
-                <ion-card-title>
-                    <ion-skeleton-text width="40%"></ion-skeleton-text>
-                </ion-card-title>
-                <ion-card-subtitle class="post_user">
-                    <ion-skeleton-text width="40%"></ion-skeleton-text>
-                </ion-card-subtitle>
-                <ion-card-subtitle>
-                    <ion-skeleton-text width="50%"></ion-skeleton-text>
-                </ion-card-subtitle>
-            </ion-card-header>
-            <ion-card-content class="post_description">
-                <p class="post_content">
-                    <ion-skeleton-text width="70%"></ion-skeleton-text>
-                    <ion-skeleton-text width="70%"></ion-skeleton-text>
-                </p>
-                <p>
-                    <ion-skeleton-text width="20%"></ion-skeleton-text>
-                </p>
-            </ion-card-content>
-            <div class="options">
-                <div class="option_button">
-                    <button class="btn primary">
+    <app-network-banner *ngIf="!appNetworkConnection" networkConnection="appNetworkConnection"></app-network-banner>
+    <div *ngIf="appNetworkConnection">
+        <p *ngIf="socialProblems.length === 0 && socialProblemsLoaded">
+            No hay publicaciones disponibles
+        </p>
+        <!-- Animacion Tarjeta hasta tener los Datos Cargados -->
+        <div *ngIf="socialProblems === null || socialProblems.length === 0">
+            <ion-card *ngFor="let items of [1,1,1,1]" class="card_social animated flash slow infinite">
+                <ion-card-header>
+                    <ion-card-title>
+                        <ion-skeleton-text width="40%"></ion-skeleton-text>
+                    </ion-card-title>
+                    <ion-card-subtitle class="post_user">
+                        <ion-skeleton-text width="40%"></ion-skeleton-text>
+                    </ion-card-subtitle>
+                    <ion-card-subtitle>
+                        <ion-skeleton-text width="50%"></ion-skeleton-text>
+                    </ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content class="post_description">
+                    <p class="post_content">
                         <ion-skeleton-text width="70%"></ion-skeleton-text>
-                        <ion-ripple-effect></ion-ripple-effect>
-                    </button>
-                </div>
-                <div class="option_actions">
-                    <div class="btn_icon" style="width: 50%;height: 30px;">
-                        <ion-skeleton-text width="55%"></ion-skeleton-text>
+                        <ion-skeleton-text width="70%"></ion-skeleton-text>
+                    </p>
+                    <p>
+                        <ion-skeleton-text width="20%"></ion-skeleton-text>
+                    </p>
+                </ion-card-content>
+                <div class="options">
+                    <div class="option_button">
+                        <button class="btn primary">
+                            <ion-skeleton-text width="70%"></ion-skeleton-text>
+                            <ion-ripple-effect></ion-ripple-effect>
+                        </button>
                     </div>
-                    <div class="btn_icon" style="width: 50%;height: 30px;">
-                        <ion-skeleton-text width="55%"></ion-skeleton-text>
+                    <div class="option_actions">
+                        <div class="btn_icon" style="width: 50%;height: 30px;">
+                            <ion-skeleton-text width="55%"></ion-skeleton-text>
+                        </div>
+                        <div class="btn_icon" style="width: 50%;height: 30px;">
+                            <ion-skeleton-text width="55%"></ion-skeleton-text>
+                        </div>
+                    </div>
+                </div>
+            </ion-card>
+        </div>
+        <!-- Tarjeta con Datos Cargados -->
+        <ion-card class="card_social"
+            *ngFor="let socialProblem of (socialProblems) | filtroSearch:subcategory:'subcategory_id'; let i = index;">
+            <div *ngIf="socialProblem.exists === -1">
+                <ion-card-header class="ion-text-center">
+                    <ion-card-title>No hay publicaciones en esta categoria :( </ion-card-title>
+                </ion-card-header>
+            </div>
+            <div *ngIf="socialProblem.exists !== -1">
+                <ion-card-header>
+                    <ion-card-subtitle class="post_user problem-subtitle">
+                        <span>{{socialProblem.user.firstname}} {{socialProblem.user.lastname}}</span>
+                        <span>{{socialProblem.date | beafitulDate}}</span>
+                    </ion-card-subtitle>
+                    <ion-card-title>{{socialProblem.title}}</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                    <p class="post-description">{{socialProblem.description | truncate: 50}} </p>
+                    <!-- <p style="color:black;">Likes: {{socialProblem.details.length}}</p> -->
+                    <p class="post-see-more" (click)="postDetail(socialProblem.id)">Ver más...</p>
+                    <p class="post-num-likes">{{socialProblem.details.length}} me gusta</p>
+                </ion-card-content>
+                <div class="action-buttons">
+                    <div class="action-button pair">
+                        <!-- <div class="btn-like" [class.active]="(checkLikePost(socialProblem.details,1))"> -->
+                        <div class="btn-like" [ngClass]="{'active': (checkLikePost(socialProblem.details))}"
+                            (click)="toggleLike((checkLikePost(socialProblem.details)), socialProblem.id)">
+                            <ion-icon slot="icon-only" class="icon-like"
+                                [name]="(checkLikePost(socialProblem.details,2))?'heart':'heart-empty'"></ion-icon>
+                        </div>
+                        <div class="btn-share" (click)="sharePost(socialProblem)">
+                            <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
+                        </div>
+                    </div>
+                    <div class="action-button">
+                        <div class="btn-more">
+                            <ion-icon class="icon-more" slot="icon-only" name="more"></ion-icon>
+                        </div>
                     </div>
                 </div>
             </div>
         </ion-card>
     </div>
-    <!-- Tarjeta con Datos Cargados -->
-    <ion-card class="card_social"
-        *ngFor="let socialProblem of (socialProblems) | filtroSearch:subcategory:'subcategory_id'; let i = index;">
-        <div *ngIf="socialProblem.exists === -1">
-            <ion-card-header class="ion-text-center">
-                <ion-card-title>No hay publicaciones en esta categoria :( </ion-card-title>
-            </ion-card-header>
-        </div>
-        <div *ngIf="socialProblem.exists !== -1">
-            <ion-card-header>
-                <ion-card-subtitle class="post_user problem-subtitle">
-                    <span>{{socialProblem.user.firstname}} {{socialProblem.user.lastname}}</span>
-                    <span>{{socialProblem.date | beafitulDate}}</span>
-                </ion-card-subtitle>
-                <ion-card-title>{{socialProblem.title}}</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-                <p class="post-description">{{socialProblem.description | truncate: 50}} </p>
-                <!-- <p style="color:black;">Likes: {{socialProblem.details.length}}</p> -->
-                <p class="post-see-more" (click)="postDetail(socialProblem.id)">Ver más...</p>
-                <p class="post-num-likes">{{socialProblem.details.length}} me gusta</p>
-            </ion-card-content>
-            <div class="action-buttons">
-                <div class="action-button pair">
-                    <!-- <div class="btn-like" [class.active]="(checkLikePost(socialProblem.details,1))"> -->
-                    <div class="btn-like" [ngClass]="{'active': (checkLikePost(socialProblem.details))}" (click)="toggleLike((checkLikePost(socialProblem.details)), socialProblem.id)">
-                        <ion-icon slot="icon-only" class="icon-like"
-                            [name]="(checkLikePost(socialProblem.details,2))?'heart':'heart-empty'"></ion-icon>
-                    </div>
-                    <div class="btn-share" (click)="sharePost(socialProblem)">
-                            <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
-                        </div>
-                </div>
-                <div class="action-button">
-                    <div class="btn-more">
-                        <ion-icon class="icon-more" slot="icon-only" name="more"></ion-icon>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </ion-card>
     <!-- Scroll Infinito -->
     <ion-infinite-scroll threshold="150px" (ionInfinite)="getInfiniteScrollData($event)">
         <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando Publicaciones...">

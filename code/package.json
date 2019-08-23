@@ -29,6 +29,7 @@
     "@ionic-native/geolocation": "^5.8.0",
     "@ionic-native/google-plus": "^5.6.0",
     "@ionic-native/in-app-browser": "^5.10.0",
+    "@ionic-native/ionic-webview": "^5.12.0",
     "@ionic-native/location-accuracy": "^5.9.0",
     "@ionic-native/native-storage": "^5.9.0",
     "@ionic-native/network": "^5.10.0",
@@ -106,9 +107,7 @@
       "cordova-plugin-statusbar": {},
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
-      "cordova-plugin-ionic-webview": {
-        "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
-      },
+      "cordova-plugin-ionic-webview": {},
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-nativestorage": {},
       "cordova-sqlite-storage": {},

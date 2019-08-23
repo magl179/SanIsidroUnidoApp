@@ -18,31 +18,12 @@ export class LoginAuthGuard implements CanActivate {
 
     async canActivate() {
         const userAuthenticated = await this.authService.isAuthenticated();
-        console.log('login auth', userAuthenticated);
+        
         if (!userAuthenticated) {
             this.navCtrl.navigateRoot('/login');
             return false;
         } else {
             return true;
         }
-        // const isAuthenticated = await this.authService.isAuthenticated();
-        // // console.log({tengo_auth: isAuthenticated});
-        // if (isAuthenticated === false) {
-        //     this.navCtrl.navigateRoot('/login');
-        //     return false;
-        // }
-        // return true;
-        // this.authService.verificarAuthInfo();
-        // return this.authService.getAuthUser().pipe(
-        //     take(1),
-        //     map(user => {
-        //         if (user) {
-        //             return true;
-        //         } else {
-        //             this.navCtrl.navigateRoot('/home');
-        //             return false;
-        //         }
-        //     })
-        // );
     }
 }
