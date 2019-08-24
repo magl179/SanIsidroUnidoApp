@@ -12,7 +12,7 @@ import { environment } from '../../../../environments/environment';
 import { UserService } from '../../../services/user.service';
 import { UtilsService } from '../../../services/utils.service';
 
-// const imageServeURL = `${environment.apiBaseURL}/${environment.image_blob_url}/`;
+const URL_PATTERN = new RegExp(/^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/);
 
 @Component({
     selector: 'app-user-profile',
@@ -40,7 +40,12 @@ export class UserProfilePage implements OnInit {
     }
 
     getImageURL(image_name) {
-        return `${environment.apiBaseURL}/${environment.image_blob_url}/${image_name}`;
+        const imgIsURL = URL_PATTERN.test(image_name);
+        if (imgIsURL) {
+            return image_name;
+        } else {
+            return `${environment.apiBaseURL}/${environment.image_blob_url}/${image_name}`;
+        }
     }
 
     ionViewWillEnter() {

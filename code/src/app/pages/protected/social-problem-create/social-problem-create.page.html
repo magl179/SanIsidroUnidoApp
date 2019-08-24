@@ -59,8 +59,8 @@
                 <div class="item-form" *ngIf="subcategories.length > 0">
                     <ion-item>
                         <ion-label>Categoria</ion-label>
-                        <ion-select formControlName="subcategory" [value]="subcategories[0].slug"
-                            placeholder="Escoge una">
+                        <ion-select formControlName="subcategory"
+                            placeholder="Escoge una opción">
                             <ion-select-option [selected]="(i===0) ? true: false"
                                 *ngFor="let subcategory of subcategories; let i = index" [value]="subcategory.slug">
                                 {{subcategory.name}}</ion-select-option>
@@ -74,7 +74,7 @@
                     </p>
                 </div>
                 <div padding>
-                    <ion-button color="primary" type="submit" expand="block" (click)="validatePhase3()">Siguiente
+                    <ion-button [disabled]="!socialProblemForm.valid" color="primary" type="submit" expand="block" (click)="validatePhase3()">Siguiente
                     </ion-button>
                 </div>
             </form>
@@ -112,8 +112,8 @@
             <p class="ion-text-center">Escoge la ubicación donde se genero la emergencia</p>
             <single-map idMap="socialProblemReportMap" [zoomMap]="14" [mapPoints]="socialProblemCoordinate"
                 (returnCoordinateChoosen)="updateMapCoordinate($event)"></single-map>
-            <p>Latitud PAGE EC: Market {{socialProblemCoordinate.latitude}}</p>
-            <p>Longitud PAGE EC: Market {{socialProblemCoordinate.longitude}}</p>
+            <!-- <p>Latitud PAGE EC: Market {{socialProblemCoordinate.latitude}}</p> -->
+            <!-- <p>Longitud PAGE EC: Market {{socialProblemCoordinate.longitude}}</p> -->
             <p *ngIf="socialProblemCoordinate.address">Tu Dirección es: {{socialProblemCoordinate.address}}</p>
             <div>
                 <ion-button color="primary" expand="full" type="submit" (click)="validatePhase2()">Siguiente

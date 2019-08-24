@@ -11,12 +11,17 @@ import { NotificationsService } from './services/notifications.service';
 import { NetworkService } from 'src/app/services/network.service';
 import { environment } from '../environments/environment';
 
+
+const URL_PATTERN = new RegExp(/^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/);
+
+
 @Component({
     selector: 'app-root',
     templateUrl: 'app.component.html'
 })
 export class AppComponent implements OnInit {
 
+    
     showAppsplash = true;
     isConnected = false;
     menuComponents: IMenuComponent[];
@@ -148,7 +153,12 @@ export class AppComponent implements OnInit {
     }
 
     getImageURL(image_name) {
-        return `${environment.apiBaseURL}/${environment.image_blob_url}/${image_name}`;
+        const imgIsURL = URL_PATTERN.test(image_name);
+        if (imgIsURL) {
+            return image_name;
+        } else {
+            return `${environment.apiBaseURL}/${environment.image_blob_url}/${image_name}`;
+        }
     }
 
 }
