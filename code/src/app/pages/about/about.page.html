@@ -5,9 +5,9 @@
         <ion-row justify-content-center align-items-center style="height: 100%;flex-direction: column;">
             <h3>San Isidro Unido</h3>
             <p>Versión: 1.0.1</p>
-            <!-- <p>OneSignal Device ID </p> -->
-            <p>{{infodeviceID || 'No hay un valor para ID Dispositivo'}} </p>
-            <p>Notificaciones: <ion-badge [color]="(infodeviceID)?'success':'danger'">{{ (infodeviceID)?'disponible':'no disponible' }}</ion-badge></p>
+            
+            <p>{{UserDevice?.phone_id || 'No hay un valor para ID Dispositivo'}} </p>
+            <p>Notificaciones: <ion-badge [color]="(UserDevice.phone_id)?'success':'danger'">{{ (infodeviceID)?'disponible':'no disponible' }}</ion-badge></p>
             <p>Conexión a Internet: <ion-badge [color]="(isConnected)?'success':'danger'">{{ (isConnected)?'disponible':'no disponible' }}</ion-badge></p>
         </ion-row>
         <ion-row>

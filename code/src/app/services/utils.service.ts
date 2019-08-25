@@ -28,7 +28,7 @@ export class UtilsService implements OnInit {
         private socialSharing: SocialSharing
     ) { }
 
-    async ngOnInit() { }
+    ngOnInit() { }
 
     ramdomValue(tamanio) {
         return Math.floor(Math.random() * tamanio);
@@ -39,10 +39,7 @@ export class UtilsService implements OnInit {
     }
 
     checkUserInDetails(user_id: number, users_id: number[]) {
-        // return users_id.includes(user_id);
-        // return users_id.includes(user_id);
         return users_id.includes(user_id);
-        // return (users_id.indexOf(user_id) === -1);
     }
 
     openInBrowser(url) {
@@ -54,21 +51,17 @@ export class UtilsService implements OnInit {
         moment.locale('es');
         let beatifulDate = null;
         if (moment(stringDate).isValid()) {
-            console.log('Valid Date');
             const currentDate = moment(new Date());
             const lastDate = moment(new Date(stringDate));
             // Fecha Pasada, Fecha Actual
             const diffDays = currentDate.diff(lastDate, 'days');
-            console.log('Diferencia entre dias: ', diffDays);
+            // console.log('Diferencia entre dias: ', diffDays);
             if (diffDays <= 8) {
-                // console.log('Fecha Anterior', lastDate.fromNow());
                 beatifulDate = lastDate.fromNow();
             } else if (currentDate.year() === lastDate.year()) {
-                // console.log('Fecha Anterior: ', lastDate.format('D MMMM'));
                 beatifulDate = lastDate.format('D MMMM');
 
             } else {
-                // console.log('Fecha Anterior', lastDate.format('LL'));
                 beatifulDate = lastDate.format('LL');
             }
         } else {
@@ -126,15 +119,8 @@ export class UtilsService implements OnInit {
         toastItem.present();
     }
 
-    async showPopover() {
-        
-       
-    }
-
     async createBasicLoading(message: string = 'Cargando') {
-        const basicloading = await this.loadingCtrl.create({
-            message
-        });
+        const basicloading = await this.loadingCtrl.create({ message });
         return basicloading;
     }
 

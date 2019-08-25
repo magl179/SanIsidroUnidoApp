@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Network } from '@ionic-native/network/ngx';
 import { Platform } from '@ionic/angular';
 import { Observable, fromEvent, merge, of, BehaviorSubject } from 'rxjs';
-import { mapTo, map } from 'rxjs/operators';
+import { mapTo } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 
 
@@ -11,17 +11,13 @@ import { HttpClient } from '@angular/common/http';
 })
 export class NetworkService {
 
-    // private online: Observable<boolean> = null;
+    private online: Observable<boolean> = null;
     private hasConnection = new BehaviorSubject(false);
 
     constructor(
         private network: Network,
         private platform: Platform,
         private http: HttpClient) {
-
-        // this.online = new Observable(observer => {
-        //     observer.next(false);
-        // }).pipe(mapTo(false));
 
         if (this.platform.is('cordova')) {
             // on Device
@@ -33,36 +29,26 @@ export class NetworkService {
             this.network.onDisconnect().subscribe(() => {
                 console.log('network was disconnected :-(');
                 this.hasConnection.next(false);
-                // this.online = new Observable(observer => {
-                //     observer.next(false);
-                // }).pipe(mapTo(false));
                 return;
             });
-            // this.online = merge(
-            //     this.network.onConnect()
-            //         .pipe(mapTo(true), map(status => {
-            //         console.log('Evento encendi acceso a internet');
-            //         return true;
-            //     })),
-            //     this.network.onDisconnect().pipe(mapTo(false), map(status => {
-            //         console.log('Evento encendi acceso a internet');
-            //         return false;
-            //     })));
-            // this.network.onConnect().pipe(
-            //    map(status => return )
-            // )
         } else {
             // on Browser
-            // this.online = merge(of(navigator.onLine),
-            //     fromEvent(window, 'online').pipe(mapTo(true), map(status => {
-            //         console.log('Evento encendi acceso a internet');
-            //         return true;
-            //     })),
-            //     fromEvent(window, 'offline').pipe(mapTo(false), map(status => {
-            //         console.log('Evento apague acceso a internet');
-            //         return false;
-            //     }))
-            // );
+            this.online = merge(
+            of(navigator.onLine),
+            fromEvent(window, 'online').pipe(mapTo(true)),
+            fromEvent(window, 'offline').pipe(mapTo(false))
+            );
+
+            this.online.subscribe((isOnline) =>{
+                if (isOnline) {
+                    this.hasConnection.next(true);
+                   console.log('network was connected :-)');
+                } else {
+                    console.log('network was disconnected :-(');
+                    this.hasConnection.next(false);
+                    console.log(isOnline);
+                  }
+              });
         }
         this.testNetworkConnection();
     }
@@ -86,16 +72,10 @@ export class NetworkService {
             success => {
                 // console.log('Request to Google Test  success', success);
                     this.hasConnection.next(true);
-                // this.online = new Observable(observer => {
-                //     observer.next(true);
-                // }).pipe(mapTo(true));
                 return;
             }, error => {
                 // console.log('Request to Google Test fails', error);
                 this.hasConnection.next(false);
-                // this.online = new Observable(observer => {
-                //     observer.next(false);
-                // }).pipe(mapTo(false));
                 return;
             });
         } catch (err) {

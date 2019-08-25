@@ -18,24 +18,12 @@ import { NetworkService } from 'src/app/services/network.service';
 })
 export class SocialProblemCreatePage implements OnInit {
 
-    currentStep = 3
+    currentStep = 1;
     fullFormIsValid = false;
     appNetworkConnection = false;
     socialProblemForm: FormGroup;
     errorMessages = null;
-    // emergencyFormFields = {
-    //     title: {
-    //         required: true,
-    //         minlength: 3,
-    //         maxlength: 15
-    //     },
-    //     description: {
-    //         required: true,
-    //         minlength: 8,
-    //         maxlength: 30
-    //     }
-    // };
-    // activePane: PaneType = 'left';
+ 
     socialProblemFormStage = [
         { title: 'Paso 1' }, { title: 'Paso 2' },
         { title: 'Paso 3' }, { title: 'Paso 4' }
@@ -47,7 +35,6 @@ export class SocialProblemCreatePage implements OnInit {
         address: null
     };
     subcategories = [];
-    // puntosUbicacion: SimpleUbicationItem;
 
     constructor(
         private utilsService: UtilsService,
@@ -90,7 +77,6 @@ export class SocialProblemCreatePage implements OnInit {
     }
 
     async sendSocialProblem() {
-        const loadingReportSocialProblem = await this.utilsService.createBasicLoading('Enviando Reporte');
         
         if (this.socialProblemForm.valid !== true) {
             await this.utilsService.showToast('Ingresa un titulo y una descripción', 2500);
@@ -105,6 +91,7 @@ export class SocialProblemCreatePage implements OnInit {
             return;
         }
 
+        const loadingReportSocialProblem = await this.utilsService.createBasicLoading('Enviando Reporte');
         loadingReportSocialProblem.present();
         const socialProblem: ISocialProblemReported = {
             title: this.socialProblemForm.value.title,

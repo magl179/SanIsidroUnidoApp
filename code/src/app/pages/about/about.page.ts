@@ -14,7 +14,7 @@ import { UtilsService } from '../../services/utils.service';
 })
 export class AboutPage implements OnInit {
     isConnected = true;
-    infodeviceID = null;
+    UserDevice = null;
     constructor(
         private notiService: NotificationsService,
         private networkService: NetworkService,
@@ -24,9 +24,9 @@ export class AboutPage implements OnInit {
     }
 
     async ngOnInit() {
-        this.notiService.getIDSubscriptor().subscribe(data => {
+        this.notiService.getUserDevice().subscribe(data => {
             if (data) {
-                this.infodeviceID = data;
+                this.UserDevice = data;
             }
         });
         this.networkService.getNetworkStatus().subscribe((connected: boolean) => {

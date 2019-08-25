@@ -45,7 +45,7 @@ export class SocialDataService {
             avatar: googleUser.image.url,
             password: null
         };
-        console.log('OWN GOOGLE DATA', appUser);
+        // console.log('OWN GOOGLE DATA', appUser);
         return appUser;
     }
 
@@ -59,23 +59,23 @@ export class SocialDataService {
             avatar: fbUser.image,
             password: null
         };
-        console.log('OWN FB DATA', appUser);
+        // console.log('OWN FB DATA', appUser);
         return appUser;
     }
 
     // LOGIN SOCIAL
     async loginByGoogle() {
         if (this.platform.is('cordova')) {
-            console.log('login is cordova');
+            // console.log('login is cordova');
             try {
                 const loginGoogle = await this.google.login({});
-                console.log({ respuestaLoginGoogle: loginGoogle });
+                // console.log({ respuestaLoginGoogle: loginGoogle });
                 await this.getGoogleData(loginGoogle.accessToken);
             } catch (error) {
                 console.log(error);
                 await this.utilsService.showToast('Eror con Google');
             }
-            console.log('Luego del Login');
+            // console.log('Luego del Login');
         } else {
             await this.utilsService.showToast('Cordova Google no esta disponible', null, 'bottom');
         }
@@ -89,7 +89,7 @@ export class SocialDataService {
                 const userId = await respuestaLogin.authResponse.userID;
                 const accessToken = await respuestaLogin.authResponse.accessToken;
                 await this.getFacebookData(accessToken, userId, permisos);
-                console.log('Respuesta Login', respuestaLogin);
+                // console.log('Respuesta Login', respuestaLogin);
             } catch (err) {
                 console.log(err);
                 await this.utilsService.showToast('Ocurrio un error al conectarse con facebook', null, 'bottom');
@@ -106,7 +106,7 @@ export class SocialDataService {
         try {
             // tslint:disable-next-line: max-line-length
             const profile: any = await this.facebook.api(`${userId}?fields=id,name,first_name,last_name,email,picture&access_token=${accessToken}`, permisos);
-            console.log('Datos Perfil Usuario', profile);
+            // console.log('Datos Perfil Usuario', profile);
             profile.image = `https://graph.facebook.com/${userId}/picture?type=large`;
             if (profile !== null) {
                 this.fbLoginData.next(profile);
@@ -123,7 +123,7 @@ export class SocialDataService {
         try {
             this.http.get(`https://www.googleapis.com/plus/v1/people/me?access_token=${token}`).subscribe(
                 async (profile: any) => {
-                    console.log('Datos Google', profile);
+                    // console.log('Datos Google', profile);
                     if (profile) {
                         this.googleLoginData.next(profile);
                         await this.closeGoogleSession();
@@ -142,7 +142,7 @@ export class SocialDataService {
     // Close Session
     async closeGoogleSession() {
         try {
-            console.log('Google Logout Succesfull');
+            // console.log('Google Logout Succesfull');
             await this.google.logout();
         } catch (err) {
             console.log(err);
@@ -152,7 +152,7 @@ export class SocialDataService {
     async closeFacebookSession() {
         try {
             await this.facebook.logout();
-            console.log('Successfull Facebook Logout');
+            // console.log('Successfull Facebook Logout');
         } catch (err) {
             console.log(err);
         }

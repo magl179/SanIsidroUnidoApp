@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 import { UserService } from './user.service';
 import { AuthService } from './auth.service';
 import { UtilsService } from './utils.service';
-import { IPhoneUser} from 'src/app/interfaces/models';
+import { IPhoneUser } from 'src/app/interfaces/models';
 import { Device } from '@ionic-native/device/ngx';
 
 
@@ -28,7 +28,7 @@ export class NotificationsService {
 
     messagesList: OSNotificationPayload[] = [];
     currentUser = null;
-    userDeviceID = new BehaviorSubject<string>(null);
+    // userDeviceID = new BehaviorSubject<string>(null);
     //userDeviceModel = new BehaviorSubject<string>(null);
     //userDevicePlatform = new BehaviorSubject<string>(null);
     pushListener = new EventEmitter<OSNotificationPayload>();
@@ -59,9 +59,9 @@ export class NotificationsService {
             console.log('Configurando OneSignal con San Isidro Unido App');
             const OneSignalID = environment.onesignal_id;
             const firebaseID = environment.firebase_app_id;
-             console.log('Antes Onesignal StartInit');
+            // console.log('Antes Onesignal StartInit');
             this.oneSignal.startInit(OneSignalID, firebaseID);
-            console.log('Antes Onesignal In Focus Displaying');
+            // console.log('Antes Onesignal In Focus Displaying');
             this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.Notification);
 
             this.oneSignal.handleNotificationReceived().subscribe((myNotification) => {
@@ -75,10 +75,10 @@ export class NotificationsService {
                 console.log('Una notificación fue recibida y abierta', myNotification);
                 await this.manageNotificationReceived(myNotification.notification);
             });
-            
-            console.log('Antes Onesignal Endinit');
+
+            // console.log/('Antes Onesignal Endinit');
             this.oneSignal.endInit();
-            console.log('Antes GET ONESIGNAL SUBSCRIPTOR');
+            // console.log('Antes GET ONESIGNAL SUBSCRIPTOR');
             this.getOneSignalIDSubscriptor();
         } else {
             console.log('Onesignal sin Cordova');
@@ -86,40 +86,36 @@ export class NotificationsService {
     }
 
     // GET UNIQUE ID SUSCRIPTOR
-    getIDSubscriptor() {
-        return this.userDeviceID.asObservable();
-    }
+    // getIDSubscriptor() {
+        // return this.userDeviceID.asObservable();
+    // }
 
-    getUserDevice(){
+    getUserDevice() {
         return this.userDevice.asObservable();
     }
 
-     //Obtener Roles Usuario
+    //Obtener Roles Usuario
     getUserDevices() {
         return this.AuthUser.value.user.devices.map(device => device.phone_id);
     }
 
-    hasDevices(){
-        if(this.AuthUser && this.userDeviceID.value && this.AuthUser.devices && this.AuthUser.devices.length > 0){
-             let hasDevice = false;
-            // console.log('USER', this.authUser.value);
-            //if (this.isAuthenticated()) {
-                let userDevices = this.getUserDevices();
-                for (const oneDevice of userDevices) {
-                    if (userDevices.includes(this.userDeviceID.value)) {
-                        hasDevice = true;
-                    }
+    hasDevices() {
+        if (this.AuthUser && this.userDevice.value.phone_id && this.AuthUser.devices && this.AuthUser.devices.length > 0) {
+            let hasDevice = false;
+            let userDevices = this.getUserDevices();
+            // for (const oneDevice of userDevices) {
+                if (userDevices.includes(this.userDevice.value.phone_id)) {
+                    hasDevice = true;
                 }
-            //}
+            // }
             return hasDevice;
-        }else{
+        } else {
             return false;
         }
     }
 
     loadUser() {
         this.authService.getAuthUser().subscribe(res => {
-            // console.log('Noti res user', res);
             if (res) {
                 this.AuthUser = res.user;
             }
@@ -129,22 +125,13 @@ export class NotificationsService {
     async registerUserDevice() {
         if (this.platform.is('cordova')) {
             await this.userService.sendRequestAddUserDevice(this.userDevice.value)
-            .subscribe((res: any) => {
-                this.utilsService.showToast('Dispositivo Añadido Correctamente');
-                this.authService.updateAuthInfo(res.data.token, res.data.user)
-            }, err => {
-                this.utilsService.showToast('Ocurrio un error al añadir el dispositivo :( ');
-                console.log('Ocurrio un error al añadir el dispositivo', err);
-            });
-            // .subscribe(
-            //     res => {
-            //         console.log('Dispositivo Añadido Correctamente');
-            //         this.utilsService.showToast('Dispositivo Añadido Correctamente');
-            //     }, err => {
-            //         this.utilsService.showToast('Ocurrio un error al añadir el dispositivo');
-            //         console.log('Ocurrio un error al añadir el dispositivo', err);
-            //     }
-            // );
+                .subscribe((res: any) => {
+                    this.utilsService.showToast('Dispositivo Añadido Correctamente');
+                    this.authService.updateAuthInfo(res.data.token, res.data.user)
+                }, err => {
+                    this.utilsService.showToast('Ocurrio un error al añadir el dispositivo :( ');
+                    console.log('Ocurrio un error al añadir el dispositivo', err);
+                });
         } else {
             console.log('No hay cordova RDU');
         }
@@ -165,32 +152,18 @@ export class NotificationsService {
         console.log('INITIAL FUNCTION GET ONESIGNAL ID SUBSCRIPTOR: ');
         this.oneSignal.provideUserConsent(true);
         const deviceID = await this.oneSignal.getIds();
-        this.userDeviceID.next(deviceID.userId);
-        const userDevice: IPhoneUser = USER_DEVICE_DEFAULT;
-        userDevice.phone_id = deviceID.userId; 
-        userDevice.phone_model = this.device.model || 'Modelo Generico'; 
-        userDevice.phone_platform = this.device.platform || 'Sistema Generico';
-        userDevice.description = `${this.device.platform} ${this.device.model}`
-        this.userDevice.next(userDevice); 
-        /* phoneUUID: '',
-        phoneModel: '',
-            phonePlatform: ''*/
+
+        const userDevice: IPhoneUser = {
+            phone_id: deviceID.userId,
+            phone_model: this.device.model || 'Modelo Generico',
+            phone_platform: this.device.platform || 'Sistema Generico',
+            description: `${this.device.platform} ${this.device.model}`
+        };
+    
+        this.userDevice.next(userDevice);
+       
         console.log('DEVICE SUBSCRIPTOR: ', deviceID);
         console.log('USERDEVICE', this.userDevice.value);
-        // this.authService.getAuthUser().subscribe(user => {
-            //if (this.AuthUser) {
-             //   this.registrarDispositivoUsuarioApi();
-            //}
-        // });
-       
-        // this.
-        // this.oneSignal.getIds().then( res=> {
-        //     console.log(res.userId) . //===>ESTE ES TU ID
-        //     this.userId.next(res.userId);
-        // console.log('DEVICE SUBSCRIPTOR: ', res);
-        // console.log('ID SUBSCRIPTOR: ', res.userId);
-        // });
-        // this.userId.next(deviceID.userId);
         console.log('END FUNCTION GET ONESIGNAL ID SUBSCRIPTOR: ');
     }
 

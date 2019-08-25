@@ -38,19 +38,6 @@ export class EmergencyCreatePage implements OnInit {
     };
     emergencyForm: FormGroup;
     errorMessages = null;
-    // emergencyFormFields = {
-    //     title: {
-    //         required: true,
-    //         minlength: 3,
-    //         maxlength: 15
-    //     },
-    //     description: {
-    //         required: true,
-    //         minlength: 8,
-    //         maxlength: 30
-    //     }
-    // };
-    // puntosUbicacion: SimpleUbicationItem;
 
     constructor(
         private utilsService: UtilsService,
@@ -71,7 +58,6 @@ export class EmergencyCreatePage implements OnInit {
         this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
             this.appNetworkConnection = connected;
         });
-        // console.log(this.emergencyForm.get('title').value);
     }
 
     createForm() {
@@ -151,7 +137,7 @@ export class EmergencyCreatePage implements OnInit {
     }
 
     async sendEmergencyReport() {
-        const loadingEmergencyReport = await this.utilsService.createBasicLoading('Enviando Reporte');
+       
        
         if (this.emergencyForm.valid !== true) {
             await this.utilsService.showToast('Ingresa un titulo y una descripción', 2500);
@@ -169,13 +155,14 @@ export class EmergencyCreatePage implements OnInit {
         }
 
         // await this.utilsService.showToast('Post Emergencia Valido', 2500);
+        const loadingEmergencyReport = await this.utilsService.createBasicLoading('Enviando Reporte');
         loadingEmergencyReport.present();
         const socialProblem: IEmergencyReported = {
             title: this.emergencyForm.value.title,
             description: this.emergencyForm.value.description,
             ubication: this.emergencyPostCoordinate
         };
-        // await this.utilsService.showToast('Post Problema Social Valido', 2500);
+
         this.postService.sendEmergencyReport(socialProblem).pipe(
             finalize(() => {
                 loadingEmergencyReport.dismiss()

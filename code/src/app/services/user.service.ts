@@ -32,8 +32,15 @@ export class UserService implements OnInit {
         });
     }
 
-    async ngOnInit() {
-        // console.log('User', this.currentUser);
+    ngOnInit() { }
+
+    getUserInfo(id: number): Observable<any> {
+        return this.http.get(`${environment.apiBaseURL}/usuarios/${id}`);
+    }
+
+    getNotificationsUser() {
+        const user_id = this.AuthUser.id;
+        return this.http.get(`${environment.apiBaseURL}/usuarios/${user_id}/notificaciones`);
     }
 
     sendChangeUserPassRequest(newPassword: string): Observable<any> {
@@ -54,7 +61,6 @@ export class UserService implements OnInit {
     }
 
     sendEditProfileRequest(profile: IEditProfile): Observable<any> {
-        // console.log('current user', this.currentUser);
         const headers = this.headersApp.set('Authorization', this.AuthToken);
         const user_id = this.AuthUser.id;
         return this.http.patch(`${environment.apiBaseURL}/usuarios/${user_id}`, profile, { headers });
@@ -86,15 +92,5 @@ export class UserService implements OnInit {
         return this.http.delete(`${environment.apiBaseURL}/usuarios/${user_id}/perfiles-sociales/${social_profile_id}`, { headers });
     }
 
-    getUserInfo(id: number): Observable<any> {
-        return this.http.get(`${environment.apiBaseURL}/usuarios/${id}`);
-    }
-
-    getNotificationsUser() {
-        // const headers = this.headersApp;
-        const user_id = this.AuthUser.id;
-        // console.log('User noti', this.currentUser);
-        // console.log('User id noti', user_id);
-        return this.http.get(`${environment.apiBaseURL}/usuarios/${user_id}/notificaciones`);
-    }
+    
 }

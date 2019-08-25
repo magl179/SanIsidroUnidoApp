@@ -41,7 +41,6 @@ export class PostsService implements OnInit {
         this.authService.getAuthUser().subscribe(res => {
             this.AuthUser = res.user;
         });
-        // console.log('ng on init posts service', this.AuthToken);
      }
 
     resetSocialProblemsPage() {
@@ -68,7 +67,7 @@ export class PostsService implements OnInit {
         });
     }
     sendCreateDetailToPost(detailInfo: ICreateDetail) {
-        console.log('auth token', this.AuthToken);
+        // console.log('auth token', this.AuthToken);
         const headers = this.headersApp.set('Authorization', this.AuthToken);
         return this.http.post(`${environment.apiBaseURL}/detalles`, detailInfo, {
             headers
@@ -76,7 +75,7 @@ export class PostsService implements OnInit {
     }
     sendDeleteDetailToPost(post_id: number) {
         const headers = this.headersApp.set('Authorization', this.AuthToken);
-        console.log('auth token', this.AuthToken);
+        // console.log('auth token', this.AuthToken);
         return this.http.delete(`${environment.apiBaseURL}/detalles/${post_id}`, {
             headers
         });
@@ -88,7 +87,7 @@ export class PostsService implements OnInit {
 
     getSocialProblems(): Observable<any> {
         this.currentPage.socialProblems++;
-        console.log('Social Problems Page', this.currentPage.socialProblems);
+        // console.log('Social Problems Page', this.currentPage.socialProblems);
         return this.http.get(`${environment.apiBaseURL}/problemas-sociales?page=${this.currentPage.socialProblems}`);
     }
 
@@ -97,7 +96,7 @@ export class PostsService implements OnInit {
     }
     getEvents(): Observable<any> {
         this.currentPage.events++;
-        console.log('Events Page', this.currentPage.events);
+        // console.log('Events Page', this.currentPage.events);
         return this.http.get(`${environment.apiBaseURL}/eventos?page=${this.currentPage.events}`);
     }
 
