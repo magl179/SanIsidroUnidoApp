@@ -19,7 +19,7 @@ export const environment = {
         { name: 'Areás Verdes', slug: 'green_areas' },
         { name: 'Transporte & Tránsito', slug: 'transport_transit' }
     ],
-    image_blob_url: 'imagenes-blob'
+    image_assets: 'imagenes'
 };
 
 /*

@@ -157,7 +157,7 @@ export class AppComponent implements OnInit {
         if (imgIsURL) {
             return image_name;
         } else {
-            return `${environment.apiBaseURL}/${environment.image_blob_url}/${image_name}`;
+            return `${environment.apiBaseURL}/${environment.image_assets}/${image_name}`;
         }
     }
 
