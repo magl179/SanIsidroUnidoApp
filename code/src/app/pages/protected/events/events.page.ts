@@ -95,10 +95,14 @@ export class EventsPage implements OnInit, OnDestroy {
     }
 
     getImages($imagesArray) {
-        if ($imagesArray.length === 0) {
-            return '';
+        if ($imagesArray) {
+            if ($imagesArray.length === 0) {
+                return '';
+            } else {
+                return $imagesArray[0].url;
+            }
         } else {
-            return $imagesArray[0].url;
+            return '';
         }
     }
 
@@ -140,6 +144,7 @@ export class EventsPage implements OnInit, OnDestroy {
         this.utilsService.enableMenu();
     }
     postDetail(id) {
+        this.resetEvents();
         this.navCtrl.navigateForward(`/event-detail/${id}`);
     }
 

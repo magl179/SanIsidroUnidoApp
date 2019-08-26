@@ -155,6 +155,7 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
     }
 
     postDetail(id) {
+        this.resetSocialProblems();
         this.navCtrl.navigateForward(`/social-problem-detail/${id}`);
     }
 

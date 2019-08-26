@@ -80,7 +80,7 @@ export class LoginPage implements OnInit {
                 this.utilsService.showToast('Fallo Iniciar Sesión 2'); 
             }
         }, err => {
-            this.utilsService.showToast(err.error.message);
+            this.utilsService.showToast(`Error: ${err.error.message}`);
             console.log('Error Login', err);
         });
     }
@@ -101,7 +101,7 @@ export class LoginPage implements OnInit {
                     this.manageLogin(loginData, res);
                 //} //
             }, err => {
-                this.utilsService.showToast(err.error.message);
+                this.utilsService.showToast(`Error: ${err.error.message}`);
                 console.log('Error Login', err.error);
             });
     }
@@ -111,17 +111,11 @@ export class LoginPage implements OnInit {
             await this.socialDataService.fbLoginData.subscribe(async fbData => {
                 if (fbData) {
                     const user = this.socialDataService.getFacebookDataParsed(fbData);
-                    // const social_id = user.social_id, email = user.email;
                     const { social_id, email } = user;
                     await this.authService.login(user).subscribe(res => {
-                        // console.log('Login First Response', res);
-                        //if (res.code === 200) {
                             this.manageLogin({provider: 'facebook', social_id, email} , res);
-                        //} else {
-                          //  this.utilsService.showToast('Fallo Iniciar Sesión 1');
-                        //}
                     }, err => {
-                        this.utilsService.showToast(err.error.message);
+                        this.utilsService.showToast(`Error: ${err.error.message}`);
                         console.log('Error Login', err.error);
                     });
                 }
@@ -139,14 +133,9 @@ export class LoginPage implements OnInit {
                         const { social_id, email } = user;
                         await this.authService.login(user).subscribe(async res => {
                             console.log('Login First Response', res);
-                            //if (res.code === 200) {
                                 await this.manageLogin({social_id, email, provider: 'google'} , res);
-                            //} 
-                            //else {
-                                //this.utilsService.showToast('Fallo Iniciar Sesión 1');
-                            //}
                         }, err => {
-                            this.utilsService.showToast(err.error.message);
+                            this.utilsService.showToast(`Error: ${err.error.message}`);
                             console.log('Error Login', err.error);
                         });
                     }

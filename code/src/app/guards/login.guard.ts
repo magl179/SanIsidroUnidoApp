@@ -20,6 +20,7 @@ export class LoginAuthGuard implements CanActivate {
         const userAuthenticated = await this.authService.isAuthenticated();
         
         if (!userAuthenticated) {
+            this.authService.removeAuthInfo();
             this.navCtrl.navigateRoot('/login');
             return false;
         } else {

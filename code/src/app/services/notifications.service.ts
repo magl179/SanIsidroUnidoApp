@@ -87,7 +87,7 @@ export class NotificationsService {
 
     // GET UNIQUE ID SUSCRIPTOR
     // getIDSubscriptor() {
-        // return this.userDeviceID.asObservable();
+    // return this.userDeviceID.asObservable();
     // }
 
     getUserDevice() {
@@ -104,9 +104,9 @@ export class NotificationsService {
             let hasDevice = false;
             let userDevices = this.getUserDevices();
             // for (const oneDevice of userDevices) {
-                if (userDevices.includes(this.userDevice.value.phone_id)) {
-                    hasDevice = true;
-                }
+            if (userDevices.includes(this.userDevice.value.phone_id)) {
+                hasDevice = true;
+            }
             // }
             return hasDevice;
         } else {
@@ -124,7 +124,13 @@ export class NotificationsService {
 
     async registerUserDevice() {
         if (this.platform.is('cordova')) {
-            await this.userService.sendRequestAddUserDevice(this.userDevice.value)
+            const data = {
+                description: this.userDevice.value.description,
+                phone_id: this.userDevice.value.phone_id,
+                phone_model: this.userDevice.value.phone_model,
+                phone_platform: this.userDevice.value.phone_platform
+            };
+            await this.userService.sendRequestAddUserDevice(data)
                 .subscribe((res: any) => {
                     this.utilsService.showToast('Dispositivo Añadido Correctamente');
                     this.authService.updateAuthInfo(res.data.token, res.data.user)
@@ -159,9 +165,9 @@ export class NotificationsService {
             phone_platform: this.device.platform || 'Sistema Generico',
             description: `${this.device.platform} ${this.device.model}`
         };
-    
+
         this.userDevice.next(userDevice);
-       
+
         console.log('DEVICE SUBSCRIPTOR: ', deviceID);
         console.log('USERDEVICE', this.userDevice.value);
         console.log('END FUNCTION GET ONESIGNAL ID SUBSCRIPTOR: ');

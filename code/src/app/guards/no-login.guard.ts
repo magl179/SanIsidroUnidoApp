@@ -19,7 +19,6 @@ export class NoLoginAuthGuard implements CanActivate {
 
     async canActivate() {
         const userAuthenticated = await this.authService.isAuthenticated();
-        // console.log('login auth', userAuthenticated);
         if (userAuthenticated) {
             this.navCtrl.navigateRoot('/home');
             return false;

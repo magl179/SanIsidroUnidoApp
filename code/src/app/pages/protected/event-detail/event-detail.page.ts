@@ -115,11 +115,16 @@ export class EventDetailPage implements OnInit {
     }
 
     getImages($imagesArray) {
-        if ($imagesArray.length === 0) {
-            return '';
+        if ($imagesArray) {
+            if ($imagesArray.length === 0) {
+                return '';
+            } else {
+                return $imagesArray[0].url;
+            }
         } else {
-            return $imagesArray[0].url;
+            return '';
         }
+       
     }
 
 }

@@ -49,15 +49,15 @@ export class SocialProblemCreatePage implements OnInit {
     }
 
     async ngOnInit() {
+        this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
+            this.appNetworkConnection = connected;
+        });
         const coords = await this.localizationService.getCoordinate();
         this.socialProblemCoordinate.latitude = coords.latitude;
         this.socialProblemCoordinate.longitude = coords.longitude;
         this.postService.getSubcategoriesByCategory(environment.categories[0].slug).subscribe(res => {
             this.subcategories = res.data;
             console.log('subcategories', res.data);
-        });
-        this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
-            this.appNetworkConnection = connected;
         });
     }
 

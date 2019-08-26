@@ -62,9 +62,6 @@ export class RegisterPage implements OnInit {
     }
 
     async manageRegister(loginData, res) {
-        // await this.utilsService.showToast("Has sido registrado correctamente, por favor inicia sesión");
-        // this.navCtrl.navigateRoot('/login');
-         // console.log('login token cifrado', res);
          this.loginData.token = res.data;
          //Obtener Usuario Identificado
          this.authService.login(loginData, true).subscribe(async res => {
@@ -79,7 +76,7 @@ export class RegisterPage implements OnInit {
                  this.utilsService.showToast('Fallo Iniciar Sesión 2'); 
              }
          }, err => {
-             this.utilsService.showToast(err.error.message);
+             this.utilsService.showToast(`Error: ${err.error.message}`);
              console.log('Error Login', err);
          });
     }
@@ -106,7 +103,7 @@ export class RegisterPage implements OnInit {
                 await this.manageRegister({provider: 'formulario', email, password }, res);
             //}
         }, err => {
-            this.utilsService.showToast(err.error.message);
+            this.utilsService.showToast(`Error: ${err.error.message}`);
             console.log('Error Login', err.error);
         });
     }
@@ -126,7 +123,7 @@ export class RegisterPage implements OnInit {
                         // await this.setLoginUserData(registerData);
                     // }
                 }, err => {
-                    this.utilsService.showToast(err.error.message);
+                    this.utilsService.showToast(`Error: ${err.error.message}`);
                     console.log('Error Login', err.error);
                 });
             }
@@ -144,7 +141,7 @@ export class RegisterPage implements OnInit {
                     // await this.setLoginUserData(registerData);
                     await this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'google' }, res);
                 }, err => {
-                    this.utilsService.showToast(err.error.message);
+                    this.utilsService.showToast(`Error: ${err.error.message}`);
                     console.log('Error Login', err.error);
                 });
             }

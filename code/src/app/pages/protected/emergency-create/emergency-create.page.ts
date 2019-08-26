@@ -52,12 +52,12 @@ export class EmergencyCreatePage implements OnInit {
     }
 
     async ngOnInit() {
-        const coords = await this.localizationService.getCoordinate();
-        this.emergencyPostCoordinate.latitude = coords.latitude;
-        this.emergencyPostCoordinate.longitude = coords.longitude;
         this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
             this.appNetworkConnection = connected;
         });
+        const coords = await this.localizationService.getCoordinate();
+        this.emergencyPostCoordinate.latitude = coords.latitude;
+        this.emergencyPostCoordinate.longitude = coords.longitude;
     }
 
     createForm() {
