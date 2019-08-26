@@ -157,6 +157,7 @@ interface IBaseReportSend {
     description: string;
     user_id?: number;
     ubication: IUbication;
+    images?: string[]
 }
 
 

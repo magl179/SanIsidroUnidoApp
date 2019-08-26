@@ -77,7 +77,7 @@ export class UserService implements OnInit {
     sendRequestAddUserDevice(device: IPhoneUser) {
         const headers = this.headersApp.set('Authorization', this.AuthToken);
         const user_id = this.AuthUser.id;
-        return this.http.post(`${environment.apiBaseURL}/usuarios/${user_id}/dispositivos`, { device }, { headers });
+        return this.http.post(`${environment.apiBaseURL}/usuarios/${user_id}/dispositivos`, device , { headers });
     }
 
     sendRequestDeleteUserDevice(device_id: number) {

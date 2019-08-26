@@ -22,7 +22,7 @@
         </ion-list-header>
         <ion-item [lines]="getLinesState(i)" *ngFor="let noti of notificationsRequested; let i = index;">
             <ion-avatar slot="start" *ngIf="noti.user">
-                <img [src]="noti.user.avatar || 'http://cmauriflama.sp.gov.br/app/webroot/img/avatar-user.png' ">
+                <img [src]="getImageURL(noti.user.avatar) || 'http://cmauriflama.sp.gov.br/app/webroot/img/avatar-user.png' ">
             </ion-avatar>
             <ion-label class="notifications_description">
                 <h2 class="title">{{noti.title}}</h2>

@@ -144,8 +144,9 @@ export class NotificationsService {
     }
 
     async removeUserDevice(device_id) {
-        await this.userService.sendRequestDeleteUserDevice(device_id).subscribe((res: any) => {
-            this.utilsService.showToast('Dispositivo eliminado Correctamente');
+        await this.userService.sendRequestDeleteUserDevice(device_id).subscribe(async (res: any) => {
+            await this.utilsService.showToast('Dispositivo eliminado Correctamente');
+            console.log('remove device', res);
             this.authService.updateAuthInfo(res.data.token, res.data.user)
         }, err => {
             this.utilsService.showToast('Ocurrio un error al eliminar el dispositivo :( ');

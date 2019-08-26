@@ -10,6 +10,7 @@ import { LocalDataService } from '../../../services/local-data.service';
 import { finalize } from 'rxjs/operators';
 import { fakeAsync } from '@angular/core/testing';
 import { NetworkService } from '../../../services/network.service';
+import { NavController } from '@ionic/angular';
 
 
 // type PaneType = 'left' | 'right';
@@ -45,6 +46,7 @@ export class EmergencyCreatePage implements OnInit {
         public formBuilder: FormBuilder,
         private localizationService: LocalizationService,
         private postService: PostsService,
+        private navCtrl: NavController,
         private networkService: NetworkService,
         private localDataService: LocalDataService
     ) {
@@ -160,7 +162,8 @@ export class EmergencyCreatePage implements OnInit {
         const socialProblem: IEmergencyReported = {
             title: this.emergencyForm.value.title,
             description: this.emergencyForm.value.description,
-            ubication: this.emergencyPostCoordinate
+            ubication: this.emergencyPostCoordinate,
+            images: this.emergencyImages
         };
 
         this.postService.sendEmergencyReport(socialProblem).pipe(
@@ -169,6 +172,7 @@ export class EmergencyCreatePage implements OnInit {
             })
         ).subscribe(async res => {
             await this.utilsService.showToast("El Reporte fue enviado correctamente");
+            this.navCtrl.navigateRoot('/home');
         }, err => {
             this.utilsService.showToast(err.error.message);
             console.log('Error Reportar Emergencia', err.error);

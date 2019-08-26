@@ -1,8 +1,11 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { NotificationsService } from '../../services/notifications.service';
 import { Observable } from 'rxjs';
-import { NavController, IonSegment } from '@ionic/angular';
+// import { NavController, IonSegment } from '@ionic/angular';
 import { UserService } from '../../services/user.service';
+import { environment } from 'src/environments/environment';
+
+const URL_PATTERN = new RegExp(/^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/);
 
 @Component({
     selector: 'app-list-notifications',
@@ -47,6 +50,15 @@ export class ListNotificationsComponent implements OnInit {
 
     getLinesState(indice) {
         return ((indice + 1) !== this.notificationsRequested.length) ? 'full' : 'none';
+    }
+
+    getImageURL(image_name) {
+        const imgIsURL = URL_PATTERN.test(image_name);
+        if (imgIsURL) {
+            return image_name;
+        } else {
+            return `${environment.apiBaseURL}/${environment.image_assets}/${image_name}`;
+        }
     }
 
     getNotifications() {

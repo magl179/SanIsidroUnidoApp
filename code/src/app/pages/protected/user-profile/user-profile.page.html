@@ -57,7 +57,7 @@
                         <span class="label">Stalin Maza</span>
                     </div>
                     <div class="item-right">
-                            <ion-button *ngIf="AuthUser.password !== null" color="light" class="ion-text-capitalize" (click)="removeSocialProfileToUser(user_social_profile.id)">Desconectar Cuenta</ion-button>
+                            <ion-button *ngIf="AuthUser.password !== null" color="light" class="ion-text-capitalize" (click)="removeSocialProfileToUser(user_social_profile.id)">Desconectar</ion-button>
                     </div>
                 </div>
             </div>
@@ -76,7 +76,7 @@
 
                         </div>
                         <div class="item-right">
-                            <ion-button *ngIf="user_device.phone_id !== DeviceUser.phone_id" color="light" class="ion-text-capitalize" (click)="removeDevicetoUser(user_device.id)">Desconectar Dispositivo</ion-button>
+                            <ion-button *ngIf="user_device.phone_id !== DeviceUser.phone_id" color="light" class="ion-text-capitalize" (click)="removeDevicetoUser(user_device.id)">Desconectar</ion-button>
                         </div>
                     </div>
                 </div>

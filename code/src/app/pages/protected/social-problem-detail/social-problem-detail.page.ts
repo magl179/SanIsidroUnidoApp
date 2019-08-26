@@ -7,6 +7,10 @@ import { UserService } from '../../../services/user.service';
 import { AuthService } from '../../../services/auth.service';
 import { IPostShare, ISocialProblem } from '../../../interfaces/models';
 import { NetworkService } from 'src/app/services/network.service';
+import { environment } from "../../../../environments/environment";
+
+
+const URL_PATTERN = new RegExp(/^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/);
 
 @Component({
     selector: 'app-social-problem-detail',
@@ -50,6 +54,15 @@ export class SocialProblemDetailPage implements OnInit {
         //     // (() => {
         //     // });
         // });
+    }
+
+    getImageURL(image_name) {
+        const imgIsURL = URL_PATTERN.test(image_name);
+        if (imgIsURL) {
+            return image_name;
+        } else {
+            return `${environment.apiBaseURL}/${environment.image_assets}/${image_name}`;
+        }
     }
 
     getSocialProblem() {

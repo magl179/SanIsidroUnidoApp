@@ -10,6 +10,7 @@ import { environment } from 'src/environments/environment';
 import { ISocialProblemReported, IUbication } from 'src/app/interfaces/models';
 import { finalize } from 'rxjs/operators';
 import { NetworkService } from 'src/app/services/network.service';
+import { NavController } from '@ionic/angular';
 
 @Component({
     selector: 'app-social-problem-create',
@@ -43,7 +44,8 @@ export class SocialProblemCreatePage implements OnInit {
         private localizationService: LocalizationService,
         private localDataService: LocalDataService,
         private networkService: NetworkService,
-        private postService: PostsService
+        private postService: PostsService,
+        private navCtrl: NavController
     ) {
         this.createForm();
     }
@@ -96,7 +98,8 @@ export class SocialProblemCreatePage implements OnInit {
         const socialProblem: ISocialProblemReported = {
             title: this.socialProblemForm.value.title,
             description: this.socialProblemForm.value.description,
-            ubication: this.socialProblemCoordinate
+            ubication: this.socialProblemCoordinate,
+            images: this.socialProblemImages
         };
         // await this.utilsService.showToast('Post Problema Social Valido', 2500);
         this.postService.sendSocialProblemReport(socialProblem).pipe(
@@ -105,6 +108,7 @@ export class SocialProblemCreatePage implements OnInit {
             })
         ).subscribe(async res => {
             await this.utilsService.showToast("El Reporte fue enviado correctamente");
+            this.navCtrl.navigateRoot('/social-problems');
         }, err => {
             this.utilsService.showToast(err.error.message);
             console.log('Error Reportar Problema Social', err.error);

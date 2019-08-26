@@ -8,9 +8,9 @@ import { ChangeProfileImagePage } from 'src/app/modals/change-profile-image/chan
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { IPhoneUser } from '../../../interfaces/models';
 import { NetworkService } from 'src/app/services/network.service';
-import { environment } from '../../../../environments/environment';
 import { UserService } from '../../../services/user.service';
 import { UtilsService } from '../../../services/utils.service';
+import { environment } from '../../../../environments/environment';
 
 const URL_PATTERN = new RegExp(/^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/);
 
@@ -135,8 +135,8 @@ export class UserProfilePage implements OnInit {
     }
 
     removeSocialProfileToUser($social_profile_id) {
-        this.userService.sendRequestDeleteSocialProfile($social_profile_id).subscribe((res: any) => {
-            this.utilsService.showToast('Perfil Social Desconectado Correctamente');
+        this.userService.sendRequestDeleteSocialProfile($social_profile_id).subscribe(async (res: any) => {
+            await this.utilsService.showToast('Perfil Social Desconectado Correctamente');
             this.authService.updateAuthInfo(res.data.token, res.data.user)
         }, err => {
             this.utilsService.showToast('Perfil Social no se pudo eliminar desconectar :(');

@@ -114,10 +114,12 @@ export class ChangePasswordPage implements OnInit {
     }
 
     sendRequestChangePass() {
-        this.utilsService.showToast(JSON.stringify(this.changePassForm.value));
-        this.userService.sendChangeUserPassRequest(this.changePassForm.value.password).subscribe(res => {
-            this.utilsService.showToast('Contraseña Actualizada Correctamente');
-            this.authService.updateAuthInfo(res.data.token, res.data.user)
+        // this.utilsService.showToast(JSON.stringify(this.changePassForm.value));
+        this.userService.sendChangeUserPassRequest(this.changePassForm.value.password).subscribe(async (res: any) => {
+            await this.utilsService.showToast('Contraseña Actualizada Correctamente');
+            this.authService.updateAuthInfo(res.data.token, res.data.user);
+            this.changePassForm.reset();
+
         }, err => {
             this.utilsService.showToast('Contraseña No se pudo actualizar :( ');
             console.log('error al actualizar contraseña usuario', err);
