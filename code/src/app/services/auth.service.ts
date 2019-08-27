@@ -83,9 +83,12 @@ export class AuthService {
         }
     }
     // Actualizar Informacion Local Storage
-    updateAuthInfo(token, user) {
-        this.setTokenLocalStorage(token);
-        this.setUserLocalStorage(user);
+    async updateAuthInfo(token, user) {
+        await this.setTokenLocalStorage(token);
+        await this.setUserLocalStorage(user);
+        await this.getUserLocalStorage();
+        await this.getTokenLocalStorage();
+        
     }
     //Obtener la información desde Local Storage
     async verificarAuthInfo() {

@@ -14,7 +14,7 @@ export class HasDeviceDirective implements OnInit{
     private viewContainer: ViewContainerRef) { }
 
   ngOnInit(){
-  	  if (!this.notificationService.hasDevices()) {
+  	  if (this.notificationService.hasDevices()) {
             this.viewContainer.createEmbeddedView(this.templateRef);
         } else {
             this.viewContainer.clear();

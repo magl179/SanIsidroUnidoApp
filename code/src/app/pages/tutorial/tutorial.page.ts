@@ -68,7 +68,7 @@ export class TutorialPage implements OnInit {
     async startTutorial() {
         await this.closeMenu();
         timer(300).subscribe(() => {
-            this.navCtrl.navigateRoot('/social-problems');
+            this.navCtrl.navigateRoot('/home');
         });
     }
 

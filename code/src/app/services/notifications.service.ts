@@ -101,12 +101,16 @@ export class NotificationsService {
 
     hasDevices() {
         if (this.AuthUser && this.userDevice.value.phone_id && this.AuthUser.devices && this.AuthUser.devices.length > 0) {
-            let hasDevice = false;
+            // let hasDevice = false;
             let userDevices = this.getUserDevices();
             // for (const oneDevice of userDevices) {
-            if (userDevices.includes(this.userDevice.value.phone_id)) {
-                hasDevice = true;
-            }
+            console.log('user devices', userDevices);
+            console.log('user value phone id', this.userDevice.value.phone_id);
+            // const device_inclu
+            let hasDevice = (userDevices.includes(this.userDevice.value.phone_id)) ? true : false;
+            // if (userDevices.includes(this.userDevice.value.phone_id)) {
+            //     hasDevice = true;
+            // }
             // }
             return hasDevice;
         } else {

@@ -49,16 +49,7 @@ export class UserProfilePage implements OnInit {
     }
 
     ionViewWillEnter() {
-        this.authService.getAuthUser().subscribe(res => {
-            if (res) {                
-                this.AuthUser = res.user;
-            }
-        });
-        this.notificationsService.getUserDevice().subscribe(userdevice => {
-            if(userdevice){
-                this.DeviceUser = userdevice;
-            }
-        });
+      
     }
 
     // ionViewWillLeave() {
@@ -70,6 +61,16 @@ export class UserProfilePage implements OnInit {
             this.appNetworkConnection = connected;
         });
         this.checkRolUser();
+        this.authService.getAuthUser().subscribe(res => {
+            if (res) {                
+                this.AuthUser = res.user;
+            }
+        });
+        this.notificationsService.getUserDevice().subscribe(userdevice => {
+            if(userdevice){
+                this.DeviceUser = userdevice;
+            }
+        });
      }
 
     async checkRolUser() {

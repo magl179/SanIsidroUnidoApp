@@ -25,7 +25,7 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
     //     { title: 'Transporte&Tránsito', slug: 'transport_transit' }
     // ];
     appNetworkConnection = false;
-    subcategories = environment.subcategoriesSocialProblems;
+    subcategories = null;
     @ViewChild(IonSegment) segment: IonSegment;
     subcategory = '';
     // loading: any;
@@ -61,7 +61,11 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
         err => {
             console.log('Error al traer los problemas sociales');    
         });
-       
+        this.postService.getSubcategoriesByCategory(environment.socialProblemSlug).subscribe(res => {
+            this.subcategories = res.data
+        }, err => {
+                console.log('Error al traer subcategorias', err);
+        })
         this.loadSocialProblems();
     }
 

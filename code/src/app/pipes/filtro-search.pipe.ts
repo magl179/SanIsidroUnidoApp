@@ -9,21 +9,39 @@ export class FiltroSearchPipe implements PipeTransform {
         arreglo: any,
         texto: any,
         columna: string): any[] {
-        console.log('Arreglo Entrante: ', arreglo);
+        
+        // console.log('Arreglo Entrante: ', arreglo);
+        // console.log('Columna Entrante: ', columna);
+        // console.log('Texto Entrante: ', texto);
+        // console.log('arreglo 0', arreglo[0]);
+
+        // if (arreglo[0].hasOwnProperty(columna)) {
+        //     console.log('Item Columna Entrante: ', arreglo[0][columna]);
+        // }
+
         if (texto === '' || texto === null) {
             arreglo.exists = 1;
             return arreglo;
         }
 
-        texto = texto.toLowerCase();
-
+        if (!Number.isInteger(texto)) {
+            texto = texto.toLowerCase();
+        }
+        // console.log('Arreglo Entrante: ', arreglo);
+        // console.log('Columna Entrante: ', columna);
+        // console.log('Texto Entrante: ', texto);
+        // console.log('arreglo 0', arreglo[0]);
 
         let arregloFiltrado = arreglo.filter(item => {
-            console.log('item: ', item);
-            console.log('item-columna: ', item[columna].toString().toLowerCase());
-            console.log('texto: ', texto);
-            console.log('columna: ', columna);
-            return item[columna].toString().toLowerCase().includes(texto);
+            // console.log('item: ', item);
+            // console.log('item-columna: ', item[columna].toString().toLowerCase());
+            // console.log('texto: ', texto);
+            // console.log('columna: ', columna);
+            if (!Number.isInteger(texto)) {
+                return item.hasOwnProperty(columna) && item[columna] !== null && item[columna].toString().toLowerCase().includes(texto);
+            } else {
+                return item.hasOwnProperty(columna) && item[columna] !== null && item[columna].includes(texto);
+            }
         });
         console.log('Arreglo Filtrado', arregloFiltrado);
 
