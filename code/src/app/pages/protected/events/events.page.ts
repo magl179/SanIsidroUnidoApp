@@ -10,7 +10,7 @@ import { NetworkService } from '../../../services/network.service';
     templateUrl: './events.page.html',
     styleUrls: ['./events.page.scss'],
 })
-export class EventsPage implements OnInit, OnDestroy {
+export class EventsPage implements OnInit {
 
     appNetworkConnection = false;
     // loading: any;
@@ -24,7 +24,9 @@ export class EventsPage implements OnInit, OnDestroy {
         private postService: PostsService,
         private authService: AuthService,
         private networkService: NetworkService
-    ) { }
+    ) { 
+        console.log('Constructor Eventos');
+    }
 
 
     getFullDate(date, time) {
@@ -39,6 +41,10 @@ export class EventsPage implements OnInit, OnDestroy {
         this.authService.getAuthUser().subscribe(res => {
             this.AuthUser = res.user; 
         });
+    }
+    
+    ionViewWillEnter() {
+        this.utilsService.enableMenu();
         this.loadEvents();
     }
 
@@ -111,10 +117,6 @@ export class EventsPage implements OnInit, OnDestroy {
         this.postService.resetEventsPage();
     }
 
-    ngOnDestroy() {
-        this.resetEvents();
-    }
-
     loadEvents(event?, resetEvents?) {
         // if (resetEvents) {
         //     this.postService.resetEventsPage();
@@ -140,8 +142,8 @@ export class EventsPage implements OnInit, OnDestroy {
         });
     }
 
-    ionViewWillEnter() {
-        this.utilsService.enableMenu();
+    ionViewWillLeave() {
+        this.resetEvents();
     }
     postDetail(id) {
         this.resetEvents();

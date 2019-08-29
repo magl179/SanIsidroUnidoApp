@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UtilsService } from '../../../services/utils.service';
 import { MapService } from 'src/app/services/map.service';
 import { IPostUbicationItem } from 'src/app/interfaces/barrios';
@@ -63,6 +63,10 @@ export class SocialProblemCreatePage implements OnInit {
         });
     }
 
+    ionViewWillLeave() {
+        console.log('Detalle Problema Social Destruido');
+    }
+
     createForm() {
         const validations = this.localDataService.getFormValidations();
         const title = new FormControl('', Validators.compose([
@@ -99,7 +103,8 @@ export class SocialProblemCreatePage implements OnInit {
             title: this.socialProblemForm.value.title,
             description: this.socialProblemForm.value.description,
             ubication: this.socialProblemCoordinate,
-            images: this.socialProblemImages
+            images: this.socialProblemImages,
+            subcategory_id: this.socialProblemForm.value.subcategory
         };
         // await this.utilsService.showToast('Post Problema Social Valido', 2500);
         this.postService.sendSocialProblemReport(socialProblem).pipe(

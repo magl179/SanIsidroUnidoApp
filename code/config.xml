@@ -3,7 +3,7 @@
     <name>SanIsidroUnido</name>
     <description>Aplicacion para Gestionar el Barrio San Isidro de Puengasi</description>
     <author email="stalinct97@gmail.com" href="https://github.com/StalinMazaEpn">Stalin Maza</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://localhost:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -114,4 +114,5 @@
     <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
         <string>Nosotros usamos tu localizacion para ofrecerte al 100% las caracteristicas de la aplicacion.</string>
     </edit-config>
+    <allow-navigation href="http://localhost:8100" sessionid="3cfee7e0" />
 </widget>

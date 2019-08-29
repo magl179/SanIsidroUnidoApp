@@ -97,7 +97,7 @@ export interface IEmergencyReported extends IBaseReportSend {
 }
 
 export interface ISocialProblemReported extends IBaseReportSend {
-    subcategory?: number;
+    subcategory_id?: number;
 }
 
 export interface ILoginUser {

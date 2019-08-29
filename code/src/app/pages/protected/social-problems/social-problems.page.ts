@@ -16,7 +16,7 @@ import { NetworkService } from 'src/app/services/network.service';
     templateUrl: './social-problems.page.html',
     styleUrls: ['./social-problems.page.scss'],
 })
-export class SocialProblemsPage implements OnInit, OnDestroy {
+export class SocialProblemsPage implements OnInit {
 
     // subcategorias = [
     //     { title: 'Transporte&Tránsito', slug: 'transport_transit' },
@@ -44,6 +44,7 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
         private userService: UserService,
         private networkService: NetworkService
     ) {
+        console.log('Constructor Problemas Sociales');
     }
 
     async ngOnInit() {
@@ -66,10 +67,20 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
         }, err => {
                 console.log('Error al traer subcategorias', err);
         })
+    }
+    //Codigo Asincrono
+    ionViewWillEnter() {
+        this.utilsService.enableMenu();
         this.loadSocialProblems();
     }
 
-    ngOnDestroy(){
+    // ngOnDestroy() {
+    //         console.log('Listado Problemas Sociales Destruido');
+    //     this.resetSocialProblems();
+    // }
+
+    ionViewWillLeave() {
+        console.log('IonWillLeave Listado Problemas Sociales Destruido');
         this.resetSocialProblems();
     }
 
@@ -113,10 +124,6 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
                     console.log('detalle no se pudo crear', err);
             });
         }
-    }
-
-    ionViewWillEnter() {
-        this.utilsService.enableMenu();
     }
 
     loadSocialProblems(event?) {

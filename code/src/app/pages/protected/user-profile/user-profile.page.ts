@@ -28,6 +28,7 @@ export class UserProfilePage implements OnInit {
     sizeOptions = 4;
     canRequestAfiliation = true;
     DeviceUser: IPhoneUser = null;
+    UserDevices = null;
 
     constructor(
         private authService: AuthService,
@@ -66,6 +67,7 @@ export class UserProfilePage implements OnInit {
                 this.AuthUser = res.user;
             }
         });
+        // this.getUserDevices();
         this.notificationsService.getUserDevice().subscribe(userdevice => {
             if(userdevice){
                 this.DeviceUser = userdevice;
@@ -77,6 +79,13 @@ export class UserProfilePage implements OnInit {
         this.sizeOptions = (this.canRequestAfiliation) ? 4 : 6;
     }
   
+    // getUserDevices() {
+    //     this.userService.getDevicesUser().subscribe((res: any){
+    //         if (res) {
+    //             this.UserDevices = res.data;
+    //         }
+    //     });
+    // }
 
     getRoles() {
         //console.log('get roles', this.AuthUser);

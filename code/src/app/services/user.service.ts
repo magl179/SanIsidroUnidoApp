@@ -43,6 +43,11 @@ export class UserService implements OnInit {
         return this.http.get(`${environment.apiBaseURL}/usuarios/${user_id}/notificaciones`);
     }
 
+    getDevicesUser() {
+        const user_id = this.AuthUser.id;
+        return this.http.get(`${environment.apiBaseURL}/usuarios/${user_id}/dispositivos`);
+    }
+
     sendChangeUserPassRequest(newPassword: string): Observable<any> {
         const headers = this.headersApp.set('Authorization', this.AuthToken);
         const user_id = this.AuthUser.id;

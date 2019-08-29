@@ -46,7 +46,7 @@
                     <span> {{socialProblem.user.firstname}} {{socialProblem.user.lastname}}</span>
                     <span>{{socialProblem.date | beafitulDate}}</span>
                 </ion-card-subtitle>
-                <ion-card-title>Problem {{idPost}}</ion-card-title>
+                <ion-card-title> {{socialProblem.title }}- ProblemID {{socialProblem.id}}</ion-card-title>
             </ion-card-header>
             <ion-card-content>
                 <p class="post_description">
@@ -65,11 +65,11 @@
                         <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
                     </div>
                 </div>
-                <div class="action-button">
+                <!-- <div class="action-button">
                     <div class="btn-more">
                         <ion-icon class="icon-more" slot="icon-only" name="more"></ion-icon>
                     </div>
-                </div>
+                </div> -->
             </div>
         </ion-card>
     </div>
