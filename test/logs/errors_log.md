@@ -39,3 +39,10 @@ Edit /resources/android/xml/network_security_config.xml
     </domain-config>
 </network-security-config>
 ```
+# Error Gladle
+Could not find an installed version of Gradle either in Android Studio, or on your system to install the gradle wrapper. Please include gradle in your path, or install Android Studio
+
+Solución:
+- Descargar el Graddle desde https://gradle.org/install/#manually con la versión completa
+- Descomprimir y guardarlo en la ruta C:\\Gradle
+- Añadir la ruta C:\\Gradle\\bin al path
