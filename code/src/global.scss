@@ -217,11 +217,14 @@ body {
     display: flex;
     justify-content: space-around;
     align-items: center;
+    .button-title{
+        margin-top: .8rem;
+    }
 
     .container_btn_camera,
     .container_btn_gallery {
-        height: 5rem;
-        width: 5rem;
+        height: 6rem;
+        width: 6rem;
         display: flex;
         flex-direction: column;
         align-items: center;

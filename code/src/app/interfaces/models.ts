@@ -36,6 +36,8 @@ export interface IDirective {
     state: number;
     basic_service_image?: any;
     number_phone?: any;
+    position_id?: number;
+    position: IPosition[];
     created_at?: string;
     updated_at?: string;
     roles?: IRole[];
@@ -57,7 +59,7 @@ export interface ISocialProblem {
     details?: any;
 }
 
-export interface ISocialProfile{
+export interface ISocialProfile {
     id: Number;
     user_id: number;
     social_id: string;
@@ -66,7 +68,7 @@ export interface ISocialProfile{
     updated_at?: string;
 }
 
-export interface IDeviceUser{
+export interface IDeviceUser {
     id: Number;
     phone_id: number;
     phone_model?: string;
@@ -124,7 +126,7 @@ export interface IEditProfile {
     number
 }
 
-export interface IEventDetail{
+export interface IEventDetail {
     id: number;
     title: string;
     description: string;
@@ -138,10 +140,10 @@ export interface IEventDetail{
     details?: any;
 }
 
-export interface ICreateDetail{
+export interface ICreateDetail {
     type: string,
     user_id: number,
-    post_id : number
+    post_id: number
 }
 
 //INTERFACES NO EXPORTADAS
@@ -158,6 +160,15 @@ interface IBaseReportSend {
     user_id?: number;
     ubication: IUbication;
     images?: string[]
+}
+
+interface IPosition {
+    id: number;
+    name: string;
+    slug: string;
+    allocation: string;
+    created_at?: string;
+    updated_at?: string;
 }
 
 

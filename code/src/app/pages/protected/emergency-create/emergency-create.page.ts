@@ -124,8 +124,8 @@ export class EmergencyCreatePage implements OnInit {
         this.currentStep = event.currentStep;
     }
 
-    getUserAddress(latitud, longitud) {
-        this.mapService.getAddress({
+    async getUserAddress(latitud, longitud) {
+        await this.mapService.getAddress({
             lat: latitud,
             lng: longitud,
             zoom: 14
@@ -138,9 +138,7 @@ export class EmergencyCreatePage implements OnInit {
             });
     }
 
-    async sendEmergencyReport() {
-       
-       
+    async sendEmergencyReport() { 
         if (this.emergencyForm.valid !== true) {
             await this.utilsService.showToast('Ingresa un titulo y una descripción', 2500);
             return;
@@ -151,10 +149,10 @@ export class EmergencyCreatePage implements OnInit {
             return;
         }
 
-        if (this.emergencyImages.length === 0) {
-            await this.utilsService.showToast('Sube alguna imagen por favor', 2500);
-            return;
-        }
+        // if (this.emergencyImages.length === 0) {
+        //     await this.utilsService.showToast('Sube alguna imagen por favor', 2500);
+        //     return;
+        // }
 
         // await this.utilsService.showToast('Post Emergencia Valido', 2500);
         const loadingEmergencyReport = await this.utilsService.createBasicLoading('Enviando Reporte');
@@ -174,8 +172,8 @@ export class EmergencyCreatePage implements OnInit {
             await this.utilsService.showToast("El Reporte fue enviado correctamente");
             this.navCtrl.navigateRoot('/home');
         }, err => {
+            console.log('Error Reportar Emergencia', err);
             this.utilsService.showToast(err.error.message);
-            console.log('Error Reportar Emergencia', err.error);
         });
     }
 

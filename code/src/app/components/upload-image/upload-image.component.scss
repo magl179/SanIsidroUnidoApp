@@ -33,3 +33,25 @@
         --padding-start: 0px;
     }
 }
+
+.section-images-upload{
+    display: flex;
+    justify-content: space-around;
+    .image-item{
+        width: 6rem;
+        height: 6rem;
+        background: #dadada;
+        display: flex;
+        &.fake{
+            justify-content: center;
+            align-items: center;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .icon{
+            font-size: 2rem;
+            color: #f8f8f8;
+        }
+    }
+}

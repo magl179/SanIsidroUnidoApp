@@ -25,7 +25,6 @@ export class HomePage implements OnInit {
     constructor(
         private utilsService: UtilsService,
         private localDataService: LocalDataService,
-        private authService: AuthService,
         private networkService: NetworkService
     ) { }
 

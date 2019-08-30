@@ -7,6 +7,8 @@ import { IEditProfile } from 'src/app/interfaces/models';
 import { catchError } from 'rxjs/operators';
 import { IPhoneUser } from '../interfaces/models';
 
+const AUTHORIZATION_NAME = "authorization";
+
 @Injectable({
     providedIn: 'root'
 })
@@ -49,7 +51,7 @@ export class UserService implements OnInit {
     }
 
     sendChangeUserPassRequest(newPassword: string): Observable<any> {
-        const headers = this.headersApp.set('Authorization', this.AuthToken);
+        const headers = this.headersApp.set(AUTHORIZATION_NAME, this.AuthToken);
         const user_id = this.AuthUser.id;
         return this.http.patch(`${environment.apiBaseURL}/usuarios/${user_id}/cambiar-contrasenia`, {
             password: newPassword,
@@ -58,7 +60,7 @@ export class UserService implements OnInit {
     }
 
     sendChangeUserImageRequest(image: string): Observable<any> {
-        const headers = this.headersApp.set('Authorization', this.AuthToken);
+        const headers = this.headersApp.set(AUTHORIZATION_NAME, this.AuthToken);
         const user_id = this.AuthUser.id;
         return this.http.patch(`${environment.apiBaseURL}/usuarios/${user_id}/cambiar-avatar`, {
             avatar: image
@@ -66,13 +68,13 @@ export class UserService implements OnInit {
     }
 
     sendEditProfileRequest(profile: IEditProfile): Observable<any> {
-        const headers = this.headersApp.set('Authorization', this.AuthToken);
+        const headers = this.headersApp.set(AUTHORIZATION_NAME, this.AuthToken);
         const user_id = this.AuthUser.id;
         return this.http.patch(`${environment.apiBaseURL}/usuarios/${user_id}`, profile, { headers });
     }
 
     sendRequestUserMembership(image: string) {
-        const headers = this.headersApp.set('Authorization', this.AuthToken);
+        const headers = this.headersApp.set(AUTHORIZATION_NAME, this.AuthToken);
         const user_id = this.AuthUser.id;
         return this.http.patch(`${environment.apiBaseURL}/usuarios/${user_id}/solicitar-afiliacion`, {
             basic_service_image: image
@@ -80,19 +82,19 @@ export class UserService implements OnInit {
     }
 
     sendRequestAddUserDevice(device: IPhoneUser) {
-        const headers = this.headersApp.set('Authorization', this.AuthToken);
+        const headers = this.headersApp.set(AUTHORIZATION_NAME, this.AuthToken);
         const user_id = this.AuthUser.id;
         return this.http.post(`${environment.apiBaseURL}/usuarios/${user_id}/dispositivos`, device , { headers });
     }
 
     sendRequestDeleteUserDevice(device_id: number) {
-        const headers = this.headersApp.set('Authorization', this.AuthToken);
+        const headers = this.headersApp.set(AUTHORIZATION_NAME, this.AuthToken);
         const user_id = this.AuthUser.id;
         return this.http.delete(`${environment.apiBaseURL}/usuarios/${user_id}/dispositivos/${device_id}`, { headers });
     }
 
     sendRequestDeleteSocialProfile(social_profile_id: number) {
-        const headers = this.headersApp.set('Authorization', this.AuthToken);
+        const headers = this.headersApp.set(AUTHORIZATION_NAME, this.AuthToken);
         const user_id = this.AuthUser.id;
         return this.http.delete(`${environment.apiBaseURL}/usuarios/${user_id}/perfiles-sociales/${social_profile_id}`, { headers });
     }

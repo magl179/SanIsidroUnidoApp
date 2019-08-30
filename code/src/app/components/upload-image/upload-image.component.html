@@ -1,4 +1,4 @@
-<p class="ion-text-center text-img-empty" *ngIf="uploadedImages.length === 0">Por favor sube alguna imagen</p>
+<!-- <p class="ion-text-center text-img-empty" *ngIf="uploadedImages.length === 0">Por favor sube alguna imagen</p> -->
 <ion-progress-bar [value]="getUploadImagePercent()"></ion-progress-bar>
 <br>
 <br>
@@ -7,12 +7,12 @@
         <svg class="camera">
             <use href="assets/font-awesome/sprites/solid.svg#camera" />
         </svg>
-        <p>Camara</p>
+        <p class="button-title">Camara</p>
     </section>
     <section class="container_btn_gallery" (click)="loadImageFromGallery()">
         <svg class="gallery">
             <use href="assets/font-awesome/sprites/solid.svg#image" />
         </svg>
-        <p>Galeria</p>
+        <p class="button-title">Galeria</p>
     </section>
 </div>

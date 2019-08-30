@@ -44,7 +44,7 @@
             <ion-card-header>
                 <ion-card-subtitle class="post_user problem-subtitle" *ngIf="socialProblem">
                     <span> {{socialProblem.user.firstname}} {{socialProblem.user.lastname}}</span>
-                    <span>{{socialProblem.date | beafitulDate}}</span>
+                    <span>{{socialProblem.created_at | beafitulDate}}</span>
                 </ion-card-subtitle>
                 <ion-card-title> {{socialProblem.title }}- ProblemID {{socialProblem.id}}</ion-card-title>
             </ion-card-header>

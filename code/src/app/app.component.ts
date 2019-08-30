@@ -43,10 +43,6 @@ export class AppComponent implements OnInit {
         this.initializeApp();
     }
 
-    // ionViewWillEnter() {
-    //     this.checkInitialStateNetwork();
-    // }
-
     ngOnInit() {
         this.utilsService.getMenuOptions().subscribe((data) => {
             this.menuComponents = data;
@@ -58,13 +54,14 @@ export class AppComponent implements OnInit {
         await this.authService.verificarAuthInfo();
         await this.checkInitialStateNetwork();
         await this.platform.ready().then(async () => {
-            await this.statusBar.styleDefault();
-            await this.splashScreen.hide();
+            if (this.platform.is('cordova')) {
+                await this.statusBar.styleDefault();
+                await this.splashScreen.hide();
+            }
             await this.checkUserLoggedIn();
             timer(3000).subscribe(async () => {
                 this.showAppsplash = false;
                 await this.pushNotificationService.initialConfig();
-               
             });
         });
     }
@@ -135,14 +132,6 @@ export class AppComponent implements OnInit {
     }
 
     async checkInitialStateNetwork() {
-        // console.log('network check state');
-        // await this.networkService.testNetworkConnection();
-        // const isOnline = this.networkService.getNetworkTestValue();
-        // this.isConnected = isOnline;
-        // if (!isOnline) {
-        //     this.utilsService.showToast('Por favor enciende tu conexión a Internet');
-        //     console.log('No tienes conexion a Internet');
-        // }
         this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
             this.isConnected = connected;
             console.log('Network status', connected);

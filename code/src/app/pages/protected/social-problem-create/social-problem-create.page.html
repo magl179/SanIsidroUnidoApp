@@ -62,7 +62,7 @@
                         <ion-select formControlName="subcategory"
                             placeholder="Escoge una opción">
                             <ion-select-option [selected]="(i===0) ? true: false"
-                                *ngFor="let subcategory of subcategories; let i = index" [value]="subcategory.slug">
+                                *ngFor="let subcategory of subcategories; let i = index" [value]="subcategory.id">
                                 {{subcategory.name}}</ion-select-option>
                         </ion-select>
                     </ion-item>
@@ -124,7 +124,7 @@
     ">
             <h2>{{socialProblemForm.get('title').value || 'Ingresa un Titulo'}}</h2>
             <p>{{socialProblemForm.get('title').value || 'Ingresa una descripción'}}</p>
-            <p *ngIf="socialProblemCoordinate.address">Dirección de la Emergencia</p>
+            <!-- <p *ngIf="socialProblemCoordinate.address">Dirección de la Emergencia</p> -->
             <p *ngIf="socialProblemCoordinate.address">{{socialProblemCoordinate.address}}</p>
             <p *ngIf="!socialProblemCoordinate.address">Por favor escoge una ubicación</p>
             <div class="section-img-thumb" *ngIf="socialProblemImages.length > 0">
@@ -132,7 +132,7 @@
                     <img [src]="image">
                 </ion-thumbnail>
             </div>
-            <p *ngIf="socialProblemImages.length === 0">No hay imagenes en este post</p>
+            <p *ngIf="socialProblemImages.length === 0">No hay ninguna imagen para enviar</p>
             <div>
                 <ion-button expand="full" (click)="sendSocialProblem()">Reportar</ion-button>
             </div>

@@ -21,10 +21,24 @@
         "children": []
     },
     {
-        "icon": "information-circle",
-        "name": "Información",
-        "redirectTo": "/about",
+        "icon": "help-circle-outline",
+        "name": "Ayuda",
         "routeDirection": "root",
-        "children": []
+        "children": [
+            {
+                "icon": "list-box",
+                "name": "Preguntas Frecuentes",
+                "redirectTo": "/frequent-questions",
+                "routeDirection": "root",
+                "children": []
+            },
+            {
+                "icon": "information-circle",
+                "name": "Información App",
+                "redirectTo": "/about",
+                "routeDirection": "root",
+                "children": []
+            }
+        ]
     }
 ]

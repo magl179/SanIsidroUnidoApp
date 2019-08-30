@@ -6,6 +6,8 @@ import { environment } from 'src/environments/environment';
 import { IEmergencyReported, ISocialProblemReported, ICreateDetail } from 'src/app/interfaces/models';
 import { AuthService } from './auth.service';
 
+const AUTHORIZATION_NAME = "authorization";
+
 @Injectable({
     providedIn: 'root'
 })
@@ -53,7 +55,7 @@ export class PostsService implements OnInit {
     //MÉTODOS POST
     sendEmergencyReport(emergencyPost: IEmergencyReported): Observable<any> {
         emergencyPost.user_id = this.AuthUser.id;
-        const headers = this.headersApp.set('Authorization', this.AuthToken);
+        const headers = this.headersApp.set(AUTHORIZATION_NAME, this.AuthToken);
         return this.http.post(`${environment.apiBaseURL}/emergencias`, emergencyPost, {
             headers
         });
@@ -61,20 +63,20 @@ export class PostsService implements OnInit {
 
     sendSocialProblemReport(socialProblemPost: ISocialProblemReported): Observable<any> {
         socialProblemPost.user_id = this.AuthUser.id;
-        const headers = this.headersApp.set('Authorization', this.AuthToken);
+        const headers = this.headersApp.set(AUTHORIZATION_NAME, this.AuthToken);
         return this.http.post(`${environment.apiBaseURL}/problemas-sociales`, socialProblemPost, {
             headers
         });
     }
     sendCreateDetailToPost(detailInfo: ICreateDetail) {
         // console.log('auth token', this.AuthToken);
-        const headers = this.headersApp.set('Authorization', this.AuthToken);
+        const headers = this.headersApp.set(AUTHORIZATION_NAME, this.AuthToken);
         return this.http.post(`${environment.apiBaseURL}/detalles`, detailInfo, {
             headers
         });
     }
     sendDeleteDetailToPost(post_id: number) {
-        const headers = this.headersApp.set('Authorization', this.AuthToken);
+        const headers = this.headersApp.set(AUTHORIZATION_NAME, this.AuthToken);
         // console.log('auth token', this.AuthToken);
         return this.http.delete(`${environment.apiBaseURL}/detalles/${post_id}`, {
             headers

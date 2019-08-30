@@ -10,11 +10,11 @@ export class SimpleBeatifulDatePipe implements PipeTransform {
         let simpleBeatifulDate = null;
         moment.locale('es');
         if (moment(value).isValid()) {
-            console.log('Valid Date');
+            // console.log('Valid Date');
             const requestDate = moment(new Date(value));
             simpleBeatifulDate = requestDate.format('LLL');
         } else {
-            console.log('Invalid Date', value);
+            // console.log('Invalid Date', value);
         }
         return simpleBeatifulDate;
         // moment().format('MMMM Do YYYY, h:mm:ss a');

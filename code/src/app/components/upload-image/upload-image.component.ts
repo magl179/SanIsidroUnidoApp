@@ -29,7 +29,10 @@ export class UploadImageComponent implements OnInit {
         private camera: Camera,
         private utilsService: UtilsService,
         private platform: Platform
-    ) { }
+    ) { 
+        // this.uploadedImages = Array(this.maxImages).fill().map(() => Math.round(Math.random() * 40));
+        // console.log('component upload_img', this.uploadedImages);
+    }
 
     ngOnInit() {
         cameraOptions.destinationType = this.camera.DestinationType.DATA_URL;
@@ -89,7 +92,7 @@ export class UploadImageComponent implements OnInit {
                     });
             if (this.uploadedImages.length >= 1) {
                 this.getUploadedImages();
-                this.utilsService.showToast('Imagenes Enviadas al Padre', 1500);
+                // this.utilsService.showToast('Imagenes Enviadas al Padre', 1500);
             }
         } else {
             this.utilsService.showToast('Cordova no esta disponible', 1500);

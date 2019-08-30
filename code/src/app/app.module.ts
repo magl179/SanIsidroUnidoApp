@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP } from '@ionic-native/http/ngx';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SmComponentsModule } from './components/sm-components.module';
 
@@ -70,7 +71,8 @@ import { AuthInterceptorService } from 'src/app/services/auth-interceptor.servic
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptorService,
             multi: true
-        }
+        },
+        HTTP
     ],
     bootstrap: [AppComponent]
 })

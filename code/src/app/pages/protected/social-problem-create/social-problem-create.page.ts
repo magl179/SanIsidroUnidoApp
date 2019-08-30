@@ -92,10 +92,10 @@ export class SocialProblemCreatePage implements OnInit {
             await this.utilsService.showToast('No se pudo obtener tu ubicación', 2500);
             return;
         }
-        if (this.socialProblemImages.length === 0) {
-            await this.utilsService.showToast('Sube alguna imagen por favor', 2500);
-            return;
-        }
+        // if (this.socialProblemImages.length === 0) {
+        //     await this.utilsService.showToast('Sube alguna imagen por favor', 2500);
+        //     return;
+        // }
 
         const loadingReportSocialProblem = await this.utilsService.createBasicLoading('Enviando Reporte');
         loadingReportSocialProblem.present();

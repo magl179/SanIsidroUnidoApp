@@ -98,12 +98,21 @@ export class NotificationsService {
 
     //Obtener Roles Usuario
     getUserDevices() {
-        return this.AuthUser.value.user.devices.map(device => device.phone_id);
+        if (this.AuthUser.value.user) {
+            if (this.AuthUser.value.user.devices) {
+                return this.AuthUser.value.user.devices.map(device => device.phone_id);
+            } else{
+                return [];
+            }
+        } else{
+            return [];
+        }
+        
         // return this.userDevices.map(device => device.phone_id);
     }
 
     hasDevices() {
-        if (this.AuthUser && this.userDevice.value.phone_id && this.AuthUser.devices && this.AuthUser.devices.userDevices.length > 0) {
+        if (this.AuthUser && this.userDevice.value.phone_id) {
             // let hasDevice = false;
             let userDevices = this.getUserDevices();
             // for (const oneDevice of userDevices) {

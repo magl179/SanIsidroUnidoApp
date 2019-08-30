@@ -11,9 +11,9 @@
                     <ion-label>
                         <h1>{{userApp?.firstname || 'Firstname'}} {{userApp?.lastname || 'Lastname'}}</h1>
                         <p>{{userApp?.email || 'example@gmail.com'}}</p> 
-                        <p class="network_avalaible">
+                        <!-- <p class="network_avalaible">
                             <span>Red: </span> <ion-badge [color]="(isConnected)?'success':'danger'">{{ (isConnected)?'disponible':'no disponible' }}</ion-badge>
-                        </p>
+                        </p> -->
                     </ion-label>
                 </ion-item>
                 <ion-list class="list-no-padding" *ngFor="let c of menuComponents;let i = index;">
