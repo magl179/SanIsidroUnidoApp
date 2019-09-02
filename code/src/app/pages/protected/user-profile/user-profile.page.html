@@ -1,12 +1,11 @@
 <app-header title="Mi Perfil"></app-header>
 
 <ion-content padding>
-    <!-- <p>Mi Perfil</p> -->
     <app-network-banner *ngIf="!appNetworkConnection" networkConnection="appNetworkConnection"></app-network-banner>
     <div class="container-profile" *ngIf="appNetworkConnection">
         <div class="img-profile ion-padding-top">
             <div class="item_img" *ngIf="AuthUser">
-                <img [src]="getImageURL(AuthUser.avatar) || 'assets/img/default/img_avatar.png'" alt="User Profile Image" />
+                <img [src]="(AuthUser.avatar) ? getImageURL(AuthUser.avatar) : 'assets/img/default/img_avatar.png'" alt="User Profile Image" />
                 <div class="upload_image" (click)="showChangeUserImageProfileModal()">
                     <ion-icon name="camera"></ion-icon>
                 </div>
@@ -71,7 +70,6 @@
                             <img class="icon" src="/assets/img/svg/smartphone.svg">
                             <div class="label">
                                 <p>{{user_device.phone_model}}</p>
-                                <!-- <p>{{device.phone_model}}</p> -->
                             </div>
 
                         </div>
@@ -83,8 +81,6 @@
             </div>
         
         <div *ngIf="DeviceUser">
-            <br>
-            <br>
             <p>DeviceUser: {{DeviceUser.phone_id}}</p>
             <p>DeviceUser: {{DeviceUser.phone_model}}</p>
             <p>DeviceUser: {{DeviceUser.phone_platform}}</p>

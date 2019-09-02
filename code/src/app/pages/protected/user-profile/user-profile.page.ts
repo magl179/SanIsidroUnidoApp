@@ -49,15 +49,15 @@ export class UserProfilePage implements OnInit {
     }
 
     async ngOnInit() {
-        this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
-            this.appNetworkConnection = connected;
-        });
-        this.checkRolUser();
         this.authService.getAuthUser().subscribe(res => {
             if (res) {                
                 this.AuthUser = res.user;
             }
         });
+        this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
+            this.appNetworkConnection = connected;
+        });
+        this.checkRolUser();
         // this.getUserDevices();
         this.notificationsService.getUserDevice().subscribe(userdevice => {
             if(userdevice){
