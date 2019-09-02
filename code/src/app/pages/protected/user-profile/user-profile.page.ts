@@ -37,7 +37,6 @@ export class UserProfilePage implements OnInit {
         private utilsService: UtilsService,
         private notificationsService: NotificationsService,
         private networkService: NetworkService) {
-        // this.loadUserData();
     }
 
     getImageURL(image_name) {
@@ -48,14 +47,6 @@ export class UserProfilePage implements OnInit {
             return `${environment.apiBaseURL}/${environment.image_assets}/${image_name}`;
         }
     }
-
-    ionViewWillEnter() {
-      
-    }
-
-    // ionViewWillLeave() {
-    //     this.userProfileSubscription.unsubscribe();
-    // }
 
     async ngOnInit() {
         this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
@@ -78,17 +69,8 @@ export class UserProfilePage implements OnInit {
     async checkRolUser() {
         this.sizeOptions = (this.canRequestAfiliation) ? 4 : 6;
     }
-  
-    // getUserDevices() {
-    //     this.userService.getDevicesUser().subscribe((res: any){
-    //         if (res) {
-    //             this.UserDevices = res.data;
-    //         }
-    //     });
-    // }
 
     getRoles() {
-        //console.log('get roles', this.AuthUser);
         if (this.AuthUser) {
             return this.AuthUser.roles.map(role => role.slug);
         }
@@ -146,10 +128,11 @@ export class UserProfilePage implements OnInit {
 
     removeSocialProfileToUser($social_profile_id) {
         this.userService.sendRequestDeleteSocialProfile($social_profile_id).subscribe(async (res: any) => {
-            await this.utilsService.showToast('Perfil Social Desconectado Correctamente');
-            this.authService.updateAuthInfo(res.data.token, res.data.user)
+            this.utilsService.showToast('Perfil Social fue desconectado correctamente');
+            const token_decode = await this.authService.decodeToken(res.data.token);
+            this.authService.updateAuthInfo(res.data.token, token_decode);
         }, err => {
-            this.utilsService.showToast('Perfil Social no se pudo eliminar desconectar :(');
+            this.utilsService.showToast('El Perfil Social no se pudo desconectar');
             console.log('error al desconectar perfil social imagen usuario', err);
         });
     }

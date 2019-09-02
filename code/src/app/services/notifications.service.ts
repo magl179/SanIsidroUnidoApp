@@ -26,20 +26,11 @@ const USER_DEVICE_DEFAULT: IPhoneUser = {
 export class NotificationsService {
 
 
-    messagesList: OSNotificationPayload[] = [];
+    // messagesList: OSNotificationPayload[] = [];
     currentUser = null;
-    // userDeviceID = new BehaviorSubject<string>(null);
-    //userDeviceModel = new BehaviorSubject<string>(null);
-    //userDevicePlatform = new BehaviorSubject<string>(null);
     pushListener = new EventEmitter<OSNotificationPayload>();
     AuthUser = null;
-    /*userDeviceDefault = {
-        phoneUUID: '',
-        phoneModel: '',
-        phonePlatform: ''
-    };*/
     userDevice = new BehaviorSubject<IPhoneUser>(USER_DEVICE_DEFAULT);
-    // userDevices = null;
 
     constructor(
         private device: Device,
@@ -51,7 +42,6 @@ export class NotificationsService {
         private authService: AuthService,
         private utilsService: UtilsService
     ) {
-        this.loadMessages();
         this.loadUser();
         // this.loadUserDevices();
     }
@@ -113,17 +103,8 @@ export class NotificationsService {
 
     hasDevices() {
         if (this.AuthUser && this.userDevice.value.phone_id) {
-            // let hasDevice = false;
             let userDevices = this.getUserDevices();
-            // for (const oneDevice of userDevices) {
-            // console.log('user devices', userDevices);
-            // console.log('user value phone id', this.userDevice.value.phone_id);
-            // const device_inclu
             let hasDevice = (userDevices.includes(this.userDevice.value.phone_id)) ? true : false;
-            // if (userDevices.includes(this.userDevice.value.phone_id)) {
-            //     hasDevice = true;
-            // }
-            // }
             return hasDevice;
         } else {
             return false;
@@ -147,9 +128,11 @@ export class NotificationsService {
                 phone_platform: this.userDevice.value.phone_platform
             };
             await this.userService.sendRequestAddUserDevice(data)
-                .subscribe((res: any) => {
+                .subscribe(async (res: any) => {
                     this.utilsService.showToast('Dispositivo Añadido Correctamente');
-                    this.authService.updateAuthInfo(res.data.token, res.data.user)
+                    // this.authService.updateAuthInfo(res.data.token, res.data.user)
+                    const token_decode = await this.authService.decodeToken(res.data.token);
+                    this.authService.updateAuthInfo(res.data.token, token_decode);
                 }, err => {
                     this.utilsService.showToast('Ocurrio un error al añadir el dispositivo :( ');
                     console.log('Ocurrio un error al añadir el dispositivo', err);
@@ -162,10 +145,12 @@ export class NotificationsService {
     async removeUserDevice(device_id) {
         await this.userService.sendRequestDeleteUserDevice(device_id).subscribe(async (res: any) => {
             await this.utilsService.showToast('Dispositivo eliminado Correctamente');
-            console.log('remove device', res);
-            this.authService.updateAuthInfo(res.data.token, res.data.user)
+            // console.log('remove device', res);
+            // this.authService.updateAuthInfo(res.data.token, res.data.user)
+            const token_decode = await this.authService.decodeToken(res.data.token);
+            this.authService.updateAuthInfo(res.data.token, token_decode);
         }, err => {
-            this.utilsService.showToast('Ocurrio un error al eliminar el dispositivo :( ');
+            this.utilsService.showToast('Ocurrio un error al desconectar el dispositivo :( ');
             console.log('Ocurrio un error al eliminar el dispositivo', err);
         });
     }
@@ -191,30 +176,30 @@ export class NotificationsService {
     }
 
     // Función Cargar Mensajes
-    async loadMessages() {
-        this.messagesList = await this.storage.get('app_notifications') || [];
-        return this.messagesList;
-    }
+    // async loadMessages() {
+    //     this.messagesList = await this.storage.get('app_notifications') || [];
+    //     return this.messagesList;
+    // }
 
     // Función para guardar los mensajes
-    saveMessages() {
-        this.storage.set('app_notifications', this.messagesList);
-        console.log({ mensajesGuardados: this.messagesList });
-    }
+    // saveMessages() {
+    //     this.storage.set('app_notifications', this.messagesList);
+    //     console.log({ mensajesGuardados: this.messagesList });
+    // }
 
     // Función a Ejecutar cuando se recibe una notificación
     async manageNotificationReceived(appNotification: OSNotification) {
-        await this.loadMessages();
-        const notificationPayload = appNotification.payload;
-        const pushNotificationExist = this.messagesList.find((message) => {
-            return message.notificationID === notificationPayload.notificationID;
-        });
-        if (pushNotificationExist) {
-            return;
-        }
-        this.messagesList.unshift(notificationPayload);
-        await this.saveMessages();
-        this.pushListener.emit(notificationPayload);
+        // await this.loadMessages();
+        // const notificationPayload = appNotification.payload;
+        // const pushNotificationExist = this.messagesList.find((message) => {
+        //     return message.notificationID === notificationPayload.notificationID;
+        // });
+        // if (pushNotificationExist) {
+        //     return;
+        // }
+        // this.messagesList.unshift(notificationPayload);
+        // await this.saveMessages();
+        // this.pushListener.emit(notificationPayload);
     }
 
     getNotifications(): Observable<any> {

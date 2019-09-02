@@ -29,10 +29,10 @@ export class RegisterPage implements OnInit {
     iconpassword = 'eye-off';
     registerForm: FormGroup;
     errorMessages = null;
-    loginData = {
-        token: null,
-        user: null
-    };
+    // loginData = {
+    //     token: null,
+    //     user: null
+    // };
 
     constructor(
         private navCtrl: NavController,
@@ -62,23 +62,33 @@ export class RegisterPage implements OnInit {
     }
 
     async manageRegister(loginData, res) {
-         this.loginData.token = res.data;
-         //Obtener Usuario Identificado
-         this.authService.login(loginData, true).subscribe(async res => {
-             console.log('login token descifrado', res);
-             if (res.code === 200) {
-                 this.loginData.user = res.data;
-                 await this.authService.setUserLocalStorage(this.loginData.user);
-                 await this.authService.setTokenLocalStorage(this.loginData.token);
-                 await this.notificationsService.registerUserDevice();
-                 this.navCtrl.navigateRoot('/home');
-             } else {
-                 this.utilsService.showToast('Fallo Iniciar Sesión 2'); 
-             }
-         }, err => {
-             this.utilsService.showToast(`Error: ${err.error.message}`);
-             console.log('Error Login', err);
-         });
+        //Obtener Token y Usuario
+        const token = res.data; 
+        const tokendescrifrado = this.authService.decodeToken(token);
+        //Guardar Datos Token
+        await this.authService.setUserLocalStorage(tokendescrifrado);
+        await this.authService.setTokenLocalStorage(token);
+        //Registrar Dispositivo
+        await this.notificationsService.registerUserDevice();
+        //Redirigir Usuario
+        this.navCtrl.navigateRoot('/home');
+        //  this.loginData.token = res.data;
+        //  //Obtener Usuario Identificado
+        //  this.authService.login(loginData, true).subscribe(async res => {
+        //      console.log('login token descifrado', res);
+        //      if (res.code === 200) {
+        //          this.loginData.user = res.data;
+        //          await this.authService.setUserLocalStorage(this.loginData.user);
+        //          await this.authService.setTokenLocalStorage(this.loginData.token);
+        //          await this.notificationsService.registerUserDevice();
+        //          this.navCtrl.navigateRoot('/home');
+        //      } else {
+        //          this.utilsService.showToast('Fallo Iniciar Sesión 2'); 
+        //      }
+        //  }, err => {
+        //      this.utilsService.showToast(`Error: ${err.error.message}`);
+        //      console.log('Error Login', err);
+        //  });
     }
 
     async registerUser() {

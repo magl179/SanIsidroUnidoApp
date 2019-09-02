@@ -226,3 +226,9 @@ export interface IUser {
     social_profiles: ISocialProfile[];
     roles: IRole[];
 }
+
+export interface ISlideTutorial {
+    img: string;
+    title: string;
+    description: string;
+}

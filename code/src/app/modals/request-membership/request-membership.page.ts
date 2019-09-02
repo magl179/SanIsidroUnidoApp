@@ -28,7 +28,7 @@ export class RequestMembershipPage implements OnInit {
     }
 
     getUploadedImages(event) {
-        console.log(event);
+        // console.log(event);
         this.publicServiceImg = event.total_img;
     }
 
@@ -37,12 +37,13 @@ export class RequestMembershipPage implements OnInit {
     }
 
     sendRequestMembership() {
-        alert(JSON.stringify(this.publicServiceImg));
-        this.userService.sendRequestUserMembership(this.publicServiceImg[0]).subscribe((res: any) => {
+        // alert(JSON.stringify(this.publicServiceImg));
+        this.userService.sendRequestUserMembership(this.publicServiceImg[0]).subscribe(async (res: any) => {
             this.utilsService.showToast('Solicitud Enviada Correctamente');
-            this.authService.updateAuthInfo(res.data.token, res.data.user)
+            const token_decode = await this.authService.decodeToken(res.data.token);
+            this.authService.updateAuthInfo(res.data.token, token_decode);
         }, err => {
-            this.utilsService.showToast('Solicitud no se pudo enviar :(');
+            this.utilsService.showToast('Solicitud no se pudo enviar');
             console.log('error al solicitar afiliacion datos usuario', err);
         });
     }

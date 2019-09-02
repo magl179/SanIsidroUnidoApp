@@ -16,28 +16,6 @@ export class EditProfilePage implements OnInit {
     AuthUser = null;
     editProfileForm: FormGroup;
     errorMessages = null;
-    editProfileFormFields = {
-        firstname: {
-            required: true,
-            minlength: 3,
-            maxlength: 15
-        },
-        lastname: {
-            required: true,
-            minlength: 8,
-            maxlength: 30
-        },
-        email: {
-            required: true,
-            minlength: 8,
-            maxlength: 30
-        },
-        phone: {
-            required: true,
-            minlength: 8,
-            maxlength: 30
-        }
-    };
 
     constructor(
         private modalCtrl: ModalController,
@@ -47,7 +25,6 @@ export class EditProfilePage implements OnInit {
         private userService: UserService,
         private utilsService: UtilsService) {
         this.createForm();
-        //this.loadErrorMessages();
     }
 
     async ngOnInit() {
@@ -67,10 +44,10 @@ export class EditProfilePage implements OnInit {
     }
 
     editUserProfileData() {
-        // this.utilsService.showToast(JSON.stringify(this.editProfileForm.value));
-        this.userService.sendEditProfileRequest(this.editProfileForm.value).subscribe(res => {
+        this.userService.sendEditProfileRequest(this.editProfileForm.value).subscribe(async res => {
             this.utilsService.showToast('Datos Actualizados Correctamente');
-            this.authService.updateAuthInfo(res.data.token, res.data.user)
+            const token_decode = await this.authService.decodeToken(res.data.token);
+            this.authService.updateAuthInfo(res.data.token, token_decode);
         }, err => {
             this.utilsService.showToast('Datos No se pudieron actualizar :(');
             console.log('error al actualizar datos usuario', err);

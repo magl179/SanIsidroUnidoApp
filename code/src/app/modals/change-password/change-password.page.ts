@@ -5,6 +5,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { MustMatch } from 'src/app/helpers/must-match.validator';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
+import { LocalDataService } from "../../services/local-data.service";
 
 @Component({
     selector: 'app-change-password',
@@ -20,19 +21,8 @@ export class ChangePasswordPage implements OnInit {
     passwordConfirmTypeInput = 'password';
     iconConfirmpassword = 'eye-off';
 
-    // currentUser = null;
     changePassForm: FormGroup;
     errorMessages = null;
-    changePassFormFields = {
-        password: {
-            required: true,
-            minlength: 3
-        },
-        confirmPassword: {
-            required: true,
-            minlength: 8
-        }
-    };
     //Usuario Autenticado
     AuthUser = null;
     constructor(
@@ -40,10 +30,10 @@ export class ChangePasswordPage implements OnInit {
         public formBuilder: FormBuilder,
         private authService: AuthService,
         private userService: UserService,
-        private utilsService: UtilsService
+        private utilsService: UtilsService,
+        private localDataService: LocalDataService
     ) {
         this.createForm();
-        this.loadErrorMessages();
     }
 
     ngOnInit() {
@@ -60,52 +50,32 @@ export class ChangePasswordPage implements OnInit {
     // Función Crea el Formulario
     async createForm() {
         await this.loadAuthData();
-        // Campo Email
+        // Validaciones Formulario
+        const validations = this.localDataService.getFormValidations();
+        // Campos Formulario
         const password = new FormControl('', Validators.compose([
             Validators.required
         ]));
-        const confirmPassword = new FormControl('', Validators.compose([
+        const password_confirm = new FormControl('', Validators.compose([
             Validators.required
         ]));
-        // Añado Propiedades al Form
-        this.changePassForm = this.formBuilder.group({
-            password,
-            confirmPassword
-        }, {
-                validator: MustMatch('password', 'confirmPassword')
-            });
-    }
-
-    loadErrorMessages() {
-        this.errorMessages = {
-            password: {
-                required: {
-                    message: 'La Contraseña es Obligatoria'
-                }
-            },
-            confirmPassword: {
-                required: {
-                    message: 'La Contraseña de Confirmación es Obligatoria'
-                },
-                mustMatch: {
-                    message: `Las contraseñas no coinciden`
-                }
-            }
-        };
-
+        // Añado Propiedades al Formulario
+        this.changePassForm = this.formBuilder.group({password, password_confirm}, {
+                validator: MustMatch('password', 'password_confirm')
+        });
+        // Cargo los errores del formulario
+        this.errorMessages = this.localDataService.getFormMessagesValidations(validations);
     }
 
     togglePasswordMode() {
         this.passwordTypeInput = this.passwordTypeInput === 'text' ? 'password' : 'text';
         this.iconpassword = this.iconpassword === 'eye-off' ? 'eye' : 'eye-off';
-        // console.log(this.passwordEye);
         this.passwordEye.el.setFocus();
     }
 
-    toggleConfirmPasswordMode() {
+    togglePasswordConfirmMode() {
         this.passwordConfirmTypeInput = this.passwordConfirmTypeInput === 'text' ? 'password' : 'text';
         this.iconConfirmpassword = this.iconConfirmpassword === 'eye-off' ? 'eye' : 'eye-off';
-        // console.log(this.passwordEye);
         this.passwordConfirmEye.el.setFocus();
     }
 
@@ -114,14 +84,14 @@ export class ChangePasswordPage implements OnInit {
     }
 
     sendRequestChangePass() {
-        // this.utilsService.showToast(JSON.stringify(this.changePassForm.value));
         this.userService.sendChangeUserPassRequest(this.changePassForm.value.password).subscribe(async (res: any) => {
-            await this.utilsService.showToast('Contraseña Actualizada Correctamente');
-            this.authService.updateAuthInfo(res.data.token, res.data.user);
+            this.utilsService.showToast('Contraseña Actualizada Correctamente');
+            const token_decode = await this.authService.decodeToken(res.data.token);
+            this.authService.updateAuthInfo(res.data.token, token_decode);
             this.changePassForm.reset();
 
         }, err => {
-            this.utilsService.showToast('Contraseña No se pudo actualizar :( ');
+            this.utilsService.showToast('La Contraseña No se pudo actualizar');
             console.log('error al actualizar contraseña usuario', err);
         });
     }

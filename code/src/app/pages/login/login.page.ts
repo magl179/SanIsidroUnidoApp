@@ -24,10 +24,10 @@ export class LoginPage implements OnInit {
     @ViewChild('passwordEyeLogin') passwordEye;
     appNetworkConnection = false;
     // apphasConnection = false;
-    loginData = {
-        token: null,
-        user: null
-    };
+    // loginData = {
+    //     token: null,
+    //     user: null
+    // };
 
     passwordTypeInput = 'password';
     iconpassword = 'eye-off';
@@ -64,25 +64,32 @@ export class LoginPage implements OnInit {
         this.passwordEye.el.setFocus();
     }
 
-    manageLogin(loginData, res) {
-        // console.log('login token cifrado', res);
-        this.loginData.token = res.data;
-        //Obtener Usuario Identificado
-        this.authService.login(loginData, true).subscribe(async res => {
-            console.log('login token descifrado', res);
-            if (res.code === 200) {
-                this.loginData.user = res.data;
-                await this.authService.setUserLocalStorage(this.loginData.user);
-                await this.authService.setTokenLocalStorage(this.loginData.token);
-                await this.notificationsService.registerUserDevice();
-                this.navCtrl.navigateRoot('/home');
-            } else {
-                this.utilsService.showToast('Fallo Iniciar Sesión 2'); 
-            }
-        }, err => {
-            this.utilsService.showToast(`Error: ${err.error.message}`);
-            console.log('Error Login', err);
-        });
+    async manageLogin(loginData, res) {
+        //Obtener Token y Usuario
+        const token = res.data; 
+        const tokendescrifrado = this.authService.decodeToken(token);
+        //Guardar Datos Token
+        await this.authService.setUserLocalStorage(tokendescrifrado);
+        await this.authService.setTokenLocalStorage(token);
+        //Registrar Dispositivo
+        await this.notificationsService.registerUserDevice();
+        //Redirigir Usuario
+        this.navCtrl.navigateRoot('/home');
+        // this.authService.login(loginData, true).subscribe(async res => {
+        //     console.log('login token descifrado', res);
+        //     if (res.code === 200) {
+        //         this.loginData.user = res.data;
+        //         await this.authService.setUserLocalStorage(this.loginData.user);
+        //         await this.authService.setTokenLocalStorage(this.loginData.token);
+        //         await this.notificationsService.registerUserDevice();
+        //         this.navCtrl.navigateRoot('/home');
+        //     } else {
+        //         this.utilsService.showToast('Fallo Iniciar Sesión 2'); 
+        //     }
+        // }, err => {
+        //     this.utilsService.showToast(`Error: ${err.error.message}`);
+        //     console.log('Error Login', err);
+        // });
     }
    
     async loginUser() {

@@ -4,6 +4,7 @@ import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 // import { map } from 'rxjs/operators';
+import { JwtHelperService } from "@auth0/angular-jwt";
 import { environment } from '../../environments/environment';
 // import { NavController } from '@ionic/angular';
 import { ILoginUser, IRegisterUser } from '../interfaces/models';
@@ -37,15 +38,6 @@ export class AuthService {
     login(loginData: any, getToken = null): Observable<any> {
         // URL API LOGIN
         const urlApi = `${environment.apiBaseURL}/login`;
-        // const loginBody: ILoginUser = {
-        //     provider,
-        //     email: loginData.email
-        // }
-        // if (provider == 'formulario') {
-        //     loginBody.password = loginData.password
-        // } else {
-        //     loginBody.social_id = loginData.token_id
-        // }
         if (getToken !== null) {
             loginData.getToken = true;
         }
@@ -67,6 +59,18 @@ export class AuthService {
         const headers = this.authHeaders.set(AUTHORIZATION_NAME, token);
         return this.http.post(urlApi, {}, { headers });
     }
+    // Decodificar Token
+    decodeToken(token) {
+        let decodedToken = null;
+        try {      
+            const helper = new JwtHelperService();
+            decodedToken = helper.decodeToken(token);
+        } catch (err) {
+            console.log(err);
+        }
+        return decodedToken;
+    }
+    // Get UserLoginCredentials
     //VERIFICAR SI SE DEBE CHECKEAR VALIDEZ TOKEN
     async checkValidToken() {
         if (this.tokenExists()) {

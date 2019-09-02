@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { IMenuServices, IHomeOptions } from '../interfaces/models';
+import { IMenuServices, IHomeOptions, ISlideTutorial} from '../interfaces/models';
 import { Observable } from 'rxjs';
 
 // interface IHomeOptions {
@@ -21,6 +21,10 @@ export class LocalDataService {
 
     getMenuOptions(): Observable<IMenuServices[]> {
         return this.http.get<IMenuServices[]>('/assets/data/menu.json');
+    }
+
+    getTutoSlides(): Observable<ISlideTutorial[]> {
+        return this.http.get<ISlideTutorial[]>('/assets/data/tuto_slides.json');
     }
     
     getHomeOptions(): Observable<IHomeOptions[]> {
@@ -51,6 +55,10 @@ export class LocalDataService {
                 pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,20}$/
             },
             password_confirm: {
+                required: true,
+                minlength: 8
+            },
+            confirmPassword: {
                 required: true,
                 minlength: 8
             },
