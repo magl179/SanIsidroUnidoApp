@@ -49,7 +49,7 @@ export class EditProfilePage implements OnInit {
             const token_decode = await this.authService.decodeToken(res.data.token);
             this.authService.updateAuthInfo(res.data.token, token_decode);
         }, err => {
-            this.utilsService.showToast('Datos No se pudieron actualizar :(');
+            this.utilsService.showToast('Los datos no se pudieron actualizar');
             console.log('error al actualizar datos usuario', err);
         });
     }

@@ -40,7 +40,7 @@ export class LocalizationService {
             return this.misCoordenadas;
         } catch (err) {
             console.log('Error: ', err);
-            this.utilsService.showToast('Error getting location' + err);
+            this.utilsService.showToast('Error al obtener la geolocalizacion' + err);
         }
     }
 
@@ -59,7 +59,8 @@ export class LocalizationService {
                     }
                 },
                 err => {
-                    this.utilsService.showToast('Fails to Android Permissions: ' + err);
+                    this.utilsService.showToast('Fallo obtener los permisos de GPS');
+                    console.log(err);
                 }
             );
         } else {
@@ -80,8 +81,9 @@ export class LocalizationService {
                             await this.askTurnOnGPS();
                             console.log('pedir encender gps');
                         },
-                        error => {
-                            this.utilsService.showToast('Error al pedir permisos al GPS: ' + error);
+                        err => {
+                            this.utilsService.showToast('Error al pedir permisos al GPS: ');
+                            console.log(err);
                         }
                     );
             }
@@ -102,8 +104,9 @@ export class LocalizationService {
                 }
                 return;
             },
-            error => {
-                this.utilsService.showToast('Error requesting location permissions ' + JSON.stringify(error));
+            err => {
+                this.utilsService.showToast('Error requesting location permissions ');
+                console.log(err);
             }
         );
     }

@@ -54,8 +54,9 @@ export class DirectoryInfoPage implements OnInit {
                     }
                 });
         },err => {
-                console.log('Error al traer directivos');
-            });
+            console.log('Error al traer directivos');
+            this.utilsService.showToast('No se pudieron cargar los directivos');
+        });
     }
 
     imageWasLoaded() {

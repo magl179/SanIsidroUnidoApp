@@ -60,12 +60,14 @@ export class SocialProblemsPage implements OnInit {
             this.AuthUser = res.user;
         },
         err => {
-            console.log('Error al traer los problemas sociales');    
+            console.log('Error al traer la informacion del usuario');   
+            this.utilsService.showToast('No se pudieron cargar la información del usuario');
         });
         this.postService.getSubcategoriesByCategory(environment.socialProblemSlug).subscribe(res => {
             this.subcategories = res.data
         }, err => {
-                console.log('Error al traer subcategorias', err);
+            console.log('Error al traer subcategorias', err);
+            this.utilsService.showToast('No se pudo traer las subcategorias, intentalo más tarde');    
         })
     }
     //Codigo Asincrono
@@ -109,6 +111,7 @@ export class SocialProblemsPage implements OnInit {
                 this.loadSocialProblems();
             }, err => {
                     console.log('detalle no se pudo eliminar', err);
+                    this.utilsService.showToast('No se pudo eliminar el like');
             });
         } else {
             const detailInfo = {
@@ -122,6 +125,7 @@ export class SocialProblemsPage implements OnInit {
                 this.loadSocialProblems();
             }, err => {
                     console.log('detalle no se pudo crear', err);
+                    this.utilsService.showToast('No se pudo dar like');
             });
         }
     }
@@ -146,6 +150,7 @@ export class SocialProblemsPage implements OnInit {
         },
         err => {
             console.log(err);
+            this.utilsService.showToast('No se pudieron cargar los problemas sociales');
         });
     }
 

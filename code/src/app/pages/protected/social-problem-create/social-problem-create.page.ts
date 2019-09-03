@@ -57,7 +57,7 @@ export class SocialProblemCreatePage implements OnInit {
         const coords = await this.localizationService.getCoordinate();
         this.socialProblemCoordinate.latitude = coords.latitude;
         this.socialProblemCoordinate.longitude = coords.longitude;
-        this.postService.getSubcategoriesByCategory(environment.categories[0].slug).subscribe(res => {
+        this.postService.getSubcategoriesByCategory(environment.socialProblemSlug).subscribe(res => {
             this.subcategories = res.data;
             console.log('subcategories', res.data);
         });
@@ -115,8 +115,9 @@ export class SocialProblemCreatePage implements OnInit {
             await this.utilsService.showToast("El Reporte fue enviado correctamente");
             this.navCtrl.navigateRoot('/social-problems');
         }, err => {
-            this.utilsService.showToast(err.error.message);
-            console.log('Error Reportar Problema Social', err.error);
+            const message_error = (err.error.message) ? err.error.message : 'No se pudo enviar el reporte';
+            this.utilsService.showToast(message_error);
+            console.log('Error Reportar Problema Social', message_error);
         });
     }
 
@@ -176,9 +177,10 @@ export class SocialProblemCreatePage implements OnInit {
             console.log({ add: direccion });
             this.socialProblemCoordinate.address = direccion.display_name;
         },
-            err => {
-                console.log('Ocurrio un error al obtener la ubicación: ', err);
-            });
+        err => {
+            console.log('Ocurrio un error al obtener la ubicación: ', err);
+            this.utilsService.showToast('No se pudo obtener tu ubicación');
+        });
     }
 
 }

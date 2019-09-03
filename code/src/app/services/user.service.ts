@@ -1,10 +1,9 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { environment } from 'src/environments/environment';
 import { IEditProfile } from 'src/app/interfaces/models';
-import { catchError } from 'rxjs/operators';
 import { IPhoneUser } from '../interfaces/models';
 
 const AUTHORIZATION_NAME = "authorization";

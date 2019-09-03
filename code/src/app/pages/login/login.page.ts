@@ -23,16 +23,8 @@ export class LoginPage implements OnInit {
 
     @ViewChild('passwordEyeLogin') passwordEye;
     appNetworkConnection = false;
-    // apphasConnection = false;
-    // loginData = {
-    //     token: null,
-    //     user: null
-    // };
-
     passwordTypeInput = 'password';
     iconpassword = 'eye-off';
-
-    //loadingLogin: any;
     loginForm: FormGroup;
     errorMessages = null;
 
@@ -47,7 +39,6 @@ export class LoginPage implements OnInit {
         private notificationsService: NotificationsService
     ) {
         this.createForm();
-        //this.loadErrorMessages();
     }
 
     async ngOnInit() {
@@ -73,23 +64,9 @@ export class LoginPage implements OnInit {
         await this.authService.setTokenLocalStorage(token);
         //Registrar Dispositivo
         await this.notificationsService.registerUserDevice();
+        this.loginForm.reset();
         //Redirigir Usuario
         this.navCtrl.navigateRoot('/home');
-        // this.authService.login(loginData, true).subscribe(async res => {
-        //     console.log('login token descifrado', res);
-        //     if (res.code === 200) {
-        //         this.loginData.user = res.data;
-        //         await this.authService.setUserLocalStorage(this.loginData.user);
-        //         await this.authService.setTokenLocalStorage(this.loginData.token);
-        //         await this.notificationsService.registerUserDevice();
-        //         this.navCtrl.navigateRoot('/home');
-        //     } else {
-        //         this.utilsService.showToast('Fallo Iniciar Sesión 2'); 
-        //     }
-        // }, err => {
-        //     this.utilsService.showToast(`Error: ${err.error.message}`);
-        //     console.log('Error Login', err);
-        // });
     }
    
     async loginUser() {
@@ -103,14 +80,12 @@ export class LoginPage implements OnInit {
                 loadingLoginValidation.dismiss()
             })
         ).subscribe(res => {
-                // console.log('Login First Response', res);
-                //if (res.code === 200) {
-                    this.manageLogin(loginData, res);
-                //} //
-            }, err => {
-                this.utilsService.showToast(`Error: ${err.error.message}`);
-                console.log('Error Login', err.error);
-            });
+            this.manageLogin(loginData, res);
+        }, err => {
+            const message_error = (err.error.message) ? err.error.message : 'Ocurrio un error, por favor intentalo más tarde';
+            this.utilsService.showToast(message_error);
+            console.log('Error Login', message_error);
+        });
     }
 
     async loginUserByFB() {

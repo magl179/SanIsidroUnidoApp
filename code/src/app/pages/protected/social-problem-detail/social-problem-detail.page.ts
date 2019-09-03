@@ -38,22 +38,14 @@ export class SocialProblemDetailPage implements OnInit {
         this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
             this.appNetworkConnection = connected;
         });
-        // this.idPost = Number(this.id);
+        
         this.authService.getAuthUser().subscribe(res => {
             this.AuthUser = res.user;
         },
         err => {
             console.log('Error al traer los problemas sociales');    
-            });
+        });
         this.getSocialProblem();
-        // await this.postService.getSocialProblem(+this.id).subscribe(res => {
-        //     this.socialProblem = res.data;
-        //     console.log('res post', res);
-        //     console.log('Dato post', this.socialProblem);
-        //     // this.getUserPostInfo();
-        //     // (() => {
-        //     // });
-        // });
     }
 
     getImageURL(image_name) {
@@ -96,7 +88,8 @@ export class SocialProblemDetailPage implements OnInit {
                 console.log('detalle eliminado correctamente');
                 this.getSocialProblem();
             }, err => {
-                    console.log('detalle no se pudo eliminar', err);
+                console.log('detalle no se pudo eliminar', err);
+                this.utilsService.showToast('El like no se pudo eliminar');    
             });
         } else {
             const detailInfo = {
@@ -108,7 +101,8 @@ export class SocialProblemDetailPage implements OnInit {
                 console.log('detalle creado correctamente');
                 this.getSocialProblem();
             }, err => {
-                    console.log('detalle no se pudo crear', err);
+                console.log('detalle no se pudo crear', err);
+                this.utilsService.showToast('El like no pudo guardarse');
             });
         }
     }
@@ -131,14 +125,5 @@ export class SocialProblemDetailPage implements OnInit {
             return $imagesArray[0].url;
         }
     }
-
-    // getUserPostInfo() {
-    //     this.userService.getUserInfo(this.socialProblem.user_id).subscribe((res: any )=> {
-    //         this.userPost = res.data;
-    //         console.log('userPost', this.userPost);
-    //     }, err =>{
-    //             console.log(err);
-    //     })
-    // }
 
 }

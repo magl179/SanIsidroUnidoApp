@@ -45,7 +45,6 @@ export class SocialDataService {
             avatar: googleUser.image.url,
             password: null
         };
-        // console.log('OWN GOOGLE DATA', appUser);
         return appUser;
     }
 
@@ -59,23 +58,19 @@ export class SocialDataService {
             avatar: fbUser.image,
             password: null
         };
-        // console.log('OWN FB DATA', appUser);
         return appUser;
     }
 
     // LOGIN SOCIAL
     async loginByGoogle() {
         if (this.platform.is('cordova')) {
-            // console.log('login is cordova');
             try {
                 const loginGoogle = await this.google.login({});
-                // console.log({ respuestaLoginGoogle: loginGoogle });
                 await this.getGoogleData(loginGoogle.accessToken);
             } catch (error) {
                 console.log(error);
-                await this.utilsService.showToast('Eror con Google');
+                await this.utilsService.showToast('Error con la conexion a Google');
             }
-            // console.log('Luego del Login');
         } else {
             await this.utilsService.showToast('Cordova Google no esta disponible', null, 'bottom');
         }
@@ -89,7 +84,6 @@ export class SocialDataService {
                 const userId = await respuestaLogin.authResponse.userID;
                 const accessToken = await respuestaLogin.authResponse.accessToken;
                 await this.getFacebookData(accessToken, userId, permisos);
-                // console.log('Respuesta Login', respuestaLogin);
             } catch (err) {
                 console.log(err);
                 await this.utilsService.showToast('Ocurrio un error al conectarse con facebook', null, 'bottom');
@@ -116,6 +110,7 @@ export class SocialDataService {
             }
         } catch (err) {
             console.log(err);
+            this.utilsService.showToast('No se pudieron obtener los datos de facebook');
         }
     }
 
@@ -133,32 +128,31 @@ export class SocialDataService {
                 },
                 err => {
                     console.log(err);
+                    this.utilsService.showToast('No se pudieron obtener los datos de Google');
                 });
         } catch (err) {
             console.log(err);
+            this.utilsService.showToast('No se pudieron obtener los datos de Google');
         }
     }
 
     // Close Session
     async closeGoogleSession() {
         try {
-            // console.log('Google Logout Succesfull');
             await this.google.logout();
         } catch (err) {
             console.log(err);
+            this.utilsService.showToast('No se pudo cerrar la sesion de Google');
         }
     }
 
     async closeFacebookSession() {
         try {
             await this.facebook.logout();
-            // console.log('Successfull Facebook Logout');
         } catch (err) {
             console.log(err);
+            this.utilsService.showToast('No se pudo cerrar la sesion de Facebook');
         }
     }
-
-
-
 
 }

@@ -91,7 +91,7 @@ export class ChangePasswordPage implements OnInit {
             this.changePassForm.reset();
 
         }, err => {
-            this.utilsService.showToast('La Contraseña No se pudo actualizar');
+            this.utilsService.showToast('La Contraseña no se ha podido actualizar');
             console.log('error al actualizar contraseña usuario', err);
         });
     }

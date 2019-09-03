@@ -22,7 +22,7 @@ export class UtilsService implements OnInit {
         private loadingCtrl: LoadingController,
         private http: HttpClient,
         private menuCtrl: MenuController,
-        private popoverCtrl: PopoverController,
+        private utilsService: UtilsService,
         private storage: Storage,
         private platform: Platform,
         private socialSharing: SocialSharing
@@ -91,6 +91,7 @@ export class UtilsService implements OnInit {
                     console.log('Compartido Correctamente');
                 }).catch(err => {
                     console.log('Error al compartir');
+                    this.utilsService.showToast('No se pudo compartir');
                 });
             } else {
                 console.log('Tu dispositivo no soporta la función de compartir');

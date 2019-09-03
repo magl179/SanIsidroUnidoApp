@@ -130,7 +130,6 @@ export class NotificationsService {
             await this.userService.sendRequestAddUserDevice(data)
                 .subscribe(async (res: any) => {
                     this.utilsService.showToast('Dispositivo Añadido Correctamente');
-                    // this.authService.updateAuthInfo(res.data.token, res.data.user)
                     const token_decode = await this.authService.decodeToken(res.data.token);
                     this.authService.updateAuthInfo(res.data.token, token_decode);
                 }, err => {
@@ -145,8 +144,6 @@ export class NotificationsService {
     async removeUserDevice(device_id) {
         await this.userService.sendRequestDeleteUserDevice(device_id).subscribe(async (res: any) => {
             await this.utilsService.showToast('Dispositivo eliminado Correctamente');
-            // console.log('remove device', res);
-            // this.authService.updateAuthInfo(res.data.token, res.data.user)
             const token_decode = await this.authService.decodeToken(res.data.token);
             this.authService.updateAuthInfo(res.data.token, token_decode);
         }, err => {

@@ -3,6 +3,7 @@ import { timer } from 'rxjs';
 import { MenuController, NavController } from '@ionic/angular';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { ISlideTutorial } from 'src/app/interfaces/models';
+import { UtilsService } from "../../services/utils.service";
 
 @Component({
     selector: 'app-tutorial',
@@ -22,6 +23,7 @@ export class TutorialPage implements OnInit {
     constructor(
         private menuCtrl: MenuController,
         private navCtrl: NavController,
+        private utilsService: UtilsService,
         private localDataService: LocalDataService) { }
 
     ngOnInit() {
@@ -30,7 +32,8 @@ export class TutorialPage implements OnInit {
                 //console.log('slides', res);
                 this.slides = res;
             }, err => {
-                console.log('Error al traer las opciones del tutorial')
+                console.log('Error al traer las opciones del tutorial');
+                this.utilsService.showToast('No se pudieron cargar las opciones del tutorial');
             }
         );
     }

@@ -72,11 +72,9 @@ export class NetworkService {
         try {
             this.getNetworkTestRequest().subscribe(
                 success => {
-                    // console.log('Request to Google Test  success', success);
                     this.hasConnection.next(true);
                     return;
                 }, error => {
-                    // console.log('Request to Google Test fails', error);
                     this.hasConnection.next(false);
                     return;
                 });

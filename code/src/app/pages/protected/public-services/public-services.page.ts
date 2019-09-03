@@ -34,6 +34,9 @@ export class PublicServicesPage implements OnInit {
         });
         this.postService.getPublicServices().subscribe(response => {
             this.publicServices = response.data;
+        }, err => {
+                this.utilsService.showToast('No se pudieron cargar los servicios públicos');
+                console.log('Servicios Publicos', err);
         });
     }
 

@@ -38,7 +38,7 @@ export class ChangeProfileImagePage implements OnInit {
             const token_decode = await this.authService.decodeToken(res.data.token);
             this.authService.updateAuthInfo(res.data.token, token_decode);
         }, err => {
-            this.utilsService.showToast('Imagen No se pudo actualizar :(');
+            this.utilsService.showToast('Imagen no ha podido ser actualizada');
             console.log('error al actualizar imagen usuario', err);
         });
     }

@@ -86,7 +86,8 @@ export class EventDetailPage implements OnInit {
                 console.log('detalle eliminado correctamente');
                 this.getEvent();
             }, err => {
-                    console.log('detalle no se pudo eliminar', err);
+                console.log('detalle no se pudo eliminar', err);
+                this.utilsService.showToast('La asistencia no ha podido ser eliminada');
             });
         } else {
             const detailInfo = {
@@ -98,7 +99,8 @@ export class EventDetailPage implements OnInit {
                 console.log('detalle creado correctamente');
                 this.getEvent();
             }, err => {
-                    console.log('detalle no se pudo crear', err);
+                console.log('detalle no se pudo crear', err);
+                this.utilsService.showToast('No se pudo guardar la asistencia');
             });
         }
     }

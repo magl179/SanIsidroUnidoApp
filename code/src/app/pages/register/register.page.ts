@@ -72,23 +72,6 @@ export class RegisterPage implements OnInit {
         await this.notificationsService.registerUserDevice();
         //Redirigir Usuario
         this.navCtrl.navigateRoot('/home');
-        //  this.loginData.token = res.data;
-        //  //Obtener Usuario Identificado
-        //  this.authService.login(loginData, true).subscribe(async res => {
-        //      console.log('login token descifrado', res);
-        //      if (res.code === 200) {
-        //          this.loginData.user = res.data;
-        //          await this.authService.setUserLocalStorage(this.loginData.user);
-        //          await this.authService.setTokenLocalStorage(this.loginData.token);
-        //          await this.notificationsService.registerUserDevice();
-        //          this.navCtrl.navigateRoot('/home');
-        //      } else {
-        //          this.utilsService.showToast('Fallo Iniciar Sesión 2'); 
-        //      }
-        //  }, err => {
-        //      this.utilsService.showToast(`Error: ${err.error.message}`);
-        //      console.log('Error Login', err);
-        //  });
     }
 
     async registerUser() {
@@ -113,7 +96,8 @@ export class RegisterPage implements OnInit {
                 await this.manageRegister({provider: 'formulario', email, password }, res);
             //}
         }, err => {
-            this.utilsService.showToast(`Error: ${err.error.message}`);
+            const message_error = (err.error) ? err.error: 'No se pudo cargar la información del usuario';
+            this.utilsService.showToast(message_error);
             console.log('Error Login', err.error);
         });
     }
@@ -128,13 +112,11 @@ export class RegisterPage implements OnInit {
             if (fbData) {
                 const user = await this.socialDataService.getFacebookDataParsed(fbData);
                 await this.authService.register(user).subscribe(async res=> {
-                    // if (registerData) {
-                        await this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'facebook'}, res);
-                        // await this.setLoginUserData(registerData);
-                    // }
+                    await this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'facebook'}, res);
                 }, err => {
-                    this.utilsService.showToast(`Error: ${err.error.message}`);
-                    console.log('Error Login', err.error);
+                    const message_error = (err.error.message)?err.error.message: 'No se pudo guardar el registro';
+                    this.utilsService.showToast(message_error);
+                    console.log('Error Login', message_error);
                 });
             }
         }, err => {
@@ -148,11 +130,11 @@ export class RegisterPage implements OnInit {
             if (googleData) {
                 const user = await this.socialDataService.getGoogleDataParsed(googleData);
                 await this.authService.register(user).subscribe(async res => {
-                    // await this.setLoginUserData(registerData);
                     await this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'google' }, res);
                 }, err => {
-                    this.utilsService.showToast(`Error: ${err.error.message}`);
-                    console.log('Error Login', err.error);
+                    const message_error = (err.error.message)?err.error.message: 'No se pudo guardar el registro';
+                    this.utilsService.showToast(message_error);
+                    console.log('Error Login', message_error);
                 });
             }
         }, err => {
@@ -194,53 +176,4 @@ export class RegisterPage implements OnInit {
         this.errorMessages = this.localDataService.getFormMessagesValidations(validations);
     }
 
-    /*loadErrorMessages(validations) {
-        this.errorMessages = {
-            firstname: {
-                required: {
-                    message: 'El Nombre es Obligatorio'
-                },
-                minlength: {
-                    message: `El Nombre debe contener minimo ${validations.firstname.minlength} caracteres`
-                },
-                maxlength: {
-                    message: `El Nombre debe contener máximo ${validations.firstname.maxlength} caracteres`
-                }
-            },
-            lastname: {
-                required: {
-                    message: 'Los Apellidos son Obligatorios'
-                },
-                minlength: {
-                    message: `Los Apellidos deben contener minimo ${this.registerFormFields.email.minlength} caracteres`
-                },
-                maxlength: {
-                    message: `Los Apellidos deben contener máximo ${this.registerFormFields.email.maxlength} caracteres`
-                }
-            },
-            email: {
-                required: {
-                    message: 'El Email es Obligatorio'
-                },
-                minlength: {
-                    message: `El Email debe contener minimo ${this.registerFormFields.email.minlength} caracteres`
-                },
-                pattern: {
-                    message: `Ingresa un email válido`
-                }
-            },
-            password: {
-                required: {
-                    message: 'La Contraseña es obligatoria'
-                },
-                minlength: {
-                    message: `La Contraseña debe contener al menos ${this.registerFormFields.password.minlength} caracteres`
-                },
-                pattern: {
-                    message: `Ingresa una contraseña segura`
-                }
-            }
-        };
-
-    }*/
 }

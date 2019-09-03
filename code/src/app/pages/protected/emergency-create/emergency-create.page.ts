@@ -133,9 +133,10 @@ export class EmergencyCreatePage implements OnInit {
             console.log({ add: direccion });
             this.emergencyPostCoordinate.address = direccion.display_name;
         },
-            err => {
-                console.log('Ocurrio un error al obtener la ubicación: ', err);
-            });
+        err => {
+            console.log('Ocurrio un error al obtener la ubicación: ', err);
+            this.utilsService.showToast('No se pudo obtener tu ubicación');
+        });
     }
 
     async sendEmergencyReport() { 
@@ -149,12 +150,6 @@ export class EmergencyCreatePage implements OnInit {
             return;
         }
 
-        // if (this.emergencyImages.length === 0) {
-        //     await this.utilsService.showToast('Sube alguna imagen por favor', 2500);
-        //     return;
-        // }
-
-        // await this.utilsService.showToast('Post Emergencia Valido', 2500);
         const loadingEmergencyReport = await this.utilsService.createBasicLoading('Enviando Reporte');
         loadingEmergencyReport.present();
         const socialProblem: IEmergencyReported = {
@@ -172,8 +167,9 @@ export class EmergencyCreatePage implements OnInit {
             await this.utilsService.showToast("El Reporte fue enviado correctamente");
             this.navCtrl.navigateRoot('/home');
         }, err => {
-            console.log('Error Reportar Emergencia', err);
-            this.utilsService.showToast(err.error.message);
+            const message_error = (err.error.message) ? err.error.message :'Ocurrio un error al reportar la emergencia';
+            this.utilsService.showToast(message_error);
+            console.log('Ocurrio un error al reportar la emergencia', message_error);
         });
     }
 

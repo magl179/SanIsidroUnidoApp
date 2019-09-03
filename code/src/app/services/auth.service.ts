@@ -2,12 +2,9 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
-// import { map } from 'rxjs/operators';
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { environment } from '../../environments/environment';
-// import { NavController } from '@ionic/angular';
-import { ILoginUser, IRegisterUser } from '../interfaces/models';
+import { IRegisterUser } from '../interfaces/models';
 
 const TOKEN_ITEM_NAME = "accessToken";
 const USER_ITEM_NAME = "currentUser";
@@ -27,9 +24,7 @@ export class AuthService {
     constructor(
         private storage: Storage,
         private http: HttpClient
-    ) {
-        // this.verificarAuthInfo();
-    }
+    ) { }
     //CERRAR SESION
     async logout() {
         await this.removeAuthInfo();
@@ -180,6 +175,18 @@ export class AuthService {
             }
         }
         return hasRole;
+    }
+
+    isActive() {
+        if (this.isAuthenticated()) {
+            let isActive = false;
+            if (this.authUser.value.user.state === 1) {
+                isActive = true;
+            }
+            return isActive;
+        } else {
+            return false;
+        }
     }
 
 }

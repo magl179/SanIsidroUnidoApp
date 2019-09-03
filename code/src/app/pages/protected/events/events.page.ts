@@ -71,7 +71,8 @@ export class EventsPage implements OnInit {
                 this.resetEvents();
                 this.loadEvents();
             }, err => {
-                    console.log('detalle no se pudo eliminar', err);
+                console.log('detalle no se pudo eliminar', err);
+                this.utilsService.showToast('La asistencia no pudo ser eliminada');
             });
         } else {
             const detailInfo = {
@@ -85,6 +86,7 @@ export class EventsPage implements OnInit {
                 this.loadEvents();
             }, err => {
                     console.log('detalle no se pudo crear', err);
+                    this.utilsService.showToast('No se pudo eliminar la asistencia');
             });
         }
     }
@@ -139,6 +141,7 @@ export class EventsPage implements OnInit {
         },
         err => {
             console.log(err);
+            this.utilsService.showToast('No se pudieron cargar los eventos');
         });
     }
 

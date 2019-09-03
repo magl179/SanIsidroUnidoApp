@@ -43,7 +43,7 @@ export class RequestMembershipPage implements OnInit {
             const token_decode = await this.authService.decodeToken(res.data.token);
             this.authService.updateAuthInfo(res.data.token, token_decode);
         }, err => {
-            this.utilsService.showToast('Solicitud no se pudo enviar');
+            this.utilsService.showToast('La solicitud no ha podido ser enviada');
             console.log('error al solicitar afiliacion datos usuario', err);
         });
     }
