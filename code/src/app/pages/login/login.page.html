@@ -1,9 +1,14 @@
 <ion-content>
     <!-- <div class="container-app"> -->
     <ion-grid class="grid-container-center padding-none">
-        <network-state-bar [networkStatus]="appNetworkConnection"></network-state-bar>
-        <ion-row class="main-row-center">
+        <!-- <network-state-bar [networkStatus]="appNetworkConnection"></network-state-bar> -->
+        <ion-row class="main-row-center" class="social_login">
             <ion-grid class="ion-padding">
+                <ion-row>
+                    <ion-col size="12">
+                        <p class="title_login">Inicia sesión con</p>
+                    </ion-col>
+                </ion-row>
                 <ion-row justify-content-center>
                     <ion-col size="6">
                         <ion-button (click)="loginUserByGoogle()" color="google" expand="block">
@@ -16,14 +21,24 @@
                         </ion-button>
                     </ion-col>
                 </ion-row>
+                <ion-row>
+                    <ion-col size="12">
+                        <div class="divider-full"></div>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="12">
+                        <p class="title_login">O utiliza tu correo</p>
+                    </ion-col>
+                </ion-row>
                 <ion-row class="login-form-container">
-
                     <ion-col size="12">
                         <form [formGroup]="loginForm">
                             <div class="item-form">
                                 <ion-item class="input_item">
                                     <ion-label position="floating">Email</ion-label>
-                                    <ion-input placeholder="john@gmail.com" formControlName="email" type="email">
+                                    <ion-input placeholder="john@gmail.com" formControlName="email"
+                                        type="email">
                                     </ion-input>
                                 </ion-item>
                                 <div class="feedback-icon">
@@ -60,9 +75,11 @@
                             <div class="item-form">
                                 <ion-item class="input_item">
                                     <ion-label position="floating">Contraseña</ion-label>
-                                    <ion-input #passwordEyeLogin formControlName="password" [type]="passwordTypeInput">
+                                    <ion-input #passwordEyeLogin formControlName="password"
+                                        [type]="passwordTypeInput">
                                     </ion-input>
-                                    <button item-end class="btn_eye_icon" (click)="togglePasswordMode()">
+                                    <button item-end class="btn_eye_icon"
+                                        (click)="togglePasswordMode()">
                                         <ion-icon [name]="iconpassword"></ion-icon>
                                     </button>
                                 </ion-item>
@@ -102,8 +119,8 @@
                                 </p>
                             </div>
                             <div padding>
-                                <ion-button (click)="loginUser()" color="primary" type="submit" expand="block"
-                                    [disabled]="!loginForm.valid">
+                                <ion-button (click)="loginUser()" color="primary" type="submit"
+                                    expand="block" [disabled]="!loginForm.valid">
                                     Iniciar Sesión
                                 </ion-button>
                             </div>
@@ -113,7 +130,8 @@
                 <ion-row style="margin-top: 1rem;">
                     <ion-col size="12">
                         <div class="flex-center-all already-have-account">
-                            <span>No tienes una cuenta?</span><a color="primary" routerLink="/register">Crear una</a>
+                            <span>¿No tienes una cuenta?</span><a color="primary"
+                                routerLink="/register">Registrarse</a>
                         </div>
 
                     </ion-col>

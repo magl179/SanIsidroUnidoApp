@@ -36,13 +36,14 @@ export class SocialDataService {
     }
 
     getGoogleDataParsed(googleUser: any) {
+        //console.log('google user', googleUser);
         const appUser = {
             firstname: googleUser.name.givenName,
             lastname: googleUser.displayName,
             email: googleUser.emails[0].value,
             social_id: googleUser.id,
             provider: 'google',
-            avatar: googleUser.image.url,
+            avatar: googleUser.avatar,
             password: null
         };
         return appUser;
@@ -66,7 +67,7 @@ export class SocialDataService {
         if (this.platform.is('cordova')) {
             try {
                 const loginGoogle = await this.google.login({});
-                await this.getGoogleData(loginGoogle.accessToken);
+                await this.getGoogleData(loginGoogle);
             } catch (error) {
                 console.log(error);
                 await this.utilsService.showToast('Error con la conexion a Google');
@@ -114,17 +115,13 @@ export class SocialDataService {
         }
     }
 
-    getGoogleData(token) {
+    getGoogleData(googleLogin) {
         try {
-            this.http.get(`https://www.googleapis.com/plus/v1/people/me?access_token=${token}`).subscribe(
+            this.http.get(`https://www.googleapis.com/plus/v1/people/me?access_token=${googleLogin.accessToken}`).subscribe(
                 async (profile: any) => {
-                    // console.log('Datos Google', profile);
-                    if (profile) {
-                        this.googleLoginData.next(profile);
-                        await this.closeGoogleSession();
-                    } else {
-                        this.utilsService.showToast('No se pudo obtener los datos con Google');
-                    }
+                    profile.avatar = googleLogin.imageUrl;
+                    this.googleLoginData.next(profile);
+                    await this.closeGoogleSession();                    
                 },
                 err => {
                     console.log(err);

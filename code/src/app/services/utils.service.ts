@@ -6,6 +6,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Storage } from '@ionic/storage';
 import { IPostShare } from 'src/app/interfaces/models';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { ToastOptions } from "@ionic/core";
 
 declare var moment: any;
 
@@ -22,7 +23,6 @@ export class UtilsService implements OnInit {
         private loadingCtrl: LoadingController,
         private http: HttpClient,
         private menuCtrl: MenuController,
-        private utilsService: UtilsService,
         private storage: Storage,
         private platform: Platform,
         private socialSharing: SocialSharing
@@ -91,14 +91,13 @@ export class UtilsService implements OnInit {
                     console.log('Compartido Correctamente');
                 }).catch(err => {
                     console.log('Error al compartir');
-                    this.utilsService.showToast('No se pudo compartir');
+                    this.showToast('No se pudo compartir');
                 });
             } else {
                 console.log('Tu dispositivo no soporta la función de compartir');
                 await this.showToast('Tu dispositivo no soporta la función de compartir');
             }
         }
-
     }
 
     async ramdomItem(array) {
@@ -107,16 +106,16 @@ export class UtilsService implements OnInit {
         return item;
     }
 
-    async showToast(message?: string, duration?: number, position?: any, color?: string, cssClass?: string, header?: string) {
-        const toastItem = await this.toastCtrl.create({
+    async showToast(message?: string, duration?: number, position?: any, color?: string, cssClass?: string) {
+        const toast: ToastOptions = {
             animated: true,
             message: message || 'Test Message Toast',
             duration: duration || 1000,
             color: color || 'dark',
             cssClass: cssClass || '',
-            header: header || '',
             position: position || 'top'
-        });
+        }
+        const toastItem = await this.toastCtrl.create(toast);
         toastItem.present();
     }
 
