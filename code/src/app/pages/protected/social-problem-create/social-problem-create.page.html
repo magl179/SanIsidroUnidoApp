@@ -109,27 +109,26 @@
         </section>
         <section *ngIf="currentStep === 2">
             <p class="ion-text-center">Escoge la ubicación donde se genero la emergencia</p>
-            <single-map idMap="socialProblemReportMap" [zoomMap]="17"
-                [mapPoints]="socialProblemCoordinate"
+            <single-map idMap="socialProblemReportMap" [zoomMap]="17" [enableGesture]="false"
                 (returnCoordinateChoosen)="updateMapCoordinate($event)"></single-map>
             <!-- <p>Latitud PAGE EC: Market {{socialProblemCoordinate.latitude}}</p> -->
             <!-- <p>Longitud PAGE EC: Market {{socialProblemCoordinate.longitude}}</p> -->
             <p *ngIf="socialProblemCoordinate.address">Tu Dirección es:
                 {{socialProblemCoordinate.address}}</p>
-            <form class="form-ubication">
+            <form class="form-ubication" [formGroup]="ubicationForm">
                 <div class="item-form">
                     <ion-item class="input_item">
-                        <ion-label position="floating">Descripcion Ubicación</ion-label>
-                        <ion-textarea auto-grow="true"></ion-textarea>
+                        <ion-label position="floating">Descripcion de la Ubicación</ion-label>
+                        <ion-textarea formControlName="description_ubication" auto-grow="true"></ion-textarea>
                     </ion-item>
                     <div class="feedback-icon">
                         <ion-item lines="none">
                             <button class="icon-help-input" disabled>
                                 <ion-icon name="close-circle" class="error"
-                                    *ngIf="socialProblemForm.get('description').touched && socialProblemForm.get('description').invalid">
+                                    *ngIf="ubicationForm.get('description_ubication').touched && ubicationForm.get('description_ubication').invalid">
                                 </ion-icon>
                                 <ion-icon name="checkmark-circle" class="success"
-                                    *ngIf="socialProblemForm.get('description').touched && socialProblemForm.get('description').valid">
+                                    *ngIf="ubicationForm.get('description_ubication').touched && ubicationForm.get('description_ubication').valid">
                                 </ion-icon>
                             </button>
                         </ion-item>
@@ -137,13 +136,13 @@
                 </div>
                 <div class="form-errors">
                     <p class="form-error"
-                        *ngIf="socialProblemForm.get('description').hasError('required') && socialProblemForm.get('description').touched">
+                        *ngIf="ubicationForm.get('description_ubication').hasError('required') && ubicationForm.get('description_ubication').touched">
                         {{errorMessages.description.required.message}}
                     </p>
                 </div>
             </form>
             <div>
-                <ion-button color="primary" expand="full" type="submit" (click)="validatePhase2()">
+                <ion-button [disabled]="!ubicationForm.valid" color="primary" expand="full" type="submit" (click)="validatePhase2()">
                     Siguiente
                 </ion-button>
             </div>

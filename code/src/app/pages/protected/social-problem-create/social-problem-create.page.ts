@@ -20,9 +20,10 @@ import { NavController } from '@ionic/angular';
 export class SocialProblemCreatePage implements OnInit {
 
     currentStep = 2;
-    fullFormIsValid = false;
-    appNetworkConnection = false;
+    // fullFormIsValid = false;
+    // appNetworkConnection = false;
     socialProblemForm: FormGroup;
+    ubicationForm: FormGroup;
     errorMessages = null;
  
     socialProblemFormStage = [
@@ -51,9 +52,9 @@ export class SocialProblemCreatePage implements OnInit {
     }
 
     async ngOnInit() {
-        this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
-            this.appNetworkConnection = connected;
-        });
+        // this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
+        //     this.appNetworkConnection = connected;
+        // });
         const coords = await this.localizationService.getCoordinate();
         this.socialProblemCoordinate.latitude = coords.latitude;
         this.socialProblemCoordinate.longitude = coords.longitude;
@@ -63,22 +64,26 @@ export class SocialProblemCreatePage implements OnInit {
         });
     }
 
-    ionViewWillLeave() {
-        console.log('Detalle Problema Social Destruido');
-    }
+    // ionViewWillLeave() {
+    //     console.log('Detalle Problema Social Destruido');
+    // }
 
     createForm() {
         const validations = this.localDataService.getFormValidations();
         const title = new FormControl('', Validators.compose([
-            Validators.required,
+            Validators.required
         ]));
         const description = new FormControl('', Validators.compose([
-            Validators.required,
+            Validators.required
+        ]));
+        const description_ubication = new FormControl('', Validators.compose([
+            Validators.required
         ]));
         const subcategory = new FormControl('', Validators.compose([
-            Validators.required,
+            Validators.required
         ]));
         this.socialProblemForm = this.formBuilder.group({ title, description, subcategory });
+        this.ubicationForm = this.formBuilder.group({description_ubication});
         this.errorMessages = this.localDataService.getFormMessagesValidations(validations); 
     }
 
@@ -86,6 +91,10 @@ export class SocialProblemCreatePage implements OnInit {
         
         if (this.socialProblemForm.valid !== true) {
             await this.utilsService.showToast('Ingresa un titulo y una descripción', 2500);
+            return;
+        }
+        if (this.ubicationForm.valid !== true) {
+            await this.utilsService.showToast('Ingresa una descripción de tu ubicación', 2500);
             return;
         }
         if (this.socialProblemCoordinate.address === null || this.socialProblemCoordinate.address === null) {
@@ -104,7 +113,8 @@ export class SocialProblemCreatePage implements OnInit {
             description: this.socialProblemForm.value.description,
             ubication: this.socialProblemCoordinate,
             images: this.socialProblemImages,
-            subcategory_id: this.socialProblemForm.value.subcategory
+            subcategory_id: this.socialProblemForm.value.subcategory,
+            description_ubication: this.ubicationForm.value.description_ubication
         };
         // await this.utilsService.showToast('Post Problema Social Valido', 2500);
         this.postService.sendSocialProblemReport(socialProblem).pipe(
@@ -157,19 +167,18 @@ export class SocialProblemCreatePage implements OnInit {
     updateMapCoordinate(event) {
         console.log({ datosHijo: event });
         if (event.lat !== null && event.lng !== null) {
-            this.socialProblemCoordinate.latitude = event.lat;
-            this.socialProblemCoordinate.longitude = event.lng;
+            this.socialProblemCoordinate.latitude = event.latitude;
+            this.socialProblemCoordinate.longitude = event.longitude;
             this.getUserAddress(this.socialProblemCoordinate.latitude, this.socialProblemCoordinate.longitude);
         }
-
     }
 
     updateCurrentStep(event) {
         this.currentStep = event.currentStep;
     }
 
-    async getUserAddress(latitud, longitud) {
-        await this.mapService.getAddress({
+    getUserAddress(latitud, longitud) {
+        this.mapService.getAddress({
             lat: latitud,
             lng: longitud,
             zoom: 14
@@ -179,7 +188,7 @@ export class SocialProblemCreatePage implements OnInit {
         },
         err => {
             console.log('Ocurrio un error al obtener la ubicación: ', err);
-            this.utilsService.showToast('No se pudo obtener tu ubicación');
+            this.utilsService.showToast('No se pudo obtener la dirección de tu ubicación');
         });
     }
 

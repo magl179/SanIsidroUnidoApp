@@ -1,8 +1,12 @@
 <app-header-back title="Eventos"></app-header-back>
 <ion-content>
-    <app-network-banner *ngIf="!appNetworkConnection" networkConnection="appNetworkConnection">
-    </app-network-banner>
-    <div *ngIf="appNetworkConnection">
+    <!-- <app-network-banner *ngIf="!appNetworkConnection" networkConnection="appNetworkConnection">
+    </app-network-banner> -->
+    <div>
+        <div>
+            <ion-searchbar animated debounce="500" showCancelButton="focus"
+                placeholder="Buscar Eventos"></ion-searchbar>
+        </div>
         <!-- Tarjetas Animacion hasta cargar datos-->
         <div *ngIf="!eventsList || eventsList.length === 0">
             <ion-card *ngFor="let event of [1,1,1,1,1,1,1];"
@@ -66,7 +70,9 @@
                             <ion-icon slot="icon-only" class="icon-like"
                                 [name]="(checkLikePost(event.details))?'heart':'heart-empty'"></ion-icon>
                         </div> -->
-                        <ion-button (click)="toggleAssistance(checkLikePost(event.details), event.id)">Asistiré</ion-button>
+                        <ion-button
+                            (click)="toggleAssistance(checkLikePost(event.details), event.id)">
+                            Asistiré</ion-button>
                         <!-- <div class="btn-like"
                             (click)="toggleAssistance(checkLikePost(event.details), event.id)">
                             <ion-icon slot="icon-only" class="icon-like"

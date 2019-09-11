@@ -1,6 +1,18 @@
-ion-slide {
-    display: block;
-    // background: green;
+ion-slide.tutorial_slide {
+    display: flex;
+    align-items: center;
+    background-position: center !important;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    text-align: center;
+}
+.slide-content{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
+    color:white;
 }
 
 // p{

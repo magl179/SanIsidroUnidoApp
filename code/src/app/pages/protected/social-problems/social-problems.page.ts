@@ -70,6 +70,10 @@ export class SocialProblemsPage implements OnInit {
         this.loadSocialProblems();
     }
 
+    reportSocialProblem() {
+        this.navCtrl.navigateForward('/social-problem-create')
+    }
+
     // ngOnDestroy() {
     //         console.log('Listado Problemas Sociales Destruido');
     //     this.resetSocialProblems();

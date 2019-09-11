@@ -6,12 +6,6 @@
         "valid_roles": ["morador"]
     },
     {
-        "title": "Reportar Problema",
-        "icon": "assets/img/svg/megaphone.svg",
-        "url": "/social-problem-create",
-        "valid_roles": ["morador"]
-    },
-    {
         "title": "Problemas Sociales",
         "icon": "assets/img/svg/protest.svg",
         "url": "/social-problems",

@@ -12,7 +12,7 @@ import { NetworkService } from '../../../services/network.service';
 })
 export class EventsPage implements OnInit {
 
-    appNetworkConnection = false;
+    // appNetworkConnection = false;
     // loading: any;
     elements: any = [];
     AuthUser = null;
@@ -35,9 +35,9 @@ export class EventsPage implements OnInit {
     }
 
     ngOnInit() {
-        this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
-            this.appNetworkConnection = connected;
-        });
+        // this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
+        //     this.appNetworkConnection = connected;
+        // });
         this.authService.getAuthUser().subscribe(res => {
             this.AuthUser = res.user; 
         });

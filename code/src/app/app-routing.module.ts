@@ -93,7 +93,8 @@ const routes: Routes = [
         path: 'emergencies',
         loadChildren: './pages/protected/emergencies/emergencies.module#EmergenciesPageModule',
         canActivate: [LoginAuthGuard, IsActiveGuard]
-    },  { path: 'reportes', loadChildren: './pages/protected/reportes/reportes.module#ReportesPageModule' },
+    },
+  { path: 'reportes', loadChildren: './pages/protected/reportes/reportes.module#ReportesPageModule' },
 
 
 

@@ -91,27 +91,25 @@
         <section *ngIf="currentStep === 2">
             <p class="ion-text-center">Escoge la ubicación donde se genero la emergencia</p>
             <single-map idMap="emergencyReportMap" [zoomMap]="17" [enableGesture]="false"
-                [mapPoints]="emergencyPostCoordinate" (returnCoordinateChoosen)="updateMapCoordinate($event)">
+                (returnCoordinateChoosen)="updateMapCoordinate($event)">
             </single-map>
-            <div>
-                <p>Latitud {{(emergencyPostCoordinate && emergencyPostCoordinate.latitude) || 'No hay una latitud'}}</p>
-                <p>Longitud {{(emergencyPostCoordinate && emergencyPostCoordinate.longitude) || 'No hay una longitud'}}</p>
-                <p>Tu Dirección es: {{(emergencyPostCoordinate && emergencyPostCoordinate.address) || 'No hay una dirección'}}</p>
-            </div>
-            <form class="form-ubication">
+            
+            <p *ngIf="emergencyPostCoordinate.address">Tu Dirección es:
+                {{emergencyPostCoordinate.address}}</p>
+            <form class="form-ubication" [formGroup]="ubicationForm">
                     <div class="item-form">
                         <ion-item class="input_item">
-                            <ion-label position="floating">Descripcion Ubicación</ion-label>
-                            <ion-textarea auto-grow="true"></ion-textarea>
+                            <ion-label position="floating">Descripcion de la Ubicación</ion-label>
+                            <ion-textarea formControlName="description_ubication" auto-grow="true"></ion-textarea>
                         </ion-item>
                         <div class="feedback-icon">
                             <ion-item lines="none">
                                 <button class="icon-help-input" disabled>
                                     <ion-icon name="close-circle" class="error"
-                                        *ngIf="emergencyForm.get('description').touched && emergencyForm.get('description').invalid">
+                                        *ngIf="ubicationForm.get('description_ubication').touched && ubicationForm.get('description_ubication').invalid">
                                     </ion-icon>
                                     <ion-icon name="checkmark-circle" class="success"
-                                        *ngIf="emergencyForm.get('description').touched && emergencyForm.get('description').valid">
+                                        *ngIf="ubicationForm.get('description_ubication').touched && ubicationForm.get('description_ubication').valid">
                                     </ion-icon>
                                 </button>
                             </ion-item>
@@ -119,13 +117,13 @@
                     </div>
                     <div class="form-errors">
                         <p class="form-error"
-                            *ngIf="emergencyForm.get('description').hasError('required') && emergencyForm.get('description').touched">
+                            *ngIf="ubicationForm.get('description_ubication').hasError('required') && ubicationForm.get('description_ubication').touched">
                             {{errorMessages.description.required.message}}
                         </p>
                     </div>
                 </form>
             <div>
-                <ion-button color="primary" expand="full" type="submit" (click)="validatePhase2()">Siguiente
+                <ion-button color="primary" [disabled]="!ubicationForm.valid" expand="full" type="submit" (click)="validatePhase2()">Siguiente
                 </ion-button>
             </div>
         </section>

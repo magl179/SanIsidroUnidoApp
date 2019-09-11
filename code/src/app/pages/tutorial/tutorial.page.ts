@@ -52,4 +52,63 @@ export class TutorialPage implements OnInit {
         });
     }
 
+    getBackgroundG(image_url) {
+        return `linear-gradient(rgba(2, 2, 2, 0.58), rgba(2, 2, 2, 0.58)), url(${image_url})`;
+    }
+
+    slideChange(event) {
+        // console.log('evento change end', event)
+
+
+        // const isBeginningSlide = event.target.isBeginning();
+        // const isEndSlideBeginning = event.target.isEnd();
+
+        event.target.isBeginning().then(is_first_slide => {
+            // console.log('is begin slide', is_first_slide);
+            // console.log('is last slide', is_last_slide);
+            if (is_first_slide) {
+                event.target.lockSwipeToPrev(true);
+            } else {
+                event.target.lockSwipeToPrev(false);
+            }
+        });
+        event.target.isEnd().then(is_last_slide => {
+            // console.log('is last slide', is_last_slide);
+            if (is_last_slide) {
+                event.target.lockSwipeToNext(true);
+            } else {
+                event.target.lockSwipeToNext(false);
+            }
+        });
+    }
+
+
+    slidesLoaded(event) {
+        // console.log('slides load', event);
+        //Bloquear Slide Prev al cargar slides
+        event.target.lockSwipeToPrev(true);
+    }
+    // slideNextEnd(event) {
+    //     console.log('evento next end', event)
+    //     console.log('evento next end index', event.target.getActiveIndex())
+    // }
+
+    async goToLogin() {
+        // await this.closeMenu();
+        // timer(300).subscribe(() => {
+        //     this.navCtrl.navigateRoot('/login');
+        // });
+        this.navCtrl.navigateForward('/login');
+    }
+
+    async goToRegister() {
+        // await this.closeMenu();
+        // timer(300).subscribe(() => {
+        //     this.navCtrl.navigateRoot('/register');
+        // });
+        this.navCtrl.navigateForward('/register');
+    }
+
+
+
 }

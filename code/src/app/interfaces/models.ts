@@ -98,6 +98,7 @@ export interface IEvent {
 // INTERFACES ENVIAR DATOS
 
 export interface IEmergencyReported extends IBaseReportSend {
+
 }
 
 export interface ISocialProblemReported extends IBaseReportSend {
@@ -161,6 +162,7 @@ interface IBaseReportSend {
     description: string;
     user_id?: number;
     ubication: IUbication;
+    description_ubication?: string;
     images?: string[]
 }
 

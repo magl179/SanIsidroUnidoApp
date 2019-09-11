@@ -23,9 +23,9 @@ import { NavController } from '@ionic/angular';
 })
 export class EmergencyCreatePage implements OnInit {
 
-    appNetworkConnection = false;
+    // appNetworkConnection = false;
     currentStep = 2;
-    emergencyPostValid = false;
+    // emergencyPostValid = false;
     // activePane: PaneType = 'left';
     emergencyFormStage = [
         { title: 'Paso 1' }, { title: 'Paso 2' },
@@ -38,6 +38,7 @@ export class EmergencyCreatePage implements OnInit {
         address: null
     };
     emergencyForm: FormGroup;
+    ubicationForm: FormGroup;
     errorMessages = null;
 
     constructor(
@@ -54,13 +55,13 @@ export class EmergencyCreatePage implements OnInit {
     }
 
     async ngOnInit() {
-        this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
-            this.appNetworkConnection = connected;
-        });
+        // this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
+        //     this.appNetworkConnection = connected;
+        // });
         const coords = await this.localizationService.getCoordinate();
         this.emergencyPostCoordinate.latitude = coords.latitude;
         this.emergencyPostCoordinate.longitude = coords.longitude;
-        console.log(this.emergencyPostCoordinate);
+        // console.log(this.emergencyPostCoordinate);
     }
 
     createForm() {
@@ -71,8 +72,12 @@ export class EmergencyCreatePage implements OnInit {
         const description = new FormControl('', Validators.compose([
             Validators.required,
         ]));
+        const description_ubication = new FormControl('', Validators.compose([
+            Validators.required,
+        ]));
 
         this.emergencyForm = this.formBuilder.group({ title, description });
+        this.ubicationForm = this.formBuilder.group({description_ubication});
         this.errorMessages = this.localDataService.getFormMessagesValidations(validations);
     }
 
@@ -99,7 +104,6 @@ export class EmergencyCreatePage implements OnInit {
         }
     }
 
-
     validatePhase1() {
         this.nextStep();
     }
@@ -114,19 +118,18 @@ export class EmergencyCreatePage implements OnInit {
     updateMapCoordinate(event) {
         console.log({ datosHijo: event });
         if (event.lat !== null && event.lng !== null) {
-            this.emergencyPostCoordinate.latitude = event.lat;
-            this.emergencyPostCoordinate.longitude = event.lng;
+            this.emergencyPostCoordinate.latitude = event.latitude;
+            this.emergencyPostCoordinate.longitude = event.longitude;
             this.getUserAddress(this.emergencyPostCoordinate.latitude, this.emergencyPostCoordinate.longitude);
         }
-
     }
 
     updateCurrentStep(event) {
         this.currentStep = event.currentStep;
     }
 
-    async getUserAddress(latitud, longitud) {
-        await this.mapService.getAddress({
+    getUserAddress(latitud, longitud) {
+        this.mapService.getAddress({
             lat: latitud,
             lng: longitud,
             zoom: 14
@@ -136,13 +139,18 @@ export class EmergencyCreatePage implements OnInit {
         },
         err => {
             console.log('Ocurrio un error al obtener la ubicación: ', err);
-            this.utilsService.showToast('No se pudo obtener tu ubicación');
+            this.utilsService.showToast('No se pudo obtener la dirección de tu ubicación');
         });
     }
 
     async sendEmergencyReport() { 
         if (this.emergencyForm.valid !== true) {
             await this.utilsService.showToast('Ingresa un titulo y una descripción', 2500);
+            return;
+        }
+
+        if (this.ubicationForm.valid !== true) {
+            await this.utilsService.showToast('Ingresa una descripción de la ubicación', 2500);
             return;
         }
 
@@ -157,7 +165,8 @@ export class EmergencyCreatePage implements OnInit {
             title: this.emergencyForm.value.title,
             description: this.emergencyForm.value.description,
             ubication: this.emergencyPostCoordinate,
-            images: this.emergencyImages
+            images: this.emergencyImages,
+            description_ubication: this.ubicationForm.value.description_ubication
         };
 
         this.postService.sendEmergencyReport(socialProblem).pipe(

@@ -2,6 +2,8 @@ import { Component, OnInit, EventEmitter, Input, Output, AfterViewInit } from '@
 import * as Leaflet from 'leaflet';
 import { GestureHandling } from 'leaflet-gesture-handling';
 import { IPostUbicationItem } from 'src/app/interfaces/barrios';
+import { MapService } from "../../services/map.service";
+import { LocalizationService } from "../../services/localization.service";
 
 const tileURL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const tileAtribution = '&copy; <a target=_blank" href="https://www.openstreetmap.org/copyright">© Colaboradores de OpenStreetMap</a>';
@@ -15,18 +17,29 @@ export class SingleMapComponent implements OnInit, AfterViewInit {
 
     @Input() idMap: string;
     @Input() zoomMap: number;
-    @Input() mapPoints: IPostUbicationItem;
+    // @Input() mapPoints: IPostUbicationItem;
     @Input() enableGesture = false;
     @Output() returnCoordinateChoosen = new EventEmitter();
 
     map: any;
     mapIsLoaded = false;
+    currentCoordinate: IPostUbicationItem = {
+        latitude: null,
+        longitude: null,
+        address: null
+    };
 
-    constructor() { }
+    constructor(
+        private localizationService: LocalizationService
+    ) { }
 
     async ngOnInit() { }
 
     async ngAfterViewInit() {
+        this.currentCoordinate = await this.localizationService.getCoordinate();
+        if (this.currentCoordinate) {
+            this.sendMarkerCoordinate();
+        }
         await this.initializeMap();
     }
 
@@ -54,7 +67,7 @@ export class SingleMapComponent implements OnInit, AfterViewInit {
             Leaflet.control.scale().addTo(this.map);
             this.mapIsLoaded = true;
         });
-        this.map.setView([this.mapPoints.latitude || -0.2188216, this.mapPoints.longitude || -78.5135489], this.zoomMap || 15);
+        this.map.setView([this.currentCoordinate.latitude || -0.2188216, this.currentCoordinate.longitude || -78.5135489], this.zoomMap || 15);
 
         Leaflet.tileLayer(tileURL, {
             attribution: tileAtribution,
@@ -63,24 +76,29 @@ export class SingleMapComponent implements OnInit, AfterViewInit {
             reuseTiles: true
         }).addTo(this.map);
 
-        const mainMarker = await Leaflet.marker([this.mapPoints.latitude || -0.2188216, this.mapPoints.longitude || -78.5135489], {
-            title: this.mapPoints.address || 'No hay direccion',
+        const mainMarker = await Leaflet.marker([this.currentCoordinate.latitude || -0.2188216, this.currentCoordinate.longitude || -78.5135489], {
+            title: this.currentCoordinate.address || 'No hay direccion',
             draggable: true
         });
         mainMarker.on('dragend', async (e) => {
             const position = await e.target.getLatLng();
-            this.mapPoints.latitude = position.lat;
-            this.mapPoints.longitude = position.lng;
+            this.currentCoordinate.latitude = position.lat;
+            this.currentCoordinate.longitude = position.lng;
+            // this.currentCoordinate.address = null;
+            // this.currentCoordinate.la
             this.sendMarkerCoordinate();
         });
+        mainMarker.bindPopup('Mi Ubicación').openPopup();
+
         this.map.addLayer(mainMarker);
     }
 
     // Cuando se lance el evento click en la plantilla llamaremos a este método
     async sendMarkerCoordinate() {
         await this.returnCoordinateChoosen.emit({
-            lat: this.mapPoints.latitude,
-            lng: this.mapPoints.longitude
+            latitude: this.currentCoordinate.latitude,
+            longitude: this.currentCoordinate.longitude,
+            // address:
         });
     }
 

@@ -61,7 +61,7 @@ export interface ISocialProblemPost {
 export interface IPostUbicationItem {
     latitude: number;
     longitude: number;
-    address: string;
+    address?: string;
 }
 
 // LOCALIZATION
