@@ -10,12 +10,12 @@ export class BeafitulDatePipe implements PipeTransform {
         let beatifulDate = null;
         moment.locale('es');
         if (moment(value).isValid()) {
-            console.log('Valid Date');
+            // console.log('Valid Date');
             const currentDate = moment(new Date());
             const lastDate = moment(new Date(value));
             // Fecha Pasada, Fecha Actual
             const diffDays = Math.abs(currentDate.diff(lastDate, 'days'));
-            console.log('Diferencia entre dias: ', diffDays);
+            // console.log('Diferencia entre dias: ', diffDays);
             if (diffDays <= 8) {
                 // console.log('Fecha Anterior', lastDate.fromNow());
                 beatifulDate = lastDate.fromNow();

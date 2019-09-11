@@ -19,7 +19,7 @@ import { NavController } from '@ionic/angular';
 })
 export class SocialProblemCreatePage implements OnInit {
 
-    currentStep = 1;
+    currentStep = 2;
     fullFormIsValid = false;
     appNetworkConnection = false;
     socialProblemForm: FormGroup;

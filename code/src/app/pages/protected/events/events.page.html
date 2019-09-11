@@ -1,10 +1,12 @@
 <app-header-back title="Eventos"></app-header-back>
 <ion-content>
-    <app-network-banner *ngIf="!appNetworkConnection" networkConnection="appNetworkConnection"></app-network-banner>
+    <app-network-banner *ngIf="!appNetworkConnection" networkConnection="appNetworkConnection">
+    </app-network-banner>
     <div *ngIf="appNetworkConnection">
         <!-- Tarjetas Animacion hasta cargar datos-->
         <div *ngIf="!eventsList || eventsList.length === 0">
-            <ion-card *ngFor="let event of [1,1,1,1,1,1,1];" class="event_item animated flash slow infinite">
+            <ion-card *ngFor="let event of [1,1,1,1,1,1,1];"
+                class="event_item animated flash slow infinite">
                 <ion-card-header>
                     <ion-card-subtitle>
                         <ion-skeleton-text width="60%"></ion-skeleton-text>
@@ -54,15 +56,24 @@
                     <p class="post-description"> {{event.description | truncate: 50}}</p>
                     <p class="post-see-more" (click)="postDetail(event.id)">Ver más...</p>
                     <p class="post-num-likes">{{event.details.length}}
-                        {{(event.details.length !== 1) ? 'personas asistirán': 'persona asistirá'}}</p>
+                        {{(event.details.length !== 1) ? 'personas asistirán': 'persona asistirá'}}
+                    </p>
                 </ion-card-content>
                 <div class="action-buttons">
                     <div class="action-button pair">
-                        <div class="btn-like" [ngClass]="{'active': (checkLikePost(event.details))}"
+                        <!-- <div class="btn-like" [ngClass]="{'active': (checkLikePost(event.details))}"
                             (click)="toggleAssistance((checkLikePost(event.details)), event.id)">
                             <ion-icon slot="icon-only" class="icon-like"
                                 [name]="(checkLikePost(event.details))?'heart':'heart-empty'"></ion-icon>
-                        </div>
+                        </div> -->
+                        <ion-button (click)="toggleAssistance(checkLikePost(event.details), event.id)">Asistiré</ion-button>
+                        <!-- <div class="btn-like"
+                            (click)="toggleAssistance(checkLikePost(event.details), event.id)">
+                            <ion-icon slot="icon-only" class="icon-like"
+                                [name]="(checkLikePost(event.details))?'heart':'heart-empty'">
+                            </ion-icon>
+                            
+                        </div> -->
                         <div class="btn-share" (click)="sharePost(event)">
                             <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
                         </div>
@@ -94,7 +105,8 @@
     </div>
     <!-- Scroll Infinito -->
     <ion-infinite-scroll threshold="150px" (ionInfinite)="getInfiniteScrollData($event)">
-        <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando Publicaciones...">
+        <ion-infinite-scroll-content loadingSpinner="crescent"
+            loadingText="Cargando Publicaciones...">
         </ion-infinite-scroll-content>
     </ion-infinite-scroll>
 </ion-content>

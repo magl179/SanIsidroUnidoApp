@@ -1,0 +1,14 @@
+.container_emergency_options{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 1rem 0px;
+    .first{
+        width: 80%;
+    }
+    .create{
+        width: 20%;
+        display: flex;
+        justify-content: center;
+    }
+}

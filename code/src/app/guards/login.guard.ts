@@ -21,10 +21,11 @@ export class LoginAuthGuard implements CanActivate {
         
         if (!userAuthenticated) {
             this.authService.removeAuthInfo();
-            this.navCtrl.navigateRoot('/login');
+            this.navCtrl.navigateRoot('/tutorial');
             return false;
         } else {
             return true;
         }
     }
+    
 }

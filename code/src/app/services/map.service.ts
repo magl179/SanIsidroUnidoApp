@@ -35,13 +35,13 @@ export class MapService implements OnInit {
 
     async getCustomIcon(color) {
         let markerIcon = null;
-        console.log('get custom icon function called');
+        // console.log('get custom icon function called');
         const markerData = await this.getMarkers().toPromise();
         if (markerData) {
             const iconData = markerData.filter((dataMarker) => {
                 return dataMarker.color === color;
             });
-            console.log('iconed data custom icon', iconData);
+            // console.log('iconed data custom icon', iconData);
             if (iconData && iconData.length > 0) {
                 markerIcon = await this.createIcon(iconData[0].iconURL);
             }
@@ -73,4 +73,20 @@ export class MapService implements OnInit {
         };
         return this.http.get<IReverseGeocodeResponse>(REVERSE_GEOCODING_ENDPOINT, { params: addressParams });
     }
+
+    getDistanceInKm(lat1,lon1,lat2,lon2) {
+        let R = 6371;
+        let dLat = (lat2-lat1) * (Math.PI/180);
+        let dLon = (lon2-lon1) * (Math.PI/180);
+        let a =
+          Math.sin(dLat/2) * Math.sin(dLat/2) +
+          Math.cos(lat1 * (Math.PI/180)) * Math.cos(lat2 * (Math.PI/180)) *
+          Math.sin(dLon/2) * Math.sin(dLon/2)
+          ;
+        let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        let d = R * c;
+        return d;
+      }
+
+
 }

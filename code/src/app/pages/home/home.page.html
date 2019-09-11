@@ -1,7 +1,6 @@
 <app-header title="Inicio"></app-header>
 <ion-content>
-    <app-network-banner *ngIf="!appNetworkConnection" networkConnection="appNetworkConnection"></app-network-banner>
-    <ion-grid class="ion-padding-top" *ngIf="appNetworkConnection">
+    <ion-grid class="ion-padding-top">
         <ion-row class="ion-justify-content-center" *ngIf="servicesList !== null || servicesList.length > 0">
             <ion-col size="6" *ngFor="let service of servicesList" class="service_item">
                 <a [routerLink]="service.url" *appHasRole="service.valid_roles"> 
@@ -13,9 +12,6 @@
                     </ion-card>
                 </a>
             </ion-col>
-            <!-- <ion-col *ngIf="">
-                <p>Por favor inicia sesión</p>
-            </ion-col> -->
         </ion-row>
     </ion-grid>
 </ion-content>

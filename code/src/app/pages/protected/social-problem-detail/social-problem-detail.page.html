@@ -56,11 +56,19 @@
             </ion-card-content>
             <div class="action-buttons detail">
                 <div class="action-button pair">
-                    <div class="btn-like" [ngClass]="{'active': (checkLikePost(socialProblem.details))}"
-                        (click)="toggleLike((checkLikePost(socialProblem.details)))">
+                    <div class="btn-like"
+                        (click)="toggleLike(checkLikePost(socialProblem.details))">
                         <ion-icon slot="icon-only" class="icon-like"
                             [name]="(checkLikePost(socialProblem.details))?'heart':'heart-empty'"></ion-icon>
                     </div>
+                    <!-- <div class="btn-like"
+                        (click)="testClass($event)">
+                        <ion-icon slot="icon-only" class="icon-like"
+                            [name]="(test)?'heart':'heart-empty'"></ion-icon>
+                    </div> -->
+                    <!-- <div class="btn-likes" [ngClass]="{'active': (checkLikePost(socialProblem.details))}">
+                        <div class="icon-likes" (click)="toggleLike((checkLikePost(socialProblem.details)))"></div>
+                    </div> -->
                     <div class="btn-share" (click)="sharePost(socialProblem)">
                         <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
                     </div>

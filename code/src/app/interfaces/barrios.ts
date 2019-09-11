@@ -10,11 +10,14 @@ export interface IMenuComponent {
 }
 // PUBLIC SERVICES
 
-export interface IPublicServicesComponente {
+export interface IPublicService {
+    id: number;
     name: string;
     description: string;
-    phone?: string;
+    phones?: string[];
     ubication: ISimpleCoordinates;
+    created_at?: string;
+    updated_at?: string;
 }
 
 // USER

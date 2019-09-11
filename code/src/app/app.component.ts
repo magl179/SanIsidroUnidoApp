@@ -26,7 +26,8 @@ export class AppComponent implements OnInit {
     isConnected = false;
     menuComponents: IMenuComponent[];
     automaticClose = true;
-    userApp: any = null;
+    authUser: any = null;
+    authUserRol = null;
 
     constructor(
         private platform: Platform,
@@ -50,13 +51,24 @@ export class AppComponent implements OnInit {
         });
     }
 
+    getRoles() {
+        if (this.authUser && this.authUser.roles) {
+            const roles = this.authUser.roles.map(role => role.slug);
+            const rol = roles.find(rol => environment.roles_permitidos.includes(rol));
+            if (rol) {
+                // console.log('roles', rol);
+                this.authUserRol = rol;
+            }
+        }
+    }
+
     async initializeApp() {
         await this.authService.verificarAuthInfo();
         await this.checkInitialStateNetwork();
         await this.platform.ready().then(async () => {
             if (this.platform.is('cordova')) {
-                await this.statusBar.styleDefault();
-                await this.splashScreen.hide();
+                this.statusBar.styleDefault();
+                this.splashScreen.hide();
             }
             await this.checkUserLoggedIn();
             timer(3000).subscribe(async () => {
@@ -69,7 +81,8 @@ export class AppComponent implements OnInit {
     async checkUserLoggedIn() {
         await this.authService.getAuthUser().subscribe(res => {
             if (res) {
-                this.userApp = res.user;
+                this.authUser = res.user;
+                this.getRoles();
             }
         }, err => {
                 console.log('Error', err);
@@ -87,7 +100,6 @@ export class AppComponent implements OnInit {
     async confirmCloseSession() {
         const alert = await this.alertController.create({
             header: 'Cerrar Sesión',
-            // subHeader: 'Subtitle',
             message: 'Estas seguro que deseas cerrar sesión?',
             cssClass: 'alertButtons',
             buttons: [
@@ -106,7 +118,7 @@ export class AppComponent implements OnInit {
                         await this.authService.logout();
                         await this.menuCtrl.close();
                         timer(400).subscribe(() => {
-                            this.navCtrl.navigateRoot('/login');
+                            this.navCtrl.navigateRoot('/tutorial');
                         });
                     }
                 }
@@ -134,7 +146,6 @@ export class AppComponent implements OnInit {
     async checkInitialStateNetwork() {
         this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
             this.isConnected = connected;
-            console.log('Network status', connected);
             if (!this.isConnected) {
                 this.utilsService.showToast('Por favor enciende tu conexión a Internet');
             }

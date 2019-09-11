@@ -26,7 +26,7 @@ export class TutorialPage implements OnInit {
         private utilsService: UtilsService,
         private localDataService: LocalDataService) { }
 
-    ngOnInit() {
+    async ngOnInit() {
         this.localDataService.getTutoSlides().subscribe(
             res => {
                 //console.log('slides', res);
@@ -36,6 +36,7 @@ export class TutorialPage implements OnInit {
                 this.utilsService.showToast('No se pudieron cargar las opciones del tutorial');
             }
         );
+        await this.utilsService.disabledMenu();
     }
 
 

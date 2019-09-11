@@ -24,6 +24,8 @@ export interface IPublicService {
     description: string;
     ubication: IUbication;
     phones?: IPhones[];
+    created_at?: string;
+    updated_at?: string;
 }
 
 export interface IDirective {

@@ -25,6 +25,7 @@ export class UserProfilePage implements OnInit {
     appNetworkConnection = false;
     // imageServeURL = `${environment.apiBaseURL}/${environment.image_blob_url}/`;
     AuthUser = null;
+    authUserRol = null;
     sizeOptions = 4;
     canRequestAfiliation = true;
     DeviceUser: IPhoneUser = null;
@@ -52,6 +53,7 @@ export class UserProfilePage implements OnInit {
         this.authService.getAuthUser().subscribe(res => {
             if (res) {                
                 this.AuthUser = res.user;
+                this.getRoles();
             }
         });
         this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
@@ -71,10 +73,14 @@ export class UserProfilePage implements OnInit {
     }
 
     getRoles() {
-        if (this.AuthUser) {
-            return this.AuthUser.roles.map(role => role.slug);
+        if (this.AuthUser && this.AuthUser.roles) {
+            const roles = this.AuthUser.roles.map(role => role.slug);
+            const rol = roles.find(rol => environment.roles_permitidos.includes(rol));
+            if (rol) {
+                // console.log('roles', rol);
+                this.authUserRol = rol;
+            }
         }
-        return [];
     }
 
     async showEditProfileModal() {

@@ -7,6 +7,9 @@ import { PostsService } from '../../../services/posts.service';
 import { IDirective } from 'src/app/interfaces/models';
 import { NetworkService } from 'src/app/services/network.service';
 import { finalize } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
+
+const URL_PATTERN = new RegExp(/^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/);
 
 @Component({
     selector: 'app-directory-info',
@@ -61,6 +64,15 @@ export class DirectoryInfoPage implements OnInit {
 
     imageWasLoaded() {
         this.imgLoaded = true;
+    }
+
+    getImageURL(image_name) {
+        const imgIsURL = URL_PATTERN.test(image_name);
+        if (imgIsURL) {
+            return image_name;
+        } else {
+            return `${environment.apiBaseURL}/${environment.image_assets}/${image_name}`;
+        }
     }
 
 }

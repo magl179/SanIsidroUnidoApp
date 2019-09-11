@@ -63,8 +63,8 @@
             <!-- <p *ngIf="event">Likes: {{event.details.length}}</p> -->
             <div class="action-buttons detail">
                 <div class="action-button pair">
-                    <div class="btn-like" [ngClass]="{'active': (checkLikePost(event.details))}"
-                        (click)="toggleAssistance((checkLikePost(event.details)))">
+                    <div class="btn-like"
+                        (click)="toggleAssistance(checkLikePost(event.details))">
                         <ion-icon slot="icon-only" class="icon-like"
                             [name]="(checkLikePost(event.details))?'heart':'heart-empty'"></ion-icon>
                     </div>

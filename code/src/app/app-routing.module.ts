@@ -6,7 +6,7 @@ import { HasRoleGuard } from './guards/has-role.guard';
 import { IsActiveGuard } from "./guards/is-active.guard";
 
 const routes: Routes = [
-    { path: '', redirectTo: 'login', pathMatch: 'full' },
+    { path: '', redirectTo: 'tutorial', pathMatch: 'full' },
     {
         path: 'home',
         loadChildren: './pages/home/home.module#HomePageModule',
@@ -73,7 +73,7 @@ const routes: Routes = [
     {
         path: 'tutorial',
         loadChildren: './pages/tutorial/tutorial.module#TutorialPageModule',
-        canActivate: [LoginAuthGuard]
+        canActivate: [NoLoginAuthGuard]
     },
     {
         path: 'about',
@@ -89,6 +89,13 @@ const routes: Routes = [
         loadChildren: './pages/frequent-questions/frequent-questions.module#FrequentQuestionsPageModule',
         canActivate: [LoginAuthGuard]
     },
+    {
+        path: 'emergencies',
+        loadChildren: './pages/protected/emergencies/emergencies.module#EmergenciesPageModule',
+        canActivate: [LoginAuthGuard, IsActiveGuard]
+    },  { path: 'reportes', loadChildren: './pages/protected/reportes/reportes.module#ReportesPageModule' },
+
+
 
 
 ];

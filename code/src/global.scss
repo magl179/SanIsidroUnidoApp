@@ -364,6 +364,12 @@ body {
 }
 
 // Formularios
+
+.form-ubication{
+    margin-bottom: 1.2rem;
+    margin-bottom: 1.2rem;
+}
+
 .form-errors {
     p {
         // margin-left: 1rem;
@@ -413,8 +419,9 @@ body {
 
 .card_social, .card-event {
     outline: none;
-    margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
+    margin: 1.5rem 0;
+    // margin-top: 1.5rem;
+    // margin-bottom: 1.5rem;
     .post_user {
         font-weight: bold;
     }
@@ -476,6 +483,7 @@ body {
     .action-button.pair{
         display: flex;
         justify-content: space-between;
+        align-items: center;
     }
     .action-button.pair div:nth-child(2){
         margin-left: 2rem;
@@ -494,54 +502,52 @@ body {
             color: #ed4956;
         }
     }
+    .icon-like{
+        transition: all .5s;
+        color: #ed4956;
+        
+        // &.active{
+            // transform: scale(1.1);
+            // transition: all .5s ease-in-out;
+            // animation: heart-basic .5s;
+        // }
+    }
     .btn-share{
         color: #1da1f2;
     }
+}
 
-    // .options {
-    //     // background:purple;
-    //     display: flex;
-    //     width: 100%;
-    //     justify-content: space-around;
-    //     margin-top: .7rem;
-    //     margin-bottom: .7rem;
+.icon-likes {
+    cursor: pointer;
+    display: inline-block;
+    width: 4rem;
+    height: 100%;
+	background-image: url("/assets/images/web_heart_animation_clear.png");
+	background-position: left;
+	background-repeat: no-repeat;
+	background-size: 2900%;
+	&.active {
+		animation: heart-burst 0.8s steps(28) 1;
+		background-position: right;
+	}
+}
 
-    //     &.detail{
-    //         justify-content: flex-start;
-    //         width: 100%;
-    //         div:nth-child(1){
-    //             margin-right: 2rem;
-    //         }
-    //     }
+@keyframes heart-basic {
+    from {
+        transform: scale(1.2);
+    }
+    to{
+        transform: scale(1.2);
+    }
+}
 
-    //     .option_button {
-    //         // background: yellow;
-    //         width: 70%;
-    //         display: flex;
-    //         justify-content: center;
-
-    //     }
-       
-
-    //     .option_actions {
-    //         // background:green;
-    //         display: flex;
-    //         justify-content: space-around;
-    //         align-items: center;
-    //         width: 30%;
-           
-
-    //         .btn_icon {
-    //             ion-icon {
-    //                 font-size: 1.3rem;
-    //             }
-    //         }
-
-    //         .active {
-    //             color: #3880ff;
-    //         }
-    //     }
-    // }
+@keyframes heart-burst {
+	from {
+		background-position: left;
+	}
+	to {
+		background-position: right;
+	}
 }
 
 .btn {
@@ -612,8 +618,16 @@ hr.gray {
     padding: 0px !important;
 }
 
-.swiper-pagination {
-    bottom: -4px !important;
+.swiper-pagination{
+    bottom: 9rem !important;
+}
+.swiper-pagination-bullet-active{
+    background: white;
+}
+
+.full-outline-white{
+    border: 2px solid white;
+    // border-right: 1px solid white;
 }
 
 .icon-help-input {

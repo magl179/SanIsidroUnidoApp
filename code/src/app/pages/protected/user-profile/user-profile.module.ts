@@ -7,15 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { UserProfilePage } from './user-profile.page';
 import { SmComponentsModule } from 'src/app/components/sm-components.module';
 
-import { EditProfilePage } from '../../../modals/edit-profile/edit-profile.page';
-import { EditProfilePageModule } from '../../../modals/edit-profile/edit-profile.module';
-import { ChangePasswordPage } from '../../../modals/change-password/change-password.page';
-import { ChangePasswordPageModule } from '../../../modals/change-password/change-password.module';
+import { EditProfilePage } from 'src/app/modals/edit-profile/edit-profile.page';
+import { EditProfilePageModule } from 'src/app/modals/edit-profile/edit-profile.module';
+import { ChangePasswordPage } from 'src/app/modals/change-password/change-password.page';
+import { ChangePasswordPageModule } from 'src/app/modals/change-password/change-password.module';
 import { RequestMembershipPage } from 'src/app/modals/request-membership/request-membership.page';
-import { RequestMembershipPageModule } from '../../../modals/request-membership/request-membership.module';
-import { ChangeProfileImagePage } from '../../../modals/change-profile-image/change-profile-image.page';
-import { ChangeProfileImagePageModule } from '../../../modals/change-profile-image/change-profile-image.module';
-import { DirectivesModule } from '../../../directives/directives.module';
+import { RequestMembershipPageModule } from 'src/app/modals/request-membership/request-membership.module';
+import { ChangeProfileImagePage } from 'src/app/modals/change-profile-image/change-profile-image.page';
+import { ChangeProfileImagePageModule } from 'src/app/modals/change-profile-image/change-profile-image.module';
+import { DirectivesModule } from 'src/app/directives/directives.module';
 
 const routes: Routes = [
     {

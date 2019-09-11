@@ -101,7 +101,7 @@ export class NotificationsService {
         // return this.userDevices.map(device => device.phone_id);
     }
 
-    hasDevices() {
+    async hasDevices() {
         if (this.AuthUser && this.userDevice.value.phone_id) {
             let userDevices = this.getUserDevices();
             let hasDevice = (userDevices.includes(this.userDevice.value.phone_id)) ? true : false;

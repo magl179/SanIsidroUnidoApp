@@ -18,18 +18,12 @@ import { NetworkService } from 'src/app/services/network.service';
 })
 export class SocialProblemsPage implements OnInit {
 
-    // subcategorias = [
-    //     { title: 'Transporte&Tránsito', slug: 'transport_transit' },
-    //     { title: 'Seguridad', slug: 'security' },
-    //     { title: 'EspaciosVerdes', slug: 'green_areas' },
-    //     { title: 'Transporte&Tránsito', slug: 'transport_transit' }
-    // ];
     appNetworkConnection = false;
     subcategories = null;
     @ViewChild(IonSegment) segment: IonSegment;
     subcategory = '';
     // loading: any;
-    elements: any = [];
+    // elements: any = [];
     // socialProblems: Observable<any>;
     AuthUser = null;
 

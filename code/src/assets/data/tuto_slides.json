@@ -12,7 +12,7 @@
     {
         "img": "/assets/img/svg/user_profile.svg",
         "title": "Mi Perfil",
-        "description": "Puedes editar tus datos de contacto, cambiar tu imagen y contraseña, administrar tus redes sociales asociadas, tus dispositos asociados y además en caso de no ser un morador afiliado, podrás solicitar la afiliación."
+        "description": "Puedes editar tus datos personales, administrar tus redes sociales y dispositivos asociados y si no estas afiliado, puedes solicitar la afiliación."
     },
     {
         "img": "/assets/img/svg/people.svg",
@@ -27,6 +27,6 @@
     {
         "img": "/assets/img/svg/report_paper.svg",
         "title": "Publicaciones",
-        "description": "Puedes ver un listado de los problemas sociales reportados por la comunidad y los eventos publicados por la directiva para siempre estar enterado sobre lo que sucede en la comunidad."
+        "description": "Puedes ver un listado de los problemas sociales reportados por la comunidad y los eventos y reportes publicados por la directiva para siempre estar enterado sobre lo que sucede en la comunidad."
     }
 ]

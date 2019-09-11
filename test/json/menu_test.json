@@ -1,61 +1,10 @@
 [
     {
-        "icon": "list-box",
-        "name": "Publicaciones",
-        "redirectTo": "",
+        "icon": "home",
+        "name": "Inicio",
+        "redirectTo": "/home",
         "routeDirection": "root",
-        "children": [{
-                "icon": "megaphone",
-                "name": "Problemas Sociales",
-                "redirectTo": "/social-problems",
-                "routeDirection": "root"
-            },
-            {
-                "icon": "calendar",
-                "name": "Eventos",
-                "redirectTo": "/events",
-                "routeDirection": "root"
-            }
-        ]
-    },
-    {
-        "icon": "medkit",
-        "name": "Servicios",
-        "redirectTo": "/public-services",
-        "routeDirection": "root",
-        "children": [{
-                "icon": "filing",
-                "name": "Servicios Públicos",
-                "redirectTo": "/public-services",
-                "routeDirection": "root"
-            },
-            {
-                "icon": "people",
-                "name": "Directorio Barrial",
-                "redirectTo": "/directory-info",
-                "routeDirection": "root"
-            }
-        ]
-    },
-    {
-        "icon": "create",
-        "name": "Reportar",
-        "redirectTo": "",
-        "routeDirection": "root",
-        "children": [
-            {
-                "icon": "create",
-                "name": "Emergencia",
-                "redirectTo": "/emergency-create",
-                "routeDirection": "root"
-            },
-            {
-                "icon": "create",
-                "name": "Problema Social",
-                "redirectTo": "/social-problem-create",
-                "routeDirection": "root"
-            }
-        ]
+        "children": []
     },
     {
         "icon": "person",
@@ -64,23 +13,31 @@
         "routeDirection": "root",
         "children": []
     },
+    // {
+    //     "icon": "play-circle",
+    //     "name": "Tutorial",
+    //     "redirectTo": "/tutorial",
+    //     "routeDirection": "root",
+    //     "children": []
+    // },
     {
-        "icon": "help-circle",
+        "icon": "help-circle-outline",
         "name": "Ayuda",
-        "redirectTo": "",
         "routeDirection": "root",
         "children": [
             {
-                "icon": "play-circle",
-                "name": "Tutorial",
-                "redirectTo": "/tutorial",
-                "routeDirection": "root"
+                "icon": "list-box",
+                "name": "Preguntas Frecuentes",
+                "redirectTo": "/frequent-questions",
+                "routeDirection": "root",
+                "children": []
             },
             {
                 "icon": "information-circle",
-                "name": "Información",
+                "name": "Información App",
                 "redirectTo": "/about",
-                "routeDirection": "root"
+                "routeDirection": "root",
+                "children": []
             }
         ]
     }

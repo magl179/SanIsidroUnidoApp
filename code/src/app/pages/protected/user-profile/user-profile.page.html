@@ -22,7 +22,7 @@
             </p>
             <p class="user_data">
                 <ion-icon name="briefcase" class="icon"></ion-icon>
-                <span>Roles: {{ getRoles() | json}}</span>
+                <span class="ion-text-capitalize">{{ authUserRol || 'No tienes un rol registrado'}}</span>
             </p>
             <p class="user_data" *ngIf="AuthUser.number_phone">
                 <ion-icon name="call" class="icon"></ion-icon>

@@ -3,13 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IMenuServices, IHomeOptions, ISlideTutorial} from '../interfaces/models';
 import { Observable } from 'rxjs';
 
-// interface IHomeOptions {
-//     title: string;
-//     icon: string;
-//     url: string;
-//     valid_roles: string[];
-// };
-
 @Injectable({
     providedIn: 'root'
 })
@@ -35,12 +28,12 @@ export class LocalDataService {
         return {
             firstname: {
                 required: true,
-                minlength: 10,
+                minlength: 3,
                 maxlength: 20
             },
             lastname: {
                 required: true,
-                minlength: 10,
+                minlength: 4,
                 maxlength: 20
             },
             email: {
@@ -50,7 +43,7 @@ export class LocalDataService {
             },
             password: {
                 required: true,
-                minlength: 10,
+                minlength: 8,
                 maxlength: 20,
                 pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,20}$/
             },
@@ -64,8 +57,8 @@ export class LocalDataService {
             },
             phone: {
                 required: true,
-                minlength: 8,
-                maxlength: 30
+                minlength: 7,
+                maxlength: 10
             },
             title: {
                 required: true,

@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 
 import { PublicServicesPage } from './public-services.page';
 import { SmComponentsModule } from 'src/app/components/sm-components.module';
+import { MapInfoPageModule } from "src/app/modals/map-info/map-info.module";
+import { MapInfoPage } from "src/app/modals/map-info/map-info.page";
 
 const routes: Routes = [
   {
@@ -16,12 +18,16 @@ const routes: Routes = [
 ];
 
 @NgModule({
+    entryComponents: [
+        MapInfoPage
+    ],
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    SmComponentsModule
+    SmComponentsModule,
+    MapInfoPageModule
   ],
   declarations: [PublicServicesPage]
 })

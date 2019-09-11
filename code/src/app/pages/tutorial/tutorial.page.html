@@ -1,25 +1,54 @@
-<app-header title="Tutorial" [showNoti]="false"></app-header>
-<ion-content padding>
+<!-- <app-header title="Tutorial" [showNoti]="false"></app-header> -->
+<ion-content>
     <!-- <div style="height: 100%"> -->
         <!-- <div justify-content-center align-items-center style="display: flex;height: 100%;flex-direction: column;"> -->
-            <ion-slides pager="true">
-                <ion-slide *ngFor="let slide of slides" text-center>
-                    <img [src]="slide.img" class="slide-img">
-                    <h3>{{slide.title}}</h3>
-                    <p>{{slide.description}}</p>
+            <ion-slides pager="true" style="display: flex;">
+                <ion-slide *ngFor="let slide of slides" text-center style="display: flex;
+                align-items: center;background: linear-gradient(rgba(64, 56, 56, 0.5), rgba(53, 47, 47, 0.5)), url(https://images.pexels.com/photos/1586486/pexels-photo-1586486.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500) center center / cover no-repeat;">
+                    <div style="display: flex;align-items: center;
+                    flex-direction: column;padding-left: 1.2rem;
+    padding-right: 1.2rem;color:white;">
+                        <!-- <img [src]="slide.img" class="slide-img"> -->
+                        <h1>{{slide.title}}</h1>
+                        <p>{{slide.description}}</p>
+                    </div>
                 </ion-slide>
             </ion-slides>
+            <div style="position: fixed;bottom: 3em;
+            width: 100%;display:flex;z-index: 1000;">
+                <div style="width: 50%;display: flex;
+                justify-content: center;">
+                   <div style="width: 70%">
+                        <ion-button color="light" expand="full" (click)="startTutorial()">
+                            Iniciar Sesión
+                        </ion-button>
+                   </div>
+                </div>
+                <div style="width: 50%;display: flex;
+                justify-content: center;">
+                    <div style="width: 70%">
+                        <ion-button color="light" fill="outline" class="full-outline-white" expand="full" (click)="startTutorial()">
+                            Registrarme
+                        </ion-button>
+                    </div>
+                </div>
+            </div>
         <!-- </div> -->
     <!-- </div> -->
 </ion-content>
-<ion-footer no-border text-center>
+<!-- <ion-footer no-border text-center>
     <ion-grid fixed>
         <ion-row>
-            <ion-col size="10" offset="1">
+            <ion-col size="6">
                     <ion-button color="primary" expand="full" shape="round" (click)="startTutorial()">
-                        Comenzar
+                        Iniciar Sesión
                     </ion-button>
             </ion-col>
+            <ion-col size="6">
+                <ion-button color="primary" expand="full" shape="round" (click)="startTutorial()">
+                    Registrarme
+                </ion-button>
+        </ion-col>
         </ion-row>
     </ion-grid>
-</ion-footer>
+</ion-footer> -->

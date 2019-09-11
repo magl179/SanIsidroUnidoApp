@@ -8,26 +8,37 @@
         <ion-segment-button *ngFor="let sub of subcategories" [value]="sub.id" mode="md">
             <ion-label>{{sub.name}}</ion-label>
         </ion-segment-button>
-        <!-- <ion-segment-button value="2" mode="md">
-            <ion-label>Espacios Verdes</ion-label>
-        </ion-segment-button>
-        <ion-segment-button value="3" mode="md">
-            <ion-label>Seguridad</ion-label>
-        </ion-segment-button>
-        <ion-segment-button value="4" mode="md">
-            <ion-label>Protección Animal</ion-label>
-        </ion-segment-button> -->
     </ion-segment>
 </ion-toolbar>
-<ion-content>
-    <app-network-banner *ngIf="!appNetworkConnection" networkConnection="appNetworkConnection"></app-network-banner>
-    <div *ngIf="appNetworkConnection">
+
+<ion-content padding>
+    <ion-grid>
+        <ion-row>
+            <!-- <ion-col size="3"></ion-col> -->
+            <ion-col size="6" style="display:flex;justify-content: center;">
+                <ion-button color="primary">
+                    Reportar <ion-icon name="send" slot="end"></ion-icon>
+                </ion-button>
+            </ion-col>
+            <ion-col size="6" style="display:flex;justify-content: center;">
+                <ion-button>
+                    Filtrar <ion-icon slot="end" name="options"></ion-icon>
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+    <div>
+        <ion-searchbar animated debounce="500" showCancelButton="focus"
+            placeholder="Buscar Problemas Sociales"></ion-searchbar>
+    </div>
+    <div>
         <p *ngIf="socialProblems.length === 0 && socialProblemsLoaded">
             No hay publicaciones disponibles
         </p>
         <!-- Animacion Tarjeta hasta tener los Datos Cargados -->
         <div *ngIf="socialProblems === null || socialProblems.length === 0">
-            <ion-card *ngFor="let items of [1,1,1,1]" class="card_social animated flash slow infinite">
+            <ion-card *ngFor="let items of [1,1,1,1]"
+                class="card_social animated flash slow infinite">
                 <ion-card-header>
                     <ion-card-title>
                         <ion-skeleton-text width="40%"></ion-skeleton-text>
@@ -77,7 +88,8 @@
             <div *ngIf="socialProblem.exists !== -1">
                 <ion-card-header>
                     <ion-card-subtitle class="post_user problem-subtitle">
-                        <span>{{socialProblem.user.firstname}} {{socialProblem.user.lastname}}</span>
+                        <span>{{socialProblem.user.firstname}}
+                            {{socialProblem.user.lastname}}</span>
                         <span>{{socialProblem.created_at | beafitulDate}}</span>
                     </ion-card-subtitle>
                     <ion-card-title>{{socialProblem.title}}</ion-card-title>
@@ -90,12 +102,16 @@
                 </ion-card-content>
                 <div class="action-buttons">
                     <div class="action-button pair">
-                        <!-- <div class="btn-like" [class.active]="(checkLikePost(socialProblem.details,1))"> -->
-                        <div class="btn-like" [ngClass]="{'active': (checkLikePost(socialProblem.details))}"
-                            (click)="toggleLike((checkLikePost(socialProblem.details)), socialProblem.id)">
+
+                        <div class="btn-like"
+                            (click)="toggleLike(checkLikePost(socialProblem.details), socialProblem.id)">
                             <ion-icon slot="icon-only" class="icon-like"
-                                [name]="(checkLikePost(socialProblem.details,2))?'heart':'heart-empty'"></ion-icon>
+                                [name]="(checkLikePost(socialProblem.details))?'heart':'heart-empty'">
+                            </ion-icon>
                         </div>
+                        <!-- <div class="btn-likes" [ngClass]="{'active': (checkLikePost(socialProblem.details))}">
+                            <div class="icon-likes" (click)="toggleLike((checkLikePost(socialProblem.details)))"></div>
+                        </div> -->
                         <div class="btn-share" (click)="sharePost(socialProblem)">
                             <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
                         </div>
@@ -111,7 +127,8 @@
     </div>
     <!-- Scroll Infinito -->
     <ion-infinite-scroll threshold="150px" (ionInfinite)="getInfiniteScrollData($event)">
-        <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando Publicaciones...">
+        <ion-infinite-scroll-content loadingSpinner="crescent"
+            loadingText="Cargando Publicaciones...">
         </ion-infinite-scroll-content>
     </ion-infinite-scroll>
 </ion-content>

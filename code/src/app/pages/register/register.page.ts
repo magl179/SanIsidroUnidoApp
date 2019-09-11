@@ -150,12 +150,12 @@ export class RegisterPage implements OnInit {
         // Campo Email
         const firstname = new FormControl('', Validators.compose([
             Validators.required,
-            Validators.minLength(3)
+            Validators.minLength(validations.firstname.minlength)
         ]));
         // Campo Email
         const lastname = new FormControl('', Validators.compose([
             Validators.required,
-            Validators.minLength(3),
+            Validators.minLength(validations.lastname.minlength),
         ]));
         // Campo Email
         const email = new FormControl('', Validators.compose([
@@ -164,14 +164,15 @@ export class RegisterPage implements OnInit {
         ]));
         // Campo Contraseña
         const password = new FormControl('', Validators.compose([
-            Validators.required
+            Validators.required,
+            Validators.minLength(validations.password.minlength)
             // Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,20}$/)
         ]));
-        const termconditions = new FormControl(false, Validators.compose([
-            CheckboxValidator.isChecked, Validators.required
-        ]));
+        // const termconditions = new FormControl(false, Validators.compose([
+        //     CheckboxValidator.isChecked, Validators.required
+        // ]));
         // Añado Propiedades al Forms
-        this.registerForm = this.formBuilder.group({ firstname, lastname, email, password, termconditions });
+        this.registerForm = this.formBuilder.group({ firstname, lastname, email, password });
         // Cargo Mensajes de Validaciones
         this.errorMessages = this.localDataService.getFormMessagesValidations(validations);
     }

@@ -71,7 +71,10 @@ export class EditProfilePage implements OnInit {
         ]));
         // Campo Contraseña
         const number_phone = new FormControl(this.AuthUser.number_phone || '',
-            Validators.compose([]));
+            Validators.compose([
+                Validators.minLength(validations.phone.minlength),
+                Validators.maxLength(validations.phone.maxlength)
+            ]));
         // Añado Propiedades al Form
         this.editProfileForm = this.formBuilder.group({firstname, lastname, email, number_phone});
         this.errorMessages = this.localDataService.getFormMessagesValidations(validations);

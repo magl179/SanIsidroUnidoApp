@@ -15,7 +15,6 @@ import { ListNotificationsComponent } from './list-notifications/list-notificati
 import { StrengthPassbarComponent } from './strength-passbar/strength-passbar.component';
 import { NetworkStateBarComponent } from './network-state-bar/network-state-bar.component';
 import { NetworkBannerComponent } from './network-banner/network-banner.component';
- 
 
 @NgModule({
     declarations: [

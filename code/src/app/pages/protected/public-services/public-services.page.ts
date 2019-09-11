@@ -4,8 +4,8 @@ import { IUbicationItem } from 'src/app/interfaces/barrios';
 import { IPublicService } from 'src/app/interfaces/models';
 import { PostsService } from '../../../services/posts.service';
 import { NetworkService } from 'src/app/services/network.service';
-
-// import { environment}
+import { ModalController } from "@ionic/angular";
+import { MapInfoPage } from "src/app/modals/map-info/map-info.page";
 
 @Component({
     selector: 'app-public-services',
@@ -20,12 +20,16 @@ export class PublicServicesPage implements OnInit {
     filterPublicServices = [];
     isPublicServiceAvalaible = false;
     publicServiceSelected = null;
+    currentLocation = null;
+    publicServiceClicked = false;
     // loading: any;
+    markerSelected = false;
 
     constructor(
         private utilsService: UtilsService,
         private networkService: NetworkService,
-        private postService: PostsService
+        private postService: PostsService,
+        private modalCtrl: ModalController
     ) { }
 
     async ngOnInit() {
@@ -53,6 +57,30 @@ export class PublicServicesPage implements OnInit {
         }
     }
 
+    async lanzarModal() {
+        if(this.publicServiceSelected && this.markerSelected){
+            // publicServices
+            const modal = await this.modalCtrl.create({
+                component: MapInfoPage,
+                componentProps: {
+                    mapPoint: this.publicServiceSelected,
+                    pais: 'Ecuador',
+                    currentLocation: this.currentLocation
+                }
+            });
+            await modal.present();
+    
+            const { data } = await modal.onDidDismiss();
+    
+            if (data == null) {
+                console.log('No hay datos que Retorne el Modal');
+            } else {
+                console.log('Retorno de Datos del Modal: ', data);
+            }
+        }
+
+    }
+
     async showPublicService(indice) {
         console.log('Mostrar Servicio Público con el ID: ', indice);
         await this.utilsService.showToast(`Mostrar Servicio Público con el ID: ${indice}`);
@@ -62,6 +90,10 @@ export class PublicServicesPage implements OnInit {
         console.log({ datosHijoPS: event });
         if (event.serviceSelected) {
             this.publicServiceSelected = event.serviceSelected;
+            this.currentLocation = event.currentLocation;
+            // this.mapPointSelected = 
+            this.markerSelected = event.markerSelected;
+            this.lanzarModal();
         }
     }
 

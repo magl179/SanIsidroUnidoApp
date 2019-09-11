@@ -19,6 +19,7 @@ const URL_PATTERN = new RegExp(/^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=
 })
 export class SocialProblemDetailPage implements OnInit {
 
+    test = false;
     id: string;
     idPost: number;
     socialProblem: ISocialProblem = null;
@@ -29,7 +30,7 @@ export class SocialProblemDetailPage implements OnInit {
         private route: ActivatedRoute,
         private utilsService: UtilsService,
         private postService: PostsService,
-        private userService: UserService,
+        // private userService: UserService,
         private networkService: NetworkService,
         private authService: AuthService) { }
 
@@ -60,8 +61,8 @@ export class SocialProblemDetailPage implements OnInit {
     getSocialProblem() {
         this.postService.getSocialProblem(+this.id).subscribe(res => {
             this.socialProblem = res.data;
-            console.log('res post', res);
-            console.log('Dato post', this.socialProblem);
+           // console.log('res post', res);
+            //console.log('Dato post', this.socialProblem);
         });
     }
 
@@ -124,6 +125,11 @@ export class SocialProblemDetailPage implements OnInit {
         } else {
             return $imagesArray[0].url;
         }
+    }
+
+    testClass(event) {
+        event.srcElement.classList.toggle("active");
+        this.test = (this.test) ? false : true;
     }
 
 }

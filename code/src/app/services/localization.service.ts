@@ -24,6 +24,12 @@ export class LocalizationService {
         private platform: Platform
     ) { }
 
+    getPositionWeb() {
+        return new Promise(function (resolve, reject) {
+          navigator.geolocation.getCurrentPosition(resolve, reject);
+        });
+    }
+
     async getCoordinate() {
         try {
             if (this.platform.is('cordova')) {
@@ -31,12 +37,21 @@ export class LocalizationService {
                 await this.checkGPSPermissions();
             } else {
                 if (navigator.geolocation) {
-                    await navigator.geolocation.getCurrentPosition((position) => {
-                        this.misCoordenadas.latitude = position.coords.latitude;
-                        this.misCoordenadas.longitude = position.coords.longitude;
-                    });
-                  }
+                    const positionweb: any = await this.getPositionWeb();
+                    this.misCoordenadas.latitude = positionweb.coords.latitude;
+                    this.misCoordenadas.longitude = positionweb.coords.longitude;
+                    // navigator.geolocation.getCurrentPosition((position) => {
+                    //     console.log('positionweb', position);
+                    //     this.misCoordenadas.latitude = position.coords.latitude;
+                    //     this.misCoordenadas.longitude = position.coords.longitude;
+                    //     return;
+                    // });
+                } else {
+                    return this.misCoordenadas;
+                }
+                // console.log('antes return2', this.misCoordenadas);
             }
+            // console.log('antes return', this.misCoordenadas);
             return this.misCoordenadas;
         } catch (err) {
             console.log('Error: ', err);

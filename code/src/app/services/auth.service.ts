@@ -41,7 +41,7 @@ export class AuthService {
         });
     }
     // Registrar Usuario
-    
+
     register(registerData: IRegisterUser): Observable<any> {
         const urlApi = `${environment.apiBaseURL}/registro`;
         return this.http.post(urlApi, registerData, {
@@ -57,7 +57,7 @@ export class AuthService {
     // Decodificar Token
     decodeToken(token) {
         let decodedToken = null;
-        try {      
+        try {
             const helper = new JwtHelperService();
             decodedToken = helper.decodeToken(token);
         } catch (err) {
@@ -65,18 +65,27 @@ export class AuthService {
         }
         return decodedToken;
     }
-    // Get UserLoginCredentials
+
+    tokenIsExpired(token) {
+        const helper = new JwtHelperService();
+        const isExpired = helper.isTokenExpired(token);
+        return isExpired;
+    }
     //VERIFICAR SI SE DEBE CHECKEAR VALIDEZ TOKEN
     async checkValidToken() {
         if (this.tokenExists()) {
             const itemToken = await this.storage.get(TOKEN_ITEM_NAME);
             if (itemToken) {
-                // console.log('item token to check', itemToken);
-                this.tokenIsValid(itemToken).subscribe( res=> {
-                    console.log('Token Válido');
-                }, err => {
-                    console.log('Error Validar Token', err);
-                });
+                const isTokenExpired = this.tokenIsExpired(itemToken);
+                if (isTokenExpired) {
+                    this.tokenIsValid(itemToken).subscribe(res => {
+                        console.log('Token Válido');
+                    }, err => {
+                        console.log('Error Validar Token', err);
+                    });
+                } else {
+                    console.log('Token no expirado');
+                }
             } else {
                 console.log('No existe Token');
             }
@@ -88,7 +97,7 @@ export class AuthService {
         await this.setUserLocalStorage(user);
         await this.getUserLocalStorage();
         await this.getTokenLocalStorage();
-        
+
     }
     //Obtener la información desde Local Storage
     async verificarAuthInfo() {
@@ -125,7 +134,7 @@ export class AuthService {
     getAuthToken() {
         return this.authToken.asObservable();
     }
-  
+
     // Traer Token Local Storage
     async getUserLocalStorage() {
         const user = await this.storage.get(USER_ITEM_NAME)
@@ -159,15 +168,22 @@ export class AuthService {
         this.authToken.next(null);
     }
     //Obtener Roles Usuario
-    getUserRoles() {
-        return (this.authUser.value.user) ? this.authUser.value.user.roles.map(role => role.slug): [];
+    getUserRoles(user_decoded) {
+        console.log('get user roles', user_decoded);
+        return (user_decoded) ? user_decoded.user.roles.map(role => role.slug) : [];
     }
     // Verificar Roles
-    hasRoles(allowedRoles: string[]): boolean {
+    async hasRoles(allowedRoles: string[]) {
         let hasRole = false;
         // console.log('USER', this.authUser.value);
         if (this.isAuthenticated()) {
-            let userRoles = this.getUserRoles();
+            if (!this.authUser.value) {
+                await this.getUserLocalStorage();
+            }
+            let userRoles = await this.getUserRoles(this.authUser.value);
+            
+            console.log('userRoles', userRoles);
+            console.log('allowedRoles', allowedRoles);
             for (const oneRole of allowedRoles) {
                 if (userRoles.includes(oneRole.toLowerCase())) {
                     hasRole = true;
@@ -177,8 +193,28 @@ export class AuthService {
         return hasRole;
     }
 
-    isActive() {
+    // async getRoleUser(user) {
+    //     let roleUser = '';
+    //     const roles_permitidos = environment.roles_permitidos;
+    //     let userRoles = await this.getUserRoles(user);
+    //     //console.log('userRoles', userRoles);
+    //     //console.log('allowedRoles', allowedRoles);
+    //     if (userRoles) {
+    //         const roleUserArr = userRoles.find(roles_use => {
+    //             //console.log(roles_permitidos.includes(roles_use));
+    //             return roles_permitidos.includes(roles_use);
+    //         });
+    //         console.log('roleuserarr', roleUserArr);
+    //         roleUser = (roleUserArr) ? roleUserArr[0] : '';
+    //     }
+    //     return roleUser;
+    // }
+
+    async isActive() {
         if (this.isAuthenticated()) {
+            if (!this.authUser.value) {
+                await this.getUserLocalStorage();
+            }
             let isActive = false;
             if (this.authUser.value.user.state === 1) {
                 isActive = true;

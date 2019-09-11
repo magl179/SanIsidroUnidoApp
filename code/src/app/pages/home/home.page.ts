@@ -18,7 +18,7 @@ import { Observable } from 'rxjs';
     styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
-    appNetworkConnection = false;
+    // appNetworkConnection = false;
     // appNetworkConnection: Observable<boolean>;
     servicesList: IHomeOptions[] = [];
 
@@ -29,11 +29,6 @@ export class HomePage implements OnInit {
     ) { }
 
     async ngOnInit() {
-        // this.appNetworkConnection = this.networkService.getNetworkStatus();
-       
-        this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
-            this.appNetworkConnection = connected;
-        });
         await this.localDataService.getHomeOptions().subscribe((data) => {
             this.servicesList = data;
             console.log('items home: ', data.length);

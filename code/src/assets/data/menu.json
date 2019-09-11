@@ -14,13 +14,6 @@
         "children": []
     },
     {
-        "icon": "play-circle",
-        "name": "Tutorial",
-        "redirectTo": "/tutorial",
-        "routeDirection": "root",
-        "children": []
-    },
-    {
         "icon": "help-circle-outline",
         "name": "Ayuda",
         "routeDirection": "root",

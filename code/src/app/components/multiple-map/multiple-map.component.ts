@@ -19,10 +19,11 @@ const tileAtribution = '&copy; <a target=_blank" href="https://www.openstreetmap
 export class MultipleMapComponent implements OnInit, AfterViewInit {
 
     @Input() idMap: string;
-    @Input() zoomMap: number;
+    @Input() zoomMap: number = 16;
     @Input() mapPoints: IPublicService[] = [];
     @Input() enableGesture = false;
     @Output() returnMapLoaded = new EventEmitter();
+
 
     map: any;
     mapMarkers: any[] = null;
@@ -32,6 +33,7 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
     currentPolyline = Leaflet.polyline([[1, 2], [3, 4]], {
         color: '#ff8181'
     });
+    markerSelected = false;
     currentService = null;
     currentCoordinate = null;
     latlngsOrigDest = [
@@ -39,10 +41,10 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
         [-0.0999525, -78.4740685]
     ];
     mapLoading = null;
-    strictBounds = new Leaflet.latLngBounds(
-        new Leaflet.latLng(-0.27950918164172833, -78.56206247545173),
-        new Leaflet.latLng(-0.06358925013978478, -78.42609322912877)
-    );
+    // strictBounds = new Leaflet.latLngBounds(
+    //     new Leaflet.latLng(-0.27950918164172833, -78.56206247545173),
+    //     new Leaflet.latLng(-0.06358925013978478, -78.42609322912877)
+    // );
 
     constructor(
         private mapService: MapService,
@@ -53,13 +55,14 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
     async ngOnInit() { }
 
     async ngAfterViewInit() {
+        //Loading Cargar Mapa y Mostrarlo
         this.mapLoading = await this.utilsService.createBasicLoading('Cargando Mapa');
         this.mapLoading.present();
-        console.log('Multiple Map After View Init');
+        // Obtener marcadores
         this.mapMarkers = await this.mapService.getMarkers().toPromise();
-        console.log('After get markers');
+        // Obtener Coordenadas
         this.currentCoordinate = await this.localizationService.getCoordinate();
-        console.log('After get coordinate');
+        // Inicializar el Mapa
         await this.initializeMap();
     }
 
@@ -73,31 +76,32 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
 
     async initializeMap() {
         // Verificar si se habilita el gesture handling
-        console.log('Iniciar Mapa Múltiple');
         if (this.enableGesture) {
             Leaflet.Map.addInitHook('addHandler', 'gestureHandling', GestureHandling);
         }
         // Crear el Mapa
         this.map = Leaflet.map(this.idMap, {
             gestureHandling: this.enableGesture,
-            fadeAnimation: false,
-            zoomAnimation: false,
-            markerZoomAnimation: false,
-            zoomControl: false
+            zoomAnimation: true,
+            markerZoomAnimation: true,
+            zoomControl: true
         });
 
-        // Agregar Evento On al Mapa
+        // Agregar Evento al Mapa cuando esta cargado
         this.map.on('load', (e) => {
-            console.log('Map Loaded');
             this.mapIsLoaded = true;
-            // apagar el loading
+            // Apagar el loading
             this.mapLoading.dismiss();
+            // Invalidar Tamanio
+            this.map.invalidateSize();
             // Enviar informacion mapa al padre
             this.sendMapInfo();
         });
+        this.map.zoomControl.setPosition('topright');
         // Configurar la vista centrada
-        Leaflet.control.zoom({ position: 'topright' }).addTo(this.map);
+        // Leaflet.control.zoom({ position: 'topright' }).addTo(this.map);
         this.map.setView([-0.1548643, -78.4822049], this.zoomMap);
+        // this.map.flyTo([-0.1548643, -78.4822049], this.zoomMap);
         // Agregar la capa del Mapa
         Leaflet.tileLayer(tileURL, {
             attribution: tileAtribution,
@@ -109,41 +113,37 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
         // Añadir Polilinea al Mapa
         this.currentPolyline.addTo(this.map);
         // Añadir el control de escala
-        Leaflet.control.scale({ position: 'bottomleft' }).addTo(this.map);
+        // Leaflet.control.scale({ position: 'bottomleft' }).addTo(this.map);
         // Si obtuve coordenadas añadir el marcador
         if (this.currentCoordinate !== null) {
-            // tslint:disable-next-line: max-line-length
             const iconCurrent = await this.mapService.getCustomIcon('blue');
             let currentPoint;
             if (iconCurrent) {
                 // tslint:disable-next-line: max-line-length
                 currentPoint = new Leaflet.Marker(new Leaflet.latLng([this.currentCoordinate.latitude, this.currentCoordinate.longitude]), { icon: iconCurrent, title: 'Mi Posición Actual' });
-                // console.log('customed icon current marker');
             } else {
                 // tslint:disable-next-line: max-line-length
                 currentPoint = new Leaflet.Marker(new Leaflet.latLng([this.currentCoordinate.latitude, this.currentCoordinate.longitude]), { title: 'Mi Posición Actual' });
-                // console.log('no customed icon current marker');
             }
             currentPoint.addTo(this.map).bindPopup('Mi Ubicación').openPopup();
-            // this.markersLayer.addLayer(currentPoint);
         }
         console.log('map points', this.mapPoints);
-        //
+        //Recorrer los puntos del mapa
         this.mapPoints.forEach(async point => {
             let punto = null;
-            const title = `<h1>${point.name}</h1>`;
-            // const description = `<p>${point.description}</p>`;
-            const fullDescription = `<div><h1>${point.name}</h1><p>${point.description}</p></div>`;
+            const title = `${point.name}`;
             const markerIcon = await this.mapService.getCustomIcon('orange');
             if (markerIcon) {
                 // tslint:disable-next-line: max-line-length
-                punto = new Leaflet.Marker(new Leaflet.latLng([point.ubication.latitude, point.ubication.longitude]), { title, icon: markerIcon });
+                punto = new Leaflet.Marker(new Leaflet.latLng(
+                    point.ubication.latitude,point.ubication.longitude), { title, icon: markerIcon });
             } else {
                 // tslint:disable-next-line: max-line-length
-                punto = new Leaflet.Marker(new Leaflet.latLng([point.ubication.latitude, point.ubication.longitude]), { title });
+                punto = new Leaflet.Marker(new Leaflet.latLng(point.ubication.latitude, point.ubication.longitude), { title });
             }
+            // Evento marcador al hacer click para mostrar información
             punto.on('click', (e) => { this.showInfo(e); });
-            punto.bindPopup(fullDescription);
+            // Añadir el punto al marcador
             this.markersLayer.addLayer(punto);
         });
 
@@ -154,18 +154,23 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
             textPlaceholder: 'Buscar...',
             autoCollapse: true,
             autoCollapseTime: 2000,
-            // marker: false,
+            // Function al mover localización
             moveToLocation: (latlng, title, map) => {
                 console.log(latlng);
-                console.log(`Move Location => current: ${this.currentCoordinate} destino: ${latlng}`);
-                console.log(title);
                 console.log(map);
-                this.map.setView(latlng, 13);
+                console.log(`Move Location => current: ${this.currentCoordinate} destino: ${latlng}`);
+                // console.log(title);
+                // console.log(map);
+                this.map = map;
+                // this.map.setView(latlng, this.zoomMap);
+               
+                // this.map.flyTo(latlng, this.zoomMap);
                 if (this.currentCoordinate !== null) {
                     this.latlngsOrigDest[0] = [this.currentCoordinate.latitude, this.currentCoordinate.longitude];
                     this.latlngsOrigDest[1] = [latlng.lat, latlng.lng];
-                    console.log('tatlng: ', this.latlngsOrigDest);
+                    // console.log('tatlng: ', this.latlngsOrigDest);
                     this.currentPolyline.setLatLngs(this.latlngsOrigDest);
+                    this.map.fitBounds(this.currentPolyline.getBounds())
                     this.currentPolyline.redraw();
                 }
             }
@@ -175,55 +180,60 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
 
         this.map.addControl(searchControl);
         searchControl.on('search:collapsed', (e) => {
-            console.log(e);
+            // console.log(e);
         });
     }
 
     async sendMapInfo() {
         await this.returnMapLoaded.emit({
             mapisLoad: this.mapIsLoaded,
-            serviceSelected: this.currentService
+            serviceSelected: this.currentService,
+            currentLocation: this.currentCoordinate,
+            markerSelected : this.markerSelected
         });
+        this.markerSelected = false;
     }
 
     showInfo(e) {
         let selectedMarker = null;
-        console.log(e);
-        console.log(this.mapPoints);
+        // console.log(e);
+        // console.log(this.mapPoints);
         this.mapPoints.forEach((point) => {
             if (point.ubication.latitude === e.latlng.lat && point.ubication.longitude === e.latlng.lng) {
                 selectedMarker = point;
             }
         });
         this.currentService = selectedMarker;
+        this.markerSelected = true;
+        this.sendMapInfo();
     }
 
-    preventMoveOutLimits() {
-        this.map.on('moveend', () => {
-            // code stuff
-            if (this.strictBounds.contains(this.map.getCenter())) {
-                return;
-            }
-            // We're out of bounds - Move the map back within the bounds
-            const c = this.map.getCenter();
-            console.log('ccc', c);
-            let x = c.lng;
-            let y = c.lat;
-            const maxX = this.strictBounds.getNorthEast().lng;
-            const maxY = this.strictBounds.getNorthEast().lat;
-            const minX = this.strictBounds.getSouthWest().lng;
-            const minY = this.strictBounds.getSouthWest().lat;
+    // preventMoveOutLimits() {
+    //     this.map.on('moveend', () => {
+    //         // code stuff
+    //         if (this.strictBounds.contains(this.map.getCenter())) {
+    //             return;
+    //         }
+    //         // We're out of bounds - Move the map back within the bounds
+    //         const c = this.map.getCenter();
+    //         console.log('ccc', c);
+    //         let x = c.lng;
+    //         let y = c.lat;
+    //         const maxX = this.strictBounds.getNorthEast().lng;
+    //         const maxY = this.strictBounds.getNorthEast().lat;
+    //         const minX = this.strictBounds.getSouthWest().lng;
+    //         const minY = this.strictBounds.getSouthWest().lat;
 
-            if (x < minX) { x = minX; }
-            if (x > maxX) { x = maxX; }
-            if (y < minY) { y = minY; }
-            if (y > maxY) { y = maxY; }
+    //         if (x < minX) { x = minX; }
+    //         if (x > maxX) { x = maxX; }
+    //         if (y < minY) { y = minY; }
+    //         if (y > maxY) { y = maxY; }
 
-            setTimeout(() => {
-                this.map.panTo(new Leaflet.latLng(y, x));
-            }, 1000);
-        });
-    }
+    //         setTimeout(() => {
+    //             this.map.panTo(new Leaflet.latLng(y, x));
+    //         }, 1000);
+    //     });
+    // }
 
 }
 

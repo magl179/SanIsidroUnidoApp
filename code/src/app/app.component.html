@@ -5,15 +5,13 @@
             <ion-content class="menu_content_app">
                 <!-- Header Menu -->
                 <ion-item lines="none" color="primary">
-                    <ion-avatar slot="start" (click)="closeMenu()" *ngIf="userApp">
-                        <img [src]="(userApp.avatar) ? getImageURL(userApp.avatar) : 'assets/img/default/img_avatar.png'" />
+                    <ion-avatar slot="start" (click)="closeMenu()" *ngIf="authUser">
+                        <img [src]="(authUser.avatar) ? getImageURL(authUser.avatar) : 'assets/img/default/img_avatar.png'" />
                     </ion-avatar>
                     <ion-label>
-                        <h1>{{userApp?.firstname || 'Firstname'}} {{userApp?.lastname || 'Lastname'}}</h1>
-                        <p>{{userApp?.email || 'example@gmail.com'}}</p> 
-                        <!-- <p class="network_avalaible">
-                            <span>Red: </span> <ion-badge [color]="(isConnected)?'success':'danger'">{{ (isConnected)?'disponible':'no disponible' }}</ion-badge>
-                        </p> -->
+                        <h1>{{authUser?.firstname || 'Firstname'}} {{authUser?.lastname || 'Lastname'}}</h1>
+                        <!-- <p>{{authUser?.email || 'No hay un rol registrado'}}</p>  -->
+                        <p class="ion-text-capitalize">{{authUserRol || 'No tienes un rol registrado'}}</p>
                     </ion-label>
                 </ion-item>
                 <ion-list class="list-no-padding" *ngFor="let c of menuComponents;let i = index;">

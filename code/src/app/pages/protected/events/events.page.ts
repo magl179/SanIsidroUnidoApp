@@ -64,7 +64,7 @@ export class EventsPage implements OnInit {
     }
 
     toggleAssistance(assistance: boolean, id: number) {
-        console.log((assistance) ? 'quitar assistencia' : 'dar asistencia');
+        // console.log((assistance) ? 'quitar assistencia' : 'dar asistencia');
         if (assistance) {
             this.postService.sendDeleteDetailToPost(id).subscribe(res => {
                 console.log('detalle eliminado correctamente');
