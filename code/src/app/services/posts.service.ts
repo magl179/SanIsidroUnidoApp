@@ -23,7 +23,8 @@ export class PostsService implements OnInit {
     //Paginas Actuales
     currentPage = {
         events: 0,
-        socialProblems: 0
+        socialProblems: 0,
+        emergencies: 0
     }
     //Categorias Actuales
     currentCategory = {
@@ -91,6 +92,12 @@ export class PostsService implements OnInit {
         this.currentPage.socialProblems++;
         // console.log('Social Problems Page', this.currentPage.socialProblems);
         return this.http.get(`${environment.apiBaseURL}/problemas-sociales?page=${this.currentPage.socialProblems}`);
+    }
+
+    getEmergenciesByUser() {
+        const user_id = this.AuthUser.id;
+        this.currentPage.emergencies++;
+        return this.http.get(`${environment.apiBaseURL}/usuarios/${user_id}/emergencias?page=${this.currentPage.emergencies}`);
     }
 
     getEventsTest(): Observable<any> {

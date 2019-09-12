@@ -105,8 +105,8 @@ export class LocalizationService {
         });
     }
 
-    askTurnOnGPS() {
-        return this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
+    async askTurnOnGPS() {
+        return await this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
             async () => {
                 // When GPS Turned ON call method to get Accurate location coordinates
                 console.log('You can request ubication');
@@ -120,7 +120,7 @@ export class LocalizationService {
                 return;
             },
             err => {
-                this.utilsService.showToast('Error requesting location permissions ');
+                this.utilsService.showToast('Error al Obtener los Permisos de Localización');
                 console.log(err);
             }
         );
