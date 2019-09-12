@@ -14,24 +14,17 @@
         "children": []
     },
     {
-        "icon": "help-circle-outline",
-        "name": "Ayuda",
+        "icon": "list-box",
+        "name": "Preguntas Frecuentes",
+        "redirectTo": "/frequent-questions",
         "routeDirection": "root",
-        "children": [
-            {
-                "icon": "list-box",
-                "name": "Preguntas Frecuentes",
-                "redirectTo": "/frequent-questions",
-                "routeDirection": "root",
-                "children": []
-            },
-            {
-                "icon": "information-circle",
-                "name": "Información App",
-                "redirectTo": "/about",
-                "routeDirection": "root",
-                "children": []
-            }
-        ]
+        "children": []
+    },
+    {
+        "icon": "information-circle",
+        "name": "Información",
+        "redirectTo": "/about",
+        "routeDirection": "root",
+        "children": []
     }
 ]
