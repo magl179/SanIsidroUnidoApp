@@ -1,0 +1,25 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-title class="ion-text-center">Categorias</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="closeFiltroPopover()">
+                <ion-icon slot="icon-only" name="close"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ion-list>
+        <ion-radio-group (ionChange)="radioButtonChanged($event)" [value]="subcategory">
+            <ion-item>
+                <ion-label>Todos</ion-label>
+                <ion-radio slot="start" value=""></ion-radio>
+            </ion-item>
+
+            <ion-item *ngFor="let sub of subcategories">
+                <ion-label>{{sub.id}} {{sub.name}}</ion-label>
+                <ion-radio slot="start" [value]="sub.id"></ion-radio>
+            </ion-item>
+        </ion-radio-group>
+    </ion-list>
+</ion-content>

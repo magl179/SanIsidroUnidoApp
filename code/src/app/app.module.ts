@@ -35,10 +35,11 @@ import { DirectivesModule } from './directives/directives.module';
 
 // Interceptores
 import { AuthInterceptorService } from 'src/app/services/auth-interceptor.service';
+import { FilterPostsComponent } from "./components/filter-posts/filter-posts.component";
 
 @NgModule({
     declarations: [AppComponent],
-    entryComponents: [PopNotificationsComponent, ShowListNotificationsPage],
+    entryComponents: [PopNotificationsComponent, ShowListNotificationsPage, FilterPostsComponent],
     imports: [
         BrowserModule,
         BrowserAnimationsModule,

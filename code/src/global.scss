@@ -442,6 +442,9 @@ body {
     margin-top: 10px;
     border-radius: .25rem;
     background-clip: padding-box;
+    &.text-area{
+        height: auto !important; 
+    }
 }
 
 .social_login{
@@ -664,6 +667,10 @@ hr.gray {
     width: 100%;
     height: 100%;
     padding: 16px;
+}
+
+.inline-block{
+    display: inline-block !important;
 }
 
 .map-center {

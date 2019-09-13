@@ -23,13 +23,12 @@ export class TutorialPage implements OnInit {
     constructor(
         private menuCtrl: MenuController,
         private navCtrl: NavController,
-        private utilsService: UtilsService,
+        public utilsService: UtilsService,
         private localDataService: LocalDataService) { }
 
     async ngOnInit() {
         this.localDataService.getTutoSlides().subscribe(
             res => {
-                //console.log('slides', res);
                 this.slides = res;
             }, err => {
                 console.log('Error al traer las opciones del tutorial');
@@ -38,34 +37,9 @@ export class TutorialPage implements OnInit {
         );
         await this.utilsService.disabledMenu();
     }
-
-
-
-    closeMenu() {
-        this.menuCtrl.close();
-    }
-
-    async startTutorial() {
-        await this.closeMenu();
-        timer(300).subscribe(() => {
-            this.navCtrl.navigateRoot('/home');
-        });
-    }
-
-    getBackgroundG(image_url) {
-        return `linear-gradient(rgba(2, 2, 2, 0.58), rgba(2, 2, 2, 0.58)), url(${image_url})`;
-    }
-
-    slideChange(event) {
-        // console.log('evento change end', event)
-
-
-        // const isBeginningSlide = event.target.isBeginning();
-        // const isEndSlideBeginning = event.target.isEnd();
-
+    //Función cuando cambia el Slide para prevenir ir a la slide -1 y slide n+1
+     slideChange(event) {
         event.target.isBeginning().then(is_first_slide => {
-            // console.log('is begin slide', is_first_slide);
-            // console.log('is last slide', is_last_slide);
             if (is_first_slide) {
                 event.target.lockSwipeToPrev(true);
             } else {
@@ -73,7 +47,6 @@ export class TutorialPage implements OnInit {
             }
         });
         event.target.isEnd().then(is_last_slide => {
-            // console.log('is last slide', is_last_slide);
             if (is_last_slide) {
                 event.target.lockSwipeToNext(true);
             } else {
@@ -81,31 +54,12 @@ export class TutorialPage implements OnInit {
             }
         });
     }
-
-
-    slidesLoaded(event) {
-        // console.log('slides load', event);
-        //Bloquear Slide Prev al cargar slides
-        event.target.lockSwipeToPrev(true);
-    }
-    // slideNextEnd(event) {
-    //     console.log('evento next end', event)
-    //     console.log('evento next end index', event.target.getActiveIndex())
-    // }
-
-    async goToLogin() {
-        // await this.closeMenu();
-        // timer(300).subscribe(() => {
-        //     this.navCtrl.navigateRoot('/login');
-        // });
+    //Funcion navegar hacia pagina de Login
+    goToLogin() {
         this.navCtrl.navigateForward('/login');
     }
-
-    async goToRegister() {
-        // await this.closeMenu();
-        // timer(300).subscribe(() => {
-        //     this.navCtrl.navigateRoot('/register');
-        // });
+    //Funcion para navegar a pagina de registro
+    goToRegister() {
         this.navCtrl.navigateForward('/register');
     }
 

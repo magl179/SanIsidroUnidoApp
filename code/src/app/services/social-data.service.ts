@@ -7,6 +7,7 @@ import { GooglePlus as Google } from '@ionic-native/google-plus/ngx';
 import { Platform } from '@ionic/angular';
 import { UtilsService } from './utils.service';
 // import { environment } from 'src/environments/environment';
+import { HttpRequestService } from "./http-request.service";
 
 @Injectable({
     providedIn: 'root'
@@ -18,6 +19,7 @@ export class SocialDataService {
 
     constructor(
         private http: HttpClient,
+        private httpRequest: HttpRequestService,
         private facebook: Facebook,
         private google: Google,
         private platform: Platform,
@@ -25,18 +27,17 @@ export class SocialDataService {
     ) { }
 
 
-    testFBLoginFake(): Observable<any> {
-        const urlTest = 'assets/data/fb.json';
-        return this.http.get(urlTest).pipe(map(data => data));
-    }
+    // testFBLoginFake(): Observable<any> {
+    //     const urlTest = 'assets/data/fb.json';
+    //     return this.httpRequest.get(urlTest).pipe(map(data => data));
+    // }
 
-    testGoogleLoginFake(): Observable<any> {
-        const urlTest = 'assets/data/google.json';
-        return this.http.get(urlTest).pipe(map(data => data));
-    }
-
+    // testGoogleLoginFake(): Observable<any> {
+    //     const urlTest = 'assets/data/google.json';
+    //     return this.httpRequest.get(urlTest).pipe(map(data => data));
+    // }
+    // Funcion para parsear los datos del login de google
     getGoogleDataParsed(googleUser: any) {
-        //console.log('google user', googleUser);
         const appUser = {
             firstname: googleUser.name.givenName,
             lastname: googleUser.displayName,
@@ -48,7 +49,7 @@ export class SocialDataService {
         };
         return appUser;
     }
-
+    // Funcion para parsear los datos del login de facebook
     getFacebookDataParsed(fbUser: any) {
         const appUser = {
             firstname: fbUser.first_name,
@@ -62,7 +63,7 @@ export class SocialDataService {
         return appUser;
     }
 
-    // LOGIN SOCIAL
+    // Funcion para usar el API de Google para mostrar pantalla login google
     async loginByGoogle() {
         if (this.platform.is('cordova')) {
             try {
@@ -76,7 +77,7 @@ export class SocialDataService {
             await this.utilsService.showToast('Cordova Google no esta disponible', null, 'bottom');
         }
     }
-
+    // Funcion para usar el API de Facebook para mostrar pantalla login Facebook
     async  loginByFacebook() {
         if (this.platform.is('cordova')) {
             const permisos = ['public_profile', 'email'];
@@ -90,18 +91,14 @@ export class SocialDataService {
                 await this.utilsService.showToast('Ocurrio un error al conectarse con facebook', null, 'bottom');
             }
         } else {
-            console.log('Cordova FACE no esta disponible');
             await this.utilsService.showToast('Cordova no Disponible', null, 'bottom');
         }
     }
-
-    // GET SOCIAL DATA
-
+    // Function para llamar a la api de GRAPHQL y obtener los datos del perfil del usuario logueado
     async getFacebookData(accessToken: string, userId: string, permisos: any) {
         try {
-            // tslint:disable-next-line: max-line-length
-            const profile: any = await this.facebook.api(`${userId}?fields=id,name,first_name,last_name,email,picture&access_token=${accessToken}`, permisos);
-            // console.log('Datos Perfil Usuario', profile);
+            const url = `${userId}?fields=id,name,first_name,last_name,email,picture&access_token=${accessToken}`;
+            const profile: any = await this.facebook.api(url, permisos);
             profile.image = `https://graph.facebook.com/${userId}/picture?type=large`;
             if (profile !== null) {
                 this.fbLoginData.next(profile);
@@ -114,10 +111,11 @@ export class SocialDataService {
             this.utilsService.showToast('No se pudieron obtener los datos de facebook');
         }
     }
-
+    // Function para llamar a la api de Google y obtener los datos del perfil del usuario logueado
     getGoogleData(googleLogin) {
         try {
-            this.http.get(`https://www.googleapis.com/plus/v1/people/me?access_token=${googleLogin.accessToken}`).subscribe(
+            const url = `https://www.googleapis.com/plus/v1/people/me?access_token=${googleLogin.accessToken}`;
+            this.httpRequest.get(url).subscribe(
                 async (profile: any) => {
                     profile.avatar = googleLogin.imageUrl;
                     this.googleLoginData.next(profile);
@@ -133,7 +131,7 @@ export class SocialDataService {
         }
     }
 
-    // Close Session
+    // Función para cerrar la sesión de google una vez obtenidos los datos
     async closeGoogleSession() {
         try {
             await this.google.logout();
@@ -142,7 +140,7 @@ export class SocialDataService {
             this.utilsService.showToast('No se pudo cerrar la sesion de Google');
         }
     }
-
+     // Función para cerrar la sesión de facebook una vez obtenidos los datos
     async closeFacebookSession() {
         try {
             await this.facebook.logout();

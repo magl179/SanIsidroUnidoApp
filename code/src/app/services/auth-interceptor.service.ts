@@ -12,7 +12,8 @@ export class AuthInterceptorService implements HttpInterceptor {
 
     constructor(
         private authService: AuthService,
-        private navCtrl: NavController
+        private navCtrl: NavController,
+        // private 
     ) { }
 
     // throw err;

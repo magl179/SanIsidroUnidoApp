@@ -27,7 +27,7 @@ export class DirectoryInfoPage implements OnInit {
     constructor(
         private utilsService: UtilsService,
         private directivesService: DirectivesService,
-        private postService: PostsService,
+        // private postService: PostsService,
         private networkService: NetworkService
     ) { }
 

@@ -5,12 +5,13 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ReportesPage } from './reportes.page';
+import { ReportsPage } from './reports.page';
+import { SmComponentsModule } from "../../../components/sm-components.module";
 
 const routes: Routes = [
   {
     path: '',
-    component: ReportesPage
+    component: ReportsPage
   }
 ];
 
@@ -19,8 +20,9 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    SmComponentsModule
   ],
-  declarations: [ReportesPage]
+  declarations: [ReportsPage]
 })
-export class ReportesPageModule {}
+export class ReportsPageModule {}

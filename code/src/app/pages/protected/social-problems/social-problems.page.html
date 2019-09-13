@@ -1,42 +1,32 @@
 <app-header-back title="Problemas Sociales"></app-header-back>
-
-<ion-toolbar mode="md">
-    <ion-segment color="tertiary" scrollable mode="md" (ionChange)="segmentChanged($event)">
-        <ion-segment-button value="all" mode="md">
-            <ion-label>Todos</ion-label>
-        </ion-segment-button>
-        <ion-segment-button *ngFor="let sub of subcategories" [value]="sub.id" mode="md">
-            <ion-label>{{sub.name}}</ion-label>
-        </ion-segment-button>
-    </ion-segment>
-</ion-toolbar>
-
 <ion-content padding>
     <ion-grid>
         <ion-row>
-            <!-- <ion-col size="3"></ion-col> -->
             <ion-col size="6" style="display:flex;justify-content: center;">
                 <ion-button color="primary" (click)="reportSocialProblem()">
                     Reportar <ion-icon name="send" slot="end"></ion-icon>
                 </ion-button>
             </ion-col>
             <ion-col size="6" style="display:flex;justify-content: center;">
-                <ion-button>
+                <ion-button (click)="showFilterPosts($event)">
                     Filtrar <ion-icon slot="end" name="options"></ion-icon>
                 </ion-button>
             </ion-col>
         </ion-row>
     </ion-grid>
-    <div>
+    <ng-container>
         <ion-searchbar animated debounce="500" showCancelButton="focus"
             placeholder="Buscar Problemas Sociales"></ion-searchbar>
-    </div>
+    </ng-container>
     <div>
-        <p *ngIf="socialProblems.length === 0 && socialProblemsLoaded">
+        <p class="test" *ngIf="socialProblems">
+            Social Problems Length {{ socialProblems.length}}
+        </p>
+        <p *ngIf="socialProblemsFilter.length === 0 && socialProblemsFilter">
             No hay publicaciones disponibles
         </p>
         <!-- Animacion Tarjeta hasta tener los Datos Cargados -->
-        <div *ngIf="socialProblems === null || socialProblems.length === 0">
+        <div *ngIf="!socialProblemsFilter">
             <ion-card *ngFor="let items of [1,1,1,1]"
                 class="card_social animated flash slow infinite">
                 <ion-card-header>
@@ -79,7 +69,7 @@
         </div>
         <!-- Tarjeta con Datos Cargados -->
         <ion-card class="card_social"
-            *ngFor="let socialProblem of (socialProblems) | filtroSearch:subcategory:'subcategory_id'; let i = index;">
+            *ngFor="let socialProblem of (socialProblemsFilter); let i = index;">
             <div *ngIf="socialProblem.exists === -1">
                 <ion-card-header class="ion-text-center">
                     <ion-card-title>No hay publicaciones en esta categoria :( </ion-card-title>
@@ -92,11 +82,13 @@
                             {{socialProblem.user.lastname}}</span>
                         <span>{{socialProblem.created_at | beafitulDate}}</span>
                     </ion-card-subtitle>
+                    <ion-card-subtitle>
+                        {{(is_attended) ? 'Ha sido atendido' : 'No ha sido atendido'}}
+                    </ion-card-subtitle>
                     <ion-card-title>{{socialProblem.title}}</ion-card-title>
                 </ion-card-header>
                 <ion-card-content>
                     <p class="post-description">{{socialProblem.description | truncate: 50}} </p>
-                    <!-- <p style="color:black;">Likes: {{socialProblem.details.length}}</p> -->
                     <p class="post-see-more" (click)="postDetail(socialProblem.id)">Ver más...</p>
                     <p class="post-num-likes">{{socialProblem.details.length}} me gusta</p>
                 </ion-card-content>
@@ -104,23 +96,15 @@
                     <div class="action-button pair">
 
                         <div class="btn-like"
-                            (click)="toggleLike(checkLikePost(socialProblem.details), socialProblem.id)">
+                            (click)="toggleLike(socialProblem.postLiked, socialProblem.id)">
                             <ion-icon slot="icon-only" class="icon-like"
-                                [name]="(checkLikePost(socialProblem.details))?'heart':'heart-empty'">
+                                [name]="(socialProblem.postLiked)?'heart':'heart-empty'">
                             </ion-icon>
                         </div>
-                        <!-- <div class="btn-likes" [ngClass]="{'active': (checkLikePost(socialProblem.details))}">
-                            <div class="icon-likes" (click)="toggleLike((checkLikePost(socialProblem.details)))"></div>
-                        </div> -->
                         <div class="btn-share" (click)="sharePost(socialProblem)">
                             <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
                         </div>
                     </div>
-                    <!-- <div class="action-button">
-                        <div class="btn-more">
-                            <ion-icon class="icon-more" slot="icon-only" name="more"></ion-icon>
-                        </div>
-                    </div> -->
                 </div>
             </div>
         </ion-card>

@@ -4,13 +4,15 @@ import { FiltroSearchPipe } from './filtro-search.pipe';
 import { BeafitulDatePipe } from './beafitul-date.pipe';
 import { SimpleBeatifulDatePipe } from './simple-beatiful-date.pipe';
 import { TruncatePipe } from './truncate.pipe';
+import { JsonValidatePipe } from './json-validate.pipe';
 
 @NgModule({
     declarations: [
         FiltroSearchPipe,
         BeafitulDatePipe,
         SimpleBeatifulDatePipe,
-        TruncatePipe
+        TruncatePipe,
+        JsonValidatePipe
     ],
     imports: [
         CommonModule
@@ -19,7 +21,8 @@ import { TruncatePipe } from './truncate.pipe';
         FiltroSearchPipe,
         BeafitulDatePipe,
         SimpleBeatifulDatePipe,
-        TruncatePipe
+        TruncatePipe,
+        JsonValidatePipe
   ]
 })
 export class PipesModule { }

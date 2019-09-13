@@ -5,6 +5,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { environment } from '../../environments/environment';
 import { IRegisterUser } from '../interfaces/models';
+import { HttpRequestService } from "./http-request.service";
 
 const TOKEN_ITEM_NAME = "accessToken";
 const USER_ITEM_NAME = "currentUser";
@@ -23,38 +24,33 @@ export class AuthService {
 
     constructor(
         private storage: Storage,
-        private http: HttpClient
+        private http: HttpClient,
+        private httpRequest: HttpRequestService
     ) { }
-    //CERRAR SESION
+    //CERRAR SESION del usuario, borrando los datos del local storage
     async logout() {
         await this.removeAuthInfo();
     }
-    // Iniciar Sesion
+    // Iniciar Sesion del Usuario
     login(loginData: any, getToken = null): Observable<any> {
-        // URL API LOGIN
         const urlApi = `${environment.apiBaseURL}/login`;
         if (getToken !== null) {
             loginData.getToken = true;
         }
-        return this.http.post(urlApi, loginData, {
-            headers: this.authHeaders
-        });
+        return this.httpRequest.post(urlApi, loginData, this.authHeaders);
     }
-    // Registrar Usuario
-
+    // Registrar al Usuario
     register(registerData: IRegisterUser): Observable<any> {
         const urlApi = `${environment.apiBaseURL}/registro`;
-        return this.http.post(urlApi, registerData, {
-            headers: this.authHeaders
-        });
+        return this.httpRequest.post(urlApi, registerData, this.authHeaders);
     }
     //COMPROBAR EN EL API SI TOKEN ES VÁLIDO
     tokenIsValid(token) {
         const urlApi = `${environment.apiBaseURL}/verificar-token`;
         const headers = this.authHeaders.set(AUTHORIZATION_NAME, token);
-        return this.http.post(urlApi, {}, { headers });
+        return this.httpRequest.post(urlApi, {}, headers);
     }
-    // Decodificar Token
+    // Decodificar el Token
     decodeToken(token) {
         let decodedToken = null;
         try {
@@ -65,7 +61,7 @@ export class AuthService {
         }
         return decodedToken;
     }
-
+    // Validar si el token ha expirado
     tokenIsExpired(token) {
         const helper = new JwtHelperService();
         const isExpired = helper.isTokenExpired(token);
@@ -84,10 +80,10 @@ export class AuthService {
                         console.log('Error Validar Token', err);
                     });
                 } else {
-                    console.log('Token no expirado');
+                    // console.log('Token no expirado');
                 }
             } else {
-                console.log('No existe Token');
+                // console.log('No existe Token');
             }
         }
     }
@@ -97,7 +93,6 @@ export class AuthService {
         await this.setUserLocalStorage(user);
         await this.getUserLocalStorage();
         await this.getTokenLocalStorage();
-
     }
     //Obtener la información desde Local Storage
     async verificarAuthInfo() {
@@ -110,23 +105,18 @@ export class AuthService {
         this.removeTokenLocalStorage();
         this.removeUserLocalStorage();
     }
-    //Verificar Usuario Autenticado
+    //Verificar si el usuario esta autenticado, es decir tiene su datos en el local storage
     async isAuthenticated() {
         const itemUser = await this.storage.get(USER_ITEM_NAME);
         const isAuthenticated = !!itemUser;
-        // if (isAuthenticated) {
-        //     await this.getUserLocalStorage();
-        //     await this.getTokenLocalStorage();
-        // }
         return isAuthenticated;
     }
-
+    // Verificar si el token esta guardado en el local storage
     async tokenExists() {
         const itemToken = await this.storage.get(TOKEN_ITEM_NAME);
         const tokenExists = !!itemToken;
         return tokenExists;
     }
-
     //Retornar Datos como Observables
     getAuthUser() {
         return this.authUser.asObservable();
@@ -134,56 +124,53 @@ export class AuthService {
     getAuthToken() {
         return this.authToken.asObservable();
     }
-
-    // Traer Token Local Storage
+    // Traer los Datos del Token del Local Storage
     async getUserLocalStorage() {
         const user = await this.storage.get(USER_ITEM_NAME)
         this.authUser.next(user);
         // console.log('get user ls value', this.authUser.value);
     }
-    // Traer Usuario Local Storage
+    // Traer los Datos del Usuario del Local Storage
     async getTokenLocalStorage() {
         const token = await this.storage.get(TOKEN_ITEM_NAME);
         this.authToken.next(token);
         // console.log('get token ls value', this.authToken.value);
     }
-    // Guardar Usuario Local Storage
+    // Guardar los Datos del Usuario en el Local Storage
     async setUserLocalStorage(user) {
         await this.storage.set(USER_ITEM_NAME, user);
         this.authUser.next(user);
     }
-    // Guardar Token Local Storage
+    // Guardar los Datos del Token en el Local Storage
     async setTokenLocalStorage(token) {
         await this.storage.set(TOKEN_ITEM_NAME, token);
         this.authToken.next(token);
     }
-    // Eliminar Usuario Local Storage
+    // Eliminar los Datos del Usuario del Local Storage
     async removeUserLocalStorage() {
         await this.storage.remove(USER_ITEM_NAME);
         this.authUser.next(null);
     }
-    // Eliminar Token Local Storage
+    // Eliminar los Datos del Token del Local Storage
     async removeTokenLocalStorage() {
         await this.storage.remove(TOKEN_ITEM_NAME);
         this.authToken.next(null);
     }
-    //Obtener Roles Usuario
+    //Obtener los Roles Usuario
     getUserRoles(user_decoded) {
-        console.log('get user roles', user_decoded);
+        // console.log('get user roles', user_decoded);
         return (user_decoded) ? user_decoded.user.roles.map(role => role.slug) : [];
     }
-    // Verificar Roles
+    // Verificar si un usuario tiene unos roles en especifico
     async hasRoles(allowedRoles: string[]) {
         let hasRole = false;
-        // console.log('USER', this.authUser.value);
         if (this.isAuthenticated()) {
             if (!this.authUser.value) {
                 await this.getUserLocalStorage();
             }
             let userRoles = await this.getUserRoles(this.authUser.value);
-            
-            console.log('userRoles', userRoles);
-            console.log('allowedRoles', allowedRoles);
+            // console.log('userRoles', userRoles);
+            // console.log('allowedRoles', allowedRoles);
             for (const oneRole of allowedRoles) {
                 if (userRoles.includes(oneRole.toLowerCase())) {
                     hasRole = true;
@@ -192,24 +179,7 @@ export class AuthService {
         }
         return hasRole;
     }
-
-    // async getRoleUser(user) {
-    //     let roleUser = '';
-    //     const roles_permitidos = environment.roles_permitidos;
-    //     let userRoles = await this.getUserRoles(user);
-    //     //console.log('userRoles', userRoles);
-    //     //console.log('allowedRoles', allowedRoles);
-    //     if (userRoles) {
-    //         const roleUserArr = userRoles.find(roles_use => {
-    //             //console.log(roles_permitidos.includes(roles_use));
-    //             return roles_permitidos.includes(roles_use);
-    //         });
-    //         console.log('roleuserarr', roleUserArr);
-    //         roleUser = (roleUserArr) ? roleUserArr[0] : '';
-    //     }
-    //     return roleUser;
-    // }
-
+    //Verificar si el usuario esta activo
     async isActive() {
         if (this.isAuthenticated()) {
             if (!this.authUser.value) {

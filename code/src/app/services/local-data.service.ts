@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+// import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IMenuServices, IHomeOptions, ISlideTutorial} from '../interfaces/models';
 import { Observable } from 'rxjs';
+import { HttpRequestService } from "./http-request.service";
 
 @Injectable({
     providedIn: 'root'
@@ -9,19 +10,20 @@ import { Observable } from 'rxjs';
 export class LocalDataService {
 
     constructor(
-        private http: HttpClient
+        // private http: HttpClient,
+        private httpRequest: HttpRequestService
     ) { }
 
     getMenuOptions(): Observable<IMenuServices[]> {
-        return this.http.get<IMenuServices[]>('/assets/data/menu.json');
+        return this.httpRequest.get<IMenuServices[]>('/assets/data/menu.json');
     }
 
     getTutoSlides(): Observable<ISlideTutorial[]> {
-        return this.http.get<ISlideTutorial[]>('/assets/data/tuto_slides.json');
+        return this.httpRequest.get<ISlideTutorial[]>('/assets/data/tuto_slides.json');
     }
     
     getHomeOptions(): Observable<IHomeOptions[]> {
-        return this.http.get<IHomeOptions[]>('/assets/data/home_options.json');
+        return this.httpRequest.get<IHomeOptions[]>('/assets/data/home_options.json');
     }
 
     getFormValidations(){

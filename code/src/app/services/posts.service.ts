@@ -1,10 +1,12 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HTTP } from '@ionic-native/http/ngx';
+import { Observable, from } from 'rxjs';
 import { IEmergencyPost, ISocialProblemPost } from '../interfaces/barrios';
 import { environment } from 'src/environments/environment';
 import { IEmergencyReported, ISocialProblemReported, ICreateDetail } from 'src/app/interfaces/models';
 import { AuthService } from './auth.service';
+import { HttpRequestService } from "./http-request.service";
 
 const AUTHORIZATION_NAME = "authorization";
 
@@ -24,7 +26,8 @@ export class PostsService implements OnInit {
     currentPage = {
         events: 0,
         socialProblems: 0,
-        emergencies: 0
+        emergencies: 0,
+        reports: 0
     }
     //Categorias Actuales
     currentCategory = {
@@ -36,94 +39,111 @@ export class PostsService implements OnInit {
 
     constructor(
         private http: HttpClient,
-        private authService: AuthService
+        private nativeHttp: HTTP,
+        private authService: AuthService,
+        private httpRequest: HttpRequestService
     ) {
+        //Cargar token e Información del Usuario Autenticado
         this.authService.getAuthToken().subscribe(token => {
-            this.AuthToken = token;
+            if (token) {
+                this.AuthToken = token;
+            }
         });
         this.authService.getAuthUser().subscribe(res => {
-            this.AuthUser = res.user;
+            if (res) {
+                this.AuthUser = res.user;
+            }
         });
-     }
+    }
 
+    ngOnInit() { }
+
+    test() {
+        const test = from(this.nativeHttp.get(`${environment.apiBaseURL}/servicios-publicos`, {}, {}));
+        test.subscribe(res => {
+            console.log('success', res);
+        }, err => {
+            console.log('Error', err);
+        });
+    }
+    //MÉTODOS PARA RESETEAR LOS CONTADORES DE PAGINACION
     resetSocialProblemsPage() {
         this.currentPage.socialProblems = 0;
     }
     resetEventsPage() {
         this.currentPage.events = 0;
     }
-    ngOnInit() {}
-    //MÉTODOS POST
+    resetEmergenciesPage() {
+        this.currentPage.emergencies = 0;
+    }
+    resetReportsPage() {
+        this.currentPage.reports = 0;
+    }
+    // Función para enviar un Reporte de Emergencia
     sendEmergencyReport(emergencyPost: IEmergencyReported): Observable<any> {
         emergencyPost.user_id = this.AuthUser.id;
         const headers = this.headersApp.set(AUTHORIZATION_NAME, this.AuthToken);
-        return this.http.post(`${environment.apiBaseURL}/emergencias`, emergencyPost, {
-            headers
-        });
+        return this.httpRequest.post(`${environment.apiBaseURL}/emergencias`, emergencyPost, headers);
     }
-
+    // Función para enviar un Reporte de Problema Social
     sendSocialProblemReport(socialProblemPost: ISocialProblemReported): Observable<any> {
         socialProblemPost.user_id = this.AuthUser.id;
         const headers = this.headersApp.set(AUTHORIZATION_NAME, this.AuthToken);
-        return this.http.post(`${environment.apiBaseURL}/problemas-sociales`, socialProblemPost, {
-            headers
-        });
+        return this.httpRequest.post(`${environment.apiBaseURL}/problemas-sociales`, socialProblemPost,headers);
     }
+    // Función para Enviar un like o asistencia a registrarse de un post
     sendCreateDetailToPost(detailInfo: ICreateDetail) {
-        // console.log('auth token', this.AuthToken);
         const headers = this.headersApp.set(AUTHORIZATION_NAME, this.AuthToken);
-        return this.http.post(`${environment.apiBaseURL}/detalles`, detailInfo, {
-            headers
-        });
+        return this.httpRequest.post(`${environment.apiBaseURL}/detalles`, detailInfo, headers);
     }
+     // Función para Enviar un like o asistencia a eliminarse de un post
     sendDeleteDetailToPost(post_id: number) {
         const headers = this.headersApp.set(AUTHORIZATION_NAME, this.AuthToken);
         // console.log('auth token', this.AuthToken);
-        return this.http.delete(`${environment.apiBaseURL}/detalles/${post_id}`, {
-            headers
-        });
+        return this.httpRequest.delete(`${environment.apiBaseURL}/detalles/${post_id}`, {}, headers);
     }
-    // MÉTODOS GET
-    getSocialProblemsTest(): Observable<any> {
-        return this.http.get(`assets/data/socialProblems.json`);
-    }
-
+    // Función para obtener los problemas sociales de la API
     getSocialProblems(): Observable<any> {
         this.currentPage.socialProblems++;
-        // console.log('Social Problems Page', this.currentPage.socialProblems);
-        return this.http.get(`${environment.apiBaseURL}/problemas-sociales?page=${this.currentPage.socialProblems}`);
+        return this.httpRequest.get(`${environment.apiBaseURL}/problemas-sociales?page=${this.currentPage.socialProblems}`);
     }
-
+    // Función para obtener el listado de emergencias reportadas por un usuario
     getEmergenciesByUser() {
         const user_id = this.AuthUser.id;
         this.currentPage.emergencies++;
-        return this.http.get(`${environment.apiBaseURL}/usuarios/${user_id}/emergencias?page=${this.currentPage.emergencies}`);
+        return this.httpRequest.get(`${environment.apiBaseURL}/usuarios/${user_id}/emergencias?page=${this.currentPage.emergencies}`);
     }
-
-    getEventsTest(): Observable<any> {
-        return this.http.get('assets/data/events.json');
-    }
+    // Función para obtener el listado de eventos publicados
     getEvents(): Observable<any> {
         this.currentPage.events++;
         // console.log('Events Page', this.currentPage.events);
-        return this.http.get(`${environment.apiBaseURL}/eventos?page=${this.currentPage.events}`);
+        return this.httpRequest.get(`${environment.apiBaseURL}/eventos?page=${this.currentPage.events}`);
     }
-
+    // Función para obtener el detalle de un problema social
     getSocialProblem(id: number): Observable<any> {
-        return this.http.get(`${environment.apiBaseURL}/problemas-sociales/${id}`);
+        return this.httpRequest.get(`${environment.apiBaseURL}/problemas-sociales/${id}`);
     }
-
+    // Función para obtener el detalle de un evento
     getEvent(id: number): Observable<any> {
-        return this.http.get(`${environment.apiBaseURL}/eventos/${id}`);
+        return this.httpRequest.get(`${environment.apiBaseURL}/eventos/${id}`);
     }
-
+    // Función para obtener el detalle de una emergencia
+    getEmergency(id: number): Observable<any> {
+        return this.httpRequest.get(`${environment.apiBaseURL}/emergencias/${id}`);
+    }
+    // Función para obtener el listado de servicios publicos registrados
     getPublicServices(): Observable<any> {
-        return this.http.get(`${environment.apiBaseURL}/servicios-publicos`);
+        return this.httpRequest.get(`${environment.apiBaseURL}/servicios-publicos`);
     }
-
+    // Función para obtener el listado de subcategorias de una categoria
     getSubcategoriesByCategory(category: string): Observable<any> {
         const url = `${environment.apiBaseURL}/categorias/${category}/subcategorias`;
-        return this.http.get(url);
+        return this.httpRequest.get(url);
+    }
+    // Función para obtener las publicaciones relacionadas a una categoria de una busqueda en especifico
+    searchPosts(search_term: string, slugCategory: string) {
+        const url = `${environment.apiBaseURL}/search/${slugCategory}?search_term=${search_term}`;
+        return this.httpRequest.get(url);
     }
 
 }

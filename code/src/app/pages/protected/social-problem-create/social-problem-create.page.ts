@@ -19,7 +19,7 @@ import { NavController } from '@ionic/angular';
 })
 export class SocialProblemCreatePage implements OnInit {
 
-    currentStep = 2;
+    currentStep = 1;
     // fullFormIsValid = false;
     // appNetworkConnection = false;
     socialProblemForm: FormGroup;
@@ -105,16 +105,23 @@ export class SocialProblemCreatePage implements OnInit {
         //     await this.utilsService.showToast('Sube alguna imagen por favor', 2500);
         //     return;
         // }
+        if (this.socialProblemImages.length === 0) {
+            await this.utilsService.showToast('No has enviado imagenes al reporte', 200);
+            // return;
+        }
 
         const loadingReportSocialProblem = await this.utilsService.createBasicLoading('Enviando Reporte');
+
+        const ubication = this.socialProblemCoordinate;
+        ubication.description = this.ubicationForm.value.description_ubication;
+
         loadingReportSocialProblem.present();
         const socialProblem: ISocialProblemReported = {
             title: this.socialProblemForm.value.title,
             description: this.socialProblemForm.value.description,
-            ubication: this.socialProblemCoordinate,
             images: this.socialProblemImages,
             subcategory_id: this.socialProblemForm.value.subcategory,
-            description_ubication: this.ubicationForm.value.description_ubication
+            ubication
         };
         // await this.utilsService.showToast('Post Problema Social Valido', 2500);
         this.postService.sendSocialProblemReport(socialProblem).pipe(

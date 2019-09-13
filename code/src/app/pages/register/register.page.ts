@@ -53,11 +53,10 @@ export class RegisterPage implements OnInit {
         });
         await this.utilsService.disabledMenu();
     }
-
+    //Función alternar modo vista campo contraseña
     togglePasswordMode() {
         this.passwordTypeInput = this.passwordTypeInput === 'text' ? 'password' : 'text';
         this.iconpassword = this.iconpassword === 'eye-off' ? 'eye' : 'eye-off';
-        // console.log(this.passwordEye);
         this.passwordEye.el.setFocus();
     }
 
@@ -69,11 +68,11 @@ export class RegisterPage implements OnInit {
         await this.authService.setUserLocalStorage(tokendescrifrado);
         await this.authService.setTokenLocalStorage(token);
         //Registrar Dispositivo
-        await this.notificationsService.registerUserDevice();
+        this.notificationsService.registerUserDevice();
         //Redirigir Usuario
         this.navCtrl.navigateRoot('/home');
     }
-
+    //Function registrar al usuario por formulario
     async registerUser() {
         const loadingRegisterValidation = await this.utilsService.createBasicLoading('Registrando Usuario');
         loadingRegisterValidation.present();
@@ -92,26 +91,20 @@ export class RegisterPage implements OnInit {
                 loadingRegisterValidation.dismiss()
             })
         ).subscribe(async res => { 
-            //if (res.code === 200) {
                 await this.manageRegister({provider: 'formulario', email, password }, res);
-            //}
         }, err => {
             const message_error = (err.error) ? err.error: 'No se pudo cargar la información del usuario';
             this.utilsService.showToast(message_error);
             console.log('Error Login', err.error);
         });
     }
-
-    goToTermConditions() {
-        this.utilsService.openInBrowser('https://www.google.com');
-    }
-
+    //Function para registrar usuario con Facebook
     async registerFBUser() {
         await this.socialDataService.loginByFacebook();
-        await this.socialDataService.fbLoginData.subscribe(async fbData => {
+        this.socialDataService.fbLoginData.subscribe(async fbData => {
             if (fbData) {
-                const user = await this.socialDataService.getFacebookDataParsed(fbData);
-                await this.authService.register(user).subscribe(async res=> {
+                const user = this.socialDataService.getFacebookDataParsed(fbData);
+                this.authService.register(user).subscribe(async res=> {
                     await this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'facebook'}, res);
                 }, err => {
                     const message_error = (err.error.message)?err.error.message: 'No se pudo guardar el registro';
@@ -124,12 +117,13 @@ export class RegisterPage implements OnInit {
             console.log('Error Login', err);
         });
     }
+    // Función para registrar al usuario con Google
     async registerGoogleUser() {
         await this.socialDataService.loginByGoogle();
-        await this.socialDataService.googleLoginData.subscribe(async googleData => {
+        this.socialDataService.googleLoginData.subscribe(async googleData => {
             if (googleData) {
                 const user = await this.socialDataService.getGoogleDataParsed(googleData);
-                await this.authService.register(user).subscribe(async res => {
+                this.authService.register(user).subscribe(async res => {
                     await this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'google' }, res);
                 }, err => {
                     const message_error = (err.error.message)?err.error.message: 'No se pudo guardar el registro';

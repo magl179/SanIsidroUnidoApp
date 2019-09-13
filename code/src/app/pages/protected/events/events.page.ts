@@ -5,6 +5,8 @@ import { IEvent, IPostShare } from 'src/app/interfaces/models';
 import { PostsService } from '../../../services/posts.service';
 import { AuthService } from '../../../services/auth.service';
 import { NetworkService } from '../../../services/network.service';
+import { environment } from "../../../../environments/environment";
+import { finalize } from 'rxjs/operators';
 @Component({
     selector: 'app-events',
     templateUrl: './events.page.html',
@@ -14,9 +16,15 @@ export class EventsPage implements OnInit {
 
     // appNetworkConnection = false;
     // loading: any;
+    ideas = ['Spiderman', 'Batman', 'Lolita', 'Calderon', 'Transporte'];
+    
+    searchingEvents = false;
+    eventsBusqueda = [];
+    eventsList: IEvent[] = [];
+    textoEventoBuscar = '';
+
     elements: any = [];
     AuthUser = null;
-    eventsList: IEvent[] = [];
 
     constructor(
         private navCtrl: NavController,
@@ -48,20 +56,20 @@ export class EventsPage implements OnInit {
         this.loadEvents();
     }
 
-    checkLikePost($details) {
-        if ($details && $details.length > 0) {
-            const likes_user = this.utilsService.getUsersFromDetails($details);
-            const user_made_like = this.utilsService.checkUserInDetails(this.AuthUser.id, likes_user);
-            // console.log('likes user', likes_user);
-            // console.log('user made like', user_made_like);
-            // console.log('user authenticated id', this.AuthUser.id);
-            return user_made_like;
-        }
-        else {
-            // console.log('no paso tamanio details');
-            return false;
-        }
-    }
+    // checkLikePost($details) {
+    //     if ($details && $details.length > 0) {
+    //         const likes_user = this.utilsService.getUsersFromDetails($details);
+    //         const user_made_like = this.utilsService.checkUserInDetails(this.AuthUser.id, likes_user);
+    //         // console.log('likes user', likes_user);
+    //         // console.log('user made like', user_made_like);
+    //         // console.log('user authenticated id', this.AuthUser.id);
+    //         return user_made_like;
+    //     }
+    //     else {
+    //         // console.log('no paso tamanio details');
+    //         return false;
+    //     }
+    // }
 
     toggleAssistance(assistance: boolean, id: number) {
         // console.log((assistance) ? 'quitar assistencia' : 'dar asistencia');
@@ -119,21 +127,50 @@ export class EventsPage implements OnInit {
         this.postService.resetEventsPage();
     }
 
+    searchEvents(event) {
+        const valor: string = event.detail.value;
+        if (valor.length === 0) {
+            this.searchingEvents = false;
+            this.eventsBusqueda = [];
+            return;
+        }
+        this.searchingEvents = true;
+        this.postService.searchPosts(valor, environment.eventsSlug).pipe(
+            finalize(() => {
+                this.searchingEvents = false;
+            })
+        ).subscribe((res: any) => {
+            console.log('events search', res);
+            this.eventsBusqueda = res.data;
+            if (res.data.length === 0) {
+                this.utilsService.showToast('No hay coincidencias');
+            } else {
+                this.utilsService.showToast(`Hay ${res.data.length} coincidencias`);
+            }
+        }, err => {
+                console.log('Ocurrio un error al buscar eventos', err);
+                this.utilsService.showToast('Ocurrio un error al buscar eventos');
+        });
+    }
+
     loadEvents(event?, resetEvents?) {
-        // if (resetEvents) {
-        //     this.postService.resetEventsPage();
-        // }
         this.postService.getEvents().subscribe(res => {
-            if (res.data) {
+            let events = res.data.data;
+            if (events) {
                 console.log('data', res);
-                if (res.data.data.length === 0) {
+                events = events.map((event: any) => {
+                    const postLiked = this.utilsService.checkLikePost(event.details, this.AuthUser) || false;
+                    event.postLiked = postLiked;
+                    return event;
+                });
+                if (events.length === 0) {
                     if (event) {
                         event.target.disabled = true;
                         event.target.complete();
                     }
                     return;
                 }
-                this.eventsList.push(...res.data.data);
+                this.eventsList.push(...events);
                 if (event) {
                     event.target.complete();
                 }
@@ -148,6 +185,7 @@ export class EventsPage implements OnInit {
     ionViewWillLeave() {
         this.resetEvents();
     }
+    
     postDetail(id) {
         this.resetEvents();
         this.navCtrl.navigateForward(`/event-detail/${id}`);

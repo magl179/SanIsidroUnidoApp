@@ -28,5 +28,11 @@
         "icon": "assets/img/svg/agenda.svg",
         "url": "/directory-info",
         "valid_roles": ["morador", "invitado", "policia"]
+    },
+    {
+        "title": "Reportes",
+        "icon": "assets/img/svg/analytics.svg",
+        "url": "/reports",
+        "valid_roles": ["morador", "invitado", "policia"]
     }
 ]

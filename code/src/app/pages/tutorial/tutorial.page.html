@@ -1,7 +1,7 @@
 <!-- <app-header title="Tutorial" [showNoti]="false"></app-header> -->
 <ion-content>
             <ion-slides pager="true" style="display: flex;" (ionSlideDidChange)="slideChange($event)" (ionSlidesDidLoad)="slidesLoaded($event)">
-                <ion-slide class="tutorial_slide" *ngFor="let slide of slides" [ngStyle]="{'background':  getBackgroundG(slide.img)}">
+                <ion-slide class="tutorial_slide" *ngFor="let slide of slides" [ngStyle]="{'background':  utilsService.getBackgroundG(slide.img)}">
                     <div class="slide-content">
                         <!-- <img [src]="slide.img" class="slide-img"> -->
                         <h1>{{slide.title}}</h1>
@@ -29,19 +29,3 @@
                 </div>
             </div>
 </ion-content>
-<!-- <ion-footer no-border text-center>
-    <ion-grid fixed>
-        <ion-row>
-            <ion-col size="6">
-                    <ion-button color="primary" expand="full" shape="round" (click)="startTutorial()">
-                        Iniciar Sesión
-                    </ion-button>
-            </ion-col>
-            <ion-col size="6">
-                <ion-button color="primary" expand="full" shape="round" (click)="startTutorial()">
-                    Registrarme
-                </ion-button>
-        </ion-col>
-        </ion-row>
-    </ion-grid>
-</ion-footer> -->

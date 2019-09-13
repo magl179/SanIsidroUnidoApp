@@ -20,7 +20,7 @@ export class FiltroSearchPipe implements PipeTransform {
         // }
 
         if (texto === '' || texto === null) {
-            arreglo.exists = 1;
+            // arreglo.exists = 1;
             return arreglo;
         }
 
@@ -36,22 +36,30 @@ export class FiltroSearchPipe implements PipeTransform {
             // console.log('item: ', item);
             // console.log('item-columna: ', item[columna].toString().toLowerCase());
             // console.log('texto: ', texto);
-            // console.log('columna: ', columna);
+            // console.log('arreglo', arreglo);/
             if (!Number.isInteger(texto)) {
-                return item.hasOwnProperty(columna) && item[columna] !== null && item[columna].toString().toLowerCase().includes(texto);
+                // console.log('texto no es numero');
+                return item.hasOwnProperty(columna) && item[columna] !== null && item[columna] === texto;
             } else {
-                return item.hasOwnProperty(columna) && item[columna] !== null && item[columna].includes(texto);
+                // console.log('texto es numero');
+                // console.log('columna', columna);
+                // console.log('arreglo_item', item);
+               
+                // console.log('has property', item.hasOwnProperty(columna));
+                // console.log('not null property', item[columna] !== null);
+                // console.log('incluides property', item[columna].includes(texto));
+                return item.hasOwnProperty(columna) && item[columna] !== null && (!Number.isInteger(item[columna])) ? item[columna] === texto: parseInt(item[columna]) === texto;
             }
         });
-        console.log('Arreglo Filtrado', arregloFiltrado);
+        // console.log('Arreglo Filtrado', arregloFiltrado);
 
         if (arregloFiltrado.length === 0) {
-            const elemento: any = {};
+            // const elemento: any = {};
             // tslint:disable-next-line: no-string-literal
-            elemento.exists = -1;
-            arregloFiltrado = [elemento];
+            // elemento.exists = -1;
+            arregloFiltrado = [];
         }
-        console.log('Arreglo Filtrado', arregloFiltrado);
+        // console.log('Arreglo Filtrado', arregloFiltrado);
 
         return arregloFiltrado;
 

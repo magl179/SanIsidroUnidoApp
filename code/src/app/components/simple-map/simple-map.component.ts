@@ -2,6 +2,7 @@ import { Component, Input, AfterViewInit } from '@angular/core';
 import * as Leaflet from 'leaflet';
 import { GestureHandling } from 'leaflet-gesture-handling';
 import { ISimpleUbicationItem } from 'src/app/interfaces/barrios';
+import { environment } from 'src/environments/environment';
 
 const tileURL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const tileAtribution = '&copy; <a target=_blank" href="https://www.openstreetmap.org/copyright">© Colaboradores de OpenStreetMap</a>';
@@ -14,6 +15,7 @@ const tileAtribution = '&copy; <a target=_blank" href="https://www.openstreetmap
 export class SimpleMapComponent implements AfterViewInit {
 
     @Input() idMap: string;
+    @Input() zoom = 14;
     @Input() classMap = '';
     @Input() coordsMap: ISimpleUbicationItem = {
         latitude: null,
@@ -44,9 +46,9 @@ export class SimpleMapComponent implements AfterViewInit {
             Leaflet.control.scale().addTo(this.map);
         });
 
-        this.map.setView([this.coordsMap.latitude, this.coordsMap.longitude], 13);
-        Leaflet.tileLayer(tileURL, {
-            attribution: tileAtribution,
+        this.map.setView([this.coordsMap.latitude, this.coordsMap.longitude], this.zoom);
+        Leaflet.tileLayer(environment.googleMapLayer.url, {
+            attribution: environment.googleMapLayer.attribution,
             maxZoom: 18,
             updateWhenIdle: true,
             reuseTiles: true

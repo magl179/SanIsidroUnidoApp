@@ -24,7 +24,7 @@ import { NavController } from '@ionic/angular';
 export class EmergencyCreatePage implements OnInit {
 
     // appNetworkConnection = false;
-    currentStep = 2;
+    currentStep = 1;
     // emergencyPostValid = false;
     // activePane: PaneType = 'left';
     emergencyFormStage = [
@@ -83,7 +83,7 @@ export class EmergencyCreatePage implements OnInit {
 
     async getUploadedImages(event) {
         this.emergencyImages = event.total_img;
-        await this.utilsService.showToast('update emergency images');
+        // await this.utilsService.showToast('update emergency images');
 
     }
 
@@ -159,14 +159,22 @@ export class EmergencyCreatePage implements OnInit {
             return;
         }
 
+        if (this.emergencyImages.length === 0) {
+            await this.utilsService.showToast('No has enviado imagenes al reporte', 200);
+            // return;
+        }
+
         const loadingEmergencyReport = await this.utilsService.createBasicLoading('Enviando Reporte');
+
+        const ubication = this.emergencyPostCoordinate;
+        ubication.description = this.ubicationForm.value.description_ubication;
+
         loadingEmergencyReport.present();
         const socialProblem: IEmergencyReported = {
             title: this.emergencyForm.value.title,
             description: this.emergencyForm.value.description,
-            ubication: this.emergencyPostCoordinate,
-            images: this.emergencyImages,
-            description_ubication: this.ubicationForm.value.description_ubication
+            ubication,
+            images: this.emergencyImages
         };
 
         this.postService.sendEmergencyReport(socialProblem).pipe(
@@ -175,7 +183,7 @@ export class EmergencyCreatePage implements OnInit {
             })
         ).subscribe(async res => {
             await this.utilsService.showToast("El Reporte fue enviado correctamente");
-            this.navCtrl.navigateRoot('/home');
+            this.navCtrl.navigateRoot('/emergencies');
         }, err => {
             const message_error = (err.error.message) ? err.error.message :'Ocurrio un error al reportar la emergencia';
             this.utilsService.showToast(message_error);

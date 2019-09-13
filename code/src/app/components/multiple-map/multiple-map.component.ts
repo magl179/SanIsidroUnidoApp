@@ -6,6 +6,7 @@ import { MapService } from 'src/app/services/map.service';
 import { UtilsService } from '../../services/utils.service';
 import { IPublicService } from 'src/app/interfaces/models';
 import { LocalizationService } from '../../services/localization.service';
+import { environment } from "../../../environments/environment";
 
 // const iconsColors = ['red', 'orange', 'yellow', 'purple'];
 const tileURL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -103,8 +104,8 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
         this.map.setView([-0.1548643, -78.4822049], this.zoomMap);
         // this.map.flyTo([-0.1548643, -78.4822049], this.zoomMap);
         // Agregar la capa del Mapa
-        Leaflet.tileLayer(tileURL, {
-            attribution: tileAtribution,
+        Leaflet.tileLayer(environment.googleMapLayer.url, {
+            attribution: environment.googleMapLayer.attribution,
             maxZoom: 18,
             updateWhenIdle: true,
             reuseTiles: true

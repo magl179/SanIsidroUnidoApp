@@ -1,21 +1,35 @@
 <app-header-back title="Eventos"></app-header-back>
-<ion-content>
-    <!-- <app-network-banner *ngIf="!appNetworkConnection" networkConnection="appNetworkConnection">
-    </app-network-banner> -->
-    <div>
-        <div>
-            <ion-searchbar animated debounce="500" showCancelButton="focus"
-                placeholder="Buscar Eventos"></ion-searchbar>
-        </div>
+<ion-content padding>
+    <ng-container>
+        <ng-container>
+            <ion-searchbar animated debounce="700" showCancelButton="focus"
+                placeholder="Buscar Eventos" [value]="textoEventoBuscar" (ionChange)="searchEvents($event)"></ion-searchbar>
+        </ng-container>
+        <ion-grid *ngIf="searchingEvents">
+            <ion-row>
+                <ion-col text-center>
+                    <ion-spinner name="crescent"></ion-spinner>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+        <ion-list *ngIf="eventsBusqueda.length === 0">
+            <ion-list-header>
+                <ion-label>Ideas</ion-label>
+            </ion-list-header>
+            <ion-item *ngFor="let idea of ideas; let i = index;"
+                      (click)="textoEventoBuscar = idea">
+                <ion-label color="primary">{{idea}}</ion-label>
+            </ion-item>
+        </ion-list>
         <!-- Tarjetas Animacion hasta cargar datos-->
-        <div *ngIf="!eventsList || eventsList.length === 0">
+        <ng-container *ngIf="!eventsList || eventsList.length === 0">
             <ion-card *ngFor="let event of [1,1,1,1,1,1,1];"
                 class="event_item animated flash slow infinite">
                 <ion-card-header>
                     <ion-card-subtitle>
                         <ion-skeleton-text width="60%"></ion-skeleton-text>
                     </ion-card-subtitle>
-                    <ion-card-title (click)="postDetail(event.id)">
+                    <ion-card-title>
                         <ion-skeleton-text width="30%"></ion-skeleton-text>
                     </ion-card-title>
                 </ion-card-header>
@@ -26,22 +40,20 @@
                 </ion-card-content>
                 <ion-row>
                     <ion-col size="6">
-                        <ion-item lines="none" detail="false" button="true" class="container_events"
-                            [ngClass]="{'active': event.assist}">
+                        <ion-item lines="none" detail="false" button="true" class="container_events">
                             <ion-skeleton-text width="70%"></ion-skeleton-text>
                         </ion-item>
                     </ion-col>
                     <ion-col size="6">
-                        <ion-item class="container_events" detail="false" button="true" lines="none"
-                            [ngClass]="{'active': event.notassist}">
+                        <ion-item class="container_events" detail="false" button="true" lines="none">
                             <ion-skeleton-text width="70%"></ion-skeleton-text>
                         </ion-item>
                     </ion-col>
                 </ion-row>
             </ion-card>
-        </div>
+        </ng-container>
         <!-- Tarjetas con Datos -->
-        <div *ngIf="eventsList  && eventsList.length > 0">
+        <ng-container *ngIf="eventsList  && eventsList.length > 0">
             <ion-card class="card-event" *ngFor="let event of eventsList; let i = index;">
                 <ion-card-header (click)="postDetail(event.id)">
                     <ion-card-subtitle class="event-subtitle">
@@ -65,50 +77,20 @@
                 </ion-card-content>
                 <div class="action-buttons">
                     <div class="action-button pair">
-                        <!-- <div class="btn-like" [ngClass]="{'active': (checkLikePost(event.details))}"
-                            (click)="toggleAssistance((checkLikePost(event.details)), event.id)">
-                            <ion-icon slot="icon-only" class="icon-like"
-                                [name]="(checkLikePost(event.details))?'heart':'heart-empty'"></ion-icon>
-                        </div> -->
                         <ion-button
-                            (click)="toggleAssistance(checkLikePost(event.details), event.id)">
-                            Asistiré</ion-button>
-                        <!-- <div class="btn-like"
-                            (click)="toggleAssistance(checkLikePost(event.details), event.id)">
-                            <ion-icon slot="icon-only" class="icon-like"
-                                [name]="(checkLikePost(event.details))?'heart':'heart-empty'">
-                            </ion-icon>
-                            
-                        </div> -->
+                            (click)="toggleAssistance(event.postLiked, event.id)">
+                            Asistiré
+                            <ion-icon slot="end" class="icon-like"
+                            [name]="(event.postLiked)?'body':'man'"></ion-icon>                            
+                        </ion-button>
                         <div class="btn-share" (click)="sharePost(event)">
                             <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
                         </div>
                     </div>
-                    <!-- <div class="action-button">
-                        <div class="btn-more">
-                            <ion-icon class="icon-more" slot="icon-only" name="more"></ion-icon>
-                        </div>
-                    </div> -->
                 </div>
-                <!-- <ion-row>
-                <ion-col size="6">
-                    <ion-item lines="none" detail="false" button="true" class="container_events"
-                        [ngClass]="{'active': event.assist}">
-                        <ion-icon slot="start" [name]="(event.assist) ? 'star' : 'checkmark'"></ion-icon>
-                        <div>Asistire</div>
-                    </ion-item>
-                </ion-col>
-                <ion-col size="6">
-                    <ion-item class="container_events" detail="false" button="true" lines="none"
-                        [ngClass]="{'active': event.notassist}">
-                        <ion-icon slot="start" [name]="(event.notassist) ? 'star' : 'star-outline'"></ion-icon>
-                        <div>No Asistire</div>
-                    </ion-item>
-                </ion-col>
-            </ion-row> -->
             </ion-card>
-        </div>
-    </div>
+        </ng-container>
+    </ng-container>
     <!-- Scroll Infinito -->
     <ion-infinite-scroll threshold="150px" (ionInfinite)="getInfiniteScrollData($event)">
         <ion-infinite-scroll-content loadingSpinner="crescent"

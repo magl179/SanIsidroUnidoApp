@@ -7,9 +7,9 @@
         <section *ngIf="currentStep === 1">
             <form [formGroup]="socialProblemForm">
                 <div class="item-form">
-                    <ion-item class="input_item">
-                        <ion-label position="floating">Titulo</ion-label>
-                        <ion-input formControlName="title" type="email"></ion-input>
+                    <ion-item class="input_item" lines="none">
+                        <ion-label class="label-padding" position="stacked">Titulo</ion-label>
+                        <ion-input placeholder="Ingresa el título de tu reporte" class="input-beatiful" formControlName="title" type="email"></ion-input>
                     </ion-item>
                     <div class="feedback-icon">
                         <ion-item lines="none">
@@ -31,9 +31,9 @@
                     </p>
                 </div>
                 <div class="item-form">
-                    <ion-item class="input_item">
-                        <ion-label position="floating">Descripcion</ion-label>
-                        <ion-textarea formControlName="description" auto-grow="true"></ion-textarea>
+                    <ion-item class="input_item" lines="none">
+                        <ion-label class="label-padding" position="stacked">Descripción</ion-label>
+                        <ion-textarea placeholder="Ingresa una descripción sobre tu reporte" class="input-beatiful text-area" formControlName="description" auto-grow="true"></ion-textarea>
                     </ion-item>
                     <div class="feedback-icon">
                         <ion-item lines="none">
@@ -55,9 +55,9 @@
                     </p>
                 </div>
                 <div class="item-form" *ngIf="subcategories.length > 0">
-                    <ion-item>
-                        <ion-label>Categoria</ion-label>
-                        <ion-select formControlName="subcategory" placeholder="Escoge una opción">
+                    <ion-item lines="none">
+                        <ion-label class="label-padding">Categoria</ion-label>
+                        <ion-select formControlName="subcategory" placeholder="Escoge una categoría">
                             <ion-select-option [selected]="(i===0) ? true: false"
                                 *ngFor="let subcategory of subcategories; let i = index"
                                 [value]="subcategory.id">
@@ -113,13 +113,13 @@
                 (returnCoordinateChoosen)="updateMapCoordinate($event)"></single-map>
             <!-- <p>Latitud PAGE EC: Market {{socialProblemCoordinate.latitude}}</p> -->
             <!-- <p>Longitud PAGE EC: Market {{socialProblemCoordinate.longitude}}</p> -->
-            <p *ngIf="socialProblemCoordinate.address">Tu Dirección es:
+            <p class="padding-lateral" *ngIf="socialProblemCoordinate.address">Tu Dirección es:
                 {{socialProblemCoordinate.address}}</p>
             <form class="form-ubication" [formGroup]="ubicationForm">
                 <div class="item-form">
-                    <ion-item class="input_item">
-                        <ion-label position="floating">Descripcion de la Ubicación</ion-label>
-                        <ion-textarea formControlName="description_ubication" auto-grow="true"></ion-textarea>
+                    <ion-item class="input_item" lines="none">
+                        <ion-label class="label-padding" position="stacked">Descripcion de la Ubicación</ion-label>
+                        <ion-textarea placeholder="Ingresa una descripción más detallada de la ubicación de tu reporte" class="input-beatiful text-area" formControlName="description_ubication" auto-grow="true"></ion-textarea>
                     </ion-item>
                     <div class="feedback-icon">
                         <ion-item lines="none">

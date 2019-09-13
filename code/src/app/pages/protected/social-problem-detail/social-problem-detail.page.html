@@ -1,9 +1,8 @@
 <app-header-back title="Problema Social" hrefDefault="/social-problems"></app-header-back>
 
 <ion-content padding>
-    <app-network-banner *ngIf="!appNetworkConnection" networkConnection="appNetworkConnection"></app-network-banner>
-    <div *ngIf="appNetworkConnection">
-        <div *ngIf="socialProblem === null">
+    <ng-container>
+        <ng-container *ngIf="socialProblem === null">
             <ion-card class="card_social detail-card animated flash slow infinite">
                 <ion-skeleton-text animated style="width: 80%" style="height: 300px;"></ion-skeleton-text>
                 <ion-card-header>
@@ -35,11 +34,11 @@
                     </div>
                 </div>
             </ion-card>
-        </div>
+        </ng-container>
         <ion-card class="card_social detail-card" *ngIf="socialProblem !== null">
-            <img *ngIf="socialProblem.images.length === 0" style="border: 1px solid #ccc;"
+            <img *ngIf="socialProblem.images.length === 0" class="image-border"
                 src="assets/img/default/slide-1.png" />
-            <img *ngIf="socialProblem.images.length > 0 " style="border: 1px solid #ccc;"
+            <img *ngIf="socialProblem.images.length > 0 " class="image-border"
                 [src]="getImageURL(socialProblem.images[0].url)" />
             <ion-card-header>
                 <ion-card-subtitle class="post_user problem-subtitle" *ngIf="socialProblem">
@@ -57,28 +56,15 @@
             <div class="action-buttons detail">
                 <div class="action-button pair">
                     <div class="btn-like"
-                        (click)="toggleLike(checkLikePost(socialProblem.details))">
+                        (click)="toggleLike(postLiked)">
                         <ion-icon slot="icon-only" class="icon-like"
-                            [name]="(checkLikePost(socialProblem.details))?'heart':'heart-empty'"></ion-icon>
+                            [name]="(postLiked)?'heart':'heart-empty'"></ion-icon>
                     </div>
-                    <!-- <div class="btn-like"
-                        (click)="testClass($event)">
-                        <ion-icon slot="icon-only" class="icon-like"
-                            [name]="(test)?'heart':'heart-empty'"></ion-icon>
-                    </div> -->
-                    <!-- <div class="btn-likes" [ngClass]="{'active': (checkLikePost(socialProblem.details))}">
-                        <div class="icon-likes" (click)="toggleLike((checkLikePost(socialProblem.details)))"></div>
-                    </div> -->
                     <div class="btn-share" (click)="sharePost(socialProblem)">
                         <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
                     </div>
                 </div>
-                <!-- <div class="action-button">
-                    <div class="btn-more">
-                        <ion-icon class="icon-more" slot="icon-only" name="more"></ion-icon>
-                    </div>
-                </div> -->
             </div>
         </ion-card>
-    </div>
+    </ng-container>
 </ion-content>

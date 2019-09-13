@@ -18,6 +18,7 @@ import { NetworkService } from '../../../services/network.service';
 export class EventDetailPage implements OnInit {
 
     id: string;
+    postLiked = false;
     appNetworkConnection = false;
     AuthUser = null;
     event:IEventDetail = null;
@@ -49,9 +50,15 @@ export class EventDetailPage implements OnInit {
 
     getEvent() {
         this.postService.getEvent(+this.id).subscribe(res => {
-            this.event = res.data;
-            console.log('res post', res);
-            console.log('Dato post', this.event);
+            if (res) {
+                this.event = res.data;
+                if (this.event) {
+                    this.postLiked = this.utilsService.checkLikePost(this.event.details, this.AuthUser);
+                }
+                // console.log('res post', res);
+                // console.log('Dato post', this.event);
+            }
+            
         });
     }
 

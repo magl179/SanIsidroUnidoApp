@@ -10,7 +10,7 @@ import { NetworkService } from 'src/app/services/network.service';
 import { environment } from "../../../../environments/environment";
 
 
-const URL_PATTERN = new RegExp(/^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/);
+
 
 @Component({
     selector: 'app-social-problem-detail',
@@ -19,6 +19,7 @@ const URL_PATTERN = new RegExp(/^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=
 })
 export class SocialProblemDetailPage implements OnInit {
 
+    postLiked = false;
     test = false;
     id: string;
     idPost: number;
@@ -28,8 +29,8 @@ export class SocialProblemDetailPage implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
-        private utilsService: UtilsService,
         private postService: PostsService,
+        public utilsService: UtilsService,
         // private userService: UserService,
         private networkService: NetworkService,
         private authService: AuthService) { }
@@ -49,38 +50,32 @@ export class SocialProblemDetailPage implements OnInit {
         this.getSocialProblem();
     }
 
-    getImageURL(image_name) {
-        const imgIsURL = URL_PATTERN.test(image_name);
-        if (imgIsURL) {
-            return image_name;
-        } else {
-            return `${environment.apiBaseURL}/${environment.image_assets}/${image_name}`;
-        }
+    getImageURL(image: string) {
+        return this.utilsService.getImageURL(image);
     }
 
+    //Obtener el detalle de un problema social
     getSocialProblem() {
         this.postService.getSocialProblem(+this.id).subscribe(res => {
-            this.socialProblem = res.data;
-           // console.log('res post', res);
-            //console.log('Dato post', this.socialProblem);
+            if (res) {
+                this.socialProblem = res.data;
+                if (this.socialProblem) {
+                    this.postLiked = this.utilsService.checkLikePost(this.socialProblem.details, this.AuthUser);
+                }
+            }
         });
     }
-
-    checkLikePost($details) {
-        // console.log('origen: ', kk);
-        if ($details && $details.length > 0) {
-            const likes_user = this.utilsService.getUsersFromDetails($details);
-            const user_made_like = this.utilsService.checkUserInDetails(this.AuthUser.id, likes_user);
-            // console.log('likes user', likes_user);
-            // console.log('user made like', user_made_like);
-            // console.log('user authenticated id', this.AuthUser.id);
-            return user_made_like;
-        }
-        else {
-            // console.log('no paso tamanio details');
-            return false;
-        }
-    }
+    //Verificar Like de un Post
+    // checkLikePost($details) {
+    //     if ($details && $details.length > 0) {
+    //         const likes_user = this.utilsService.getUsersFromDetails($details);
+    //         const user_made_like = this.utilsService.checkUserInDetails(this.AuthUser.id, likes_user);
+    //         return user_made_like;
+    //     }
+    //     else {
+    //         return false;
+    //     }
+    // }
 
     toggleLike(like: boolean) {
         console.log((like) ? 'quitar like' : 'dar like');

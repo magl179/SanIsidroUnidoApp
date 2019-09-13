@@ -5,6 +5,7 @@ import { Observable, fromEvent, merge, of, BehaviorSubject, from } from 'rxjs';
 import { mapTo, finalize } from "rxjs/operators";
 import { HttpClient } from '@angular/common/http';
 import { HTTP } from '@ionic-native/http/ngx';
+import { HttpRequestService } from "./http-request.service";
 
 
 @Injectable({
@@ -19,55 +20,56 @@ export class NetworkService {
         private network: Network,
         private platform: Platform,
         private http: HttpClient,
+        private httpRequest: HttpRequestService,
         private nativeHttp: HTTP) {
 
         if (this.platform.is('cordova')) {
-            // on Device
+            //Función si estamos en un dispositivo para subscribirnos a los 
+            // eventos on connect y disconnect de la red de internet
             this.network.onConnect().subscribe(() => {
-                console.log('network was connected :-)');
+                // console.log('network was connected :-)');
                 this.hasConnection.next(true);
                 return;
             });
             this.network.onDisconnect().subscribe(() => {
-                console.log('network was disconnected :-(');
+                // console.log('network was disconnected :-(');
                 this.hasConnection.next(false);
                 return;
             });
         } else {
-            // on Browser
+            //Función si estamos en un navegador para subscribirnos a los 
+            // eventos on connect y disconnect de la red de internet
             this.online = merge(
                 of(navigator.onLine),
                 fromEvent(window, 'online').pipe(mapTo(true)),
                 fromEvent(window, 'offline').pipe(mapTo(false))
             );
-
             this.online.subscribe((isOnline) => {
                 if (isOnline) {
                     this.hasConnection.next(true);
-                    console.log('network was connected :-)');
+                    // console.log('network was connected :-)');
                 } else {
-                    console.log('network was disconnected :-(');
+                    // console.log('network was disconnected :-(');
                     this.hasConnection.next(false);
-                    console.log(isOnline);
                 }
             });
         }
-        this.testNetworkConnection();
+        //Realizar una prueba de conección
+        //this.testNetworkConnection();
     }
-
+    //Función obtener el tipo de red a la que estamos conectados
     public getNetworkType(): string {
         return this.network.type;
     }
-
+    // Función obtener el estado de la red
     public getNetworkStatus(): Observable<boolean> {
-        // return this.online;
         return this.hasConnection.asObservable();
     }
-
+    // Función para hacer una petición a JSON Placeholder
     private getNetworkTestRequest(): Observable<any> {
-        return this.http.get('https://jsonplaceholder.typicode.com/todos/1');
+        return this.httpRequest.get('https://jsonplaceholder.typicode.com/todos/1');
     }
-
+    // Función para hace una peticion a una url y comprobar si fue exitosa o no
     public async testNetworkConnection() {
         try {
             this.getNetworkTestRequest().subscribe(
@@ -77,31 +79,11 @@ export class NetworkService {
                 }, error => {
                     this.hasConnection.next(false);
                     return;
-                });
-            
-            if (this.platform.is('cordova')) {     
-                from(this.nativeHttp.post('http://127.0.0.1/github/SanIsidroWeb/public/api/v1/usuarios/5/cambiar-avatar', {
-                    avatar: 'data://base64'
-                }, { 'Content-Type': 'application/json' })).pipe(
-                    finalize(() => {
-                        console.log('Native Test Finalized');
-                    })
-                ).subscribe(data => {
-                    console.log('test native success');
-                }, err => {
-                    console.log('Native Call test error: ', err);
-                });
-            }
-            
+                });            
         } catch (err) {
-            console.log('err testNetworkConnection', err);
+            // console.log('err testNetworkConnection', err);
             this.hasConnection.next(false);
             return;
         }
     }
-
-    // getNetworkTestValue() {
-    //     return this.hasConnection.value;
-    // }
-
 }

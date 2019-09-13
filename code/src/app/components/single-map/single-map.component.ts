@@ -4,6 +4,7 @@ import { GestureHandling } from 'leaflet-gesture-handling';
 import { IPostUbicationItem } from 'src/app/interfaces/barrios';
 import { MapService } from "../../services/map.service";
 import { LocalizationService } from "../../services/localization.service";
+import { environment } from "../../../environments/environment";
 
 const tileURL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const tileAtribution = '&copy; <a target=_blank" href="https://www.openstreetmap.org/copyright">© Colaboradores de OpenStreetMap</a>';
@@ -16,7 +17,7 @@ const tileAtribution = '&copy; <a target=_blank" href="https://www.openstreetmap
 export class SingleMapComponent implements OnInit, AfterViewInit {
 
     @Input() idMap: string;
-    @Input() zoomMap: number;
+    @Input() zoomMap = 15;
     // @Input() mapPoints: IPostUbicationItem;
     @Input() enableGesture = false;
     @Output() returnCoordinateChoosen = new EventEmitter();
@@ -67,25 +68,23 @@ export class SingleMapComponent implements OnInit, AfterViewInit {
             Leaflet.control.scale().addTo(this.map);
             this.mapIsLoaded = true;
         });
-        this.map.setView([this.currentCoordinate.latitude || -0.2188216, this.currentCoordinate.longitude || -78.5135489], this.zoomMap || 15);
+        this.map.setView([this.currentCoordinate.latitude || -0.2188216, this.currentCoordinate.longitude || -78.5135489], this.zoomMap);
 
-        Leaflet.tileLayer(tileURL, {
-            attribution: tileAtribution,
+        Leaflet.tileLayer(environment.googleMapLayer.url, {
+            attribution: environment.googleMapLayer.attribution,
             maxZoom: 18,
             updateWhenIdle: true,
             reuseTiles: true
         }).addTo(this.map);
 
         const mainMarker = await Leaflet.marker([this.currentCoordinate.latitude || -0.2188216, this.currentCoordinate.longitude || -78.5135489], {
-            title: this.currentCoordinate.address || 'No hay direccion',
+            title: 'Mi Ubicación Actual',
             draggable: true
         });
         mainMarker.on('dragend', async (e) => {
             const position = await e.target.getLatLng();
             this.currentCoordinate.latitude = position.lat;
             this.currentCoordinate.longitude = position.lng;
-            // this.currentCoordinate.address = null;
-            // this.currentCoordinate.la
             this.sendMarkerCoordinate();
         });
         mainMarker.bindPopup('Mi Ubicación').openPopup();

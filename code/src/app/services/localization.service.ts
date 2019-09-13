@@ -40,16 +40,9 @@ export class LocalizationService {
                     const positionweb: any = await this.getPositionWeb();
                     this.misCoordenadas.latitude = positionweb.coords.latitude;
                     this.misCoordenadas.longitude = positionweb.coords.longitude;
-                    // navigator.geolocation.getCurrentPosition((position) => {
-                    //     console.log('positionweb', position);
-                    //     this.misCoordenadas.latitude = position.coords.latitude;
-                    //     this.misCoordenadas.longitude = position.coords.longitude;
-                    //     return;
-                    // });
                 } else {
                     return this.misCoordenadas;
                 }
-                // console.log('antes return2', this.misCoordenadas);
             }
             // console.log('antes return', this.misCoordenadas);
             return this.misCoordenadas;

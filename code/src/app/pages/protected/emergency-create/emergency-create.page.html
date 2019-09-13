@@ -8,9 +8,9 @@
         <section *ngIf="currentStep === 1">
             <form [formGroup]="emergencyForm">
                 <div class="item-form">
-                    <ion-item class="input_item">
-                        <ion-label position="floating">Titulo</ion-label>
-                        <ion-input formControlName="title" type="email"></ion-input>
+                    <ion-item class="input_item" lines="none">
+                        <ion-label class="label-padding" position="stacked">Titulo</ion-label>
+                        <ion-input placeholder="Ingresa el título de tu reporte" class="input-beatiful"formControlName="title" type="email"></ion-input>
                     </ion-item>
                     <div class="feedback-icon">
                         <ion-item lines="none">
@@ -32,9 +32,9 @@
                     </p>
                 </div>
                 <div class="item-form">
-                    <ion-item class="input_item">
-                        <ion-label position="floating">Descripcion</ion-label>
-                        <ion-textarea formControlName="description" auto-grow="true"></ion-textarea>
+                    <ion-item class="input_item" lines="none">
+                        <ion-label class="label-padding" position="stacked">Descripción</ion-label>
+                        <ion-textarea class="input-beatiful text-area" placeholder="Ingresa la descripción de tu reporte" formControlName="description" auto-grow="true"></ion-textarea>
                     </ion-item>
                     <div class="feedback-icon">
                         <ion-item lines="none">
@@ -67,7 +67,7 @@
                 <ion-row>
                     <ion-col size="6" *ngFor="let image of emergencyImages; let i = index;">
                         <ion-item-sliding>
-                            <ion-item>
+                            <ion-item lines="none">
                                 <ion-card>
                                     <img [src]="image">
                                 </ion-card>
@@ -94,13 +94,13 @@
                 (returnCoordinateChoosen)="updateMapCoordinate($event)">
             </single-map>
             
-            <p *ngIf="emergencyPostCoordinate.address">Tu Dirección es:
+            <p *ngIf="emergencyPostCoordinate.address" class="padding-lateral">Tu Dirección es:
                 {{emergencyPostCoordinate.address}}</p>
             <form class="form-ubication" [formGroup]="ubicationForm">
                     <div class="item-form">
-                        <ion-item class="input_item">
-                            <ion-label position="floating">Descripcion de la Ubicación</ion-label>
-                            <ion-textarea formControlName="description_ubication" auto-grow="true"></ion-textarea>
+                        <ion-item class="input_item" lines="none">
+                            <ion-label class="label-padding" position="stacked">Descripción de la Ubicación</ion-label>
+                            <ion-textarea placeholder="Ingresa una descripción más detallada de la ubicación de tu reporte" class="input-beatiful text-area" formControlName="description_ubication" auto-grow="true"></ion-textarea>
                         </ion-item>
                         <div class="feedback-icon">
                             <ion-item lines="none">

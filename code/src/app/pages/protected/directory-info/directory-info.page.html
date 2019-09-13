@@ -1,24 +1,31 @@
 <app-header-back title="Directorio Barrial"></app-header-back>
-<ion-content>
-    <ion-list *ngIf="(directives.length === 0 || directives === null) && !loadDirectives">
-        <ion-item lines="none" *ngFor="let skeleton of [1,1,1,1,1,1,1,1]"
-            class="animated flash slow infinite">
-            <ion-thumbnail slot="start">
-                <ion-skeleton-text class="circle"></ion-skeleton-text>
-            </ion-thumbnail>
-            <ion-label class="profile_item ion-text-center">
-                <h2 class="title">
-                    <ion-skeleton-text width="100%"></ion-skeleton-text>
-                </h2>
-                <h5 class="subtitle">
-                    <ion-skeleton-text width="100%"></ion-skeleton-text>
-                </h5>
-                <p class="phone">
-                    <ion-skeleton-text width="100%"></ion-skeleton-text>
-                </p>
-            </ion-label>
-        </ion-item>
-    </ion-list>
+<ion-content> 
+    <ion-grid  *ngIf="(directives.length === 0 || directives === null) && !loadDirectives">
+        <ion-row>
+            <ion-col size="6" *ngFor="let skeleton of [1,1,1,1]">
+                <ion-card class="animated flash slow infinite">
+                    <div class="thumbnail-container">
+                        <ion-thumbnail slot="start" class="icon-directive">
+                                <ion-skeleton-text class="circle"></ion-skeleton-text>
+                        </ion-thumbnail>
+                    </div>
+                    <ion-card-header class="ion-text-center">
+                        <ion-card-subtitle>
+                                <ion-skeleton-text class="inline-block" width="40%"></ion-skeleton-text>
+                        </ion-card-subtitle>
+                        <ion-card-title class="directive-title">
+                            <ion-skeleton-text class="inline-block" width="60%"></ion-skeleton-text>
+                        </ion-card-title>
+                    </ion-card-header>
+                    <ion-card-content class="ion-text-center">
+                        <p class="phone">
+                            <ion-skeleton-text class="inline-block" width="60%"></ion-skeleton-text>
+                        </p>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
     <ion-grid *ngIf="directives.length > 0">
         <ion-row>
             <ion-col size="6" *ngFor="let people of directives">
@@ -34,14 +41,15 @@
                         <ion-card-subtitle>
                             {{(people.position && people.position.name) || 'Sin posicion'}}
                         </ion-card-subtitle>
-                        <ion-card-title class="directive-title">{{people.firstname}} {{people.lastname}}
+                        <ion-card-title class="directive-title">{{people.firstname}}
+                            {{people.lastname}}
                         </ion-card-title>
                     </ion-card-header>
                     <ion-card-content class="ion-text-center">
                         <p class="phone">
                             <ion-icon name="call"></ion-icon>
                             <span
-                                class="profile_detail">{{people.number_phone || 'No tiene un teléfono registrado'}}</span>
+                                class="profile_detail">{{people.number_phone || 'Sin teléfono registrado'}}</span>
                         </p>
                     </ion-card-content>
                 </ion-card>

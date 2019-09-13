@@ -196,6 +196,7 @@ export interface IUbication {
     latitude: number;
     longitude: number;
     address: string;
+    description?: string;
 }
 
 interface IPhones {

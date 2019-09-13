@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { NavController, IonSegment } from '@ionic/angular';
+import { NavController, IonSegment, PopoverController } from "@ionic/angular";
 import { UtilsService } from '../../../services/utils.service';
 import { AuthService } from '../../../services/auth.service';
 import { PostsService } from '../../../services/posts.service';
@@ -10,6 +10,8 @@ import { finalize } from 'rxjs/operators';
 import { ISocialProblem, IPostShare } from 'src/app/interfaces/models';
 import { environment } from '../../../../environments/environment';
 import { NetworkService } from 'src/app/services/network.service';
+import { FilterPostsComponent } from "src/app/components/filter-posts/filter-posts.component";
+
 
 @Component({
     selector: 'app-social-problems',
@@ -19,15 +21,11 @@ import { NetworkService } from 'src/app/services/network.service';
 export class SocialProblemsPage implements OnInit {
 
     appNetworkConnection = false;
-    subcategories = null;
-    @ViewChild(IonSegment) segment: IonSegment;
     subcategory = '';
-    // loading: any;
-    // elements: any = [];
-    // socialProblems: Observable<any>;
     AuthUser = null;
 
     socialProblems: ISocialProblem[] = [];
+    socialProblemsFilter: ISocialProblem[] = [];
     socialProblemsLoaded = false;
 
     constructor(
@@ -36,160 +34,168 @@ export class SocialProblemsPage implements OnInit {
         private postService: PostsService,
         private authService: AuthService,
         private userService: UserService,
+        private popoverCtrl: PopoverController,
         private networkService: NetworkService
     ) {
         console.log('Constructor Problemas Sociales');
     }
 
     async ngOnInit() {
-        this.segment.value = 'all';
-        this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
-            this.appNetworkConnection = connected;
-        });
         this.authService.getAuthUser().pipe(
-            finalize(() => {
-                this.socialProblemsLoaded = true;
-            })
+            finalize(() => { })
         ).subscribe(res => {
             this.AuthUser = res.user;
         },
-        err => {
-            console.log('Error al traer la informacion del usuario');   
-            this.utilsService.showToast('No se pudieron cargar la información del usuario');
-        });
-        this.postService.getSubcategoriesByCategory(environment.socialProblemSlug).subscribe(res => {
-            this.subcategories = res.data
-        }, err => {
-            console.log('Error al traer subcategorias', err);
-            this.utilsService.showToast('No se pudo traer las subcategorias, intentalo más tarde');    
-        })
+            err => {
+                console.log('Error al traer la informacion del usuario', err);
+                this.utilsService.showToast('No se pudieron cargar la información del usuario');
+            });
     }
-    //Codigo Asincrono
+    //Activar el Menu y Cargar los problemas sociales
     ionViewWillEnter() {
         this.utilsService.enableMenu();
         this.loadSocialProblems();
     }
-
+    //Ir a la pagina para reportar problemas sociales
     reportSocialProblem() {
         this.navCtrl.navigateForward('/social-problem-create')
     }
-
-    // ngOnDestroy() {
-    //         console.log('Listado Problemas Sociales Destruido');
-    //     this.resetSocialProblems();
-    // }
-
+    //Vaciar problemas sociales al salir pagina
     ionViewWillLeave() {
         console.log('IonWillLeave Listado Problemas Sociales Destruido');
         this.resetSocialProblems();
     }
-
+    //Resetear los problemas sociales
     resetSocialProblems() {
         this.socialProblems = [];
         this.postService.resetSocialProblemsPage();
     }
-
-    checkLikePost($details):boolean {
-        if ($details && $details.length > 0) {
-            const likes_user = this.utilsService.getUsersFromDetails($details);
-            const user_made_like = this.utilsService.checkUserInDetails(this.AuthUser.id, likes_user);
-            return user_made_like;
-        }
-        else {
-            return false;
-        }
-    }
-
+    //Verificar like en una publicacion
+    // checkLikePost(details, auth_user): boolean {
+    //     return this.utilsService.checkLikePost(details, auth_user);
+    //     if ($details && $details.length > 0) {
+    //         const likes_user = this.utilsService.getUsersFromDetails($details);
+    //         const user_made_like = this.utilsService.checkUserInDetails(this.AuthUser.id, likes_user);
+    //         return user_made_like;
+    //     }
+    //     else {
+    //         return false;
+    //     }
+    // }
+    //Eliminar o agregar like a una publicacion
     toggleLike(like: boolean, id: number) {
-        console.log((like) ? 'quitar like' : 'dar like');
         if (like) {
             this.postService.sendDeleteDetailToPost(id).subscribe(res => {
                 console.log('detalle eliminado correctamente');
                 this.resetSocialProblems();
                 this.loadSocialProblems();
             }, err => {
-                    console.log('detalle no se pudo eliminar', err);
-                    this.utilsService.showToast('No se pudo eliminar el like');
+                console.log('detalle no se pudo eliminar', err);
+                this.utilsService.showToast('No se pudo eliminar el like');
             });
         } else {
             const detailInfo = {
                 type: 'like',
                 user_id: this.AuthUser.id,
-                post_id : id
+                post_id: id
             }
             this.postService.sendCreateDetailToPost(detailInfo).subscribe(res => {
                 console.log('detalle creado correctamente');
                 this.resetSocialProblems();
                 this.loadSocialProblems();
             }, err => {
-                    console.log('detalle no se pudo crear', err);
-                    this.utilsService.showToast('No se pudo dar like');
+                console.log('detalle no se pudo crear', err);
+                this.utilsService.showToast('No se pudo dar like');
             });
         }
     }
-
+    //Cargar los problemas sociales
     loadSocialProblems(event?) {
-        this.postService.getSocialProblems().subscribe(res => {
-            const socialProblems = res.social_problems;
-            if (socialProblems) {
-                console.log('data', res);
-                if (socialProblems.data.length === 0) {
+        this.postService.getSocialProblems().pipe(
+            finalize(() => {
+                this.socialProblemsLoaded = true;
+            })
+        ).subscribe((res: any) => {
+            //porque contenido viene paginado
+            let socialProblems = res.data.data;
+            // console.log(typeof socialProblems);
+            //console.log(socialProblems_api);
+            if (socialProblems) {                
+                socialProblems = socialProblems.map((social_problem: any) => {
+                    const postLiked = this.utilsService.checkLikePost(social_problem.details, this.AuthUser) || false;
+                    social_problem.postLiked = postLiked;
+                    return social_problem;
+                });
+                if (socialProblems.length === 0) {
                     if (event) {
                         event.target.disabled = true;
                         event.target.complete();
                     }
                     return;
                 }
-                this.socialProblems.push(...socialProblems.data);
+                this.socialProblems.push(...socialProblems);
+                //console.log('social_problems', this.socialProblems);
+                this.socialProblemsFilter.push(...socialProblems);
                 if (event) {
                     event.target.complete();
                 }
             }
         },
-        err => {
-            console.log(err);
-            this.utilsService.showToast('No se pudieron cargar los problemas sociales');
-        });
+            err => {
+                console.log(err);
+                this.utilsService.showToast('No se pudieron cargar los problemas sociales');
+            });
     }
-
+    //Obtener datos con el Infinite Scroll
     getInfiniteScrollData(event) {
         this.loadSocialProblems(event);
     }
-
-    segmentChanged(event) {
-        const valorSegmento = event.detail.value;
-        console.log(valorSegmento);
-        if (valorSegmento === 'all') {
-            this.subcategory = '';
-            console.log(this.subcategory);
-            return;
-        }
-        this.subcategory = valorSegmento;
-        console.log(this.subcategory);
-    }
-
+    //Ir al detalle de un problema socialc
     postDetail(id) {
         this.resetSocialProblems();
         this.navCtrl.navigateForward(`/social-problem-detail/${id}`);
     }
-
+    //Compartir el Problema Social
     async sharePost(post: ISocialProblem) {
         const sharePost: IPostShare = {
             title: post.title,
             description: post.description,
-            image:  this.getImages(post.images),
+            image: this.getImages(post.images),
             url: ''
 
         };
         await this.utilsService.shareSocial(sharePost);
     }
-
+    //Obtener las imagenes de un post
     getImages($imagesArray) {
         if ($imagesArray.length === 0) {
             return '';
         } else {
             return $imagesArray[0].url;
         }
+    }
+    //Funcion mostrar el filtro de publicaciones
+    async showFilterPosts(event) {
+        //Crear Popover
+        const popover = await this.popoverCtrl.create({
+            component: FilterPostsComponent,
+            event,
+            backdropDismiss: false,
+            showBackdrop: false,
+            componentProps: {
+                "posts": [...this.socialProblems],
+                'subcategory': this.subcategory
+            }
+        });
+        //Obtener datos popover cuando se vaya a cerrar
+        popover.onDidDismiss().then((dataReturned: any) => {
+            if (dataReturned !== null) {
+                this.socialProblemsFilter = [...dataReturned.data.posts];
+                this.subcategory = dataReturned.data.subcategory;
+            }
+        });
+        //Presentar el Popover
+        return await popover.present();
     }
 
 }
