@@ -3,7 +3,7 @@
 <ion-content padding>
     <!-- <app-network-banner *ngIf="!appNetworkConnection" networkConnection="appNetworkConnection"></app-network-banner> -->
     <div>
-        <ion-card class="detail-card animated flash slow infinite" *ngIf="!emergency">
+        <ion-card class="detail-card animated flash slow infinite" *ngIf="!postLoaded">
 
             <ion-card-header>
                 <ion-card-subtitle>
@@ -37,13 +37,13 @@
                 </ion-col>
             </ion-row>
         </ion-card>
-        <ion-card class="card-event detail-card" *ngIf="emergency">
-            <img *ngIf="emergency.images.length === 0" class="image-border"
+        <ion-card class="emergency_card detail" *ngIf="emergency && postLoaded">
+            <img *ngIf="emergency.images.length === 0" class="image-border emergency_cover_image"
                 src="assets/img/default/slide-1.png" />
-            <img *ngIf="emergency.images.length > 0 " class="image-border"
+            <img *ngIf="emergency.images.length > 0 " class="image-border emergency_cover_image"
                 [src]="getImageURL(emergency.images[0].url)" />
-            <ion-card-header>
-                <ion-card-subtitle class="event-subtitle">
+            <ion-card-header class="emergency_card_header">
+                <!-- <ion-card-subtitle class="event-subtitle">
                     <p class="post-fulldate">
                         <ion-icon class="icon" name="calendar"></ion-icon>
                         <span>{{utilsService.getFullDate(emergency.date, emergency.time) | simpleBeatifulDate}}</span>
@@ -52,36 +52,25 @@
                         <ion-icon class="icon" name="navigate"></ion-icon>
                         <span>{{ emergency.ubication.address || 'Direccion no encontrada'}}</span>
                     </p>
-                </ion-card-subtitle>
-                <ion-card-title>{{ emergency.title }}</ion-card-title>
+                </ion-card-subtitle> -->
+                <!-- <ion-card-title>{{ emergency.title }}</ion-card-title> -->
+                <ion-card-subtitle class="emergency_info">
+                        <span class="emergency_date">
+                            <ion-icon name="calendar"></ion-icon> 
+                            {{utilsService.getFullDate(emergency.date, emergency.time) | simpleBeatifulDate}}
+                          </span>
+                          <span class="emergency_address">
+                            <ion-icon name="navigate"></ion-icon>
+                            {{ emergency.ubication.address || 'Direccion no encontrada'}}
+                          </span>
+                      </ion-card-subtitle>
+                       <ion-card-title class="emergency_card_title"> {{ emergency.title }}</ion-card-title>
             </ion-card-header>
-            <ion-card-content>
-                <p class="post-description"> {{emergency.description | truncate: 50}}</p>
+            <ion-card-content class="emergency_card_content">
+                <p class="post_description">
+                        {{emergency.description | truncate: 50}}
+                </p>
             </ion-card-content>
-            <!-- <div>
-                <simple-map classMap="event-map-detail map-center" idMap="emergencyMap-detail-{{id}}"
-                    [coordsMap]="mapPoints" [zoom]="16">
-                </simple-map>
-                <p class="post-num-likes">{{emergency.details.length}}
-                    {{(emergency.details.length !== 1) ? 'personas asistirán': 'persona asistirá'}}</p>
-            </div> -->
-            <div class="action-buttons detail">
-                <!-- <div class="action-button pair">
-                    <div class="btn-like"
-                        (click)="toggleAssistance(checkLikePost(event.details))">
-                        <ion-icon slot="icon-only" class="icon-like"
-                            [name]="(checkLikePost(event.details))?'heart':'heart-empty'"></ion-icon>
-                    </div>
-                    <div class="btn-share" (click)="sharePost(event)">
-                        <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
-                    </div>
-                </div> -->
-                <!-- <div class="action-button">
-                    <div class="btn-more">
-                        <ion-icon class="icon-more" slot="icon-only" name="more"></ion-icon>
-                    </div>
-                </div> -->
-            </div>
         </ion-card>
     </div>
 </ion-content>

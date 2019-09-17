@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { NavController, ModalController } from "@ionic/angular";
 import { UtilsService } from '../../../services/utils.service';
 import { IEvent, IPostShare } from 'src/app/interfaces/models';
 import { PostsService } from '../../../services/posts.service';
@@ -7,6 +7,7 @@ import { AuthService } from '../../../services/auth.service';
 import { NetworkService } from '../../../services/network.service';
 import { environment } from "../../../../environments/environment";
 import { finalize } from 'rxjs/operators';
+import { SearchPage } from "../../../modals/search/search.page";
 @Component({
     selector: 'app-events',
     templateUrl: './events.page.html',
@@ -31,6 +32,7 @@ export class EventsPage implements OnInit {
         private utilsService: UtilsService,
         private postService: PostsService,
         private authService: AuthService,
+        private modalCtrl: ModalController,
         private networkService: NetworkService
     ) { 
         console.log('Constructor Eventos');
@@ -120,6 +122,22 @@ export class EventsPage implements OnInit {
         } else {
             return '';
         }
+    }
+
+    async showModalSearchEvents() {
+        const modal = await this.modalCtrl.create({
+            component: SearchPage,
+            componentProps: {
+                // data: [...this.emergencies],
+                searchPlaceholder: 'Buscar Eventos',
+                searchIdeas: [],
+                originalSearchData: this.eventsList,
+                routeDetail: '/event-detail',
+                fieldsToSearch : ['title','description']
+                // filters: this.filters
+            }
+        });
+        await modal.present();
     }
 
     resetEvents() {

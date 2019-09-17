@@ -4,7 +4,8 @@
     <ng-container>
         <ng-container *ngIf="socialProblem === null">
             <ion-card class="card_social detail-card animated flash slow infinite">
-                <ion-skeleton-text animated style="width: 80%" style="height: 300px;"></ion-skeleton-text>
+                <ion-skeleton-text animated style="width: 80%" style="height: 300px;">
+                </ion-skeleton-text>
                 <ion-card-header>
                     <ion-card-title>
                         <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
@@ -35,28 +36,61 @@
                 </div>
             </ion-card>
         </ng-container>
-        <ion-card class="card_social detail-card" *ngIf="socialProblem !== null">
-            <img *ngIf="socialProblem.images.length === 0" class="image-border"
+        <ion-card class="social_problem_card detail" *ngIf="socialProblem !== null">
+            <img *ngIf="socialProblem.images.length === 0" class="image-border image_post_cover"
                 src="assets/img/default/slide-1.png" />
-            <img *ngIf="socialProblem.images.length > 0 " class="image-border"
+            <img *ngIf="socialProblem.images.length > 0 " class="image-border image_post_cover"
                 [src]="getImageURL(socialProblem.images[0].url)" />
-            <ion-card-header>
-                <ion-card-subtitle class="post_user problem-subtitle" *ngIf="socialProblem">
-                    <span> {{socialProblem.user.firstname}} {{socialProblem.user.lastname}}</span>
-                    <span>{{socialProblem.created_at | beafitulDate}}</span>
+            <ion-card-header class="social_problem_header">
+                <ion-card-title class="social_problem_title">{{socialProblem.title}}
+                </ion-card-title>
+                <ion-card-subtitle class="social_problem_user_info_container">
+                    <img class="avatar_user"
+                        [src]="(socialProblem.user.avatar) ? getImageURL(socialProblem.user.avatar) : 'assets/img/default/img_avatar.png'"
+                        alt="Avatar del Usuario">
+                    <div class="user_info">
+                        <p>{{socialProblem.user.firstname}} {{socialProblem.user.lastname}}</p>
+                        <p>{{socialProblem.created_at | beafitulDate}}</p>
+                    </div>
                 </ion-card-subtitle>
-                <ion-card-title> {{socialProblem.title }}- ProblemID {{socialProblem.id}}</ion-card-title>
             </ion-card-header>
-            <ion-card-content>
+            <ion-card-content class="social_problem_card_content">
                 <p class="post_description">
                     {{socialProblem.description}}
                 </p>
-                <p class="post-num-likes">{{socialProblem.details.length}} me gusta</p>
+                <!-- <p class="post-num-likes">{{socialProblem.details.length}} me gusta</p> -->
             </ion-card-content>
-            <div class="action-buttons detail">
-                <div class="action-button pair">
-                    <div class="btn-like"
-                        (click)="toggleLike(postLiked)">
+            <div class="image_gallery_container"
+                *ngIf="socialProblem.images && socialProblem.images.length > 0">
+                <p class="image_gallery_title">Imágenes</p>
+                <div class="image_gallery">
+                    <figure *ngFor="let image of socialProblem.images" (click)="showImageDetail((image.url) ? getImageURL(image.url) : 'assets/img/default/img_avatar.png')">
+                        <img [src]="(image.url) ? getImageURL(image.url) : 'assets/img/default/img_avatar.png'" alt="Imagen de la Publicación">
+                        <!-- <figcaption>
+                          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua
+                        </figcaption> -->
+                    </figure>
+                </div>
+            </div>
+            <div class="social_problem_card_footer">
+                <div class="count_likes">
+                    <span class="post-num-likes">{{socialProblem.details.length}} me gusta</span>
+                </div>
+                <div class="post_options">
+                    <div class="btn-like">
+                        <ion-icon slot="icon-only" class="icon-like"  [name]="(postLiked)?'heart':'heart-empty'"></ion-icon>
+                    </div>
+                    <div class="btn-share" (click)="sharePost(socialProblem)">
+                        <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="action-buttons detail" style="justify-content: flex-start;">
+                <div class="count_likes" style="width: 88%;">
+                    <span class="post-num-likes">{{socialProblem.details.length}} me gusta</span>
+                </div>
+                <div class="action-button pair" style="width: 12%;justify-content: center;">
+                    <div class="btn-like" (click)="toggleLike(postLiked)">
                         <ion-icon slot="icon-only" class="icon-like"
                             [name]="(postLiked)?'heart':'heart-empty'"></ion-icon>
                     </div>
@@ -64,7 +98,7 @@
                         <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </ion-card>
     </ng-container>
 </ion-content>

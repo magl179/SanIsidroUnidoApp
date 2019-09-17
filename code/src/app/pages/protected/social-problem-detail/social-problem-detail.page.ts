@@ -8,6 +8,8 @@ import { AuthService } from '../../../services/auth.service';
 import { IPostShare, ISocialProblem } from '../../../interfaces/models';
 import { NetworkService } from 'src/app/services/network.service';
 import { environment } from "../../../../environments/environment";
+import { ModalController } from "@ionic/angular";
+import { ImageDetailPage } from 'src/app/modals/image_detail/image_detail.page';
 
 
 
@@ -31,7 +33,7 @@ export class SocialProblemDetailPage implements OnInit {
         private route: ActivatedRoute,
         private postService: PostsService,
         public utilsService: UtilsService,
-        // private userService: UserService,
+        private modalCtrl: ModalController,
         private networkService: NetworkService,
         private authService: AuthService) { }
 
@@ -50,9 +52,9 @@ export class SocialProblemDetailPage implements OnInit {
         this.getSocialProblem();
     }
 
-    getImageURL(image: string) {
-        return this.utilsService.getImageURL(image);
-    }
+    // getImageURL(image: string) {
+    //     return this.utilsService.getImageURL(image);
+    // }
 
     //Obtener el detalle de un problema social
     getSocialProblem() {
@@ -65,6 +67,23 @@ export class SocialProblemDetailPage implements OnInit {
             }
         });
     }
+
+    //Obtener Imagen 
+    getImageURL(image_name: string) {
+        const imgIsURL = this.utilsService.imgIsURL(image_name);
+        return (imgIsURL) ? image_name : `${environment.apiBaseURL}/${environment.image_assets}/${image_name}` ;
+    }
+
+    async showImageDetail(image) {
+        const modal = await this.modalCtrl.create({
+            component: ImageDetailPage,
+            componentProps: {
+                image
+            }
+        });
+        await modal.present();
+    }
+
     //Verificar Like de un Post
     // checkLikePost($details) {
     //     if ($details && $details.length > 0) {

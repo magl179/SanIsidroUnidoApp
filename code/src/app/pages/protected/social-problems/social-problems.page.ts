@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { NavController, IonSegment, PopoverController } from "@ionic/angular";
+import { NavController, IonSegment, PopoverController, ModalController } from "@ionic/angular";
 import { UtilsService } from '../../../services/utils.service';
 import { AuthService } from '../../../services/auth.service';
 import { PostsService } from '../../../services/posts.service';
 // import { IUserLogued } from 'src/app/interfaces/barrios';
+import { IBasicFilter } from 'src/app/interfaces/models';
 import { Observable } from 'rxjs';
 import { UserService } from '../../../services/user.service';
 import { finalize } from 'rxjs/operators';
@@ -11,6 +12,8 @@ import { ISocialProblem, IPostShare } from 'src/app/interfaces/models';
 import { environment } from '../../../../environments/environment';
 import { NetworkService } from 'src/app/services/network.service';
 import { FilterPostsComponent } from "src/app/components/filter-posts/filter-posts.component";
+import { FilterPage } from "../../../modals/filter/filter.page";
+import { SearchPage } from 'src/app/modals/search/search.page';
 
 
 @Component({
@@ -27,6 +30,27 @@ export class SocialProblemsPage implements OnInit {
     socialProblems: ISocialProblem[] = [];
     socialProblemsFilter: ISocialProblem[] = [];
     socialProblemsLoaded = false;
+    // filtros: IBasicFilter;
+    filters: IBasicFilter = {
+        subcategory_id: {
+            name: 'Subcategoria',
+            value: "",
+            options: [
+                { id: 1, name: 'Transporte y Tránsito' },
+                { id: 2, name: 'Seguridad' },
+                { id: 3, name: 'Protección Animal' },
+                { id: 4, name: 'Espacios Verdes' }
+            ]
+        },
+        is_attended: {
+            name: 'Estado',
+            value: "",
+            options: [
+                { id: 1, name: 'Atendidos' },
+                { id: 0, name: 'Pendientes' }
+            ]
+        }
+    };
 
     constructor(
         private navCtrl: NavController,
@@ -34,6 +58,7 @@ export class SocialProblemsPage implements OnInit {
         private postService: PostsService,
         private authService: AuthService,
         private userService: UserService,
+        private modalCtrl: ModalController,
         private popoverCtrl: PopoverController,
         private networkService: NetworkService
     ) {
@@ -120,7 +145,7 @@ export class SocialProblemsPage implements OnInit {
             let socialProblems = res.data.data;
             // console.log(typeof socialProblems);
             //console.log(socialProblems_api);
-            if (socialProblems) {                
+            if (socialProblems) {
                 socialProblems = socialProblems.map((social_problem: any) => {
                     const postLiked = this.utilsService.checkLikePost(social_problem.details, this.AuthUser) || false;
                     social_problem.postLiked = postLiked;
@@ -197,5 +222,54 @@ export class SocialProblemsPage implements OnInit {
         //Presentar el Popover
         return await popover.present();
     }
+    //Obtener Imagen 
+    getImageURL(image_name: string) {
+        const imgIsURL = this.utilsService.imgIsURL(image_name);
+        return (imgIsURL) ? image_name : `${environment.apiBaseURL}/${environment.image_assets}/${image_name}`;
+    }
+
+    async showSearchModal() {
+        const modal = await this.modalCtrl.create({
+            component: SearchPage,
+            componentProps: {
+                // data: [...this.socialProblems],
+                // filters: this.filterssearchPlaceholder: 'Buscar Eventos',
+                searchIdeas: [],
+                originalSearchData: [...this.socialProblems],
+                routeDetail: '/social-problem-detail',
+                searchPlaceholder : 'Buscar Problemas Sociales',
+                fieldsToSearch : ['title','description']
+            }
+        });
+         //Obtener datos popover cuando se vaya a cerrar
+         modal.onDidDismiss().then((dataReturned: any) => {
+            // if (dataReturned !== null) {
+            //     this.socialProblemsFilter = [...dataReturned.data.data];
+            //     this.filters = dataReturned.data.filters;
+            //     // this.subcategory = dataReturned.data.subcategory;
+            // }
+        });
+        await modal.present();
+    }
+    async showFilterModal() {
+        
+        const modal = await this.modalCtrl.create({
+            component: FilterPage,
+            componentProps: {
+                data: [...this.socialProblems],
+                filters: this.filters
+            }
+        });
+         //Obtener datos popover cuando se vaya a cerrar
+         modal.onDidDismiss().then((dataReturned: any) => {
+            if (dataReturned !== null) {
+                this.socialProblemsFilter = [...dataReturned.data.data];
+                this.filters = dataReturned.data.filters;
+                // this.subcategory = dataReturned.data.subcategory;
+            }
+        });
+        await modal.present();
+    }
+
 
 }

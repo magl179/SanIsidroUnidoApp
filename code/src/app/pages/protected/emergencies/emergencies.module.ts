@@ -8,6 +8,10 @@ import { IonicModule } from '@ionic/angular';
 import { EmergenciesPage } from './emergencies.page';
 import { SmComponentsModule } from "../../../components/sm-components.module";
 import { PipesModule } from "../../../pipes/pipes.module";
+import { FilterPage } from "../../../modals/filter/filter.page";
+import { FilterPageModule } from "../../../modals/filter/filter.module";
+import { SearchPage } from "../../../modals/search/search.page";
+import { SearchPageModule } from "../../../modals/search/search.module";
 
 const routes: Routes = [
   {
@@ -17,13 +21,19 @@ const routes: Routes = [
 ];
 
 @NgModule({
+    entryComponents: [
+        FilterPage,
+        SearchPage
+    ],
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
         SmComponentsModule,
-    PipesModule
+      PipesModule,
+      FilterPageModule,
+    SearchPageModule
   ],
   declarations: [EmergenciesPage]
 })

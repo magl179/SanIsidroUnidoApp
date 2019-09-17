@@ -53,6 +53,11 @@ export class TutorialPage implements OnInit {
                 event.target.lockSwipeToNext(false);
             }
         });
+     }
+    // Funcion cuando el slide carga
+    slidesLoaded(event) {
+        //console.dir(event);
+        event.target.lockSwipeToPrev(true);
     }
     //Funcion navegar hacia pagina de Login
     goToLogin() {
@@ -61,6 +66,10 @@ export class TutorialPage implements OnInit {
     //Funcion para navegar a pagina de registro
     goToRegister() {
         this.navCtrl.navigateForward('/register');
+    }
+    //Obtener el Background
+    getBackgroundApp(image_url: string) {
+        return `linear-gradient(rgba(2, 2, 2, 0.58), rgba(2, 2, 2, 0.58)), url(${image_url})`;
     }
 
 

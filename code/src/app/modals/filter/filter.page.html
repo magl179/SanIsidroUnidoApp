@@ -1,0 +1,40 @@
+<ion-header>
+        <ion-toolbar color="primary">
+          <ion-title class="ion-text-center">Filtro de Búsqueda</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-list class="list_filter">
+          <div *ngFor="let filter of filters | keyvalue">
+            <ion-item lines="none">
+              <ion-label>{{filter.value.name}}</ion-label>
+              <ion-select [value]="filter.value.value" okText="Aplicar" cancelText="Cancelar" (ionChange)="applyFilter($event, filter.key)">
+                <ion-select-option value="">Todas</ion-select-option>
+                <ion-select-option *ngFor="let option of filter.value.options; let i = index;" [value]="option.id">{{option.id}} - {{option.name}}</ion-select-option>
+            </ion-select>
+            </ion-item>
+          </div>
+        </ion-list> 
+        <ion-list *ngIf="dataFiltered">
+          <p>Coincidencias: {{dataFiltered.length}}</p>
+          <ion-item lines="none" *ngFor="let data of dataFiltered">
+            <ion-label>
+              <p>Name: {{data | json}}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-content>
+      <ion-footer>
+        <ion-toolbar color="light">
+        <ion-buttons slot="primary" class="buttons-end">
+             <ion-button color="medium" (click)="closeModalEmpty()">
+             Cancelar
+            </ion-button>
+          </ion-buttons>
+          <ion-buttons slot="end" class="buttons-end">
+             <ion-button color="primary" fill="solid" (click)="closeModal()">
+             Aplicar
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-footer>

@@ -117,7 +117,7 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
         // Leaflet.control.scale({ position: 'bottomleft' }).addTo(this.map);
         // Si obtuve coordenadas añadir el marcador
         if (this.currentCoordinate !== null) {
-            const iconCurrent = await this.mapService.getCustomIcon('blue');
+            const iconCurrent = await this.mapService.getCustomIcon('red');
             let currentPoint;
             if (iconCurrent) {
                 // tslint:disable-next-line: max-line-length
@@ -133,7 +133,7 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
         this.mapPoints.forEach(async point => {
             let punto = null;
             const title = `${point.name}`;
-            const markerIcon = await this.mapService.getCustomIcon('orange');
+            const markerIcon = await this.mapService.getCustomIcon('green');
             if (markerIcon) {
                 // tslint:disable-next-line: max-line-length
                 punto = new Leaflet.Marker(new Leaflet.latLng(

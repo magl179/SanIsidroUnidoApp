@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { NavController, ModalController } from "@ionic/angular";
 import { UtilsService } from "src/app/services/utils.service";
 import { PostsService } from "src/app/services/posts.service";
+import { IBasicFilter } from "../../../interfaces/models";
+import { FilterPage } from "../../../modals/filter/filter.page";
+import { SearchPage } from "../../../modals/search/search.page";
 
 @Component({
     selector: 'app-emergencies',
@@ -11,56 +14,31 @@ import { PostsService } from "src/app/services/posts.service";
 export class EmergenciesPage implements OnInit {
 
     emergencies = [];
-
+    emergenciesFiltered = [];
+    filters: IBasicFilter = {
+        is_attended: {
+            name: 'Estado',
+            value: "",
+            options: [
+                { id: 1, name: 'Atendidos' },
+                { id: 0, name: 'Pendientes' }
+            ]
+        }
+    };
 
     searchingEmergencies= false;
-    emergenciesBusqueda = [];
     // eventsList: IEvent[] = [];
     textoEmergenciaBuscar = '';
 
     constructor(
         private navCtrl: NavController,
         private utilsService: UtilsService,
-        private postsService: PostsService
+        private postsService: PostsService,
+        private modalCtrl: ModalController
     ) { }
 
 
     ngOnInit() {
-    }
-
-    async searchEmergencies(event) {
-        const valor: string = event.detail.value;
-        if (valor.length === 0) {
-            this.searchingEmergencies = false;
-            this.emergenciesBusqueda = [];
-            return;
-        }
-        this.searchingEmergencies = true;
-        this.emergenciesBusqueda = await this.emergencies.filter(emergency => {
-            return emergency.title.toLowerCase().indexOf(valor.toLowerCase()) >= 0 || emergency.description.toLowerCase().indexOf(valor.toLowerCase()) >= 0;
-        });
-        if (this.emergenciesBusqueda.length === 0) {
-            this.utilsService.showToast('No hay coincidencias');
-        } else {
-            this.utilsService.showToast(`Hay ${this.emergenciesBusqueda.length} coincidencias`);
-        }
-        this.searchingEmergencies = false;
-        // this.postService.searchPosts(valor, environment.eventsSlug).pipe(
-        //     finalize(() => {
-        //         this.searchingEvents = false;
-        //     })
-        // ).subscribe((res: any) => {
-        //     console.log('events search', res);
-        //     this.eventsBusqueda = res.data;
-        //     if (res.data.length === 0) {
-        //         this.utilsService.showToast('No hay coincidencias');
-        //     } else {
-        //         this.utilsService.showToast(`Hay ${res.data.length} coincidencias`);
-        //     }
-        // }, err => {
-        //         console.log('Ocurrio un error al buscar eventos', err);
-        //         this.utilsService.showToast('Ocurrio un error al buscar eventos');
-        // });
     }
 
     reportEmergency() {
@@ -72,10 +50,10 @@ export class EmergenciesPage implements OnInit {
         this.loadEmergencies();
     }
 
-    ionViewWillLeave(){
-        this.emergencies = [];
-        this.postsService.resetEmergenciesPage();
-    }
+    // ionViewWillLeave(){
+    //     this.emergencies = [];
+    //     this.postsService.resetEmergenciesPage();
+    // }
 
     loadEmergencies(event?, resetEvents?) {
         // if (resetEvents) {
@@ -92,6 +70,7 @@ export class EmergenciesPage implements OnInit {
                     return;
                 }
                 this.emergencies.push(...res.data.data);
+                this.emergenciesFiltered.push(...this.emergencies);
                 console.log(this.emergencies);
                 if (event) {
                     event.target.complete();
@@ -123,13 +102,51 @@ export class EmergenciesPage implements OnInit {
     
     postDetail(id) {
         this.resetEmergencies();
-        this.navCtrl.navigateForward(`/emergency-detail/${id}`);
+        this.navCtrl.navigateForward(`/emergency-detail/${id}`);;
     }
     
 
     resetEmergencies() {
         this.emergencies = [];
         this.postsService.resetEmergenciesPage();
+    }
+
+    async showModalFilterEmergencies() {
+        const modal = await this.modalCtrl.create({
+            component: FilterPage,
+            componentProps: {
+                data: [...this.emergencies],
+                filters: this.filters
+            }
+        });
+         //Obtener datos popover cuando se vaya a cerrar
+        modal.onDidDismiss().then((dataReturned: any) => {
+            console.dir(dataReturned);
+            if (dataReturned && dataReturned.data.data && dataReturned.data.filters) {
+                this.emergenciesFiltered = [...dataReturned.data.data];
+                console.log('Data Returned Modal Filter', [...dataReturned.data.data]);
+                console.log('Data Returned Modal Filterdespues', this.emergenciesFiltered);
+                this.filters = dataReturned.data.filters;
+            }
+             //console.log('Data Returned Modal Filter', this.emergenciesFiltered);
+        });
+        await modal.present();
+    }
+
+    async showModalSearchEmergencies() {
+        const modal = await this.modalCtrl.create({
+            component: SearchPage,
+            componentProps: {
+                // data: [...this.emergencies],
+                searchPlaceholder: 'Buscar Emergencias',
+                searchIdeas: [],
+                originalSearchData: [...this.emergencies],
+                routeDetail: '/emergency-detail',
+                fieldsToSearch : ['title','description']
+                // filters: this.filters
+            }
+        });
+        await modal.present();
     }
 
 }

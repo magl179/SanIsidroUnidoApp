@@ -1,0 +1,253 @@
+/*PROBLEMAS SOCIALES*/
+.social_problem_card {
+  .avatar_user {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+  }
+  .image_post_cover{
+    height: 250px;
+  }
+
+  &.detail {
+    border: none;
+    box-shadow: none;
+  }
+  .see_more {
+    margin: 1.5rem auto 0.7rem;
+  }
+  .social_problem_title {
+    margin: 0.9em auto;
+  }
+  .icon-like {
+    color: #e83b46;
+  }
+  .icon-share {
+    color: #0096fa;
+  }
+  .count_likes {
+    width: 60%;
+  }
+  .post_options {
+    font-size: 1.4rem;
+    width: 40%;
+    display: flex;
+    justify-content: space-around;
+  }
+  .social_problem_header,
+  .social_problem_card_content {
+    padding: 0.4rem 1rem;
+  }
+  .social_problem_card_footer {
+    padding: 1rem;
+    display: flex;
+  }
+  .social_problem_user_info_container {
+    margin: 1rem auto;
+    display: flex;
+    align-items: center;
+    .user_info {
+      margin-left: 2rem;
+      font-size: 0.9em;
+      .user_name {
+        margin: 0.5rem auto;
+      }
+      .post_date {
+        margin: 0.5rem auto;
+      }
+    }
+  }
+
+  .image_gallery_container {
+    .image_gallery_title {
+      padding: 0 1rem;
+    }
+    .image_gallery {
+      padding: 0 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      figure {
+        width: 45%;
+        height: 150px;
+        margin: 0.5rem 0.3rem !important;
+        display: inline-block;
+        img {
+          border: none;
+          max-width: 100%;
+          height: 100%;
+          width: 100%;
+          display: block;
+          background: #ccc;
+          transition: transform 0.2s ease-in-out;
+        //   &:hover {
+        //     transform: scale(1.2);
+        //   }
+        }
+      }
+    }
+  }
+}
+/*EVENTOS*/
+.event_card {
+  &.detail {
+    border: none;
+    box-shadow: none;
+  }
+  .event_card_header {
+    padding: 0.7rem 1rem;
+  }
+  .see-more {
+    padding: 1rem 0 0.5rem;
+  }
+  .avatar_user {
+    width: 50px;
+  }
+  .image_gallery_container {
+    .image_gallery_title {
+      padding: 0 1rem;
+    }
+    .image_gallery {
+      padding: 0 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      figure {
+        width: 45%;
+        margin: 0.5rem 0.3rem !important;
+        display: inline-block;
+        img {
+          border: none;
+          max-width: 100%;
+          height: auto;
+          display: block;
+          background: #ccc;
+          transition: transform 0.2s ease-in-out;
+          &:hover {
+            transform: scale(1.2);
+          }
+        }
+      }
+    }
+  }
+
+  .event_map {
+    height: 250px;
+    width: 100%;
+    padding: 0 1rem 1rem;
+  }
+  .event_info {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
+    text-align: center;
+    .event_date {
+      width: 50%;
+    }
+    .event_address {
+      width: 50%;
+    }
+  }
+  .count_assistants {
+    padding: 1rem 0;
+    display: flex;
+    align-items: center;
+    .icon_assistant {
+      margin-right: 0.5rem;
+      font-size: 1.3rem;
+    }
+  }
+  .event_card_content {
+    padding: 0.4rem 1rem;
+  }
+  .event_card_footer {
+    padding: 0.5rem 1rem 1rem;
+    display: flex;
+    .count_likes {
+      width: 60%;
+    }
+    .btn-assistant {
+      text-transform: capitalize;
+      font-size: 1rem;
+      --ripple-color: transparent;
+    }
+    .btn-share {
+      display: flex;
+
+      align-items: center;
+      margin-right: 1rem;
+    }
+
+    .post_assistants {
+      width: 50%;
+    }
+    .post_options {
+      font-size: 1.4rem;
+      width: 50%;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .icon-like {
+      color: #e83b46;
+    }
+    .icon-share {
+      color: #0096fa;
+    }
+  }
+}
+/*EMERGENCIAS*/
+.emergency_card {
+  &.detail {
+    border: none;
+    box-shadow: none;
+  }
+  .emergency_cover_image{
+      height: 250px;
+  }
+  .emergency_card_header {
+    padding: 0.7rem 1rem;
+  }
+  .see-more {
+    padding: 1rem 0;
+  }
+  .emergency_info {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
+    text-align: center;
+    .emergency_date {
+      width: 50%;
+    }
+    .emergency_address {
+      width: 50%;
+    }
+  }
+
+  .image_gallery_container {
+    .image_gallery_title {
+      padding: 0 1rem;
+    }
+    .image_gallery {
+      padding: 0 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      figure {
+        width: 45%;
+        margin: 0.5rem 0.3rem !important;
+        display: inline-block;
+        img {
+          border: none;
+          max-width: 100%;
+          height: auto;
+          display: block;
+          background: #ccc;
+          transition: transform 0.2s ease-in-out;
+          &:hover {
+            transform: scale(1.2);
+          }
+        }
+      }
+    }
+  }
+}

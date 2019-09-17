@@ -2,25 +2,26 @@
 <ion-content padding>
     <ion-grid>
         <ion-row>
-            <ion-col size="6" style="display:flex;justify-content: center;">
+            <ion-col size="4" style="display:flex;justify-content: center;">
                 <ion-button color="primary" (click)="reportSocialProblem()">
                     Reportar <ion-icon name="send" slot="end"></ion-icon>
                 </ion-button>
             </ion-col>
-            <ion-col size="6" style="display:flex;justify-content: center;">
-                <ion-button (click)="showFilterPosts($event)">
+            <ion-col size="4" style="display:flex;justify-content: center;">
+                    <ion-button color="primary" (click)="showSearchModal()">
+                        Buscar <ion-icon name="search" slot="end"></ion-icon>
+                    </ion-button>
+            </ion-col>
+            <ion-col size="4" style="display:flex;justify-content: center;">
+                <ion-button (click)="showFilterModal()">
                     Filtrar <ion-icon slot="end" name="options"></ion-icon>
                 </ion-button>
             </ion-col>
         </ion-row>
     </ion-grid>
-    <ng-container>
-        <ion-searchbar animated debounce="500" showCancelButton="focus"
-            placeholder="Buscar Problemas Sociales"></ion-searchbar>
-    </ng-container>
     <div>
         <p class="test" *ngIf="socialProblems">
-            Social Problems Length {{ socialProblems.length}}
+            Social Problems Length {{ socialProblemsFilter.length}}
         </p>
         <p *ngIf="socialProblemsFilter.length === 0 && socialProblemsFilter">
             No hay publicaciones disponibles
@@ -68,7 +69,7 @@
             </ion-card>
         </div>
         <!-- Tarjeta con Datos Cargados -->
-        <ion-card class="card_social"
+        <ion-card class="social_problem_card"
             *ngFor="let socialProblem of (socialProblemsFilter); let i = index;">
             <div *ngIf="socialProblem.exists === -1">
                 <ion-card-header class="ion-text-center">
@@ -76,23 +77,33 @@
                 </ion-card-header>
             </div>
             <div *ngIf="socialProblem.exists !== -1">
-                <ion-card-header>
-                    <ion-card-subtitle class="post_user problem-subtitle">
-                        <span>{{socialProblem.user.firstname}}
-                            {{socialProblem.user.lastname}}</span>
-                        <span>{{socialProblem.created_at | beafitulDate}}</span>
+                <ion-card-header class="social_problem_header">
+                    <ion-card-title class="social_problem_title">
+                        {{socialProblem.title}}
+                    </ion-card-title>
+                    <ion-card-subtitle class="social_problem_user_info_container">
+                        <img class="avatar_user"
+                            [src]="(socialProblem.user.avatar) ? getImageURL(socialProblem.user.avatar) : 'assets/img/default/img_avatar.png'"
+                            alt="Avatar del Usuario">
+                        <div class="user_info">
+                            <p class="user_name"> {{socialProblem.user.firstname}}
+                                {{socialProblem.user.lastname}}</p>
+                            <p class="post_date">{{socialProblem.created_at | beafitulDate}}</p>
+                        </div>
                     </ion-card-subtitle>
-                    <ion-card-subtitle>
-                        {{(is_attended) ? 'Ha sido atendido' : 'No ha sido atendido'}}
-                    </ion-card-subtitle>
-                    <ion-card-title>{{socialProblem.title}}</ion-card-title>
                 </ion-card-header>
-                <ion-card-content>
+                <ion-card-content class="social_problem_card_content">
+                        <p class="post_description">
+                                {{socialProblem.description | truncate: 50}}
+                        </p>
+                        <p class="see_more" (click)="postDetail(socialProblem.id)">Ver más...</p>
+                    </ion-card-content>
+                <!-- <ion-card-content>
                     <p class="post-description">{{socialProblem.description | truncate: 50}} </p>
                     <p class="post-see-more" (click)="postDetail(socialProblem.id)">Ver más...</p>
                     <p class="post-num-likes">{{socialProblem.details.length}} me gusta</p>
-                </ion-card-content>
-                <div class="action-buttons">
+                </ion-card-content> -->
+                <!-- <div class="action-buttons">
                     <div class="action-button pair">
 
                         <div class="btn-like"
@@ -105,7 +116,21 @@
                             <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
                         </div>
                     </div>
-                </div>
+                </div> -->
+                <div class="social_problem_card_footer">
+                        <div class="count_likes">
+                            <span class="post-num-likes">{{socialProblem.details.length}} me gusta</span>
+                        </div>
+                        <div class="post_options">
+                            <div class="btn-like" >
+                                <ion-icon slot="icon-only" class="icon-like" 
+                                [name]="(socialProblem.postLiked)?'heart':'heart-empty'"></ion-icon>
+                            </div>
+                            <div class="btn-share" (click)="sharePost(socialProblem)">
+                                <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
+                            </div>
+                        </div>
+                    </div>
             </div>
         </ion-card>
     </div>

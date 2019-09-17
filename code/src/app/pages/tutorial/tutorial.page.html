@@ -1,7 +1,7 @@
 <!-- <app-header title="Tutorial" [showNoti]="false"></app-header> -->
 <ion-content>
-            <ion-slides pager="true" style="display: flex;" (ionSlideDidChange)="slideChange($event)" (ionSlidesDidLoad)="slidesLoaded($event)">
-                <ion-slide class="tutorial_slide" *ngFor="let slide of slides" [ngStyle]="{'background':  utilsService.getBackgroundG(slide.img)}">
+            <ion-slides pager="true" style="display: flex;" (ionSlidesDidLoad)="slidesLoaded($event)" (ionSlideDidChange)="slideChange($event)">
+                <ion-slide class="tutorial_slide" *ngFor="let slide of slides" [ngStyle]="{'background':  getBackgroundApp(slide.img)}">
                     <div class="slide-content">
                         <!-- <img [src]="slide.img" class="slide-img"> -->
                         <h1>{{slide.title}}</h1>

@@ -13,15 +13,15 @@
         </div>
         <div class="ion-text-center" *ngIf="AuthUser">
             <h3 class="user_data">
-                <ion-icon name="person" class="icon"></ion-icon>
+                <!-- <ion-icon name="person" class="icon"></ion-icon> -->
                 <span>{{AuthUser.firstname || 'Sin Nombre'}} {{AuthUser.lastname || 'Sin Apellidos'}}</span>
             </h3>
             <p class="user_data" >
-                <ion-icon name="mail" class="icon"></ion-icon>
+                <!-- <ion-icon name="mail" class="icon"></ion-icon> -->
                 <span>{{AuthUser.email || 'sin email'}}</span>
             </p>
             <p class="user_data">
-                <ion-icon name="briefcase" class="icon"></ion-icon>
+                <!-- <ion-icon name="briefcase" class="icon"></ion-icon> -->
                 <span class="ion-text-capitalize">{{ authUserRol || 'No tienes un rol registrado'}}</span>
             </p>
             <p class="user_data" *ngIf="AuthUser.number_phone">

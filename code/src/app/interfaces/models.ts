@@ -237,3 +237,17 @@ export interface ISlideTutorial {
     title: string;
     description: string;
 }
+
+//Modelos de Filtrado
+interface IFilterOptions {
+    id: any;
+    name: string;
+}
+interface IFilterFields {
+    name: string;
+    value: any;
+    options: IFilterOptions[];
+}
+export interface IBasicFilter {
+    [key: string]: IFilterFields;
+}

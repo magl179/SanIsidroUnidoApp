@@ -7,7 +7,7 @@ import { UserService } from '../../services/user.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 
 @Component({
-    selector: 'app-edit-profile',
+    selector: 'modal-edit-profile',
     templateUrl: './edit-profile.page.html',
     styleUrls: ['./edit-profile.page.scss'],
 })

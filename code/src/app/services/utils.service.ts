@@ -174,4 +174,8 @@ export class UtilsService implements OnInit {
             return `${environment.apiBaseURL}/${environment.image_assets}/${image_name}`;
         }
     }
+
+    imgIsURL(image_name: string) {
+        return this.URL_PATTERN.test(image_name);
+    }
 }

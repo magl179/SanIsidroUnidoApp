@@ -2,12 +2,12 @@
 
 <ion-content padding>
     <ion-list>
-        <div *ngFor="let question of frequentQuestions;let i = index;">
-            <ion-item color="primary" (click)="toggleSection(i,true)">
-                <ion-label class="ion-text-wrap">
+        <div class="item_question" *ngFor="let question of frequentQuestions;let i = index;">
+              <ion-item color="primary" (click)="toggleSection(i,true)">
+                <ion-label class="ion-text-wrap" slot="start">
                     {{question.title}}
-                    <ion-icon [name]="question.icon"></ion-icon>
                 </ion-label>
+                <ion-icon [name]="(question.open)?'add':'remove'" slot="end"></ion-icon>
             </ion-item>
             <ion-item [class.parent-active]="question.open" *ngIf="question.open">
                 <ion-label class="ion-text-wrap">

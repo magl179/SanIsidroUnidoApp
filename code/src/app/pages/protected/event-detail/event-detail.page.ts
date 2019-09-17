@@ -8,6 +8,7 @@ import { PostsService } from '../../../services/posts.service';
 import { AuthService } from '../../../services/auth.service';
 import { IEvent, IPostShare } from '../../../interfaces/models';
 import { NetworkService } from '../../../services/network.service';
+import { environment } from 'src/environments/environment.prod';
 
 
 @Component({
@@ -121,6 +122,12 @@ export class EventDetailPage implements OnInit {
 
         };
         await this.utilsService.shareSocial(sharePost);
+    }
+
+    //Obtener Imagen 
+    getImageURL(image_name: string) {
+        const imgIsURL = this.utilsService.imgIsURL(image_name);
+        return (imgIsURL) ? image_name : `${environment.apiBaseURL}/${environment.image_assets}/${image_name}` ;
     }
 
     getImages($imagesArray) {

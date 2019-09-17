@@ -1,0 +1,103 @@
+.icon-help-input {
+    position: absolute;
+    right: 0;
+    bottom: 4px;
+    background: transparent;
+    font-size: 18px;
+
+    ion-icon.error {
+        color: #f04141
+    }
+
+    ion-icon.success {
+        color: #10dc60;
+    }
+}
+
+.input-beatiful{
+    background-color: #ffffff;
+    color: #535353;
+    display: block;
+    border: none !important;
+    padding: .375rem .75rem !important;
+    /* text-decoration: none; */
+    font-size: 1rem;
+    /* margin: 5px; */
+    line-height: 1.5;
+    width: 100%;
+    border: 1px solid #efefef !important;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    height: 37px;
+    /* text-align: center; */
+    margin: 0 auto;
+    /* margin-bottom: 10px; */
+    margin-top: 10px;
+    border-radius: .25rem;
+    background-clip: padding-box;
+    &.text-area{
+        height: auto !important; 
+    }
+}
+
+.btn_eye_icon {
+    position: absolute;
+    right: 22px;
+    bottom: 4px;
+    background: transparent;
+    z-index: 1000;
+
+    ion-icon {
+        font-size: 22px;
+        color: #757575;
+    }
+}
+
+.btn_eye_icon:focus {
+    outline: none !important;
+}
+
+
+.item-form {
+    .input_item {
+        display: inline-block;
+        width: 90%;
+    }
+
+    .feedback-icon {
+        display: inline-flex;
+        justify-content: center;
+        width: 10%;
+
+        ion-item {
+            display: inline-block;
+            width: 100%;
+            --padding-start: 0px;
+        }
+    }
+}
+
+.form-ubication{
+    margin-bottom: 1.2rem;
+    margin-bottom: 1.2rem;
+}
+
+.form-errors {
+    p {
+        // margin-left: 1rem;
+        color: #f04141;
+        font-size: .8rem;
+    }
+}
+
+// Botones Alerta Confirmacion
+.alertButtons {
+    button.alert-button.cancel_button {
+        color: #aaa;
+    }
+
+    button.alert-button.confirm_button {
+        font-weight: bold;
+        color: #187ff5;
+    }
+}
+

@@ -1,0 +1,25 @@
+<ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start" class="buttons-start" (click)="closeModal()">
+            <ion-icon name="close" slot="icon-only"></ion-icon>
+          </ion-buttons>
+          <ion-buttons slot="end" class="buttons-end">
+            <ion-icon name="share" slot="icon-only"></ion-icon>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+      <ion-grid style="height: 100%" class="grid_container">
+              <ion-row class="row_container">
+                  <ion-col class="col_container">
+                     <div class="swipper-zoom-container" [ngStyle]="{height: (description) ? '80%': '100%'}">
+                        <img [src]="image" alt="Image" />
+                      </div>
+                      <div class="description_image" *ngIf="description">
+                        <p>{{description}}</p>
+                      </div>
+                  </ion-col>
+              </ion-row>
+          </ion-grid>
+      </ion-content>
+      

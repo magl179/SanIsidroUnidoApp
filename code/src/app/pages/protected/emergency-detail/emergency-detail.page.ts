@@ -4,6 +4,7 @@ import { UtilsService } from "../../../services/utils.service";
 import { PostsService } from "../../../services/posts.service";
 import { NetworkService } from "../../../services/network.service";
 import { AuthService } from "../../../services/auth.service";
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-emergency-detail',
@@ -14,6 +15,7 @@ export class EmergencyDetailPage implements OnInit {
     id: string;
     emergency = null;
     AuthUser = null;
+    postLoaded = false;
 
   constructor(  private route: ActivatedRoute,
     public utilsService: UtilsService,
@@ -39,7 +41,9 @@ export class EmergencyDetailPage implements OnInit {
     }
     
     getEmergency() {
-        this.postService.getEmergency(+this.id).subscribe(res => {
+        this.postService.getEmergency(+this.id).pipe(finalize(() => {
+            this.postLoaded = true;
+        })).subscribe((res: any) => {
             this.emergency = res.data;
             console.log('res post', res);
             console.log('Dato post', this.emergency);
