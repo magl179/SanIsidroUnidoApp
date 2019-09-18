@@ -81,13 +81,19 @@ export class FilterPage implements OnInit {
     applyFilter(event, type) {
         console.log('type', type);
         for (const prop in this.filters) {
-            if (prop === type) {
-                console.log(`obj.${prop} = ${this.filters[prop]}`);
-                console.log(`event`, event.detail.value);
-                console.log(`type`, type);
-                this.filters[prop].value = event.detail.value;
-                this.filtersToApply[prop] = this.filters[prop].value;
-            }
+            // if (event.detail.value !== "") {
+                if (prop === type) {
+                    console.log(`obj.${prop} = ${this.filters[prop]}`);
+                    // console.log(`event`, event.detail.value);
+                    console.log(`type`, type);
+                    this.filters[prop].value = event.detail.value;
+                    if (event.detail.value === "") {
+                        delete this.filtersToApply[prop];
+                    } else {
+                        this.filtersToApply[prop] = this.filters[prop].value;
+                    }
+                }
+            // }
 
         }
         console.log('filters to aply', this.filtersToApply);

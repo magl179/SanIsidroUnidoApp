@@ -232,13 +232,13 @@ export class SocialProblemsPage implements OnInit {
         const modal = await this.modalCtrl.create({
             component: SearchPage,
             componentProps: {
-                // data: [...this.socialProblems],
-                // filters: this.filterssearchPlaceholder: 'Buscar Eventos',
                 searchIdeas: [],
                 originalSearchData: [...this.socialProblems],
                 routeDetail: '/social-problem-detail',
                 searchPlaceholder : 'Buscar Problemas Sociales',
-                fieldsToSearch : ['title','description']
+                fieldsToSearch: ['title', 'description'],
+                searchInApi: true,
+                postTypeSlug: environment.socialProblemSlug
             }
         });
          //Obtener datos popover cuando se vaya a cerrar

@@ -10,6 +10,7 @@ export const environment = {
     apiBaseURL: 'http://192.168.1.4/github/SanIsidroApi/public/api/v1',
     socialProblemSlug: 'social_problems',
     eventsSlug: 'events',
+    emergenciesSlug: 'emergencies',
     image_assets: 'imagenes',
     roles_permitidos : ['morador', 'afiliado', 'policia','policia_comunitario'],
     roles_permitidos2: ['morador', 'afiliado', 'policia'],

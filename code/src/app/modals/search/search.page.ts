@@ -2,6 +2,8 @@ import { Component, OnInit, Input } from "@angular/core";
 import { ModalController, NavParams, NavController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 import { map, debounceTime, distinctUntilChanged, finalize } from 'rxjs/operators';
+import { PostsService } from "../../services/posts.service";
+import { environment } from "../../../environments/environment";
 
 @Component({
     selector: 'modal-search',
@@ -64,6 +66,8 @@ export class SearchPage implements OnInit {
     ];
 
     routeDetail = null;
+    postTypeSlug = null;
+    searchInApi = false;
     searchingPosts = false;
     itemsSearchFound = null;
     searchPlaceholder = '';
@@ -75,12 +79,15 @@ export class SearchPage implements OnInit {
     constructor(
         private modalCtrl: ModalController,
         private NavParams: NavParams,
+        private postsService: PostsService,
         private navCtrl: NavController
     ) {
         this.searchPlaceholder = this.NavParams.data.searchPlaceholder;
         this.searchIdeas = this.NavParams.data.searchIdeas;
         this.itemsSearchAvalaible = this.NavParams.data.originalSearchData;
         this.routeDetail = this.NavParams.data.routeDetail;
+        this.searchInApi = (this.NavParams.data.searchInApi) ? this.NavParams.data.searchInApi : false;
+        this.postTypeSlug = (this.NavParams.data.postTypeSlug) ? this.NavParams.data.postTypeSlug : null;
         this.fieldsToSearch = ['title','description'];
         console.log('original search data', this.itemsSearchAvalaible);
     }
@@ -117,7 +124,8 @@ export class SearchPage implements OnInit {
                     console.log('No buscar valor vacio');
                     this.itemsSearchFound = null;
                     return;
-                }
+            }
+            if (!this.searchInApi) {
                 setTimeout(async () => {
                     const items_found = await this.itemsSearchAvalaible.filter(item => {
                         let item_match = false;
@@ -151,6 +159,24 @@ export class SearchPage implements OnInit {
                     }
                     this.searchingPosts = false;
                 }, 2000);
+            } else if(this.searchInApi && this.postTypeSlug) {
+                this.searchingPosts = true;
+                this.postsService.searchPosts(value, this.postTypeSlug).pipe(
+                    finalize(() => {
+                        this.searchingPosts = false;
+                    })
+                ).subscribe((res: any) => {
+                    console.log('events search', res);
+                    this.itemsSearchFound = res.data;
+                    if (res.data.length === 0) {
+                        console.log('No hay coincidencias');
+                    } else {
+                        console.log(`Hay ${this.itemsSearchFound.length} coincidencias`);
+                    }
+                }, err => {
+                        console.log('Ocurrio un error al buscar eventos', err);
+                });
+            }
             });
     }
 

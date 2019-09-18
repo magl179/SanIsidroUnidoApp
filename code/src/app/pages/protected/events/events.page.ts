@@ -133,7 +133,9 @@ export class EventsPage implements OnInit {
                 searchIdeas: [],
                 originalSearchData: this.eventsList,
                 routeDetail: '/event-detail',
-                fieldsToSearch : ['title','description']
+                fieldsToSearch: ['title', 'description'],
+                searchInApi: true,
+                postTypeSlug: environment.eventsSlug
                 // filters: this.filters
             }
         });

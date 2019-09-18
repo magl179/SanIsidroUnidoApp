@@ -5,6 +5,7 @@ import { PostsService } from "src/app/services/posts.service";
 import { IBasicFilter } from "../../../interfaces/models";
 import { FilterPage } from "../../../modals/filter/filter.page";
 import { SearchPage } from "../../../modals/search/search.page";
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-emergencies',
@@ -142,7 +143,9 @@ export class EmergenciesPage implements OnInit {
                 searchIdeas: [],
                 originalSearchData: [...this.emergencies],
                 routeDetail: '/emergency-detail',
-                fieldsToSearch : ['title','description']
+                fieldsToSearch: ['title', 'description'],
+                searchInApi: true,
+                postTypeSlug: environment.emergenciesSlug
                 // filters: this.filters
             }
         });

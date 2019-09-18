@@ -1,8 +1,5 @@
 <ion-header>
         <ion-toolbar color="primary">
-            <!-- <ion-buttons slot="start">
-                <ion-back-button defaultHref="tabs/tabmain"></ion-back-button>
-            </ion-buttons> -->
             <ion-searchbar mode="ios" type="text" [placeholder]="searchPlaceholder" animated (ionChange)="searchPosts($event)">
             </ion-searchbar>
             <ion-buttons slot="end" class="buttons-start" (click)="closeModal()">
@@ -31,19 +28,10 @@
                 <ion-list-header>
                     <ion-label>Resultados Encontrados</ion-label>
                 </ion-list-header>
-                <ion-item *ngFor="let item of itemsSearchFound; let i = index;" lines="none" (click)="seeDetailItemFound(item.id)">
-                    <!-- <p>{{item | json}}</p> -->
+                <ion-item detail="true" *ngFor="let item of itemsSearchFound; let i = index;" lines="none" (click)="seeDetailItemFound(item.id)">
                     <ion-label>
                         <p *ngFor="let field of fieldsToSearch">{{item[field]}}</p>
                     </ion-label>
-
-                    <!-- <ion-thumbnail slot="start">
-                        <img [src]="user.avatar">
-                  </ion-thumbnail>
-                    <ion-label color="dark">
-                      <p>{{user.first_name}}</p>
-                      <p>{{ user.email }}</p>
-                    </ion-label> -->
                 </ion-item>
             </ion-list>
              <ion-list *ngIf="itemsSearchFound.length === 0">
