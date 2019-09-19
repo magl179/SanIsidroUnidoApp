@@ -6,7 +6,7 @@ import { ChangePasswordPage } from 'src/app/modals/change-password/change-passwo
 import { RequestMembershipPage } from 'src/app/modals/request-membership/request-membership.page';
 import { ChangeProfileImagePage } from 'src/app/modals/change-profile-image/change-profile-image.page';
 import { NotificationsService } from 'src/app/services/notifications.service';
-import { IPhoneUser } from '../../../interfaces/models';
+import { IPhoneUser, IRespuestaApiSIU } from '../../../interfaces/models';
 import { NetworkService } from 'src/app/services/network.service';
 import { UserService } from '../../../services/user.service';
 import { UtilsService } from '../../../services/utils.service';
@@ -50,7 +50,7 @@ export class UserProfilePage implements OnInit {
     }
 
     async ngOnInit() {
-        this.authService.getAuthUser().subscribe(res => {
+        this.authService.getAuthUser().subscribe((res: any) => {
             if (res) {                
                 this.AuthUser = res.user;
                 this.getRoles();

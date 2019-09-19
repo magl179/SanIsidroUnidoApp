@@ -20,7 +20,10 @@
     margin: 0.9em auto;
   }
   .icon-like {
-    color: #e83b46;
+    color: #85929d;
+    &.active{
+      color:#e83b46;
+    }
   }
   .icon-share {
     color: #0096fa;
@@ -188,7 +191,10 @@
       justify-content: flex-end;
     }
     .icon-like {
-      color: #e83b46;
+      color: #85929d;
+      &.active{
+        color:#e83b46;
+      }
     }
     .icon-share {
       color: #0096fa;

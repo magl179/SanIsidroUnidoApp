@@ -1,4 +1,34 @@
 //INTERFACES RECIBIR DATOS
+// Respuesta Api
+export interface IRespuestaApiSIU {
+    code: number;
+    message: string;
+    data: any[];
+    errors: any[]
+}
+
+export interface IRespuestaApiSIUPaginada{
+    code: number;
+    message: string;
+    data: IApiSUIDataPaginada;
+    errors: any[]
+}
+
+interface IApiSUIDataPaginada{
+    current_page: number;
+    data: any[];
+    first_page_url: string;
+    from: number;
+    last_page: number;
+    last_page_url: string;
+    next_page_url?: any;
+    path: string;
+    per_page: number;
+    prev_page_url?: any;
+    to: number;
+    total: number;
+}
+  
 // Compartir Publicaciones
 export interface IPostShare {
     title: string;
@@ -246,6 +276,7 @@ interface IFilterOptions {
 interface IFilterFields {
     name: string;
     value: any;
+    type?: string;
     options: IFilterOptions[];
 }
 export interface IBasicFilter {

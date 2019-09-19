@@ -78,22 +78,22 @@ export class SearchPage implements OnInit {
 
     constructor(
         private modalCtrl: ModalController,
-        private NavParams: NavParams,
+        private navParams: NavParams,
         private postsService: PostsService,
         private navCtrl: NavController
     ) {
-        this.searchPlaceholder = this.NavParams.data.searchPlaceholder;
-        this.searchIdeas = this.NavParams.data.searchIdeas;
-        this.itemsSearchAvalaible = this.NavParams.data.originalSearchData;
-        this.routeDetail = this.NavParams.data.routeDetail;
-        this.searchInApi = (this.NavParams.data.searchInApi) ? this.NavParams.data.searchInApi : false;
-        this.postTypeSlug = (this.NavParams.data.postTypeSlug) ? this.NavParams.data.postTypeSlug : null;
-        this.fieldsToSearch = ['title','description'];
+        this.searchPlaceholder = this.navParams.data.searchPlaceholder;
+        this.searchIdeas = this.navParams.data.searchIdeas;
+        this.itemsSearchAvalaible = this.navParams.data.originalSearchData;
+        this.routeDetail = this.navParams.data.routeDetail;
+        this.searchInApi = (this.navParams.data.searchInApi) ? this.navParams.data.searchInApi : false;
+        this.postTypeSlug = (this.navParams.data.postTypeSlug) ? this.navParams.data.postTypeSlug : null;
+        this.fieldsToSearch = ['title', 'description'];
         console.log('original search data', this.itemsSearchAvalaible);
     }
 
     seeDetailItemFound(id: any) {
-        if (this.routeDetail) {     
+        if (this.routeDetail) {
             this.modalCtrl.dismiss().then(() => {
                 this.navCtrl.navigateForward(`${this.routeDetail}/${id}`);
             });
@@ -117,13 +117,13 @@ export class SearchPage implements OnInit {
                 this.searchingPosts = false;
             }),
         ).subscribe(async value => {
-                console.log('value', value);
-                this.searchingPosts = true;
-                if (value.length === 0) {
-                    this.searchingPosts = false;
-                    console.log('No buscar valor vacio');
-                    this.itemsSearchFound = null;
-                    return;
+            console.log('value', value);
+            this.searchingPosts = true;
+            if (value.length === 0) {
+                this.searchingPosts = false;
+                console.log('No buscar valor vacio');
+                this.itemsSearchFound = null;
+                return;
             }
             if (!this.searchInApi) {
                 setTimeout(async () => {
@@ -148,7 +148,7 @@ export class SearchPage implements OnInit {
                         } else {
                             return true;
                         }
-                        
+
                     });
                     this.itemsSearchFound = items_found;
                     console.log('Valor encontrado', items_found);
@@ -159,7 +159,7 @@ export class SearchPage implements OnInit {
                     }
                     this.searchingPosts = false;
                 }, 2000);
-            } else if(this.searchInApi && this.postTypeSlug) {
+            } else if (this.searchInApi && this.postTypeSlug) {
                 this.searchingPosts = true;
                 this.postsService.searchPosts(value, this.postTypeSlug).pipe(
                     finalize(() => {
@@ -174,10 +174,10 @@ export class SearchPage implements OnInit {
                         console.log(`Hay ${this.itemsSearchFound.length} coincidencias`);
                     }
                 }, err => {
-                        console.log('Ocurrio un error al buscar eventos', err);
+                    console.log('Ocurrio un error al buscar posts', err);
                 });
             }
-            });
+        });
     }
 
     async searchPosts(event) {

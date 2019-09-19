@@ -140,10 +140,14 @@ export class PostsService implements OnInit {
         const url = `${environment.apiBaseURL}/categorias/${category}/subcategorias`;
         return this.httpRequest.get(url);
     }
-    // Función para obtener las publicaciones relacionadas a una categoria de una busqueda en especifico
+    // Función para buscar las publicaciones relacionadas a una categoria de una busqueda en especifico
     searchPosts(search_term: string, slugCategory: string) {
         const url = `${environment.apiBaseURL}/search/${slugCategory}?search_term=${search_term}`;
         return this.httpRequest.get(url);
     }
-
+    // Función para filtrar las publicaciones de acuerdo a unos parametros
+    filterPosts(filter_params: object , slugCategory: string) {
+        const url = `${environment.apiBaseURL}/filter/${slugCategory}`;
+        return this.httpRequest.get(url, filter_params);
+    }
 }

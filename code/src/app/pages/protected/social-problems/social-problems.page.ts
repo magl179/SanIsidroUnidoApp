@@ -4,7 +4,7 @@ import { UtilsService } from '../../../services/utils.service';
 import { AuthService } from '../../../services/auth.service';
 import { PostsService } from '../../../services/posts.service';
 // import { IUserLogued } from 'src/app/interfaces/barrios';
-import { IBasicFilter } from 'src/app/interfaces/models';
+import { IBasicFilter, IRespuestaApiSIU, IRespuestaApiSIUPaginada } from 'src/app/interfaces/models';
 import { Observable } from 'rxjs';
 import { UserService } from '../../../services/user.service';
 import { finalize } from 'rxjs/operators';
@@ -35,6 +35,7 @@ export class SocialProblemsPage implements OnInit {
         subcategory_id: {
             name: 'Subcategoria',
             value: "",
+            type: 'select',
             options: [
                 { id: 1, name: 'Transporte y Tránsito' },
                 { id: 2, name: 'Seguridad' },
@@ -45,6 +46,7 @@ export class SocialProblemsPage implements OnInit {
         is_attended: {
             name: 'Estado',
             value: "",
+            type: 'segment',
             options: [
                 { id: 1, name: 'Atendidos' },
                 { id: 0, name: 'Pendientes' }
@@ -68,7 +70,7 @@ export class SocialProblemsPage implements OnInit {
     async ngOnInit() {
         this.authService.getAuthUser().pipe(
             finalize(() => { })
-        ).subscribe(res => {
+        ).subscribe((res: any) => {
             this.AuthUser = res.user;
         },
             err => {
@@ -110,7 +112,7 @@ export class SocialProblemsPage implements OnInit {
     //Eliminar o agregar like a una publicacion
     toggleLike(like: boolean, id: number) {
         if (like) {
-            this.postService.sendDeleteDetailToPost(id).subscribe(res => {
+            this.postService.sendDeleteDetailToPost(id).subscribe((res: IRespuestaApiSIU) => {
                 console.log('detalle eliminado correctamente');
                 this.resetSocialProblems();
                 this.loadSocialProblems();
@@ -124,7 +126,7 @@ export class SocialProblemsPage implements OnInit {
                 user_id: this.AuthUser.id,
                 post_id: id
             }
-            this.postService.sendCreateDetailToPost(detailInfo).subscribe(res => {
+            this.postService.sendCreateDetailToPost(detailInfo).subscribe((res: IRespuestaApiSIU) => {
                 console.log('detalle creado correctamente');
                 this.resetSocialProblems();
                 this.loadSocialProblems();
@@ -140,11 +142,8 @@ export class SocialProblemsPage implements OnInit {
             finalize(() => {
                 this.socialProblemsLoaded = true;
             })
-        ).subscribe((res: any) => {
-            //porque contenido viene paginado
+        ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let socialProblems = res.data.data;
-            // console.log(typeof socialProblems);
-            //console.log(socialProblems_api);
             if (socialProblems) {
                 socialProblems = socialProblems.map((social_problem: any) => {
                     const postLiked = this.utilsService.checkLikePost(social_problem.details, this.AuthUser) || false;
@@ -257,7 +256,9 @@ export class SocialProblemsPage implements OnInit {
             component: FilterPage,
             componentProps: {
                 data: [...this.socialProblems],
-                filters: this.filters
+                filters: this.filters,
+                // filterInApi: true,
+                // postTypeSlug: environment.socialProblemSlug
             }
         });
          //Obtener datos popover cuando se vaya a cerrar

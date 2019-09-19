@@ -1,40 +1,82 @@
 <ion-header>
-        <ion-toolbar color="primary">
-          <ion-title class="ion-text-center">Filtro de Búsqueda</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content>
-        <ion-list class="list_filter">
-          <div *ngFor="let filter of filters | keyvalue">
-            <ion-item lines="none">
-              <ion-label>{{filter.value.name}}</ion-label>
-              <ion-select [value]="filter.value.value" okText="Aplicar" cancelText="Cancelar" (ionChange)="applyFilter($event, filter.key)">
-                <ion-select-option value="">Todas</ion-select-option>
-                <ion-select-option *ngFor="let option of filter.value.options; let i = index;" [value]="option.id">{{option.id}} - {{option.name}}</ion-select-option>
-            </ion-select>
+    <ion-toolbar color="primary">
+        <ion-title class="ion-text-center">Filtro de Búsqueda</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ion-grid *ngIf="filteringPosts">
+        <ion-row>
+            <ion-col text-center style="margin: 2rem auto">
+                <ion-spinner name="crescent"></ion-spinner>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+    <ion-list class="list_filter">
+        <div *ngFor="let filter of filters | keyvalue">
+            <ion-item lines="full" *ngIf="filter.value.type === 'select'">
+                <ion-label>{{filter.value.name}}</ion-label>
+                <ion-select [value]="filter.value.value" okText="Aplicar" cancelText="Cancelar"
+                    (ionChange)="applyFilter($event, filter.key)">
+                    <ion-select-option value="">{{allDataPlaceholder}}</ion-select-option>
+                    <ion-select-option *ngFor="let option of filter.value.options; let i = index;"
+                        [value]="option.id">{{option.id}} - {{option.name}}</ion-select-option>
+                </ion-select>
             </ion-item>
-          </div>
-        </ion-list> 
-        <ion-list *ngIf="dataFiltered">
-          <p>Coincidencias: {{dataFiltered.length}}</p>
-          <ion-item lines="none" *ngFor="let data of dataFiltered">
+            <div *ngIf="filter.value.type === 'segment'">
+                <p style="padding:0 1rem;">{{filter.value.name}}</p>
+                <!-- <ion-item> -->
+                <ion-segment mode="ios" [value]="filter.value.value" style="padding: 1rem"
+                    (ionChange)="applyFilter($event, filter.key)">
+                    <ion-segment-button mode="ios" value="" style="padding: .25rem;">
+                        <ion-label>{{allDataPlaceholder}}</ion-label>
+                    </ion-segment-button>
+                    <ion-segment-button *ngFor="let option of filter.value.options; let i = index;"
+                        mode="ios" [value]="option.id" style="padding: .25rem;">
+                        <ion-label>{{option.id}} - {{option.name}}</ion-label>
+                    </ion-segment-button>
+                </ion-segment>
+                <!-- </ion-item> -->
+            </div>
+            <div *ngIf="filter.value.type === 'radio'">
+                <p style="padding: 0 1rem;margin-bottom: 10px;text-transform: uppercase;">
+                    {{filter.value.name}}</p>
+                <ion-list>
+                    <ion-radio-group mode="ios" [value]="filter.value.value"
+                        (ionChange)="applyFilter($event, filter.key)">
+                        <ion-item lines="none">
+                            <ion-label>{{allDataPlaceholder}}</ion-label>
+                            <ion-radio mode="ios" slot="end" value=""></ion-radio>
+                        </ion-item>
+                        <ion-item lines="none"
+                            *ngFor="let option of filter.value.options; let i = index;">
+                            <ion-label>{{option.id}} - {{option.name}}</ion-label>
+                            <ion-radio mode="ios" slot="end" [value]="option.id"></ion-radio>
+                        </ion-item>
+                    </ion-radio-group>
+                </ion-list>
+            </div>
+        </div>
+    </ion-list>
+    <ion-list *ngIf="dataFiltered">
+        <p>Coincidencias: {{dataFiltered.length}}</p>
+        <ion-item lines="none" *ngFor="let data of dataFiltered">
             <ion-label>
-              <p>Name: {{data | json}}</p>
+                <p>Name: {{data | json}}</p>
             </ion-label>
-          </ion-item>
-        </ion-list>
-      </ion-content>
-      <ion-footer>
-        <ion-toolbar color="light">
+        </ion-item>
+    </ion-list>
+</ion-content>
+<ion-footer>
+    <ion-toolbar color="light">
         <ion-buttons slot="primary" class="buttons-end">
-             <ion-button color="medium" (click)="closeModalEmpty()">
-             Cancelar
+            <ion-button color="medium" (click)="closeModalEmpty()">
+                Cancelar
             </ion-button>
-          </ion-buttons>
-          <ion-buttons slot="end" class="buttons-end">
-             <ion-button color="primary" fill="solid" (click)="closeModal()">
-             Aplicar
+        </ion-buttons>
+        <ion-buttons slot="end" class="buttons-end">
+            <ion-button color="primary" fill="solid" (click)="closeModal()">
+                Aplicar
             </ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-footer>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-footer>

@@ -40,7 +40,7 @@ export class AuthInterceptorService implements HttpInterceptor {
 
     logoutUser() {
         this.authService.removeAuthInfo();
-        this.navCtrl.navigateRoot('/login');
+        this.navCtrl.navigateRoot('/tutorial');
     }
 
 }

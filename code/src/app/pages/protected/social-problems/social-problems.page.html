@@ -1,6 +1,6 @@
 <app-header-back title="Problemas Sociales"></app-header-back>
 <ion-content padding>
-    <ion-grid>
+    <!-- <ion-grid>
         <ion-row>
             <ion-col size="4" style="display:flex;justify-content: center;">
                 <ion-button color="primary" (click)="reportSocialProblem()">
@@ -18,7 +18,23 @@
                 </ion-button>
             </ion-col>
         </ion-row>
-    </ion-grid>
+    </ion-grid> -->
+    <ion-toolbar>
+        <ion-buttons slot="secondary">
+            <ion-button (click)="reportSocialProblem()">
+                <ion-icon slot="icon-only" name="send"></ion-icon>
+            </ion-button>
+            <ion-button (click)="showSearchModal()">
+                <ion-icon slot="icon-only" name="search"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-buttons slot="primary">
+            <ion-button (click)="showFilterModal()">
+                <ion-icon slot="icon-only" name="options"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <!-- <ion-title>Opciones</ion-title> -->
+    </ion-toolbar>
     <div>
         <p class="test" *ngIf="socialProblems">
             Social Problems Length {{ socialProblemsFilter.length}}
@@ -93,11 +109,11 @@
                     </ion-card-subtitle>
                 </ion-card-header>
                 <ion-card-content class="social_problem_card_content">
-                        <p class="post_description">
-                                {{socialProblem.description | truncate: 50}}
-                        </p>
-                        <p class="see_more" (click)="postDetail(socialProblem.id)">Ver más...</p>
-                    </ion-card-content>
+                    <p class="post_description">
+                        {{socialProblem.description | truncate: 50}}
+                    </p>
+                    <p class="see_more" (click)="postDetail(socialProblem.id)">Ver más...</p>
+                </ion-card-content>
                 <!-- <ion-card-content>
                     <p class="post-description">{{socialProblem.description | truncate: 50}} </p>
                     <p class="post-see-more" (click)="postDetail(socialProblem.id)">Ver más...</p>
@@ -118,19 +134,20 @@
                     </div>
                 </div> -->
                 <div class="social_problem_card_footer">
-                        <div class="count_likes">
-                            <span class="post-num-likes">{{socialProblem.details.length}} me gusta</span>
-                        </div>
-                        <div class="post_options">
-                            <div class="btn-like" >
-                                <ion-icon slot="icon-only" class="icon-like" 
+                    <div class="count_likes">
+                        <span class="post-num-likes">{{socialProblem.details.length}} me
+                            gusta</span>
+                    </div>
+                    <div class="post_options">
+                        <div class="btn-like">
+                            <ion-icon slot="icon-only" class="icon-like"
                                 [name]="(socialProblem.postLiked)?'heart':'heart-empty'"></ion-icon>
-                            </div>
-                            <div class="btn-share" (click)="sharePost(socialProblem)">
-                                <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
-                            </div>
+                        </div>
+                        <div class="btn-share" (click)="sharePost(socialProblem)">
+                            <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
                         </div>
                     </div>
+                </div>
             </div>
         </ion-card>
     </div>

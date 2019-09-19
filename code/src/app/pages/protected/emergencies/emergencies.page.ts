@@ -20,6 +20,7 @@ export class EmergenciesPage implements OnInit {
         is_attended: {
             name: 'Estado',
             value: "",
+            type: 'segment', //select //radio
             options: [
                 { id: 1, name: 'Atendidos' },
                 { id: 0, name: 'Pendientes' }

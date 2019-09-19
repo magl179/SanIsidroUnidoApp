@@ -6,24 +6,29 @@
                 placeholder="Buscar Eventos" [value]="textoEventoBuscar"
                 (ionChange)="searchEvents($event)"></ion-searchbar>
         </ng-container>showModalSearchEmergency() -->
-        <ion-row class="ion-align-items-center">
-                <!-- <ion-grid size="10"></ion-grid> -->
-                <ion-grid size="4" style="display:flex;justify-content:center;">
-                    <ion-button color="primary" (click)="showModalSearchEvents()">
-                        Buscar <ion-icon name="search" slot="end"></ion-icon>
+        <!-- <ion-row class="ion-align-items-center">
+            <ion-grid size="4" style="display:flex;justify-content:center;">
+                <ion-button color="primary" (click)="showModalSearchEvents()">
+                    Buscar <ion-icon name="search" slot="end"></ion-icon>
                 </ion-button>
-                </ion-grid>
-                <!-- <ion-grid size="4" style="display:flex;justify-content:center;">
-                    <ion-button color="primary" (click)="reportEmergency()">
-                        Reportar <ion-icon name="send" slot="end"></ion-icon>
-                    </ion-button>
-                </ion-grid>
-                <ion-grid size="4">
-                    <ion-button color="primary" (click)="showModalFilterEmergencies()">
-                        Filtrar <ion-icon name="options" slot="end"></ion-icon>
-                    </ion-button>
-                </ion-grid> -->
-            </ion-row>
+            </ion-grid>
+        </ion-row> -->
+        <ion-toolbar>
+            <!-- <ion-buttons slot="secondary">
+                <ion-button (click)="reportSocialProblem()">
+                    <ion-icon slot="icon-only" name="send"></ion-icon>
+                </ion-button>
+                <ion-button (click)="showModalSearchEvents()">
+                    <ion-icon slot="icon-only" name="search"></ion-icon>
+                </ion-button>
+            </ion-buttons> -->
+            <ion-buttons slot="primary">
+                <ion-button (click)="showModalSearchEvents()">
+                    <ion-icon slot="icon-only" name="search"></ion-icon>
+                </ion-button>
+            </ion-buttons>
+            <!-- <ion-title>Opciones</ion-title> -->
+        </ion-toolbar>
         <!-- Tarjetas Animacion hasta cargar datos-->
         <ng-container *ngIf="!eventsList || eventsList.length === 0">
             <ion-card *ngFor="let event of [1,1,1,1,1,1,1];"
@@ -77,7 +82,7 @@
                             <ion-icon name="calendar"></ion-icon>
                             {{getFullDate(event.date, event.time) | simpleBeatifulDate}}
                         </span>
-                        <span class="event_address">
+                        <span class="event_address" *ngIf="event.ubication && event.ubication.address">
                             <ion-icon name="navigate"></ion-icon>
                             {{ event.ubication.address || 'Direccion no encontrada'}}
                         </span>
@@ -142,20 +147,21 @@
                     </div>
                 </div> -->
                 <div class="event_card_footer">
-                        <div class="post_assistants">
-                    <ion-button class="btn-assistant" color="primary" (click)="toggleAssistance(event.postLiked, event.id)">
-                              Asistiré
-                               <ion-icon slot="start" class="icon-assistant" 
-                               [name]="(event.postLiked)?'body':'man'"></ion-icon>
-                            </ion-button>
-                        </div>
-                        <div class="post_options">
-                          
-                            <div class="btn-share" (click)="sharePost(event)">
-                                <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
-                            </div>
+                    <div class="post_assistants">
+                        <ion-button class="btn-assistant" [color]="(event.postLiked)?'primary':'light'"
+                            (click)="toggleAssistance(event.postLiked, event.id)">
+                            Interesado
+                            <ion-icon slot="start" class="icon-assistant"
+                                [name]="(event.postLiked)?'body':'man'"></ion-icon>
+                        </ion-button>
+                    </div>
+                    <div class="post_options">
+
+                        <div class="btn-share" (click)="sharePost(event)">
+                            <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
                         </div>
                     </div>
+                </div>
             </ion-card>
         </ng-container>
     </ng-container>

@@ -1,15 +1,24 @@
 <app-header-back title="Mis Emergencias"></app-header-back>
 
 <ion-content padding>
-    <!-- <div class="container_emergency_options">
-        <div class="first"></div>
-        <div class="create">
-            <ion-button color="primary">Reportar</ion-button>
-        </div>
-    </div> -->
-    <ion-grid>
+    <ion-toolbar>
+        <ion-buttons slot="secondary">
+           <ion-button (click)="reportEmergency()">
+             <ion-icon slot="icon-only" name="send"></ion-icon>
+           </ion-button>
+           <ion-button (click)="showModalSearchEmergencies()">
+             <ion-icon slot="icon-only" name="search"></ion-icon>
+           </ion-button>
+         </ion-buttons>
+         <ion-buttons slot="primary">
+           <ion-button (click)="showModalFilterEmergencies()">
+             <ion-icon slot="icon-only" name="options"></ion-icon>
+           </ion-button>
+         </ion-buttons>
+        <!-- <ion-title>Opciones</ion-title> -->
+       </ion-toolbar>
+    <!-- <ion-grid>
         <ion-row class="ion-align-items-center">
-            <!-- <ion-grid size="10"></ion-grid> -->
             <ion-grid size="4" style="display:flex;justify-content:center;">
                 <ion-button color="primary" (click)="showModalSearchEmergencies()">
                     Buscar <ion-icon name="search" slot="end"></ion-icon>
@@ -26,7 +35,7 @@
                 </ion-button>
             </ion-grid>
         </ion-row>
-    </ion-grid>
+    </ion-grid> -->
     <!-- <div>
         <ion-searchbar animated debounce="500" showCancelButton="focus"
             placeholder="Buscar Mis Emergencias" [value]="textoEmergenciaBuscar" (ionChange)="searchEmergencies($event)"></ion-searchbar>
