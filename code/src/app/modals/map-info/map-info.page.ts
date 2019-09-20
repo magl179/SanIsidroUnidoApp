@@ -12,7 +12,7 @@ export class MapInfoPage implements OnInit {
 
     @Input() mapPoint: IPublicService;
     @Input() currentLocation: { latitude: number
-    longitude: number};
+    longitude: number, route?: any};
 
     distancia = null;
 
@@ -40,6 +40,13 @@ export class MapInfoPage implements OnInit {
             nombre: 'Ana',
             pais: 'España'
         });
+    }
+
+    getKilometers(meters) {
+        return Math.round(meters / 1000);
+    }
+    getMinutes(seconds) {
+        return Math.round(seconds / 60);
     }
 
 }

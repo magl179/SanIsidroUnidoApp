@@ -9,8 +9,8 @@ import { LocalizationService } from '../../services/localization.service';
 import { environment } from "../../../environments/environment";
 
 // const iconsColors = ['red', 'orange', 'yellow', 'purple'];
-const tileURL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-const tileAtribution = '&copy; <a target=_blank" href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+// const tileURL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+// const tileAtribution = '&copy; <a target=_blank" href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
 
 @Component({
     selector: 'multiple-map',
@@ -20,7 +20,7 @@ const tileAtribution = '&copy; <a target=_blank" href="https://www.openstreetmap
 export class MultipleMapComponent implements OnInit, AfterViewInit {
 
     @Input() idMap: string;
-    @Input() zoomMap: number = 16;
+    @Input() zoomMap = 16;
     @Input() mapPoints: IPublicService[] = [];
     @Input() enableGesture = false;
     @Output() returnMapLoaded = new EventEmitter();
@@ -31,21 +31,18 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
     mapIsLoaded = false;
     markersLayer = new Leaflet.LayerGroup();
     currentUserLayer = new Leaflet.LayerGroup();
-    currentPolyline = Leaflet.polyline([[1, 2], [3, 4]], {
-        color: '#ff8181'
-    });
+    // currentPolyline = Leaflet.polyline([[1, 2], [3, 4]], {
+    //     color: '#ff8181'
+    // });
     markerSelected = false;
     currentService = null;
-    currentCoordinate = null;
-    latlngsOrigDest = [
-        [-0.0756493, -78.433859],
-        [-0.0999525, -78.4740685]
-    ];
+    currentCoordinate: any = null;
+    // latlngsOrigDest = [
+    //     [-0.0756493, -78.433859],
+    //     [-0.0999525, -78.4740685]
+    // ];
     mapLoading = null;
-    // strictBounds = new Leaflet.latLngBounds(
-    //     new Leaflet.latLng(-0.27950918164172833, -78.56206247545173),
-    //     new Leaflet.latLng(-0.06358925013978478, -78.42609322912877)
-    // );
+    currentRoute = null;
 
     constructor(
         private mapService: MapService,
@@ -54,6 +51,39 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
     ) { }
 
     async ngOnInit() { }
+
+    createLatLng(latitude: number, longitude: number) {
+        return Leaflet.latLng(latitude, longitude);
+    }
+
+    createWayPoints(lat1: number, lng1: number, lat2: number, lng2: number) {
+        return [this.createLatLng(lat1, lng1), this.createLatLng(lat2, lng2)];
+    }
+
+    createRoute(waypoints: any) {
+        const route = Leaflet.Routing.control({
+            waypoints: waypoints,
+            plan: Leaflet.Routing.plan(waypoints, {
+                createMarker: function (i: any, wp: any) {
+                    //   return Leaflet.marker(wp.latLng, {
+                    //     draggable: false
+                    //   });
+                    return null;
+                }
+            }),
+            router: new Leaflet.Routing.osrmv1({
+                language: 'es'
+            }),
+            routeWhileDragging: false,
+            autoRoute: false,
+            fitSelectedRoutes: true,
+            useZoomParameter: true,
+            show: false,
+            showAlternatives: true
+        });
+        // ruta1.route();
+        return route;
+    }
 
     async ngAfterViewInit() {
         //Loading Cargar Mapa y Mostrarlo
@@ -75,6 +105,11 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
         }
     }
 
+    // Clear route:
+    // control.setWaypoints([]);
+    // Remove control:
+    // map.removeControl(control);
+
     async initializeMap() {
         // Verificar si se habilita el gesture handling
         if (this.enableGesture) {
@@ -87,9 +122,8 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
             markerZoomAnimation: true,
             zoomControl: true
         });
-
         // Agregar Evento al Mapa cuando esta cargado
-        this.map.on('load', (e) => {
+        this.map.on('load', (e: any) => {
             this.mapIsLoaded = true;
             // Apagar el loading
             this.mapLoading.dismiss();
@@ -111,12 +145,22 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
             reuseTiles: true
         }).addTo(this.map);
 
+        //Añadir Ruta
+        this.currentRoute = this.createRoute([null]);
+        this.currentRoute.on('routesfound', async function (e: any) {
+            console.log('event route selected', e);
+        });
+        this.currentRoute.on('routingerror', function (e: any) {
+            console.log('error', e);
+        });
+
         // Añadir Polilinea al Mapa
-        this.currentPolyline.addTo(this.map);
+        // this.currentPolyline.addTo(this.map);
+        this.currentRoute.addTo(this.map);
         // Añadir el control de escala
         // Leaflet.control.scale({ position: 'bottomleft' }).addTo(this.map);
         // Si obtuve coordenadas añadir el marcador
-        if (this.currentCoordinate !== null) {
+        if (this.currentCoordinate) {
             const iconCurrent = await this.mapService.getCustomIcon('red');
             let currentPoint;
             if (iconCurrent) {
@@ -137,7 +181,7 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
             if (markerIcon) {
                 // tslint:disable-next-line: max-line-length
                 punto = new Leaflet.Marker(new Leaflet.latLng(
-                    point.ubication.latitude,point.ubication.longitude), { title, icon: markerIcon });
+                    point.ubication.latitude, point.ubication.longitude), { title, icon: markerIcon });
             } else {
                 // tslint:disable-next-line: max-line-length
                 punto = new Leaflet.Marker(new Leaflet.latLng(point.ubication.latitude, point.ubication.longitude), { title });
@@ -156,23 +200,13 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
             autoCollapse: true,
             autoCollapseTime: 2000,
             // Function al mover localización
-            moveToLocation: (latlng, title, map) => {
-                console.log(latlng);
-                console.log(map);
-                console.log(`Move Location => current: ${this.currentCoordinate} destino: ${latlng}`);
-                // console.log(title);
-                // console.log(map);
+            moveToLocation: async (latlng, title, map) => {
                 this.map = map;
-                // this.map.setView(latlng, this.zoomMap);
-               
-                // this.map.flyTo(latlng, this.zoomMap);
-                if (this.currentCoordinate !== null) {
-                    this.latlngsOrigDest[0] = [this.currentCoordinate.latitude, this.currentCoordinate.longitude];
-                    this.latlngsOrigDest[1] = [latlng.lat, latlng.lng];
-                    // console.log('tatlng: ', this.latlngsOrigDest);
-                    this.currentPolyline.setLatLngs(this.latlngsOrigDest);
-                    this.map.fitBounds(this.currentPolyline.getBounds())
-                    this.currentPolyline.redraw();
+                if (this.currentCoordinate) {
+                    console.log('Redraw route', title);
+                    const wp1 = this.createLatLng(this.currentCoordinate.latitude, this.currentCoordinate.longitude);
+                    this.currentRoute.setWaypoints([wp1, latlng]);
+                    await this.currentRoute.route();
                 }
             }
         });
@@ -180,25 +214,21 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
         this.map.addLayer(this.markersLayer);
 
         this.map.addControl(searchControl);
-        searchControl.on('search:collapsed', (e) => {
-            // console.log(e);
-        });
+        searchControl.on('search:collapsed', (e: any) => { });
     }
 
     async sendMapInfo() {
-        await this.returnMapLoaded.emit({
+        this.returnMapLoaded.emit({
             mapisLoad: this.mapIsLoaded,
             serviceSelected: this.currentService,
             currentLocation: this.currentCoordinate,
-            markerSelected : this.markerSelected
+            markerSelected: this.markerSelected
         });
         this.markerSelected = false;
     }
 
     showInfo(e) {
         let selectedMarker = null;
-        // console.log(e);
-        // console.log(this.mapPoints);
         this.mapPoints.forEach((point) => {
             if (point.ubication.latitude === e.latlng.lat && point.ubication.longitude === e.latlng.lng) {
                 selectedMarker = point;
@@ -208,33 +238,6 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
         this.markerSelected = true;
         this.sendMapInfo();
     }
-
-    // preventMoveOutLimits() {
-    //     this.map.on('moveend', () => {
-    //         // code stuff
-    //         if (this.strictBounds.contains(this.map.getCenter())) {
-    //             return;
-    //         }
-    //         // We're out of bounds - Move the map back within the bounds
-    //         const c = this.map.getCenter();
-    //         console.log('ccc', c);
-    //         let x = c.lng;
-    //         let y = c.lat;
-    //         const maxX = this.strictBounds.getNorthEast().lng;
-    //         const maxY = this.strictBounds.getNorthEast().lat;
-    //         const minX = this.strictBounds.getSouthWest().lng;
-    //         const minY = this.strictBounds.getSouthWest().lat;
-
-    //         if (x < minX) { x = minX; }
-    //         if (x > maxX) { x = maxX; }
-    //         if (y < minY) { y = minY; }
-    //         if (y > maxY) { y = maxY; }
-
-    //         setTimeout(() => {
-    //             this.map.panTo(new Leaflet.latLng(y, x));
-    //         }, 1000);
-    //     });
-    // }
 
 }
 

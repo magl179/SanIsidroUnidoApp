@@ -21,6 +21,7 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
 import { OneSignal } from '@ionic-native/onesignal/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+// import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { Device } from '@ionic-native/device/ngx';
 import { Network } from '@ionic-native/network/ngx';
@@ -64,6 +65,7 @@ import { FilterPostsComponent } from "./components/filter-posts/filter-posts.com
         GooglePlus,
         Facebook,
         OneSignal,
+        // WebView,
         SocialSharing,
         Network,
         Device,

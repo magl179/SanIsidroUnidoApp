@@ -1,7 +1,7 @@
 <app-header-back title="Servicios Públicos"></app-header-back>
 <ion-content>
-    <app-network-banner *ngIf="!appNetworkConnection" networkConnection="appNetworkConnection"></app-network-banner>
-    <div *ngIf="appNetworkConnection">
+    <!-- <app-network-banner *ngIf="!appNetworkConnection" networkConnection="appNetworkConnection"></app-network-banner> -->
+    <div>
         <multiple-map *ngIf="publicServices.length > 0"
             idMap="public-services" 
             [zoomMap]="12" 

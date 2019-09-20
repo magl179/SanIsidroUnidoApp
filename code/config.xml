@@ -116,5 +116,8 @@
     <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
         <string>Nosotros usamos tu localizacion para ofrecerte al 100% las caracteristicas de la aplicacion.</string>
     </edit-config>
+    <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryUsageDescription">
+        <string>Nosotros solicitamos el acceso a tu galeria para que puedas subir imagenes desde la galeria</string>
+    </edit-config>
     <allow-navigation href="http://localhost:8100" sessionid="3cfee7e0" />
 </widget>

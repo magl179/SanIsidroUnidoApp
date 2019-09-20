@@ -2,11 +2,14 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { UtilsService } from 'src/app/services/utils.service';
 import { Platform } from '@ionic/angular';
+// import { WebView } from '@ionic-native/ionic-webview/ngx';
 
 const cameraOptions: CameraOptions = {
-    quality: 100,
+    quality: 80,
     correctOrientation: true,
-    saveToPhotoAlbum: false
+    saveToPhotoAlbum: false,
+    targetWidth:350,
+    targetHeight: 200
 };
 
 @Component({
@@ -22,6 +25,7 @@ export class UploadImageComponent implements OnInit {
     
 
     @Input() maxImages = 3;
+    // @Input() type = 'base64'; 
     @Input() uploadedImages = [];
     @Output() returnUploadedImages = new EventEmitter();
 
@@ -35,6 +39,7 @@ export class UploadImageComponent implements OnInit {
     }
 
     ngOnInit() {
+        // cameraOptions.destinationType = this.camera.DestinationType.DATA_URL;
         cameraOptions.destinationType = this.camera.DestinationType.DATA_URL;
         cameraOptions.encodingType = this.camera.EncodingType.JPEG;
         cameraOptions.mediaType = this.camera.MediaType.PICTURE;
@@ -82,11 +87,9 @@ export class UploadImageComponent implements OnInit {
             await this.camera.getPicture(cameraOptions)
                 .then(
                     (datosImagen) => {
-                        // DatoImagen es un string codificado en base64 - BASE URI
-                        this.imagenB64 = `data:image/jpeg;base64,${datosImagen}`;
-                        this.uploadedImages.push(this.imagenB64);
-                        // this.uploadedImages.push(datosImagen);
-                        // console.log('imagen subida', datosImagen);
+                            // DatoImagen es un string codificado en base64 - BASE URI
+                            this.imagenB64 = `data:image/jpeg;base64,${datosImagen}`;
+                            this.uploadedImages.push(this.imagenB64);
                     }, err => {
                         console.log({ errorCapturarImagen: err });
                     });

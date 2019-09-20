@@ -84,3 +84,7 @@
     height: 250px;
 }
 
+//Hide Leaflet Routing Instructions
+.leaflet-control-container .leaflet-routing-container-hide {
+    display: none;
+}
