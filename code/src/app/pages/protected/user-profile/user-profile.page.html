@@ -5,7 +5,7 @@
     <div class="container-profile" *ngIf="appNetworkConnection">
         <div class="img-profile ion-padding-top">
             <div class="item_img" *ngIf="AuthUser">
-                <img [src]="(AuthUser.avatar) ? getImageURL(AuthUser.avatar) : 'assets/img/default/img_avatar.png'" alt="User Profile Image" />
+                <img [src]="(AuthUser.avatar) ? getImageURL(AuthUser.avatar) : 'assets/img/default/img_avatar.png'" fallimg="user_avatar"/>
                 <div class="upload_image" (click)="showChangeUserImageProfileModal()">
                     <ion-icon name="camera"></ion-icon>
                 </div>

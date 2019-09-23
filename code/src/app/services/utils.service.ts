@@ -18,7 +18,7 @@ declare var moment: any;
 })
 export class UtilsService implements OnInit {
 
-    URL_PATTERN = new RegExp(/^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/);
+    URL_PATTERN = new RegExp("^(?:(?:http(?:s)?|ftp)://)(?:\\S+(?::(?:\\S)*)?@)?(?:(?:[a-z0-9\u00a1-\uffff](?:-)*)*(?:[a-z0-9\u00a1-\uffff])+)(?:\\.(?:[a-z0-9\u00a1-\uffff](?:-)*)*(?:[a-z0-9\u00a1-\uffff])+)*(?:\\.(?:[a-z0-9\u00a1-\uffff]){2,})(?::(?:\\d){2,5})?(?:/(?:\\S)*)?$");
 
     constructor(
         private iab: InAppBrowser,
@@ -168,6 +168,7 @@ export class UtilsService implements OnInit {
     //Obtener la URL de una imagen
     getImageURL(image_name: string) {
         const imgIsURL = this.URL_PATTERN.test(image_name);
+        // console.log('is image url extern', imgIsURL);
         if (imgIsURL) {
             return image_name;
         } else {
@@ -178,4 +179,23 @@ export class UtilsService implements OnInit {
     imgIsURL(image_name: string) {
         return this.URL_PATTERN.test(image_name);
     }
+
+    isJSON(str) {
+        try {
+          return JSON.parse(str) && !!str;
+        } catch (e) {
+          return false;
+        }
+    }
+    
+    getJSON(variable){
+        if(typeof variable === 'object'){
+          return variable;
+        }
+        if(this.isJSON(variable)){
+          return JSON.parse(variable);
+        } else {
+          return null;
+        }
+      }
 }

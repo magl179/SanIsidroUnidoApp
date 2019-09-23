@@ -9,6 +9,9 @@ import { AuthService } from '../../../services/auth.service';
 import { IEvent, IPostShare } from '../../../interfaces/models';
 import { NetworkService } from '../../../services/network.service';
 import { environment } from 'src/environments/environment.prod';
+import { ModalController } from "@ionic/angular";
+import { ImageDetailPage } from "../../../modals/image_detail/image_detail.page";
+import { finalize } from 'rxjs/operators';
 
 
 @Component({
@@ -19,21 +22,22 @@ import { environment } from 'src/environments/environment.prod';
 export class EventDetailPage implements OnInit {
 
     id: string;
-    postLiked = false;
+    eventLoaded = false;
     appNetworkConnection = false;
     AuthUser = null;
     event:IEventDetail = null;
 
-    mapPoints: ISimpleUbicationItem = {
-        latitude: 0.0456696,
-        longitude: -78.14502999999999,
-        title: 'Ubicación del Evento'
-    };
+    // mapPoints: ISimpleUbicationItem = {
+    //     latitude: 0.0456696,
+    //     longitude: -78.14502999999999,
+    //     title: 'Ubicación del Evento'
+    // };
 
     constructor(
         private route: ActivatedRoute,
         private utilsService: UtilsService,
         private postService: PostsService,
+        private modalCtrl: ModalController,
         private networkService: NetworkService,
         private authService: AuthService) { }
 
@@ -50,11 +54,16 @@ export class EventDetailPage implements OnInit {
     }
 
     getEvent() {
-        this.postService.getEvent(+this.id).subscribe(res => {
+        this.eventLoaded = false;
+        this.postService.getEvent(+this.id).pipe(
+            finalize(() => {
+                this.eventLoaded = true;
+            })
+        ).subscribe(res => {
             if (res) {
                 this.event = res.data;
                 if (this.event) {
-                    this.postLiked = this.utilsService.checkLikePost(this.event.details, this.AuthUser);
+                    this.event.postLiked = this.utilsService.checkLikePost(this.event.details, this.AuthUser);
                 }
                 // console.log('res post', res);
                 // console.log('Dato post', this.event);
@@ -130,6 +139,12 @@ export class EventDetailPage implements OnInit {
         return (imgIsURL) ? image_name : `${environment.apiBaseURL}/${environment.image_assets}/${image_name}` ;
     }
 
+    getBGCover(image_cover: any) {
+        // console.log('has images', image_cover);
+        const img = this.utilsService.getImageURL(image_cover);
+        return `linear-gradient(to bottom, rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.23)), url('${img}')`;
+    }
+
     getImages($imagesArray) {
         if ($imagesArray) {
             if ($imagesArray.length === 0) {
@@ -141,6 +156,16 @@ export class EventDetailPage implements OnInit {
             return '';
         }
        
+    }
+
+    async showImageDetailModal(image: string) {
+        const modal = await this.modalCtrl.create({
+            component: ImageDetailPage,
+            componentProps: {
+                image,
+            }
+        });
+        await modal.present();
     }
 
 }

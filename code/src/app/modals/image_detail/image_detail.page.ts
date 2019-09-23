@@ -9,8 +9,8 @@ import { ModalController } from '@ionic/angular';
 export class ImageDetailPage implements OnInit {
 
     @Input() image: string = "https://farm6.staticflickr.com/5591/15008867125_b61960af01_h.jpg";
-    description2 = "Conoce a uno de neustros expositores @Splaktar visita nuestra cuenta Twitter @Angular Quito";
-    @Input() description = "Conoce a uno de neustros expositores @Splaktar visita nuestra cuenta Twitter @Angular Quito";
+    // description2 = "Conoce a uno de neustros expositores @Splaktar visita nuestra cuenta Twitter @Angular Quito";
+    @Input() description = null;
 
     constructor(
       private modalCtrl: ModalController

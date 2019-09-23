@@ -3,6 +3,8 @@ import * as Leaflet from 'leaflet';
 import { GestureHandling } from 'leaflet-gesture-handling';
 import { ISimpleUbicationItem } from 'src/app/interfaces/barrios';
 import { environment } from 'src/environments/environment';
+import { IUbication } from "../../interfaces/models";
+import { UtilsService } from "../../services/utils.service";
 
 const tileURL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const tileAtribution = '&copy; <a target=_blank" href="https://www.openstreetmap.org/copyright">© Colaboradores de OpenStreetMap</a>';
@@ -17,15 +19,18 @@ export class SimpleMapComponent implements AfterViewInit {
     @Input() idMap: string;
     @Input() zoom = 14;
     @Input() classMap = '';
-    @Input() coordsMap: ISimpleUbicationItem = {
+    @Input() coordsMap: IUbication = {
         latitude: null,
         longitude: null,
-        title: null
+        address: null,
+        description: null
     };
     @Input() enableGesture = false;
     map: any;
 
-    constructor() { }
+    constructor(
+        private utilsService: UtilsService
+    ) { }
 
     async ngAfterViewInit() {
         await this.initializeMap();
@@ -35,12 +40,16 @@ export class SimpleMapComponent implements AfterViewInit {
         if (this.enableGesture) {
             Leaflet.Map.addInitHook('addHandler', 'gestureHandling', GestureHandling);
         }
+
+        this.coordsMap = this.utilsService.getJSON(this.coordsMap);
+
         this.map = Leaflet.map(this.idMap, {
             gestureHandling: this.enableGesture,
             fadeAnimation: false,
             zoomAnimation: false,
             markerZoomAnimation: false
         });
+        console.log('Map coords', this.coordsMap);
         this.map.on('load', (e) => {
             console.log('MAPA SIMPLE CARGADO');
             Leaflet.control.scale().addTo(this.map);
@@ -54,8 +63,7 @@ export class SimpleMapComponent implements AfterViewInit {
             reuseTiles: true
         }).addTo(this.map);
 
-        Leaflet.marker([this.coordsMap.latitude, this.coordsMap.longitude]).addTo(this.map)
-            .bindPopup(this.coordsMap.title);
+        Leaflet.marker([this.coordsMap.latitude, this.coordsMap.longitude]).addTo(this.map);
     }
 
     onTwoFingerDrag(e) {

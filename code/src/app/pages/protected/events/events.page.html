@@ -1,170 +1,82 @@
-<app-header-back title="Eventos"></app-header-back>
+<app-header-back title="Eventos" [searchAvalaible]="true"
+    (returnHeaderBackData)="getHeaderBackData($event)"></app-header-back>
 <ion-content padding>
-    <ng-container>
-        <!-- <ng-container>
-            <ion-searchbar animated debounce="700" showCancelButton="focus"
-                placeholder="Buscar Eventos" [value]="textoEventoBuscar"
-                (ionChange)="searchEvents($event)"></ion-searchbar>
-        </ng-container>showModalSearchEmergency() -->
-        <!-- <ion-row class="ion-align-items-center">
-            <ion-grid size="4" style="display:flex;justify-content:center;">
-                <ion-button color="primary" (click)="showModalSearchEvents()">
-                    Buscar <ion-icon name="search" slot="end"></ion-icon>
-                </ion-button>
-            </ion-grid>
-        </ion-row> -->
-        <ion-toolbar>
-            <!-- <ion-buttons slot="secondary">
-                <ion-button (click)="reportSocialProblem()">
-                    <ion-icon slot="icon-only" name="send"></ion-icon>
-                </ion-button>
-                <ion-button (click)="showModalSearchEvents()">
-                    <ion-icon slot="icon-only" name="search"></ion-icon>
-                </ion-button>
-            </ion-buttons> -->
-            <ion-buttons slot="primary">
-                <ion-button (click)="showModalSearchEvents()">
-                    <ion-icon slot="icon-only" name="search"></ion-icon>
-                </ion-button>
-            </ion-buttons>
-            <!-- <ion-title>Opciones</ion-title> -->
-        </ion-toolbar>
-        <!-- Tarjetas Animacion hasta cargar datos-->
-        <ng-container *ngIf="!eventsList || eventsList.length === 0">
-            <ion-card *ngFor="let event of [1,1,1,1,1,1,1];"
-                class="event_item animated flash slow infinite">
-                <ion-card-header>
-                    <ion-card-subtitle>
-                        <ion-skeleton-text width="60%"></ion-skeleton-text>
-                    </ion-card-subtitle>
-                    <ion-card-title>
-                        <ion-skeleton-text width="30%"></ion-skeleton-text>
-                    </ion-card-title>
-                </ion-card-header>
-                <ion-card-content>
-                    <ion-skeleton-text width="100%"></ion-skeleton-text>
-                    <ion-skeleton-text width="100%"></ion-skeleton-text>
-                    <ion-skeleton-text width="100%"></ion-skeleton-text>
-                </ion-card-content>
-                <ion-row>
-                    <ion-col size="6">
-                        <ion-item lines="none" detail="false" button="true"
-                            class="container_events">
-                            <ion-skeleton-text width="70%"></ion-skeleton-text>
-                        </ion-item>
-                    </ion-col>
-                    <ion-col size="6">
-                        <ion-item class="container_events" detail="false" button="true"
-                            lines="none">
-                            <ion-skeleton-text width="70%"></ion-skeleton-text>
-                        </ion-item>
-                    </ion-col>
-                </ion-row>
-            </ion-card>
-        </ng-container>
-        <!-- Tarjetas con Datos -->
-        <ng-container *ngIf="eventsList  && eventsList.length > 0">
-            <ion-card class="event_card" *ngFor="let event of eventsList; let i = index;">
-                <ion-card-header class="event_card_header" (click)="postDetail(event.id)">
-                    <!-- <ion-card-subtitle class="event-subtitle">
-                        <p class="post-fulldate">
-                            <ion-icon class="icon" name="calendar"></ion-icon>
-                            <span>{{getFullDate(event.date, event.time) | simpleBeatifulDate}}</span>
-                        </p>
-                        <p class="post-ubication-address flex-right" *ngIf="event.ubication">
-                            <ion-icon class="icon" name="navigate"></ion-icon>
-                            <span>{{ event.ubication.address || 'Direccion no encontrada'}}</span>
-                        </p>
-                    </ion-card-subtitle>
-                    <ion-card-title>{{event.title}}</ion-card-title> -->
-                    <ion-card-subtitle class="event_info">
-                        <span class="event_date">
-                            <ion-icon name="calendar"></ion-icon>
-                            {{getFullDate(event.date, event.time) | simpleBeatifulDate}}
-                        </span>
-                        <span class="event_address" *ngIf="event.ubication && event.ubication.address">
-                            <ion-icon name="navigate"></ion-icon>
-                            {{ event.ubication.address || 'Direccion no encontrada'}}
-                        </span>
-                    </ion-card-subtitle>
-                    <ion-card-title class="event_card_title">
-                        {{event.title}}
-                    </ion-card-title>
-                </ion-card-header>
-                <!-- <ion-card-content>
-                    <p class="post-description"> {{event.description | truncate: 50}}</p>
-                    <p class="post-see-more" (click)="postDetail(event.id)">Ver más...</p>
-                    <p class="post-num-likes">{{event.details.length}}
-                        {{(event.details.length !== 1) ? 'personas asistirán': 'persona asistirá'}}
-                    </p>
-                </ion-card-content> -->
-                <ion-card-content class="event_card_content">
-                    <p class="post_description">
-                        {{event.description | truncate: 50}}
-                    </p>
-                    <p class="see-more" (click)="postDetail(event.id)">Ver más...</p>
-                    <p class="count_assistants">
-                        <ion-icon class="icon_assistant" name="people"></ion-icon>
-                        {{event.details.length}}
-                        {{(event.details.length !== 1) ? 'personas asistirán': 'persona asistirá'}}
-                    </p>
-                </ion-card-content>
-                <!-- <div class="image_gallery_container" style="margin-bottom:1rem;margin-top: 0px;">
-                    <p class="image_gallery_title">Imágenes</p>
-                    <div class="image_gallery">
-                        <figure *ngFor="let image of [1,1,1,1]">
-                            <img src="https://dn60005mpuo2f.cloudfront.net/wp-content/uploads/2012/08/greatplace.jpg"
-                                alt="">
-                        </figure>
-                    </div>
-                </div> -->
-                <!-- <div class="action-buttons">
-                    <div class="action-button pair">
-                        <ion-button (click)="toggleAssistance(event.postLiked, event.id)">
-                            Asistiré
-                            <ion-icon slot="end" class="icon-like"
-                                [name]="(event.postLiked)?'body':'man'"></ion-icon>
-                        </ion-button>
-                        <div class="btn-share" (click)="sharePost(event)">
-                            <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
-                        </div>
-                    </div>
-                </div> -->
-                <!-- <div class="event_card_footer">
-                    <div class="post_assistants">
-                        <ion-button class="btn-assistant"
-                            (click)="toggleAssistance(event.postLiked, event.id)">
-                            Asistiré
-                            <ion-icon slot="start" class="icon-assistant"
-                                [name]="(event.postLiked)?'body':'man'"></ion-icon>
-                        </ion-button>
-                    </div>
-                    <div class="post_options">
-
-                        <div class="btn-share">
-                            <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
-                        </div>
-                    </div>
-                </div> -->
-                <div class="event_card_footer">
-                    <div class="post_assistants">
-                        <ion-button class="btn-assistant" [color]="(event.postLiked)?'primary':'light'"
-                            (click)="toggleAssistance(event.postLiked, event.id)">
-                            Interesado
-                            <ion-icon slot="start" class="icon-assistant"
-                                [name]="(event.postLiked)?'body':'man'"></ion-icon>
-                        </ion-button>
-                    </div>
-                    <div class="post_options">
-
-                        <div class="btn-share" (click)="sharePost(event)">
-                            <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
-                        </div>
+    <!-- <p>events loaded {{(eventsLoaded)?'true': 'false'}}</p>
+    <p>events {{eventsList.length}}</p> -->
+    <!-- Mensaje cuando cargan o no los datos-->
+    <div class="flex-column-center message-fail-load" *ngIf="eventsLoaded && eventsList.length === 0">
+        <p>No se pudieron cargar los Eventos</p>
+        <ion-button (click)="loadEvents()">Toca para reintentar</ion-button>
+    </div>
+    <!-- Tarjetas Animacion hasta cargar datos-->
+    <div *ngIf="!eventsLoaded">
+        <ion-card *ngFor="let event of [1,1,1,1]" class="event_item animated flash slow infinite">
+            <ion-card-header>
+                <ion-card-subtitle>
+                    <ion-skeleton-text width="60%"></ion-skeleton-text>
+                </ion-card-subtitle>
+                <ion-card-title>
+                    <ion-skeleton-text width="30%"></ion-skeleton-text>
+                </ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <ion-skeleton-text width="100%"></ion-skeleton-text>
+                <ion-skeleton-text width="100%"></ion-skeleton-text>
+                <ion-skeleton-text width="100%"></ion-skeleton-text>
+            </ion-card-content>
+            <ion-row>
+                <ion-col size="6">
+                    <ion-item lines="none" detail="false" button="true" class="container_events">
+                        <ion-skeleton-text width="70%"></ion-skeleton-text>
+                    </ion-item>
+                </ion-col>
+                <ion-col size="6">
+                    <ion-item class="container_events" detail="false" button="true" lines="none">
+                        <ion-skeleton-text width="70%"></ion-skeleton-text>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+        </ion-card>
+    </div>
+    <div *ngIf="eventsLoaded  && eventsList.length > 0">
+        <ion-card class="event_card" *ngFor="let event of eventsList; let i = index;">
+            <div class="cover-event"
+                [ngStyle]="{'background-image': (event.images && event.images.length > 0) ? getBGCover(event.images[0].url) : ''}">
+                <div class="social-buttons">
+                    <div class="item-button" (click)="sharePost(event)">
+                        <ion-icon class="share" name="share"></ion-icon>
                     </div>
                 </div>
-            </ion-card>
-        </ng-container>
-    </ng-container>
+            </div>
+            <div class="event-info">
+                <ion-card-title class="event-title" (click)="postDetail(event.id)"> Angular 7 de
+                    Cero a Experto</ion-card-title>
+                <p class="event-date">
+                    <ion-icon name="calendar"></ion-icon>
+                    15 de Agosto de 2019 12:00 asdasd
+                </p>
+                <p class="event-ubication">
+                    <ion-icon name="pin"></ion-icon>
+                    10 de Agosto y Amazonas
+                </p>
+                <p class="assistance-info">
+                    <span class="count-people">
+                        <ion-icon name="people"></ion-icon>
+                        {{event.details.length}}
+                        {{(event.details.length !== 1) ? 'personas asistirán': 'persona asistirá'}}
+                    </span>
+                    <ion-chip class="chip-assistance" [class.active]="(event.postLiked)"
+                        (click)="toggleAssistance(event.postLiked, event.id)">
+                        <ion-label style="display:flex;align-items:center">
+                            <ion-icon [name]="(event.postLiked)?'checkmark':'people'"
+                                style="margin-right: 6px"></ion-icon>
+                            <span>{{(event.postLiked) ? 'Voy a Asistir': 'Unirme'}}</span>
+                        </ion-label>
+                    </ion-chip>
+                </p>
+            </div>
+        </ion-card>
+    </div>
     <!-- Scroll Infinito -->
     <ion-infinite-scroll threshold="150px" (ionInfinite)="getInfiniteScrollData($event)">
         <ion-infinite-scroll-content loadingSpinner="crescent"

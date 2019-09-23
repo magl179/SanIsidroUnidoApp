@@ -15,6 +15,7 @@ import { FilterPage } from "../../../modals/filter/filter.page";
 import { SearchPage } from 'src/app/modals/search/search.page';
 import { FilterPageModule } from "../../../modals/filter/filter.module";
 import { SearchPageModule } from "../../../modals/search/search.module";
+import { NgFallimgModule } from 'ng-fallimg';
 const routes: Routes = [
   {
     path: '',
@@ -37,7 +38,8 @@ const routes: Routes = [
       PipesModule,
       ImageDetailPageModule,
       FilterPageModule,
-    SearchPageModule
+      SearchPageModule,
+      NgFallimgModule
   ],
   declarations: [SocialProblemsPage]
 })

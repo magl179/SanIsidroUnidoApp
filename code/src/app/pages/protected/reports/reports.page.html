@@ -1,8 +1,17 @@
 <app-header-back title="Reportes"></app-header-back>
 
 <ion-content padding>
- <!-- Tarjetas con Datos -->
- <div>
+    <div class="flex-column-center message-fail-load"
+        *ngIf="reportsLoaded && reportsList.length === 0">
+        <p>No se pudieron cargar los reportes</p>
+        <ion-button (click)="loadReports()">Toca para reintentar</ion-button>
+    </div>
+    <!-- animacion antes cargue datos -->
+    <div class="flex-column-center message-fail-load" *ngIf="!reportsLoaded">
+            <ion-spinner name="crescent"></ion-spinner>
+     </div>
+    <!-- Tarjetas con Datos -->
+    <div *ngIf="reportsLoaded && reportsList.length > 0">
         <ion-card class="card-event">
             <ion-card-header>
                 <ion-card-subtitle class="event-subtitle">
@@ -10,19 +19,15 @@
                         <ion-icon class="icon" name="calendar"></ion-icon>
                         <span>2019-05-21</span>
                     </p>
-                    <!-- <p class="post-ubication-address flex-right" *ngIf="event.ubication">
-                        <ion-icon class="icon" name="navigate"></ion-icon>
-                        <span>{{ event.ubication.address || 'Direccion no encontrada'}}</span>
-                    </p> -->
                 </ion-card-subtitle>
                 <ion-card-title>Reporte 1</ion-card-title>
             </ion-card-header>
             <ion-card-content>
-                <p class="post-description"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Non corporis fugit a dignissimos nulla aperiam error, saepe dolor ipsum delectus minima aliquam quibusdam neque voluptatibus corrupti soluta perspiciatis possimus fuga! </p>
+                <p class="post-description"> Lorem ipsum dolor sit amet consectetur adipisicing
+                    elit. Non corporis fugit a dignissimos nulla aperiam error, saepe dolor ipsum
+                    delectus minima aliquam quibusdam neque voluptatibus corrupti soluta
+                    perspiciatis possimus fuga! </p>
                 <p class="post-see-more">Ver más...</p>
-                <!-- <p class="post-num-likes">{{event.details.length}}
-                    {{(event.details.length !== 1) ? 'personas asistirán': 'persona asistirá'}}
-                </p> -->
             </ion-card-content>
         </ion-card>
     </div>

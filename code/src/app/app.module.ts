@@ -38,6 +38,9 @@ import { DirectivesModule } from './directives/directives.module';
 import { AuthInterceptorService } from 'src/app/services/auth-interceptor.service';
 import { FilterPostsComponent } from "./components/filter-posts/filter-posts.component";
 
+// Imagenes por Defecto
+import { NgFallimgModule } from 'ng-fallimg';
+
 @NgModule({
     declarations: [AppComponent],
     entryComponents: [PopNotificationsComponent, ShowListNotificationsPage, FilterPostsComponent],
@@ -50,6 +53,11 @@ import { FilterPostsComponent } from "./components/filter-posts/filter-posts.com
         SmComponentsModule,
         ReactiveFormsModule,
         IonicStorageModule.forRoot(),
+        NgFallimgModule.forRoot({
+            default: 'https://via.placeholder.com/600?text=SanIsidroImage',
+            user_avatar:  'assets/img/default/img_avatar.png',
+            image_full:  'assets/img/default/image_full.png',
+        }),
         ShowListNotificationsPageModule,
         PipesModule,
         DirectivesModule

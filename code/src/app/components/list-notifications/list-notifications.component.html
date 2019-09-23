@@ -13,5 +13,8 @@
                 <h3 class="author">{{noti.user.firstname}} {{noti.user.lastname}} </h3>
                 <p class="description ion-text-wrap">{{noti.message}}</p>
             </ion-label>
+            <div slot="end">
+                <span class="icon-noti-readed" [class.active]="(noti.state === 1)"></span>
+            </div>
         </ion-item>
     </ion-list>

@@ -1,49 +1,13 @@
-<app-header-back title="Problemas Sociales"></app-header-back>
+<app-header-back title="Problemas Sociales" [searchAvalaible]="true" [filterAvalaible]="true"
+    [reportAvalaible]="true" (returnHeaderBackData)="getHeaderBackData($event)"></app-header-back>
 <ion-content padding>
-    <!-- <ion-grid>
-        <ion-row>
-            <ion-col size="4" style="display:flex;justify-content: center;">
-                <ion-button color="primary" (click)="reportSocialProblem()">
-                    Reportar <ion-icon name="send" slot="end"></ion-icon>
-                </ion-button>
-            </ion-col>
-            <ion-col size="4" style="display:flex;justify-content: center;">
-                    <ion-button color="primary" (click)="showSearchModal()">
-                        Buscar <ion-icon name="search" slot="end"></ion-icon>
-                    </ion-button>
-            </ion-col>
-            <ion-col size="4" style="display:flex;justify-content: center;">
-                <ion-button (click)="showFilterModal()">
-                    Filtrar <ion-icon slot="end" name="options"></ion-icon>
-                </ion-button>
-            </ion-col>
-        </ion-row>
-    </ion-grid> -->
-    <ion-toolbar>
-        <ion-buttons slot="secondary">
-            <ion-button (click)="reportSocialProblem()">
-                <ion-icon slot="icon-only" name="send"></ion-icon>
-            </ion-button>
-            <ion-button (click)="showSearchModal()">
-                <ion-icon slot="icon-only" name="search"></ion-icon>
-            </ion-button>
-        </ion-buttons>
-        <ion-buttons slot="primary">
-            <ion-button (click)="showFilterModal()">
-                <ion-icon slot="icon-only" name="options"></ion-icon>
-            </ion-button>
-        </ion-buttons>
-        <!-- <ion-title>Opciones</ion-title> -->
-    </ion-toolbar>
-    <div>
-        <p class="test" *ngIf="socialProblems">
-            Social Problems Length {{ socialProblemsFilter.length}}
-        </p>
-        <p *ngIf="socialProblemsFilter.length === 0 && socialProblemsFilter">
-            No hay publicaciones disponibles
-        </p>
+        <!-- Mensaje no cargaron los datos desde la Api -->
+        <div class="flex-column-center message-fail-load" *ngIf="socialProblemsLoaded && socialProblemsList.length === 0">
+            <p>No se pudieron cargar los problemas sociales reportados</p>
+            <ion-button (click)="loadSocialProblems()">Toca para reintentar</ion-button>
+        </div>
         <!-- Animacion Tarjeta hasta tener los Datos Cargados -->
-        <div *ngIf="!socialProblemsFilter">
+        <div *ngIf="!socialProblemsLoaded">
             <ion-card *ngFor="let items of [1,1,1,1]"
                 class="card_social animated flash slow infinite">
                 <ion-card-header>
@@ -85,26 +49,32 @@
             </ion-card>
         </div>
         <!-- Tarjeta con Datos Cargados -->
-        <ion-card class="social_problem_card"
-            *ngFor="let socialProblem of (socialProblemsFilter); let i = index;">
-            <div *ngIf="socialProblem.exists === -1">
-                <ion-card-header class="ion-text-center">
-                    <ion-card-title>No hay publicaciones en esta categoria :( </ion-card-title>
-                </ion-card-header>
-            </div>
-            <div *ngIf="socialProblem.exists !== -1">
+        <div *ngIf="socialProblemsLoaded  && socialProblemsList.length > 0">
+            <ion-card class="social_problem_card"
+                *ngFor="let socialProblem of (socialProblemsFilter); let i = index;">
+                <div class="cover-social-problem"
+                    [ngStyle]="{'background-image': (socialProblem.images && socialProblem.images.length > 0) ? getBGCover(socialProblem.images[0].url) : ''}">
+                    <div class="social-buttons">
+                        <div class="item-button" (click)="toggleLike(socialProblem.postLiked, socialProblem.id)">
+                            <ion-icon class="like" [class.active]="socialProblem.postLiked" name="heart"></ion-icon>
+                        </div>
+                        <div class="item-button" (click)="sharePost(socialProblem)">
+                            <ion-icon class="share" name="share"></ion-icon>
+                        </div>
+                    </div>
+                </div>
                 <ion-card-header class="social_problem_header">
                     <ion-card-title class="social_problem_title">
                         {{socialProblem.title}}
                     </ion-card-title>
                     <ion-card-subtitle class="social_problem_user_info_container">
-                        <img class="avatar_user"
-                            [src]="(socialProblem.user.avatar) ? getImageURL(socialProblem.user.avatar) : 'assets/img/default/img_avatar.png'"
-                            alt="Avatar del Usuario">
-                        <div class="user_info">
-                            <p class="user_name"> {{socialProblem.user.firstname}}
+                        <img class="avatar_user" [src]="socialProblem.user.avatar" fallimg="user_avatar">
+                        <div class="user-info">
+                            <p class="user-name"> {{socialProblem.user.firstname}}
                                 {{socialProblem.user.lastname}}</p>
-                            <p class="post_date">{{socialProblem.created_at | beafitulDate}}</p>
+                            <p class="post-date">{{socialProblem.created_at | beafitulDate}}</p>
+                            <p class="post-date">{{socialProblem.details.length}} me
+                                gusta</p>
                         </div>
                     </ion-card-subtitle>
                 </ion-card-header>
@@ -114,43 +84,9 @@
                     </p>
                     <p class="see_more" (click)="postDetail(socialProblem.id)">Ver más...</p>
                 </ion-card-content>
-                <!-- <ion-card-content>
-                    <p class="post-description">{{socialProblem.description | truncate: 50}} </p>
-                    <p class="post-see-more" (click)="postDetail(socialProblem.id)">Ver más...</p>
-                    <p class="post-num-likes">{{socialProblem.details.length}} me gusta</p>
-                </ion-card-content> -->
-                <!-- <div class="action-buttons">
-                    <div class="action-button pair">
-
-                        <div class="btn-like"
-                            (click)="toggleLike(socialProblem.postLiked, socialProblem.id)">
-                            <ion-icon slot="icon-only" class="icon-like"
-                                [name]="(socialProblem.postLiked)?'heart':'heart-empty'">
-                            </ion-icon>
-                        </div>
-                        <div class="btn-share" (click)="sharePost(socialProblem)">
-                            <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
-                        </div>
-                    </div>
-                </div> -->
-                <div class="social_problem_card_footer">
-                    <div class="count_likes">
-                        <span class="post-num-likes">{{socialProblem.details.length}} me
-                            gusta</span>
-                    </div>
-                    <div class="post_options">
-                        <div class="btn-like">
-                            <ion-icon slot="icon-only" class="icon-like"
-                                [name]="(socialProblem.postLiked)?'heart':'heart-empty'"></ion-icon>
-                        </div>
-                        <div class="btn-share" (click)="sharePost(socialProblem)">
-                            <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </ion-card>
-    </div>
+            </ion-card>
+        </div>
+   
     <!-- Scroll Infinito -->
     <ion-infinite-scroll threshold="150px" (ionInfinite)="getInfiniteScrollData($event)">
         <ion-infinite-scroll-content loadingSpinner="crescent"

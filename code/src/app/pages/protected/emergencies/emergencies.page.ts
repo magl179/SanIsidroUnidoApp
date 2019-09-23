@@ -6,6 +6,7 @@ import { IBasicFilter } from "../../../interfaces/models";
 import { FilterPage } from "../../../modals/filter/filter.page";
 import { SearchPage } from "../../../modals/search/search.page";
 import { environment } from 'src/environments/environment';
+import { finalize } from 'rxjs/operators';
 
 @Component({
     selector: 'app-emergencies',
@@ -14,8 +15,9 @@ import { environment } from 'src/environments/environment';
 })
 export class EmergenciesPage implements OnInit {
 
-    emergencies = [];
+    emergenciesList = [];
     emergenciesFiltered = [];
+    emergenciesLoaded = false;
     filters: IBasicFilter = {
         is_attended: {
             name: 'Estado',
@@ -27,10 +29,6 @@ export class EmergenciesPage implements OnInit {
             ]
         }
     };
-
-    searchingEmergencies= false;
-    // eventsList: IEvent[] = [];
-    textoEmergenciaBuscar = '';
 
     constructor(
         private navCtrl: NavController,
@@ -61,7 +59,12 @@ export class EmergenciesPage implements OnInit {
         // if (resetEvents) {
         //     this.postService.resetEventsPage();
         // }
-        this.postsService.getEmergenciesByUser().subscribe((res:any)=> {
+        this.emergenciesLoaded = false;
+        this.postsService.getEmergenciesByUser().pipe(
+            finalize(() => {
+                this.emergenciesLoaded = true;
+            })
+        ).subscribe((res:any)=> {
             if (res.data) {
                 console.log('data', res);
                 if (res.data.data.length === 0) {
@@ -71,9 +74,9 @@ export class EmergenciesPage implements OnInit {
                     }
                     return;
                 }
-                this.emergencies.push(...res.data.data);
-                this.emergenciesFiltered.push(...this.emergencies);
-                console.log(this.emergencies);
+                this.emergenciesList.push(...res.data.data);
+                this.emergenciesFiltered.push(...this.emergenciesList);
+                console.log(this.emergenciesList);
                 if (event) {
                     event.target.complete();
                 }
@@ -109,7 +112,7 @@ export class EmergenciesPage implements OnInit {
     
 
     resetEmergencies() {
-        this.emergencies = [];
+        this.emergenciesList = [];
         this.postsService.resetEmergenciesPage();
     }
 
@@ -117,18 +120,19 @@ export class EmergenciesPage implements OnInit {
         const modal = await this.modalCtrl.create({
             component: FilterPage,
             componentProps: {
-                data: [...this.emergencies],
+                data: [...this.emergenciesList],
                 filters: this.filters
             }
         });
          //Obtener datos popover cuando se vaya a cerrar
-        modal.onDidDismiss().then((dataReturned: any) => {
-            console.dir(dataReturned);
-            if (dataReturned && dataReturned.data.data && dataReturned.data.filters) {
-                this.emergenciesFiltered = [...dataReturned.data.data];
-                console.log('Data Returned Modal Filter', [...dataReturned.data.data]);
+        modal.onDidDismiss().then((modalReturn: any) => {
+            // console.dir(dataReturned);
+            // console.log('data', dataReturned);
+            if (modalReturn.data && modalReturn.data.data && modalReturn.data.filters) {
+                this.emergenciesFiltered = [...modalReturn.data.data];
+                console.log('Data Returned Modal Filter', [...modalReturn.data.data]);
                 console.log('Data Returned Modal Filterdespues', this.emergenciesFiltered);
-                this.filters = dataReturned.data.filters;
+                this.filters = modalReturn.data.filters;
             }
              //console.log('Data Returned Modal Filter', this.emergenciesFiltered);
         });
@@ -142,7 +146,7 @@ export class EmergenciesPage implements OnInit {
                 // data: [...this.emergencies],
                 searchPlaceholder: 'Buscar Emergencias',
                 searchIdeas: [],
-                originalSearchData: [...this.emergencies],
+                originalSearchData: [...this.emergenciesList],
                 routeDetail: '/emergency-detail',
                 fieldsToSearch: ['title', 'description'],
                 searchInApi: true,
@@ -151,6 +155,18 @@ export class EmergenciesPage implements OnInit {
             }
         });
         await modal.present();
+    }
+
+    getHeaderBackData(event){
+        if (event.wannaSearch) {
+            this.showModalSearchEmergencies();
+        }
+        if (event.wannaFilter) {
+            this.showModalFilterEmergencies();
+        }
+        if (event.wannaReport) {
+            this.reportEmergency();
+        }
     }
 
 }

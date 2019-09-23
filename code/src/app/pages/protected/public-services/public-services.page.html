@@ -1,19 +1,16 @@
 <app-header-back title="Servicios Públicos"></app-header-back>
 <ion-content>
-    <!-- <app-network-banner *ngIf="!appNetworkConnection" networkConnection="appNetworkConnection"></app-network-banner> -->
-    <div>
-        <multiple-map *ngIf="publicServices.length > 0"
-            idMap="public-services" 
-            [zoomMap]="12" 
-            [mapPoints]="publicServices" 
-            [enableGesture]="false" 
+    <div class="flex-column-center message-fail-load" *ngIf="publicServicesLoaded && publicServices.length === 0">
+        <p>No se pudieron cargar los servicios públicos</p>
+        <ion-button (click)="loadPublicServices()">Toca para reintentar</ion-button>
+    </div>
+    <div class="flex-column-center message-fail-load" *ngIf="!publicServicesLoaded">
+        <ion-spinner name="crescent"></ion-spinner>
+    </div>
+    <div *ngIf="publicServicesLoaded && publicServices.length > 0">
+        <multiple-map *ngIf="publicServices.length > 0" idMap="public-services" [zoomMap]="12"
+            [mapPoints]="publicServices" [enableGesture]="false"
             (returnMapLoaded)="manageDataMap($event)">
         </multiple-map>
-        <!-- <ion-button expand="full" (click)="lanzarModal()">Abrir Modal</ion-button> -->
-        <!-- <div style="text-align:center" *ngIf="publicServiceSelected">
-            <p>Servicio: {{publicServiceSelected.title}}</p>
-            <p>Latitud: {{publicServiceSelected.latitude}}</p>
-            <p>Longitud: {{publicServiceSelected.longitude}}</p>
-        </div> -->
     </div>
 </ion-content>

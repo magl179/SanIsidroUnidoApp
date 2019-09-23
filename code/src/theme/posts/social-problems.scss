@@ -1,0 +1,121 @@
+/*PROBLEMAS SOCIALES*/
+.social_problem_card {
+    .avatar_user {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+    }
+    .cover-social-problem{
+      display: block;
+      transition: all .4s;
+      width: 100%;
+      position: relative;
+      height: 200px;
+      background-image: linear-gradient(to right, #2C5364, #203A43, #0F2027);
+      background-position: center;
+      background-size: cover;
+      margin-bottom: 1.5rem;
+    }
+    .image_post_cover {
+      height: 250px;
+    }
+  
+    &.detail {
+      border: none;
+      box-shadow: none;
+    }
+    .see_more {
+      margin: 1.5rem auto 0.7rem;
+    }
+    .social-problem-content {
+      .title{
+          font-weight: bold;
+          color: var(--ion-color-dark);
+          margin-bottom: 1rem;
+      }
+      .space-bottom{
+          margin-bottom: 1rem;
+      }
+    }
+    .social-problem-images{
+        .title{
+          font-weight: bold;
+          color: var(--ion-color-dark);
+        }
+    }
+    .icon-like {
+      color: var(--ion-color-medium);
+      &.active {
+        color: var(--ion-color-danger);
+      }
+    }
+    .icon-share {
+      color: var(--ion-color-primary);
+    }
+    .count_likes {
+      width: 60%;
+    }
+    .post_options {
+      font-size: 1.4rem;
+      width: 40%;
+      display: flex;
+      justify-content: space-around;
+    }
+    .social_problem_header,
+    .social_problem_card_content {
+      padding: 0.4rem 1rem;
+    }
+    .social_problem_card_footer {
+      padding: 1rem;
+      display: flex;
+    }
+    .social_problem_user_info_container {
+      margin: 1rem auto;
+      display: flex;
+      align-items: center;
+      .user-info {
+        margin-left: 2rem;
+      //   font-size: 0.9em;
+        .user-name {
+          margin: 0.5rem auto;
+        }
+        .post-date {
+          margin: 0.5rem auto;
+        }
+      }
+    }
+  
+    .image_gallery_container {
+      .image_gallery_title {
+        padding: 0 1rem;
+        &.strong{
+          font-weight: bold;
+          color: var(--ion-color-dark);
+        }
+      }
+      .image_gallery {
+        padding: 0 1rem;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        figure {
+          width: 45%;
+          height: 150px;
+          margin: 0.5rem 0.3rem !important;
+          display: inline-block;
+          img {
+            border: none;
+            max-width: 100%;
+            height: 100%;
+            width: 100%;
+            display: block;
+            background: var(--ion-color-medium);
+            transition: transform 0.2s ease-in-out;
+            //   &:hover {
+            //     transform: scale(1.2);
+            //   }
+          }
+        }
+      }
+    }
+}

@@ -5,46 +5,8 @@
     }
 }
 
-// .login-form-container{
-//     margin-top: .8rem;
-// }
-
-
-.divider{
-    position: relative;
-    color: #dedede;
-    .item{
-        text-align: center;
-        font-size: 1rem;
-    }
-    .item:before, .item:after{
-        content: "";
-        position: absolute;
-        background: #dedede;
-        height: 2px;
-        width: 45%;
-    }
-    .item:before{
-        top: 50%;
-        left: 0;
-    }
-    .item:after{
-        top: 50%;
-        left: 0;
-    }
-}
-
-
 .title_login{
     font-size: .8em;
     // font-weight: bold;
 }
-
-.divider-full{
-    background: #dedede;
-    height: 1px;
-    width: 100%;
-    margin: 1rem 0 .2rem;
-}
-
 

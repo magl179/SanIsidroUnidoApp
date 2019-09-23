@@ -16,15 +16,8 @@ import { SearchPage } from "../../../modals/search/search.page";
 export class EventsPage implements OnInit {
 
     // appNetworkConnection = false;
-    // loading: any;
-    ideas = ['Spiderman', 'Batman', 'Lolita', 'Calderon', 'Transporte'];
-    
-    searchingEvents = false;
-    eventsBusqueda = [];
+    eventsLoaded = false;
     eventsList: IEvent[] = [];
-    textoEventoBuscar = '';
-
-    elements: any = [];
     AuthUser = null;
 
     constructor(
@@ -45,9 +38,6 @@ export class EventsPage implements OnInit {
     }
 
     ngOnInit() {
-        // this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
-        //     this.appNetworkConnection = connected;
-        // });
         this.authService.getAuthUser().subscribe(res => {
             this.AuthUser = res.user; 
         });
@@ -57,21 +47,6 @@ export class EventsPage implements OnInit {
         this.utilsService.enableMenu();
         this.loadEvents();
     }
-
-    // checkLikePost($details) {
-    //     if ($details && $details.length > 0) {
-    //         const likes_user = this.utilsService.getUsersFromDetails($details);
-    //         const user_made_like = this.utilsService.checkUserInDetails(this.AuthUser.id, likes_user);
-    //         // console.log('likes user', likes_user);
-    //         // console.log('user made like', user_made_like);
-    //         // console.log('user authenticated id', this.AuthUser.id);
-    //         return user_made_like;
-    //     }
-    //     else {
-    //         // console.log('no paso tamanio details');
-    //         return false;
-    //     }
-    // }
 
     toggleAssistance(assistance: boolean, id: number) {
         // console.log((assistance) ? 'quitar assistencia' : 'dar asistencia');
@@ -147,34 +122,15 @@ export class EventsPage implements OnInit {
         this.postService.resetEventsPage();
     }
 
-    searchEvents(event) {
-        const valor: string = event.detail.value;
-        if (valor.length === 0) {
-            this.searchingEvents = false;
-            this.eventsBusqueda = [];
-            return;
-        }
-        this.searchingEvents = true;
-        this.postService.searchPosts(valor, environment.eventsSlug).pipe(
-            finalize(() => {
-                this.searchingEvents = false;
-            })
-        ).subscribe((res: any) => {
-            console.log('events search', res);
-            this.eventsBusqueda = res.data;
-            if (res.data.length === 0) {
-                this.utilsService.showToast('No hay coincidencias');
-            } else {
-                this.utilsService.showToast(`Hay ${res.data.length} coincidencias`);
-            }
-        }, err => {
-                console.log('Ocurrio un error al buscar eventos', err);
-                this.utilsService.showToast('Ocurrio un error al buscar eventos');
-        });
-    }
-
     loadEvents(event?, resetEvents?) {
-        this.postService.getEvents().subscribe(res => {
+        this.eventsLoaded = false;
+        this.postService.getEvents().pipe(
+            finalize(() => {
+                this.eventsLoaded = true;
+                console.log('finalize get events', this.eventsLoaded);
+                console.log('finalize get events', this.eventsList);
+            })
+        ).subscribe(res => {
             let events = res.data.data;
             if (events) {
                 console.log('data', res);
@@ -214,6 +170,22 @@ export class EventsPage implements OnInit {
     getInfiniteScrollData(event) {
             this.loadEvents(event);
     }
+
+    getBGCover(image_cover: any) {
+            // console.log('has images', image_cover);
+            const img = this.utilsService.getImageURL(image_cover);
+            return `linear-gradient(to bottom, rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.23)), url('${img}')`;
+    }
+
+    getHeaderBackData(event: any) {
+        if (event.wannaSearch) {
+            this.showModalSearchEvents();
+        }
+    }
+
+
+
+    
 
 
 }

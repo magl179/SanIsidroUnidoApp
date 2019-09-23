@@ -11,7 +11,6 @@ import { NotificationsService } from './services/notifications.service';
 import { NetworkService } from 'src/app/services/network.service';
 import { environment } from '../environments/environment';
 
-
 const URL_PATTERN = new RegExp(/^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/);
 
 

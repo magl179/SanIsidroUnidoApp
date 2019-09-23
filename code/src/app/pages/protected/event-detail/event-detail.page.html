@@ -1,9 +1,14 @@
 <app-header-back title="Evento" hrefDefault="/events"></app-header-back>
 
 <ion-content padding>
-    <!-- <app-network-banner *ngIf="!appNetworkConnection" networkConnection="appNetworkConnection"></app-network-banner> -->
-    <ng-container>
-        <ion-card class="detail-card animated flash slow infinite" *ngIf="!event">
+    <!-- Mensaje no cargaron los datos desde la Api -->
+    <div class="flex-column-center message-fail-load" *ngIf="eventLoaded && !event">
+        <p>No se pudo cargar el evento solicitado</p>
+        <ion-button (click)="getEvent()">Toca para reintentar</ion-button>
+    </div>
+    <!-- Animacion Eventos Cargados -->
+    <div *ngIf="!eventLoaded">
+        <ion-card class="detail-card animated flash slow infinite">
             <ion-card-header>
                 <ion-card-subtitle>
                     <ion-skeleton-text width="30%"></ion-skeleton-text>
@@ -36,82 +41,64 @@
                 </ion-col>
             </ion-row>
         </ion-card>
+    </div>
+    <!-- Datos Cargados -->
+    <div *ngIf="eventLoaded && event">
         <ion-card class="event_card detail" *ngIf="event">
-            <ion-card-header class="event_card_header">
-                <ion-card-subtitle class="event_info">
-                    <!-- <p class="post-fulldate">
-                        <ion-icon class="icon" name="calendar"></ion-icon>
-                        <span>{{getFullDate(event.date, event.time) | simpleBeatifulDate}}</span>
-                    </p>
-                    <p class="post-ubication-address flex-right" *ngIf="event.ubication">
-                        <ion-icon class="icon" name="navigate"></ion-icon>
-                        <span>{{ event.ubication.address || 'Direccion no encontrada'}}</span>
-                    </p> -->
-                    <span class="event_date">
-                        <ion-icon name="calendar"></ion-icon>
-                        {{getFullDate(event.date, event.time) | simpleBeatifulDate}}
-                    </span>
-                    <span class="event_address">
-                        <ion-icon name="navigate"></ion-icon>
-                        {{ event.ubication.address || 'Direccion no encontrada'}}
-                    </span>
-                </ion-card-subtitle>
-                <ion-card-title class="event_card_title">{{event.title}}</ion-card-title>
-            </ion-card-header>
-            <ion-card-content class="emergency_card_content">
-                <p class="post-description"> {{event.description | truncate: 50}}</p>
-                <p class="count_assistants">
-                    <ion-icon class="icon_assistant" name="people"></ion-icon>
-                    {{event.details.length}} {{(event.details.length !== 1) ? 'personas asistirán': 'persona asistirá'}}
+            <div class="cover-event"
+                [ngStyle]="{'background-image': (event.images && event.images.length > 0) ? getBGCover(event.images[0].url) : ''}">
+                <div class="social-buttons">
+                    <div class="item-button" (click)="sharePost(event)">
+                        <ion-icon class="share" name="share"></ion-icon>
+                    </div>
+                </div>
+            </div>
+            <div class="event-info">
+                <ion-card-title class="event-title"> Angular 7 de Cero a Experto</ion-card-title>
+                <p class="event-date">
+                    <ion-icon name="calendar"></ion-icon>
+                    15 de Agosto de 2019 12:00 asdasd
                 </p>
-            </ion-card-content>
-            <div class="" style="margin-bottom:1rem;">
-                <p class="image_gallery_title">Ubicación</p>
+                <p class="event-ubication">
+                    <ion-icon name="pin"></ion-icon>
+                    10 de Agosto y Amazonas
+                </p>
+                <p class="assistance-info">
+                    <span class="count-people">
+                        <ion-icon name="people"></ion-icon>
+                        {{event.details.length}}
+                        {{(event.details.length !== 1) ? 'personas asistirán': 'persona asistirá'}}
+                    </span>
+                    <ion-chip class="chip-assistance" [class.active]="(event.postLiked)"
+                        (click)="toggleAssistance(event.postLiked, event.id)">
+                        <ion-label style="display:flex;align-items:center">
+                            <ion-icon [name]="(event.postLiked)?'checkmark':'people'"
+                                style="margin-right: 6px"></ion-icon>
+                            <span>{{(event.postLiked) ? 'Voy a Asistir': 'Unirme'}}</span>
+                        </ion-label>
+                    </ion-chip>
+                </p>
+            </div>
+            <div class="map-container" *ngIf="event.ubication">
+                <p class="map-title">Ubicación</p>
                 <simple-map classMap="event-map-detail map-center" idMap="eventMap-detail-{{id}}"
-                    [coordsMap]="mapPoints" [zoom]="16">
+                    [coordsMap]="event.ubication" [zoom]="16">
                 </simple-map>
-                <!-- <p class="post-num-likes">{{event.details.length}}
-                    {{(event.details.length !== 1) ? 'personas asistirán': 'persona asistirá'}}</p> -->
             </div>
             <div class="image_gallery_container" *ngIf="event.images && event.images.length > 0">
                 <p class="image_gallery_title">Imágenes</p>
                 <div class="image_gallery">
-                    <figure *ngFor="let image of event.images">
+                    <figure *ngFor="let image of event.images"
+                        (click)="showImageDetailModal((image.url) ? getImageURL(image.url) : 'assets/img/default/img_avatar.png')">
                         <img [src]="(image.url) ? getImageURL(image.url) : 'assets/img/default/img_avatar.png'"
                             alt="Imagen de la Publicación">
                         <!-- <figcaption>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua
-                    </figcaption> -->
+                                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua
+                                </figcaption> -->
                     </figure>
                 </div>
             </div>
-            <!-- <div class="action-buttons detail">
-                <div class="action-button pair">
-                    <div class="btn-like" (click)="toggleAssistance(postLiked)">
-                        <ion-icon slot="icon-only" class="icon-like"
-                            [name]="(postLiked)?'body':'man'"></ion-icon>
-                    </div>
-                    <div class="btn-share" (click)="sharePost(event)">
-                        <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
-                    </div>
-                </div>
-            </div> -->
-            <div class="event_card_footer">
-                <div class="post_assistants">
-                    <ion-button class="btn-assistant" color="primary"
-                    (click)="toggleAssistance(postLiked)">
-                        Asistiré
-                        <ion-icon slot="start" class="icon-assistant"
-                        [name]="(postLiked)?'body':'man'"></ion-icon>
-                    </ion-button>
-                </div>
-                <div class="post_options">
-
-                    <div class="btn-share" (click)="sharePost(event)">
-                        <ion-icon class="icon-share" slot="icon-only" name="share"></ion-icon>
-                    </div>
-                </div>
-            </div>
         </ion-card>
-    </ng-container>
+    </div>
+
 </ion-content>

@@ -1,0 +1,172 @@
+/*EVENTOS*/
+.event_card {
+    .cover-event {
+      display: block;
+      transition: all .4s;
+      width: 100%;
+      position: relative;
+      height: 200px;
+      background-image: linear-gradient(to right, #2C5364, #203A43, #0F2027);
+      background-position: center;
+      background-size: cover;
+      margin-bottom: 1.5rem;
+    }
+    &.detail {
+      border: none;
+      box-shadow: none;
+    }
+    .event-info{
+        position: relative;
+        padding: 0.7rem 1rem;
+        .event-title{
+          margin-bottom: 1.2rem;
+        }
+        .event-date, .event-ubication{
+          display:flex;
+          align-items:center;
+          // margin-bottom: 1.3rem;
+          ion-icon{
+              font-size: 1.3em;
+              margin-right: 8px;
+          }
+        }
+        .event-date{
+          margin-bottom: 1.2rem;
+        }
+        .event-ubication{
+          margin-bottom: .5rem;
+        }
+        .chip-assistance{
+            --background: var(--ion-color-orange);
+            --color:var(--ion-color-white);
+            &.active{
+              --background: var(--ion-color-darkblue);
+            }
+        }
+        .assistance-info{
+          display:flex;
+          align-items:center;
+          justify-content:space-between;
+          margin-top: 0px;
+          .count-people{
+              display:flex;
+              align-items:center;
+              ion-icon{
+                  font-size: 1.3em;
+                  margin-right: 8px;
+              }
+          }
+        }
+    }
+    .event_card_header {
+      padding: 0.7rem 1rem;
+    }
+    .see-more {
+      margin-bottom: 1rem;
+    }
+    .avatar_user {
+      width: 50px;
+    }
+    .image_gallery_container {
+      .image_gallery_title {
+        padding: 0 1rem;
+      }
+      .image_gallery {
+        padding: 0 1rem;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        figure {
+          width: 45%;
+          margin: 0.5rem 0.3rem !important;
+          display: inline-block;
+          img {
+            border: none;
+            max-width: 100%;
+            height: auto;
+            display: block;
+            background: var(--ion-color-medium);
+            transition: transform 0.2s ease-in-out;
+            &:hover {
+              transform: scale(1.2);
+            }
+          }
+        }
+      }
+    }
+  
+    .event_map {
+      height: 250px;
+      width: 100%;
+      padding: 0 1rem 1rem;
+    }
+    .event_info {
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 0;
+      text-align: center;
+      .event_date {
+        width: 50%;
+      }
+      .event_address {
+        width: 50%;
+      }
+    }
+    .count_assistants {
+      padding: 1rem 0;
+      display: flex;
+      align-items: center;
+      .icon_assistant {
+        margin-right: 0.5rem;
+        font-size: 1.3rem;
+      }
+    }
+    .event-card-content {
+      // padding: 0.4rem 1rem;
+      .title, .description{
+          margin-bottom: 1rem;
+      }
+      .title{
+          font-weight: bold;
+          color: var(--ion-color-dark);
+      }
+      margin-bottom: 1rem;
+    }
+    .event_card_footer {
+      padding: 0.5rem 1rem 1rem;
+      display: flex;
+      .count_likes {
+        width: 60%;
+      }
+      .btn-assistant {
+        text-transform: capitalize;
+        font-size: 1rem;
+        --ripple-color: transparent;
+      }
+      .btn-share {
+        display: flex;
+  
+        align-items: center;
+        margin-right: 1rem;
+      }
+  
+      .post_assistants {
+        width: 50%;
+      }
+      .post_options {
+        font-size: 1.4rem;
+        width: 50%;
+        display: flex;
+        justify-content: flex-end;
+      }
+      .icon-like {
+        color: var(--ion-color-medium);
+        &.active {
+          color: var(--ion-color-danger);
+        }
+      }
+      .icon-share {
+        color: var(--ion-color-primary);
+      }
+    }
+}

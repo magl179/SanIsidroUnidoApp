@@ -1,55 +1,14 @@
-<app-header-back title="Mis Emergencias"></app-header-back>
+<app-header-back title="Mis Emergencias" [searchAvalaible]="true" [filterAvalaible]="true"
+    [reportAvalaible]="true" (returnHeaderBackData)="getHeaderBackData($event)"></app-header-back>
 
 <ion-content padding>
-    <ion-toolbar>
-        <ion-buttons slot="secondary">
-           <ion-button (click)="reportEmergency()">
-             <ion-icon slot="icon-only" name="send"></ion-icon>
-           </ion-button>
-           <ion-button (click)="showModalSearchEmergencies()">
-             <ion-icon slot="icon-only" name="search"></ion-icon>
-           </ion-button>
-         </ion-buttons>
-         <ion-buttons slot="primary">
-           <ion-button (click)="showModalFilterEmergencies()">
-             <ion-icon slot="icon-only" name="options"></ion-icon>
-           </ion-button>
-         </ion-buttons>
-        <!-- <ion-title>Opciones</ion-title> -->
-       </ion-toolbar>
-    <!-- <ion-grid>
-        <ion-row class="ion-align-items-center">
-            <ion-grid size="4" style="display:flex;justify-content:center;">
-                <ion-button color="primary" (click)="showModalSearchEmergencies()">
-                    Buscar <ion-icon name="search" slot="end"></ion-icon>
-            </ion-button>
-            </ion-grid>
-            <ion-grid size="4" style="display:flex;justify-content:center;">
-                <ion-button color="primary" (click)="reportEmergency()">
-                    Reportar <ion-icon name="send" slot="end"></ion-icon>
-                </ion-button>
-            </ion-grid>
-            <ion-grid size="4">
-                <ion-button color="primary" (click)="showModalFilterEmergencies()">
-                    Filtrar <ion-icon name="options" slot="end"></ion-icon>
-                </ion-button>
-            </ion-grid>
-        </ion-row>
-    </ion-grid> -->
-    <!-- <div>
-        <ion-searchbar animated debounce="500" showCancelButton="focus"
-            placeholder="Buscar Mis Emergencias" [value]="textoEmergenciaBuscar" (ionChange)="searchEmergencies($event)"></ion-searchbar>
-    </div> -->
-    <ion-grid *ngIf="searchingEmergencies">
-        <ion-row>
-            <ion-col text-center>
-                <ion-spinner name="crescent"></ion-spinner>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+    <div class="flex-column-center message-fail-load" *ngIf="emergenciesLoaded && emergenciesList.length === 0">
+        <p>No se pudieron cargar tus emergencias reportadas</p>
+        <ion-button (click)="loadEmergencies()">Toca para reintentar</ion-button>
+    </div>
     <!-- Tarjetas Animacion hasta cargar datos-->
-    <div *ngIf="!emergencies || emergencies.length === 0">
-        <ion-card *ngFor="let emergencies of [1,1,1,1,1,1,1];"
+    <div *ngIf="!emergenciesLoaded">
+        <ion-card *ngFor="let animations of [1,1,1,1,1,1,1];"
             class="event_item animated flash slow infinite">
             <ion-card-header>
                 <ion-card-subtitle>
@@ -79,27 +38,28 @@
         </ion-card>
     </div>
     <!-- Tarjetas con Datos -->
-    <div *ngIf="emergencies  && emergencies.length > 0">
-        <ion-card class="emergency_card" *ngFor="let emergencie of emergenciesFiltered; let i = index;">
+    <div *ngIf="emergenciesLoaded  && emergenciesList.length > 0">
+        <ion-card class="emergency_card"
+            *ngFor="let emergencie of emergenciesFiltered; let i = index;">
             <ion-card-header (click)="postDetail(emergencie.id)" class="emergency_card_header">
                 <ion-card-subtitle class="emergency_info">
                     <span class="emergency_date">
-                            <ion-icon name="calendar"></ion-icon> 
-                            {{getFullDate(emergencie.date, emergencie.time) | simpleBeatifulDate}}
-                          </span>
-                          <span class="emergency_address">
-                            <ion-icon name="navigate"></ion-icon>
-                            {{ emergencie.ubication.address || 'Direccion no encontrada'}}
-                          </span>
+                        <ion-icon name="calendar"></ion-icon>
+                        {{getFullDate(emergencie.date, emergencie.time) | simpleBeatifulDate}}
+                    </span>
+                    <span class="emergency_address">
+                        <ion-icon name="navigate"></ion-icon>
+                        {{ emergencie.ubication.address || 'Direccion no encontrada'}}
+                    </span>
                 </ion-card-subtitle>
                 <ion-card-title class="emergency_card_title">{{emergencie.title}}</ion-card-title>
             </ion-card-header>
-           
+
             <ion-card-content class="emergency_card_content">
-                    <p class="post_description">
-                            {{emergencie.description | truncate: 50}}
-                    </p>
-                    <p class="see-more" (click)="postDetail(emergencie.id)">Ver más...</p>
+                <p class="post_description">
+                    {{emergencie.description | truncate: 50}}
+                </p>
+                <p class="see-more" (click)="postDetail(emergencie.id)">Ver más...</p>
             </ion-card-content>
         </ion-card>
     </div>

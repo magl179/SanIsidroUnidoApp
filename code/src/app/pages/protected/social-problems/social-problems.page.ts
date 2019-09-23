@@ -22,15 +22,12 @@ import { SearchPage } from 'src/app/modals/search/search.page';
     styleUrls: ['./social-problems.page.scss'],
 })
 export class SocialProblemsPage implements OnInit {
-
-    appNetworkConnection = false;
     subcategory = '';
     AuthUser = null;
 
-    socialProblems: ISocialProblem[] = [];
+    socialProblemsList: ISocialProblem[] = [];
     socialProblemsFilter: ISocialProblem[] = [];
     socialProblemsLoaded = false;
-    // filtros: IBasicFilter;
     filters: IBasicFilter = {
         subcategory_id: {
             name: 'Subcategoria',
@@ -94,7 +91,7 @@ export class SocialProblemsPage implements OnInit {
     }
     //Resetear los problemas sociales
     resetSocialProblems() {
-        this.socialProblems = [];
+        this.socialProblemsList = [];
         this.postService.resetSocialProblemsPage();
     }
     //Verificar like en una publicacion
@@ -138,6 +135,7 @@ export class SocialProblemsPage implements OnInit {
     }
     //Cargar los problemas sociales
     loadSocialProblems(event?) {
+        this.socialProblemsLoaded = false;
         this.postService.getSocialProblems().pipe(
             finalize(() => {
                 this.socialProblemsLoaded = true;
@@ -146,8 +144,9 @@ export class SocialProblemsPage implements OnInit {
             let socialProblems = res.data.data;
             if (socialProblems) {
                 socialProblems = socialProblems.map((social_problem: any) => {
-                    const postLiked = this.utilsService.checkLikePost(social_problem.details, this.AuthUser) || false;
-                    social_problem.postLiked = postLiked;
+                    // const postLiked = this.utilsService.checkLikePost(social_problem.details, this.AuthUser) || false;
+                    social_problem.user.avatar = (social_problem.user && social_problem.user.avatar) ? this.getImageURL(social_problem.user.avatar) : null;
+                    social_problem.postLiked = this.utilsService.checkLikePost(social_problem.details, this.AuthUser) || false;
                     return social_problem;
                 });
                 if (socialProblems.length === 0) {
@@ -157,7 +156,7 @@ export class SocialProblemsPage implements OnInit {
                     }
                     return;
                 }
-                this.socialProblems.push(...socialProblems);
+                this.socialProblemsList.push(...socialProblems);
                 //console.log('social_problems', this.socialProblems);
                 this.socialProblemsFilter.push(...socialProblems);
                 if (event) {
@@ -207,7 +206,7 @@ export class SocialProblemsPage implements OnInit {
             backdropDismiss: false,
             showBackdrop: false,
             componentProps: {
-                "posts": [...this.socialProblems],
+                "posts": [...this.socialProblemsList],
                 'subcategory': this.subcategory
             }
         });
@@ -227,12 +226,18 @@ export class SocialProblemsPage implements OnInit {
         return (imgIsURL) ? image_name : `${environment.apiBaseURL}/${environment.image_assets}/${image_name}`;
     }
 
+    getBGCover(image_cover: any) {
+        // console.log('has images', image_cover);
+        const img = this.utilsService.getImageURL(image_cover);
+        return `linear-gradient(to bottom, rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.23)), url('${img}')`;
+    }
+
     async showSearchModal() {
         const modal = await this.modalCtrl.create({
             component: SearchPage,
             componentProps: {
                 searchIdeas: [],
-                originalSearchData: [...this.socialProblems],
+                originalSearchData: [...this.socialProblemsList],
                 routeDetail: '/social-problem-detail',
                 searchPlaceholder : 'Buscar Problemas Sociales',
                 fieldsToSearch: ['title', 'description'],
@@ -255,21 +260,34 @@ export class SocialProblemsPage implements OnInit {
         const modal = await this.modalCtrl.create({
             component: FilterPage,
             componentProps: {
-                data: [...this.socialProblems],
+                data: [...this.socialProblemsList],
                 filters: this.filters,
                 // filterInApi: true,
                 // postTypeSlug: environment.socialProblemSlug
             }
         });
          //Obtener datos popover cuando se vaya a cerrar
-         modal.onDidDismiss().then((dataReturned: any) => {
-            if (dataReturned !== null) {
-                this.socialProblemsFilter = [...dataReturned.data.data];
-                this.filters = dataReturned.data.filters;
+         modal.onDidDismiss().then((modalReturn: any) => {
+            if (modalReturn.data && modalReturn.data.data && modalReturn.data.filters) {
+                this.socialProblemsFilter = [...modalReturn.data.data];
+                this.filters = modalReturn.data.filters;
                 // this.subcategory = dataReturned.data.subcategory;
             }
         });
         await modal.present();
+    }
+
+
+    getHeaderBackData(event){
+        if (event.wannaSearch) {
+            this.showSearchModal();
+        }
+        if (event.wannaFilter) {
+            this.showFilterModal();
+        }
+        if (event.wannaReport) {
+            this.reportSocialProblem();
+        }
     }
 
 

@@ -1,0 +1,56 @@
+/*EMERGENCIAS*/
+.emergency_card {
+    &.detail {
+      border: none;
+      box-shadow: none;
+    }
+    .emergency_cover_image {
+      height: 250px;
+    }
+    .emergency_card_header {
+      padding: 0.7rem 1rem;
+    }
+    .see-more {
+      padding: 1rem 0;
+    }
+    .emergency_info {
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 0;
+      text-align: center;
+      .emergency_date {
+        width: 50%;
+      }
+      .emergency_address {
+        width: 50%;
+      }
+    }
+  
+    .image_gallery_container {
+      .image_gallery_title {
+        padding: 0 1rem;
+      }
+      .image_gallery {
+        padding: 0 1rem;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        figure {
+          width: 45%;
+          margin: 0.5rem 0.3rem !important;
+          display: inline-block;
+          img {
+            border: none;
+            max-width: 100%;
+            height: auto;
+            display: block;
+            background: var(--ion-color-medium);
+            transition: transform 0.2s ease-in-out;
+            &:hover {
+              transform: scale(1.2);
+            }
+          }
+        }
+      }
+    }
+  }

@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { DirectoryInfoPage } from './directory-info.page';
 
 import { SmComponentsModule } from 'src/app/components/sm-components.module';
+import { NgFallimgModule } from "ng-fallimg";
 
 const routes: Routes = [
   {
@@ -22,7 +23,8 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    SmComponentsModule
+        SmComponentsModule,
+    NgFallimgModule
   ],
   declarations: [DirectoryInfoPage]
 })

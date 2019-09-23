@@ -6,6 +6,12 @@ export interface IRespuestaApiSIU {
     data: any[];
     errors: any[]
 }
+export interface IRespuestaApiSIUSingle{
+    code: number;
+    message: string;
+    data: any;
+    errors: any[]
+ }
 
 export interface IRespuestaApiSIUPaginada{
     code: number;
@@ -89,6 +95,7 @@ export interface ISocialProblem {
     category?: any;
     user?: any;
     details?: any;
+    postLiked?: any;
 }
 
 export interface ISocialProfile {
@@ -171,6 +178,7 @@ export interface IEventDetail {
     created_at?: string;
     updated_at?: string;
     details?: any;
+    postLiked?: any;
 }
 
 export interface ICreateDetail {

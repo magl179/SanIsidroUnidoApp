@@ -9,6 +9,9 @@ import { SocialProblemDetailPage } from './social-problem-detail.page';
 
 import { SmComponentsModule } from 'src/app/components/sm-components.module';
 import { PipesModule } from '../../../pipes/pipes.module';
+import { ImageDetailPage } from 'src/app/modals/image_detail/image_detail.page';
+import { ImageDetailPageModule } from "../../../modals/image_detail/image_detail.module";
+import { NgFallimgModule } from 'ng-fallimg';
 
 const routes: Routes = [
   {
@@ -18,13 +21,18 @@ const routes: Routes = [
 ];
 
 @NgModule({
+    entryComponents: [
+        ImageDetailPage
+    ],
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
         SmComponentsModule,
-    PipesModule
+      PipesModule,
+      ImageDetailPageModule,
+    NgFallimgModule
   ],
   declarations: [SocialProblemDetailPage]
 })

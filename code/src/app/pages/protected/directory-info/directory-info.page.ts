@@ -18,7 +18,7 @@ const URL_PATTERN = new RegExp(/^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=
 })
 export class DirectoryInfoPage implements OnInit {
 
-    directives: IDirective[] = [];
+    directivesList: IDirective[] = [];
     loading: any;
     imgLoaded = false;
     loadDirectives = false;
@@ -35,6 +35,11 @@ export class DirectoryInfoPage implements OnInit {
         this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
             this.appNetworkConnection = connected;
         });
+        this.loadDirectoryInfo();
+    }
+
+    loadDirectoryInfo() {
+        this.loadDirectives = false;
         this.directivesService.getDirectives().pipe(
             finalize(() => {
                 this.loadDirectives = true;
@@ -52,7 +57,7 @@ export class DirectoryInfoPage implements OnInit {
                     images: imagesPath,
                     completed: () => {
                         // setTimeout(() => {
-                        this.directives = response.data;
+                        this.directivesList = response.data;
                         // }, 2500);
                     }
                 });

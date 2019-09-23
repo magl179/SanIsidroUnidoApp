@@ -6,6 +6,8 @@ import { PostsService } from '../../../services/posts.service';
 import { NetworkService } from 'src/app/services/network.service';
 import { ModalController } from "@ionic/angular";
 import { MapInfoPage } from "src/app/modals/map-info/map-info.page";
+import { finalize } from 'rxjs/operators';
+// import { CacheService } from 'ionic-cache';
 
 @Component({
     selector: 'app-public-services',
@@ -14,29 +16,36 @@ import { MapInfoPage } from "src/app/modals/map-info/map-info.page";
 })
 export class PublicServicesPage implements OnInit {
 
-    appNetworkConnection = false;
+    publicServicesKey = 'public_services-siu';
     publicServicesPoints: IUbicationItem[] = [];
     publicServices: IPublicService[] = [];
     filterPublicServices = [];
-    isPublicServiceAvalaible = false;
+    // isPublicServiceAvalaible = false;
     publicServiceSelected = null;
     currentLocation = null;
-    publicServiceClicked = false;
+    // publicServiceClicked = false;
     // loading: any;
     markerSelected = false;
+    publicServicesLoaded = false;
 
     constructor(
         private utilsService: UtilsService,
         private networkService: NetworkService,
+        // private cacheService: CacheService,
         private postService: PostsService,
         private modalCtrl: ModalController
     ) { }
 
     async ngOnInit() {
-        this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
-            this.appNetworkConnection = connected;
-        });
-        this.postService.getPublicServices().subscribe(response => {
+        this.loadPublicServices();
+    }
+
+    loadPublicServices() {
+        
+        this.publicServicesLoaded = false;
+        this.postService.getPublicServices().pipe(finalize(() => {
+            this.publicServicesLoaded = true;
+        })).subscribe(response => {
             this.publicServices = response.data;
         }, err => {
                 this.utilsService.showToast('No se pudieron cargar los servicios públicos');
@@ -50,7 +59,6 @@ export class PublicServicesPage implements OnInit {
         const val = event.target.value;
         // if the value is an empty string don't filter the items
         if (val && val.trim() !== '') {
-            this.isPublicServiceAvalaible = true;
             this.filterPublicServices = this.publicServicesPoints.filter((item) => {
                 return (item.title.toLowerCase().indexOf(val.toLowerCase()) > -1);
             });

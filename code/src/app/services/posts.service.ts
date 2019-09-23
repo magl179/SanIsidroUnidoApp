@@ -4,7 +4,7 @@ import { HTTP } from '@ionic-native/http/ngx';
 import { Observable, from } from 'rxjs';
 import { IEmergencyPost, ISocialProblemPost } from '../interfaces/barrios';
 import { environment } from 'src/environments/environment';
-import { IEmergencyReported, ISocialProblemReported, ICreateDetail } from 'src/app/interfaces/models';
+import { IEmergencyReported, ISocialProblemReported, ICreateDetail, IRespuestaApiSIU } from 'src/app/interfaces/models';
 import { AuthService } from './auth.service';
 import { HttpRequestService } from "./http-request.service";
 
@@ -134,6 +134,9 @@ export class PostsService implements OnInit {
     // Función para obtener el listado de servicios publicos registrados
     getPublicServices(): Observable<any> {
         return this.httpRequest.get(`${environment.apiBaseURL}/servicios-publicos`);
+    }
+    getReports(): Observable<IRespuestaApiSIU>{
+        return this.httpRequest.get(`${environment.apiBaseURL}/reportes`);
     }
     // Función para obtener el listado de subcategorias de una categoria
     getSubcategoriesByCategory(category: string): Observable<any> {

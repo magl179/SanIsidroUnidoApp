@@ -64,7 +64,7 @@ export class FilterPage implements OnInit {
         private postsService: PostsService
     ) {
         this.allDataPlaceholder = (this.navParams.data.allDataPlaceholder)?this.navParams.data.allDataPlaceholder: 'Todas';
-        console.table(this.navParams);
+        // console.table(this.navParams);
         this.data = this.navParams.data.data;        
         this.filters = this.navParams.data.filters;
         this.dataFiltered.push(...this.data);

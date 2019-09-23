@@ -5,11 +5,12 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { PostsService } from '../../../services/posts.service';
 import { UserService } from '../../../services/user.service';
 import { AuthService } from '../../../services/auth.service';
-import { IPostShare, ISocialProblem } from '../../../interfaces/models';
+import { IPostShare, ISocialProblem, IRespuestaApiSIUSingle } from "../../../interfaces/models";
 import { NetworkService } from 'src/app/services/network.service';
 import { environment } from "../../../../environments/environment";
 import { ModalController } from "@ionic/angular";
 import { ImageDetailPage } from 'src/app/modals/image_detail/image_detail.page';
+import { finalize } from 'rxjs/operators';
 
 
 
@@ -21,11 +22,12 @@ import { ImageDetailPage } from 'src/app/modals/image_detail/image_detail.page';
 })
 export class SocialProblemDetailPage implements OnInit {
 
-    postLiked = false;
-    test = false;
+    // postLiked = false;
+    // test = false;
     id: string;
-    idPost: number;
+    // idPost: number;
     socialProblem: ISocialProblem = null;
+    socialProblemLoaded = false;
     AuthUser = null;
     appNetworkConnection = false;
 
@@ -51,34 +53,39 @@ export class SocialProblemDetailPage implements OnInit {
         });
         this.getSocialProblem();
     }
-
-    // getImageURL(image: string) {
-    //     return this.utilsService.getImageURL(image);
-    // }
-
     //Obtener el detalle de un problema social
     getSocialProblem() {
-        this.postService.getSocialProblem(+this.id).subscribe(res => {
-            if (res) {
+        this.socialProblemLoaded = false;
+        this.postService.getSocialProblem(+this.id).pipe(
+            finalize(() => {
+                this.socialProblemLoaded = true;
+            })
+        ).subscribe((res: IRespuestaApiSIUSingle) => {
+            if (res.data) {
                 this.socialProblem = res.data;
-                if (this.socialProblem) {
-                    this.postLiked = this.utilsService.checkLikePost(this.socialProblem.details, this.AuthUser);
+                this.socialProblem.postLiked = this.utilsService.checkLikePost(this.socialProblem.details, this.AuthUser);
+                this.socialProblem.user.avatar = (this.socialProblem.user && this.socialProblem.user.avatar) ? this.utilsService.getImageURL(this.socialProblem.user.avatar) : null;
+                if (this.socialProblem.images && this.socialProblem.images.length > 0) {
+                    this.socialProblem.images.forEach((image: any) => {
+                        image.url = (image.url) ? this.utilsService.getImageURL(image.url) : null;
+                    });
                 }
+                console.log('social problem detail', res)
+                console.log('social problem detail', this.socialProblem)
             }
         });
     }
-
-    //Obtener Imagen 
-    getImageURL(image_name: string) {
-        const imgIsURL = this.utilsService.imgIsURL(image_name);
-        return (imgIsURL) ? image_name : `${environment.apiBaseURL}/${environment.image_assets}/${image_name}` ;
+    
+    getBGCover(image_cover: any) {
+        const img = this.utilsService.getImageURL(image_cover);
+        return `linear-gradient(to bottom, rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.23)), url('${img}')`;
     }
 
-    async showImageDetail(image) {
+    async showImageDetailModal(image: string) {
         const modal = await this.modalCtrl.create({
             component: ImageDetailPage,
             componentProps: {
-                image
+                image,
             }
         });
         await modal.present();
@@ -141,9 +148,9 @@ export class SocialProblemDetailPage implements OnInit {
         }
     }
 
-    testClass(event) {
-        event.srcElement.classList.toggle("active");
-        this.test = (this.test) ? false : true;
-    }
+    // testClass(event) {
+    //     event.srcElement.classList.toggle("active");
+    //     this.test = (this.test) ? false : true;
+    // }
 
 }

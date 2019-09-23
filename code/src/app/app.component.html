@@ -6,7 +6,7 @@
                 <!-- Header Menu -->
                 <ion-item lines="none" color="primary">
                     <ion-avatar slot="start" (click)="closeMenu()" *ngIf="authUser">
-                        <img [src]="(authUser.avatar) ? getImageURL(authUser.avatar) : 'assets/img/default/img_avatar.png'" />
+                        <img [src]="(authUser.avatar) ? getImageURL(authUser.avatar) : 'assets/img/default/img_avatar.png'" fallimg="user_avatar"/>
                     </ion-avatar>
                     <ion-label>
                         <h1>{{authUser?.firstname || 'Firstname'}} {{authUser?.lastname || 'Lastname'}}</h1>
