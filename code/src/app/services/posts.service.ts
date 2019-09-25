@@ -105,7 +105,8 @@ export class PostsService implements OnInit {
     // Función para obtener los problemas sociales de la API
     getSocialProblems(): Observable<any> {
         this.currentPage.socialProblems++;
-        return this.httpRequest.get(`${environment.apiBaseURL}/problemas-sociales?page=${this.currentPage.socialProblems}`);
+        const socialProblemsSlug = environment.socialProblemSlug;
+        return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/${socialProblemsSlug}?page=${this.currentPage.socialProblems}`);
     }
     // Función para obtener el listado de emergencias reportadas por un usuario
     getEmergenciesByUser() {
@@ -116,20 +117,23 @@ export class PostsService implements OnInit {
     // Función para obtener el listado de eventos publicados
     getEvents(): Observable<any> {
         this.currentPage.events++;
-        // console.log('Events Page', this.currentPage.events);
-        return this.httpRequest.get(`${environment.apiBaseURL}/eventos?page=${this.currentPage.events}`);
+        const eventsSlug = environment.eventsSlug;
+        return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/${eventsSlug}?page=${this.currentPage.events}`);
     }
     // Función para obtener el detalle de un problema social
     getSocialProblem(id: number): Observable<any> {
-        return this.httpRequest.get(`${environment.apiBaseURL}/problemas-sociales/${id}`);
+        const socialProblemsSlug = environment.socialProblemSlug;
+        return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/${socialProblemsSlug}/${id}`);
     }
     // Función para obtener el detalle de un evento
     getEvent(id: number): Observable<any> {
-        return this.httpRequest.get(`${environment.apiBaseURL}/eventos/${id}`);
+        const eventsSlug = environment.eventsSlug;
+        return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/${eventsSlug}/${id}`);
     }
     // Función para obtener el detalle de una emergencia
     getEmergency(id: number): Observable<any> {
-        return this.httpRequest.get(`${environment.apiBaseURL}/emergencias/${id}`);
+        const emergenciesSlug = environment.emergenciesSlug;
+        return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/${emergenciesSlug}/${id}`);
     }
     // Función para obtener el listado de servicios publicos registrados
     getPublicServices(): Observable<any> {

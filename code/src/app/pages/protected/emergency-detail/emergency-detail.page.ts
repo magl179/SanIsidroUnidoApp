@@ -6,6 +6,8 @@ import { NetworkService } from "../../../services/network.service";
 import { AuthService } from "../../../services/auth.service";
 import { finalize } from 'rxjs/operators';
 import { IRespuestaApiSIUSingle } from 'src/app/interfaces/models';
+import { ModalController } from "@ionic/angular";
+import { ImageDetailPage } from 'src/app/modals/image_detail/image_detail.page';
 
 @Component({
   selector: 'app-emergency-detail',
@@ -21,7 +23,8 @@ export class EmergencyDetailPage implements OnInit {
 
   constructor(  private route: ActivatedRoute,
     public utilsService: UtilsService,
-    private postService: PostsService,
+      private postService: PostsService,
+    private modalCtrl: ModalController,
     private networkService: NetworkService,
     private authService: AuthService) { }
 
@@ -52,6 +55,21 @@ export class EmergencyDetailPage implements OnInit {
             this.emergency = res.data;
             console.log('Dato post', this.emergency);
         });
+    }
+
+    getBGCover(image_cover: any) {
+        const img = this.utilsService.getImageURL(image_cover);
+        return `linear-gradient(to bottom, rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.23)), url('${img}')`;
+}
+
+    async showImageDetailModal(image: string) {
+        const modal = await this.modalCtrl.create({
+            component: ImageDetailPage,
+            componentProps: {
+                image,
+            }
+        });
+        await modal.present();
     }
 
 }

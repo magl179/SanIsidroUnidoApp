@@ -1,8 +1,8 @@
 <app-header title="Mi Perfil"></app-header>
 
 <ion-content padding>
-    <app-network-banner *ngIf="!appNetworkConnection" networkConnection="appNetworkConnection"></app-network-banner>
-    <div class="container-profile" *ngIf="appNetworkConnection">
+    <!-- <app-network-banner *ngIf="!appNetworkConnection" networkConnection="appNetworkConnection"></app-network-banner> -->
+    <div class="container-profile">
         <div class="img-profile ion-padding-top">
             <div class="item_img" *ngIf="AuthUser">
                 <img [src]="(AuthUser.avatar) ? getImageURL(AuthUser.avatar) : 'assets/img/default/img_avatar.png'" fallimg="user_avatar"/>

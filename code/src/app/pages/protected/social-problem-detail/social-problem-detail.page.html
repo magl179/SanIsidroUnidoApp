@@ -69,6 +69,10 @@
                     <p class="post-date">{{socialProblem.details.length}} me
                         gusta</p>
                 </div>
+                <ion-chip class="post-state" [class.active]="(socialProblem.is_attended)">
+                        <ion-icon [name]="(socialProblem.is_attended)?'checkmark':'close'"></ion-icon>
+                        <ion-label>{{(socialProblem.is_attended)?'Atendida':'Pendiente'}}</ion-label>
+                    </ion-chip>
             </ion-card-subtitle>
         </ion-card-header>
         <ion-card-content class="social-problem-content">

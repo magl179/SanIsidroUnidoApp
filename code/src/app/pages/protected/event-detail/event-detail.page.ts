@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { UtilsService } from 'src/app/services/utils.service';
 
 import { ISimpleUbicationItem } from 'src/app/interfaces/barrios';
-import { IEventDetail } from 'src/app/interfaces/models';
 import { PostsService } from '../../../services/posts.service';
 import { AuthService } from '../../../services/auth.service';
 import { IEvent, IPostShare } from '../../../interfaces/models';
@@ -25,7 +24,7 @@ export class EventDetailPage implements OnInit {
     eventLoaded = false;
     appNetworkConnection = false;
     AuthUser = null;
-    event:IEventDetail = null;
+    event:IEvent = null;
 
     // mapPoints: ISimpleUbicationItem = {
     //     latitude: 0.0456696,
@@ -63,7 +62,7 @@ export class EventDetailPage implements OnInit {
             if (res) {
                 this.event = res.data;
                 if (this.event) {
-                    this.event.postLiked = this.utilsService.checkLikePost(this.event.details, this.AuthUser);
+                    this.event.postAssistance = this.utilsService.checkLikePost(this.event.details, this.AuthUser);
                 }
                 // console.log('res post', res);
                 // console.log('Dato post', this.event);
@@ -101,7 +100,8 @@ export class EventDetailPage implements OnInit {
         if (assistance) {
             this.postService.sendDeleteDetailToPost(this.event.id).subscribe(res => {
                 console.log('detalle eliminado correctamente');
-                this.getEvent();
+                // this.getEvent();
+                this.event.postAssistance = false;
             }, err => {
                 console.log('detalle no se pudo eliminar', err);
                 this.utilsService.showToast('La asistencia no ha podido ser eliminada');
@@ -114,7 +114,8 @@ export class EventDetailPage implements OnInit {
             }
             this.postService.sendCreateDetailToPost(detailInfo).subscribe(res => {
                 console.log('detalle creado correctamente');
-                this.getEvent();
+                // this.getEvent();
+                this.event.postAssistance = true;
             }, err => {
                 console.log('detalle no se pudo crear', err);
                 this.utilsService.showToast('No se pudo guardar la asistencia');
@@ -169,3 +170,4 @@ export class EventDetailPage implements OnInit {
     }
 
 }
+// 

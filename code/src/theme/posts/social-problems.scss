@@ -43,18 +43,6 @@
           color: var(--ion-color-dark);
         }
     }
-    .icon-like {
-      color: var(--ion-color-medium);
-      &.active {
-        color: var(--ion-color-danger);
-      }
-    }
-    .icon-share {
-      color: var(--ion-color-primary);
-    }
-    .count_likes {
-      width: 60%;
-    }
     .post_options {
       font-size: 1.4rem;
       width: 40%;
@@ -63,15 +51,19 @@
     }
     .social_problem_header,
     .social_problem_card_content {
+        position: relative;
       padding: 0.4rem 1rem;
     }
     .social_problem_card_footer {
+        position: relative;
       padding: 1rem;
       display: flex;
     }
     .social_problem_user_info_container {
+    position: relative;
       margin: 1rem auto;
       display: flex;
+      position: relative;
       align-items: center;
       .user-info {
         margin-left: 2rem;

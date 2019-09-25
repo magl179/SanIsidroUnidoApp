@@ -54,7 +54,7 @@ export class SocialProblemsPage implements OnInit {
     constructor(
         private navCtrl: NavController,
         private utilsService: UtilsService,
-        private postService: PostsService,
+        private postsService: PostsService,
         private authService: AuthService,
         private userService: UserService,
         private modalCtrl: ModalController,
@@ -92,7 +92,7 @@ export class SocialProblemsPage implements OnInit {
     //Resetear los problemas sociales
     resetSocialProblems() {
         this.socialProblemsList = [];
-        this.postService.resetSocialProblemsPage();
+        this.postsService.resetSocialProblemsPage();
     }
     //Verificar like en una publicacion
     // checkLikePost(details, auth_user): boolean {
@@ -109,10 +109,15 @@ export class SocialProblemsPage implements OnInit {
     //Eliminar o agregar like a una publicacion
     toggleLike(like: boolean, id: number) {
         if (like) {
-            this.postService.sendDeleteDetailToPost(id).subscribe((res: IRespuestaApiSIU) => {
+            this.postsService.sendDeleteDetailToPost(id).subscribe((res: IRespuestaApiSIU) => {
                 console.log('detalle eliminado correctamente');
-                this.resetSocialProblems();
-                this.loadSocialProblems();
+                this.socialProblemsList.forEach(social_problem => {
+                    if (social_problem.id === id) {
+                        social_problem.postLiked = false;
+                    }
+                });
+                // this.resetSocialProblems();
+                // this.loadSocialProblems();
             }, err => {
                 console.log('detalle no se pudo eliminar', err);
                 this.utilsService.showToast('No se pudo eliminar el like');
@@ -123,10 +128,15 @@ export class SocialProblemsPage implements OnInit {
                 user_id: this.AuthUser.id,
                 post_id: id
             }
-            this.postService.sendCreateDetailToPost(detailInfo).subscribe((res: IRespuestaApiSIU) => {
+            this.postsService.sendCreateDetailToPost(detailInfo).subscribe((res: IRespuestaApiSIU) => {
                 console.log('detalle creado correctamente');
-                this.resetSocialProblems();
-                this.loadSocialProblems();
+                // this.resetSocialProblems();
+                // this.loadSocialProblems()
+                this.socialProblemsList.forEach(social_problem => {
+                    if (social_problem.id === id) {
+                        social_problem.postLiked = true;
+                    }
+                });
             }, err => {
                 console.log('detalle no se pudo crear', err);
                 this.utilsService.showToast('No se pudo dar like');
@@ -134,9 +144,12 @@ export class SocialProblemsPage implements OnInit {
         }
     }
     //Cargar los problemas sociales
-    loadSocialProblems(event?) {
+    loadSocialProblems(event?: any, resetEvents?: any) {
         this.socialProblemsLoaded = false;
-        this.postService.getSocialProblems().pipe(
+        if (resetEvents) {
+            this.postsService.resetSocialProblemsPage();
+        }
+        this.postsService.getSocialProblems().pipe(
             finalize(() => {
                 this.socialProblemsLoaded = true;
             })

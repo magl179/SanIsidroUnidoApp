@@ -41,9 +41,7 @@ export class EmergenciesPage implements OnInit {
     ngOnInit() {
     }
 
-    reportEmergency() {
-        this.navCtrl.navigateForward('/emergency-create');
-    }
+    
 
     ionViewWillEnter() {
         this.utilsService.enableMenu();
@@ -56,9 +54,9 @@ export class EmergenciesPage implements OnInit {
     // }
 
     loadEmergencies(event?, resetEvents?) {
-        // if (resetEvents) {
-        //     this.postService.resetEventsPage();
-        // }
+        if (resetEvents) {
+            this.postsService.resetEventsPage();
+        }
         this.emergenciesLoaded = false;
         this.postsService.getEmergenciesByUser().pipe(
             finalize(() => {
@@ -82,7 +80,7 @@ export class EmergenciesPage implements OnInit {
                 }
             }
         },
-        err => {
+        (err: any) => {
             console.log(err);
             this.utilsService.showToast('No se pudieron cargar tus emergencias');
         });
@@ -105,7 +103,7 @@ export class EmergenciesPage implements OnInit {
         return fulldate;
     }
     
-    postDetail(id) {
+    postDetail(id: number) {
         this.resetEmergencies();
         this.navCtrl.navigateForward(`/emergency-detail/${id}`);;
     }
@@ -157,16 +155,22 @@ export class EmergenciesPage implements OnInit {
         await modal.present();
     }
 
-    getHeaderBackData(event){
-        if (event.wannaSearch) {
-            this.showModalSearchEmergencies();
-        }
-        if (event.wannaFilter) {
-            this.showModalFilterEmergencies();
-        }
-        if (event.wannaReport) {
-            this.reportEmergency();
-        }
+    reportEmergency() {
+        this.navCtrl.navigateForward('/emergency-create');
     }
+
+    // getHeaderBackData(event){
+    //     if (event.wannaSearch) {
+    //         this.showModalSearchEmergencies();
+    //     }
+    //     if (event.wannaFilter) {
+    //         this.showModalFilterEmergencies();
+    //     }
+    //     if (event.wannaReport) {
+    //         this.reportEmergency();
+    //     }
+    // }
+
+
 
 }

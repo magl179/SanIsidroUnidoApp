@@ -1,13 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavController, ModalController } from "@ionic/angular";
 import { UtilsService } from '../../../services/utils.service';
-import { IEvent, IPostShare } from 'src/app/interfaces/models';
+import { IPostShare } from 'src/app/interfaces/models';
 import { PostsService } from '../../../services/posts.service';
 import { AuthService } from '../../../services/auth.service';
 import { NetworkService } from '../../../services/network.service';
 import { environment } from "../../../../environments/environment";
 import { finalize } from 'rxjs/operators';
 import { SearchPage } from "../../../modals/search/search.page";
+import { IEvent} from "../../../interfaces/models";
 @Component({
     selector: 'app-events',
     templateUrl: './events.page.html',
@@ -53,8 +54,13 @@ export class EventsPage implements OnInit {
         if (assistance) {
             this.postService.sendDeleteDetailToPost(id).subscribe(res => {
                 console.log('detalle eliminado correctamente');
-                this.resetEvents();
-                this.loadEvents();
+                this.eventsList.forEach(event => {
+                    if (event.id == id) {
+                        event.postAssistance = false;
+                    }
+                });
+                // this.resetEvents();
+                // this.loadEvents();
             }, err => {
                 console.log('detalle no se pudo eliminar', err);
                 this.utilsService.showToast('La asistencia no pudo ser eliminada');
@@ -67,8 +73,11 @@ export class EventsPage implements OnInit {
             }
             this.postService.sendCreateDetailToPost(detailInfo).subscribe(res => {
                 console.log('detalle creado correctamente');
-                this.resetEvents();
-                this.loadEvents();
+                this.eventsList.forEach(event => {
+                    if (event.id == id) {
+                        event.postAssistance = true;
+                    }
+                });
             }, err => {
                     console.log('detalle no se pudo crear', err);
                     this.utilsService.showToast('No se pudo eliminar la asistencia');
@@ -122,8 +131,11 @@ export class EventsPage implements OnInit {
         this.postService.resetEventsPage();
     }
 
-    loadEvents(event?, resetEvents?) {
+    loadEvents(event?: any, resetEvents?: any) {
         this.eventsLoaded = false;
+        if (resetEvents) {
+            this.postService.resetEventsPage();
+        }
         this.postService.getEvents().pipe(
             finalize(() => {
                 this.eventsLoaded = true;
@@ -135,8 +147,8 @@ export class EventsPage implements OnInit {
             if (events) {
                 console.log('data', res);
                 events = events.map((event: any) => {
-                    const postLiked = this.utilsService.checkLikePost(event.details, this.AuthUser) || false;
-                    event.postLiked = postLiked;
+                    const postAssistance = this.utilsService.checkLikePost(event.details, this.AuthUser) || false;
+                    event.postAssistance = postAssistance;
                     return event;
                 });
                 if (events.length === 0) {
@@ -172,7 +184,6 @@ export class EventsPage implements OnInit {
     }
 
     getBGCover(image_cover: any) {
-            // console.log('has images', image_cover);
             const img = this.utilsService.getImageURL(image_cover);
             return `linear-gradient(to bottom, rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.23)), url('${img}')`;
     }

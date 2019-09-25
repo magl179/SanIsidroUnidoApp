@@ -8,12 +8,12 @@ export const environment = {
     onesignal_id : '2ffbdcc2-223e-4527-9164-9583ea47d0b4',
     firebase_app_id: '729197860050',
     apiBaseURL: 'http://192.168.1.6/github/SanIsidroApi/public/api/v1',
-    socialProblemSlug: 'social_problems',
-    eventsSlug: 'events',
-    emergenciesSlug: 'emergencies',
+    socialProblemSlug: 'problemas_sociales',
+    eventsSlug: 'eventos',
+    emergenciesSlug: 'emergencias',
+    reportsSlug: 'reportes',
     image_assets: 'imagenes',
-    roles_permitidos : ['morador', 'afiliado', 'policia','policia_comunitario'],
-    roles_permitidos2: ['morador', 'afiliado', 'policia'],
+    roles_permitidos : ['morador', 'afiliado', 'policia'],
     googleMapLayer: {
         url: "https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}",
         attribution: '&copy; <a target=_blank" href="https://www.google.com/intl/es-419_ec/help/terms_maps/">Google Maps</a>'
@@ -23,13 +23,6 @@ export const environment = {
         attribution: '&copy; <a target=_blank" href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }
 };
-
-//“start”: “ng serve –proxy-config proxy.conf.json”
-// return this._http.get('/api/pictures?method=GetPictures')
-// .subscribe((returnedStuff) => {
-//   console.log(returnedStuff);
-// });
-
 
 /*
  * For easier debugging in development mode, you can import the following file

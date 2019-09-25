@@ -69,12 +69,12 @@
                         {{event.details.length}}
                         {{(event.details.length !== 1) ? 'personas asistirán': 'persona asistirá'}}
                     </span>
-                    <ion-chip class="chip-assistance" [class.active]="(event.postLiked)"
-                        (click)="toggleAssistance(event.postLiked, event.id)">
+                    <ion-chip class="chip-assistance" [class.active]="(event.postAssistance)"
+                        (click)="toggleAssistance(event.postAssistance, event.id)">
                         <ion-label style="display:flex;align-items:center">
-                            <ion-icon [name]="(event.postLiked)?'checkmark':'people'"
+                            <ion-icon [name]="(event.postAssistance)?'checkmark':'people'"
                                 style="margin-right: 6px"></ion-icon>
-                            <span>{{(event.postLiked) ? 'Voy a Asistir': 'Unirme'}}</span>
+                            <span>{{(event.postAssistance) ? 'Voy a Asistir': 'Unirme'}}</span>
                         </ion-label>
                     </ion-chip>
                 </p>
@@ -92,9 +92,6 @@
                         (click)="showImageDetailModal((image.url) ? getImageURL(image.url) : 'assets/img/default/img_avatar.png')">
                         <img [src]="(image.url) ? getImageURL(image.url) : 'assets/img/default/img_avatar.png'"
                             alt="Imagen de la Publicación">
-                        <!-- <figcaption>
-                                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua
-                                </figcaption> -->
                     </figure>
                 </div>
             </div>

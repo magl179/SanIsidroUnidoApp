@@ -117,20 +117,21 @@ export interface IDeviceUser {
     updated_at?: string;
 }
 
-export interface IEvent {
-    id: number;
-    title: string;
-    description: string;
-    category_id: number;
-    date: string;
-    time: string;
-    ubication: IUbication;
-    user_id?: number;
-    assist: boolean;
-    notassist: boolean;
-    images?: [];
-    details?: any;
-}
+// export interface IEvent {
+//     id: number;
+//     title: string;
+//     description: string;
+//     category_id: number;
+//     date: string;
+//     time: string;
+//     ubication: IUbication;
+//     user_id?: number;
+//     assist: boolean;
+//     notassist: boolean;
+//     images?: [];
+//     details?: any;
+//     postAssistance?: boolean;
+// }
 
 // INTERFACES ENVIAR DATOS
 
@@ -166,7 +167,7 @@ export interface IEditProfile {
     number
 }
 
-export interface IEventDetail {
+export interface IEvent {
     id: number;
     title: string;
     description: string;
@@ -177,8 +178,9 @@ export interface IEventDetail {
     category_id: number;
     created_at?: string;
     updated_at?: string;
+    images?: []
     details?: any;
-    postLiked?: any;
+    postAssistance?: any;
 }
 
 export interface ICreateDetail {

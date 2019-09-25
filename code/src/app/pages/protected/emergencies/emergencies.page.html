@@ -1,8 +1,8 @@
-<app-header-back title="Mis Emergencias" [searchAvalaible]="true" [filterAvalaible]="true"
-    [reportAvalaible]="true" (returnHeaderBackData)="getHeaderBackData($event)"></app-header-back>
+<app-header-back title="Mis Emergencias"></app-header-back>
 
 <ion-content padding>
-    <div class="flex-column-center message-fail-load" *ngIf="emergenciesLoaded && emergenciesList.length === 0">
+    <div class="flex-column-center message-fail-load"
+        *ngIf="emergenciesLoaded && emergenciesList.length === 0">
         <p>No se pudieron cargar tus emergencias reportadas</p>
         <ion-button (click)="loadEmergencies()">Toca para reintentar</ion-button>
     </div>
@@ -40,27 +40,38 @@
     <!-- Tarjetas con Datos -->
     <div *ngIf="emergenciesLoaded  && emergenciesList.length > 0">
         <ion-card class="emergency_card"
-            *ngFor="let emergencie of emergenciesFiltered; let i = index;">
-            <ion-card-header (click)="postDetail(emergencie.id)" class="emergency_card_header">
-                <ion-card-subtitle class="emergency_info">
-                    <span class="emergency_date">
-                        <ion-icon name="calendar"></ion-icon>
-                        {{getFullDate(emergencie.date, emergencie.time) | simpleBeatifulDate}}
-                    </span>
-                    <span class="emergency_address">
-                        <ion-icon name="navigate"></ion-icon>
-                        {{ emergencie.ubication.address || 'Direccion no encontrada'}}
-                    </span>
-                </ion-card-subtitle>
-                <ion-card-title class="emergency_card_title">{{emergencie.title}}</ion-card-title>
+            *ngFor="let emergency of emergenciesFiltered; let i = index;">
+            <ion-card-header (click)="postDetail(emergency.id)" class="emergency_card_header">
+                <ion-card-title class="emergency_card_title">{{emergency.title}}</ion-card-title>
             </ion-card-header>
 
             <ion-card-content class="emergency_card_content">
                 <p class="post_description">
-                    {{emergencie.description | truncate: 50}}
+                    {{emergency.description | truncate: 50}}
                 </p>
-                <p class="see-more" (click)="postDetail(emergencie.id)">Ver más...</p>
+                <p class="see-more" (click)="postDetail(emergency.id)">Ver más...</p>
+                <ion-chip class="post-state" [class.active]="(emergency.is_attended)">
+                    <ion-icon [name]="(emergency.is_attended)?'checkmark':'close'"></ion-icon>
+                    <ion-label>{{(emergency.is_attended)?'Atendida':'Pendiente'}}</ion-label>
+                </ion-chip>
             </ion-card-content>
         </ion-card>
     </div>
+    <!--Opciones -->
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button color="primary">
+            <ion-icon name="md-more"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-list side="top">
+            <ion-fab-button (click)="showModalSearchEmergencies()">
+                <ion-icon name="search"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button (click)="showModalFilterEmergencies()">
+                <ion-icon name="options"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button (click)="this.reportEmergency()">
+                <ion-icon name="send"></ion-icon>
+            </ion-fab-button>
+        </ion-fab-list>
+    </ion-fab>
 </ion-content>

@@ -6,7 +6,7 @@
     <!-- Mensaje cuando cargan o no los datos-->
     <div class="flex-column-center message-fail-load" *ngIf="eventsLoaded && eventsList.length === 0">
         <p>No se pudieron cargar los Eventos</p>
-        <ion-button (click)="loadEvents()">Toca para reintentar</ion-button>
+        <ion-button (click)="loadEvents(null,true)">Toca para reintentar</ion-button>
     </div>
     <!-- Tarjetas Animacion hasta cargar datos-->
     <div *ngIf="!eventsLoaded">
@@ -65,12 +65,12 @@
                         {{event.details.length}}
                         {{(event.details.length !== 1) ? 'personas asistirán': 'persona asistirá'}}
                     </span>
-                    <ion-chip class="chip-assistance" [class.active]="(event.postLiked)"
-                        (click)="toggleAssistance(event.postLiked, event.id)">
+                    <ion-chip class="chip-assistance" [class.active]="(event.postAssistance)"
+                        (click)="toggleAssistance(event.postAssistance, event.id)">
                         <ion-label style="display:flex;align-items:center">
-                            <ion-icon [name]="(event.postLiked)?'checkmark':'people'"
+                            <ion-icon [name]="(event.postAssistance)?'checkmark':'people'"
                                 style="margin-right: 6px"></ion-icon>
-                            <span>{{(event.postLiked) ? 'Voy a Asistir': 'Unirme'}}</span>
+                            <span>{{(event.postAssistance) ? 'Voy a Asistir': 'Unirme'}}</span>
                         </ion-label>
                     </ion-chip>
                 </p>

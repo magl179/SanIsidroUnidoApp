@@ -108,7 +108,8 @@ export class SocialProblemDetailPage implements OnInit {
         if (like) {
             this.postService.sendDeleteDetailToPost(this.socialProblem.id).subscribe(res => {
                 console.log('detalle eliminado correctamente');
-                this.getSocialProblem();
+                // this.getSocialProblem();
+                this.socialProblem.postLiked = false;
             }, err => {
                 console.log('detalle no se pudo eliminar', err);
                 this.utilsService.showToast('El like no se pudo eliminar');    
@@ -121,7 +122,8 @@ export class SocialProblemDetailPage implements OnInit {
             }
             this.postService.sendCreateDetailToPost(detailInfo).subscribe(res => {
                 console.log('detalle creado correctamente');
-                this.getSocialProblem();
+                // this.getSocialProblem();
+                this.socialProblem.postLiked = true;
             }, err => {
                 console.log('detalle no se pudo crear', err);
                 this.utilsService.showToast('El like no pudo guardarse');

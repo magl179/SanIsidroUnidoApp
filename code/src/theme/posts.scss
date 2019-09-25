@@ -26,6 +26,7 @@
             //background:red;
             background: var(--ion-color-white);
             color: var(--ion-color-gray);
+            transition: all .2s ease-in-out;
             &.active, &:hover{
               background: var(--ion-color-danger);
               color: var(--ion-color-white);
@@ -36,6 +37,22 @@
     }
   }
 
+
+  .post-state {
+    position: absolute;
+    right: 10px;
+    top: 0px;
+    --background: var(--ion-color-warning);
+    &.center{
+        top: 50%;
+    }
+    &.bottom{
+        top: 100%;
+    }
+    &.active{
+      --background: var(--ion-color-success);
+    }
+  }
 
 
 
