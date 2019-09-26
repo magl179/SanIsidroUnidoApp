@@ -6,21 +6,21 @@ export interface IRespuestaApiSIU {
     data: any[];
     errors: any[]
 }
-export interface IRespuestaApiSIUSingle{
+export interface IRespuestaApiSIUSingle {
     code: number;
     message: string;
     data: any;
     errors: any[]
- }
+}
 
-export interface IRespuestaApiSIUPaginada{
+export interface IRespuestaApiSIUPaginada {
     code: number;
     message: string;
     data: IApiSUIDataPaginada;
     errors: any[]
 }
 
-interface IApiSUIDataPaginada{
+interface IApiSUIDataPaginada {
     current_page: number;
     data: any[];
     first_page_url: string;
@@ -34,7 +34,7 @@ interface IApiSUIDataPaginada{
     to: number;
     total: number;
 }
-  
+
 // Compartir Publicaciones
 export interface IPostShare {
     title: string;
@@ -91,7 +91,7 @@ export interface ISocialProblem {
     ubication: IUbication;
     user_id: number;
     likes: number;
-    images?: [];
+    images?: I_ImagesApi[];
     category?: any;
     user?: any;
     details?: any;
@@ -167,6 +167,14 @@ export interface IEditProfile {
     number
 }
 
+export interface I_ImagesApi {
+    created_at: string;
+    id: number;
+    post_id: number;
+    updated_at: string;
+    url: string;
+}
+
 export interface IEvent {
     id: number;
     title: string;
@@ -178,7 +186,7 @@ export interface IEvent {
     category_id: number;
     created_at?: string;
     updated_at?: string;
-    images?: []
+    images?: I_ImagesApi[]
     details?: any;
     postAssistance?: any;
 }

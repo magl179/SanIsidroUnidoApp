@@ -48,16 +48,13 @@ export class EmergencyCreatePage implements OnInit {
         private localizationService: LocalizationService,
         private postService: PostsService,
         private navCtrl: NavController,
-        private networkService: NetworkService,
+        // private networkService: NetworkService,
         private localDataService: LocalDataService
     ) {
         this.createForm();
     }
 
     async ngOnInit() {
-        // this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
-        //     this.appNetworkConnection = connected;
-        // });
         const coords = await this.localizationService.getCoordinate();
         this.emergencyPostCoordinate.latitude = coords.latitude;
         this.emergencyPostCoordinate.longitude = coords.longitude;

@@ -8,8 +8,9 @@ import { IonicModule } from '@ionic/angular';
 import { EventDetailPage } from './event-detail.page';
 import { SmComponentsModule } from 'src/app/components/sm-components.module';
 import { PipesModule } from 'src/app/pipes/pipes.module';
-import { ImageDetailPage } from "../../../modals/image_detail/image_detail.page";
-import { ImageDetailPageModule } from "../../../modals/image_detail/image_detail.module";
+import { NgFallimgModule } from 'ng-fallimg';
+// import { ImageDetailPage } from "../../../modals/image_detail/image_detail.page";
+// import { ImageDetailPageModule } from "../../../modals/image_detail/image_detail.module";
 
 const routes: Routes = [
   {
@@ -19,8 +20,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
- entryComponents: [
-    ImageDetailPage     
+ entryComponents: [     
   ],
   imports: [
     CommonModule,
@@ -29,7 +29,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
         SmComponentsModule,
       PipesModule,
-    ImageDetailPageModule
+      NgFallimgModule
   ],
   declarations: [EventDetailPage]
 })

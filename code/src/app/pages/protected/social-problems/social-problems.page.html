@@ -1,5 +1,4 @@
-<app-header-back title="Problemas Sociales" [searchAvalaible]="true" [filterAvalaible]="true"
-    [reportAvalaible]="true" (returnHeaderBackData)="getHeaderBackData($event)"></app-header-back>
+<app-header-back title="Problemas Sociales"></app-header-back>
 <ion-content padding>
     <!-- Mensaje no cargaron los datos desde la Api -->
     <div class="flex-column-center message-fail-load"
@@ -93,7 +92,23 @@
             </ion-card-content>
         </ion-card>
     </div>
-
+    <!--Opciones del FabButton -->
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button color="primary" size="small">
+            <ion-icon name="ios-arrow-dropup"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-list side="top">
+            <ion-fab-button color="secondary" (click)="showModalSearchSocialProblems()">
+                <ion-icon name="search"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button color="danger" (click)="showModalFilterSocialProblems()">
+                <ion-icon name="options"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button color="tertiary" (click)="reportSocialProblem()">
+                <ion-icon name="send"></ion-icon>
+            </ion-fab-button>
+        </ion-fab-list>
+    </ion-fab>
     <!-- Scroll Infinito -->
     <ion-infinite-scroll threshold="150px" (ionInfinite)="getInfiniteScrollData($event)">
         <ion-infinite-scroll-content loadingSpinner="crescent"

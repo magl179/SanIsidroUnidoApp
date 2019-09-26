@@ -45,8 +45,7 @@
     <!-- Datos Cargados -->
     <div *ngIf="eventLoaded && event">
         <ion-card class="event_card detail" *ngIf="event">
-            <div class="cover-event"
-                [ngStyle]="{'background-image': (event.images && event.images.length > 0) ? getBGCover(event.images[0].url) : ''}">
+            <div class="cover-event" [style.background-image]="(event.images && event.images.length > 0) ? getBGCover(event.images[0].url) : ''">
                 <div class="social-buttons">
                     <div class="item-button" (click)="sharePost(event)">
                         <ion-icon class="share" name="share"></ion-icon>
@@ -71,9 +70,8 @@
                     </span>
                     <ion-chip class="chip-assistance" [class.active]="(event.postAssistance)"
                         (click)="toggleAssistance(event.postAssistance, event.id)">
-                        <ion-label style="display:flex;align-items:center">
-                            <ion-icon [name]="(event.postAssistance)?'checkmark':'people'"
-                                style="margin-right: 6px"></ion-icon>
+                        <ion-label class="ion-align-items-center">
+                            <ion-icon [name]="(event.postAssistance)?'checkmark':'people'" class="icon left"></ion-icon>
                             <span>{{(event.postAssistance) ? 'Voy a Asistir': 'Unirme'}}</span>
                         </ion-label>
                     </ion-chip>
@@ -89,9 +87,8 @@
                 <p class="image_gallery_title">Imágenes</p>
                 <div class="image_gallery">
                     <figure *ngFor="let image of event.images"
-                        (click)="showImageDetailModal((image.url) ? getImageURL(image.url) : 'assets/img/default/img_avatar.png')">
-                        <img [src]="(image.url) ? getImageURL(image.url) : 'assets/img/default/img_avatar.png'"
-                            alt="Imagen de la Publicación">
+                        (click)="seeImageDetail(image.url)">
+                        <img [src]="image.url" fallimg="image_full"/>
                     </figure>
                 </div>
             </div>

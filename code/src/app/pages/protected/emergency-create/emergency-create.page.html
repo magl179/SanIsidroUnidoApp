@@ -25,7 +25,7 @@
                         </ion-item>
                     </div>
                 </div>
-                <div class="form-errors">
+                <div class="form-errors padding-lateral">
                     <p class="form-error"
                         *ngIf="emergencyForm.get('title').hasError('required') && emergencyForm.get('title').touched">
                         {{errorMessages.title.required.message}}
@@ -49,7 +49,7 @@
                         </ion-item>
                     </div>
                 </div>
-                <div class="form-errors">
+                <div class="form-errors padding-lateral">
                     <p class="form-error"
                         *ngIf="emergencyForm.get('description').hasError('required') && emergencyForm.get('description').touched">
                         {{errorMessages.description.required.message}}
@@ -115,7 +115,7 @@
                             </ion-item>
                         </div>
                     </div>
-                    <div class="form-errors">
+                    <div class="form-errors padding-lateral">
                         <p class="form-error"
                             *ngIf="ubicationForm.get('description_ubication').hasError('required') && ubicationForm.get('description_ubication').touched">
                             {{errorMessages.description.required.message}}

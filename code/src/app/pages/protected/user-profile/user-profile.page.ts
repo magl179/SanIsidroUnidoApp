@@ -50,9 +50,9 @@ export class UserProfilePage implements OnInit {
     }
 
     async ngOnInit() {
-        this.authService.getAuthUser().subscribe((res: any) => {
-            if (res) {                
-                this.AuthUser = res.user;
+        this.authService.getAuthUser().subscribe(token_decoded => {
+            if (token_decoded.user) {
+                this.AuthUser = token_decoded.user;
                 this.getRoles();
             }
         });

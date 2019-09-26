@@ -1,10 +1,11 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { ModalController } from '@ionic/angular';
+import { UtilsService } from "src/app/services/utils.service";
 
 @Component({
-  selector: 'modal-image-detail',
-  templateUrl: './image_detail.page.html',
-  styleUrls: ['./image_detail.page.scss'],
+    selector: 'modal-image-detail',
+    templateUrl: './image_detail.page.html',
+    styleUrls: ['./image_detail.page.scss'],
 })
 export class ImageDetailPage implements OnInit {
 
@@ -13,14 +14,26 @@ export class ImageDetailPage implements OnInit {
     @Input() description = null;
 
     constructor(
-      private modalCtrl: ModalController
-  ) { }
+        private modalCtrl: ModalController,
+        private utilsService: UtilsService
+    ) { }
 
-  ngOnInit() {
-  }
+    ngOnInit() {
+    }
 
-  closeModal() {
-    this.modalCtrl.dismiss();
-}
+    shareImage() {
+        const imgObject = {
+            description: '', // message
+            title: null, // subject
+            image: this.image, // file image or [] images
+            url: null // url to share
+        };
+        this.utilsService.shareSocial(imgObject);
+        // this.socialShari/ng.share('',null,this.image,null);
+    }
+
+    closeModal() {
+        this.modalCtrl.dismiss();
+    }
 
 }

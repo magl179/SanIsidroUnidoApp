@@ -4,7 +4,7 @@
     <div class="flex-column-center message-fail-load"
         *ngIf="emergenciesLoaded && emergenciesList.length === 0">
         <p>No se pudieron cargar tus emergencias reportadas</p>
-        <ion-button (click)="loadEmergencies()">Toca para reintentar</ion-button>
+        <ion-button (click)="loadEmergencies(null, true)">Toca para reintentar</ion-button>
     </div>
     <!-- Tarjetas Animacion hasta cargar datos-->
     <div *ngIf="!emergenciesLoaded">
@@ -57,19 +57,19 @@
             </ion-card-content>
         </ion-card>
     </div>
-    <!--Opciones -->
+    <!--Opciones del FabButton -->
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button color="primary">
-            <ion-icon name="md-more"></ion-icon>
+        <ion-fab-button color="primary" size="small">
+            <ion-icon name="ios-arrow-dropup"></ion-icon>
         </ion-fab-button>
         <ion-fab-list side="top">
-            <ion-fab-button (click)="showModalSearchEmergencies()">
+            <ion-fab-button color="secondary" (click)="showModalSearchEmergencies()">
                 <ion-icon name="search"></ion-icon>
             </ion-fab-button>
-            <ion-fab-button (click)="showModalFilterEmergencies()">
+            <ion-fab-button color="danger" (click)="showModalFilterEmergencies()">
                 <ion-icon name="options"></ion-icon>
             </ion-fab-button>
-            <ion-fab-button (click)="this.reportEmergency()">
+            <ion-fab-button color="tertiary" (click)="reportEmergency()">
                 <ion-icon name="send"></ion-icon>
             </ion-fab-button>
         </ion-fab-list>

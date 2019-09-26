@@ -23,7 +23,7 @@ export class EmergencyDetailPage implements OnInit {
 
   constructor(  private route: ActivatedRoute,
     public utilsService: UtilsService,
-      private postService: PostsService,
+      private postsService: PostsService,
     private modalCtrl: ModalController,
     private networkService: NetworkService,
     private authService: AuthService) { }
@@ -42,24 +42,22 @@ export class EmergencyDetailPage implements OnInit {
         });
         this.getEmergency();
     }
-
-    getImageURL(image: string) {
-        return this.utilsService.getImageURL(image);
-    }
     
-    getEmergency() {
+    getEmergency(event?: any, resetEvents?: any) {
         this.emergencyLoaded = false;
-        this.postService.getEmergency(+this.id).pipe(finalize(() => {
+        this.postsService.getEmergency(+this.id).pipe(finalize(() => {
             this.emergencyLoaded = true;
         })).subscribe((res: IRespuestaApiSIUSingle) => {
             this.emergency = res.data;
+            if (this.emergency.images && this.emergency.images.length > 0) {
+                this.emergency.images = this.utilsService.mapImagesApi(this.emergency.images);
+            }
             console.log('Dato post', this.emergency);
         });
     }
 
     getBGCover(image_cover: any) {
-        const img = this.utilsService.getImageURL(image_cover);
-        return `linear-gradient(to bottom, rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.23)), url('${img}')`;
+        return `linear-gradient(to bottom, rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.23)), url('${image_cover}')`;
 }
 
     async showImageDetailModal(image: string) {
@@ -70,6 +68,11 @@ export class EmergencyDetailPage implements OnInit {
             }
         });
         await modal.present();
+    }
+
+    seeImageDetail(image: string) {
+        console.log('see image', image)
+        this.utilsService.seeImageDetail(image, 'Imagen Evento');
     }
 
 }

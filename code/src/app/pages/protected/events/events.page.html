@@ -1,8 +1,5 @@
-<app-header-back title="Eventos" [searchAvalaible]="true"
-    (returnHeaderBackData)="getHeaderBackData($event)"></app-header-back>
+<app-header-back title="Eventos"></app-header-back>
 <ion-content padding>
-    <!-- <p>events loaded {{(eventsLoaded)?'true': 'false'}}</p>
-    <p>events {{eventsList.length}}</p> -->
     <!-- Mensaje cuando cargan o no los datos-->
     <div class="flex-column-center message-fail-load" *ngIf="eventsLoaded && eventsList.length === 0">
         <p>No se pudieron cargar los Eventos</p>
@@ -38,10 +35,11 @@
             </ion-row>
         </ion-card>
     </div>
+    <!-- Tarjeta Datos Cargados y Disponibles -->
     <div *ngIf="eventsLoaded  && eventsList.length > 0">
         <ion-card class="event_card" *ngFor="let event of eventsList; let i = index;">
             <div class="cover-event"
-                [ngStyle]="{'background-image': (event.images && event.images.length > 0) ? getBGCover(event.images[0].url) : ''}">
+                [ngStyle]="{'background-image': getImageCover(event)}">
                 <div class="social-buttons">
                     <div class="item-button" (click)="sharePost(event)">
                         <ion-icon class="share" name="share"></ion-icon>
@@ -67,7 +65,7 @@
                     </span>
                     <ion-chip class="chip-assistance" [class.active]="(event.postAssistance)"
                         (click)="toggleAssistance(event.postAssistance, event.id)">
-                        <ion-label style="display:flex;align-items:center">
+                        <ion-label class="ion-align-items-center">
                             <ion-icon [name]="(event.postAssistance)?'checkmark':'people'"
                                 style="margin-right: 6px"></ion-icon>
                             <span>{{(event.postAssistance) ? 'Voy a Asistir': 'Unirme'}}</span>
@@ -77,6 +75,17 @@
             </div>
         </ion-card>
     </div>
+     <!--Opciones del FabButton -->
+     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button color="primary" size="small">
+            <ion-icon name="ios-arrow-dropup"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-list side="top">
+            <ion-fab-button (click)="showModalSearchEvents()">
+                <ion-icon name="search"></ion-icon>
+            </ion-fab-button>
+        </ion-fab-list>
+    </ion-fab>
     <!-- Scroll Infinito -->
     <ion-infinite-scroll threshold="150px" (ionInfinite)="getInfiniteScrollData($event)">
         <ion-infinite-scroll-content loadingSpinner="crescent"

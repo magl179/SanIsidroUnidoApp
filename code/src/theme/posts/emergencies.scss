@@ -40,9 +40,10 @@
   .emergency_cover_image {
     height: 250px;
     width: 100%;
+    background-image: linear-gradient(to right, #2C5364, #203A43, #0F2027);
     background-position: center;
     background-size: cover;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
   }
   .emergency_card_header {
     padding: 0.7rem 1rem;

@@ -24,7 +24,7 @@
                         </ion-item>
                     </div>
                 </div>
-                <div class="form-errors">
+                <div class="form-errors padding-lateral">
                     <p class="form-error"
                         *ngIf="socialProblemForm.get('title').hasError('required') && socialProblemForm.get('title').touched">
                         {{errorMessages.title.required.message}}
@@ -48,14 +48,15 @@
                         </ion-item>
                     </div>
                 </div>
-                <div class="form-errors">
+                <div class="form-errors padding-lateral">
                     <p class="form-error"
                         *ngIf="socialProblemForm.get('description').hasError('required') && socialProblemForm.get('description').touched">
                         {{errorMessages.description.required.message}}
                     </p>
                 </div>
-                <div class="item-form" *ngIf="subcategories.length > 0">
-                    <ion-item lines="none">
+                
+                <div class="item-form padding-top" *ngIf="subcategories.length > 0">
+                    <ion-item lines="none" class="small-font">
                         <ion-label class="label-padding">Categoria</ion-label>
                         <ion-select formControlName="subcategory" placeholder="Escoge una categoría">
                             <ion-select-option [selected]="(i===0) ? true: false"
@@ -65,7 +66,7 @@
                         </ion-select>
                     </ion-item>
                 </div>
-                <div class="form-errors">
+                <div class="form-errors padding-lateral">
                     <p class="form-error"
                         *ngIf="socialProblemForm.get('subcategory').hasError('required') && socialProblemForm.get('subcategory').touched">
                         {{errorMessages.subcategory.required.message}}
@@ -134,7 +135,7 @@
                         </ion-item>
                     </div>
                 </div>
-                <div class="form-errors">
+                <div class="form-errors padding-lateral">
                     <p class="form-error"
                         *ngIf="ubicationForm.get('description_ubication').hasError('required') && ubicationForm.get('description_ubication').touched">
                         {{errorMessages.description.required.message}}

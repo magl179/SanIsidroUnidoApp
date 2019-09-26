@@ -67,8 +67,10 @@ export class SocialProblemsPage implements OnInit {
     async ngOnInit() {
         this.authService.getAuthUser().pipe(
             finalize(() => { })
-        ).subscribe((res: any) => {
-            this.AuthUser = res.user;
+        ).subscribe(token_decoded => {
+            if (token_decoded.user) {
+                this.AuthUser = token_decoded.user;
+            }
         },
             err => {
                 console.log('Error al traer la informacion del usuario', err);
@@ -84,28 +86,11 @@ export class SocialProblemsPage implements OnInit {
     reportSocialProblem() {
         this.navCtrl.navigateForward('/social-problem-create')
     }
-    //Vaciar problemas sociales al salir pagina
-    ionViewWillLeave() {
-        console.log('IonWillLeave Listado Problemas Sociales Destruido');
-        this.resetSocialProblems();
-    }
     //Resetear los problemas sociales
     resetSocialProblems() {
         this.socialProblemsList = [];
         this.postsService.resetSocialProblemsPage();
     }
-    //Verificar like en una publicacion
-    // checkLikePost(details, auth_user): boolean {
-    //     return this.utilsService.checkLikePost(details, auth_user);
-    //     if ($details && $details.length > 0) {
-    //         const likes_user = this.utilsService.getUsersFromDetails($details);
-    //         const user_made_like = this.utilsService.checkUserInDetails(this.AuthUser.id, likes_user);
-    //         return user_made_like;
-    //     }
-    //     else {
-    //         return false;
-    //     }
-    // }
     //Eliminar o agregar like a una publicacion
     toggleLike(like: boolean, id: number) {
         if (like) {
@@ -116,8 +101,6 @@ export class SocialProblemsPage implements OnInit {
                         social_problem.postLiked = false;
                     }
                 });
-                // this.resetSocialProblems();
-                // this.loadSocialProblems();
             }, err => {
                 console.log('detalle no se pudo eliminar', err);
                 this.utilsService.showToast('No se pudo eliminar el like');
@@ -147,6 +130,7 @@ export class SocialProblemsPage implements OnInit {
     loadSocialProblems(event?: any, resetEvents?: any) {
         this.socialProblemsLoaded = false;
         if (resetEvents) {
+            this.socialProblemsList = [];
             this.postsService.resetSocialProblemsPage();
         }
         this.postsService.getSocialProblems().pipe(
@@ -157,9 +141,11 @@ export class SocialProblemsPage implements OnInit {
             let socialProblems = res.data.data;
             if (socialProblems) {
                 socialProblems = socialProblems.map((social_problem: any) => {
-                    // const postLiked = this.utilsService.checkLikePost(social_problem.details, this.AuthUser) || false;
-                    social_problem.user.avatar = (social_problem.user && social_problem.user.avatar) ? this.getImageURL(social_problem.user.avatar) : null;
+                    social_problem.user.avatar = (social_problem.user && social_problem.user.avatar) ? this.utilsService.getImageURL(social_problem.user.avatar) : null;
                     social_problem.postLiked = this.utilsService.checkLikePost(social_problem.details, this.AuthUser) || false;
+                    if (social_problem.images && social_problem.images.length > 0) {
+                        social_problem.images = this.utilsService.mapImagesApi(social_problem.images);
+                    }
                     return social_problem;
                 });
                 if (socialProblems.length === 0) {
@@ -211,7 +197,7 @@ export class SocialProblemsPage implements OnInit {
         }
     }
     //Funcion mostrar el filtro de publicaciones
-    async showFilterPosts(event) {
+    async showModalFilterSocialProblems(event) {
         //Crear Popover
         const popover = await this.popoverCtrl.create({
             component: FilterPostsComponent,
@@ -233,33 +219,26 @@ export class SocialProblemsPage implements OnInit {
         //Presentar el Popover
         return await popover.present();
     }
-    //Obtener Imagen 
-    getImageURL(image_name: string) {
-        const imgIsURL = this.utilsService.imgIsURL(image_name);
-        return (imgIsURL) ? image_name : `${environment.apiBaseURL}/${environment.image_assets}/${image_name}`;
-    }
 
     getBGCover(image_cover: any) {
-        // console.log('has images', image_cover);
-        const img = this.utilsService.getImageURL(image_cover);
-        return `linear-gradient(to bottom, rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.23)), url('${img}')`;
+        return `linear-gradient(to bottom, rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.23)), url('${image_cover}')`;
     }
 
-    async showSearchModal() {
+    async showModalSearchSocialProblems() {
         const modal = await this.modalCtrl.create({
             component: SearchPage,
             componentProps: {
                 searchIdeas: [],
                 originalSearchData: [...this.socialProblemsList],
                 routeDetail: '/social-problem-detail',
-                searchPlaceholder : 'Buscar Problemas Sociales',
+                searchPlaceholder: 'Buscar Problemas Sociales',
                 fieldsToSearch: ['title', 'description'],
                 searchInApi: true,
                 postTypeSlug: environment.socialProblemSlug
             }
         });
-         //Obtener datos popover cuando se vaya a cerrar
-         modal.onDidDismiss().then((dataReturned: any) => {
+        //Obtener datos popover cuando se vaya a cerrar
+        modal.onDidDismiss().then((dataReturned: any) => {
             // if (dataReturned !== null) {
             //     this.socialProblemsFilter = [...dataReturned.data.data];
             //     this.filters = dataReturned.data.filters;
@@ -269,7 +248,7 @@ export class SocialProblemsPage implements OnInit {
         await modal.present();
     }
     async showFilterModal() {
-        
+
         const modal = await this.modalCtrl.create({
             component: FilterPage,
             componentProps: {
@@ -279,8 +258,8 @@ export class SocialProblemsPage implements OnInit {
                 // postTypeSlug: environment.socialProblemSlug
             }
         });
-         //Obtener datos popover cuando se vaya a cerrar
-         modal.onDidDismiss().then((modalReturn: any) => {
+        //Obtener datos popover cuando se vaya a cerrar
+        modal.onDidDismiss().then((modalReturn: any) => {
             if (modalReturn.data && modalReturn.data.data && modalReturn.data.filters) {
                 this.socialProblemsFilter = [...modalReturn.data.data];
                 this.filters = modalReturn.data.filters;
@@ -291,17 +270,17 @@ export class SocialProblemsPage implements OnInit {
     }
 
 
-    getHeaderBackData(event){
-        if (event.wannaSearch) {
-            this.showSearchModal();
-        }
-        if (event.wannaFilter) {
-            this.showFilterModal();
-        }
-        if (event.wannaReport) {
-            this.reportSocialProblem();
-        }
-    }
+    // getHeaderBackData(event){
+    //     if (event.wannaSearch) {
+    //         this.showSearchModal();
+    //     }
+    //     if (event.wannaFilter) {
+    //         this.showFilterModal();
+    //     }
+    //     if (event.wannaReport) {
+    //         this.reportSocialProblem();
+    //     }
+    // }
 
 
 }

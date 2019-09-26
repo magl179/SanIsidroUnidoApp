@@ -28,6 +28,7 @@ import { Network } from '@ionic-native/network/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { IonicStorageModule } from '@ionic/storage';
+import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
 import { PopNotificationsComponent } from './components/pop-notifications/pop-notifications.component';
 import { ShowListNotificationsPage } from './modals/show-list-notifications/show-list-notifications.page';
 import { ShowListNotificationsPageModule } from './modals/show-list-notifications/show-list-notifications.module';
@@ -36,14 +37,17 @@ import { DirectivesModule } from './directives/directives.module';
 
 // Interceptores
 import { AuthInterceptorService } from 'src/app/services/auth-interceptor.service';
-import { FilterPostsComponent } from "./components/filter-posts/filter-posts.component";
+// import { FilterPostsComponent } from "./components/filter-posts/filter-posts.component";
+
 
 // Imagenes por Defecto
 import { NgFallimgModule } from 'ng-fallimg';
+import { ImageDetailPage } from "./modals/image_detail/image_detail.page";
+import { ImageDetailPageModule } from './modals/image_detail/image_detail.module';
 
 @NgModule({
     declarations: [AppComponent],
-    entryComponents: [PopNotificationsComponent, ShowListNotificationsPage, FilterPostsComponent],
+    entryComponents: [PopNotificationsComponent, ShowListNotificationsPage, ImageDetailPage],
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
@@ -56,11 +60,13 @@ import { NgFallimgModule } from 'ng-fallimg';
         NgFallimgModule.forRoot({
             default: 'https://via.placeholder.com/600?text=SanIsidroImage',
             user_avatar:  'assets/img/default/img_avatar.png',
-            image_full:  'assets/img/default/image_full.png',
+            image_full: 'assets/img/default/image_full.png',
+            cover_image: 'https://via.placeholder.com/600x200?text=SanIsidroImage'
         }),
         ShowListNotificationsPageModule,
         PipesModule,
-        DirectivesModule
+        DirectivesModule,
+        ImageDetailPageModule
     ],
     providers: [
         StatusBar,
@@ -73,7 +79,7 @@ import { NgFallimgModule } from 'ng-fallimg';
         GooglePlus,
         Facebook,
         OneSignal,
-        // WebView,
+        PhotoViewer,
         SocialSharing,
         Network,
         Device,

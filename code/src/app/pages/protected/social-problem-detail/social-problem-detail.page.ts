@@ -45,8 +45,10 @@ export class SocialProblemDetailPage implements OnInit {
             this.appNetworkConnection = connected;
         });
         
-        this.authService.getAuthUser().subscribe(res => {
-            this.AuthUser = res.user;
+        this.authService.getAuthUser().subscribe(token_decoded => {
+            if (token_decoded.user) {
+                this.AuthUser = token_decoded.user; 
+            }
         },
         err => {
             console.log('Error al traer los problemas sociales');    
@@ -66,9 +68,7 @@ export class SocialProblemDetailPage implements OnInit {
                 this.socialProblem.postLiked = this.utilsService.checkLikePost(this.socialProblem.details, this.AuthUser);
                 this.socialProblem.user.avatar = (this.socialProblem.user && this.socialProblem.user.avatar) ? this.utilsService.getImageURL(this.socialProblem.user.avatar) : null;
                 if (this.socialProblem.images && this.socialProblem.images.length > 0) {
-                    this.socialProblem.images.forEach((image: any) => {
-                        image.url = (image.url) ? this.utilsService.getImageURL(image.url) : null;
-                    });
+                    this.socialProblem.images = this.utilsService.mapImagesApi(this.socialProblem.images);
                 }
                 console.log('social problem detail', res)
                 console.log('social problem detail', this.socialProblem)
@@ -77,8 +77,7 @@ export class SocialProblemDetailPage implements OnInit {
     }
     
     getBGCover(image_cover: any) {
-        const img = this.utilsService.getImageURL(image_cover);
-        return `linear-gradient(to bottom, rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.23)), url('${img}')`;
+        return `linear-gradient(to bottom, rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.23)), url('${image_cover}')`;
     }
 
     async showImageDetailModal(image: string) {

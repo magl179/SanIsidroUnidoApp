@@ -47,9 +47,10 @@
         <ion-card class="emergency_card detail">
             <!-- <img *ngIf="emergency.images.length > 0 " class="image-border emergency_cover_image"
                 [src]="getImageURL(emergency.images[0].url)" /> -->
-            <div class="emergency_cover_image"
-                [ngStyle]="{'background-image': (emergency.images && emergency.images.length > 0) ? getBGCover(emergency.images[0].url) : ''}">
+            <div class="emergency_cover_image" [style.background-image]="(emergency.images && emergency.images.length > 0) ? getBGCover(emergency.images[0].url) : ''">
             </div>
+            <p *ngIf="emergency.images && emergency.images.length > 0">emergency.images[0].url</p>
+            
             <ion-card-header class="emergency_card_header">
                 <ion-card-title class="emergency_card_title"> {{ emergency.title }}</ion-card-title>
             </ion-card-header>
@@ -84,9 +85,8 @@
                 <p class="image_gallery_title">Imágenes</p>
                 <div class="image_gallery">
                     <figure *ngFor="let image of emergency.images"
-                        (click)="showImageDetailModal((image.url) ? getImageURL(image.url) : 'assets/img/default/img_avatar.png')">
-                        <img [src]="(image.url) ? getImageURL(image.url) : 'assets/img/default/img_avatar.png'"
-                            alt="Imagen de la Publicación">
+                        (click)="seeImageDetail(image.url)">
+                        <img [src]="image.url" fallimg="image_full"/>
                     </figure>
                 </div>
             </div>

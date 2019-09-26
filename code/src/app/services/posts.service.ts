@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
 import { IEmergencyReported, ISocialProblemReported, ICreateDetail, IRespuestaApiSIU } from 'src/app/interfaces/models';
 import { AuthService } from './auth.service';
 import { HttpRequestService } from "./http-request.service";
+import { IRespuestaApiSIUPaginada } from "../interfaces/models";
 
 const AUTHORIZATION_NAME = "authorization";
 
@@ -115,7 +116,7 @@ export class PostsService implements OnInit {
         return this.httpRequest.get(`${environment.apiBaseURL}/usuarios/${user_id}/emergencias?page=${this.currentPage.emergencies}`);
     }
     // Función para obtener el listado de eventos publicados
-    getEvents(): Observable<any> {
+    getEvents(): Observable<IRespuestaApiSIUPaginada> {
         this.currentPage.events++;
         const eventsSlug = environment.eventsSlug;
         return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/${eventsSlug}?page=${this.currentPage.events}`);
@@ -139,8 +140,9 @@ export class PostsService implements OnInit {
     getPublicServices(): Observable<any> {
         return this.httpRequest.get(`${environment.apiBaseURL}/servicios-publicos`);
     }
-    getReports(): Observable<IRespuestaApiSIU>{
-        return this.httpRequest.get(`${environment.apiBaseURL}/reportes`);
+    getReports(): Observable<IRespuestaApiSIUPaginada>{
+        console.log('llamdo post service get reports');
+        return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/reportes`);
     }
     // Función para obtener el listado de subcategorias de una categoria
     getSubcategoriesByCategory(category: string): Observable<any> {

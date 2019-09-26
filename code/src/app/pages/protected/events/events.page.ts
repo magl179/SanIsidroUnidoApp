@@ -8,7 +8,8 @@ import { NetworkService } from '../../../services/network.service';
 import { environment } from "../../../../environments/environment";
 import { finalize } from 'rxjs/operators';
 import { SearchPage } from "../../../modals/search/search.page";
-import { IEvent} from "../../../interfaces/models";
+import { IEvent } from "../../../interfaces/models";
+// import { CacheService, Cache } from 'ionic-cache-observable';
 @Component({
     selector: 'app-events',
     templateUrl: './events.page.html',
@@ -17,6 +18,7 @@ import { IEvent} from "../../../interfaces/models";
 export class EventsPage implements OnInit {
 
     // appNetworkConnection = false;
+    // private cacheEvents: Cache<any>;
     eventsLoaded = false;
     eventsList: IEvent[] = [];
     AuthUser = null;
@@ -26,31 +28,31 @@ export class EventsPage implements OnInit {
         private utilsService: UtilsService,
         private postService: PostsService,
         private authService: AuthService,
-        private modalCtrl: ModalController,
-        private networkService: NetworkService
-    ) { 
+        private modalCtrl: ModalController
+    ) {
         console.log('Constructor Eventos');
     }
 
 
-    getFullDate(date, time) {
+    getFullDate(date: string, time: string) {
         const fulldate = `${date} ${time}`;
         return fulldate;
     }
 
     ngOnInit() {
-        this.authService.getAuthUser().subscribe(res => {
-            this.AuthUser = res.user; 
+        this.authService.getAuthUser().subscribe(token_decoded => {
+            if (token_decoded.user) {
+                this.AuthUser = token_decoded.user; 
+            }
         });
     }
-    
+
     ionViewWillEnter() {
         this.utilsService.enableMenu();
         this.loadEvents();
     }
 
     toggleAssistance(assistance: boolean, id: number) {
-        // console.log((assistance) ? 'quitar assistencia' : 'dar asistencia');
         if (assistance) {
             this.postService.sendDeleteDetailToPost(id).subscribe(res => {
                 console.log('detalle eliminado correctamente');
@@ -59,8 +61,6 @@ export class EventsPage implements OnInit {
                         event.postAssistance = false;
                     }
                 });
-                // this.resetEvents();
-                // this.loadEvents();
             }, err => {
                 console.log('detalle no se pudo eliminar', err);
                 this.utilsService.showToast('La asistencia no pudo ser eliminada');
@@ -69,7 +69,7 @@ export class EventsPage implements OnInit {
             const detailInfo = {
                 type: 'assistance',
                 user_id: this.AuthUser.id,
-                post_id : id
+                post_id: id
             }
             this.postService.sendCreateDetailToPost(detailInfo).subscribe(res => {
                 console.log('detalle creado correctamente');
@@ -79,8 +79,8 @@ export class EventsPage implements OnInit {
                     }
                 });
             }, err => {
-                    console.log('detalle no se pudo crear', err);
-                    this.utilsService.showToast('No se pudo eliminar la asistencia');
+                console.log('detalle no se pudo crear', err);
+                this.utilsService.showToast('No se pudo eliminar la asistencia');
             });
         }
     }
@@ -89,14 +89,14 @@ export class EventsPage implements OnInit {
         const sharePost: IPostShare = {
             title: post.title,
             description: post.description,
-            image:  this.getImages(post.images),
+            image: this.getImages(post.images),
             url: ''
 
         };
         await this.utilsService.shareSocial(sharePost);
     }
 
-    getImages($imagesArray) {
+    getImages($imagesArray: any[]) {
         if ($imagesArray) {
             if ($imagesArray.length === 0) {
                 return '';
@@ -112,7 +112,6 @@ export class EventsPage implements OnInit {
         const modal = await this.modalCtrl.create({
             component: SearchPage,
             componentProps: {
-                // data: [...this.emergencies],
                 searchPlaceholder: 'Buscar Eventos',
                 searchIdeas: [],
                 originalSearchData: this.eventsList,
@@ -120,7 +119,6 @@ export class EventsPage implements OnInit {
                 fieldsToSearch: ['title', 'description'],
                 searchInApi: true,
                 postTypeSlug: environment.eventsSlug
-                // filters: this.filters
             }
         });
         await modal.present();
@@ -131,10 +129,18 @@ export class EventsPage implements OnInit {
         this.postService.resetEventsPage();
     }
 
+    getImageCover(event: IEvent) {
+        if (event.images && event.images.length > 0) {
+            return this.getBGCover(event.images[0].url);
+        } else {
+            return '';
+        }
+    }
+
     loadEvents(event?: any, resetEvents?: any) {
         this.eventsLoaded = false;
         if (resetEvents) {
-            this.postService.resetEventsPage();
+            this.resetEvents()
         }
         this.postService.getEvents().pipe(
             finalize(() => {
@@ -149,6 +155,9 @@ export class EventsPage implements OnInit {
                 events = events.map((event: any) => {
                     const postAssistance = this.utilsService.checkLikePost(event.details, this.AuthUser) || false;
                     event.postAssistance = postAssistance;
+                    if (event.images && event.images.length > 0) {
+                        event.images = this.utilsService.mapImagesApi(event.images);
+                    }
                     return event;
                 });
                 if (events.length === 0) {
@@ -164,39 +173,28 @@ export class EventsPage implements OnInit {
                 }
             }
         },
-        err => {
-            console.log(err);
-            this.utilsService.showToast('No se pudieron cargar los eventos');
-        });
+            err => {
+                console.log(err);
+                this.utilsService.showToast('No se pudieron cargar los eventos');
+            });
     }
 
-    ionViewWillLeave() {
-        this.resetEvents();
-    }
-    
     postDetail(id) {
         this.resetEvents();
         this.navCtrl.navigateForward(`/event-detail/${id}`);
     }
 
     getInfiniteScrollData(event) {
-            this.loadEvents(event);
+        this.loadEvents(event);
     }
 
     getBGCover(image_cover: any) {
-            const img = this.utilsService.getImageURL(image_cover);
-            return `linear-gradient(to bottom, rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.23)), url('${img}')`;
-    }
-
-    getHeaderBackData(event: any) {
-        if (event.wannaSearch) {
-            this.showModalSearchEvents();
-        }
+        return `linear-gradient(to bottom, rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.23)), url('${image_cover}')`;
     }
 
 
 
-    
+
 
 
 }

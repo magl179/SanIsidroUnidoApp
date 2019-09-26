@@ -1,14 +1,16 @@
 import { Injectable, OnInit } from '@angular/core';
-import { ToastController, LoadingController, MenuController, Platform, PopoverController } from '@ionic/angular';
-import { HttpClient, HttpRequest } from "@angular/common/http";
+import { ToastController, LoadingController, MenuController, Platform } from '@ionic/angular';
+// import { HttpClient, HttpRequest } from "@angular/common/http";
 import { IMenuComponent } from 'src/app/interfaces/barrios';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Storage } from '@ionic/storage';
-import { IPostShare } from 'src/app/interfaces/models';
+import { IPostShare, I_ImagesApi } from 'src/app/interfaces/models';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { ToastOptions } from "@ionic/core";
 import { HttpRequestService } from "./http-request.service";
 import { environment } from 'src/environments/environment';
+import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
+// import { ImageDetailPage } from "../modals/image_detail/image_detail.page";
 
 declare var moment: any;
 
@@ -22,9 +24,11 @@ export class UtilsService implements OnInit {
 
     constructor(
         private iab: InAppBrowser,
+        // private modalCtrl: ModalController,
         private toastCtrl: ToastController,
         private loadingCtrl: LoadingController,
-        private http: HttpClient,
+        // private http: HttpClient,
+        private photoViewer: PhotoViewer,
         private httpRequest: HttpRequestService,
         private menuCtrl: MenuController,
         private storage: Storage,
@@ -36,6 +40,10 @@ export class UtilsService implements OnInit {
     // Funcion para obtener un valor aleatorio de un tamaño en especifico
     ramdomValue(tamanio) {
         return Math.floor(Math.random() * tamanio);
+    }
+
+    seeImageDetail(url: string, title = "Detalle Imagen", share = true) {
+            this.photoViewer.show(url, title, {share});
     }
     //Funcion verifica like en un posts
     checkLikePost(details: any, user_authenticated: any) {
@@ -60,6 +68,15 @@ export class UtilsService implements OnInit {
     openInBrowser(url) {
         const navegador = this.iab.create(url, '_system');
     }
+
+    mapImagesApi(images: I_ImagesApi[]) {
+        return images.map((image: I_ImagesApi) => {
+            image.url = this.getImageURL(image.url);
+            // console.log('image returned', image.url);
+            return image;
+        });
+    }
+
     //Obtener la fecha formateada con MomentJS
     getBeatifulDate(stringDate: string) {
         moment.locale('es');
@@ -84,7 +101,7 @@ export class UtilsService implements OnInit {
         return beatifulDate;
     }
 
-    async shareSocial(publicacion: IPostShare) {
+    async shareSocial(publicacion: any) {
         // Verificar Si Existe Cordova
         if (this.platform.is('cordova')) {
             await this.socialSharing.share(
@@ -168,7 +185,8 @@ export class UtilsService implements OnInit {
     //Obtener la URL de una imagen
     getImageURL(image_name: string) {
         const imgIsURL = this.URL_PATTERN.test(image_name);
-        // console.log('is image url extern', imgIsURL);
+        // console.log('is image/ url extern', imgIsURL);
+        // console.log('is image url extern', image_name);
         if (imgIsURL) {
             return image_name;
         } else {

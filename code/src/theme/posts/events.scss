@@ -42,6 +42,14 @@
             &.active{
               --background: var(--ion-color-darkblue);
             }
+            .icon{
+                &.left{
+                    margin-right: 6px
+                }
+                &.right{
+                    margin-left: 6px
+                }
+            }
         }
         .assistance-info{
           display:flex;
@@ -70,9 +78,13 @@
     .image_gallery_container {
       .image_gallery_title {
         padding: 0 1rem;
+        font-weight: bold;
+        color: var(--ion-color-dark);
       }
       .image_gallery {
         padding: 0 1rem;
+        font-weight: bold;
+        color: var(--ion-color-dark);
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
@@ -87,9 +99,6 @@
             display: block;
             background: var(--ion-color-medium);
             transition: transform 0.2s ease-in-out;
-            &:hover {
-              transform: scale(1.2);
-            }
           }
         }
       }

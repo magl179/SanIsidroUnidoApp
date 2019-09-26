@@ -10,6 +10,7 @@ import { SmComponentsModule } from "../../../components/sm-components.module";
 import { PipesModule } from "../../../pipes/pipes.module";
 import { ImageDetailPageModule } from "../../../modals/image_detail/image_detail.module";
 import { ImageDetailPage } from "../../../modals/image_detail/image_detail.page";
+import { NgFallimgModule } from 'ng-fallimg';
 
 const routes: Routes = [
     {
@@ -29,7 +30,8 @@ const routes: Routes = [
         RouterModule.forChild(routes),
         SmComponentsModule,
         PipesModule,
-        ImageDetailPageModule
+        ImageDetailPageModule,
+        NgFallimgModule
     ],
     declarations: [EmergencyDetailPage]
 })

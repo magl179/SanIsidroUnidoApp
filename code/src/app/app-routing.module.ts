@@ -96,13 +96,21 @@ const routes: Routes = [
     },
     {
         path: 'reports',
-        loadChildren: './pages/protected/reports/reports.module#ReportsPageModule'
+        loadChildren: './pages/protected/reports/reports.module#ReportsPageModule',
+        canActivate: [LoginAuthGuard, IsActiveGuard]
     },
     {
         path: 'emergency-detail/:id',
         loadChildren: './pages/protected/emergency-detail/emergency-detail.module#EmergencyDetailPageModule'
     },
-
+    {
+        path: '404',
+        loadChildren: './pages/not-found/not-found.module#NotFoundPageModule'
+    },
+    {
+        path: '**',
+        redirectTo: '/404'
+    },
 
 
 

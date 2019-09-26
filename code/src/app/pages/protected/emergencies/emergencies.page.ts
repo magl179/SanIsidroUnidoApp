@@ -41,20 +41,14 @@ export class EmergenciesPage implements OnInit {
     ngOnInit() {
     }
 
-    
-
     ionViewWillEnter() {
         this.utilsService.enableMenu();
         this.loadEmergencies();
     }
 
-    // ionViewWillLeave(){
-    //     this.emergencies = [];
-    //     this.postsService.resetEmergenciesPage();
-    // }
-
-    loadEmergencies(event?, resetEvents?) {
+    loadEmergencies(event?: any, resetEvents?: any) {
         if (resetEvents) {
+            this.emergenciesList = [];
             this.postsService.resetEventsPage();
         }
         this.emergenciesLoaded = false;
@@ -86,7 +80,7 @@ export class EmergenciesPage implements OnInit {
         });
     }
 
-    getImages($imagesArray) {
+    getImages($imagesArray: any[]) {
         if ($imagesArray) {
             if ($imagesArray.length === 0) {
                 return '';
@@ -98,21 +92,17 @@ export class EmergenciesPage implements OnInit {
         }
     }
 
-    getFullDate(date, time) {
+    getFullDate(date: string, time: string) {
         const fulldate = `${date} ${time}`;
         return fulldate;
     }
     
     postDetail(id: number) {
-        this.resetEmergencies();
+        // this.postsService.resetEmergenciesPage();
         this.navCtrl.navigateForward(`/emergency-detail/${id}`);;
     }
     
 
-    resetEmergencies() {
-        this.emergenciesList = [];
-        this.postsService.resetEmergenciesPage();
-    }
 
     async showModalFilterEmergencies() {
         const modal = await this.modalCtrl.create({
@@ -158,19 +148,6 @@ export class EmergenciesPage implements OnInit {
     reportEmergency() {
         this.navCtrl.navigateForward('/emergency-create');
     }
-
-    // getHeaderBackData(event){
-    //     if (event.wannaSearch) {
-    //         this.showModalSearchEmergencies();
-    //     }
-    //     if (event.wannaFilter) {
-    //         this.showModalFilterEmergencies();
-    //     }
-    //     if (event.wannaReport) {
-    //         this.reportEmergency();
-    //     }
-    // }
-
 
 
 }

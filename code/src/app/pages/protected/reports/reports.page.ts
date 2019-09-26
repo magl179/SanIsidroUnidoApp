@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PostsService } from "../../../services/posts.service";
+import { PostsService } from "src/app/services/posts.service";
 import { finalize } from 'rxjs/operators';
 
 @Component({
@@ -9,27 +9,36 @@ import { finalize } from 'rxjs/operators';
 })
 export class ReportsPage implements OnInit {
 
-    reportsList = [];
+    reportsList: any = [];
     reportsLoaded = false;
 
     constructor(
       private postsService: PostsService
   ) { }
 
-    ngOnInit() {
+    ionViewWillEnter() {
+        console.log('reports will enter');
         this.loadReports();
-  }
+    }
     
-    loadReports() {
+    ngOnInit() { }
+    
+    loadReports(event?: any, resetReports?: any) {
         this.reportsLoaded = false;
+        console.log('llamdo get reports');
+        if (resetReports) {
+            this.reportsList = [];
+        }
         this.postsService.getReports().pipe(
             finalize(() => {
                 this.reportsLoaded = true;
             })
-        ).subscribe((res: any) => {
-            this.reportsList = res.data;
-        }, err => {
-            console.log('Ocurrio un error al traer el listadode reportes', err);
+        ).subscribe(res => {
+            this.reportsList = res.data.data;
+            // console.log(res);
+            console.log('reports list', this.reportsList);
+        }, (err: any) => {
+            console.log('Ocurrio un error al traer el listado de reportes', err);
         });
     }
 
