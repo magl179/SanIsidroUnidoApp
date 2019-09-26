@@ -34,7 +34,26 @@
           margin-bottom: 1.2rem;
         }
         .event-ubication{
-          margin-bottom: .5rem;
+            margin-bottom: 1.2rem;
+        }
+        .chip-event-assistance{
+            --background: var(--ion-color-orange);
+            --color:var(--ion-color-white);
+            ion-label{
+                display: flex;
+                align-items: center;
+            }
+            &.active{
+                --background: var(--ion-color-darkblue);
+              }
+              .icon{
+                &.left{
+                    margin-right: 6px
+                }
+                &.right{
+                    margin-left: 6px
+                }
+            }
         }
         .chip-assistance{
             --background: var(--ion-color-orange);
@@ -55,7 +74,7 @@
           display:flex;
           align-items:center;
           justify-content:space-between;
-          margin-top: 0px;
+          margin-bottom: 1.2rem;
           .count-people{
               display:flex;
               align-items:center;

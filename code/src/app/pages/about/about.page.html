@@ -6,14 +6,7 @@
             <h3>San Isidro Unido</h3>
             <p>Versión: 1.0.2</p>            
             <p>{{UserDevice?.phone_id || 'No se pudo obtener el ID Dispositivo'}} </p>
-            <!-- <ion-badge>Notificaciones: <ion-badge [color]="(UserDevice.phone_id)?'success':'danger'">{{ (infodeviceID)?'disponible':'no disponible' }}</ion-badge></p> -->
             <p>Conexión a Internet: <ion-badge [color]="(isConnected)?'success':'danger'">{{ (isConnected)?'disponible':'no disponible' }}</ion-badge></p>
-            <!-- <ion-col>
-                <h4>Redes Sociales Asociadas  <ion-icon name="help-circle-outline"></ion-icon></h4>
-                <p>Las Redes Sociales Asociadas te permiten que puedas iniciar sesión por medio de tu cuenta de Facebook o Google, si deseas desconectar una cuenta social asegurate primero de tener una contraseña activa, caso contrario cambia tu contraseña para que puedas iniciar sesión por medio de un formulario</p>
-                <h4>Dispositivos Asociados  <ion-icon name="help-circle-outline"></ion-icon></h4>
-                <p>Los dispositivos asociados se registran cuando inicias sesión para permitir que recibas notificaciones en tu celular, si desconectas un dispositivo ya no podrás recibir notificaciones en dicho dispositivo</p>
-            </ion-col> -->
         </ion-row>
     </ion-grid>
 </ion-content>

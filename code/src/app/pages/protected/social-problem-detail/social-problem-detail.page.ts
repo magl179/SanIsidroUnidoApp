@@ -149,9 +149,9 @@ export class SocialProblemDetailPage implements OnInit {
         }
     }
 
-    // testClass(event) {
-    //     event.srcElement.classList.toggle("active");
-    //     this.test = (this.test) ? false : true;
-    // }
+    seeImageDetail(image: string) {
+        console.log('see image', image)
+        this.utilsService.seeImageDetail(image, 'Imagen Evento');
+    }
 
 }

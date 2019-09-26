@@ -2,8 +2,7 @@
 
 <ion-content padding>
     <!-- Mensaje no cargaron los datos desde la Api -->
-    <div class="flex-column-center message-fail-load"
-        *ngIf="socialProblemLoaded && !socialProblem">
+    <div class="flex-column-center message-fail-load" *ngIf="socialProblemLoaded && !socialProblem">
         <p>No se pudo cargar el problema social solicitado</p>
         <ion-button (click)="getSocialProblem()">Toca para reintentar</ion-button>
     </div>
@@ -69,12 +68,19 @@
                     <p class="post-date">{{socialProblem.details.length}} me
                         gusta</p>
                 </div>
-                <ion-chip class="post-state" [class.active]="(socialProblem.is_attended)">
-                        <ion-icon [name]="(socialProblem.is_attended)?'checkmark':'close'"></ion-icon>
-                        <ion-label>{{(socialProblem.is_attended)?'Atendida':'Pendiente'}}</ion-label>
-                    </ion-chip>
+                <!-- <ion-chip class="post-state" [class.active]="(socialProblem.is_attended)">
+                    <ion-icon [name]="(socialProblem.is_attended)?'checkmark':'close'"></ion-icon>
+                    <ion-label>{{(socialProblem.is_attended)?'Atendida':'Pendiente'}}</ion-label>
+                </ion-chip> -->
             </ion-card-subtitle>
         </ion-card-header>
+        <p class="post-attendace-container bottom-mg pd-lateral">
+           <span class="title strong">Estado Atención</span>
+            <ion-chip class="post-attent-state right"
+                [class.active]="(socialProblem.is_attended)">
+                <ion-label>{{(socialProblem.is_attended)?'Atendida':'Pendiente'}}</ion-label>
+            </ion-chip>
+        </p>
         <ion-card-content class="social-problem-content">
             <p class="title">Descripción</p>
             <p class="description">
@@ -93,7 +99,7 @@
             <p class="image_gallery_title strong">Imágenes</p>
             <div class="image_gallery">
                 <figure *ngFor="let image of socialProblem.images"
-                    (click)="showImageDetailModal(image.url)">
+                    (click)="seeImageDetail(image.url)">
                     <img [src]="image.url" alt="Imagen de la Publicación" fallimg="image_full">
                     <!-- <figcaption>
                           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua

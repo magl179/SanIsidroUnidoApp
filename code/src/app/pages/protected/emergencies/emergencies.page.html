@@ -41,19 +41,29 @@
     <div *ngIf="emergenciesLoaded  && emergenciesList.length > 0">
         <ion-card class="emergency_card"
             *ngFor="let emergency of emergenciesFiltered; let i = index;">
+            <div class="emergency-top"></div>
             <ion-card-header (click)="postDetail(emergency.id)" class="emergency_card_header">
                 <ion-card-title class="emergency_card_title">{{emergency.title}}</ion-card-title>
             </ion-card-header>
 
             <ion-card-content class="emergency_card_content">
-                <p class="post_description">
-                    {{emergency.description | truncate: 50}}
+               
+                <p class="post-attendace-container">
+                    Estado Atención: 
+                    <ion-chip class="post-attent-state right bottom-mg" [class.active]="(emergency.is_attended)">
+                        <!-- <ion-icon [name]="(emergency.is_attended)?'checkmark':'close'"></ion-icon> -->
+                        <ion-label>{{(emergency.is_attended)?'Atendida':'Pendiente'}}</ion-label>
+                    </ion-chip>
                 </p>
+                <p class="post_description">
+                        {{emergency.description | truncate: 50}}
+                    </p>
                 <p class="see-more" (click)="postDetail(emergency.id)">Ver más...</p>
+<!-- 
                 <ion-chip class="post-state" [class.active]="(emergency.is_attended)">
                     <ion-icon [name]="(emergency.is_attended)?'checkmark':'close'"></ion-icon>
                     <ion-label>{{(emergency.is_attended)?'Atendida':'Pendiente'}}</ion-label>
-                </ion-chip>
+                </ion-chip> -->
             </ion-card-content>
         </ion-card>
     </div>

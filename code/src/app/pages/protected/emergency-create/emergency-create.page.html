@@ -1,7 +1,6 @@
 <app-header-back title="Reportar Emergencia"></app-header-back>
 
 <ion-content padding>
-    <!-- <app-network-banner *ngIf="!appNetworkConnection" networkConnection="appNetworkConnection"></app-network-banner> -->
     <div>
         <app-stepbar [progressSteps]="emergencyFormStage" [currentStep]="currentStep"
             (returnCurrentStep)="updateCurrentStep($event)"></app-stepbar>

@@ -45,12 +45,9 @@
     <!-- Datos ya cargados -->
     <div *ngIf="emergencyLoaded && emergency">
         <ion-card class="emergency_card detail">
-            <!-- <img *ngIf="emergency.images.length > 0 " class="image-border emergency_cover_image"
-                [src]="getImageURL(emergency.images[0].url)" /> -->
-            <div class="emergency_cover_image" [style.background-image]="(emergency.images && emergency.images.length > 0) ? getBGCover(emergency.images[0].url) : ''">
+            <div class="emergency_cover_image"
+                [style.background-image]="(emergency.images && emergency.images.length > 0) ? getBGCover(emergency.images[0].url) : ''">
             </div>
-            <p *ngIf="emergency.images && emergency.images.length > 0">emergency.images[0].url</p>
-            
             <ion-card-header class="emergency_card_header">
                 <ion-card-title class="emergency_card_title"> {{ emergency.title }}</ion-card-title>
             </ion-card-header>
@@ -63,30 +60,37 @@
                     <ion-icon name="navigate"></ion-icon>
                     {{ emergency.ubication.address || 'Direccion no encontrada'}}
                 </p>
+                <p class="post-attendace-container">
+                        <span class="title strong">Estado Atención</span>
+                    <ion-chip class="post-attent-state right" [class.active]="(emergency.is_attended)">
+                        <!-- <ion-icon [name]="(emergency.is_attended)?'checkmark':'close'"></ion-icon> -->
+                        <ion-label>{{(emergency.is_attended)?'Atendida':'Pendiente'}}</ion-label>
+                    </ion-chip>
+                </p>
             </ion-card-subtitle>
             <ion-card-content class="emergency-detail-description">
-                <h2 class="title">Descripción</h2>
+                <h2 class="title title-section">Descripción</h2>
                 <p class="post_description">
                     {{emergency.description | truncate: 50}}
                 </p>
-                <ion-chip class="post-state" [class.active]="(emergency.is_attended)">
+                <!-- <ion-chip class="post-state" [class.active]="(emergency.is_attended)">
                     <ion-icon [name]="(emergency.is_attended)?'checkmark':'close'"></ion-icon>
                     <ion-label>{{(emergency.is_attended)?'Atendida':'Pendiente'}}</ion-label>
-                </ion-chip>
+                </ion-chip> -->
             </ion-card-content>
             <div class="map-container" *ngIf="emergency.ubication">
-                <p class="map-title">Ubicación</p>
+                <p class="map-title title-section">Ubicación</p>
                 <simple-map classMap="emergency-map" idMap="emergency-map-detail-{{id}}"
                     [coordsMap]="emergency.ubication" [zoom]="16">
                 </simple-map>
             </div>
             <div class="image_gallery_container"
                 *ngIf="emergency.images && emergency.images.length > 0">
-                <p class="image_gallery_title">Imágenes</p>
+                <p class="image_gallery_title title-section">Imágenes</p>
                 <div class="image_gallery">
                     <figure *ngFor="let image of emergency.images"
                         (click)="seeImageDetail(image.url)">
-                        <img [src]="image.url" fallimg="image_full"/>
+                        <img [src]="image.url" fallimg="image_full" />
                     </figure>
                 </div>
             </div>

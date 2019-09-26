@@ -4,11 +4,12 @@
         <ion-menu side="start" menuId="main_app_menu" contentId="main_router_outlet">
             <ion-content class="menu_content_app">
                 <!-- <div> -->
-                    <!-- Header Menu -->
+                <!-- Header Menu -->
+                <div class="header-menu">
                     <ion-item lines="none" color="primary">
                         <ion-avatar slot="start" (click)="closeMenu()" *ngIf="authUser">
-                            <img [src]="(authUser.avatar) ? getImageURL(authUser.avatar) : ''"
-                                fallimg="user_avatar"/>
+                            <img [src]="authUser.avatar"
+                                fallimg="user_avatar" />
                         </ion-avatar>
                         <ion-label>
                             <h1>{{authUser?.firstname || 'Firstname'}}
@@ -17,11 +18,13 @@
                                 {{authUserRol || 'No tienes un rol registrado'}}</p>
                         </ion-label>
                     </ion-item>
+                </div>
+                <div class="body-menu">
                     <ion-list class="list-no-padding"
                         *ngFor="let c of menuComponents;let i = index;">
                         <!-- Items Without Children-->
                         <ion-menu-toggle autoHide="false" *ngIf="c.redirectTo">
-                            <ion-item class="item-sm" tapable
+                            <ion-item class="item-sm item-menu" tapable
                                 *ngIf="c.children==undefined || c.children?.length == 0"
                                 lines="none" detail="false" [routerLink]="c.redirectTo"
                                 routerDirection="root" routerLinkActive="is_active"
@@ -33,7 +36,7 @@
                             </ion-item>
                         </ion-menu-toggle>
                         <!-- Item with Children -->
-                        <ion-item class="item-sm" lines="none" detail="false"
+                        <ion-item class="item-sm item-menu" lines="none" detail="false"
                             *ngIf="c.children?.length > 0" (click)="toggleSection(i,true)"
                             [class.parent-active]="c.open">
                             <ion-icon slot="end" name="arrow-down" *ngIf="!c.open"></ion-icon>
@@ -42,9 +45,9 @@
                             <ion-icon slot="start" [name]="c.icon"></ion-icon>
                         </ion-item>
                         <!-- Children List for clicked Item -->
-                        <ion-list class="item-child list-no-padding" *ngIf="c.open">
+                        <ion-list class="item-child list-no-padding submeny-body" *ngIf="c.open">
                             <ion-menu-toggle autoHide="false">
-                                <ion-item class="item-sm sub-item" tapable lines="none"
+                                <ion-item class="item-sm sub-item item-submenu" tapable lines="none"
                                     detail="false" *ngFor="let sub of c.children"
                                     [routerLink]="sub.redirectTo" routerDirection="root"
                                     routerLinkActive="is_active">
@@ -57,19 +60,26 @@
                         </ion-list>
                         <!--FIN ELEMENTOS HIJOS-->
                     </ion-list>
-                    <!--ITEM TO CLOSE SESSION-->
-                    <!-- <hr class="gray">
+                </div>
+                <!--ITEM TO CLOSE SESSION-->
+                <ion-list>
+                    <ion-item class="item-sm item-close-sesion" tapable lines="none" (click)="closeAppSession()">
+                        <ion-icon slot="start" name="ios-log-out"></ion-icon>
+                        <ion-label>Cerrar Sesión</ion-label>
+                    </ion-item>
+                </ion-list>
+                <!-- <hr class="gray">
                     <ion-item class="item-sm" tapable lines="none" (click)="closeAppSession()">
                         <ion-icon slot="start" name="log-out"></ion-icon>
                         <ion-label>Cerrar Sesión</ion-label>
                     </ion-item> -->
                 <!-- </div> -->
-                <div class="footer-menu">
+                <!-- <div class="footer-menu">
                     <ion-item class="item-sm" tapable lines="none" (click)="closeAppSession()">
-                        <ion-icon slot="start" name="log-out"></ion-icon>
+                        <ion-icon slot="start" name="ios-log-out"></ion-icon>
                         <ion-label>Cerrar Sesión</ion-label>
                     </ion-item>
-                </div>
+                </div> -->
             </ion-content>
         </ion-menu>
         <ion-router-outlet id="main_router_outlet"></ion-router-outlet>

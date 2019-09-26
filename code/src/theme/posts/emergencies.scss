@@ -1,8 +1,16 @@
 /*EMERGENCIAS*/
 .emergency_card {
+
+    .title-section{
+        font-size: 14px !important;
+    }
   &.detail {
     border: none;
     box-shadow: none;
+  }
+  .emergency-top{
+      display: block;
+      margin-bottom: 1rem;
   }
   .emergency-detail-description {
       position: relative;

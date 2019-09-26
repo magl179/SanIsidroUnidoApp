@@ -1,27 +1,27 @@
 [
     {
-        "icon": "home",
+        "icon": "ios-home",
         "name": "Inicio",
         "redirectTo": "/home",
         "routeDirection": "root",
         "children": []
     },
     {
-        "icon": "person",
+        "icon": "ios-person",
         "name": "Mi Perfil",
         "redirectTo": "/user-profile",
         "routeDirection": "root",
         "children": []
     },
     {
-        "icon": "list-box",
+        "icon": "ios-list-box",
         "name": "Preguntas Frecuentes",
         "redirectTo": "/frequent-questions",
         "routeDirection": "root",
         "children": []
     },
     {
-        "icon": "information-circle",
+        "icon": "ios-information-circle",
         "name": "Información",
         "redirectTo": "/about",
         "routeDirection": "root",

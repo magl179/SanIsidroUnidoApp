@@ -68,14 +68,24 @@
                         {{event.details.length}}
                         {{(event.details.length !== 1) ? 'personas asistirán': 'persona asistirá'}}
                     </span>
-                    <ion-chip class="chip-assistance" [class.active]="(event.postAssistance)"
+                    <!-- <ion-chip class="chip-assistance" [class.active]="(event.postAssistance)"
                         (click)="toggleAssistance(event.postAssistance, event.id)">
                         <ion-label class="ion-align-items-center">
                             <ion-icon [name]="(event.postAssistance)?'checkmark':'people'" class="icon left"></ion-icon>
                             <span>{{(event.postAssistance) ? 'Voy a Asistir': 'Unirme'}}</span>
                         </ion-label>
-                    </ion-chip>
+                    </ion-chip> -->
                 </p>
+                <p>
+                        <ion-chip class="chip-event-assistance" [class.active]="(event.postAssistance)"
+                            (click)="toggleAssistance(event.postAssistance, event.id)">
+                            <ion-label class="ion-align-items-center">
+                                <ion-icon [name]="(event.postAssistance)?'checkmark':'people'"
+                                    style="margin-right: 6px"></ion-icon>
+                                <span>{{(event.postAssistance) ? 'Voy a Asistir': 'Unirme'}}</span>
+                            </ion-label>
+                        </ion-chip>
+                    </p>
             </div>
             <div class="map-container" *ngIf="event.ubication">
                 <p class="map-title">Ubicación</p>

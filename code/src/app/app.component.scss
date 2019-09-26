@@ -1,0 +1,26 @@
+.body-menu {
+  ion-list {
+    padding-top: 0;
+    padding-bottom: 0;
+    // --background: red;
+  }
+  .item-menu{
+    // --background: lime;
+    // border: 2px solid red;
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+  .item-close-sesion{
+    // border-top: 1px solid #a9a5a5;
+  }
+}
+.footer-menu {
+  position: absolute;
+  bottom: 0;
+  ion-item{
+      --background: red;
+  }
+}
+.header-menu {
+  margin-bottom: 1rem;
+}

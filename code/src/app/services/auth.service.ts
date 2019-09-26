@@ -6,6 +6,7 @@ import { JwtHelperService } from "@auth0/angular-jwt";
 import { environment } from '../../environments/environment';
 import { IRegisterUser } from '../interfaces/models';
 import { HttpRequestService } from "./http-request.service";
+import { UtilsService } from "./utils.service";
 
 const TOKEN_ITEM_NAME = "accessToken";
 const USER_ITEM_NAME = "currentUser";
@@ -25,6 +26,7 @@ export class AuthService {
     constructor(
         private storage: Storage,
         private http: HttpClient,
+        private utilsService: UtilsService,
         private httpRequest: HttpRequestService
     ) { }
     //CERRAR SESION del usuario, borrando los datos del local storage
@@ -126,9 +128,17 @@ export class AuthService {
     }
     // Traer los Datos del Token del Local Storage
     async getUserLocalStorage() {
-        const user = await this.storage.get(USER_ITEM_NAME)
-        this.authUser.next(user);
+        const token_decoded = await this.storage.get(USER_ITEM_NAME);
+        this.authUser.next(token_decoded);
+        if (token_decoded.user) {
+            this.mapUserInfo();
+        }
         // console.log('get user ls value', this.authUser.value);
+    }
+    mapUserInfo() {
+        if (this.authUser.value.user) {
+            this.authUser.value.user.avatar = this.utilsService.getImageURL(this.authUser.value.user.avatar);
+        }
     }
     // Traer los Datos del Usuario del Local Storage
     async getTokenLocalStorage() {
