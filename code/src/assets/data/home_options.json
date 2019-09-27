@@ -30,7 +30,7 @@
         "valid_roles": ["morador", "invitado", "policia"]
     },
     {
-        "title": "Reportes",
+        "title": "Informes",
         "icon": "assets/img/svg/analytics.svg",
         "url": "/reports",
         "valid_roles": ["morador", "invitado", "policia"]

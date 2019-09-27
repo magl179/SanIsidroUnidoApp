@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, ModalController } from "@ionic/angular";
 import { UtilsService } from "src/app/services/utils.service";
 import { PostsService } from "src/app/services/posts.service";
-import { IBasicFilter } from "../../../interfaces/models";
+import { IBasicFilter, IRespuestaApiSIUPaginada } from "../../../interfaces/models";
 import { FilterPage } from "../../../modals/filter/filter.page";
 import { SearchPage } from "../../../modals/search/search.page";
 import { environment } from 'src/environments/environment';
@@ -56,17 +56,23 @@ export class EmergenciesPage implements OnInit {
             finalize(() => {
                 this.emergenciesLoaded = true;
             })
-        ).subscribe((res:any)=> {
-            if (res.data) {
-                console.log('data', res);
-                if (res.data.data.length === 0) {
+        ).subscribe((res: IRespuestaApiSIUPaginada) => {
+            let emergenciesApi = [];
+            emergenciesApi = res.data.data;
+            if (emergenciesApi) {
+                // console.log('data', res);
+                if (emergenciesApi.length === 0) {
                     if (event) {
                         event.target.disabled = true;
                         event.target.complete();
                     }
                     return;
                 }
-                this.emergenciesList.push(...res.data.data);
+                this.emergenciesList.push(...emergenciesApi);
+                this.emergenciesList.forEach(emergency => {
+                    emergency.ubication = this.utilsService.getJSON(emergency.ubication);
+                    emergency.fulldate = `${emergency.date} ${emergency.time}`;
+                })
                 this.emergenciesFiltered.push(...this.emergenciesList);
                 console.log(this.emergenciesList);
                 if (event) {
@@ -98,8 +104,7 @@ export class EmergenciesPage implements OnInit {
     }
     
     postDetail(id: number) {
-        // this.postsService.resetEmergenciesPage();
-        this.navCtrl.navigateForward(`/emergency-detail/${id}`);;
+        this.navCtrl.navigateForward(`/emergency-detail/${id}`);
     }
     
 

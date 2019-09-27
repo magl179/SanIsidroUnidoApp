@@ -5,7 +5,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { ISimpleUbicationItem } from 'src/app/interfaces/barrios';
 import { PostsService } from '../../../services/posts.service';
 import { AuthService } from '../../../services/auth.service';
-import { IEvent, IPostShare } from '../../../interfaces/models';
+import { IEvent, IPostShare, IRespuestaApiSIU, IRespuestaApiSIUSingle } from "../../../interfaces/models";
 import { NetworkService } from '../../../services/network.service';
 import { environment } from 'src/environments/environment.prod';
 import { ModalController } from "@ionic/angular";
@@ -60,11 +60,12 @@ export class EventDetailPage implements OnInit {
             finalize(() => {
                 this.eventLoaded = true;
             })
-        ).subscribe(res => {
-            if (res) {
+        ).subscribe((res: IRespuestaApiSIUSingle) => {
+            if (res.data) {
                 this.event = res.data;
                 if (this.event) {
                     this.event.postAssistance = this.utilsService.checkLikePost(this.event.details, this.AuthUser);
+                    this.event.ubication = this.utilsService.getJSON(this.event.ubication);
                     if (this.event.images && this.event.images.length > 0) {
                         this.event.images = this.utilsService.mapImagesApi(this.event.images);
                     }

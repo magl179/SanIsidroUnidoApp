@@ -53,14 +53,16 @@
                 </div>
             </div>
             <div class="event-info">
-                <ion-card-title class="event-title"> Angular 7 de Cero a Experto</ion-card-title>
+                <ion-card-title class="event-title">
+                    {{event.title}}
+                </ion-card-title>
                 <p class="event-date">
                     <ion-icon name="calendar"></ion-icon>
-                    15 de Agosto de 2019 12:00 asdasd
+                   {{event.fulldate | beatifulDate}}
                 </p>
                 <p class="event-ubication">
                     <ion-icon name="pin"></ion-icon>
-                    10 de Agosto y Amazonas
+                    {{ (event.ubication.address) ? event.ubication.address : 'Direccion no encontrada' }}
                 </p>
                 <p class="assistance-info">
                     <span class="count-people">

@@ -96,6 +96,7 @@ export interface ISocialProblem {
     user?: any;
     details?: any;
     postLiked?: any;
+    fulldate?: any;
 }
 
 export interface ISocialProfile {
@@ -189,6 +190,7 @@ export interface IEvent {
     images?: I_ImagesApi[]
     details?: any;
     postAssistance?: any;
+    fulldate?: string;
 }
 
 export interface ICreateDetail {
@@ -300,3 +302,69 @@ interface IFilterFields {
 export interface IBasicFilter {
     [key: string]: IFilterFields;
 }
+
+
+//Token Decodificado
+export interface ITokenDecoded {
+    exp: number;
+    iat: number;
+    sub: number;
+    user: IUserDecoded;
+}
+
+export interface IUserDecoded {
+    avatar: string;
+    basic_service_image?: any;
+    created_at: string;
+    devices: IDeviceUser[];
+    email: string;
+    email_verified_at?: any;
+    firstname: string;
+    id: number;
+    lastname: string;
+    number_phone?: any;
+    password: string;
+    position_id?: any;
+    roles: IRole[];
+    social_profiles: ISocialProfile[];
+    state: number;
+    updated_at: string;
+}
+
+// interface ISocialProfileUser {
+//     created_at: string;
+//     id: number;
+//     provider: string;
+//     social_id: string;
+//     updated_at?: any;
+//     user_id: number;
+// }
+
+// interface Role {
+//     created_at: string;
+//     description: string;
+//     id: number;
+//     mobile_app: number;
+//     name: string;
+//     role_user: Roleuser;
+//     slug: string;
+//     updated_at: string;
+// }
+
+// interface Roleuser {
+//     created_at: string;
+//     role_id: number;
+//     state: number;
+//     updated_at: string;
+//     user_id: number;
+// }
+
+// interface Device {
+//     created_at: string;
+//     description: string;
+//     id: number;
+//     phone_id: string;
+//     phone_model: string;
+//     updated_at: string;
+//     user_id: number;
+// }

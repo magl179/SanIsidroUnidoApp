@@ -46,6 +46,7 @@ export class UserService implements OnInit {
     }
     // Obtener los dispositivos de un usuario
     getDevicesUser() {
+        // const headers = this.headersApp.set(AUTHORIZATION_NAME, this.AuthToken);
         const user_id = this.AuthUser.id;
         return this.httpRequest.get(`${environment.apiBaseURL}/usuarios/${user_id}/dispositivos`);
     }

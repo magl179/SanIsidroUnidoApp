@@ -8,7 +8,7 @@ import { NetworkService } from '../../../services/network.service';
 import { environment } from "../../../../environments/environment";
 import { finalize } from 'rxjs/operators';
 import { SearchPage } from "../../../modals/search/search.page";
-import { IEvent } from "../../../interfaces/models";
+import { IEvent, IRespuestaApiSIUPaginada } from "../../../interfaces/models";
 // import { CacheService, Cache } from 'ionic-cache-observable';
 @Component({
     selector: 'app-events',
@@ -42,7 +42,7 @@ export class EventsPage implements OnInit {
     ngOnInit() {
         this.authService.getAuthUser().subscribe(token_decoded => {
             if (token_decoded.user) {
-                this.AuthUser = token_decoded.user; 
+                this.AuthUser = token_decoded.user;
             }
         });
     }
@@ -137,7 +137,7 @@ export class EventsPage implements OnInit {
         }
     }
 
-    loadEvents(event?: any, resetEvents?: any) {
+    loadEvents(event?: any, resetEvents = false) {
         this.eventsLoaded = false;
         if (resetEvents) {
             this.resetEvents()
@@ -148,26 +148,27 @@ export class EventsPage implements OnInit {
                 console.log('finalize get events', this.eventsLoaded);
                 console.log('finalize get events', this.eventsList);
             })
-        ).subscribe(res => {
-            let events = res.data.data;
-            if (events) {
-                console.log('data', res);
-                events = events.map((event: any) => {
+        ).subscribe((res: IRespuestaApiSIUPaginada) => {
+            let eventsApi = [];
+            eventsApi = res.data.data;
+            if (eventsApi) {
+                eventsApi.forEach((event: any) => {
                     const postAssistance = this.utilsService.checkLikePost(event.details, this.AuthUser) || false;
                     event.postAssistance = postAssistance;
                     if (event.images && event.images.length > 0) {
                         event.images = this.utilsService.mapImagesApi(event.images);
                     }
-                    return event;
+                    event.ubication = this.utilsService.getJSON(event.ubication);
+                    event.fulldate = `${event.date} ${event.time}`;
                 });
-                if (events.length === 0) {
+                if (eventsApi.length === 0) {
                     if (event) {
                         event.target.disabled = true;
                         event.target.complete();
                     }
                     return;
                 }
-                this.eventsList.push(...events);
+                this.eventsList.push(...eventsApi);
                 if (event) {
                     event.target.complete();
                 }
@@ -180,11 +181,10 @@ export class EventsPage implements OnInit {
     }
 
     postDetail(id) {
-        this.resetEvents();
         this.navCtrl.navigateForward(`/event-detail/${id}`);
     }
 
-    getInfiniteScrollData(event) {
+    getInfiniteScrollData(event: any) {
         this.loadEvents(event);
     }
 

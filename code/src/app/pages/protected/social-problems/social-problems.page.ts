@@ -143,6 +143,7 @@ export class SocialProblemsPage implements OnInit {
                 socialProblems = socialProblems.map((social_problem: any) => {
                     social_problem.user.avatar = (social_problem.user && social_problem.user.avatar) ? this.utilsService.getImageURL(social_problem.user.avatar) : null;
                     social_problem.postLiked = this.utilsService.checkLikePost(social_problem.details, this.AuthUser) || false;
+                    social_problem.fulldate = `${social_problem.date} ${social_problem.time}`;
                     if (social_problem.images && social_problem.images.length > 0) {
                         social_problem.images = this.utilsService.mapImagesApi(social_problem.images);
                     }

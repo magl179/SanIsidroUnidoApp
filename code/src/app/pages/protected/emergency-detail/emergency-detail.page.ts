@@ -31,10 +31,7 @@ export class EmergencyDetailPage implements OnInit {
     ngOnInit() {
       
         this.id = this.route.snapshot.paramMap.get('id');
-        console.log('ID RECIBIDO:', this.id);
-        // this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
-        //     this.appNetworkConnection = connected;
-        // });
+        // console.log('ID RECIBIDO:', this.id);
         this.authService.getAuthUser().subscribe(token_decoded => {
             if (token_decoded && token_decoded.user) {
                 this.AuthUser = token_decoded.user; 
@@ -52,6 +49,7 @@ export class EmergencyDetailPage implements OnInit {
             if (this.emergency.images && this.emergency.images.length > 0) {
                 this.emergency.images = this.utilsService.mapImagesApi(this.emergency.images);
             }
+            this.emergency.ubication = this.utilsService.getJSON(this.emergency.ubication);
             console.log('Dato post', this.emergency);
         });
     }

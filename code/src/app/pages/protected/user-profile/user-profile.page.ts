@@ -6,7 +6,7 @@ import { ChangePasswordPage } from 'src/app/modals/change-password/change-passwo
 import { RequestMembershipPage } from 'src/app/modals/request-membership/request-membership.page';
 import { ChangeProfileImagePage } from 'src/app/modals/change-profile-image/change-profile-image.page';
 import { NotificationsService } from 'src/app/services/notifications.service';
-import { IPhoneUser, IRespuestaApiSIU } from '../../../interfaces/models';
+import { IPhoneUser, IRespuestaApiSIU, ITokenDecoded, IRespuestaApiSIUSingle } from '../../../interfaces/models';
 import { NetworkService } from 'src/app/services/network.service';
 import { UserService } from '../../../services/user.service';
 import { UtilsService } from '../../../services/utils.service';
@@ -22,7 +22,7 @@ const URL_PATTERN = new RegExp(/^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=
 export class UserProfilePage implements OnInit {
 
     //Guardar Subscripcion Usuario
-    appNetworkConnection = false;
+    // appNetworkConnection = false;
     // imageServeURL = `${environment.apiBaseURL}/${environment.image_blob_url}/`;
     AuthUser = null;
     authUserRol = null;
@@ -36,8 +36,8 @@ export class UserProfilePage implements OnInit {
         private modalCtrl: ModalController,
         private userService: UserService,
         private utilsService: UtilsService,
-        private notificationsService: NotificationsService,
-        private networkService: NetworkService) {
+        private notificationsService: NotificationsService
+    ) {
     }
 
     getImageURL(image_name) {
@@ -50,27 +50,21 @@ export class UserProfilePage implements OnInit {
     }
 
     async ngOnInit() {
-        this.authService.getAuthUser().subscribe(token_decoded => {
+        this.authService.getAuthUser().subscribe((token_decoded: ITokenDecoded) => {
+            console.log('token decoded', token_decoded)
+            console.log('token decoded VERIFY', (token_decoded.user) ? 'true' : 'false');
             if (token_decoded.user) {
                 this.AuthUser = token_decoded.user;
+                console.log(this.AuthUser);
                 this.getRoles();
             }
         });
-        this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
-            this.appNetworkConnection = connected;
-        });
-        this.checkRolUser();
-        // this.getUserDevices();
         this.notificationsService.getUserDevice().subscribe(userdevice => {
             if(userdevice){
                 this.DeviceUser = userdevice;
             }
         });
      }
-
-    async checkRolUser() {
-        this.sizeOptions = (this.canRequestAfiliation) ? 4 : 6;
-    }
 
     getRoles() {
         if (this.AuthUser && this.AuthUser.roles) {
@@ -128,16 +122,16 @@ export class UserProfilePage implements OnInit {
         this.notificationsService.registerUserDevice();
     }
 
-    removeDevicetoUser($device_id) {
-        this.notificationsService.removeUserDevice($device_id);
+    removeDevicetoUser(device_id: number) {
+        this.notificationsService.removeUserDevice(device_id);
     }
 
-    removeSocialProfileToUser($social_profile_id) {
-        this.userService.sendRequestDeleteSocialProfile($social_profile_id).subscribe(async (res: any) => {
+    removeSocialProfileToUser(social_profile_id) {
+        this.userService.sendRequestDeleteSocialProfile(social_profile_id).subscribe(async (res: IRespuestaApiSIUSingle) => {
+            const token = res.data.token;
+            this.authService.updateFullAuthInfo(token);
             this.utilsService.showToast('Perfil Social fue desconectado correctamente');
-            const token_decode = await this.authService.decodeToken(res.data.token);
-            this.authService.updateAuthInfo(res.data.token, token_decode);
-        }, err => {
+        }, (err: any) => {
             this.utilsService.showToast('El Perfil Social no se pudo desconectar');
             console.log('error al desconectar perfil social imagen usuario', err);
         });

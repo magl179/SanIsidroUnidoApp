@@ -43,7 +43,7 @@ export class UtilsService implements OnInit {
     }
 
     seeImageDetail(url: string, title = "Detalle Imagen", share = true) {
-            this.photoViewer.show(url, title, {share});
+        this.photoViewer.show(url, title, { share });
     }
     //Funcion verifica like en un posts
     checkLikePost(details: any, user_authenticated: any) {
@@ -82,7 +82,7 @@ export class UtilsService implements OnInit {
         moment.locale('es');
         let beatifulDate = null;
         if (moment(stringDate).isValid()) {
-             // Fecha Pasada, Fecha Actual
+            // Fecha Pasada, Fecha Actual
             const currentDate = moment(new Date());
             const lastDate = moment(new Date(stringDate));
             //Diferencia entre Fechas
@@ -200,20 +200,38 @@ export class UtilsService implements OnInit {
 
     isJSON(str) {
         try {
-          return JSON.parse(str) && !!str;
+            return JSON.parse(str) && !!str;
         } catch (e) {
-          return false;
+            return false;
         }
     }
-    
-    getJSON(variable){
-        if(typeof variable === 'object'){
-          return variable;
+
+    getJSON(variable) {
+        if (typeof variable === 'object') {
+            return variable;
         }
-        if(this.isJSON(variable)){
-          return JSON.parse(variable);
+        if (this.isJSON(variable)) {
+            return JSON.parse(variable);
         } else {
-          return null;
+            return null;
         }
-      }
+    }
+    //Recibe array objetos y un objeto con el valor a buscar y devuelve true/false si existe ese valor
+    // Ejemplo [{id: 1, name: 'lola}, {id: 2, name: 'bebe'}], {name: 'bebe}
+    searchInArrayObj(items: any[], filter: { [key: string]: any }) {
+        let match = false;
+        //Recorrer los Filtros a Aplicar
+        for (const prop in filter) {
+            //Recorro el arreglo y verifico si existe esa propiedad 
+            // y si existe si coincide con el valor solicitado
+            items.forEach((item: any) => {
+                const hasOwnProperty = item.hasOwnProperty(prop);
+                const propMatch = item[prop] === filter[prop];
+                if (hasOwnProperty && propMatch) {
+                    match = true;
+                }
+            });
+        }
+        return match;
+    }
 }

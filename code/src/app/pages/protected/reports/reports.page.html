@@ -1,4 +1,4 @@
-<app-header-back title="Reportes"></app-header-back>
+<app-header-back title="Informes"></app-header-back>
 
 <ion-content padding>
     <div class="flex-column-center message-fail-load"
@@ -12,22 +12,21 @@
      </div>
     <!-- Tarjetas con Datos -->
     <div *ngIf="reportsLoaded && reportsList.length > 0">
-        <ion-card class="card-event">
+        <ion-card class="card-event" *ngFor="let report of reportsList; let i = index;">
             <ion-card-header>
                 <ion-card-subtitle class="event-subtitle">
                     <p class="post-fulldate" style="display:flex;align-items: center;">
                         <ion-icon class="icon" style="font-size:1.2rem;margin-right: 5px;" name="calendar"></ion-icon>
-                        <span>2019-05-21</span>
+                        <span>{{report.created_at | simpleBeatifulDate}}</span>
                     </p>
                 </ion-card-subtitle>
-                <ion-card-title>Reporte 1</ion-card-title>
+                <ion-card-title>{{report.title}}</ion-card-title>
             </ion-card-header>
             <ion-card-content>
-                <p class="post-description"> Lorem ipsum dolor sit amet consectetur adipisicing
-                    elit. Non corporis fugit a dignissimos nulla aperiam error, saepe dolor ipsum
-                    delectus minima aliquam quibusdam neque voluptatibus corrupti soluta
-                    perspiciatis possimus fuga! </p>
-                <!-- <p class="post-see-more">Ver más...</p> -->
+                <p class="post-description">
+                    {{report.description}}
+                </p>
+                <p class="post-see-more" (click)="postDetail(report.id)">Ver más...</p>
             </ion-card-content>
         </ion-card>
     </div>

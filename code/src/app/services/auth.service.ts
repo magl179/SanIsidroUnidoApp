@@ -53,7 +53,7 @@ export class AuthService {
         return this.httpRequest.post(urlApi, {}, headers);
     }
     // Decodificar el Token
-    decodeToken(token) {
+    decodeToken(token: any) {
         let decodedToken = null;
         try {
             const helper = new JwtHelperService();
@@ -89,8 +89,18 @@ export class AuthService {
             }
         }
     }
+
+    async updateFullAuthInfo(token: any) {
+        const tokenDecoded = this.decodeToken(token);
+        this.updateAuthInfo(token, tokenDecoded);
+    }
+
+    async updateUserInfo(user: any) {
+        await this.setUserLocalStorage(user);
+        await this.getUserLocalStorage();
+    }
     // Actualizar Informacion Local Storage
-    async updateAuthInfo(token, user) {
+    async updateAuthInfo(token: any, user: any) {
         await this.setTokenLocalStorage(token);
         await this.setUserLocalStorage(user);
         await this.getUserLocalStorage();

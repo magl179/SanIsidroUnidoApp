@@ -47,20 +47,21 @@
                 </div>
             </div>
             <div class="event-info">
-                <ion-card-title class="event-title" (click)="postDetail(event.id)"> Angular 7 de
-                    Cero a Experto</ion-card-title>
+                <ion-card-title class="event-title" (click)="postDetail(event.id)"> 
+                    {{event.title}}
+                </ion-card-title>
                 <p class="event-date">
                     <ion-icon name="calendar"></ion-icon>
-                    15 de Agosto de 2019 12:00 asdasd
+                    {{ event.fulldate | beafitulDate }}
                 </p>
                 <p class="event-ubication">
                     <ion-icon name="pin"></ion-icon>
-                    10 de Agosto y Amazonas
+                    {{ (event.ubication && event.ubication.address) ? event.ubication.address : 'Direccion no encontrada' }}
                 </p>
                 <p class="assistance-info">
                     <span class="count-people">
                         <ion-icon name="people"></ion-icon>
-                        {{event.details.length}}
+                        {{ event.details.length }}
                         {{(event.details.length !== 1) ? 'personas asistirán': 'persona asistirá'}}
                     </span>
                 </p>
@@ -70,7 +71,7 @@
                         <ion-label class="ion-align-items-center">
                             <ion-icon [name]="(event.postAssistance)?'checkmark':'people'"
                                 style="margin-right: 6px"></ion-icon>
-                            <span>{{(event.postAssistance) ? 'Voy a Asistir': 'Unirme'}}</span>
+                            <span>{{ (event.postAssistance) ? 'Voy a Asistir': 'Unirme' }}</span>
                         </ion-label>
                     </ion-chip>
                 </p>

@@ -184,7 +184,7 @@ export class SocialProblemCreatePage implements OnInit {
         this.currentStep = event.currentStep;
     }
 
-    getUserAddress(latitud, longitud) {
+    getUserAddress(latitud: number, longitud: number) {
         this.mapService.getAddress({
             lat: latitud,
             lng: longitud,

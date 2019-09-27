@@ -23,6 +23,6 @@ import { JsonValidatePipe } from './json-validate.pipe';
         SimpleBeatifulDatePipe,
         TruncatePipe,
         JsonValidatePipe
-  ]
+    ]
 })
 export class PipesModule { }

@@ -11,6 +11,7 @@ import { finalize } from 'rxjs/operators';
 import { fakeAsync } from '@angular/core/testing';
 import { NetworkService } from '../../../services/network.service';
 import { NavController } from '@ionic/angular';
+import { IRespuestaApiSIU } from "../../../interfaces/models";
 
 
 // type PaneType = 'left' | 'right';
@@ -125,13 +126,12 @@ export class EmergencyCreatePage implements OnInit {
         this.currentStep = event.currentStep;
     }
 
-    getUserAddress(latitud, longitud) {
+    getUserAddress(latitud: number, longitud: number) {
         this.mapService.getAddress({
             lat: latitud,
             lng: longitud,
             zoom: 14
         }).subscribe(direccion => {
-            console.log({ add: direccion });
             this.emergencyPostCoordinate.address = direccion.display_name;
         },
         err => {
@@ -178,7 +178,7 @@ export class EmergencyCreatePage implements OnInit {
             finalize(() => {
                 loadingEmergencyReport.dismiss()
             })
-        ).subscribe(async res => {
+        ).subscribe(async (res: IRespuestaApiSIU) => {
             await this.utilsService.showToast("El Reporte fue enviado correctamente");
             this.navCtrl.navigateRoot('/emergencies');
         }, err => {

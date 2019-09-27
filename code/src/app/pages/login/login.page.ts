@@ -9,6 +9,7 @@ import { LocalDataService } from '../../services/local-data.service';
 import { finalize } from 'rxjs/operators';
 import { NetworkService } from '../../services/network.service';
 import { NotificationsService } from 'src/app/services/notifications.service';
+import { IRespuestaApiSIU } from "../../interfaces/models";
 
 
 
@@ -79,7 +80,7 @@ export class LoginPage implements OnInit {
             finalize(() => {
                 loadingLoginValidation.dismiss()
             })
-        ).subscribe(res => {
+        ).subscribe((res: IRespuestaApiSIU) => {
             this.manageLogin(loginData, res);
         }, err => {
             const message_error = (err.error.message) ? err.error.message : 'Ocurrio un error, por favor intentalo más tarde';
@@ -90,11 +91,11 @@ export class LoginPage implements OnInit {
 
     async loginUserByFB() {
             await this.socialDataService.loginByFacebook();
-            await this.socialDataService.fbLoginData.subscribe(async fbData => {
+            this.socialDataService.fbLoginData.subscribe(async fbData => {
                 if (fbData) {
                     const user = this.socialDataService.getFacebookDataParsed(fbData);
                     const { social_id, email } = user;
-                    await this.authService.login(user).subscribe(res => {
+                    this.authService.login(user).subscribe(res => {
                             this.manageLogin({provider: 'facebook', social_id, email} , res);
                     }, err => {
                         this.utilsService.showToast(`Error: ${err.error.message}`);
@@ -109,11 +110,11 @@ export class LoginPage implements OnInit {
 
     async loginUserByGoogle() {
                 await this.socialDataService.loginByGoogle();
-                await this.socialDataService.googleLoginData.subscribe(async googleData => {
+                this.socialDataService.googleLoginData.subscribe(async googleData => {
                     if (googleData) {
                         const user = this.socialDataService.getGoogleDataParsed(googleData);
                         const { social_id, email } = user;
-                        await this.authService.login(user).subscribe(async res => {
+                        this.authService.login(user).subscribe(async res => {
                             console.log('Login First Response', res);
                                 await this.manageLogin({social_id, email, provider: 'google'} , res);
                         }, err => {

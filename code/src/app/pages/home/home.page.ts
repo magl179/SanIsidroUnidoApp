@@ -5,12 +5,6 @@ import { AuthService } from '../../services/auth.service';
 import { IHomeOptions } from 'src/app/interfaces/models';
 import { NetworkService } from '../../services/network.service';
 import { Observable } from 'rxjs';
-// export interface MenuServices {
-//     title: string;
-//     icon: string;
-//     url: string;
-//     valid_roles: string[];
-// }
 
 @Component({
     selector: 'app-home',
@@ -18,8 +12,7 @@ import { Observable } from 'rxjs';
     styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
-    // appNetworkConnection = false;
-    // appNetworkConnection: Observable<boolean>;
+
     servicesList: IHomeOptions[] = [];
 
     constructor(
@@ -29,7 +22,7 @@ export class HomePage implements OnInit {
     ) { }
 
     async ngOnInit() {
-        await this.localDataService.getHomeOptions().subscribe((data) => {
+        this.localDataService.getHomeOptions().subscribe((data) => {
             this.servicesList = data;
             console.log('items home: ', data.length);
         });

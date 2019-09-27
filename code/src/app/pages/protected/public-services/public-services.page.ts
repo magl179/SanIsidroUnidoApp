@@ -8,6 +8,7 @@ import { ModalController } from "@ionic/angular";
 import { MapInfoPage } from "src/app/modals/map-info/map-info.page";
 import { finalize } from 'rxjs/operators';
 // import { CacheService } from 'ionic-cache';
+import { IRespuestaApiSIU } from "../../../interfaces/models";
 
 @Component({
     selector: 'app-public-services',
@@ -45,7 +46,7 @@ export class PublicServicesPage implements OnInit {
         this.publicServicesLoaded = false;
         this.postService.getPublicServices().pipe(finalize(() => {
             this.publicServicesLoaded = true;
-        })).subscribe(response => {
+        })).subscribe((response: IRespuestaApiSIU) => {
             this.publicServices = response.data;
         }, err => {
                 this.utilsService.showToast('No se pudieron cargar los servicios públicos');

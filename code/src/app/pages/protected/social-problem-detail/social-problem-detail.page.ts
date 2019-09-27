@@ -5,7 +5,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { PostsService } from '../../../services/posts.service';
 import { UserService } from '../../../services/user.service';
 import { AuthService } from '../../../services/auth.service';
-import { IPostShare, ISocialProblem, IRespuestaApiSIUSingle } from "../../../interfaces/models";
+import { IPostShare, ISocialProblem, IRespuestaApiSIUSingle, IRespuestaApiSIU } from "../../../interfaces/models";
 import { NetworkService } from 'src/app/services/network.service';
 import { environment } from "../../../../environments/environment";
 import { ModalController } from "@ionic/angular";
@@ -67,11 +67,12 @@ export class SocialProblemDetailPage implements OnInit {
                 this.socialProblem = res.data;
                 this.socialProblem.postLiked = this.utilsService.checkLikePost(this.socialProblem.details, this.AuthUser);
                 this.socialProblem.user.avatar = (this.socialProblem.user && this.socialProblem.user.avatar) ? this.utilsService.getImageURL(this.socialProblem.user.avatar) : null;
+                this.socialProblem.fulldate = `${this.socialProblem.date} ${this.socialProblem.time}`;
                 if (this.socialProblem.images && this.socialProblem.images.length > 0) {
                     this.socialProblem.images = this.utilsService.mapImagesApi(this.socialProblem.images);
                 }
-                console.log('social problem detail', res)
-                console.log('social problem detail', this.socialProblem)
+                // console.log('social problem detail', res)
+                // console.log('social problem detail', this.socialProblem)
             }
         });
     }
@@ -90,24 +91,11 @@ export class SocialProblemDetailPage implements OnInit {
         await modal.present();
     }
 
-    //Verificar Like de un Post
-    // checkLikePost($details) {
-    //     if ($details && $details.length > 0) {
-    //         const likes_user = this.utilsService.getUsersFromDetails($details);
-    //         const user_made_like = this.utilsService.checkUserInDetails(this.AuthUser.id, likes_user);
-    //         return user_made_like;
-    //     }
-    //     else {
-    //         return false;
-    //     }
-    // }
-
     toggleLike(like: boolean) {
         console.log((like) ? 'quitar like' : 'dar like');
         if (like) {
-            this.postService.sendDeleteDetailToPost(this.socialProblem.id).subscribe(res => {
+            this.postService.sendDeleteDetailToPost(this.socialProblem.id).subscribe((res: IRespuestaApiSIU) => {
                 console.log('detalle eliminado correctamente');
-                // this.getSocialProblem();
                 this.socialProblem.postLiked = false;
             }, err => {
                 console.log('detalle no se pudo eliminar', err);
@@ -119,9 +107,8 @@ export class SocialProblemDetailPage implements OnInit {
                 user_id: this.AuthUser.id,
                 post_id : this.socialProblem.id
             }
-            this.postService.sendCreateDetailToPost(detailInfo).subscribe(res => {
+            this.postService.sendCreateDetailToPost(detailInfo).subscribe((res: IRespuestaApiSIU) => {
                 console.log('detalle creado correctamente');
-                // this.getSocialProblem();
                 this.socialProblem.postLiked = true;
             }, err => {
                 console.log('detalle no se pudo crear', err);
@@ -136,7 +123,6 @@ export class SocialProblemDetailPage implements OnInit {
             description: post.description,
             image:  this.getImages(post.images),
             url: ''
-
         };
         await this.utilsService.shareSocial(sharePost);
     }

@@ -136,13 +136,20 @@ export class PostsService implements OnInit {
         const emergenciesSlug = environment.emergenciesSlug;
         return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/${emergenciesSlug}/${id}`);
     }
+    // Función para obtener el detalle de un informe
+    getReport(id: number): Observable<any> {
+        const reportsSlug = environment.reportsSlug;
+        return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/${reportsSlug}/${id}`);
+    }
     // Función para obtener el listado de servicios publicos registrados
     getPublicServices(): Observable<any> {
         return this.httpRequest.get(`${environment.apiBaseURL}/servicios-publicos`);
     }
+    //Funcion para obtener el listado de informes registrados
     getReports(): Observable<IRespuestaApiSIUPaginada>{
         console.log('llamdo post service get reports');
-        return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/reportes`);
+        const reportsSlug = environment.reportsSlug;
+        return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/${reportsSlug}`);
     }
     // Función para obtener el listado de subcategorias de una categoria
     getSubcategoriesByCategory(category: string): Observable<any> {

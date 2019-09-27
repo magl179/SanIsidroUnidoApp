@@ -1,0 +1,88 @@
+<app-header-back title="Informe" hrefDefault="/reports"></app-header-back>
+
+<ion-content padding>
+    <!-- Mensaje no cargaron los datos desde la Api -->
+    <div class="flex-column-center message-fail-load" *ngIf="reportLoaded && !report">
+        <p>No se pudo cargar el reporte solicitado</p>
+        <ion-button (click)="getReport(null,true)">Toca para reintentar</ion-button>
+    </div>
+    <!-- Animacion hasta cargar datos -->
+    <div *ngIf="!reportLoaded">
+        <ion-card class="report-card detail-card animated flash slow infinite">
+            <ion-card-header>
+                <ion-card-subtitle>
+                    <ion-skeleton-text width="30%"></ion-skeleton-text>
+                </ion-card-subtitle>
+                <ion-card-title>
+                    <ion-skeleton-text width="10%"></ion-skeleton-text>
+                </ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <ion-skeleton-text width="100%"></ion-skeleton-text>
+                <ion-skeleton-text width="100%"></ion-skeleton-text>
+                <ion-skeleton-text width="100%"></ion-skeleton-text>
+            </ion-card-content>
+            <div>
+                <ion-skeleton-text width="100%" style="height: 200px;"></ion-skeleton-text>
+            </div>
+            <ion-row>
+                <ion-col>
+                    <ion-item lines="none" detail="false" button="true"
+                        class="container_events detail" [ngClass]="{'active': (i % 2) === 0}">
+                        <ion-skeleton-text width="50%"></ion-skeleton-text>
+                    </ion-item>
+                </ion-col>
+                <ion-col>
+                    <ion-item lines="none" detail="false" button="true"
+                        class="container_events detail" [ngClass]="{'active': (i % 2) !== 0}">
+                        <ion-skeleton-text width="50%"></ion-skeleton-text>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+        </ion-card>
+    </div>
+    <!-- Datos ya cargados -->
+    <div *ngIf="reportLoaded && report">
+        <ion-card class="report-card detail">
+            <div class="report-cover-image"
+                [style.background-image]="(report.images && report.images.length > 0) ? getBGCover(report.images[0].url) : ''">
+            </div>
+            <ion-card-header class="report-card-header">
+                <ion-card-title class="report-card-title"> {{ report.title }}</ion-card-title>
+            </ion-card-header>
+            <ion-card-subtitle class="report-info">
+                <p class="fulldate">
+                    <ion-icon name="calendar"></ion-icon>
+                    {{ report.created_at | simpleBeatifulDate}}
+                </p>
+                <p class="ubication">
+                    <ion-icon name="navigate"></ion-icon>
+                    {{ (report.ubication && report.ubication.address) ? report.ubication.address : 'Direccion no encontrada' }}
+                </p>
+            </ion-card-subtitle>
+            <ion-card-content class="report-detail-description">
+                <h2 class="title title-section">Descripción</h2>
+                <p class="post_description">
+                    {{report.description | truncate: 50}}
+                </p>
+            </ion-card-content>
+            <div class="map-container" *ngIf="report.ubication">
+                <p class="map-title title-section">Ubicación</p>
+                <simple-map classMap="report-map" idMap="report-map-detail-{{id}}"
+                    [coordsMap]="report.ubication" [zoom]="16">
+                </simple-map>
+            </div>
+            <div class="image_gallery_container"
+                *ngIf="report.images && report.images.length > 0">
+                <p class="image_gallery_title title-section">Imágenes</p>
+                <div class="image_gallery">
+                    <figure *ngFor="let image of report.images"
+                        (click)="seeImageDetail(image.url)">
+                        <img [src]="image.url" fallimg="image_full" />
+                    </figure>
+                </div>
+            </div>
+        </ion-card>
+    </div>
+
+</ion-content>

@@ -95,13 +95,18 @@ const routes: Routes = [
         canActivate: [LoginAuthGuard, IsActiveGuard]
     },
     {
+        path: 'emergency-detail/:id',
+        loadChildren: './pages/protected/emergency-detail/emergency-detail.module#EmergencyDetailPageModule'
+    },
+    {
         path: 'reports',
         loadChildren: './pages/protected/reports/reports.module#ReportsPageModule',
         canActivate: [LoginAuthGuard, IsActiveGuard]
     },
     {
-        path: 'emergency-detail/:id',
-        loadChildren: './pages/protected/emergency-detail/emergency-detail.module#EmergencyDetailPageModule'
+        path: 'report-detail/:id',
+        loadChildren: './pages/protected/report-detail/report-detail.module#ReportDetailPageModule',
+        canActivate: [LoginAuthGuard, IsActiveGuard]
     },
     {
         path: '404',
@@ -111,10 +116,6 @@ const routes: Routes = [
         path: '**',
         redirectTo: '/404'
     },
-
-
-
-
 ];
 
 @NgModule({

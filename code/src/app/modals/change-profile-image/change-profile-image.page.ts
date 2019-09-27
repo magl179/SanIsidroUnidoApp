@@ -26,24 +26,23 @@ export class ChangeProfileImagePage implements OnInit {
         this.modalCtrl.dismiss();
     }
 
-    getUploadedImages(event) {
+    getUploadedImages(event: any) {
         console.log(event);
         this.profileUserImg = event.total_img;
     }
 
     sendRequestChangeUserProfile() {
-        // alert(JSON.stringify(this.profileUserImg));
         this.userService.sendChangeUserImageRequest(this.profileUserImg[0]).subscribe(async res => {
+            const token = res.data.token;
+            this.authService.updateFullAuthInfo(token);
             this.utilsService.showToast('Imagen Actualizada Correctamente');
-            const token_decode = await this.authService.decodeToken(res.data.token);
-            this.authService.updateAuthInfo(res.data.token, token_decode);
         }, err => {
             this.utilsService.showToast('Imagen no ha podido ser actualizada');
             console.log('error al actualizar imagen usuario', err);
         });
     }
 
-    deleteImage(pos) {
+    deleteImage(pos: number) {
         this.profileUserImg.splice(pos, 1);
     }
 

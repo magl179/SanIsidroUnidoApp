@@ -6,6 +6,7 @@ import { MustMatch } from 'src/app/helpers/must-match.validator';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { LocalDataService } from "../../services/local-data.service";
+import { IRespuestaApiSIUSingle } from "../../interfaces/models";
 
 @Component({
     selector: 'app-change-password',
@@ -40,7 +41,7 @@ export class ChangePasswordPage implements OnInit {
     }
 
     async loadAuthData() {
-        await this.authService.getAuthUser().subscribe(res => {
+        this.authService.getAuthUser().subscribe(res => {
             if (res) {
                 this.AuthUser = res.user;
             }
@@ -84,11 +85,11 @@ export class ChangePasswordPage implements OnInit {
     }
 
     sendRequestChangePass() {
-        this.userService.sendChangeUserPassRequest(this.changePassForm.value.password).subscribe(async (res: any) => {
-            this.utilsService.showToast('Contraseña Actualizada Correctamente');
-            const token_decode = await this.authService.decodeToken(res.data.token);
-            this.authService.updateAuthInfo(res.data.token, token_decode);
+        this.userService.sendChangeUserPassRequest(this.changePassForm.value.password).subscribe(async (res: IRespuestaApiSIUSingle) => {
+            const token = res.data.token;
+            this.authService.updateFullAuthInfo(token);
             this.changePassForm.reset();
+            this.utilsService.showToast('Contraseña Actualizada Correctamente');
 
         }, err => {
             this.utilsService.showToast('La Contraseña no se ha podido actualizar');

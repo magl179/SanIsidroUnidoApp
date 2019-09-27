@@ -3,6 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { UserService } from 'src/app/services/user.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { UtilsService } from 'src/app/services/utils.service';
+import { IRespuestaApiSIUSingle } from "../../interfaces/models";
 
 @Component({
     selector: 'app-request-membership',
@@ -23,26 +24,26 @@ export class RequestMembershipPage implements OnInit {
     ngOnInit() {
     }
 
-    closeModal() {
+    closeModal():void {
         this.modalCtrl.dismiss();
     }
 
-    getUploadedImages(event) {
+    getUploadedImages(event: any) {
         // console.log(event);
         this.publicServiceImg = event.total_img;
     }
 
-    deleteImage(pos) {
+    deleteImage(pos: number) {
         this.publicServiceImg.splice(pos, 1);
     }
 
     sendRequestMembership() {
-        // alert(JSON.stringify(this.publicServiceImg));
-        this.userService.sendRequestUserMembership(this.publicServiceImg[0]).subscribe(async (res: any) => {
+        alert(JSON.stringify(this.publicServiceImg));
+        this.userService.sendRequestUserMembership(this.publicServiceImg[0]).subscribe(async (res: IRespuestaApiSIUSingle) => {
+            const token = res.data.token;
+            this.authService.updateFullAuthInfo(token);
             this.utilsService.showToast('Solicitud Enviada Correctamente');
-            const token_decode = await this.authService.decodeToken(res.data.token);
-            this.authService.updateAuthInfo(res.data.token, token_decode);
-        }, err => {
+        }, (err: any) => {
             this.utilsService.showToast('La solicitud no ha podido ser enviada');
             console.log('error al solicitar afiliacion datos usuario', err);
         });

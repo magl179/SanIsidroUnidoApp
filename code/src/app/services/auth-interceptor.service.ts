@@ -13,10 +13,8 @@ export class AuthInterceptorService implements HttpInterceptor {
     constructor(
         private authService: AuthService,
         private navCtrl: NavController,
-        // private 
     ) { }
 
-    // throw err;
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const request = req.clone();
         // console.log('Request', request);

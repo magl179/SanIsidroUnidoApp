@@ -12,6 +12,7 @@ import { UtilsService } from './utils.service';
 import { IPhoneUser } from 'src/app/interfaces/models';
 import { Device } from '@ionic-native/device/ngx';
 import { HttpRequestService } from "./http-request.service";
+import { IRespuestaApiSIU, IRespuestaApiSIUSingle } from "../interfaces/models";
 
 
 const USER_DEVICE_DEFAULT: IPhoneUser = {
@@ -118,21 +119,21 @@ export class NotificationsService {
             };
             this.userService.sendRequestAddUserDevice(data)
                 .subscribe(async (res: any) => {
+                      const token = res.data.token;
+                    this.authService.updateFullAuthInfo(token);
                     this.utilsService.showToast('Dispositivo Añadido Correctamente');
-                    const token_decode = await this.authService.decodeToken(res.data.token);
-                    this.authService.updateAuthInfo(res.data.token, token_decode);
-                }, err => {
-                    this.utilsService.showToast('Ocurrio un error al añadir el dispositivo :( ');
+                }, (err: any) => {
+                    this.utilsService.showToast('Ocurrio un error al añadir el dispositivo');
                     console.log('Ocurrio un error al añadir el dispositivo', err);
                 });
         }
     }
     //Funcion remover dispositivo asociado a un usuario en la API
-    removeUserDevice(device_id) {
-        this.userService.sendRequestDeleteUserDevice(device_id).subscribe(async (res: any) => {
+    removeUserDevice(device_id: number) {
+        this.userService.sendRequestDeleteUserDevice(device_id).subscribe(async (res: IRespuestaApiSIUSingle) => {
+            const token = res.data.token;
+            this.authService.updateFullAuthInfo(token);
             await this.utilsService.showToast('Dispositivo eliminado Correctamente');
-            const token_decode = await this.authService.decodeToken(res.data.token);
-            this.authService.updateAuthInfo(res.data.token, token_decode);
         }, err => {
             this.utilsService.showToast('Ocurrio un error al desconectar el dispositivo :( ');
             console.log('Ocurrio un error al eliminar el dispositivo', err);
