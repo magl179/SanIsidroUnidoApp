@@ -62,7 +62,7 @@
                 </p>
                 <p class="event-ubication">
                     <ion-icon name="pin"></ion-icon>
-                    {{ (event.ubication.address) ? event.ubication.address : 'Direccion no encontrada' }}
+                    {{ (event.ubication && event.ubication.address) ? event.ubication.address : 'Direccion no encontrada' }}
                 </p>
                 <p class="assistance-info">
                     <span class="count-people">

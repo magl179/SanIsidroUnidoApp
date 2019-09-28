@@ -368,3 +368,7 @@ export interface IUserDecoded {
 //     updated_at: string;
 //     user_id: number;
 // }
+export interface INotiPostOpen{
+    type: "string";
+    id: number;
+}

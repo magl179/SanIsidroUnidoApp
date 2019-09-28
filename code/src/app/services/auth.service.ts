@@ -10,7 +10,6 @@ import { UtilsService } from "./utils.service";
 
 const TOKEN_ITEM_NAME = "accessToken";
 const USER_ITEM_NAME = "currentUser";
-const AUTHORIZATION_NAME = "authorization";
 
 @Injectable({
     providedIn: 'root'
@@ -49,7 +48,7 @@ export class AuthService {
     //COMPROBAR EN EL API SI TOKEN ES VÁLIDO
     tokenIsValid(token) {
         const urlApi = `${environment.apiBaseURL}/verificar-token`;
-        const headers = this.authHeaders.set(AUTHORIZATION_NAME, token);
+        const headers = this.authHeaders.set(environment.AUTHORIZATION_NAME, token);
         return this.httpRequest.post(urlApi, {}, headers);
     }
     // Decodificar el Token

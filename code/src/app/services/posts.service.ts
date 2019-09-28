@@ -9,8 +9,6 @@ import { AuthService } from './auth.service';
 import { HttpRequestService } from "./http-request.service";
 import { IRespuestaApiSIUPaginada } from "../interfaces/models";
 
-const AUTHORIZATION_NAME = "authorization";
-
 @Injectable({
     providedIn: 'root'
 })
@@ -83,23 +81,23 @@ export class PostsService implements OnInit {
     // Función para enviar un Reporte de Emergencia
     sendEmergencyReport(emergencyPost: IEmergencyReported): Observable<any> {
         emergencyPost.user_id = this.AuthUser.id;
-        const headers = this.headersApp.set(AUTHORIZATION_NAME, this.AuthToken);
+        const headers = this.headersApp.set(environment.AUTHORIZATION_NAME, this.AuthToken);
         return this.httpRequest.post(`${environment.apiBaseURL}/emergencias`, emergencyPost, headers);
     }
     // Función para enviar un Reporte de Problema Social
     sendSocialProblemReport(socialProblemPost: ISocialProblemReported): Observable<any> {
         socialProblemPost.user_id = this.AuthUser.id;
-        const headers = this.headersApp.set(AUTHORIZATION_NAME, this.AuthToken);
+        const headers = this.headersApp.set(environment.AUTHORIZATION_NAME, this.AuthToken);
         return this.httpRequest.post(`${environment.apiBaseURL}/problemas-sociales`, socialProblemPost,headers);
     }
     // Función para Enviar un like o asistencia a registrarse de un post
     sendCreateDetailToPost(detailInfo: ICreateDetail) {
-        const headers = this.headersApp.set(AUTHORIZATION_NAME, this.AuthToken);
+        const headers = this.headersApp.set(environment.AUTHORIZATION_NAME, this.AuthToken);
         return this.httpRequest.post(`${environment.apiBaseURL}/detalles`, detailInfo, headers);
     }
      // Función para Enviar un like o asistencia a eliminarse de un post
     sendDeleteDetailToPost(post_id: number) {
-        const headers = this.headersApp.set(AUTHORIZATION_NAME, this.AuthToken);
+        const headers = this.headersApp.set(environment.AUTHORIZATION_NAME, this.AuthToken);
         // console.log('auth token', this.AuthToken);
         return this.httpRequest.delete(`${environment.apiBaseURL}/detalles/${post_id}`, {}, headers);
     }

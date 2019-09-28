@@ -3,7 +3,7 @@ import { OneSignal, OSNotification, OSNotificationPayload } from '@ionic-native/
 import { environment } from '../../environments/environment';
 import { Storage } from '@ionic/storage';
 import { BehaviorSubject } from 'rxjs';
-import { Platform } from '@ionic/angular';
+import { Platform, NavController } from '@ionic/angular';
 import { HttpClient, HttpRequest } from "@angular/common/http";
 import { Observable } from 'rxjs';
 import { UserService } from './user.service';
@@ -12,7 +12,7 @@ import { UtilsService } from './utils.service';
 import { IPhoneUser } from 'src/app/interfaces/models';
 import { Device } from '@ionic-native/device/ngx';
 import { HttpRequestService } from "./http-request.service";
-import { IRespuestaApiSIU, IRespuestaApiSIUSingle } from "../interfaces/models";
+import { IRespuestaApiSIU, IRespuestaApiSIUSingle, INotiPostOpen } from "../interfaces/models";
 
 
 const USER_DEVICE_DEFAULT: IPhoneUser = {
@@ -38,6 +38,7 @@ export class NotificationsService {
         private storage: Storage,
         private platform: Platform,
         // private http: HttpClient,
+        private navCtrl: NavController,
         // private HttpRequest: HttpRequestService,
         private userService: UserService,
         private authService: AuthService,
@@ -66,7 +67,7 @@ export class NotificationsService {
             //Funcion para hacer algo cuando una notificacion es recibida
             this.oneSignal.handleNotificationOpened().subscribe(async (myNotification) => {
                 console.log('Una notificación fue recibida y abierta', myNotification);
-                await this.manageNotificationReceived(myNotification.notification);
+                await this.manageNotificationOpened(myNotification.notification);
             });
             //Función acabar la configuración de Onesignal
             this.oneSignal.endInit();
@@ -119,7 +120,7 @@ export class NotificationsService {
             };
             this.userService.sendRequestAddUserDevice(data)
                 .subscribe(async (res: any) => {
-                      const token = res.data.token;
+                    const token = res.data.token;
                     this.authService.updateFullAuthInfo(token);
                     this.utilsService.showToast('Dispositivo Añadido Correctamente');
                 }, (err: any) => {
@@ -179,5 +180,38 @@ export class NotificationsService {
         // this.messagesList.unshift(notificationPayload);
         // await this.saveMessages();
         // this.pushListener.emit(notificationPayload);
+    }
+
+    async manageNotificationOpened(appNotification: OSNotification) {
+        appNotification.payload.additionalData
+        //Verificar si recibe data adicional
+        const aditionalData = appNotification.payload.additionalData;
+        await this.managePostNotification(aditionalData);
+    }
+
+    async managePostNotification(aditionalData: any) {
+        if (aditionalData) {
+            //Verificar si tengo dato posts
+            const post: INotiPostOpen = aditionalData.post;
+            if (post && post.type && post.id) {
+                //Switch de Opciones segun el slug del posts
+                switch (post.type) {
+                    case environment.emergenciesSlug: //caso posts emergencia creado
+                        await this.navCtrl.navigateForward(`/emergency-detail/${post.id}`);
+                        break;
+                    case environment.eventsSlug: //caso posts evento creado
+                        await this.navCtrl.navigateForward(`/event-detail/${post.id}`);
+                        break;
+                    case environment.socialProblemSlug: // caso posts problema social
+                        await this.navCtrl.navigateForward(`/social-problem-detail/${post.id}`);
+                        break;
+                    case environment.reportsSlug: //caso reporte o informe
+                        await this.navCtrl.navigateForward(`/report-detail/${post.id}`);
+                        break;
+                    default:
+                        return;
+                }
+            }
+        }
     }
 }
