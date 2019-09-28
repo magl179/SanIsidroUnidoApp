@@ -47,7 +47,7 @@ export class EventDetailPage implements OnInit {
             this.appNetworkConnection = connected;
         });
         this.authService.getAuthUser().subscribe(token_decoded => {
-            if (token_decoded.user) {
+            if (token_decoded && token_decoded.user) {
                 this.AuthUser = token_decoded.user;
             }
         });
@@ -66,6 +66,7 @@ export class EventDetailPage implements OnInit {
                 if (this.event) {
                     this.event.postAssistance = this.utilsService.checkLikePost(this.event.details, this.AuthUser);
                     this.event.ubication = this.utilsService.getJSON(this.event.ubication);
+                    this.event.fulldate = `${this.event.date} ${this.event.time}`;
                     if (this.event.images && this.event.images.length > 0) {
                         this.event.images = this.utilsService.mapImagesApi(this.event.images);
                     }

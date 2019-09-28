@@ -32,7 +32,7 @@
             <ion-col size="6" *ngFor="let people of directivesList">
                 <ion-card>
                     <div class="picture_thumbnail">
-                            <img class="img-thumbnail circle" [src]="(people && people.avatar) ? getImageURL(people.avatar): 'assets/img/default/img_avatar.png'" fallimg="user_avatar">
+                            <img class="img-thumbnail circle" [src]="people.avatar" fallimg="user_avatar">
                     </div>
                     <ion-card-header class="ion-text-center">
                         <ion-card-subtitle>

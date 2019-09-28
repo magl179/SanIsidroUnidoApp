@@ -68,7 +68,7 @@ export class SocialProblemsPage implements OnInit {
         this.authService.getAuthUser().pipe(
             finalize(() => { })
         ).subscribe(token_decoded => {
-            if (token_decoded.user) {
+            if (token_decoded && token_decoded.user) {
                 this.AuthUser = token_decoded.user;
             }
         },
@@ -113,8 +113,6 @@ export class SocialProblemsPage implements OnInit {
             }
             this.postsService.sendCreateDetailToPost(detailInfo).subscribe((res: IRespuestaApiSIU) => {
                 console.log('detalle creado correctamente');
-                // this.resetSocialProblems();
-                // this.loadSocialProblems()
                 this.socialProblemsList.forEach(social_problem => {
                     if (social_problem.id === id) {
                         social_problem.postLiked = true;

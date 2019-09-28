@@ -27,8 +27,7 @@
         background: var(--ion-color-white);
         color: var(--ion-color-gray);
         transition: all 0.2s ease-in-out;
-        &.active,
-        &:hover {
+        &.active{
           background: var(--ion-color-danger);
           color: var(--ion-color-white);
           transition: all 0.3s;

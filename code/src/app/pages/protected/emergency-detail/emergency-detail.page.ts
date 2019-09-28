@@ -49,6 +49,7 @@ export class EmergencyDetailPage implements OnInit {
             if (this.emergency.images && this.emergency.images.length > 0) {
                 this.emergency.images = this.utilsService.mapImagesApi(this.emergency.images);
             }
+            this.emergency.fulldate = `${this.emergency.date} ${this.emergency.time}`;
             this.emergency.ubication = this.utilsService.getJSON(this.emergency.ubication);
             console.log('Dato post', this.emergency);
         });

@@ -140,7 +140,7 @@ export class AuthService {
     async getUserLocalStorage() {
         const token_decoded = await this.storage.get(USER_ITEM_NAME);
         this.authUser.next(token_decoded);
-        if (token_decoded.user) {
+        if (token_decoded && token_decoded.user) {
             this.mapUserInfo();
         }
         // console.log('get user ls value', this.authUser.value);

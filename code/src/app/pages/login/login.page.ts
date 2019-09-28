@@ -56,27 +56,30 @@ export class LoginPage implements OnInit {
         this.passwordEye.el.setFocus();
     }
 
-    async manageLogin(loginData, res) {
+    async manageLogin(loginData: any, res: any) {
         //Obtener Token y Usuario
+        const loadingManageLogin = await this.utilsService.createBasicLoading('Obteniendo Respuesta');
+        loadingManageLogin.present();
         const token = res.data; 
         const tokendescrifrado = this.authService.decodeToken(token);
         //Guardar Datos Token
         await this.authService.setUserLocalStorage(tokendescrifrado);
         await this.authService.setTokenLocalStorage(token);
         //Registrar Dispositivo
-        await this.notificationsService.registerUserDevice();
+        this.notificationsService.registerUserDevice();
         this.loginForm.reset();
         //Redirigir Usuario
+        loadingManageLogin.dismiss();
         this.navCtrl.navigateRoot('/home');
     }
    
     async loginUser() {
-        const loadingLoginValidation = await this.utilsService.createBasicLoading('Validando');
+        const loadingLoginValidation = await this.utilsService.createBasicLoading('Validando Credenciales');
         loadingLoginValidation.present();
         const email = this.loginForm.value.email;
         const password = this.loginForm.value.password;
         const loginData = { email, password, provider: 'formulario' };
-        await this.authService.login(loginData).pipe(
+        this.authService.login(loginData).pipe(
             finalize(() => {
                 loadingLoginValidation.dismiss()
             })

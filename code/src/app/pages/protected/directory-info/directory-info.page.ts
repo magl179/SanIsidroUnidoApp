@@ -4,7 +4,7 @@ import { DirectivesService } from 'src/app/services/directives.service';
 // import { trigger, style, state, query, stagger, animate, transition } from '@angular/animations';
 import Preloader from 'src/app/helpers/preloader-image';
 import { PostsService } from '../../../services/posts.service';
-import { IDirective } from 'src/app/interfaces/models';
+import { IDirective, IRespuestaApiSIU } from 'src/app/interfaces/models';
 import { NetworkService } from 'src/app/services/network.service';
 import { finalize } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -44,23 +44,28 @@ export class DirectoryInfoPage implements OnInit {
             finalize(() => {
                 this.loadDirectives = true;
             })
-        ).subscribe((response: any) => {
+        ).subscribe((response: IRespuestaApiSIU) => {
                 // if (response.data.avatar !== null) {
-                const imagesPath = response.data.filter(user => {
-                    console.log('user', user);
-                    return user.avatar !== null;
-                }).map(el => {
-                    console.log('el', el);
-                    return el.avatar;
-                });
-                Preloader.preloadImages({
-                    images: imagesPath,
-                    completed: () => {
-                        // setTimeout(() => {
-                        this.directivesList = response.data;
-                        // }, 2500);
-                    }
-                });
+            const directives = response.data;
+            directives.forEach((directive) => {
+                directive.avatar = this.getImageURL(directive.avatar);
+            });
+            this.directivesList = directives;
+                // const imagesPath = response.data.filter(user => {
+                //     console.log('user', user);
+                //     return user.avatar !== null;
+                // }).map(el => {
+                //     console.log('el', el);
+                //     return el.avatar;
+                // });
+                // Preloader.preloadImages({
+                //     images: imagesPath,
+                //     completed: () => {
+                //         // setTimeout(() => {
+                //         this.directivesList = response.data;
+                //         // }, 2500);
+                //     }
+                // });
         },err => {
             console.log('Error al traer directivos');
             this.utilsService.showToast('No se pudieron cargar los directivos');
@@ -71,12 +76,16 @@ export class DirectoryInfoPage implements OnInit {
         this.imgLoaded = true;
     }
 
-    getImageURL(image_name) {
-        const imgIsURL = URL_PATTERN.test(image_name);
-        if (imgIsURL) {
-            return image_name;
+    getImageURL(image_name: string) {
+        if (image_name) {     
+            const imgIsURL = URL_PATTERN.test(image_name);
+            if (imgIsURL) {
+                return image_name;
+            } else {
+                return `${environment.apiBaseURL}/${environment.image_assets}/${image_name}`;
+            }
         } else {
-            return `${environment.apiBaseURL}/${environment.image_assets}/${image_name}`;
+            return "";
         }
     }
 

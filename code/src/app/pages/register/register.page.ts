@@ -62,6 +62,8 @@ export class RegisterPage implements OnInit {
 
     async manageRegister(loginData, res) {
         //Obtener Token y Usuario
+        const loadingManageRegister = await this.utilsService.createBasicLoading('Obteniendo Respuesta');
+        loadingManageRegister.present();
         const token = res.data; 
         const tokendescrifrado = this.authService.decodeToken(token);
         //Guardar Datos Token
@@ -70,6 +72,7 @@ export class RegisterPage implements OnInit {
         //Registrar Dispositivo
         this.notificationsService.registerUserDevice();
         //Redirigir Usuario
+        loadingManageRegister.dismiss();
         this.navCtrl.navigateRoot('/home');
     }
     //Function registrar al usuario por formulario

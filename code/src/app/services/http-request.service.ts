@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { HTTP } from '@ionic-native/http/ngx';
 import { Observable, from } from 'rxjs';
+import { map } from 'rxjs/operators';
 // import { environment } from 'src/environments/environment';
 import { Platform } from '@ionic/angular';
 
@@ -10,7 +11,7 @@ import { Platform } from '@ionic/angular';
 })
 export class HttpRequestService {
 
-    differenceRequests = false;
+    useWithNativeHttp = false;
 
     constructor(
         private http: HttpClient,
@@ -21,8 +22,9 @@ export class HttpRequestService {
 
     get<T>(url: string, params = {}, headers = {}): any{
         let response: any;
-        if (this.platform.is('cordova') && this.differenceRequests) {
-            response = from(this.nativeHttp.get(url, params, headers));
+        if (this.platform.is('cordova') && this.useWithNativeHttp) {
+            let response_native = this.nativeHttp.get(url, params, headers).then((res: any) => res.json());
+            response = from(response_native);
         } else {
             response = this.http.get<any>(url, {
                 headers,
@@ -33,8 +35,9 @@ export class HttpRequestService {
     }
 
     post(url: string, body = {}, headers = {}, params = {}) {
-        if (this.platform.is('cordova') && this.differenceRequests) {
-            return from(this.nativeHttp.post(url, body, headers));
+        if (this.platform.is('cordova') && this.useWithNativeHttp) {
+            const response_native = this.nativeHttp.post(url, body, headers).then((res: any) => res.json())
+            return from(response_native);
         } else {
             return this.http.post(url, body, {
                 headers,
@@ -45,8 +48,9 @@ export class HttpRequestService {
 
 
     put(url: string, body = {}, headers = {}, params = {}) {
-        if (this.platform.is('cordova') && this.differenceRequests) {
-            return from(this.nativeHttp.put(url, body, headers));
+        if (this.platform.is('cordova') && this.useWithNativeHttp) {
+            const response_native = this.nativeHttp.put(url, body, headers).then((res: any) => res.json())
+            return from(response_native);
         } else {
             return this.http.put(url, body, {
                 headers,
@@ -56,8 +60,10 @@ export class HttpRequestService {
     }
 
     patch(url: string, body = {}, headers = {}, params = {}, ) {
-        if (this.platform.is('cordova') && this.differenceRequests) {
-            return from(this.nativeHttp.patch(url, body, headers));
+        if (this.platform.is('cordova') && this.useWithNativeHttp) {
+            // return from(this.nativeHttp.patch(url, body, headers));
+            const response_native = this.nativeHttp.patch(url, body, headers).then((res: any) => res.json())
+            return from(response_native);
         } else {
             return this.http.patch(url, body, {
                 headers,
@@ -67,8 +73,10 @@ export class HttpRequestService {
     }
 
     delete(url: string, params = {}, headers = {}) {
-        if (this.platform.is('cordova') && this.differenceRequests) {
-            return from(this.nativeHttp.delete(url, params, headers));
+        if (this.platform.is('cordova') && this.useWithNativeHttp) {
+            const response_native = this.nativeHttp.delete(url, params, headers).then((res: any) => res.json())
+            return from(response_native);
+            // return from(this.nativeHttp.delete(url, params, headers));
         } else {
             return this.http.delete(url, {
                 headers,

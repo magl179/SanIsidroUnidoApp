@@ -80,9 +80,9 @@ export class NotificationsService {
     }
     //Obtener los Dispositivos del Usuario
     getUserDevices() {
-        if (this.AuthUser.value.user) {
-            if (this.AuthUser.value.user.devices) {
-                return this.AuthUser.value.user.devices.map(device => device.phone_id);
+        if (this.AuthUser) {
+            if (this.AuthUser.devices) {
+                return this.AuthUser.devices.map((device: any) => device.phone_id);
             } else {
                 return [];
             }
