@@ -23,7 +23,7 @@ export class MapService implements OnInit {
 
     //Función para obtener los marcadores personalizados
     getMarkers() {
-        return this.httpRequest.get<IMarkers[]>('assets/data/markers.json');
+        return this.httpRequest.get('assets/data/markers.json');
     }
     //Funcion crear un icono con una imagen específica
     createIcon(ownIconURL) {
@@ -72,7 +72,7 @@ export class MapService implements OnInit {
             lon: (coords && coords.lng) ? coords.lng.toString(): ''
         };
         console.log('address params', addressParams);
-        return this.httpRequest.get<IReverseGeocodeResponse>(REVERSE_GEOCODING_ENDPOINT, addressParams);
+        return this.httpRequest.get(REVERSE_GEOCODING_ENDPOINT, addressParams);
     }
     // Función para obtener la distancia en KM entre dos coordenadas
     getDistanceInKm(lat1,lon1,lat2,lon2) {

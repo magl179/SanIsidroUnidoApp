@@ -1,10 +1,8 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { HTTP } from '@ionic-native/http/ngx';
 import { Observable, from } from 'rxjs';
-import { IEmergencyPost, ISocialProblemPost } from '../interfaces/barrios';
 import { environment } from 'src/environments/environment';
-import { IEmergencyReported, ISocialProblemReported, ICreateDetail, IRespuestaApiSIU } from 'src/app/interfaces/models';
+import { IEmergencyReported, ISocialProblemReported, ICreateDetail } from 'src/app/interfaces/models';
 import { AuthService } from './auth.service';
 import { HttpRequestService } from "./http-request.service";
 import { IRespuestaApiSIUPaginada } from "../interfaces/models";
@@ -38,7 +36,6 @@ export class PostsService implements OnInit {
 
     constructor(
         private http: HttpClient,
-        private nativeHttp: HTTP,
         private authService: AuthService,
         private httpRequest: HttpRequestService
     ) {
@@ -57,14 +54,6 @@ export class PostsService implements OnInit {
 
     ngOnInit() { }
 
-    test() {
-        const test = from(this.nativeHttp.get(`${environment.apiBaseURL}/servicios-publicos`, {}, {}));
-        test.subscribe(res => {
-            console.log('success', res);
-        }, err => {
-            console.log('Error', err);
-        });
-    }
     //MÉTODOS PARA RESETEAR LOS CONTADORES DE PAGINACION
     resetSocialProblemsPage() {
         this.currentPage.socialProblems = 0;
@@ -93,7 +82,9 @@ export class PostsService implements OnInit {
     // Función para Enviar un like o asistencia a registrarse de un post
     sendCreateDetailToPost(detailInfo: ICreateDetail) {
         const headers = this.headersApp.set(environment.AUTHORIZATION_NAME, this.AuthToken);
-        return this.httpRequest.post(`${environment.apiBaseURL}/detalles`, detailInfo, headers);
+        const url = `${environment.apiBaseURL}/detalles`;
+        // const url = `http://localhost:3000/`;
+        return this.httpRequest.post(url, detailInfo, headers);
     }
      // Función para Enviar un like o asistencia a eliminarse de un post
     sendDeleteDetailToPost(post_id: number) {

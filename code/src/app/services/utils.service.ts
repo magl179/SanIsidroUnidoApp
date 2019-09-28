@@ -161,7 +161,7 @@ export class UtilsService implements OnInit {
     }
     //Obtener las opciones del menu
     getMenuOptions() {
-        return this.httpRequest.get<IMenuComponent[]>('/assets/data/menu.json');
+        return this.httpRequest.get('/assets/data/menu.json');
     }
     //Activar Menu APP
     async enableMenu() {

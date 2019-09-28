@@ -3,8 +3,6 @@ import { Network } from '@ionic-native/network/ngx';
 import { Platform } from '@ionic/angular';
 import { Observable, fromEvent, merge, of, BehaviorSubject, from } from 'rxjs';
 import { mapTo, finalize } from "rxjs/operators";
-import { HttpClient } from '@angular/common/http';
-import { HTTP } from '@ionic-native/http/ngx';
 import { HttpRequestService } from "./http-request.service";
 
 
@@ -19,9 +17,7 @@ export class NetworkService {
     constructor(
         private network: Network,
         private platform: Platform,
-        private http: HttpClient,
-        private httpRequest: HttpRequestService,
-        private nativeHttp: HTTP) {
+        private httpRequest: HttpRequestService) {
 
         if (this.platform.is('cordova')) {
             //Función si estamos en un dispositivo para subscribirnos a los 

@@ -11,7 +11,6 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { HTTP } from '@ionic-native/http/ngx';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SmComponentsModule } from './components/sm-components.module';
 
@@ -21,7 +20,6 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
 import { OneSignal } from '@ionic-native/onesignal/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-// import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { Device } from '@ionic-native/device/ngx';
 import { Network } from '@ionic-native/network/ngx';
@@ -34,12 +32,8 @@ import { ShowListNotificationsPage } from './modals/show-list-notifications/show
 import { ShowListNotificationsPageModule } from './modals/show-list-notifications/show-list-notifications.module';
 import { PipesModule } from './pipes/pipes.module';
 import { DirectivesModule } from './directives/directives.module';
-
 // Interceptores
 import { AuthInterceptorService } from 'src/app/services/auth-interceptor.service';
-// import { FilterPostsComponent } from "./components/filter-posts/filter-posts.component";
-
-
 // Imagenes por Defecto
 import { NgFallimgModule } from 'ng-fallimg';
 import { ImageDetailPage } from "./modals/image_detail/image_detail.page";
@@ -88,8 +82,7 @@ import { ImageDetailPageModule } from './modals/image_detail/image_detail.module
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptorService,
             multi: true
-        },
-        HTTP
+        }
     ],
     bootstrap: [AppComponent]
 })

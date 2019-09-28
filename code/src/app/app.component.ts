@@ -11,9 +11,6 @@ import { NotificationsService } from './services/notifications.service';
 import { NetworkService } from 'src/app/services/network.service';
 import { environment } from '../environments/environment';
 
-const URL_PATTERN = new RegExp(/^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/);
-
-
 @Component({
     selector: 'app-root',
     templateUrl: 'app.component.html',
@@ -56,7 +53,6 @@ export class AppComponent implements OnInit {
             const roles = this.authUser.roles.map(role => role.slug);
             const rol = roles.find(rol => environment.roles_permitidos.includes(rol));
             if (rol) {
-                // console.log('roles', rol);
                 this.authUserRol = rol;
             }
         }
@@ -64,22 +60,28 @@ export class AppComponent implements OnInit {
 
     async initializeApp() {
         await this.authService.verificarAuthInfo();
+        console.log('auth info verified');
         await this.checkInitialStateNetwork();
+        console.log('red checked status');
         await this.platform.ready().then(async () => {
+            console.log('platform ready');
             if (this.platform.is('cordova')) {
                 this.statusBar.styleDefault();
                 this.splashScreen.hide();
+                console.log('splash screen native ready');
             }
             await this.checkUserLoggedIn();
-            timer(3000).subscribe(async () => {
+            console.log('load info user logued');
+            timer(2800).subscribe(async () => {
                 this.showAppsplash = false;
+                console.log('hide own splash screen');
                 await this.pushNotificationService.initialConfig();
             });
         });
     }
 
     async checkUserLoggedIn() {
-        await this.authService.getAuthUser().subscribe(res => {
+        this.authService.getAuthUser().subscribe(res => {
             if (res) {
                 this.authUser = res.user;
                 this.getRoles();
@@ -128,7 +130,7 @@ export class AppComponent implements OnInit {
         await alert.present();
     }
 
-    toggleSection(index, hasChild) {
+    toggleSection(index: any, hasChild: boolean) {
         this.menuComponents[index].open = !this.menuComponents[index].open;
         if (this.automaticClose && this.menuComponents[index].open) {
             this.menuComponents
@@ -150,15 +152,6 @@ export class AppComponent implements OnInit {
                 this.utilsService.showToast('Por favor enciende tu conexión a Internet');
             }
         });
-    }
-
-    getImageURL(image_name) {
-        const imgIsURL = URL_PATTERN.test(image_name);
-        if (imgIsURL) {
-            return image_name;
-        } else {
-            return `${environment.apiBaseURL}/${environment.image_assets}/${image_name}`;
-        }
     }
 
 }

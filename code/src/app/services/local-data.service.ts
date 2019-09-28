@@ -14,16 +14,16 @@ export class LocalDataService {
         private httpRequest: HttpRequestService
     ) { }
 
-    getMenuOptions(): Observable<IMenuServices[]> {
-        return this.httpRequest.get<IMenuServices[]>('/assets/data/menu.json');
+    getMenuOptions() {
+        return this.httpRequest.get('/assets/data/menu.json');
     }
 
-    getTutoSlides(): Observable<ISlideTutorial[]> {
-        return this.httpRequest.get<ISlideTutorial[]>('/assets/data/tuto_slides.json');
+    getTutoSlides() {
+        return this.httpRequest.get('/assets/data/tuto_slides.json');
     }
     
-    getHomeOptions(): Observable<IHomeOptions[]> {
-        return this.httpRequest.get<IHomeOptions[]>('/assets/data/home_options.json');
+    getHomeOptions() {
+        return this.httpRequest.get('/assets/data/home_options.json');
     }
 
     getFormValidations(){
