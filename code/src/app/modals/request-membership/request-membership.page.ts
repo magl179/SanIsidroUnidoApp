@@ -3,7 +3,8 @@ import { ModalController } from '@ionic/angular';
 import { UserService } from 'src/app/services/user.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { UtilsService } from 'src/app/services/utils.service';
-import { IRespuestaApiSIUSingle } from "../../interfaces/models";
+import { IRespuestaApiSIUSingle } from "src/app/interfaces/models";
+import { decodeToken } from 'src/app/helpers/auth-helper';
 
 @Component({
     selector: 'app-request-membership',
@@ -38,10 +39,12 @@ export class RequestMembershipPage implements OnInit {
     }
 
     sendRequestMembership() {
-        alert(JSON.stringify(this.publicServiceImg));
+        // alert(JSON.stringify(this.publicServiceImg));
         this.userService.sendRequestUserMembership(this.publicServiceImg[0]).subscribe(async (res: IRespuestaApiSIUSingle) => {
             const token = res.data.token;
-            this.authService.updateFullAuthInfo(token);
+            const token_decoded = decodeToken(token);
+            this.authService.saveUserInfo(token, token_decoded);
+            this.authService.saveLocalStorageInfo(token, token_decoded);
             this.utilsService.showToast('Solicitud Enviada Correctamente');
         }, (err: any) => {
             this.utilsService.showToast('La solicitud no ha podido ser enviada');

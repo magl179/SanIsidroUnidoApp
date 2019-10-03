@@ -1,19 +1,7 @@
-// import { Directive } from '@angular/core';
-
-// @Directive({
-//   selector: '[appIsJsonValid]'
-// })
-// export class IsJsonValidDirective {
-
-//   constructor() { }
-
-// }
-
 import { Directive, Input, TemplateRef, ViewContainerRef, OnInit } from '@angular/core';
-import { AuthService } from '../services/auth.service';
 
 @Directive({
-    selector: '[appHasRole]'
+    selector: '[isJSONValid]'
 })
 export class IsJsonValidDirective implements OnInit {
 

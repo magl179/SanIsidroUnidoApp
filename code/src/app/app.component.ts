@@ -3,13 +3,16 @@ import { Platform, NavController, MenuController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { timer } from 'rxjs';
-import { IMenuComponent } from './interfaces/barrios';
+import { IMenuComponent } from './interfaces/models';
 import { AlertController } from '@ionic/angular';
 import { AuthService } from './services/auth.service';
 import { UtilsService } from './services/utils.service';
 import { NotificationsService } from './services/notifications.service';
 import { NetworkService } from 'src/app/services/network.service';
-import { environment } from '../environments/environment';
+import { environment } from 'src/environments/environment';
+import { LocalDataService } from './services/local-data.service';
+// import { mapUser } from './helpers/user-helper';
+import { getImageURL } from './helpers/utils';
 
 @Component({
     selector: 'app-root',
@@ -18,18 +21,18 @@ import { environment } from '../environments/environment';
 })
 export class AppComponent implements OnInit {
 
-    
     showAppsplash = true;
     isConnected = false;
     menuComponents: IMenuComponent[];
     automaticClose = true;
-    authUser: any = null;
-    authUserRol = null;
+    sessionAuth: any = null;
+    // AuthUserRol = null;
 
     constructor(
         private platform: Platform,
         private navCtrl: NavController,
         private splashScreen: SplashScreen,
+        private localDataService: LocalDataService,
         private statusBar: StatusBar,
         private alertController: AlertController,
         private authService: AuthService,
@@ -41,52 +44,54 @@ export class AppComponent implements OnInit {
         this.initializeApp();
     }
 
-    ngOnInit() {
-        this.utilsService.getMenuOptions().subscribe((data) => {
+    ngOnInit() {}
+
+    getAvatar(image_name: string) {
+        return getImageURL(image_name);
+    }
+
+    async getMenuOptions() {
+        this.localDataService.getMenuOptions().subscribe((data: any) => {
             this.menuComponents = data;
             this.menuComponents[0].open = false;
         });
     }
 
-    getRoles() {
-        if (this.authUser && this.authUser.roles) {
-            const roles = this.authUser.roles.map(role => role.slug);
-            const rol = roles.find(rol => environment.roles_permitidos.includes(rol));
-            if (rol) {
-                this.authUserRol = rol;
-            }
-        }
-    }
-
-    async initializeApp() {
-        await this.authService.verificarAuthInfo();
-        console.log('auth info verified');
-        await this.checkInitialStateNetwork();
-        console.log('red checked status');
-        await this.platform.ready().then(async () => {
+    initializeApp() {
+        //Execute all Code Here
+        this.platform.ready().then(async () => {
             console.log('platform ready');
+            await this.checkInitialStateNetwork();
             if (this.platform.is('cordova')) {
                 this.statusBar.styleDefault();
                 this.splashScreen.hide();
-                console.log('splash screen native ready');
             }
             await this.checkUserLoggedIn();
-            console.log('load info user logued');
+            await this.getMenuOptions();
+            // console.log('load info user logued');
             timer(2800).subscribe(async () => {
                 this.showAppsplash = false;
-                console.log('hide own splash screen');
                 await this.pushNotificationService.initialConfig();
             });
         });
     }
 
+    manageInitialPage(token_decoded) {
+        if (token_decoded) {
+            this.navCtrl.navigateRoot('/home');
+          } else {
+            this.navCtrl.navigateRoot('/login');
+          }
+    }
+
     async checkUserLoggedIn() {
-        this.authService.getAuthUser().subscribe(res => {
-            if (res) {
-                this.authUser = res.user;
-                this.getRoles();
+        this.authService.sessionAuthUser.subscribe(async token_decoded => {
+            if (token_decoded) {
+                this.sessionAuth = token_decoded;
+                this.authService.checkValidToken();
             }
-        }, err => {
+            this.manageInitialPage(token_decoded);
+        }, (err: any) => {
                 console.log('Error', err);
         });
     }

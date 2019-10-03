@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { UtilsService } from '../../services/utils.service';
-import { UserService } from '../../services/user.service';
+import { UtilsService } from 'src/app/services/utils.service';
+import { UserService } from 'src/app/services/user.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
+import { decodeToken } from 'src/app/helpers/auth-helper';
 
 @Component({
     selector: 'modal-edit-profile',
@@ -32,7 +33,7 @@ export class EditProfilePage implements OnInit {
     }
 
     async loadUserData() {
-        await this.authService.getAuthUser().subscribe(res => {
+        await this.authService.sessionAuthUser.subscribe(res => {
             if (res) {
                 this.AuthUser = res.user;
             }
@@ -45,9 +46,11 @@ export class EditProfilePage implements OnInit {
 
     editUserProfileData() {
         this.userService.sendEditProfileRequest(this.editProfileForm.value).subscribe(async res => {
+            const token = res.data.token;
+            const token_decoded = decodeToken(token);
+            this.authService.saveUserInfo(token, token_decoded);
+            this.authService.saveLocalStorageInfo(token, token_decoded);
             this.utilsService.showToast('Datos Actualizados Correctamente');
-            const token_decode = await this.authService.decodeToken(res.data.token);
-            this.authService.updateAuthInfo(res.data.token, token_decode);
         }, err => {
             this.utilsService.showToast('Los datos no se pudieron actualizar');
             console.log('error al actualizar datos usuario', err);

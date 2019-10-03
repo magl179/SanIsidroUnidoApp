@@ -3,10 +3,11 @@ import { ModalController } from '@ionic/angular';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { UtilsService } from 'src/app/services/utils.service';
 import { MustMatch } from 'src/app/helpers/must-match.validator';
-import { AuthService } from '../../services/auth.service';
-import { UserService } from '../../services/user.service';
-import { LocalDataService } from "../../services/local-data.service";
-import { IRespuestaApiSIUSingle } from "../../interfaces/models";
+import { AuthService } from 'src/app/services/auth.service';
+import { UserService } from 'src/app/services/user.service';
+import { LocalDataService } from "src/app/services/local-data.service";
+import { IRespuestaApiSIUSingle } from "src/app/interfaces/models";
+import { decodeToken } from 'src/app/helpers/auth-helper';
 
 @Component({
     selector: 'app-change-password',
@@ -41,7 +42,7 @@ export class ChangePasswordPage implements OnInit {
     }
 
     async loadAuthData() {
-        this.authService.getAuthUser().subscribe(res => {
+        this.authService.sessionAuthUser.subscribe(res => {
             if (res) {
                 this.AuthUser = res.user;
             }
@@ -87,7 +88,9 @@ export class ChangePasswordPage implements OnInit {
     sendRequestChangePass() {
         this.userService.sendChangeUserPassRequest(this.changePassForm.value.password).subscribe(async (res: IRespuestaApiSIUSingle) => {
             const token = res.data.token;
-            this.authService.updateFullAuthInfo(token);
+            const token_decoded = decodeToken(token);
+            this.authService.saveUserInfo(token, token_decoded);
+            this.authService.saveLocalStorageInfo(token, token_decoded);
             this.changePassForm.reset();
             this.utilsService.showToast('Contraseña Actualizada Correctamente');
 

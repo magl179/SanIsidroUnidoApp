@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PostsService } from "../../services/posts.service";
-import { environment } from "../../../environments/environment";
-import { UtilsService } from "../../services/utils.service";
+import { PostsService } from "src/app/services/posts.service";
+import { environment } from "src/environments/environment";
+import { UtilsService } from "src/app/services/utils.service";
 import { FiltroSearchPipe } from "src/app/pipes/filtro-search.pipe";
 import { PopoverController } from "@ionic/angular";
 

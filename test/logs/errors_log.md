@@ -46,3 +46,12 @@ Solución:
 - Descargar el Graddle desde https://gradle.org/install/#manually con la versión completa
 - Descomprimir y guardarlo en la ruta C:\\Gradle
 - Añadir la ruta C:\\Gradle\\bin al path
+
+
+Error
+<h1>Bad Request</h1>
+<p>Your browser sent a request that this server could not understand.<br />
+Size of a request header field exceeds server limit.</p>
+Solución
+disminuir el tamaño del token no traendo datos innecesarios
+

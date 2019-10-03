@@ -2,8 +2,7 @@ import { Component, OnInit, Input } from "@angular/core";
 import { ModalController, NavParams, NavController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 import { map, debounceTime, distinctUntilChanged, finalize } from 'rxjs/operators';
-import { PostsService } from "../../services/posts.service";
-import { environment } from "../../../environments/environment";
+import { PostsService } from "src/app/services/posts.service";
 
 @Component({
     selector: 'modal-search',

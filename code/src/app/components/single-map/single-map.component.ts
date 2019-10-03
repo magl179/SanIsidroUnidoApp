@@ -1,13 +1,8 @@
 import { Component, OnInit, EventEmitter, Input, Output, AfterViewInit } from '@angular/core';
 import * as Leaflet from 'leaflet';
 import { GestureHandling } from 'leaflet-gesture-handling';
-import { IPostUbicationItem } from 'src/app/interfaces/barrios';
-import { MapService } from "../../services/map.service";
-import { LocalizationService } from "../../services/localization.service";
-import { environment } from "../../../environments/environment";
-
-const tileURL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-const tileAtribution = '&copy; <a target=_blank" href="https://www.openstreetmap.org/copyright">© Colaboradores de OpenStreetMap</a>';
+import { LocalizationService } from "src/app/services/localization.service";
+import { environment } from "src/environments/environment";
 
 @Component({
     selector: 'single-map',
@@ -24,7 +19,7 @@ export class SingleMapComponent implements OnInit, AfterViewInit {
 
     map: any;
     mapIsLoaded = false;
-    currentCoordinate: IPostUbicationItem = {
+    currentCoordinate: any = {
         latitude: null,
         longitude: null,
         address: null

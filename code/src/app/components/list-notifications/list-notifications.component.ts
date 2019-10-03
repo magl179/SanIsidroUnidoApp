@@ -1,8 +1,6 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { NotificationsService } from '../../services/notifications.service';
-import { Observable } from 'rxjs';
-// import { NavController, IonSegment } from '@ionic/angular';
-import { UserService } from '../../services/user.service';
+import { Component, OnInit, Input } from '@angular/core';
+import { NotificationsService } from 'src/app/services/notifications.service';
+import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
 
 const URL_PATTERN = new RegExp(/^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/);
@@ -85,6 +83,12 @@ export class ListNotificationsComponent implements OnInit {
             this.notificationsRequested = this.notificationsList.slice(0, (this.maxNotifications));
         }
         console.log('Noti Requested', this.notificationsRequested);
+    }
+
+    manageNoti(noti: any) {
+        if (noti && noti.additional_data) {
+            this.notiService.managePostNotification(noti.additional_data);
+        }
     }
 
 }

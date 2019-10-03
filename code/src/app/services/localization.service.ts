@@ -4,7 +4,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { Platform } from '@ionic/angular';
 import { UtilsService } from './utils.service';
-import { ISimpleCoordinates } from '../interfaces/barrios';
+import { ISimpleCoordinates } from 'src/app/interfaces/models';
 
 @Injectable({
     providedIn: 'root'
@@ -44,7 +44,6 @@ export class LocalizationService {
                     return this.misCoordenadas;
                 }
             }
-            // console.log('antes return', this.misCoordenadas);
             return this.misCoordenadas;
         } catch (err) {
             console.log('Error: ', err);

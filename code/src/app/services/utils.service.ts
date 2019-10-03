@@ -1,35 +1,23 @@
 import { Injectable, OnInit } from '@angular/core';
 import { ToastController, LoadingController, MenuController, Platform } from '@ionic/angular';
-// import { HttpClient, HttpRequest } from "@angular/common/http";
-import { IMenuComponent } from 'src/app/interfaces/barrios';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Storage } from '@ionic/storage';
-import { IPostShare, I_ImagesApi } from 'src/app/interfaces/models';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { ToastOptions } from "@ionic/core";
-import { HttpRequestService } from "./http-request.service";
-import { environment } from 'src/environments/environment';
 import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
-// import { ImageDetailPage } from "../modals/image_detail/image_detail.page";
 
 declare var moment: any;
-
 
 @Injectable({
     providedIn: 'root'
 })
 export class UtilsService implements OnInit {
 
-    URL_PATTERN = new RegExp("^(?:(?:http(?:s)?|ftp)://)(?:\\S+(?::(?:\\S)*)?@)?(?:(?:[a-z0-9\u00a1-\uffff](?:-)*)*(?:[a-z0-9\u00a1-\uffff])+)(?:\\.(?:[a-z0-9\u00a1-\uffff](?:-)*)*(?:[a-z0-9\u00a1-\uffff])+)*(?:\\.(?:[a-z0-9\u00a1-\uffff]){2,})(?::(?:\\d){2,5})?(?:/(?:\\S)*)?$");
-
     constructor(
         private iab: InAppBrowser,
-        // private modalCtrl: ModalController,
         private toastCtrl: ToastController,
         private loadingCtrl: LoadingController,
-        // private http: HttpClient,
         private photoViewer: PhotoViewer,
-        private httpRequest: HttpRequestService,
         private menuCtrl: MenuController,
         private storage: Storage,
         private platform: Platform,
@@ -38,43 +26,14 @@ export class UtilsService implements OnInit {
 
     ngOnInit() { }
     // Funcion para obtener un valor aleatorio de un tamaño en especifico
-    ramdomValue(tamanio) {
-        return Math.floor(Math.random() * tamanio);
-    }
-
+    
     seeImageDetail(url: string, title = "Detalle Imagen", share = true) {
         this.photoViewer.show(url, title, { share });
     }
-    //Funcion verifica like en un posts
-    checkLikePost(details: any, user_authenticated: any) {
-        if (details && details.length > 0) {
-            const likes_user = this.getUsersFromDetails(details);
-            const user_made_like = this.checkUserInDetails(user_authenticated.id, likes_user);
-            return user_made_like;
-        }
-        else {
-            return false;
-        }
-    }
-    // Function obtener los detalles de un usuario
-    getUsersFromDetails($details) {
-        return $details.map(detail => detail.user_id);
-    }
-    // Funcion para verificar si un usuario ha dado like o asistencia en un detalle de un post
-    checkUserInDetails(user_id: number, users_id: number[]) {
-        return users_id.includes(user_id);
-    }
+    
     //Abrir el navegador
-    openInBrowser(url) {
+    openInBrowser(url: string) {
         const navegador = this.iab.create(url, '_system');
-    }
-
-    mapImagesApi(images: I_ImagesApi[]) {
-        return images.map((image: I_ImagesApi) => {
-            image.url = this.getImageURL(image.url);
-            // console.log('image returned', image.url);
-            return image;
-        });
     }
 
     //Obtener la fecha formateada con MomentJS
@@ -111,9 +70,7 @@ export class UtilsService implements OnInit {
                 publicacion.url || '' // url to share
             );
         } else {
-            // tslint:disable-next-line: no-string-literal
             if (navigator['share']) {
-                // tslint:disable-next-line: no-string-literal
                 await navigator['share']({
                     text: publicacion.description,
                     title: publicacion.title,
@@ -130,17 +87,7 @@ export class UtilsService implements OnInit {
             }
         }
     }
-    //Obtener la fecha junta
-    getFullDate(date, time) {
-        const fulldate = `${date} ${time}`;
-        return fulldate;
-    }
-    //Obtener un item aleatorio de un array
-    async ramdomItem(array) {
-        const valueRamdom = await this.ramdomValue(array.length);
-        const item = array[valueRamdom];
-        return item;
-    }
+   
     //Crear un toast
     async showToast(message?: string, duration?: number, position?: any, color?: string, cssClass?: string) {
         const toast: ToastOptions = {
@@ -159,10 +106,7 @@ export class UtilsService implements OnInit {
         const basicloading = await this.loadingCtrl.create({ message });
         return basicloading;
     }
-    //Obtener las opciones del menu
-    getMenuOptions() {
-        return this.httpRequest.get('/assets/data/menu.json');
-    }
+    
     //Activar Menu APP
     async enableMenu() {
         await this.menuCtrl.getMenus();
@@ -176,62 +120,7 @@ export class UtilsService implements OnInit {
     // Limpiar Storage IONIC
     clearBDD() {
         this.storage.clear();
-    }
+    }  
 
-    //Función Obtener Backgound
-    getBackgroundApp(image_url: string) {
-        return `linear-gradient(rgba(2, 2, 2, 0.58), rgba(2, 2, 2, 0.58)), url(${image_url})`;
-    }
-    //Obtener la URL de una imagen
-    getImageURL(image_name: string) {
-        const imgIsURL = this.URL_PATTERN.test(image_name);
-        // console.log('is image/ url extern', imgIsURL);
-        // console.log('is image url extern', image_name);
-        if (imgIsURL) {
-            return image_name;
-        } else {
-            return `${environment.apiBaseURL}/${environment.image_assets}/${image_name}`;
-        }
-    }
-
-    imgIsURL(image_name: string) {
-        return this.URL_PATTERN.test(image_name);
-    }
-
-    isJSON(str) {
-        try {
-            return JSON.parse(str) && !!str;
-        } catch (e) {
-            return false;
-        }
-    }
-
-    getJSON(variable) {
-        if (typeof variable === 'object') {
-            return variable;
-        }
-        if (this.isJSON(variable)) {
-            return JSON.parse(variable);
-        } else {
-            return null;
-        }
-    }
-    //Recibe array objetos y un objeto con el valor a buscar y devuelve true/false si existe ese valor
-    // Ejemplo [{id: 1, name: 'lola}, {id: 2, name: 'bebe'}], {name: 'bebe}
-    searchInArrayObj(items: any[], filter: { [key: string]: any }) {
-        let match = false;
-        //Recorrer los Filtros a Aplicar
-        for (const prop in filter) {
-            //Recorro el arreglo y verifico si existe esa propiedad 
-            // y si existe si coincide con el valor solicitado
-            items.forEach((item: any) => {
-                const hasOwnProperty = item.hasOwnProperty(prop);
-                const propMatch = item[prop] === filter[prop];
-                if (hasOwnProperty && propMatch) {
-                    match = true;
-                }
-            });
-        }
-        return match;
-    }
+    
 }

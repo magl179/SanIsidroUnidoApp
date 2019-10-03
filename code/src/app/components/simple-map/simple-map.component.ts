@@ -1,13 +1,10 @@
 import { Component, Input, AfterViewInit } from '@angular/core';
 import * as Leaflet from 'leaflet';
 import { GestureHandling } from 'leaflet-gesture-handling';
-import { ISimpleUbicationItem } from 'src/app/interfaces/barrios';
 import { environment } from 'src/environments/environment';
-import { IUbication } from "../../interfaces/models";
-import { UtilsService } from "../../services/utils.service";
-
-const tileURL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-const tileAtribution = '&copy; <a target=_blank" href="https://www.openstreetmap.org/copyright">© Colaboradores de OpenStreetMap</a>';
+import { IUbication } from "src/app/interfaces/models";
+import { UtilsService } from "src/app/services/utils.service";
+import { getJSON } from "src/app/helpers/utils";
 
 @Component({
     selector: 'simple-map',
@@ -41,7 +38,7 @@ export class SimpleMapComponent implements AfterViewInit {
             Leaflet.Map.addInitHook('addHandler', 'gestureHandling', GestureHandling);
         }
 
-        this.coordsMap = this.utilsService.getJSON(this.coordsMap);
+        this.coordsMap = getJSON(this.coordsMap);
 
         this.map = Leaflet.map(this.idMap, {
             gestureHandling: this.enableGesture,

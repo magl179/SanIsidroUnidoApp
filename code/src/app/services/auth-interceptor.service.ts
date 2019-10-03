@@ -28,17 +28,11 @@ export class AuthInterceptorService implements HttpInterceptor {
                 (err) => {
                     // console.log('response unsuccess', err);
                     if (err.status === 401) {
-                        this.logoutUser();
+                        this.authService.logout();
                     }
                     return throwError(err);
                 }
             )
         );
     }
-
-    logoutUser() {
-        this.authService.removeAuthInfo();
-        this.navCtrl.navigateRoot('/tutorial');
-    }
-
 }

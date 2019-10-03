@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { NetworkService } from '../../services/network.service';
+import { NetworkService } from 'src/app/services/network.service';
 
 @Component({
   selector: 'app-network-banner',

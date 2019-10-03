@@ -4,17 +4,22 @@
                 <h2 class="title_list">Notificaciones</h2>
             </ion-label>
         </ion-list-header>
-        <ion-item [lines]="getLinesState(i)" *ngFor="let noti of notificationsRequested; let i = index;">
-            <ion-avatar slot="start" *ngIf="noti.user">
-                <img [src]="getImageURL(noti.user.avatar) || 'http://cmauriflama.sp.gov.br/app/webroot/img/avatar-user.png' ">
-            </ion-avatar>
-            <ion-label class="notifications_description">
-                <h2 class="title">{{noti.title}}</h2>
-                <h3 class="author">{{noti.user.firstname}} {{noti.user.lastname}} </h3>
-                <p class="description ion-text-wrap">{{noti.message}}</p>
-            </ion-label>
-            <div slot="end">
-                <span class="icon-noti-readed" [class.active]="(noti.state === 1)"></span>
-            </div>
+        <ng-container *ngIf="notificationsRequested && notificationsRequested.length > 0">
+            <ion-item [lines]="getLinesState(i)" *ngFor="let noti of notificationsRequested; let i = index;" (click)="manageNoti(noti)">
+                <ion-avatar slot="start" *ngIf="noti.user">
+                    <img [src]="getImageURL(noti.user.avatar) || 'http://cmauriflama.sp.gov.br/app/webroot/img/avatar-user.png' ">
+                </ion-avatar>
+                <ion-label class="notifications_description">
+                    <h2 class="title">{{noti.title}}</h2>
+                    <h3 class="author">{{noti.user.firstname}} {{noti.user.lastname}} </h3>
+                    <p class="description ion-text-wrap">{{noti.message}}</p>
+                </ion-label>
+                <div slot="end">
+                    <span class="icon-noti-readed" [class.active]="(noti.state === 1)"></span>
+                </div>
+            </ion-item>
+        </ng-container>
+        <ion-item lines="none" *ngIf="notificationsRequested && notificationsRequested.length === 0">
+            <ion-label class="ion-text-wrap ion-text-center">No existen notificaciones disponibles</ion-label>
         </ion-item>
     </ion-list>

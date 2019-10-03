@@ -1,19 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { UtilsService } from 'src/app/services/utils.service';
-import { timer } from 'rxjs';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
-import { SocialDataService } from '../../services/social-data.service';
-import { LocalDataService } from '../../services/local-data.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { SocialDataService } from 'src/app/services/social-data.service';
+import { LocalDataService } from 'src/app/services/local-data.service';
 import { finalize } from 'rxjs/operators';
-import { ILoginUser } from '../../interfaces/models';
-import { CheckboxValidator } from 'src/app/helpers/checkbox.validator';
-import { NetworkService } from '../../services/network.service';
-import { NotificationsService } from '../../services/notifications.service';
-
-
-const urlLogueado = '/home';
+import { NetworkService } from 'src/app/services/network.service';
+import { NotificationsService } from 'src/app/services/notifications.service';
+import { decodeToken } from 'src/app/helpers/auth-helper';
 
 @Component({
     selector: 'app-register',
@@ -65,10 +60,10 @@ export class RegisterPage implements OnInit {
         const loadingManageRegister = await this.utilsService.createBasicLoading('Obteniendo Respuesta');
         loadingManageRegister.present();
         const token = res.data; 
-        const tokendescrifrado = this.authService.decodeToken(token);
+        const token_decoded = decodeToken(token);
         //Guardar Datos Token
-        await this.authService.setUserLocalStorage(tokendescrifrado);
-        await this.authService.setTokenLocalStorage(token);
+        this.authService.saveUserInfo(token, token_decoded);
+        this.authService.saveLocalStorageInfo(token, token_decoded);
         //Registrar Dispositivo
         this.notificationsService.registerUserDevice();
         //Redirigir Usuario
@@ -96,9 +91,9 @@ export class RegisterPage implements OnInit {
         ).subscribe(async res => { 
                 await this.manageRegister({provider: 'formulario', email, password }, res);
         }, err => {
-            const message_error = (err.error) ? err.error: 'No se pudo cargar la información del usuario';
-            this.utilsService.showToast(message_error);
-            console.log('Error Login', err.error);
+            // const message_error = (err.error) ? err.error: 'No se pudo cargar la información del usuario';
+            this.utilsService.showToast('Ocurrio un error al registrar el usuario');
+            console.log('Error Registro', err);
         });
     }
     //Function para registrar usuario con Facebook

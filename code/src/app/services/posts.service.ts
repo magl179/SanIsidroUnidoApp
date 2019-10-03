@@ -5,7 +5,8 @@ import { environment } from 'src/environments/environment';
 import { IEmergencyReported, ISocialProblemReported, ICreateDetail } from 'src/app/interfaces/models';
 import { AuthService } from './auth.service';
 import { HttpRequestService } from "./http-request.service";
-import { IRespuestaApiSIUPaginada } from "../interfaces/models";
+import { IRespuestaApiSIUPaginada } from "src/app/interfaces/models";
+import { setHeaders } from 'src/app/helpers/utils';
 
 @Injectable({
     providedIn: 'root'
@@ -16,9 +17,12 @@ export class PostsService implements OnInit {
     AuthUser = null;
     AuthToken = null;
     //Cabeceras
-    headersApp = new HttpHeaders({
-        'Content-Type': 'application/json'
-    });
+    // headersApp = new HttpHeaders({
+    //     'Content-Type': 'application/json'
+    // });
+    // headersApp = new HttpHeaders({
+    //     'Content-Type': 'application/json'
+    // })
     //Paginas Actuales
     currentPage = {
         events: 0,
@@ -40,12 +44,12 @@ export class PostsService implements OnInit {
         private httpRequest: HttpRequestService
     ) {
         //Cargar token e Información del Usuario Autenticado
-        this.authService.getAuthToken().subscribe(token => {
+        this.authService.sessionAuthToken.subscribe(token => {
             if (token) {
                 this.AuthToken = token;
             }
         });
-        this.authService.getAuthUser().subscribe(res => {
+        this.authService.sessionAuthUser.subscribe(res => {
             if (res) {
                 this.AuthUser = res.user;
             }
@@ -69,26 +73,29 @@ export class PostsService implements OnInit {
     }
     // Función para enviar un Reporte de Emergencia
     sendEmergencyReport(emergencyPost: IEmergencyReported): Observable<any> {
+        const headers = setHeaders(environment.AUTHORIZATION_NAME, this.AuthToken);
         emergencyPost.user_id = this.AuthUser.id;
-        const headers = this.headersApp.set(environment.AUTHORIZATION_NAME, this.AuthToken);
+        // const headers = this.headersApp.set(environment.AUTHORIZATION_NAME, this.AuthToken);
         return this.httpRequest.post(`${environment.apiBaseURL}/emergencias`, emergencyPost, headers);
     }
     // Función para enviar un Reporte de Problema Social
     sendSocialProblemReport(socialProblemPost: ISocialProblemReported): Observable<any> {
         socialProblemPost.user_id = this.AuthUser.id;
-        const headers = this.headersApp.set(environment.AUTHORIZATION_NAME, this.AuthToken);
+        const headers = setHeaders(environment.AUTHORIZATION_NAME, this.AuthToken);
         return this.httpRequest.post(`${environment.apiBaseURL}/problemas-sociales`, socialProblemPost,headers);
     }
     // Función para Enviar un like o asistencia a registrarse de un post
     sendCreateDetailToPost(detailInfo: ICreateDetail) {
-        const headers = this.headersApp.set(environment.AUTHORIZATION_NAME, this.AuthToken);
+        // const headers = this.headersApp.set(environment.AUTHORIZATION_NAME, this.AuthToken);
+        const headers = setHeaders(environment.AUTHORIZATION_NAME, this.AuthToken);
         const url = `${environment.apiBaseURL}/detalles`;
         // const url = `http://localhost:3000/`;
         return this.httpRequest.post(url, detailInfo, headers);
     }
      // Función para Enviar un like o asistencia a eliminarse de un post
     sendDeleteDetailToPost(post_id: number) {
-        const headers = this.headersApp.set(environment.AUTHORIZATION_NAME, this.AuthToken);
+        const headers = setHeaders(environment.AUTHORIZATION_NAME, this.AuthToken);
+        headers[environment.AUTHORIZATION_NAME] = this.AuthToken;
         // console.log('auth token', this.AuthToken);
         return this.httpRequest.delete(`${environment.apiBaseURL}/detalles/${post_id}`, {}, headers);
     }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 // import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { IMenuServices, IHomeOptions, ISlideTutorial} from '../interfaces/models';
-import { Observable } from 'rxjs';
+// import { IMenuServices, IHomeOptions, ISlideTutorial} from 'src/app/interfaces/models';
+// import { Observable } from 'rxjs';
 import { HttpRequestService } from "./http-request.service";
 
 @Injectable({

@@ -1,112 +1,116 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { LoginAuthGuard } from './guards/login.guard';
-import { NoLoginAuthGuard } from './guards/no-login.guard';
-import { HasRoleGuard } from './guards/has-role.guard';
-import { IsActiveGuard } from "./guards/is-active.guard";
+import { UserAuthenticatedGuard } from './guards/user-authenticated.guard';
+import { UserNotAuthenticatedGuard } from './guards/user-not-authenticated.guard';
+import { UserHasRoleGuard } from "./guards/user-has-role.guard";
+import { UserIsActiveGuard } from "./guards/user-is-active.guard";
 
 const routes: Routes = [
-    { path: '', redirectTo: 'tutorial', pathMatch: 'full' },
+    
+    {
+        path: '',
+        redirectTo: '/home',
+        pathMatch: 'full'
+    },
     {
         path: 'home',
         loadChildren: './pages/home/home.module#HomePageModule',
-        canActivate: [LoginAuthGuard, IsActiveGuard]
+        canActivate: [UserAuthenticatedGuard]
     },
     {
         path: 'login',
         loadChildren: './pages/login/login.module#LoginPageModule',
-        canActivate: [NoLoginAuthGuard]
+        canActivate: [UserNotAuthenticatedGuard]
     },
     {
         path: 'register',
         loadChildren: './pages/register/register.module#RegisterPageModule',
-        canActivate: [NoLoginAuthGuard]
-    },
-    {
-        path: 'social-problems',
-        loadChildren: './pages/protected/social-problems/social-problems.module#SocialProblemsPageModule', canActivate: [LoginAuthGuard, IsActiveGuard]
-    },
-    {
-        path: 'public-services',
-        loadChildren: './pages/protected/public-services/public-services.module#PublicServicesPageModule',
-        canActivate: [LoginAuthGuard, IsActiveGuard]
-    },
-    {
-        path: 'directory-info',
-        loadChildren: './pages/protected/directory-info/directory-info.module#DirectoryInfoPageModule',
-        canActivate: [LoginAuthGuard, IsActiveGuard]
-    },
-    {
-        path: 'user-profile',
-        loadChildren: './pages/protected/user-profile/user-profile.module#UserProfilePageModule',
-        canActivate: [LoginAuthGuard, IsActiveGuard]
-    },
-    // tslint:disable-next-line: max-line-length
-    {
-        path: 'social-problem-detail/:id',
-        loadChildren: './pages/protected/social-problem-detail/social-problem-detail.module#SocialProblemDetailPageModule',
-        canActivate: [LoginAuthGuard, IsActiveGuard]
-    },
-    // tslint:disable-next-line: max-line-length
-    {
-        path: 'social-problem-create',
-        loadChildren: './pages/protected/social-problem-create/social-problem-create.module#SocialProblemCreatePageModule',
-        canActivate: [LoginAuthGuard, IsActiveGuard, HasRoleGuard],
-        data: { roles: ['morador_afiliado']}
-    },
-    {
-        path: 'emergency-create',
-        loadChildren: './pages/protected/emergency-create/emergency-create.module#EmergencyCreatePageModule',
-        canActivate: [LoginAuthGuard, IsActiveGuard, HasRoleGuard],
-        data: {roles: ['morador_afiliado']}
-    },
-    {
-        path: 'events',
-        loadChildren: './pages/protected/events/events.module#EventsPageModule',
-        canActivate: [LoginAuthGuard, IsActiveGuard]
-    },
-    {
-        path: 'event-detail/:id',
-        loadChildren: './pages/protected/event-detail/event-detail.module#EventDetailPageModule',
-        canActivate: [LoginAuthGuard, IsActiveGuard]
+        canActivate: [UserNotAuthenticatedGuard]
     },
     {
         path: 'tutorial',
         loadChildren: './pages/tutorial/tutorial.module#TutorialPageModule',
-        canActivate: [NoLoginAuthGuard]
+        canActivate: [UserNotAuthenticatedGuard]
+    },
+    {
+        path: 'social-problems',
+        loadChildren: './pages/social-problems/social-problems.module#SocialProblemsPageModule', canActivate: [UserAuthenticatedGuard]
+    },
+    {
+        path: 'public-services',
+        loadChildren: './pages/public-services/public-services.module#PublicServicesPageModule',
+        canActivate: [UserAuthenticatedGuard]
+    },
+    {
+        path: 'directory-info',
+        loadChildren: './pages/directory-info/directory-info.module#DirectoryInfoPageModule',
+        canActivate: [UserAuthenticatedGuard,]
+    },
+    {
+        path: 'user-profile',
+        loadChildren: './pages/user-profile/user-profile.module#UserProfilePageModule',
+        canActivate: [UserAuthenticatedGuard]
+    },
+    // tslint:disable-next-line: max-line-length
+    {
+        path: 'social-problem-detail/:id',
+        loadChildren: './pages/social-problem-detail/social-problem-detail.module#SocialProblemDetailPageModule',
+        canActivate: [UserAuthenticatedGuard]
+    },
+    {
+        path: 'social-problem-create',
+        loadChildren: './pages/social-problem-create/social-problem-create.module#SocialProblemCreatePageModule',
+        canActivate: [UserAuthenticatedGuard, UserIsActiveGuard, UserHasRoleGuard],
+        data: { roles: ['morador_afiliado']}
+    },
+    {
+        path: 'emergency-create',
+        loadChildren: './pages/emergency-create/emergency-create.module#EmergencyCreatePageModule',
+        canActivate: [UserAuthenticatedGuard, UserIsActiveGuard, UserHasRoleGuard],
+        data: {roles: ['morador_afiliado']}
+    },
+    {
+        path: 'events',
+        loadChildren: './pages/events/events.module#EventsPageModule',
+        canActivate: [UserAuthenticatedGuard]
+    },
+    {
+        path: 'event-detail/:id',
+        loadChildren: './pages/event-detail/event-detail.module#EventDetailPageModule',
+        canActivate: [UserAuthenticatedGuard]
     },
     {
         path: 'about',
         loadChildren: './pages/about/about.module#AboutPageModule',
-        canActivate: [LoginAuthGuard]
+        canActivate: [UserAuthenticatedGuard]
     },
     {
         path: 'configuration',
-        loadChildren: './pages/protected/configuration/configuration.module#ConfigurationPageModule'
+        loadChildren: './pages/configuration/configuration.module#ConfigurationPageModule'
     },
     {
         path: 'frequent-questions',
         loadChildren: './pages/frequent-questions/frequent-questions.module#FrequentQuestionsPageModule',
-        canActivate: [LoginAuthGuard]
+        canActivate: [UserAuthenticatedGuard]
     },
     {
         path: 'emergencies',
-        loadChildren: './pages/protected/emergencies/emergencies.module#EmergenciesPageModule',
-        canActivate: [LoginAuthGuard, IsActiveGuard]
+        loadChildren: './pages/emergencies/emergencies.module#EmergenciesPageModule',
+        canActivate: [UserAuthenticatedGuard]
     },
     {
         path: 'emergency-detail/:id',
-        loadChildren: './pages/protected/emergency-detail/emergency-detail.module#EmergencyDetailPageModule'
+        loadChildren: './pages/emergency-detail/emergency-detail.module#EmergencyDetailPageModule'
     },
     {
         path: 'reports',
-        loadChildren: './pages/protected/reports/reports.module#ReportsPageModule',
-        canActivate: [LoginAuthGuard, IsActiveGuard]
+        loadChildren: './pages/reports/reports.module#ReportsPageModule',
+        canActivate: [UserAuthenticatedGuard]
     },
     {
         path: 'report-detail/:id',
-        loadChildren: './pages/protected/report-detail/report-detail.module#ReportDetailPageModule',
-        canActivate: [LoginAuthGuard, IsActiveGuard]
+        loadChildren: './pages/report-detail/report-detail.module#ReportDetailPageModule',
+        canActivate: [UserAuthenticatedGuard]
     },
     {
         path: '404',

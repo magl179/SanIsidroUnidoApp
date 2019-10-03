@@ -1,0 +1,60 @@
+<app-header-back title="Directorio Barrial"></app-header-back>
+<ion-content>
+    <ion-grid *ngIf="!loadDirectives">
+        <ion-row>
+            <ion-col size="6" *ngFor="let skeleton of [1,1,1,1]">
+                <ion-card class="animated flash slow infinite">
+                   
+                    <div class="thumbnail-container">
+                        <ion-thumbnail slot="start" class="icon-directive">
+                            <ion-skeleton-text class="circle"></ion-skeleton-text>
+                        </ion-thumbnail>
+                    </div>
+                    <ion-card-header class="ion-text-center">
+                        <ion-card-subtitle>
+                            <ion-skeleton-text class="inline-block" width="40%"></ion-skeleton-text>
+                        </ion-card-subtitle>
+                        <ion-card-title class="directive-title">
+                            <ion-skeleton-text class="inline-block" width="60%"></ion-skeleton-text>
+                        </ion-card-title>
+                    </ion-card-header>
+                    <ion-card-content class="ion-text-center">
+                        <p class="phone">
+                            <ion-skeleton-text class="inline-block" width="60%"></ion-skeleton-text>
+                        </p>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+    <ion-grid *ngIf="loadDirectives && directivesList.length > 0">
+        <ion-row>
+            <ion-col size="6" *ngFor="let people of directivesList">
+                <ion-card>
+                    <div class="picture_thumbnail">
+                            <img class="img-thumbnail circle" [src]="getAvatar(people.avatar)" fallimg="user_avatar">
+                    </div>
+                    <ion-card-header class="ion-text-center">
+                        <ion-card-subtitle>
+                            {{(people.position && people.position.name) || 'Sin posicion'}}
+                        </ion-card-subtitle>
+                        <ion-card-title class="directive-title">{{people.firstname}}
+                            {{people.lastname}}
+                        </ion-card-title>
+                    </ion-card-header>
+                    <ion-card-content class="ion-text-center">
+                        <p class="phone">
+                            <ion-icon name="call"></ion-icon>
+                            <span
+                                class="profile_detail">{{people.number_phone || 'Sin teléfono registrado'}}</span>
+                        </p>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+    <div class="flex-column-center message-fail-load" *ngIf="loadDirectives && directivesList.length === 0">
+            <p>No se pudieron cargar los datos de la Directiva Barrial</p>
+            <ion-button (click)="loadDirectoryInfo()">Toca para reintentar</ion-button>
+        </div>
+</ion-content>

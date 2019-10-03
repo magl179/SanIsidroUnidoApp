@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
@@ -18,7 +17,6 @@ export class SocialDataService {
     fbLoginData = new BehaviorSubject(null);
 
     constructor(
-        private http: HttpClient,
         private httpRequest: HttpRequestService,
         private facebook: Facebook,
         private google: Google,
@@ -26,16 +24,6 @@ export class SocialDataService {
         private utilsService: UtilsService
     ) { }
 
-
-    // testFBLoginFake(): Observable<any> {
-    //     const urlTest = 'assets/data/fb.json';
-    //     return this.httpRequest.get(urlTest).pipe(map(data => data));
-    // }
-
-    // testGoogleLoginFake(): Observable<any> {
-    //     const urlTest = 'assets/data/google.json';
-    //     return this.httpRequest.get(urlTest).pipe(map(data => data));
-    // }
     // Funcion para parsear los datos del login de google
     getGoogleDataParsed(googleUser: any) {
         const appUser = {
@@ -68,7 +56,7 @@ export class SocialDataService {
         if (this.platform.is('cordova')) {
             try {
                 const loginGoogle = await this.google.login({});
-                await this.getGoogleData(loginGoogle);
+                this.getGoogleData(loginGoogle);
             } catch (error) {
                 console.log(error);
                 await this.utilsService.showToast('Error con la conexion a Google');
@@ -83,8 +71,8 @@ export class SocialDataService {
             const permisos = ['public_profile', 'email'];
             try {
                 const respuestaLogin: FacebookLoginResponse = await this.facebook.login(permisos);
-                const userId = await respuestaLogin.authResponse.userID;
-                const accessToken = await respuestaLogin.authResponse.accessToken;
+                const userId = respuestaLogin.authResponse.userID;
+                const accessToken = respuestaLogin.authResponse.accessToken;
                 await this.getFacebookData(accessToken, userId, permisos);
             } catch (err) {
                 console.log(err);
@@ -121,7 +109,7 @@ export class SocialDataService {
                     this.googleLoginData.next(profile);
                     await this.closeGoogleSession();                    
                 },
-                err => {
+                (err: any) => {
                     console.log(err);
                     this.utilsService.showToast('No se pudieron obtener los datos de Google');
                 });

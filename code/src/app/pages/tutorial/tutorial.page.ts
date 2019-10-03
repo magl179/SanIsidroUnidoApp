@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { timer } from 'rxjs';
 import { MenuController, NavController } from '@ionic/angular';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { ISlideTutorial } from 'src/app/interfaces/models';
-import { UtilsService } from "../../services/utils.service";
+import { UtilsService } from "src/app/services/utils.service";
 
 @Component({
     selector: 'app-tutorial',

@@ -1,18 +1,15 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { OneSignal, OSNotification, OSNotificationPayload } from '@ionic-native/onesignal/ngx';
-import { environment } from '../../environments/environment';
-import { Storage } from '@ionic/storage';
+import { environment } from 'src/environments/environment';
 import { BehaviorSubject } from 'rxjs';
 import { Platform, NavController } from '@ionic/angular';
-import { HttpClient, HttpRequest } from "@angular/common/http";
-import { Observable } from 'rxjs';
 import { UserService } from './user.service';
 import { AuthService } from './auth.service';
 import { UtilsService } from './utils.service';
 import { IPhoneUser } from 'src/app/interfaces/models';
 import { Device } from '@ionic-native/device/ngx';
-import { HttpRequestService } from "./http-request.service";
-import { IRespuestaApiSIU, IRespuestaApiSIUSingle, INotiPostOpen } from "../interfaces/models";
+import { IRespuestaApiSIUSingle, INotiPostOpen } from "src/app/interfaces/models";
+import { decodeToken} from 'src/app/helpers/auth-helper';
 
 
 const USER_DEVICE_DEFAULT: IPhoneUser = {
@@ -35,11 +32,9 @@ export class NotificationsService {
     constructor(
         private device: Device,
         private oneSignal: OneSignal,
-        private storage: Storage,
+        // private storage: Storage,
         private platform: Platform,
-        // private http: HttpClient,
         private navCtrl: NavController,
-        // private HttpRequest: HttpRequestService,
         private userService: UserService,
         private authService: AuthService,
         private utilsService: UtilsService
@@ -80,30 +75,30 @@ export class NotificationsService {
         return this.userDevice.asObservable();
     }
     //Obtener los Dispositivos del Usuario
-    getUserDevices() {
-        if (this.AuthUser) {
-            if (this.AuthUser.devices) {
-                return this.AuthUser.devices.map((device: any) => device.phone_id);
-            } else {
-                return [];
-            }
-        } else {
-            return [];
-        }
-    }
+    // getUserDevices() {
+    //     if (this.AuthUser) {
+    //         if (this.AuthUser.devices) {
+    //             return this.AuthUser.devices.map((device: any) => device.phone_id);
+    //         } else {
+    //             return [];
+    //         }
+    //     } else {
+    //         return [];
+    //     }
+    // }
     //Verificar si un usuario tiene dispositivos asociados
-    async hasDevices() {
-        if (this.AuthUser && this.userDevice.value.phone_id) {
-            let userDevices = this.getUserDevices();
-            let hasDevice = (userDevices.includes(this.userDevice.value.phone_id)) ? true : false;
-            return hasDevice;
-        } else {
-            return false;
-        }
-    }
+    // hasDevices() {
+    //     if (this.AuthUser && this.userDevice.value.phone_id) {
+    //         let userDevices = this.getUserDevices();
+    //         let hasDevice = (userDevices.includes(this.userDevice.value.phone_id)) ? true : false;
+    //         return hasDevice;
+    //     } else {
+    //         return false;
+    //     }
+    // }
     //Carga la información del usuario autenticado
     loadUser() {
-        this.authService.getAuthUser().subscribe(res => {
+        this.authService.sessionAuthUser.subscribe(res => {
             if (res) {
                 this.AuthUser = res.user;
             }
@@ -120,8 +115,7 @@ export class NotificationsService {
             };
             this.userService.sendRequestAddUserDevice(data)
                 .subscribe(async (res: any) => {
-                    const token = res.data.token;
-                    this.authService.updateFullAuthInfo(token);
+                    // const token = res.data.token;
                     this.utilsService.showToast('Dispositivo Añadido Correctamente');
                 }, (err: any) => {
                     this.utilsService.showToast('Ocurrio un error al añadir el dispositivo');
@@ -129,17 +123,7 @@ export class NotificationsService {
                 });
         }
     }
-    //Funcion remover dispositivo asociado a un usuario en la API
-    removeUserDevice(device_id: number) {
-        this.userService.sendRequestDeleteUserDevice(device_id).subscribe(async (res: IRespuestaApiSIUSingle) => {
-            const token = res.data.token;
-            this.authService.updateFullAuthInfo(token);
-            await this.utilsService.showToast('Dispositivo eliminado Correctamente');
-        }, err => {
-            this.utilsService.showToast('Ocurrio un error al desconectar el dispositivo :( ');
-            console.log('Ocurrio un error al eliminar el dispositivo', err);
-        });
-    }
+    
 
     // Función para Obtener ID de Suscriptor de Onesignal
     async getOneSignalIDSubscriptor() {
@@ -154,18 +138,6 @@ export class NotificationsService {
         };
         this.userDevice.next(userDevice);
     }
-
-    // Función Cargar Mensajes
-    // async loadMessages() {
-    //     this.messagesList = await this.storage.get('app_notifications') || [];
-    //     return this.messagesList;
-    // }
-
-    // Función para guardar los mensajes
-    // saveMessages() {
-    //     this.storage.set('app_notifications', this.messagesList);
-    //     console.log({ mensajesGuardados: this.messagesList });
-    // }
 
     // Función a Ejecutar cuando se recibe una notificación
     async manageNotificationReceived(appNotification: OSNotification) {

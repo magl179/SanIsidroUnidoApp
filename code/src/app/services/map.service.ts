@@ -1,7 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
-import { HttpClient} from '@angular/common/http';
 import * as Leaflet from 'leaflet';
-import { IReverseGeocodeResponse, IMarkers } from '../interfaces/barrios';
+import { IReverseGeocodeResponse } from 'src/app/interfaces/models';
 import { Observable } from 'rxjs';
 import { HttpRequestService } from "./http-request.service";
 
@@ -15,7 +14,6 @@ const REVERSE_GEOCODING_ENDPOINT = 'https://nominatim.openstreetmap.org/reverse'
 export class MapService implements OnInit {
 
     constructor(
-        private http: HttpClient,
         private httpRequest: HttpRequestService
     ) { }
 

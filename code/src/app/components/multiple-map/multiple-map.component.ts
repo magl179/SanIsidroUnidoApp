@@ -3,14 +3,10 @@ import * as Leaflet from 'leaflet';
 import * as LeafletSearch from 'leaflet-search';
 import { GestureHandling } from 'leaflet-gesture-handling';
 import { MapService } from 'src/app/services/map.service';
-import { UtilsService } from '../../services/utils.service';
+import { UtilsService } from 'src/app/services/utils.service';
 import { IPublicService } from 'src/app/interfaces/models';
-import { LocalizationService } from '../../services/localization.service';
-import { environment } from "../../../environments/environment";
-
-// const iconsColors = ['red', 'orange', 'yellow', 'purple'];
-// const tileURL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-// const tileAtribution = '&copy; <a target=_blank" href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+import { LocalizationService } from 'src/app/services/localization.service';
+import { environment } from "src/environments/environment";
 
 @Component({
     selector: 'multiple-map',
@@ -25,22 +21,30 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
     @Input() enableGesture = false;
     @Output() returnMapLoaded = new EventEmitter();
 
+    usePolyline = true;
+    polylineRoute = Leaflet.polyline([
+        [0.27672266086355024, -81.6663098484375]
+    ],
+        {
+            color: '#ee0033',
+            weight: 8,
+            opacity: .8,
+            dashArray: '20,15',
+            lineJoin: 'round'
+        }
+    );
+
 
     map: any;
     mapMarkers: any[] = null;
     mapIsLoaded = false;
     markersLayer = new Leaflet.LayerGroup();
     currentUserLayer = new Leaflet.LayerGroup();
-    // currentPolyline = Leaflet.polyline([[1, 2], [3, 4]], {
-    //     color: '#ff8181'
-    // });
+
     markerSelected = false;
     currentService = null;
     currentCoordinate: any = null;
-    // latlngsOrigDest = [
-    //     [-0.0756493, -78.433859],
-    //     [-0.0999525, -78.4740685]
-    // ];
+
     mapLoading = null;
     currentRoute = null;
 
@@ -65,9 +69,6 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
             waypoints: waypoints,
             plan: Leaflet.Routing.plan(waypoints, {
                 createMarker: function (i: any, wp: any) {
-                    //   return Leaflet.marker(wp.latLng, {
-                    //     draggable: false
-                    //   });
                     return null;
                 }
             }),
@@ -79,7 +80,7 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
             fitSelectedRoutes: true,
             useZoomParameter: true,
             show: false,
-            showAlternatives: true
+            showAlternatives: false
         });
         // ruta1.route();
         return route;
@@ -153,6 +154,8 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
         this.currentRoute.on('routingerror', function (e: any) {
             console.log('error', e);
         });
+        //Añadir Ruta Polyline
+        this.polylineRoute.addTo(this.map);
 
         // Añadir Polilinea al Mapa
         // this.currentPolyline.addTo(this.map);
@@ -181,13 +184,13 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
             if (markerIcon) {
                 // tslint:disable-next-line: max-line-length
                 punto = new Leaflet.Marker(new Leaflet.latLng(
-                    point.ubication.latitude, point.ubication.longitude), { title, icon: markerIcon });
+                    point.ubication.latitude, point.ubication.longitude), { title, icon: markerIcon, riseOnHover: true });
             } else {
                 // tslint:disable-next-line: max-line-length
                 punto = new Leaflet.Marker(new Leaflet.latLng(point.ubication.latitude, point.ubication.longitude), { title });
             }
             // Evento marcador al hacer click para mostrar información
-            punto.on('click', (e) => { this.showInfo(e); });
+            punto.on('click', (e: any) => { this.showInfo(e); });
             // Añadir el punto al marcador
             this.markersLayer.addLayer(punto);
         });
@@ -195,7 +198,7 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
         const searchControl = new LeafletSearch({
             position: 'topleft',
             layer: this.markersLayer,
-            initial: false,
+            // initial: false,
             textPlaceholder: 'Buscar...',
             autoCollapse: true,
             autoCollapseTime: 2000,
@@ -205,8 +208,13 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
                 if (this.currentCoordinate) {
                     console.log('Redraw route', title);
                     const wp1 = this.createLatLng(this.currentCoordinate.latitude, this.currentCoordinate.longitude);
-                    this.currentRoute.setWaypoints([wp1, latlng]);
-                    await this.currentRoute.route();
+                    if (!this.usePolyline) {     
+                        this.currentRoute.setWaypoints([wp1, latlng]);
+                        await this.currentRoute.route();
+                    } else {
+                        this.polylineRoute.setLatLngs([wp1, latlng]);
+                        this.map.fitBounds(this.polylineRoute.getBounds());
+                    }
                 }
             }
         });

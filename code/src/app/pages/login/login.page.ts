@@ -2,18 +2,14 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { UtilsService } from 'src/app/services/utils.service';
-import { timer } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { SocialDataService } from 'src/app/services/social-data.service';
-import { LocalDataService } from '../../services/local-data.service';
+import { LocalDataService } from 'src/app/services/local-data.service';
 import { finalize } from 'rxjs/operators';
-import { NetworkService } from '../../services/network.service';
+import { NetworkService } from 'src/app/services/network.service';
 import { NotificationsService } from 'src/app/services/notifications.service';
-import { IRespuestaApiSIU } from "../../interfaces/models";
-
-
-
-const urlLogueado = '/home';
+import { IRespuestaApiSIU } from "src/app/interfaces/models";
+import { decodeToken } from 'src/app/helpers/auth-helper';
 
 @Component({
     selector: 'app-login',
@@ -61,10 +57,10 @@ export class LoginPage implements OnInit {
         const loadingManageLogin = await this.utilsService.createBasicLoading('Obteniendo Respuesta');
         loadingManageLogin.present();
         const token = res.data; 
-        const tokendescrifrado = this.authService.decodeToken(token);
+        const token_decoded = decodeToken(token);
         //Guardar Datos Token
-        await this.authService.setUserLocalStorage(tokendescrifrado);
-        await this.authService.setTokenLocalStorage(token);
+        this.authService.saveUserInfo(token, token_decoded);
+        this.authService.saveLocalStorageInfo(token, token_decoded);
         //Registrar Dispositivo
         this.notificationsService.registerUserDevice();
         this.loginForm.reset();

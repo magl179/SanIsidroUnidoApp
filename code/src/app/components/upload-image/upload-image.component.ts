@@ -5,10 +5,10 @@ import { Platform } from '@ionic/angular';
 // import { WebView } from '@ionic-native/ionic-webview/ngx';
 
 const cameraOptions: CameraOptions = {
-    quality: 80,
+    quality: 75,
     correctOrientation: true,
     saveToPhotoAlbum: false,
-    targetWidth:350,
+    targetWidth: 400,
     targetHeight: 200
 };
 

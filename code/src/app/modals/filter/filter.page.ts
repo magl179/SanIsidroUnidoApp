@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { ModalController, NavParams } from '@ionic/angular';
 import { IBasicFilter } from 'src/app/interfaces/models';
-import { PostsService } from "../../services/posts.service";
+import { PostsService } from "src/app/services/posts.service";
 import { finalize } from 'rxjs/operators';
 
 

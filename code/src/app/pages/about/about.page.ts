@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { NetworkService } from 'src/app/services/network.service';
-import { UtilsService } from '../../services/utils.service';
+import { UtilsService } from 'src/app/services/utils.service';
 
 // declare var moment: any;
 // moment.locale('es');

@@ -111,27 +111,53 @@ export interface ISocialProfile {
 export interface IDeviceUser {
     id: Number;
     phone_id: number;
+    user_id: number;
     phone_model?: string;
     description?: string;
-    user_id: number;
     created_at?: string;
     updated_at?: string;
 }
 
-// export interface IEvent {
+export interface IMenuComponent {
+    icon: string;
+    name: string;
+    redirectTo: string;
+    routeDirection: string;
+    children: any[];
+    open?: any;
+}
+
+export interface IReverseGeocodeResponse {
+    readonly place_id: string;
+    readonly licence: string;
+    readonly osm_type: string;
+    readonly osm_id: string;
+    readonly lat: string;
+    readonly lon: string;
+    readonly display_name: string;
+    readonly boundingbox: string[];
+}
+
+export interface IMarkers {
+    color: string;
+    iconName: string;
+    iconURL: string;
+    shadow: string;
+}
+
+export interface ISimpleCoordinates {
+    latitude: number;
+    longitude: number;
+}
+
+// export interface IPublicService {
 //     id: number;
-//     title: string;
+//     name: string;
 //     description: string;
-//     category_id: number;
-//     date: string;
-//     time: string;
-//     ubication: IUbication;
-//     user_id?: number;
-//     assist: boolean;
-//     notassist: boolean;
-//     images?: [];
-//     details?: any;
-//     postAssistance?: boolean;
+//     phones?: string[];
+//     ubication: ISimpleCoordinates;
+//     created_at?: string;
+//     updated_at?: string;
 // }
 
 // INTERFACES ENVIAR DATOS
@@ -368,7 +394,7 @@ export interface IUserDecoded {
 //     updated_at: string;
 //     user_id: number;
 // }
-export interface INotiPostOpen{
+export interface INotiPostOpen {
     type: "string";
     id: number;
 }

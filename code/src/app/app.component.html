@@ -7,15 +7,18 @@
                 <!-- Header Menu -->
                 <div class="header-menu">
                     <ion-item lines="none" color="primary">
-                        <ion-avatar slot="start" (click)="closeMenu()" *ngIf="authUser">
-                            <img [src]="authUser.avatar"
+                        <ion-avatar slot="start" (click)="closeMenu()" *ngIf="sessionAuth">
+                            <img [src]="getAvatar(sessionAuth.user.avatar)"
                                 fallimg="user_avatar" />
                         </ion-avatar>
                         <ion-label>
-                            <h1>{{authUser?.firstname || 'Firstname'}}
-                                {{authUser?.lastname || 'Lastname'}}</h1>
-                            <p class="ion-text-capitalize">
-                                {{authUserRol || 'No tienes un rol registrado'}}</p>
+                            <h1>
+                                {{(sessionAuth && sessionAuth.user) ? sessionAuth.user.firstname : 'Nombres'}}
+                                {{(sessionAuth && sessionAuth.user) ? sessionAuth.user.lastname : 'Apellidos'}}
+                            </h1>
+                            <p class="ion-text-capitalize" *ngIf="sessionAuth && sessionAuth.user">
+                                {{ (sessionAuth.user.roles.length > 0) ? sessionAuth.user.roles[0].name : 'No tienes un rol registrado' }}
+                            </p>
                         </ion-label>
                     </ion-item>
                 </div>
