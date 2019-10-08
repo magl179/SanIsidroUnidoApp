@@ -4,11 +4,11 @@ import { UtilsService } from "src/app/services/utils.service";
 import { PostsService } from "src/app/services/posts.service";
 import { NetworkService } from "src/app/services/network.service";
 import { AuthService } from "src/app/services/auth.service";
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 import { IRespuestaApiSIUSingle } from 'src/app/interfaces/models';
 import { ModalController } from "@ionic/angular";
 import { ImageDetailPage } from 'src/app/modals/image_detail/image_detail.page';
-import { mapImagesApi, getJSON } from 'src/app/helpers/utils';
+import { mapImagesApi, getJSON, mapEmergency } from 'src/app/helpers/utils';
 
 @Component({
     selector: 'app-emergency-detail',
@@ -43,18 +43,23 @@ export class EmergencyDetailPage implements OnInit {
 
     getEmergency(event?: any, resetEvents?: any) {
         this.emergencyLoaded = false;
-        this.postsService.getEmergency(+this.id).pipe(finalize(() => {
-            this.emergencyLoaded = true;
-        })).subscribe((res: IRespuestaApiSIUSingle) => {
-            this.emergency = res.data;
-            if (this.emergency) {
-                this.emergency.fulldate = `${this.emergency.date} ${this.emergency.time}`;
-                this.emergency.ubication = getJSON(this.emergency.ubication);
-                if (this.emergency.images && this.emergency.images.length > 0) {
-                    this.emergency.images = mapImagesApi(this.emergency.images);
+        this.postsService.getEmergency(+this.id).pipe(
+            map((res: any) => {
+                // console.log('res map', res);
+                if (res && res.data) {
+                    const emergency = res.data;
+                    res.data = mapEmergency(emergency);
                 }
-                console.log('Dato post', this.emergency);
-            }
+                console.log('res maped', res.data);
+                return res;
+            }),
+            finalize(() => {
+                console.log('finalize loaded');
+                this.emergencyLoaded = true;
+            })
+        ).subscribe((res: IRespuestaApiSIUSingle) => {
+            console.log('Dato post subscribe', res.data);
+            this.emergency = res.data;
         });
     }
 

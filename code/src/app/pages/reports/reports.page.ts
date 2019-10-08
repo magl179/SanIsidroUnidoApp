@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { PostsService } from "src/app/services/posts.service";
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 import { NavController } from '@ionic/angular';
 import { UtilsService } from "src/app/services/utils.service";
 import { IRespuestaApiSIUPaginada } from 'src/app/interfaces/models';
 import { mapImagesApi } from "src/app/helpers/utils";
+import { mapReport } from "../../helpers/utils";
 
 @Component({
   selector: 'app-reports',
@@ -40,6 +41,17 @@ export class ReportsPage implements OnInit {
             this.reportsList = [];
         }
         this.postsService.getReports().pipe(
+            map((res: any) => {
+                console.log('res map', res);
+                if (res && res.data && res.data.data) {
+                    const reports_to_map = res.data.data;
+                    reports_to_map.forEach((report: any) => {
+                        report = mapReport(report);
+                    });
+                    console.log('res maped', res.data.data);
+                }
+                return res;
+            }),
             finalize(() => {
                 this.reportsLoaded = true;
             })

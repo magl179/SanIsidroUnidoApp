@@ -95,6 +95,31 @@
             </ion-card-content>
         </ion-card>
     </div>
+    <div *ngIf="socialProblemsLoaded  && socialProblemsList.length > 0">
+        <ion-card class="social-problem" *ngFor="let socialProblem of socialProblemsFilter">
+            <div class="post-cover-image">
+                <img [src]="(socialProblem.images && socialProblem.images.length > 0) ? socialProblem.images[0].url : ''"
+                    alt="Imagen Tarjeta" class="img"/>
+                <div class="social-buttons single">
+                    <div class="item-button">
+                        <ion-icon class="like" name="heart">
+                        </ion-icon>
+                    </div>
+                </div>
+            </div>
+            <ion-card-header class="post-header">
+                <ion-card-title class="post-title"> Essential Https Concepts you should know
+                </ion-card-title>
+            </ion-card-header>
+            <ion-card-content class="post-content">
+                <p class="post-description">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati reiciendis
+                    quibusdam odit aperiam
+                </p>
+                <p class="post-see-more">Leer más</p>
+            </ion-card-content>
+        </ion-card>
+    </div>
     <!--Opciones del FabButton -->
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button color="primary" size="small">

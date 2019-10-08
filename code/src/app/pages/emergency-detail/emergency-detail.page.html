@@ -44,8 +44,8 @@
     <!-- Datos ya cargados -->
     <div *ngIf="emergencyLoaded && emergency">
         <ion-card class="emergency_card detail">
-            <div class="emergency_cover_image"
-                [style.background-image]="(emergency.images && emergency.images.length > 0) ? getBGCover(emergency.images[0].url) : ''">
+            <div style="width: 100%;height: 250px;">
+                <img style="width: 100%;height: 100%;" [src]="(emergency.images && emergency.images.length > 0) ?emergency.images[0].url : ''" fallimg="cover_image">
             </div>
             <ion-card-header class="emergency_card_header">
                 <ion-card-title class="emergency_card_title"> {{ emergency.title }}</ion-card-title>

@@ -72,10 +72,11 @@ export class AuthService {
                 const isTokenExpired = tokenIsExpired(itemToken);
                 if (isTokenExpired) {
                     this.tokenIsValid(itemToken).subscribe((res: IRespuestaApiSIUSingle) => {
-                        console.log('Token Válido');
                         if (res.data && res.data.token) {
                             if (res.data.token === 'invalid') {
                                 this.logout();
+                            } else {
+                                console.log('Token Válido');
                             }
                         } else {
                             console.log('Error al Validar el Token en el servidor', res);

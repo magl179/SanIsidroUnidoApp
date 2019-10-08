@@ -76,10 +76,12 @@ export class AppComponent implements OnInit {
         });
     }
 
-    manageInitialPage(token_decoded) {
+    manageInitialPage(token_decoded: any) {
         if (token_decoded) {
+            console.log('app redirect home');
             this.navCtrl.navigateRoot('/home');
-          } else {
+        } else {
+            console.log('app redirect login');
             this.navCtrl.navigateRoot('/login');
           }
     }

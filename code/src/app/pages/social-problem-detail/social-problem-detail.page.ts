@@ -7,9 +7,10 @@ import { IPostShare, ISocialProblem, IRespuestaApiSIUSingle, IRespuestaApiSIU } 
 import { NetworkService } from 'src/app/services/network.service';
 import { ModalController } from "@ionic/angular";
 import { ImageDetailPage } from 'src/app/modals/image_detail/image_detail.page';
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 import { mapImagesApi, getImageURL } from "src/app/helpers/utils";
 import { checkLikePost } from 'src/app/helpers/user-helper';
+import { mapSocialProblem } from "../../helpers/utils";
 
 
 
@@ -56,6 +57,15 @@ export class SocialProblemDetailPage implements OnInit {
     getSocialProblem() {
         this.socialProblemLoaded = false;
         this.postService.getSocialProblem(+this.id).pipe(
+            map((res: any) => {
+                console.log('res map', res);
+                if (res && res.data) {
+                    const social_problem = res.data;
+                    res.data = mapSocialProblem(social_problem);
+                    console.log('res maped', res.data);
+                }
+                return res;
+            }),
             finalize(() => {
                 this.socialProblemLoaded = true;
             })
@@ -63,11 +73,11 @@ export class SocialProblemDetailPage implements OnInit {
             if (res.data) {
                 this.socialProblem = res.data;
                 this.socialProblem.postLiked = checkLikePost(this.socialProblem.details, this.AuthUser);
-                this.socialProblem.user.avatar = (this.socialProblem.user && this.socialProblem.user.avatar) ? getImageURL(this.socialProblem.user.avatar) : null;
-                this.socialProblem.fulldate = `${this.socialProblem.date} ${this.socialProblem.time}`;
-                if (this.socialProblem.images && this.socialProblem.images.length > 0) {
-                    this.socialProblem.images = mapImagesApi(this.socialProblem.images);
-                }
+                // this.socialProblem.user.avatar = (this.socialProblem.user && this.socialProblem.user.avatar) ? getImageURL(this.socialProblem.user.avatar) : null;
+                // this.socialProblem.fulldate = `${this.socialProblem.date} ${this.socialProblem.time}`;
+                // if (this.socialProblem.images && this.socialProblem.images.length > 0) {
+                //     this.socialProblem.images = mapImagesApi(this.socialProblem.images);
+                // }
             }
         });
     }

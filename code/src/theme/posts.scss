@@ -1,89 +1,89 @@
-@import "./posts/emergencies.scss";
-@import "./posts/events.scss";
-@import "./posts/reports.scss";
-@import "./posts/social-problems.scss";
+// @import "./posts/emergencies.scss";
+// @import "./posts/events.scss";
+// @import "./posts/reports.scss";
+// @import "./posts/social-problems.scss";
 
-/*Share Buttons*/
-.social-buttons {
-  position: absolute;
-  right: 30px;
-  bottom: -20px;
-  display: flex;
-  .item-button {
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
-    ion-icon {
-      cursor: pointer;
-      font-size: 1.4rem;
-      padding: 0.6rem;
-      border-radius: 50%;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.24);
-      &.share {
-        background: var(--ion-color-darkblue); //color: blue;
-        color: var(--ion-color-white);
-      }
-      &.like {
-        //background:red;
-        background: var(--ion-color-white);
-        color: var(--ion-color-gray);
-        transition: all 0.2s ease-in-out;
-        &.active{
-          background: var(--ion-color-danger);
-          color: var(--ion-color-white);
-          transition: all 0.3s;
-        }
-      }
-    }
-  }
-}
+// /*Share Buttons*/
+// .social-buttons {
+//   position: absolute;
+//   right: 30px;
+//   bottom: -20px;
+//   display: flex;
+//   .item-button {
+//     margin-left: 0.5rem;
+//     margin-right: 0.5rem;
+//     ion-icon {
+//       cursor: pointer;
+//       font-size: 1.4rem;
+//       padding: 0.6rem;
+//       border-radius: 50%;
+//       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.24);
+//       &.share {
+//         background: var(--ion-color-darkblue); //color: blue;
+//         color: var(--ion-color-white);
+//       }
+//       &.like {
+//         //background:red;
+//         background: var(--ion-color-white);
+//         color: var(--ion-color-gray);
+//         transition: all 0.2s ease-in-out;
+//         &.active{
+//           background: var(--ion-color-danger);
+//           color: var(--ion-color-white);
+//           transition: all 0.3s;
+//         }
+//       }
+//     }
+//   }
+// }
 
-.post-state {
-  position: absolute;
-  right: 10px;
-  top: 0px;
-  --background: var(--ion-color-warning);
-  &.center {
-    top: 50%;
-  }
-  &.bottom {
-    top: 100%;
-  }
-  &.active {
-    --background: var(--ion-color-success);
-  }
-}
+// .post-state {
+//   position: absolute;
+//   right: 10px;
+//   top: 0px;
+//   --background: var(--ion-color-warning);
+//   &.center {
+//     top: 50%;
+//   }
+//   &.bottom {
+//     top: 100%;
+//   }
+//   &.active {
+//     --background: var(--ion-color-success);
+//   }
+// }
 
-.post-attendace-container {
-  display: flex;
-  align-items: center;
-  .title{
-      &.strong{
-          font-weight: bold;
-          color: var(--ion-color-dark);
-      }
-  }
-}
+// .post-attendace-container {
+//   display: flex;
+//   align-items: center;
+//   .title{
+//       &.strong{
+//           font-weight: bold;
+//           color: var(--ion-color-dark);
+//       }
+//   }
+// }
 
-.post-attent-state {
-  --background: var(--ion-color-warning);
-  &.margin-full {
-    margin: 0.7rem 0;
-  }
-  &.active {
-    --background: var(--ion-color-success);
-  }
-  &.right {
-    margin-left: 1rem;
-  }
-}
+// .post-attent-state {
+//   --background: var(--ion-color-warning);
+//   &.margin-full {
+//     margin: 0.7rem 0;
+//   }
+//   &.active {
+//     --background: var(--ion-color-success);
+//   }
+//   &.right {
+//     margin-left: 1rem;
+//   }
+// }
 
-.bottom-mg {
-  margin-bottom: 1rem !important;
-}
-.top-mg {
-  margin-bottom: 1rem !important;
-}
-.pd-lateral{
-    padding-left: 1rem;
-    padding-right: 1rem;
-}
+// .bottom-mg {
+//   margin-bottom: 1rem !important;
+// }
+// .top-mg {
+//   margin-bottom: 1rem !important;
+// }
+// .pd-lateral{
+//     padding-left: 1rem;
+//     padding-right: 1rem;
+// }

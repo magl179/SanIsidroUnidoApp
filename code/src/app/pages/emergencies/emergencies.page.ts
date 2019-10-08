@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, ModalController } from "@ionic/angular";
 import { UtilsService } from "src/app/services/utils.service";
 import { PostsService } from "src/app/services/posts.service";
-import { IBasicFilter, IRespuestaApiSIUPaginada } from "src/app/interfaces/models";
+import { IBasicFilter, IRespuestaApiSIUPaginada, ITokenDecoded } from "src/app/interfaces/models";
 import { FilterPage } from "src/app/modals/filter/filter.page";
 import { SearchPage } from "src/app/modals/search/search.page";
 import { environment } from 'src/environments/environment';
-import { finalize } from 'rxjs/operators';
-import { getJSON } from "src/app/helpers/utils";
+import { finalize,delay, retryWhen, map } from 'rxjs/operators';
+import { getJSON, mapEmergency } from "src/app/helpers/utils";
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
     selector: 'app-emergencies',
@@ -17,6 +18,7 @@ import { getJSON } from "src/app/helpers/utils";
 export class EmergenciesPage implements OnInit {
 
     emergenciesList = [];
+    AuthUser = null;
     emergenciesFiltered = [];
     emergenciesLoaded = false;
     filters: IBasicFilter = {
@@ -33,6 +35,7 @@ export class EmergenciesPage implements OnInit {
 
     constructor(
         private navCtrl: NavController,
+        private authService: AuthService,
         private utilsService: UtilsService,
         private postsService: PostsService,
         private modalCtrl: ModalController
@@ -44,7 +47,15 @@ export class EmergenciesPage implements OnInit {
 
     ionViewWillEnter() {
         this.utilsService.enableMenu();
-        // this.
+        this.authService.sessionAuthUser.subscribe(async(token_decoded: ITokenDecoded) => {
+            // console.log('token decoded', token_decoded)
+            // console.log('token decoded VERIFY', (token_decoded.user) ? 'true' : 'false');
+            if (token_decoded) {
+                this.AuthUser = token_decoded.user;
+                console.log(this.AuthUser);
+                // this.getRoles();
+            }
+        });
         this.loadEmergencies(null, true);
     }
 
@@ -55,14 +66,24 @@ export class EmergenciesPage implements OnInit {
         }
         this.emergenciesLoaded = false;
         this.postsService.getEmergenciesByUser().pipe(
+            map((res: any) => {
+                // console.log('res map', res);
+                if (res && res.data && res.data.data) {
+                    const emergencies_to_map = res.data.data;
+                    emergencies_to_map.forEach((emergency: any) => {
+                        emergency = mapEmergency(emergency);
+                    });
+                }
+                console.log('res maped', res.data.data);
+                return res;
+            }),
             finalize(() => {
                 this.emergenciesLoaded = true;
-            })
+            }),
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let emergenciesApi = [];
             emergenciesApi = res.data.data;
             if (emergenciesApi) {
-                // console.log('data', res);
                 if (emergenciesApi.length === 0) {
                     if (event) {
                         event.target.disabled = true;
@@ -71,10 +92,6 @@ export class EmergenciesPage implements OnInit {
                     return;
                 }
                 this.emergenciesList.push(...emergenciesApi);
-                this.emergenciesList.forEach(emergency => {
-                    emergency.ubication = getJSON(emergency.ubication);
-                    emergency.fulldate = `${emergency.date} ${emergency.time}`;
-                })
                 this.emergenciesFiltered.push(...this.emergenciesList);
                 console.log(this.emergenciesList);
                 if (event) {

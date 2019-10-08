@@ -5,11 +5,12 @@ import { IPostShare } from 'src/app/interfaces/models';
 import { PostsService } from 'src/app/services/posts.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { environment } from "src/environments/environment";
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 import { SearchPage } from "src/app/modals/search/search.page";
 import { IEvent, IRespuestaApiSIUPaginada } from "src/app/interfaces/models";
 import { checkLikePost } from 'src/app/helpers/user-helper';
-import { mapImagesApi, getJSON } from 'src/app/helpers/utils';
+import { mapImagesApi, getJSON, mapEvent } from 'src/app/helpers/utils';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app-events',
@@ -144,6 +145,17 @@ export class EventsPage implements OnInit {
             this.resetEvents()
         }
         this.postService.getEvents().pipe(
+            map((res: any) => {
+                console.log('res map', res);
+                if (res && res.data && res.data.data) {
+                    const events_to_map = res.data.data;
+                    events_to_map.forEach((event: any) => {
+                        event = mapEvent(event);
+                    });
+                    console.log('res maped', res.data.data);
+                }
+                return res;
+            }),
             finalize(() => {
                 this.eventsLoaded = true;
                 console.log('finalize get events', this.eventsLoaded);
@@ -175,9 +187,13 @@ export class EventsPage implements OnInit {
                 }
             }
         },
-            err => {
+            (err: HttpErrorResponse) => {
                 console.log(err);
-                this.utilsService.showToast('No se pudieron cargar los eventos');
+                if (err.error instanceof Error) {
+                    console.log("Client-side error");
+                } else {
+                    console.log("Server-side error");
+                }
             });
     }
 

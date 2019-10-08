@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
 import { NavController } from '@ionic/angular';
-import { tap, catchError, map } from 'rxjs/operators';
+import { tap, catchError, map, delay, mergeMap, retryWhen } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthInterceptorService implements HttpInterceptor {
+
+    private statusCodeAvoid = [401];
+
 
     constructor(
         private authService: AuthService,
@@ -20,13 +23,19 @@ export class AuthInterceptorService implements HttpInterceptor {
         // console.log('Request', request);withCredentials': 'true'
         // console.log('Angular Interceptor', request);
         return next.handle(request).pipe(
+            this.http_retry(),
             map(data => {
                 // console.log('response success', data);
                 return data;
             }),
             catchError(
-                (err) => {
+                (err: HttpErrorResponse) => {
                     // console.log('response unsuccess', err);
+                    if (err.error instanceof Error) {
+                        console.log("Client-side error");
+                    } else {
+                        console.log("Server-side error");
+                    }
                     if (err.status === 401) {
                         this.authService.logout();
                     }
@@ -34,5 +43,28 @@ export class AuthInterceptorService implements HttpInterceptor {
                 }
             )
         );
+    }
+
+    http_retry<T>(maxRetry: number = 2, delayMs: number = 2000) {
+        return (src: Observable<T>) => src.pipe(
+            retryWhen(errors => {
+                let retryCount = 0;
+                return errors
+                    .pipe(
+                        delay((delayMs)),
+                        mergeMap(error => {
+                            const statusError = error.status;
+                            const includesCodeAvoid = this.statusCodeAvoid.includes(statusError);
+                            //console.log('retry count', retryCount);
+                            if (retryCount >= maxRetry || includesCodeAvoid) {
+                                return throwError(error);
+                            }
+                            retryCount++;
+                            return of(error);
+                        }),
+                        tap(() => console.log('retrying...'))
+                    );
+            })
+        )
     }
 }

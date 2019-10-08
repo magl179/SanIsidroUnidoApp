@@ -55,7 +55,7 @@ import { ImageDetailPageModule } from './modals/image_detail/image_detail.module
             default: 'https://via.placeholder.com/600?text=SanIsidroImage',
             user_avatar:  'assets/img/default/img_avatar.png',
             image_full: 'assets/img/default/image_full.png',
-            cover_image: 'https://via.placeholder.com/600x200?text=SanIsidroImage'
+            cover_image: 'https://via.placeholder.com/600x300?text=SanIsidroImage'
         }),
         ShowListNotificationsPageModule,
         PipesModule,

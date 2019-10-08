@@ -7,10 +7,11 @@ import { IEvent, IPostShare, IRespuestaApiSIUSingle } from "src/app/interfaces/m
 import { NetworkService } from 'src/app/services/network.service';
 import { ModalController } from "@ionic/angular";
 import { ImageDetailPage } from "src/app/modals/image_detail/image_detail.page";
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 import { getUsersFromDetails, checkUserInDetails } from "src/app/helpers/user-helper";
 import { checkLikePost } from "src/app/helpers/user-helper";
 import { getJSON, mapImagesApi } from "src/app/helpers/utils";
+import { mapEvent } from "../../helpers/utils";
 
 
 @Component({
@@ -54,20 +55,29 @@ export class EventDetailPage implements OnInit {
     getEvent(event?: any, resetEvents?: any) {
         this.eventLoaded = false;
         this.postService.getEvent(+this.id).pipe(
+            map((res: any) => {
+                console.log('res map', res);
+                if (res && res.data) {
+                    const event = res.data;
+                    res.data = mapEvent(event);
+                    console.log('res maped', res.data);
+                }
+                return res;
+            }),
             finalize(() => {
                 this.eventLoaded = true;
             })
         ).subscribe((res: IRespuestaApiSIUSingle) => {
             if (res.data) {
                 this.event = res.data;
-                if (this.event) {
-                    this.event.postAssistance = checkLikePost(this.event.details, this.AuthUser);
-                    this.event.ubication = getJSON(this.event.ubication);
-                    this.event.fulldate = `${this.event.date} ${this.event.time}`;
-                    if (this.event.images && this.event.images.length > 0) {
-                        this.event.images = mapImagesApi(this.event.images);
-                    }
-                }
+                // if (this.event) {
+                //     this.event.postAssistance = checkLikePost(this.event.details, this.AuthUser);
+                //     this.event.ubication = getJSON(this.event.ubication);
+                //     this.event.fulldate = `${this.event.date} ${this.event.time}`;
+                //     if (this.event.images && this.event.images.length > 0) {
+                //         this.event.images = mapImagesApi(this.event.images);
+                //     }
+                // }
             }
 
         });

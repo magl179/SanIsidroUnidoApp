@@ -19,10 +19,8 @@ export class UserHasRoleGuard implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot): boolean {
 
         if (hasRoles(this.authService.sessionAuthUserSubject.value, environment.roles_permitidos_reportar)) {
-            // console.log('User has roles', roles);
             return true;
         } else {
-            // console.log('user not has roles', roles);
             this.navCtrl.navigateRoot('/home');
             return false;
         }

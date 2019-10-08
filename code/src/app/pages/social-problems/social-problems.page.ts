@@ -5,7 +5,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { PostsService } from 'src/app/services/posts.service';
 import { IBasicFilter, IRespuestaApiSIU, IRespuestaApiSIUPaginada } from 'src/app/interfaces/models';
 import { UserService } from 'src/app/services/user.service';
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from "rxjs/operators";
 import { ISocialProblem, IPostShare } from 'src/app/interfaces/models';
 import { environment } from 'src/environments/environment';
 import { NetworkService } from 'src/app/services/network.service';
@@ -14,6 +14,7 @@ import { FilterPage } from "src/app/modals/filter/filter.page";
 import { SearchPage } from 'src/app/modals/search/search.page';
 import { getImageURL, mapImagesApi } from 'src/app/helpers/utils';
 import { checkLikePost } from 'src/app/helpers/user-helper';
+import { mapSocialProblem } from "../../helpers/utils";
 
 
 @Component({
@@ -65,6 +66,7 @@ export class SocialProblemsPage implements OnInit {
     }
 
     async ngOnInit() {
+        console.log('ng on init');
         this.authService.sessionAuthUser.pipe(
             finalize(() => { })
         ).subscribe(token_decoded => {
@@ -79,6 +81,7 @@ export class SocialProblemsPage implements OnInit {
     }
     //Activar el Menu y Cargar los problemas sociales
     ionViewWillEnter() {
+        console.log('jon will enter');
         this.utilsService.enableMenu();
         this.loadSocialProblems(null, true);
     }
@@ -132,6 +135,17 @@ export class SocialProblemsPage implements OnInit {
             this.postsService.resetSocialProblemsPage();
         }
         this.postsService.getSocialProblems().pipe(
+            map((res: any) => {
+                console.log('res map', res);
+                if (res && res.data && res.data.data) {
+                    const social_problems_to_map = res.data.data;
+                    social_problems_to_map.forEach((social_problem: any) => {
+                        social_problem = mapSocialProblem(social_problem);
+                    });
+                    console.log('res maped', res.data.data);
+                }
+                return res;
+            }),
             finalize(() => {
                 this.socialProblemsLoaded = true;
             })
@@ -139,12 +153,7 @@ export class SocialProblemsPage implements OnInit {
             let socialProblems = res.data.data;
             if (socialProblems) {
                 socialProblems = socialProblems.map((social_problem: any) => {
-                    social_problem.user.avatar = (social_problem.user && social_problem.user.avatar) ? getImageURL(social_problem.user.avatar) : null;
                     social_problem.postLiked = checkLikePost(social_problem.details, this.AuthUser) || false;
-                    social_problem.fulldate = `${social_problem.date} ${social_problem.time}`;
-                    if (social_problem.images && social_problem.images.length > 0) {
-                        social_problem.images = mapImagesApi(social_problem.images);
-                    }
                     return social_problem;
                 });
                 if (socialProblems.length === 0) {
