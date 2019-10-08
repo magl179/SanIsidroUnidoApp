@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { UtilsService } from 'src/app/services/utils.service';
@@ -10,6 +10,7 @@ import { NetworkService } from 'src/app/services/network.service';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { IRespuestaApiSIU } from "src/app/interfaces/models";
 import { decodeToken } from 'src/app/helpers/auth-helper';
+import { setInputFocus } from 'src/app/helpers/utils';
 
 @Component({
     selector: 'app-login',
@@ -18,10 +19,9 @@ import { decodeToken } from 'src/app/helpers/auth-helper';
 })
 export class LoginPage implements OnInit {
 
-    @ViewChild('passwordEyeLogin') passwordEye;
+    @ViewChild('passwordEyeLogin', {read: ElementRef}) passwordEye: ElementRef;
     appNetworkConnection = false;
     passwordTypeInput = 'password';
-    iconpassword = 'eye-off';
     loginForm: FormGroup;
     errorMessages = null;
 
@@ -47,9 +47,7 @@ export class LoginPage implements OnInit {
 
     togglePasswordMode() {
         this.passwordTypeInput = this.passwordTypeInput === 'text' ? 'password' : 'text';
-        this.iconpassword = this.iconpassword === 'eye-off' ? 'eye' : 'eye-off';
-        // console.log(this.passwordEye);
-        this.passwordEye.el.setFocus();
+        setInputFocus(this.passwordEye);
     }
 
     async manageLogin(loginData: any, res: any) {

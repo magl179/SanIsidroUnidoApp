@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { UtilsService } from 'src/app/services/utils.service';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
@@ -9,6 +9,7 @@ import { finalize } from 'rxjs/operators';
 import { NetworkService } from 'src/app/services/network.service';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { decodeToken } from 'src/app/helpers/auth-helper';
+import { setInputFocus } from 'src/app/helpers/utils';
 
 @Component({
     selector: 'app-register',
@@ -16,14 +17,13 @@ import { decodeToken } from 'src/app/helpers/auth-helper';
     styleUrls: ['./register.page.scss'],
 })
 export class RegisterPage implements OnInit {
-    @ViewChild('passwordEyeRegister') passwordEye;
-    appNetworkConnection = false;
 
+    // @ViewChild('passwordEyeRegister') passwordEye;
+    @ViewChild('passwordEyeRegister', {read: ElementRef}) passwordEye: ElementRef;
     passwordTypeInput = 'password';
-    passwordStrength = '';
-    iconpassword = 'eye-off';
     registerForm: FormGroup;
     errorMessages = null;
+    appNetworkConnection = false;
     // loginData = {
     //     token: null,
     //     user: null
@@ -51,8 +51,7 @@ export class RegisterPage implements OnInit {
     //Función alternar modo vista campo contraseña
     togglePasswordMode() {
         this.passwordTypeInput = this.passwordTypeInput === 'text' ? 'password' : 'text';
-        this.iconpassword = this.iconpassword === 'eye-off' ? 'eye' : 'eye-off';
-        this.passwordEye.el.setFocus();
+        setInputFocus(this.passwordEye);
     }
 
     async manageRegister(loginData, res) {

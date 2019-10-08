@@ -149,3 +149,12 @@ export const mapSocialProblem = (social_problem: any) => {
     // console.log('social problem maped', social_problem);
     return social_problem;
 }
+
+export const setInputFocus = (inputElement: any) => {
+    const nativeEl = inputElement.nativeElement.querySelector('input');
+    const inputSelection = nativeEl.selectionStart;
+    nativeEl.focus();
+    setTimeout(() => {
+        nativeEl.setSelectionRange(inputSelection, inputSelection);
+    }, 1);
+}

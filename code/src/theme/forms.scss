@@ -46,11 +46,14 @@
         font-size: 22px;
         color: var(--ion-color-gray);
     }
+    &:focus{
+       outline: none !important; 
+    }
 }
 
-.btn_eye_icon:focus {
+/*.btn_eye_icon:focus {
     outline: none !important;
-}
+}*/
 
 
 .item-form {

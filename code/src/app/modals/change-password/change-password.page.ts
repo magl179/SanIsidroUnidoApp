@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { UtilsService } from 'src/app/services/utils.service';
@@ -8,6 +8,7 @@ import { UserService } from 'src/app/services/user.service';
 import { LocalDataService } from "src/app/services/local-data.service";
 import { IRespuestaApiSIUSingle } from "src/app/interfaces/models";
 import { decodeToken } from 'src/app/helpers/auth-helper';
+import { setInputFocus } from 'src/app/helpers/utils';
 
 @Component({
     selector: 'app-change-password',
@@ -16,13 +17,12 @@ import { decodeToken } from 'src/app/helpers/auth-helper';
 })
 export class ChangePasswordPage implements OnInit {
 
-    @ViewChild('passwordEyeChangePass') passwordEye;
-    @ViewChild('passwordConfirmEyeChangePass') passwordConfirmEye;
+    // @ViewChild('passwordEyeChangePass') passwordEye;
+    // @ViewChild('passwordConfirmEyeChangePass') passwordConfirmEye;
+    @ViewChild('passwordEyeChangePass', {read: ElementRef}) passwordEye: ElementRef;
+    @ViewChild('passwordConfirmEyeChangePass', {read: ElementRef}) passwordEyeConfirmEye: ElementRef;
     passwordTypeInput = 'password';
-    iconpassword = 'eye-off';
     passwordConfirmTypeInput = 'password';
-    iconConfirmpassword = 'eye-off';
-
     changePassForm: FormGroup;
     errorMessages = null;
     //Usuario Autenticado
@@ -71,14 +71,12 @@ export class ChangePasswordPage implements OnInit {
 
     togglePasswordMode() {
         this.passwordTypeInput = this.passwordTypeInput === 'text' ? 'password' : 'text';
-        this.iconpassword = this.iconpassword === 'eye-off' ? 'eye' : 'eye-off';
-        this.passwordEye.el.setFocus();
+        setInputFocus(this.passwordEye);
     }
 
     togglePasswordConfirmMode() {
         this.passwordConfirmTypeInput = this.passwordConfirmTypeInput === 'text' ? 'password' : 'text';
-        this.iconConfirmpassword = this.iconConfirmpassword === 'eye-off' ? 'eye' : 'eye-off';
-        this.passwordConfirmEye.el.setFocus();
+        setInputFocus(this.passwordEyeConfirmEye);
     }
 
     closeModal() {

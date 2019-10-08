@@ -137,10 +137,10 @@
                                     </ion-label>
                                     <ion-input class="input-beatiful" #passwordEyeRegister
                                         [type]="passwordTypeInput" placeholder="********"
-                                        formControlName="password"></ion-input>
+                                        formControlName="password" clearOnEdit="false"></ion-input>
                                     <button item-end class="btn_eye_icon"
                                         (click)="togglePasswordMode()">
-                                        <ion-icon [name]="iconpassword"></ion-icon>
+                                        <ion-icon [name]="(passwordTypeInput === 'text')?'eye-off':'eye'"></ion-icon>
                                     </button>
                                 </ion-item>
                                 <div class="feedback-icon">
