@@ -22,37 +22,34 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
     @Output() returnMapLoaded = new EventEmitter();
 
     usePolyline = true;
-    polylineRoute = Leaflet.polyline([
-        [0.27672266086355024, -81.6663098484375]
-    ],
-        {
-            color: '#ee0033',
-            weight: 8,
-            opacity: .8,
-            dashArray: '20,15',
-            lineJoin: 'round'
-        }
-    );
-
-
+    polylineRoute: any;
     map: any;
     mapMarkers: any[] = null;
     mapIsLoaded = false;
     markersLayer = new Leaflet.LayerGroup();
     currentUserLayer = new Leaflet.LayerGroup();
-
     markerSelected = false;
     currentService = null;
     currentCoordinate: any = null;
-
     mapLoading = null;
-    currentRoute = null;
 
     constructor(
         private mapService: MapService,
         private utilsService: UtilsService,
         private localizationService: LocalizationService
-    ) { }
+    ) {
+        this.polylineRoute= Leaflet.polyline([
+            [0.27672266086355024, -81.6663098484375]
+        ],
+            {
+                color: '#ee0033',
+                weight: 8,
+                opacity: .8,
+                dashArray: '20,15',
+                lineJoin: 'round'
+            }
+        );
+     }
 
     async ngOnInit() { }
 
@@ -62,28 +59,6 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
 
     createWayPoints(lat1: number, lng1: number, lat2: number, lng2: number) {
         return [this.createLatLng(lat1, lng1), this.createLatLng(lat2, lng2)];
-    }
-
-    createRoute(waypoints: any) {
-        const route = Leaflet.Routing.control({
-            waypoints: waypoints,
-            plan: Leaflet.Routing.plan(waypoints, {
-                createMarker: function (i: any, wp: any) {
-                    return null;
-                }
-            }),
-            router: new Leaflet.Routing.osrmv1({
-                language: 'es'
-            }),
-            routeWhileDragging: false,
-            autoRoute: false,
-            fitSelectedRoutes: true,
-            useZoomParameter: true,
-            show: false,
-            showAlternatives: false
-        });
-        // ruta1.route();
-        return route;
     }
 
     async ngAfterViewInit() {
@@ -98,18 +73,13 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
         await this.initializeMap();
     }
 
-    onTwoFingerDrag(e) {
+    onTwoFingerDrag(e: any) {
         if (e.type === 'touchstart' && e.touches.length === 1) {
             e.currentTarget.classList.add('swiping');
         } else {
             e.currentTarget.classList.remove('swiping');
         }
     }
-
-    // Clear route:
-    // control.setWaypoints([]);
-    // Remove control:
-    // map.removeControl(control);
 
     async initializeMap() {
         // Verificar si se habilita el gesture handling
@@ -135,9 +105,7 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
         });
         this.map.zoomControl.setPosition('topright');
         // Configurar la vista centrada
-        // Leaflet.control.zoom({ position: 'topright' }).addTo(this.map);
         this.map.setView([-0.1548643, -78.4822049], this.zoomMap);
-        // this.map.flyTo([-0.1548643, -78.4822049], this.zoomMap);
         // Agregar la capa del Mapa
         Leaflet.tileLayer(environment.googleMapLayer.url, {
             attribution: environment.googleMapLayer.attribution,
@@ -145,23 +113,8 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
             updateWhenIdle: true,
             reuseTiles: true
         }).addTo(this.map);
-
-        //Añadir Ruta
-        this.currentRoute = this.createRoute([null]);
-        this.currentRoute.on('routesfound', async function (e: any) {
-            console.log('event route selected', e);
-        });
-        this.currentRoute.on('routingerror', function (e: any) {
-            console.log('error', e);
-        });
         //Añadir Ruta Polyline
         this.polylineRoute.addTo(this.map);
-
-        // Añadir Polilinea al Mapa
-        // this.currentPolyline.addTo(this.map);
-        this.currentRoute.addTo(this.map);
-        // Añadir el control de escala
-        // Leaflet.control.scale({ position: 'bottomleft' }).addTo(this.map);
         // Si obtuve coordenadas añadir el marcador
         if (this.currentCoordinate) {
             const iconCurrent = await this.mapService.getCustomIcon('red');
@@ -208,19 +161,13 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
                 if (this.currentCoordinate) {
                     console.log('Redraw route', title);
                     const wp1 = this.createLatLng(this.currentCoordinate.latitude, this.currentCoordinate.longitude);
-                    if (!this.usePolyline) {     
-                        this.currentRoute.setWaypoints([wp1, latlng]);
-                        await this.currentRoute.route();
-                    } else {
-                        this.polylineRoute.setLatLngs([wp1, latlng]);
-                        this.map.fitBounds(this.polylineRoute.getBounds());
-                    }
+                    this.polylineRoute.setLatLngs([wp1, latlng]);
+                    this.map.fitBounds(this.polylineRoute.getBounds());
                 }
             }
         });
 
         this.map.addLayer(this.markersLayer);
-
         this.map.addControl(searchControl);
         searchControl.on('search:collapsed', (e: any) => { });
     }
@@ -235,7 +182,7 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
         this.markerSelected = false;
     }
 
-    showInfo(e) {
+    showInfo(e: any) {
         let selectedMarker = null;
         this.mapPoints.forEach((point) => {
             if (point.ubication.latitude === e.latlng.lat && point.ubication.longitude === e.latlng.lng) {

@@ -2,3 +2,44 @@
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
 }
+.event {
+    // display: flex;
+    margin-bottom: 1.5em;
+    .event-title {
+      position: relative;
+    }
+    .event-image{
+        height: 150px;
+        margin-bottom: 1rem;
+        .img{
+            height: 100%;
+            object-fit: cover;
+             height: 100%;
+        }
+    }
+    .container-more-options {
+      position: absolute;
+      top: 5px;
+      right: -5px;
+      font-size: 25px;
+    }
+    .main-post-info {
+      .item-info {
+        ion-icon {
+          margin-right: 1rem;
+        }
+        .description {
+          line-height: 1.7rem;
+        }
+        .icon-fulldate {
+          color: #1a78c8;
+        }
+        .icon-ubication {
+          color: #cf4331;
+        }
+        .icon-people {
+          color: #1a78c8;
+        }
+      }
+    }
+  }

@@ -1,0 +1,25 @@
+.emergency {
+    margin-bottom: 1.7em;
+    .post-subtitle {
+      position: relative;
+      padding: 0.6em 0;
+    }
+    .post-title {
+      font-weight: bold;
+      color: #2a2c31;
+      // margin-bottom: .7rem;
+    }
+    .post-description {
+      color: #000;
+      margin-bottom: 1rem;
+    }
+    .see-more {
+      padding-bottom: 1rem;
+    }
+    .container-more-options {
+      position: absolute;
+      top: 2px;
+      right: -5px;
+      font-size: 25px;
+    }
+  }

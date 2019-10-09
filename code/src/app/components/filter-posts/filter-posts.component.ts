@@ -62,6 +62,8 @@ export class FilterPostsComponent implements OnInit {
             'subcategory': this.subcategory
         });
     }
+
+    
     
 
 }

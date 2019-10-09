@@ -5,7 +5,7 @@ import { PostsService } from 'src/app/services/posts.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { IPostShare, ISocialProblem, IRespuestaApiSIUSingle, IRespuestaApiSIU } from "src/app/interfaces/models";
 import { NetworkService } from 'src/app/services/network.service';
-import { ModalController } from "@ionic/angular";
+import { ModalController, ActionSheetController } from "@ionic/angular";
 import { ImageDetailPage } from 'src/app/modals/image_detail/image_detail.page';
 import { finalize, map } from 'rxjs/operators';
 import { mapImagesApi, getImageURL } from "src/app/helpers/utils";
@@ -33,6 +33,7 @@ export class SocialProblemDetailPage implements OnInit {
         private route: ActivatedRoute,
         private postService: PostsService,
         public utilsService: UtilsService,
+        private actionSheetCtrl: ActionSheetController,
         private modalCtrl: ModalController,
         private networkService: NetworkService,
         private authService: AuthService) { }
@@ -44,7 +45,7 @@ export class SocialProblemDetailPage implements OnInit {
         });
         
         this.authService.sessionAuthUser.subscribe(token_decoded => {
-            if (token_decoded.user) {
+            if (token_decoded && token_decoded.user) {
                 this.AuthUser = token_decoded.user; 
             }
         },
@@ -80,6 +81,43 @@ export class SocialProblemDetailPage implements OnInit {
                 // }
             }
         });
+    }
+
+    async showActionCtrl() {
+        const actionShare = {
+            text: 'Compartir',
+            icon: 'share',
+            cssClass: ['share-event'],
+            handler: () => {
+                console.log('compartir evento', event);
+                this.sharePost(this.socialProblem);
+            }
+        }
+        const actionToggleLike = {
+            text: 'Me gusta',
+            icon: 'heart',
+            cssClass: ['toggle-like', (this.socialProblem.postLiked) ? 'active' : ''],
+            handler: () => {
+                console.log('like toggle');
+                this.toggleLike(this.socialProblem.postLiked);
+            }
+        }
+
+        const actionSheet = await this.actionSheetCtrl.create({
+            buttons: [
+                actionShare,
+                actionToggleLike, {
+                    text: 'Cancelar',
+                    icon: 'close',
+                    cssClass: ['cancel-action'],
+                    role: 'cancel',
+                    handler: () => {
+                        console.log('Cancel clicked');
+                    }
+                }
+            ]
+        });
+        await actionSheet.present();
     }
     
     getBGCover(image_cover: any) {

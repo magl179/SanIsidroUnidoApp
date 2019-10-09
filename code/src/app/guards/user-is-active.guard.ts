@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, CanActivate, Router } from "@angular/router";
+import { ActivatedRouteSnapshot, RouterStateSnapshot, CanLoad, CanActivate, Router } from "@angular/router";
 import { Observable } from 'rxjs';
 import { AuthService } from "src/app/services/auth.service";
 import { map } from 'rxjs/operators';
@@ -8,7 +8,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 
-export class UserIsActiveGuard implements CanActivate {
+export class UserIsActiveGuard implements CanLoad {
 
     constructor(
         private authService: AuthService,
@@ -16,7 +16,7 @@ export class UserIsActiveGuard implements CanActivate {
         ) {
     }
 
-    canActivate():Observable<boolean> | boolean {
+    canLoad():Observable<boolean> | boolean {
         const userObservable = this.authService.sessionAuthUser;
         // console.log('login guard');
         return userObservable.pipe(

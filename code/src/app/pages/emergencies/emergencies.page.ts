@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, ModalController } from "@ionic/angular";
+import { NavController, ModalController, ActionSheetController } from "@ionic/angular";
 import { UtilsService } from "src/app/services/utils.service";
 import { PostsService } from "src/app/services/posts.service";
 import { IBasicFilter, IRespuestaApiSIUPaginada, ITokenDecoded } from "src/app/interfaces/models";
@@ -38,7 +38,8 @@ export class EmergenciesPage implements OnInit {
         private authService: AuthService,
         private utilsService: UtilsService,
         private postsService: PostsService,
-        private modalCtrl: ModalController
+        private modalCtrl: ModalController,
+        private actionSheetCtrl: ActionSheetController
     ) { }
 
 
@@ -47,6 +48,7 @@ export class EmergenciesPage implements OnInit {
 
     ionViewWillEnter() {
         this.utilsService.enableMenu();
+        this.postsService.resetEmergenciesPage();
         this.authService.sessionAuthUser.subscribe(async(token_decoded: ITokenDecoded) => {
             // console.log('token decoded', token_decoded)
             // console.log('token decoded VERIFY', (token_decoded.user) ? 'true' : 'false');
@@ -58,6 +60,33 @@ export class EmergenciesPage implements OnInit {
         });
         this.loadEmergencies(null, true);
     }
+
+    // async showActionCtrl(emergency) {
+    //     const actionToggleAssistance = {
+    //         text: (emergency.postAssistance) ? 'Unirme' : 'Ya no me interesa',
+    //         icon: 'clipboard',
+    //         cssClass: ['toggle-assistance'],
+    //         handler: () => {
+    //             console.log('Favorito Borrado');
+    //             this.toggleAssistance(event.postAssistance, event.id);
+    //         }
+    //     }
+
+    //     const actionSheet = await this.actionSheetCtrl.create({
+    //         buttons: [
+    //             actionToggleAssistance, {
+    //                 text: 'Cancelar',
+    //                 icon: 'close',
+    //                 cssClass: ['cancel-action'],
+    //                 role: 'cancel',
+    //                 handler: () => {
+    //                     console.log('Cancel clicked');
+    //                 }
+    //             }
+    //         ]
+    //     });
+    //     await actionSheet.present();
+    // }
 
     loadEmergencies(event?: any, resetEvents?: any) {
         if (resetEvents) {

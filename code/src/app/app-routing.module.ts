@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { UserAuthenticatedGuard } from './guards/user-authenticated.guard';
-import { UserNotAuthenticatedGuard } from './guards/user-not-authenticated.guard';
+// import { UserNotAuthenticatedGuard } from './guards/user-not-authenticated.guard';
 import { UserHasRoleGuard } from "./guards/user-has-role.guard";
-import { UserIsActiveGuard } from "./guards/user-is-active.guard";
+// import { UserIsActiveGuard } from "./guards/user-is-active.guard";
 
 const routes: Routes = [
     
@@ -15,74 +15,72 @@ const routes: Routes = [
     {
         path: 'home',
         loadChildren: './pages/home/home.module#HomePageModule',
-        canActivate: [UserAuthenticatedGuard]
+        canLoad: [UserAuthenticatedGuard]
     },
     {
         path: 'login',
-        loadChildren: './pages/login/login.module#LoginPageModule',
-        canActivate: [UserNotAuthenticatedGuard]
+        loadChildren: './pages/login/login.module#LoginPageModule'
     },
     {
         path: 'register',
-        loadChildren: './pages/register/register.module#RegisterPageModule',
-        canActivate: [UserNotAuthenticatedGuard]
+        loadChildren: './pages/register/register.module#RegisterPageModule'
     },
     {
         path: 'tutorial',
         loadChildren: './pages/tutorial/tutorial.module#TutorialPageModule',
-        canActivate: [UserNotAuthenticatedGuard]
+        // canLoad: [UserNotAuthenticatedGuard]
     },
     {
         path: 'social-problems',
-        loadChildren: './pages/social-problems/social-problems.module#SocialProblemsPageModule', canActivate: [UserAuthenticatedGuard]
+        loadChildren: './pages/social-problems/social-problems.module#SocialProblemsPageModule', canLoad: [UserAuthenticatedGuard]
     },
     {
         path: 'public-services',
         loadChildren: './pages/public-services/public-services.module#PublicServicesPageModule',
-        canActivate: [UserAuthenticatedGuard]
+        canLoad: [UserAuthenticatedGuard]
     },
     {
         path: 'directory-info',
         loadChildren: './pages/directory-info/directory-info.module#DirectoryInfoPageModule',
-        canActivate: [UserAuthenticatedGuard,]
+        canLoad: [UserAuthenticatedGuard,]
     },
     {
         path: 'user-profile',
         loadChildren: './pages/user-profile/user-profile.module#UserProfilePageModule',
-        canActivate: [UserAuthenticatedGuard]
+        canLoad: [UserAuthenticatedGuard]
     },
     // tslint:disable-next-line: max-line-length
     {
         path: 'social-problem-detail/:id',
         loadChildren: './pages/social-problem-detail/social-problem-detail.module#SocialProblemDetailPageModule',
-        canActivate: [UserAuthenticatedGuard]
+        canLoad: [UserAuthenticatedGuard]
     },
     {
         path: 'social-problem-create',
         loadChildren: './pages/social-problem-create/social-problem-create.module#SocialProblemCreatePageModule',
-        canActivate: [UserAuthenticatedGuard, UserIsActiveGuard, UserHasRoleGuard],
+        canLoad: [UserAuthenticatedGuard, UserHasRoleGuard],
         data: { roles: ['morador_afiliado']}
     },
     {
         path: 'emergency-create',
         loadChildren: './pages/emergency-create/emergency-create.module#EmergencyCreatePageModule',
-        canActivate: [UserAuthenticatedGuard, UserIsActiveGuard, UserHasRoleGuard],
+        canLoad: [UserAuthenticatedGuard, UserHasRoleGuard],
         data: {roles: ['morador_afiliado']}
     },
     {
         path: 'events',
         loadChildren: './pages/events/events.module#EventsPageModule',
-        canActivate: [UserAuthenticatedGuard]
+        canLoad: [UserAuthenticatedGuard]
     },
     {
         path: 'event-detail/:id',
         loadChildren: './pages/event-detail/event-detail.module#EventDetailPageModule',
-        canActivate: [UserAuthenticatedGuard]
+        canLoad: [UserAuthenticatedGuard]
     },
     {
         path: 'about',
         loadChildren: './pages/about/about.module#AboutPageModule',
-        canActivate: [UserAuthenticatedGuard]
+        canLoad: [UserAuthenticatedGuard]
     },
     {
         path: 'configuration',
@@ -91,12 +89,12 @@ const routes: Routes = [
     {
         path: 'frequent-questions',
         loadChildren: './pages/frequent-questions/frequent-questions.module#FrequentQuestionsPageModule',
-        canActivate: [UserAuthenticatedGuard]
+        canLoad: [UserAuthenticatedGuard]
     },
     {
         path: 'emergencies',
         loadChildren: './pages/emergencies/emergencies.module#EmergenciesPageModule',
-        canActivate: [UserAuthenticatedGuard]
+        canLoad: [UserAuthenticatedGuard]
     },
     {
         path: 'emergency-detail/:id',
@@ -105,12 +103,12 @@ const routes: Routes = [
     {
         path: 'reports',
         loadChildren: './pages/reports/reports.module#ReportsPageModule',
-        canActivate: [UserAuthenticatedGuard]
+        canLoad: [UserAuthenticatedGuard]
     },
     {
         path: 'report-detail/:id',
         loadChildren: './pages/report-detail/report-detail.module#ReportDetailPageModule',
-        canActivate: [UserAuthenticatedGuard]
+        canLoad: [UserAuthenticatedGuard]
     },
     {
         path: '404',

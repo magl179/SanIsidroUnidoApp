@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, ModalController } from "@ionic/angular";
+import { NavController, ModalController, ActionSheetController } from "@ionic/angular";
 import { UtilsService } from 'src/app/services/utils.service';
 import { IPostShare } from 'src/app/interfaces/models';
 import { PostsService } from 'src/app/services/posts.service';
@@ -30,7 +30,8 @@ export class EventsPage implements OnInit {
         private utilsService: UtilsService,
         private postService: PostsService,
         private authService: AuthService,
-        private modalCtrl: ModalController
+        private modalCtrl: ModalController,
+        private actionSheetCtrl: ActionSheetController
     ) {
         console.log('Constructor Eventos');
     }
@@ -43,7 +44,7 @@ export class EventsPage implements OnInit {
 
     ngOnInit() {
         this.authService.sessionAuthUser.subscribe(token_decoded => {
-            if (token_decoded.user) {
+            if (token_decoded && token_decoded.user) {
                 this.AuthUser = token_decoded.user;
             }
         });
@@ -51,7 +52,45 @@ export class EventsPage implements OnInit {
 
     ionViewWillEnter() {
         this.utilsService.enableMenu();
+        this.postService.resetEventsPage();
         this.loadEvents();
+    }
+
+    async showActionCtrl(event: IEvent) {
+        const actionShare = {
+            text: 'Compartir',
+            icon: 'share',
+            cssClass: ['share-event'],
+            handler: () => {
+                console.log('compartir evento', event);
+                this.sharePost(event);
+            }
+        }
+        const actionToggleAssistance = {
+            text: (event.postAssistance) ? 'Unirme' : 'Ya no me interesa',
+            icon: 'clipboard',
+            cssClass: ['toggle-assistance'],
+            handler: () => {
+                console.log('Favorito Borrado');
+                this.toggleAssistance(event.postAssistance, event.id);
+            }
+        }
+
+        const actionSheet = await this.actionSheetCtrl.create({
+            buttons: [
+                actionShare,
+                actionToggleAssistance, {
+                    text: 'Cancelar',
+                    icon: 'close',
+                    cssClass: ['cancel-action'],
+                    role: 'cancel',
+                    handler: () => {
+                        console.log('Cancel clicked');
+                    }
+                }
+            ]
+        });
+        await actionSheet.present();
     }
 
     toggleAssistance(assistance: boolean, id: number) {

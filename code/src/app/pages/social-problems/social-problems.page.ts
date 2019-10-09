@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, PopoverController, ModalController } from "@ionic/angular";
+import { NavController, PopoverController, ModalController, ActionSheetController } from "@ionic/angular";
 import { UtilsService } from 'src/app/services/utils.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { PostsService } from 'src/app/services/posts.service';
@@ -8,11 +8,8 @@ import { UserService } from 'src/app/services/user.service';
 import { finalize, map } from "rxjs/operators";
 import { ISocialProblem, IPostShare } from 'src/app/interfaces/models';
 import { environment } from 'src/environments/environment';
-import { NetworkService } from 'src/app/services/network.service';
-import { FilterPostsComponent } from "src/app/components/filter-posts/filter-posts.component";
 import { FilterPage } from "src/app/modals/filter/filter.page";
 import { SearchPage } from 'src/app/modals/search/search.page';
-import { getImageURL, mapImagesApi } from 'src/app/helpers/utils';
 import { checkLikePost } from 'src/app/helpers/user-helper';
 import { mapSocialProblem } from "../../helpers/utils";
 
@@ -60,7 +57,7 @@ export class SocialProblemsPage implements OnInit {
         private userService: UserService,
         private modalCtrl: ModalController,
         private popoverCtrl: PopoverController,
-        private networkService: NetworkService
+        private actionSheetCtrl: ActionSheetController
     ) {
         console.log('Constructor Problemas Sociales');
     }
@@ -83,16 +80,12 @@ export class SocialProblemsPage implements OnInit {
     ionViewWillEnter() {
         console.log('jon will enter');
         this.utilsService.enableMenu();
+        this.postsService.resetSocialProblemsPage();
         this.loadSocialProblems(null, true);
     }
     //Ir a la pagina para reportar problemas sociales
     reportSocialProblem() {
         this.navCtrl.navigateForward('/social-problem-create')
-    }
-    //Resetear los problemas sociales
-    resetSocialProblems() {
-        this.socialProblemsList = [];
-        this.postsService.resetSocialProblemsPage();
     }
     //Eliminar o agregar like a una publicacion
     toggleLike(like: boolean, id: number) {
@@ -127,6 +120,44 @@ export class SocialProblemsPage implements OnInit {
             });
         }
     }
+
+    async showActionCtrl(socialProblem: ISocialProblem) {
+        const actionShare = {
+            text: 'Compartir',
+            icon: 'share',
+            cssClass: ['share-event'],
+            handler: () => {
+                console.log('compartir evento', event);
+                this.sharePost(socialProblem);
+            }
+        }
+        const actionToggleLike = {
+            text: 'Me gusta',
+            icon: 'heart',
+            cssClass: ['toggle-like', (socialProblem.postLiked) ? 'active' : ''],
+            handler: () => {
+                console.log('like toggle');
+                this.toggleLike(socialProblem.postLiked, socialProblem.id);
+            }
+        }
+
+        const actionSheet = await this.actionSheetCtrl.create({
+            buttons: [
+                actionShare,
+                actionToggleLike, {
+                    text: 'Cancelar',
+                    icon: 'close',
+                    cssClass: ['cancel-action'],
+                    role: 'cancel',
+                    handler: () => {
+                        console.log('Cancel clicked');
+                    }
+                }
+            ]
+        });
+        await actionSheet.present();
+    }
+
     //Cargar los problemas sociales
     loadSocialProblems(event?: any, resetEvents?: any) {
         this.socialProblemsLoaded = false;
@@ -182,7 +213,6 @@ export class SocialProblemsPage implements OnInit {
     }
     //Ir al detalle de un problema socialc
     postDetail(id) {
-        this.resetSocialProblems();
         this.navCtrl.navigateForward(`/social-problem-detail/${id}`);
     }
     //Compartir el Problema Social
@@ -197,7 +227,7 @@ export class SocialProblemsPage implements OnInit {
         await this.utilsService.shareSocial(sharePost);
     }
     //Obtener las imagenes de un post
-    getImages($imagesArray) {
+    getImages($imagesArray: any) {
         if ($imagesArray.length === 0) {
             return '';
         } else {
@@ -207,25 +237,24 @@ export class SocialProblemsPage implements OnInit {
     //Funcion mostrar el filtro de publicaciones
     async showModalFilterSocialProblems(event) {
         //Crear Popover
-        const popover = await this.popoverCtrl.create({
-            component: FilterPostsComponent,
-            event,
-            backdropDismiss: false,
-            showBackdrop: false,
+        const modal = await this.modalCtrl.create({
+            component: FilterPage,
             componentProps: {
-                "posts": [...this.socialProblemsList],
-                'subcategory': this.subcategory
+                "data": [...this.socialProblemsList],
+                'postTypeSlug': this.subcategory,
+                'filters': this.filters
             }
         });
         //Obtener datos popover cuando se vaya a cerrar
-        popover.onDidDismiss().then((dataReturned: any) => {
-            if (dataReturned !== null) {
-                this.socialProblemsFilter = [...dataReturned.data.posts];
-                this.subcategory = dataReturned.data.subcategory;
+        modal.onDidDismiss().then((modal: any) => {
+            console.log('modal returned', modal);
+            if (modal.data) {
+                this.socialProblemsFilter = [...modal.data.posts];
+                this.subcategory = modal.data.subcategory;
             }
         });
         //Presentar el Popover
-        return await popover.present();
+        return await modal.present();
     }
 
     getBGCover(image_cover: any) {

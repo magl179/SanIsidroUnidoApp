@@ -7,7 +7,7 @@
     </div>
     <!-- Tarjetas Animacion hasta cargar datos-->
     <div *ngIf="!eventsLoaded">
-        <ion-card *ngFor="let event of [1,1,1,1]" class="event_item animated flash slow infinite">
+        <ion-card *ngFor="let event of [1,1,1,1]" class="event animated flash slow infinite">
             <ion-card-header>
                 <ion-card-subtitle>
                     <ion-skeleton-text width="60%"></ion-skeleton-text>
@@ -37,44 +37,43 @@
     </div>
     <!-- Tarjeta Datos Cargados y Disponibles -->
     <div *ngIf="eventsLoaded  && eventsList.length > 0">
-        <ion-card class="event_card" *ngFor="let event of eventsList; let i = index;">
-            <div class="cover-event" [ngStyle]="{'background-image': getImageCover(event)}">
-                <div class="social-buttons">
-                    <div class="item-button" (click)="sharePost(event)">
-                        <ion-icon class="share" name="share"></ion-icon>
-                    </div>
-                </div>
+        <ion-card class="event" *ngFor="let event of eventsList; let i = index;">
+            <div class="event-image" *ngIf="event.images && event.images.length > 0" >
+                <img [src]="event.images[0].url" alt="Imagen Tarjeta" class="img" />
             </div>
-            <div class="event-info">
-                <ion-card-title class="event-title" (click)="postDetail(event.id)"> 
-                    {{event.title}}
+            <ion-card-header class="event-header">
+                <ion-card-title class="event-title" (click)="postDetail(event.id)">
+                    <span>{{event.title}}</span>
+                    <div class="container-more-options" (click)="showActionCtrl(event)">
+                        <ion-icon name="md-more"></ion-icon>
+                    </div>
                 </ion-card-title>
-                <p class="event-date">
-                    <ion-icon name="calendar"></ion-icon>
-                    {{ event.fulldate | beafitulDate }}
+            </ion-card-header>
+            <ion-card-content class="main-post-info">
+                <p class="item-info">
+                    <span class="icon-fulldate">
+                        <ion-icon name="calendar"></ion-icon>
+                    </span>
+                    <span class="description"> {{ event.fulldate | beafitulDate }} </span>
                 </p>
-                <p class="event-ubication">
-                    <ion-icon name="pin"></ion-icon>
-                    {{ (event.ubication && event.ubication.address) ? event.ubication.address : 'Direccion no encontrada' }}
+                <p class="item-info">
+                    <span class="icon-ubication">
+                        <ion-icon name="pin"></ion-icon>
+                    </span>
+                    <span class="description">
+                        {{ (event.ubication && event.ubication.address) ? event.ubication.address : 'Direccion no encontrada' }}
+                    </span>
                 </p>
-                <p class="assistance-info">
-                    <span class="count-people">
+                <p class="item-info">
+                    <span class="icon-people">
                         <ion-icon name="people"></ion-icon>
+                    </span>
+                    <span class="description">
                         {{ event.details.length }}
                         {{(event.details.length !== 1) ? 'personas asistirán': 'persona asistirá'}}
                     </span>
                 </p>
-                <p>
-                    <ion-chip class="chip-event-assistance" [class.active]="(event.postAssistance)"
-                        (click)="toggleAssistance(event.postAssistance, event.id)">
-                        <ion-label class="ion-align-items-center">
-                            <ion-icon [name]="(event.postAssistance)?'checkmark':'people'"
-                                style="margin-right: 6px"></ion-icon>
-                            <span>{{ (event.postAssistance) ? 'Voy a Asistir': 'Unirme' }}</span>
-                        </ion-label>
-                    </ion-chip>
-                </p>
-            </div>
+            </ion-card-content>
         </ion-card>
     </div>
     <!--Opciones del FabButton -->

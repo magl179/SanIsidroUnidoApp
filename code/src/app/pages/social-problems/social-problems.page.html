@@ -49,89 +49,45 @@
     </div>
     <!-- Tarjeta con Datos Cargados -->
     <div *ngIf="socialProblemsLoaded  && socialProblemsList.length > 0">
-        <ion-card class="social_problem_card"
-            *ngFor="let socialProblem of (socialProblemsFilter); let i = index;">
-            <div class="cover-social-problem"
-                [ngStyle]="{'background-image': (socialProblem.images && socialProblem.images.length > 0) ? getBGCover(socialProblem.images[0].url) : ''}">
-                <div class="social-buttons">
-                    <div class="item-button"
-                        (click)="toggleLike(socialProblem.postLiked, socialProblem.id)">
-                        <ion-icon class="like" [class.active]="socialProblem.postLiked"
-                            name="heart"></ion-icon>
-                    </div>
-                    <div class="item-button" (click)="sharePost(socialProblem)">
-                        <ion-icon class="share" name="share"></ion-icon>
-                    </div>
-                </div>
-            </div>
-            <ion-card-header class="social_problem_header">
-                <ion-card-title class="social_problem_title">
-                    {{socialProblem.title}}
-                </ion-card-title>
-                <ion-card-subtitle class="social_problem_user_info_container">
-                    <img class="avatar_user" [src]="socialProblem.user.avatar"
-                        fallimg="user_avatar">
-                    <div class="user-info">
-                        <p class="user-name"> {{socialProblem.user.firstname}}
-                            {{socialProblem.user.lastname}}</p>
-                        <p class="post-date">{{socialProblem.created_at | beafitulDate}}</p>
-                        <p class="post-date">{{socialProblem.details.length}} me
-                            gusta</p>
-                    </div>
-                </ion-card-subtitle>
-            </ion-card-header>
-            <ion-card-content class="social_problem_card_content">
-                <p class="post-attendace-container bottom-mg">
-                    Estado Atención:
-                    <ion-chip class="post-attent-state right"
-                        [class.active]="(socialProblem.is_attended)">
-                        <ion-label>{{(socialProblem.is_attended)?'Atendida':'Pendiente'}}</ion-label>
-                    </ion-chip>
-                </p>
-                <p class="post_description">
-                    {{socialProblem.description | truncate: 50}}
-                </p>
-                <p class="see_more" (click)="postDetail(socialProblem.id)">Ver más...</p>
-            </ion-card-content>
-        </ion-card>
-    </div>
-    <div *ngIf="socialProblemsLoaded  && socialProblemsList.length > 0">
         <ion-card class="social-problem" *ngFor="let socialProblem of socialProblemsFilter">
-            <div class="post-cover-image">
-                <img [src]="(socialProblem.images && socialProblem.images.length > 0) ? socialProblem.images[0].url : ''"
-                    alt="Imagen Tarjeta" class="img"/>
-                <div class="social-buttons single">
-                    <div class="item-button">
-                        <ion-icon class="like" name="heart">
-                        </ion-icon>
-                    </div>
-                </div>
+            <div class="post-cover-image"
+                *ngIf="socialProblem.images && socialProblem.images.length > 0">
+                <img [src]="socialProblem.images[0].url" alt="Imagen Tarjeta" class="img" />
             </div>
             <ion-card-header class="post-header">
-                <ion-card-title class="post-title"> Essential Https Concepts you should know
+                <ion-card-subtitle class="post-subtitle">
+                    <span>{{socialProblem.subcategory.name}}</span>
+                    <div class="container-more-options" (click)="showActionCtrl(socialProblem)">
+                        <ion-icon name="md-more"></ion-icon>
+                    </div>
+                </ion-card-subtitle>
+                <ion-card-title class="post-title"> {{socialProblem.title}}
                 </ion-card-title>
             </ion-card-header>
             <ion-card-content class="post-content">
                 <p class="post-description">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati reiciendis
-                    quibusdam odit aperiam
+                    {{socialProblem.description}}
                 </p>
-                <p class="post-see-more">Leer más</p>
+                <p class="post-see-more" (click)="postDetail(socialProblem.id)">Leer más...</p>
             </ion-card-content>
         </ion-card>
     </div>
     <!--Opciones del FabButton -->
-    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab vertical="bottom" horizontal="center" slot="fixed">
         <ion-fab-button color="primary" size="small">
-            <ion-icon name="ios-arrow-dropup"></ion-icon>
+            <ion-icon name="ios-keypad"></ion-icon>
         </ion-fab-button>
         <ion-fab-list side="top">
             <ion-fab-button color="secondary" (click)="showModalSearchSocialProblems()">
                 <ion-icon name="search"></ion-icon>
             </ion-fab-button>
+        </ion-fab-list>
+        <ion-fab-list side="start">
             <ion-fab-button color="danger" (click)="showModalFilterSocialProblems()">
                 <ion-icon name="options"></ion-icon>
             </ion-fab-button>
+        </ion-fab-list>
+        <ion-fab-list side="end">
             <ion-fab-button color="tertiary" (click)="reportSocialProblem()">
                 <ion-icon name="send"></ion-icon>
             </ion-fab-button>

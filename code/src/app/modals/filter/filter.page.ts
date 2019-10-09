@@ -14,40 +14,40 @@ import { finalize } from 'rxjs/operators';
 })
 export class FilterPage implements OnInit {
 
-    @Input() data2: any = [
-        { id: 1, name: 'lr1', subcategory_id: 1, state: 0 },
-        { id: 2, name: 'lr2', subcategory_id: 2, state: 1 },
-        { id: 3, name: 'lr3', subcategory_id: 3, state: 0 },
-        { id: 4, name: 'lr4', subcategory_id: 4, state: 1 },
-        { id: 5, name: 'lr5', subcategory_id: 4, state: 1 },
-        { id: 6, name: 'lr6', subcategory_id: 1, state: 0 },
-        { id: 7, name: 'lr7', subcategory_id: 2, state: 1 },
-        { id: 8, name: 'lr8', subcategory_id: 3, state: 0 },
-        { id: 9, name: 'lr9', subcategory_id: 3, state: 1 },
-        { id: 10, name: 'lr10', subcategory_id: 4, state: 0 }
-    ];
+    // @Input() data: any = [
+    //     { id: 1, name: 'lr1', subcategory_id: 1, state: 0 },
+    //     { id: 2, name: 'lr2', subcategory_id: 2, state: 1 },
+    //     { id: 3, name: 'lr3', subcategory_id: 3, state: 0 },
+    //     { id: 4, name: 'lr4', subcategory_id: 4, state: 1 },
+    //     { id: 5, name: 'lr5', subcategory_id: 4, state: 1 },
+    //     { id: 6, name: 'lr6', subcategory_id: 1, state: 0 },
+    //     { id: 7, name: 'lr7', subcategory_id: 2, state: 1 },
+    //     { id: 8, name: 'lr8', subcategory_id: 3, state: 0 },
+    //     { id: 9, name: 'lr9', subcategory_id: 3, state: 1 },
+    //     { id: 10, name: 'lr10', subcategory_id: 4, state: 0 }
+    // ];
 
 
-    @Input() filters2: IBasicFilter = {
-        subcategory_id: {
-            name: 'Subcategoria',
-            value: "",
-            options: [
-                { id: 1, name: 'Transporte y Tránsito' },
-                { id: 2, name: 'Seguridad' },
-                { id: 3, name: 'Protección Animal' },
-                { id: 4, name: 'Espacios Verdes' }
-            ]
-        },
-        state: {
-            name: 'Estado',
-            value: "",
-            options: [
-                { id: 1, name: 'Atendidos' },
-                { id: 0, name: 'Pendientes' }
-            ]
-        }
-    };
+    // @Input() filters: IBasicFilter = {
+    //     subcategory_id: {
+    //         name: 'Subcategoria',
+    //         value: "",
+    //         options: [
+    //             { id: 1, name: 'Transporte y Tránsito' },
+    //             { id: 2, name: 'Seguridad' },
+    //             { id: 3, name: 'Protección Animal' },
+    //             { id: 4, name: 'Espacios Verdes' }
+    //         ]
+    //     },
+    //     state: {
+    //         name: 'Estado',
+    //         value: "",
+    //         options: [
+    //             { id: 1, name: 'Atendidos' },
+    //             { id: 0, name: 'Pendientes' }
+    //         ]
+    //     }
+    // };
 
     data: any;
     filteringPosts = false;
@@ -70,6 +70,7 @@ export class FilterPage implements OnInit {
         this.dataFiltered.push(...this.data);
         this.filterInApi = (this.navParams.data.filterInApi) ? this.navParams.data.filterInApi : false;
         this.postTypeSlug = (this.navParams.data.postTypeSlug) ? this.navParams.data.postTypeSlug : null;
+        console.log('Filtrar con api', this.filterInApi);
     }
 
     ngOnInit() {
@@ -122,6 +123,11 @@ export class FilterPage implements OnInit {
         if (!this.filterInApi) {
             //Recorrer los Filtros a Aplicar   
             this.filteringPosts = true;
+            if (Object.keys(filter).length === 0) {
+                this.dataFiltered = this.data;
+                this.filteringPosts = false;
+                return;
+            }
             for (const prop in filter) {
                 console.log(`obj.${prop} = ${filter[prop]}`);
                 //Verifico si la propiedad tiene valor "" ya que si lo tiene quiere decir que se solicita el arreglo sin filtrar por la propiedad actual

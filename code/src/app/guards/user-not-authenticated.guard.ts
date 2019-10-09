@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { CanActivate, CanLoad,  Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
 @Injectable({
     providedIn: 'root'
 })
-export class UserNotAuthenticatedGuard implements CanActivate {
+export class UserNotAuthenticatedGuard implements CanLoad {
 
     constructor(
         private authService: AuthService,
@@ -16,19 +16,20 @@ export class UserNotAuthenticatedGuard implements CanActivate {
 
     }
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
+    canLoad(): Observable<boolean> | boolean {
 
         const userObservable = this.authService.sessionAuthUser;
 
         return userObservable.pipe(
             map(token_decoded => {
                 console.log('token decoded user not authenticated guard', token_decoded);
-                console.log('url previous', state.url);
+                // console.log('url previous', state.url);
               if(token_decoded) {
                 this.router.navigate(['/home']);
                 return false;
               } else {
-                return true;
+                  this.router.navigate(['/tutorial']);
+                  return false;
               }
             })
           );

@@ -23,3 +23,17 @@
         </ion-radio-group>
     </ion-list>
 </ion-content>
+<ion-footer>
+    <ion-toolbar color="light">
+        <ion-buttons slot="primary" class="buttons-end">
+            <ion-button color="medium" (click)="closeModalEmpty()">
+                Cancelar
+            </ion-button>
+        </ion-buttons>
+        <ion-buttons slot="end" class="buttons-end">
+            <ion-button color="primary" fill="solid" (click)="closeModal()">
+                Aplicar
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-footer>

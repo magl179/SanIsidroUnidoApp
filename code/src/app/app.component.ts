@@ -44,7 +44,7 @@ export class AppComponent implements OnInit {
         this.initializeApp();
     }
 
-    ngOnInit() {}
+    ngOnInit() { }
 
     getAvatar(image_name: string) {
         return getImageURL(image_name);
@@ -77,13 +77,10 @@ export class AppComponent implements OnInit {
     }
 
     manageInitialPage(token_decoded: any) {
-        if (token_decoded) {
-            console.log('app redirect home');
-            this.navCtrl.navigateRoot('/home');
-        } else {
-            console.log('app redirect login');
-            this.navCtrl.navigateRoot('/login');
-          }
+        if (!token_decoded) {
+            // console.log('app redirect login');
+            // this.navCtrl.navigateRoot('/login');
+        }
     }
 
     async checkUserLoggedIn() {
@@ -94,7 +91,7 @@ export class AppComponent implements OnInit {
             }
             this.manageInitialPage(token_decoded);
         }, (err: any) => {
-                console.log('Error', err);
+            console.log('Error', err);
         });
     }
 

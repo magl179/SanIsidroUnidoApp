@@ -15,7 +15,7 @@ export const checkUserInDetails = (user_id: number, users_id: number[]) => {
 
 //Funcion verifica like en un posts
 export const checkLikePost = (details: any, user_authenticated: any) => {
-    if (details && details.length > 0) {
+    if (user_authenticated && details && details.length > 0) {
         const likes_user = getUsersFromDetails(details);
         const user_made_like = checkUserInDetails(user_authenticated.id, likes_user);
         return user_made_like;
@@ -51,16 +51,19 @@ export const getUserRoles = (sessionAuth: any) => {
 }
 
 // Verificar si un usuario tiene unos roles en especifico
-export const hasRoles = async (sessionAuth, allowedRoles: string[]) => {
+export const hasRoles = (sessionAuth: any, allowedRoles: string[]) => {
     let hasRole = false;
     // if (this.isAuthenticated()) {
     // if (!this.authUser.value) {
     //     await this.getUserLocalStorage();
     // }
     if (sessionAuth && sessionAuth.user) {
-        let userRoles = await getUserRoles(sessionAuth);
+        let userRoles = getUserRoles(sessionAuth);
+        console.log('user roles', userRoles);
+        console.log('allowed roles', allowedRoles);
         for (const oneRole of allowedRoles) {
             if (userRoles.includes(oneRole.toLowerCase())) {
+                console.log('match rol', oneRole);
                 hasRole = true;
             }
         }

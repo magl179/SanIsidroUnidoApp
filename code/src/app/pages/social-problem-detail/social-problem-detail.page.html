@@ -1,6 +1,6 @@
 <app-header-back title="Problema Social" hrefDefault="/social-problems"></app-header-back>
 
-<ion-content padding>
+<ion-content>
     <!-- Mensaje no cargaron los datos desde la Api -->
     <div class="flex-column-center message-fail-load" *ngIf="socialProblemLoaded && !socialProblem">
         <p>No se pudo cargar el problema social solicitado</p>
@@ -42,70 +42,69 @@
         </ion-card>
     </div>
     <!-- Datos ya cargados -->
-    <ion-card class="social_problem_card detail" *ngIf="socialProblemLoaded && socialProblem">
-        <div class="cover-social-problem"
-            [ngStyle]="{'background-image': (socialProblem.images && socialProblem.images.length > 0) ? getBGCover(socialProblem.images[0].url) : ''}">
-            <div class="social-buttons">
-                <div class="item-button" (click)="toggleLike(socialProblem.postLiked)">
-                    <ion-icon class="like" [class.active]="socialProblem.postLiked" name="heart">
-                    </ion-icon>
-                </div>
-                <div class="item-button" (click)="sharePost(socialProblem)">
-                    <ion-icon class="share" name="share"></ion-icon>
-                </div>
-            </div>
-        </div>
-        <ion-card-header class="social_problem_header">
-            <ion-card-title class="social_problem_title">
-                {{socialProblem.title}}
-            </ion-card-title>
-            <ion-card-subtitle class="social_problem_user_info_container">
-                <img class="avatar_user" [src]="socialProblem.user.avatar" fallimg="user_avatar">
-                <div class="user-info">
-                    <p class="user-name"> {{socialProblem.user.firstname}}
-                        {{socialProblem.user.lastname}}</p>
-                    <p class="post-date">{{socialProblem.created_at | beafitulDate}}</p>
-                    <p class="post-date">{{socialProblem.details.length}} me
-                        gusta</p>
-                </div>
-                <!-- <ion-chip class="post-state" [class.active]="(socialProblem.is_attended)">
-                    <ion-icon [name]="(socialProblem.is_attended)?'checkmark':'close'"></ion-icon>
-                    <ion-label>{{(socialProblem.is_attended)?'Atendida':'Pendiente'}}</ion-label>
-                </ion-chip> -->
-            </ion-card-subtitle>
-        </ion-card-header>
-        <p class="post-attendace-container bottom-mg pd-lateral">
-           <span class="title strong">Estado Atención</span>
-            <ion-chip class="post-attent-state right"
-                [class.active]="(socialProblem.is_attended)">
-                <ion-label>{{(socialProblem.is_attended)?'Atendida':'Pendiente'}}</ion-label>
-            </ion-chip>
-        </p>
-        <ion-card-content class="social-problem-content">
-            <p class="title">Descripción</p>
-            <p class="description">
-                {{socialProblem.description}}
-            </p>
-        </ion-card-content>
-        <div class="map-container" *ngIf="socialProblem.ubication">
-            <p class="map-title">Ubicación</p>
-            <simple-map classMap="social-problem-map-detail map-center"
-                idMap="social-problem-detail-{{id}}" [coordsMap]="socialProblem.ubication"
-                [zoom]="16">
-            </simple-map>
-        </div>
-        <div class="image_gallery_container"
+    <div class="social-problem-detail" *ngIf="socialProblemLoaded && socialProblem">
+        <div class="post-cover-image"
             *ngIf="socialProblem.images && socialProblem.images.length > 0">
-            <p class="image_gallery_title strong">Imágenes</p>
-            <div class="image_gallery">
-                <figure *ngFor="let image of socialProblem.images"
-                    (click)="seeImageDetail(image.url)">
-                    <img [src]="image.url" alt="Imagen de la Publicación" fallimg="image_full">
-                    <!-- <figcaption>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua
-                        </figcaption> -->
-                </figure>
+            <img [src]="socialProblem.images[0].url" alt="Imagen Tarjeta" class="img" />
+        </div>
+        <div class="post-info-container">
+            <div class="post-description-info">
+                <span class="post-category">
+                    <span>{{socialProblem.subcategory.name}}</span>
+                    <div class="container-more-options" (click)="showActionCtrl()">
+                        <ion-icon name="md-more"></ion-icon>
+                    </div>
+                </span>
+                <h2>{{socialProblem.title}}</h2>
+                <p>{{socialProblem.description}}</p>
+            </div>
+            <div class="post-container-main-info">
+                <div class="main-post-info">
+                    <h4 class="post-title-info">Detalle del Problema</h4>
+                    <p class="item-info">
+                        <span class="icon-fulldate">
+                            <ion-icon name="calendar" class="social-problem-state"></ion-icon>
+                        </span>
+                        <span>{{socialProblem.created_at | beafitulDate}} </span>
+                    </p>
+                    <p class="item-info">
+                        <span class="icon-ubication">
+                            <ion-icon name="pin" class="social-problem-state"></ion-icon>
+                        </span>
+                        <span>{{(socialProblem.ubication && socialProblem.ubication.address) ? socialProblem.ubication.address: 'No existe ubicación'}}</span>
+                    </p>
+                    <p class="item-info">
+                        <span class="icon-people">
+                            <ion-icon name="people" class="social-problem-state"></ion-icon>
+                        </span>
+                        <span>{{socialProblem.details.length}} personas les gusta</span>
+                    </p>
+                    <p class="item-info">
+                        <span class="icon-attendance">
+                            <ion-icon name="clipboard" class="social-problem-state"></ion-icon>
+                        </span>
+                        <span>{{(socialProblem.is_attended)?'Ya ha sido Atendido':'Esta Pendiente de atención'}}</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="map-container" *ngIf="socialProblem.ubication">
+                <p class="map-title">Ubicación</p>
+                <simple-map classMap="social-problem-map-detail map-center"
+                    idMap="social-problem-detail-{{id}}" [coordsMap]="socialProblem.ubication"
+                    [zoom]="16">
+                </simple-map>
+            </div>
+            <div class="image-gallery-container"
+                *ngIf="socialProblem.images && socialProblem.images.length > 0">
+                <h4 class="image-gallery-title">Imágenes</h4>
+                <div class="image-gallery">
+                    <figure class="image-item" *ngFor="let image of socialProblem.images"
+                        (click)="seeImageDetail(image.url)">
+                        <img class="image" [src]="image.url" fallimg="image_full">
+                    </figure>
+                </div>
             </div>
         </div>
-    </ion-card>
+    </div>
 </ion-content>

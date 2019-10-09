@@ -5,7 +5,7 @@ import { PostsService } from 'src/app/services/posts.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { IEvent, IPostShare, IRespuestaApiSIUSingle } from "src/app/interfaces/models";
 import { NetworkService } from 'src/app/services/network.service';
-import { ModalController } from "@ionic/angular";
+import { ModalController, ActionSheetController } from "@ionic/angular";
 import { ImageDetailPage } from "src/app/modals/image_detail/image_detail.page";
 import { finalize, map } from 'rxjs/operators';
 import { getUsersFromDetails, checkUserInDetails } from "src/app/helpers/user-helper";
@@ -39,6 +39,7 @@ export class EventDetailPage implements OnInit {
         private postService: PostsService,
         private modalCtrl: ModalController,
         private networkService: NetworkService,
+        private actionSheetCtrl: ActionSheetController,
         private authService: AuthService) { }
 
     ngOnInit() {
@@ -50,6 +51,43 @@ export class EventDetailPage implements OnInit {
             }
         });
         this.getEvent();
+    }
+
+    async showActionCtrl() {
+        const actionShare = {
+            text: 'Compartir',
+            icon: 'share',
+            cssClass: ['share-event'],
+            handler: () => {
+                console.log('compartir evento', event);
+                this.sharePost(this.event);
+            }
+        }
+        const actionToggleAssistance = {
+            text: (this.event.postAssistance) ? 'Unirme' : 'Ya no me interesa',
+            icon: 'clipboard',
+            cssClass: ['toggle-assistance'],
+            handler: () => {
+                console.log('Favorito Borrado');
+                this.toggleAssistance(this.event.postAssistance);
+            }
+        }
+
+        const actionSheet = await this.actionSheetCtrl.create({
+            buttons: [
+                actionShare,
+                actionToggleAssistance, {
+                    text: 'Cancelar',
+                    icon: 'close',
+                    cssClass: ['cancel-action'],
+                    role: 'cancel',
+                    handler: () => {
+                        console.log('Cancel clicked');
+                    }
+                }
+            ]
+        });
+        await actionSheet.present();
     }
 
     getEvent(event?: any, resetEvents?: any) {

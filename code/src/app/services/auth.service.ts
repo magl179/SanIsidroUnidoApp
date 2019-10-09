@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IRegisterUser } from 'src/app/interfaces/models';
 import { HttpRequestService } from "./http-request.service";
 import { setHeaders } from "src/app/helpers/utils";
-import { NavController } from '@ionic/angular';
+import { NavController, Platform } from "@ionic/angular";
 import { tokenIsExpired } from 'src/app/helpers/auth-helper';
 import { IRespuestaApiSIUSingle } from "../interfaces/models";
 
@@ -25,8 +25,23 @@ export class AuthService {
     constructor(
         private storage: Storage,
         private navCtrl: NavController,
-        private httpRequest: HttpRequestService
+        private httpRequest: HttpRequestService,
+        private platform: Platform
     ) {
+        // this.storage.get(TOKEN_ITEM_NAME).then(token_encoded => {
+        //     this.sessionAuthTokenSubject.next(token_encoded);
+        // });
+        // this.storage.get(USER_ITEM_NAME).then(token_decoded => {
+        //     this.sessionAuthUserSubject.next(token_decoded);
+        //     console.log('user storage constructor auth service', token_decoded)
+        // });
+        this.platform.ready().then(async () => {
+            await this.getTokenandUserLS();
+        });
+    }
+    
+    // ngOnInit
+    async getTokenandUserLS() {
         this.storage.get(TOKEN_ITEM_NAME).then(token_encoded => {
             this.sessionAuthTokenSubject.next(token_encoded);
         });
@@ -34,7 +49,11 @@ export class AuthService {
             this.sessionAuthUserSubject.next(token_decoded);
             console.log('user storage constructor auth service', token_decoded)
         });
-     }
+    }
+
+    // async isAuthenticated() {
+    //     return !! await this.storage.get(TOKEN_ITEM_NAME); 
+    // }
    
     // Iniciar Sesion del Usuario
     login(loginData: any, getToken = null): Observable<any> {
@@ -119,7 +138,7 @@ export class AuthService {
     async isAuthenticated() {
         const itemUser = await this.storage.get(USER_ITEM_NAME);
         // const isAuthenticated = !!itemUser;
-        return itemUser;
+        return !!itemUser;
     }
 
     // Verificar si el token esta guardado en el local storage
