@@ -102,6 +102,7 @@ export class PostsService implements OnInit {
     // Función para obtener los problemas sociales de la API
     getSocialProblems(): Observable<any> {
         this.currentPage.socialProblems++;
+        console.warn('social prlblems Current Page', this.currentPage.socialProblems);
         const socialProblemsSlug = environment.socialProblemSlug;
         return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/${socialProblemsSlug}?page=${this.currentPage.socialProblems}`);
     }
@@ -109,11 +110,13 @@ export class PostsService implements OnInit {
     getEmergenciesByUser() {
         const user_id = this.AuthUser.id;
         this.currentPage.emergencies++;
+        console.warn('emergencies Current Page', this.currentPage.emergencies);
         return this.httpRequest.get(`${environment.apiBaseURL}/usuarios/${user_id}/emergencias?page=${this.currentPage.emergencies}`);
     }
     // Función para obtener el listado de eventos publicados
     getEvents(): Observable<IRespuestaApiSIUPaginada> {
         this.currentPage.events++;
+        console.warn('Events Current Page', this.currentPage.events);
         const eventsSlug = environment.eventsSlug;
         return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/${eventsSlug}?page=${this.currentPage.events}`);
     }

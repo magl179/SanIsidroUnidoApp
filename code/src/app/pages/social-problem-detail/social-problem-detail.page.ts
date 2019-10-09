@@ -11,6 +11,7 @@ import { finalize, map } from 'rxjs/operators';
 import { mapImagesApi, getImageURL } from "src/app/helpers/utils";
 import { checkLikePost } from 'src/app/helpers/user-helper';
 import { mapSocialProblem } from "../../helpers/utils";
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 
@@ -74,11 +75,12 @@ export class SocialProblemDetailPage implements OnInit {
             if (res.data) {
                 this.socialProblem = res.data;
                 this.socialProblem.postLiked = checkLikePost(this.socialProblem.details, this.AuthUser);
-                // this.socialProblem.user.avatar = (this.socialProblem.user && this.socialProblem.user.avatar) ? getImageURL(this.socialProblem.user.avatar) : null;
-                // this.socialProblem.fulldate = `${this.socialProblem.date} ${this.socialProblem.time}`;
-                // if (this.socialProblem.images && this.socialProblem.images.length > 0) {
-                //     this.socialProblem.images = mapImagesApi(this.socialProblem.images);
-                // }
+            }
+        }, (err: HttpErrorResponse) => {
+            if (err.error instanceof Error) {
+                console.log("Client-side error", err);
+            } else {
+                console.log("Server-side error", err);
             }
         });
     }

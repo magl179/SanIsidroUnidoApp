@@ -1,5 +1,9 @@
 <app-header-back title="Eventos"></app-header-back>
 <ion-content padding>
+    <p
+        style="position: fixed;top: 3rem;left: 40%;background: black;color: white; padding: 1rem;z-index: 1000;">
+        Num Eventos {{eventsList.length}}
+    </p>
     <!-- Mensaje cuando no se pudieron cargar los datos-->
     <div class="flex-column-center message-fail-load"
         *ngIf="eventsLoaded && eventsList.length === 0">
@@ -38,7 +42,7 @@
     <!-- Tarjeta Datos Cargados y Disponibles -->
     <div *ngIf="eventsLoaded  && eventsList.length > 0">
         <ion-card class="event" *ngFor="let event of eventsList; let i = index;">
-            <div class="event-image" *ngIf="event.images && event.images.length > 0" >
+            <div class="event-image" *ngIf="event.images && event.images.length > 0">
                 <img [src]="event.images[0].url" alt="Imagen Tarjeta" class="img" />
             </div>
             <ion-card-header class="event-header">
@@ -88,7 +92,7 @@
         </ion-fab-list>
     </ion-fab>
     <!-- Scroll Infinito -->
-    <ion-infinite-scroll threshold="150px" (ionInfinite)="getInfiniteScrollData($event)">
+    <ion-infinite-scroll threshold="175px" (ionInfinite)="getInfiniteScrollData($event)">
         <ion-infinite-scroll-content loadingSpinner="crescent"
             loadingText="Cargando Publicaciones...">
         </ion-infinite-scroll-content>

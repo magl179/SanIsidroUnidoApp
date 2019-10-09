@@ -1,6 +1,10 @@
 <app-header-back title="Mis Emergencias"></app-header-back>
 
 <ion-content padding>
+    <p
+        style="position: fixed;top: 3rem;left: 40%;background: black;color: white; padding: 1rem;z-index: 1000;">
+        Num emergencias {{emergenciesFiltered.length}}
+    </p>
     <div class="flex-column-center message-fail-load"
         *ngIf="emergenciesLoaded && emergenciesList.length === 0">
         <p>No existen emergencias disponibles</p>
@@ -41,7 +45,7 @@
         <ion-card class="emergency" *ngFor="let emergency of emergenciesFiltered; let i = index;">
             <ion-card-header class="post-header">
                 <ion-card-title class="post-title">
-                        {{emergency.title}}
+                    {{emergency.title}}
                 </ion-card-title>
             </ion-card-header>
 
@@ -68,10 +72,16 @@
                 <ion-icon name="ios-funnel"></ion-icon>
             </ion-fab-button>
         </ion-fab-list>
-        <ion-fab-list side="end">
+        <ion-fab-list side="end" *appHasRole="['morador']">
             <ion-fab-button color="success" (click)="reportEmergency()">
                 <ion-icon name="send"></ion-icon>
             </ion-fab-button>
         </ion-fab-list>
     </ion-fab>
+    <!-- Scroll Infinito -->
+    <ion-infinite-scroll threshold="150px" (ionInfinite)="getInfiniteScrollData($event)">
+        <ion-infinite-scroll-content loadingSpinner="crescent"
+            loadingText="Cargando Publicaciones...">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
 </ion-content>

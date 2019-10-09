@@ -11,6 +11,7 @@ import { finalize } from 'rxjs/operators';
 import { NetworkService } from 'src/app/services/network.service';
 import { NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app-social-problem-create',
@@ -53,21 +54,20 @@ export class SocialProblemCreatePage implements OnInit {
     }
 
     async ngOnInit() {
-        // this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
-        //     this.appNetworkConnection = connected;
-        // });
         const coords = await this.localizationService.getCoordinate();
         this.socialProblemCoordinate.latitude = coords.latitude;
         this.socialProblemCoordinate.longitude = coords.longitude;
         this.postService.getSubcategoriesByCategory(environment.socialProblemSlug).subscribe(res => {
             this.subcategories = res.data;
             console.log('subcategories', res.data);
+        }, (err: HttpErrorResponse) => {
+            if (err.error instanceof Error) {
+                console.log("Client-side error", err);
+            } else {
+                console.log("Server-side error", err);
+            }
         });
     }
-
-    // ionViewWillLeave() {
-    //     console.log('Detalle Problema Social Destruido');
-    // }
 
     createForm() {
         const validations = this.localDataService.getFormValidations();
@@ -133,15 +133,18 @@ export class SocialProblemCreatePage implements OnInit {
             await this.utilsService.showToast("El Reporte fue enviado correctamente");
             // this.navCtrl.navigateRoot('/social-problems');
             this.router.navigate(['/social-problems'])
-        }, err => {
-            const message_error = (err.error.message) ? err.error.message : 'No se pudo enviar el reporte';
-            this.utilsService.showToast(message_error);
-            console.log('Error Reportar Problema Social', message_error);
+        }, (err: HttpErrorResponse) => {
+            this.utilsService.showToast('Ocurrio un error al enviar el reporte');
+            if (err.error instanceof Error) {
+                console.log("Client-side error", err);
+            } else {
+                console.log("Server-side error", err);
+            }
         });
     }
 
 
-    deleteImage(pos) {
+    deleteImage(pos: any) {
         this.socialProblemImages.splice(pos, 1);
     }
 
@@ -194,9 +197,12 @@ export class SocialProblemCreatePage implements OnInit {
         }).subscribe(direccion => {
             console.log({ add: direccion });
             this.socialProblemCoordinate.address = direccion.display_name;
-        },
-        err => {
-            console.log('Ocurrio un error al obtener la ubicación: ', err);
+        },(err: HttpErrorResponse) => {
+            if (err.error instanceof Error) {
+                console.log("Client-side error", err);
+            } else {
+                console.log("Server-side error", err);
+            }
             this.utilsService.showToast('No se pudo obtener la dirección de tu ubicación');
         });
     }

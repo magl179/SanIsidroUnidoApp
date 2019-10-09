@@ -6,6 +6,7 @@ import { UtilsService } from "src/app/services/utils.service";
 import { IRespuestaApiSIUPaginada } from 'src/app/interfaces/models';
 import { mapImagesApi } from "src/app/helpers/utils";
 import { mapReport } from "../../helpers/utils";
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-reports',
@@ -25,10 +26,12 @@ export class ReportsPage implements OnInit {
 
     ionViewWillEnter() {
         console.log('reports will enter');
-        this.loadReports();
     }
     
-    ngOnInit() { }
+    ngOnInit() { 
+        this.loadReports();
+
+    }
 
     postDetail(id: number) {
         this.navCtrl.navigateForward(`/report-detail/${id}`);
@@ -65,8 +68,12 @@ export class ReportsPage implements OnInit {
             });
             // console.log(res);
             console.log('reports list', this.reportsList);
-        }, (err: any) => {
-            console.log('Ocurrio un error al traer el listado de reportes', err);
+        },(err: HttpErrorResponse) => {
+            if (err.error instanceof Error) {
+                console.log("Client-side error", err);
+            } else {
+                console.log("Server-side error", err);
+            }
         });
     }
 

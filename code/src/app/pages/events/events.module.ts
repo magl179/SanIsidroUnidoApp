@@ -9,6 +9,7 @@ import { PipesModule } from 'src/app/pipes/pipes.module';
 import { SearchPage } from "src/app/modals/search/search.page";
 import { SearchPageModule } from "src/app/modals/search/search.module";
 import { NgFallimgModule } from 'ng-fallimg';
+import { DirectivesModule } from 'src/app/directives/directives.module';
 
 
 const routes: Routes = [
@@ -27,7 +28,8 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-        SmComponentsModule,
+      SmComponentsModule,
+        DirectivesModule,
         PipesModule,
       SearchPageModule,
       NgFallimgModule

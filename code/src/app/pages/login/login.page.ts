@@ -11,6 +11,7 @@ import { NotificationsService } from 'src/app/services/notifications.service';
 import { IRespuestaApiSIU } from "src/app/interfaces/models";
 import { decodeToken } from 'src/app/helpers/auth-helper';
 import { setInputFocus } from 'src/app/helpers/utils';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app-login',
@@ -79,10 +80,13 @@ export class LoginPage implements OnInit {
             })
         ).subscribe((res: IRespuestaApiSIU) => {
             this.manageLogin(loginData, res);
-        }, err => {
-            const message_error = (err.error.message) ? err.error.message : 'Ocurrio un error, por favor intentalo más tarde';
-            this.utilsService.showToast(message_error);
-            console.log('Error Login', message_error);
+        }, (err: HttpErrorResponse) => {
+            this.utilsService.showToast('Ocurrio un error al iniciar sesión, intentalo más tarde');
+            if (err.error instanceof Error) {
+                console.log("Client-side error", err);
+            } else {
+                console.log("Server-side error", err);
+            }
         });
     }
 

@@ -13,6 +13,7 @@ import { decodeToken } from 'src/app/helpers/auth-helper';
 import { getUserDevice } from 'src/app/helpers/user-helper';
 import { finalize } from 'rxjs/operators';
 import { getImageURL } from 'src/app/helpers/utils';
+import { HttpErrorResponse } from '@angular/common/http';
 
 const URL_PATTERN = new RegExp(/^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/);
 
@@ -59,12 +60,10 @@ export class UserProfilePage implements OnInit {
 
     async ngOnInit() {
         this.authService.sessionAuthUser.subscribe(async(token_decoded: ITokenDecoded) => {
-            // console.log('token decoded', token_decoded)
-            // console.log('token decoded VERIFY', (token_decoded.user) ? 'true' : 'false');
-            if (token_decoded) {
+            if (token_decoded && token_decoded.user) {
                 this.AuthUser = token_decoded.user;
-                console.log(this.AuthUser);
-                // this.getRoles();
+                // console.log(this.AuthUser);
+                // this.getRoles()
             }
         });
 
@@ -75,32 +74,31 @@ export class UserProfilePage implements OnInit {
             if(userdevice){
                 this.CurrentUserDevice = getUserDevice(this.UserDevices, userdevice);
             }
+        }, (err: HttpErrorResponse) => {
+            if (err.error instanceof Error) {
+                console.log("Client-side error", err);
+            } else {
+                console.log("Server-side error", err);
+            }
         });
      }
-
-    // getRoles() {
-    //     if (this.AuthUser && this.AuthUser.roles) {
-    //         const roles = this.AuthUser.roles.map(role => role.slug);
-    //         const rol = roles.find(rol => environment.roles_permitidos.includes(rol));
-    //         if (rol) {
-    //             // console.log('roles', rol);
-    //             this.authUserRol = rol;
-    //         }
-    //     }
-    // }
 
     getUserSocialProfiles(){
         this.userService.getSocialProfilesUser().pipe(
             finalize(() => {
                 this.userSocialProfilesLoaded = true;
-                // console.log('finalize get events', this.eventsLoaded);
-                // console.log('finalize get events', this.eventsList);
             })
         ).subscribe((res: IRespuestaApiSIU) => {
             if (res.data) {
                 console.log('res social profiles', res.data);
                 this.UserSocialProfiles = res.data;
                 
+            }
+        }, (err: HttpErrorResponse) => {
+            if (err.error instanceof Error) {
+                console.log("Client-side error", err);
+            } else {
+                console.log("Server-side error", err);
             }
         });
     }
@@ -117,6 +115,12 @@ export class UserProfilePage implements OnInit {
                 console.log('res devices', res.data);
                 this.UserDevices = res.data;
                 
+            }
+        }, (err: HttpErrorResponse) => {
+            if (err.error instanceof Error) {
+                console.log("Client-side error", err);
+            } else {
+                console.log("Server-side error", err);
             }
         });
     }
@@ -174,14 +178,15 @@ export class UserProfilePage implements OnInit {
     removeUserDevice(device_id: number) {
         this.userService.sendRequestDeleteUserDevice(device_id).subscribe(async (res: IRespuestaApiSIUSingle) => {
             const token = res.data.token;
-            // const token_decoded = decodeToken(token);
-            // this.authService.saveUserInfo(token, token_decoded);
-            // this.authService.saveLocalStorageInfo(token, token_decoded);
             this.getUserDevices();
             this.utilsService.showToast('Dispositivo eliminado Correctamente');
-        }, err => {
+        }, (err: HttpErrorResponse) => {
             this.utilsService.showToast('Ocurrio un error al desconectar el dispositivo :( ');
-            console.log('Ocurrio un error al eliminar el dispositivo', err);
+            if (err.error instanceof Error) {
+                console.log("Client-side error", err);
+            } else {
+                console.log("Server-side error", err);
+            }
         });
     }
 
@@ -193,9 +198,13 @@ export class UserProfilePage implements OnInit {
             // this.authService.saveLocalStorageInfo(token, token_decoded);
             this.getUserSocialProfiles();
             this.utilsService.showToast('Perfil Social fue desconectado correctamente');
-        }, (err: any) => {
+        },(err: HttpErrorResponse) => {
             this.utilsService.showToast('El Perfil Social no se pudo desconectar');
-            console.log('error al desconectar perfil social imagen usuario', err);
+            if (err.error instanceof Error) {
+                console.log("Client-side error", err);
+            } else {
+                console.log("Server-side error", err);
+            }
         });
     }
 

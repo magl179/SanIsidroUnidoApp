@@ -7,6 +7,7 @@ import { IRespuestaApiSIUSingle } from 'src/app/interfaces/models';
 import { UtilsService } from "src/app/services/utils.service";
 import { getJSON, mapImagesApi } from "src/app/helpers/utils";
 import { mapReport } from "../../helpers/utils";
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app-report-detail',
@@ -59,13 +60,13 @@ export class ReportDetailPage implements OnInit {
             })
         ).subscribe((res: IRespuestaApiSIUSingle) => {
             this.report = res.data;
-            // if (this.report.images && this.report.images.length > 0) {
-            //     this.report.images = mapImagesApi(this.report.images);
-            //     // this.report.fulldate = `${this.report.date} ${this.report.time}`;
-            // }
-            // this.report.ubication = getJSON(this.report.ubication);
-            // this.report.fulldate = `${this.report.date} ${this.report.time}`;
             console.log('Dato post', this.report);
+        },(err: HttpErrorResponse) => {
+            if (err.error instanceof Error) {
+                console.log("Client-side error", err);
+            } else {
+                console.log("Server-side error", err);
+            }
         });
     }
 

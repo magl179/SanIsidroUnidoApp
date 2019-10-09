@@ -9,6 +9,7 @@ import { IRespuestaApiSIUSingle } from 'src/app/interfaces/models';
 import { ModalController } from "@ionic/angular";
 import { ImageDetailPage } from 'src/app/modals/image_detail/image_detail.page';
 import { mapImagesApi, getJSON, mapEmergency } from 'src/app/helpers/utils';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app-emergency-detail',
@@ -60,6 +61,12 @@ export class EmergencyDetailPage implements OnInit {
         ).subscribe((res: IRespuestaApiSIUSingle) => {
             console.log('Dato post subscribe', res.data);
             this.emergency = res.data;
+        },(err: HttpErrorResponse) => {
+            if (err.error instanceof Error) {
+                console.log("Client-side error", err);
+            } else {
+                console.log("Server-side error", err);
+            }
         });
     }
 

@@ -4,6 +4,7 @@ import { UserService } from 'src/app/services/user.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { decodeToken } from 'src/app/helpers/auth-helper';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app-change-profile-image',
@@ -39,9 +40,13 @@ export class ChangeProfileImagePage implements OnInit {
             this.authService.saveUserInfo(token, token_decoded);
             this.authService.saveLocalStorageInfo(token, token_decoded);
             this.utilsService.showToast('Imagen Actualizada Correctamente');
-        }, err => {
+        },(err: HttpErrorResponse) => {
+            if (err.error instanceof Error) {
+                console.log("Client-side error", err);
+            } else {
+                console.log("Server-side error", err);
+            }
             this.utilsService.showToast('Imagen no ha podido ser actualizada');
-            console.log('error al actualizar imagen usuario', err);
         });
     }
 

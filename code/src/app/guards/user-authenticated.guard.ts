@@ -20,7 +20,7 @@ export class UserAuthenticatedGuard implements CanLoad {
         // const userObservable = this.authService.isAuthenticated();
         const tokenDecoded = this.authService.isAuthenticated();
         if (tokenDecoded) {
-            console.log('can load');
+            console.warn('can load');
             return true;
         } else {
             console.log('redirect to login');

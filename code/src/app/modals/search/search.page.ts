@@ -3,6 +3,7 @@ import { ModalController, NavParams, NavController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 import { map, debounceTime, distinctUntilChanged, finalize } from 'rxjs/operators';
 import { PostsService } from "src/app/services/posts.service";
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'modal-search',
@@ -172,73 +173,15 @@ export class SearchPage implements OnInit {
                     } else {
                         console.log(`Hay ${this.itemsSearchFound.length} coincidencias`);
                     }
-                }, err => {
-                    console.log('Ocurrio un error al buscar posts', err);
+                },(err: HttpErrorResponse) => {
+                    if (err.error instanceof Error) {
+                        console.log("Client-side error", err);
+                    } else {
+                        console.log("Server-side error", err);
+                    }
                 });
             }
         });
     }
-
-    async searchPosts(event) {
-
-        this.valueToSearch.next(event.detail.value);
-
-
-        /*.map(event => event.target.value)
-         .debounceTime(500)
-         .distinctUntilChanged()
-         .subscribe({
-           next: function(value) {
-             console.log(value);
-           }
-         });
-           if (valor.length === 0) {
-               this.searchingPosts = false;
-               this.itemsSearchFound = [];
-               return;
-           }
-           this.searchingPosts = true;
-           await setTimeout(async ()=>{
-               
-               this.itemsSearchFound = await this.itemsSearchAvalaible.filter(user => {
-                 const search_term = new RegExp(valor.toLowerCase(), 'g');
-               return user.first_name.toLowerCase().search(search_term) != -1;
-               });
-              
-               if (this.itemsSearchFound.length === 0) {
-                 console.log('No hay coincidencias');
-               } else {
-                   console.log(`Hay ${this.itemsSearchFound.length} coincidencias`);
-               }
-                this.searchingPosts = false;
-           }, 900)*/
-
-
-
-        /*const valor: string = event.detail.value;
-        if (valor.length === 0) {
-            this.searchingEvents = false;
-            this.eventsBusqueda = [];
-            return;
-        }
-        this.searchingEvents = true;
-        this.postService.searchPosts(valor, environment.eventsSlug).pipe(
-            finalize(() => {
-                this.searchingEvents = false;
-            })
-        ).subscribe((res: any) => {
-            console.log('events search', res);
-            this.eventsBusqueda = res.data;
-            if (res.data.length === 0) {
-                this.utilsService.showToast('No hay coincidencias');
-            } else {
-                this.utilsService.showToast(`Hay ${res.data.length} coincidencias`);
-            }
-        }, err => {
-                console.log('Ocurrio un error al buscar eventos', err);
-                this.utilsService.showToast('Ocurrio un error al buscar eventos');
-        });*/
-    }
-
 
 }

@@ -3,12 +3,9 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { DirectivesService } from 'src/app/services/directives.service';
 import { IDirective, IRespuestaApiSIU } from 'src/app/interfaces/models';
 import { NetworkService } from 'src/app/services/network.service';
-import { finalize } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
-import { getImageURL } from 'src/app/helpers/utils';
+import { finalize, map } from 'rxjs/operators';
+import { getImageURL, mapUser} from 'src/app/helpers/utils';
 import { Subscription } from 'rxjs';
-
-const URL_PATTERN = new RegExp(/^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/);
 
 @Component({
     selector: 'app-directory-info',
@@ -41,28 +38,23 @@ export class DirectoryInfoPage implements OnInit {
     loadDirectoryInfo() {
         this.loadDirectives = false;
         this.directoryObservable$ = this.directivesService.getDirectives().pipe(
+            map((res: any) => {
+                // console.log('res map', res);
+                if (res && res.data) {
+                    // const directives_to_map = res.data;
+                    res.data.forEach((directive: any) => {
+                        directive = mapUser(directive);
+                    });
+                }
+                console.log('res maped', res.data.data);
+                return res;
+            }),
             finalize(() => {
                 this.loadDirectives = true;
             })
         ).subscribe((response: IRespuestaApiSIU) => {
-                // if (response.data.avatar !== null) {
             const directives = response.data;
             this.directivesList = directives;
-                // const imagesPath = response.data.filter(user => {
-                //     console.log('user', user);
-                //     return user.avatar !== null;
-                // }).map(el => {
-                //     console.log('el', el);
-                //     return el.avatar;
-                // });
-                // Preloader.preloadImages({
-                //     images: imagesPath,
-                //     completed: () => {
-                //         // setTimeout(() => {
-                //         this.directivesList = response.data;
-                //         // }, 2500);
-                //     }
-                // });
         },err => {
             console.log('Error al traer directivos');
             this.utilsService.showToast('No se pudieron cargar los directivos');
@@ -72,11 +64,7 @@ export class DirectoryInfoPage implements OnInit {
     imageWasLoaded() {
         this.imgLoaded = true;
     }
-
-    getAvatar(image_name: string) {
-        return getImageURL(image_name);
-    }
-
+    
     ionViewWillLeave() {
         this.directoryObservable$.unsubscribe();
     }

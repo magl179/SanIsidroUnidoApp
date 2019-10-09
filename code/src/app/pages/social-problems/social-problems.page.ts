@@ -12,6 +12,7 @@ import { FilterPage } from "src/app/modals/filter/filter.page";
 import { SearchPage } from 'src/app/modals/search/search.page';
 import { checkLikePost } from 'src/app/helpers/user-helper';
 import { mapSocialProblem } from "../../helpers/utils";
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -59,10 +60,10 @@ export class SocialProblemsPage implements OnInit {
         private popoverCtrl: PopoverController,
         private actionSheetCtrl: ActionSheetController
     ) {
-        console.log('Constructor Problemas Sociales');
     }
 
     async ngOnInit() {
+        this.utilsService.enableMenu();
         console.log('ng on init');
         this.authService.sessionAuthUser.pipe(
             finalize(() => { })
@@ -75,14 +76,10 @@ export class SocialProblemsPage implements OnInit {
                 console.log('Error al traer la informacion del usuario', err);
                 this.utilsService.showToast('No se pudieron cargar la información del usuario');
             });
-    }
-    //Activar el Menu y Cargar los problemas sociales
-    ionViewWillEnter() {
-        console.log('jon will enter');
-        this.utilsService.enableMenu();
-        this.postsService.resetSocialProblemsPage();
         this.loadSocialProblems(null, true);
     }
+
+    ionViewWillEnter() { }
     //Ir a la pagina para reportar problemas sociales
     reportSocialProblem() {
         this.navCtrl.navigateForward('/social-problem-create')
@@ -161,51 +158,48 @@ export class SocialProblemsPage implements OnInit {
     //Cargar los problemas sociales
     loadSocialProblems(event?: any, resetEvents?: any) {
         this.socialProblemsLoaded = false;
-        if (resetEvents) {
-            this.socialProblemsList = [];
-            this.postsService.resetSocialProblemsPage();
-        }
         this.postsService.getSocialProblems().pipe(
             map((res: any) => {
-                console.log('res map', res);
+                // console.log('res map', res);
                 if (res && res.data && res.data.data) {
-                    const social_problems_to_map = res.data.data;
-                    social_problems_to_map.forEach((social_problem: any) => {
+                    res.data.data.forEach((social_problem: any) => {
                         social_problem = mapSocialProblem(social_problem);
                     });
-                    console.log('res maped', res.data.data);
                 }
+                console.log('res maped', res.data.data);
                 return res;
             }),
             finalize(() => {
                 this.socialProblemsLoaded = true;
             })
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
-            let socialProblems = res.data.data;
-            if (socialProblems) {
+            let socialProblems = [];
+            socialProblems.push(...res.data.data);
+
+            if (socialProblems.length === 0) {
+                if (event) {
+                    event.target.disabled = true;
+                    event.target.complete();
+                }
+                return;
+            } else {
                 socialProblems = socialProblems.map((social_problem: any) => {
                     social_problem.postLiked = checkLikePost(social_problem.details, this.AuthUser) || false;
                     return social_problem;
                 });
-                if (socialProblems.length === 0) {
-                    if (event) {
-                        event.target.disabled = true;
-                        event.target.complete();
-                    }
-                    return;
-                }
-                this.socialProblemsList.push(...socialProblems);
-                //console.log('social_problems', this.socialProblems);
-                this.socialProblemsFilter.push(...socialProblems);
-                if (event) {
-                    event.target.complete();
-                }
             }
-        },
-            err => {
-                console.log(err);
-                this.utilsService.showToast('No se pudieron cargar los problemas sociales');
-            });
+            this.socialProblemsList.push(...socialProblems);
+            this.socialProblemsFilter.push(...socialProblems);
+            if (event) {
+                event.target.complete();
+            }
+        }, (err: HttpErrorResponse) => {
+            if (err.error instanceof Error) {
+                console.log("Client-side error", err);
+            } else {
+                console.log("Server-side error", err);
+            }
+        });
     }
     //Obtener datos con el Infinite Scroll
     getInfiniteScrollData(event) {

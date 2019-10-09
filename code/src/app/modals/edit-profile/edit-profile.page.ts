@@ -6,6 +6,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { UserService } from 'src/app/services/user.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { decodeToken } from 'src/app/helpers/auth-helper';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'modal-edit-profile',
@@ -32,8 +33,8 @@ export class EditProfilePage implements OnInit {
 
     }
 
-    async loadUserData() {
-        await this.authService.sessionAuthUser.subscribe(res => {
+    loadUserData() {
+        this.authService.sessionAuthUser.subscribe(res => {
             if (res) {
                 this.AuthUser = res.user;
             }
@@ -51,9 +52,13 @@ export class EditProfilePage implements OnInit {
             this.authService.saveUserInfo(token, token_decoded);
             this.authService.saveLocalStorageInfo(token, token_decoded);
             this.utilsService.showToast('Datos Actualizados Correctamente');
-        }, err => {
+        },(err: HttpErrorResponse) => {
+            if (err.error instanceof Error) {
+                console.log("Client-side error", err);
+            } else {
+                console.log("Server-side error", err);
+            }
             this.utilsService.showToast('Los datos no se pudieron actualizar');
-            console.log('error al actualizar datos usuario', err);
         });
     }
 

@@ -10,6 +10,7 @@ import { NetworkService } from 'src/app/services/network.service';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { decodeToken } from 'src/app/helpers/auth-helper';
 import { setInputFocus } from 'src/app/helpers/utils';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app-register',
@@ -89,10 +90,13 @@ export class RegisterPage implements OnInit {
             })
         ).subscribe(async res => { 
                 await this.manageRegister({provider: 'formulario', email, password }, res);
-        }, err => {
-            // const message_error = (err.error) ? err.error: 'No se pudo cargar la información del usuario';
+        },(err: HttpErrorResponse) => {
             this.utilsService.showToast('Ocurrio un error al registrar el usuario');
-            console.log('Error Registro', err);
+            if (err.error instanceof Error) {
+                console.log("Client-side error", err);
+            } else {
+                console.log("Server-side error", err);
+            }
         });
     }
     //Function para registrar usuario con Facebook

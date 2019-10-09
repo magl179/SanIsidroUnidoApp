@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { IRespuestaApiSIUSingle } from "src/app/interfaces/models";
 import { decodeToken } from 'src/app/helpers/auth-helper';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app-request-membership',
@@ -46,9 +47,13 @@ export class RequestMembershipPage implements OnInit {
             this.authService.saveUserInfo(token, token_decoded);
             this.authService.saveLocalStorageInfo(token, token_decoded);
             this.utilsService.showToast('Solicitud Enviada Correctamente');
-        }, (err: any) => {
+        },(err: HttpErrorResponse) => {
+            if (err.error instanceof Error) {
+                console.log("Client-side error", err);
+            } else {
+                console.log("Server-side error", err);
+            }
             this.utilsService.showToast('La solicitud no ha podido ser enviada');
-            console.log('error al solicitar afiliacion datos usuario', err);
         });
     }
 

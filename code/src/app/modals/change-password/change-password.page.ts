@@ -9,6 +9,7 @@ import { LocalDataService } from "src/app/services/local-data.service";
 import { IRespuestaApiSIUSingle } from "src/app/interfaces/models";
 import { decodeToken } from 'src/app/helpers/auth-helper';
 import { setInputFocus } from 'src/app/helpers/utils';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app-change-password',
@@ -92,9 +93,13 @@ export class ChangePasswordPage implements OnInit {
             this.changePassForm.reset();
             this.utilsService.showToast('Contraseña Actualizada Correctamente');
 
-        }, err => {
+        },(err: HttpErrorResponse) => {
+            if (err.error instanceof Error) {
+                console.log("Client-side error", err);
+            } else {
+                console.log("Server-side error", err);
+            }
             this.utilsService.showToast('La Contraseña no se ha podido actualizar');
-            console.log('error al actualizar contraseña usuario', err);
         });
     }
 

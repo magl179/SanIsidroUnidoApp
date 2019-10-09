@@ -1,5 +1,8 @@
 <app-header-back title="Problemas Sociales"></app-header-back>
-<ion-content padding>
+<ion-content padding style="position: relative;">
+    <p style="position: fixed;top: 3rem;left: 40%;background: black;color: white; padding: 1rem;z-index: 1000;">
+        Num Problemas Sociales {{socialProblemsList.length}}
+    </p>
     <!-- Mensaje no cargaron los datos desde la Api -->
     <div class="flex-column-center message-fail-load"
         *ngIf="socialProblemsLoaded && socialProblemsList.length === 0">
@@ -87,7 +90,7 @@
                 <ion-icon name="options"></ion-icon>
             </ion-fab-button>
         </ion-fab-list>
-        <ion-fab-list side="end">
+        <ion-fab-list side="end" *appHasRole="['morador']">
             <ion-fab-button color="tertiary" (click)="reportSocialProblem()">
                 <ion-icon name="send"></ion-icon>
             </ion-fab-button>

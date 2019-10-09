@@ -6,9 +6,10 @@ import { IBasicFilter, IRespuestaApiSIUPaginada, ITokenDecoded } from "src/app/i
 import { FilterPage } from "src/app/modals/filter/filter.page";
 import { SearchPage } from "src/app/modals/search/search.page";
 import { environment } from 'src/environments/environment';
-import { finalize,delay, retryWhen, map } from 'rxjs/operators';
+import { finalize, delay, retryWhen, map } from 'rxjs/operators';
 import { getJSON, mapEmergency } from "src/app/helpers/utils";
 import { AuthService } from 'src/app/services/auth.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app-emergencies',
@@ -44,12 +45,8 @@ export class EmergenciesPage implements OnInit {
 
 
     ngOnInit() {
-    }
-
-    ionViewWillEnter() {
         this.utilsService.enableMenu();
-        this.postsService.resetEmergenciesPage();
-        this.authService.sessionAuthUser.subscribe(async(token_decoded: ITokenDecoded) => {
+        this.authService.sessionAuthUser.subscribe(async (token_decoded: ITokenDecoded) => {
             // console.log('token decoded', token_decoded)
             // console.log('token decoded VERIFY', (token_decoded.user) ? 'true' : 'false');
             if (token_decoded) {
@@ -60,6 +57,9 @@ export class EmergenciesPage implements OnInit {
         });
         this.loadEmergencies(null, true);
     }
+
+
+    ionViewWillEnter() {}
 
     // async showActionCtrl(emergency) {
     //     const actionToggleAssistance = {
@@ -89,17 +89,14 @@ export class EmergenciesPage implements OnInit {
     // }
 
     loadEmergencies(event?: any, resetEvents?: any) {
-        if (resetEvents) {
-            this.emergenciesList = [];
-            this.postsService.resetEventsPage();
-        }
         this.emergenciesLoaded = false;
+        this.emergenciesFiltered = [];
         this.postsService.getEmergenciesByUser().pipe(
             map((res: any) => {
                 // console.log('res map', res);
                 if (res && res.data && res.data.data) {
-                    const emergencies_to_map = res.data.data;
-                    emergencies_to_map.forEach((emergency: any) => {
+                    // const emergencies_to_map = res.data.data;
+                    res.data.data.forEach((emergency: any) => {
                         emergency = mapEmergency(emergency);
                     });
                 }
@@ -111,26 +108,28 @@ export class EmergenciesPage implements OnInit {
             }),
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let emergenciesApi = [];
-            emergenciesApi = res.data.data;
-            if (emergenciesApi) {
-                if (emergenciesApi.length === 0) {
-                    if (event) {
-                        event.target.disabled = true;
-                        event.target.complete();
-                    }
-                    return;
-                }
-                this.emergenciesList.push(...emergenciesApi);
-                this.emergenciesFiltered.push(...this.emergenciesList);
-                console.log(this.emergenciesList);
+            emergenciesApi = [...res.data.data];
+
+            if (emergenciesApi.length === 0) {
                 if (event) {
+                    event.target.disabled = true;
                     event.target.complete();
                 }
+                return;
             }
-        },
-        (err: any) => {
-            console.log(err);
-            this.utilsService.showToast('No se pudieron cargar tus emergencias');
+            this.emergenciesList.push(...emergenciesApi);
+            this.emergenciesFiltered.push(...this.emergenciesList);
+
+            if (event) {
+                event.target.complete();
+            }
+
+        },(err: HttpErrorResponse) => {
+            if (err.error instanceof Error) {
+                console.log("Client-side error", err);
+            } else {
+                console.log("Server-side error", err);
+            }
         });
     }
 
@@ -150,11 +149,11 @@ export class EmergenciesPage implements OnInit {
         const fulldate = `${date} ${time}`;
         return fulldate;
     }
-    
+
     postDetail(id: number) {
         this.navCtrl.navigateForward(`/emergency-detail/${id}`);
     }
-    
+
 
 
     async showModalFilterEmergencies() {
@@ -165,7 +164,7 @@ export class EmergenciesPage implements OnInit {
                 filters: this.filters
             }
         });
-         //Obtener datos popover cuando se vaya a cerrar
+        //Obtener datos popover cuando se vaya a cerrar
         modal.onDidDismiss().then((modalReturn: any) => {
             // console.dir(dataReturned);
             // console.log('data', dataReturned);
@@ -175,7 +174,7 @@ export class EmergenciesPage implements OnInit {
                 console.log('Data Returned Modal Filterdespues', this.emergenciesFiltered);
                 this.filters = modalReturn.data.filters;
             }
-             //console.log('Data Returned Modal Filter', this.emergenciesFiltered);
+            //console.log('Data Returned Modal Filter', this.emergenciesFiltered);
         });
         await modal.present();
     }
@@ -200,6 +199,10 @@ export class EmergenciesPage implements OnInit {
 
     reportEmergency() {
         this.navCtrl.navigateForward('/emergency-create');
+    }
+
+    getInfiniteScrollData(event: any) {
+        this.loadEmergencies(event);
     }
 
 

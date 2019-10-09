@@ -29,7 +29,7 @@ export const getJSON = (variable: any) => {
 export const setHeaders = (key: any, value: any) => {
     const newHeaders = environment.headersApp;
     newHeaders[key] = value;
-    console.log('new headers returned', newHeaders);
+    // console.log('new headers returned', newHeaders);
     return newHeaders;
 }
 
@@ -96,6 +96,11 @@ export const mapImagesApi = (images: any[]) => {
     });
 }
 
+export const mapUser = (user: any) => {
+    user.avatar = getImageURL(user.avatar);
+    return user;
+}
+
 //Función Obtener Backgound
 export const getBackgroundApp = (image_url: string) => {
     return `linear-gradient(rgba(2, 2, 2, 0.58), rgba(2, 2, 2, 0.58)), url(${image_url})`;
@@ -157,4 +162,16 @@ export const setInputFocus = (inputElement: any) => {
     setTimeout(() => {
         nativeEl.setSelectionRange(inputSelection, inputSelection);
     }, 1);
+}
+
+export const getImagesPost = ($imagesArray: any[]) => {
+    if ($imagesArray) {
+        if ($imagesArray.length === 0) {
+            return '';
+        } else {
+            return $imagesArray[0].url;
+        }
+    } else {
+        return '';
+    }
 }

@@ -10,6 +10,7 @@ import { finalize } from 'rxjs/operators';
 import { NavController } from '@ionic/angular';
 import { IRespuestaApiSIU } from "src/app/interfaces/models";
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 // type PaneType = 'left' | 'right';
@@ -132,9 +133,12 @@ export class EmergencyCreatePage implements OnInit {
             zoom: 14
         }).subscribe(direccion => {
             this.emergencyPostCoordinate.address = direccion.display_name;
-        },
-        err => {
-            console.log('Ocurrio un error al obtener la ubicación: ', err);
+        },(err: HttpErrorResponse) => {
+            if (err.error instanceof Error) {
+                console.log("Client-side error", err);
+            } else {
+                console.log("Server-side error", err);
+            }
             this.utilsService.showToast('No se pudo obtener la dirección de tu ubicación');
         });
     }
@@ -181,10 +185,13 @@ export class EmergencyCreatePage implements OnInit {
             await this.utilsService.showToast("El Reporte fue enviado correctamente");
             // this.navCtrl.navigateRoot('/emergencies');
             this.router.navigate(['/emergencies'])
-        }, err => {
-            const message_error = (err.error.message) ? err.error.message :'Ocurrio un error al reportar la emergencia';
-            this.utilsService.showToast(message_error);
-            console.log('Ocurrio un error al reportar la emergencia', message_error);
+        }, (err: HttpErrorResponse) => {
+            if (err.error instanceof Error) {
+                console.log("Client-side error", err);
+            } else {
+                console.log("Server-side error", err);
+            }
+            this.utilsService.showToast('Ocurrio un error al enviar el reporte');
         });
     }
 

@@ -12,6 +12,7 @@ import { getUsersFromDetails, checkUserInDetails } from "src/app/helpers/user-he
 import { checkLikePost } from "src/app/helpers/user-helper";
 import { getJSON, mapImagesApi } from "src/app/helpers/utils";
 import { mapEvent } from "../../helpers/utils";
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -108,16 +109,17 @@ export class EventDetailPage implements OnInit {
         ).subscribe((res: IRespuestaApiSIUSingle) => {
             if (res.data) {
                 this.event = res.data;
-                // if (this.event) {
-                //     this.event.postAssistance = checkLikePost(this.event.details, this.AuthUser);
-                //     this.event.ubication = getJSON(this.event.ubication);
-                //     this.event.fulldate = `${this.event.date} ${this.event.time}`;
-                //     if (this.event.images && this.event.images.length > 0) {
-                //         this.event.images = mapImagesApi(this.event.images);
-                //     }
-                // }
+                if (this.event) {
+                    this.event.postAssistance = checkLikePost(this.event.details, this.AuthUser);
+                }
             }
 
+        },(err: HttpErrorResponse) => {
+            if (err.error instanceof Error) {
+                console.log("Client-side error", err);
+            } else {
+                console.log("Server-side error", err);
+            }
         });
     }
 
@@ -127,7 +129,7 @@ export class EventDetailPage implements OnInit {
     }
 
 
-    checkLikePost($details) {
+    checkLikePost($details: any) {
         if ($details && $details.length > 0) {
             const likes_user = getUsersFromDetails($details);
             const user_made_like = checkUserInDetails(this.AuthUser.id, likes_user);

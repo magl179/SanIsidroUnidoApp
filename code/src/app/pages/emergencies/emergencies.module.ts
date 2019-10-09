@@ -13,6 +13,7 @@ import { FilterPageModule } from "src/app/modals/filter/filter.module";
 import { SearchPage } from "src/app/modals/search/search.page";
 import { SearchPageModule } from "src/app/modals/search/search.module";
 import { NgFallimgModule } from 'ng-fallimg';
+import { DirectivesModule } from "../../directives/directives.module";
 
 const routes: Routes = [
   {
@@ -34,6 +35,7 @@ const routes: Routes = [
         SmComponentsModule,
       PipesModule,
       FilterPageModule,
+      DirectivesModule,
       SearchPageModule,
       NgFallimgModule
   ],
