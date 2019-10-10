@@ -1,5 +1,8 @@
 .social-problem{
     margin-bottom: 2rem;
+    .post-content{
+        padding-bottom: 5px;
+    }
     .post-title{
         margin-bottom: .7em;
     }
@@ -23,7 +26,7 @@
         }
     }
     .post-description{
-        margin-bottom: 1rem;
+        //margin-bottom: 1rem;
         &:after {
             content: "...";
         }

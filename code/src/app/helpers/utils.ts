@@ -1,8 +1,11 @@
+
 import { environment } from 'src/environments/environment';
 import { Observable, interval, throwError, of } from 'rxjs';
 import { retryWhen, flatMap } from 'rxjs/operators';
 import { checkLikePost } from './user-helper';
 
+declare var moment: any;
+moment.locale('es');
 const URL_PATTERN = new RegExp("^(?:(?:http(?:s)?|ftp)://)(?:\\S+(?::(?:\\S)*)?@)?(?:(?:[a-z0-9\u00a1-\uffff](?:-)*)*(?:[a-z0-9\u00a1-\uffff])+)(?:\\.(?:[a-z0-9\u00a1-\uffff](?:-)*)*(?:[a-z0-9\u00a1-\uffff])+)*(?:\\.(?:[a-z0-9\u00a1-\uffff]){2,})(?::(?:\\d){2,5})?(?:/(?:\\S)*)?$");
 
 //FUncion para verificar si una variable es un JSON
@@ -11,6 +14,36 @@ const isJSON = (str: any) => {
         return JSON.parse(str) && !!str;
     } catch (e) {
         return false;
+    }
+}
+
+export const formatFulldate = (stringdate) => {   
+    let beatifulDate = null;
+    if (moment(stringdate).isValid()) {
+        //console.log('string full valid', stringdate)
+        return moment(new Date(stringdate)).format('LLL');
+    }else{
+        return stringdate;
+    }
+}
+
+export const formatDate = (stringdate) => {
+    let beatifulDate = null;
+    if (moment(stringdate).isValid()) {
+        //console.log('string date valid', stringdate)
+        return moment(new Date(stringdate)).format('LL');
+    }else{
+        return stringdate;
+    }
+}
+
+export const formatTime = (stringdate) => {
+    let beatifulDate = null;
+    if (moment(stringdate).isValid()) {
+        //console.log('string time valid', stringdate)
+        return moment(new Date(stringdate)).format('LTS');
+    }else{
+        return stringdate;
     }
 }
 
@@ -29,7 +62,6 @@ export const getJSON = (variable: any) => {
 export const setHeaders = (key: any, value: any) => {
     const newHeaders = environment.headersApp;
     newHeaders[key] = value;
-    // console.log('new headers returned', newHeaders);
     return newHeaders;
 }
 
@@ -79,8 +111,6 @@ const imagenIsURL = (image_name: string) => {
  //Obtener la URL de una imagen
 export const getImageURL = (image_name: string) => {
     const imgIsURL = imagenIsURL(image_name);
-    // console.log('is image/ url extern', imgIsURL);
-    // console.log('is image url extern', image_name);
     if (imgIsURL) {
         return image_name;
     } else {
@@ -90,8 +120,7 @@ export const getImageURL = (image_name: string) => {
 
 export const mapImagesApi = (images: any[]) => {
     return images.map((image: any) => {
-        image.url = getImageURL(image.url);
-        // console.log('image returned', image.url);
+        image.url = getImageURL(image.url);;
         return image;
     });
 }
@@ -112,7 +141,10 @@ export const isType = (type: any, val: any) => {
 }
 
 export const mapEvent = (event: any) => {
-    event.fulldate = `${event.date} ${event.time}`;
+     const dateFull = `${event.date} ${event.time}`;
+    event.fulldate =  formatFulldate(dateFull) ;
+    event.date =  formatDate(dateFull);
+    event.time =  formatTime(dateFull);
     event.ubication = getJSON(event.ubication);
     if (event.images && event.images.length > 0) {
         event.images = mapImagesApi(event.images);
@@ -120,17 +152,18 @@ export const mapEvent = (event: any) => {
     if (event.user && event.user.avatar) {
         event.user.avatar= getImageURL(event.user.avatar);
     }
-    // console.log('event maped', event);
     return event;
 }
 
 export const mapEmergency = (emergency: any) => {
-    emergency.fulldate = `${emergency.date} ${emergency.time}`;
+     const dateFull = `${emergency.date} ${emergency.time}`;
+    emergency.fulldate =  formatFulldate(dateFull) ;
+    emergency.date =  formatDate(dateFull);
+    emergency.time =  formatTime(dateFull);
     emergency.ubication = getJSON(emergency.ubication);
     if (emergency.images && emergency.images.length > 0) {
         emergency.images = mapImagesApi(emergency.images);
     }
-    // console.log('event maped', emergency);
     return emergency;
 }
 export const mapReport = (report: any) => {
@@ -139,11 +172,13 @@ export const mapReport = (report: any) => {
     if (report.images && report.images.length > 0) {
         report.images = mapImagesApi(report.images);
     }
-    // console.log('report maped', report);
     return report;
 }
 export const mapSocialProblem = (social_problem: any) => {
-    social_problem.fulldate = `${social_problem.date} ${social_problem.time}`;
+    const dateFull = `${social_problem.date} ${social_problem.time}`;
+    social_problem.fulldate =  formatFulldate(dateFull) ;
+    social_problem.date =  formatDate(dateFull);
+    social_problem.time =  formatTime(dateFull);
     social_problem.ubication = getJSON(social_problem.ubication);
     if (social_problem.images && social_problem.images.length > 0) {
         social_problem.images = mapImagesApi(social_problem.images);
@@ -151,7 +186,6 @@ export const mapSocialProblem = (social_problem: any) => {
     if (social_problem.user && social_problem.user.avatar) {
         social_problem.user.avatar= getImageURL(social_problem.user.avatar);
     }
-    // console.log('social problem maped', social_problem);
     return social_problem;
 }
 

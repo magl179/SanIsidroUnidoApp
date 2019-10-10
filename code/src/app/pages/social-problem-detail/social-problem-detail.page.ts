@@ -60,11 +60,9 @@ export class SocialProblemDetailPage implements OnInit {
         this.socialProblemLoaded = false;
         this.postService.getSocialProblem(+this.id).pipe(
             map((res: any) => {
-                console.log('res map', res);
                 if (res && res.data) {
                     const social_problem = res.data;
                     res.data = mapSocialProblem(social_problem);
-                    console.log('res maped', res.data);
                 }
                 return res;
             }),
@@ -76,6 +74,7 @@ export class SocialProblemDetailPage implements OnInit {
                 this.socialProblem = res.data;
                 this.socialProblem.postLiked = checkLikePost(this.socialProblem.details, this.AuthUser);
             }
+            console.log('problema social mapeado', this.socialProblem);
         }, (err: HttpErrorResponse) => {
             if (err.error instanceof Error) {
                 console.log("Client-side error", err);

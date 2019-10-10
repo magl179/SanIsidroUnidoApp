@@ -95,11 +95,9 @@ export class EventDetailPage implements OnInit {
         this.eventLoaded = false;
         this.postService.getEvent(+this.id).pipe(
             map((res: any) => {
-                console.log('res map', res);
                 if (res && res.data) {
                     const event = res.data;
                     res.data = mapEvent(event);
-                    console.log('res maped', res.data);
                 }
                 return res;
             }),
@@ -113,6 +111,7 @@ export class EventDetailPage implements OnInit {
                     this.event.postAssistance = checkLikePost(this.event.details, this.AuthUser);
                 }
             }
+            console.log('evento mapeado', this.event);
 
         },(err: HttpErrorResponse) => {
             if (err.error instanceof Error) {

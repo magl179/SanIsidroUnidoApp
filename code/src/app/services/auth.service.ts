@@ -35,20 +35,38 @@ export class AuthService {
         //     this.sessionAuthUserSubject.next(token_decoded);
         //     console.log('user storage constructor auth service', token_decoded)
         // });
-        this.platform.ready().then(async () => {
+        ///setTimeout(async () => {
+            this.storage.ready().then(async () => {
+                //this.storage.keys().then(keys => console.log('keys', keys));
+                //this.storage.length().then(length => console.log('length', length));
+                console.log('driver', this.storage.driver);
+                await this.getTokenandUserLS();
+            })
+            
+        //},1);
+        /*this.platform.ready().then(async () => {
             await this.getTokenandUserLS();
-        });
+        });*/
     }
     
     // ngOnInit
     async getTokenandUserLS() {
-        this.storage.get(TOKEN_ITEM_NAME).then(token_encoded => {
-            this.sessionAuthTokenSubject.next(token_encoded);
+        const getTokenLS = new Promise((resolve, reject) => {
+           this.storage.get(TOKEN_ITEM_NAME).then(token_encoded => {
+               this.sessionAuthTokenSubject.next(token_encoded);
+               resolve(true);
+            });
         });
-        this.storage.get(USER_ITEM_NAME).then(token_decoded => {
-            this.sessionAuthUserSubject.next(token_decoded);
-            console.log('user storage constructor auth service', token_decoded)
+        const getUserLS = new Promise((resolve, reject) => {
+             this.storage.get(USER_ITEM_NAME).then(token_decoded => {
+                this.sessionAuthUserSubject.next(token_decoded);
+                console.log('user storage constructor auth service', token_decoded);
+                resolve(true);
+            });
         });
+        return await Promise.all([getTokenLS, getUserLS]);
+       
+        
     }
 
     // async isAuthenticated() {
@@ -86,7 +104,7 @@ export class AuthService {
     async checkValidToken() {
         if (this.tokenExists()) {
             const itemToken = await this.storage.get(TOKEN_ITEM_NAME);
-            console.log('value check token get', itemToken)
+            //console.log('value check token get', itemToken)
             if (itemToken) {
                 const isTokenExpired = tokenIsExpired(itemToken);
                 if (isTokenExpired) {
@@ -136,9 +154,15 @@ export class AuthService {
     }
     //Verificar si el usuario esta autenticado, es decir tiene su datos en el local storage
     async isAuthenticated() {
-        const itemUser = await this.storage.get(USER_ITEM_NAME);
+        //const itemUser = await this.storage.get(USER_ITEM_NAME);
+        const getTokenLS = new Promise((resolve, reject) => {
+           this.storage.get(TOKEN_ITEM_NAME).then(token_encoded => {
+               resolve(token_encoded);
+            });
+        });
+        
         // const isAuthenticated = !!itemUser;
-        return !!itemUser;
+        return await getTokenLS;
     }
 
     // Verificar si el token esta guardado en el local storage

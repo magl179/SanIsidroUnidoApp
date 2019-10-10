@@ -49,12 +49,12 @@
         </div>
         <div class="post-info-container">
             <div class="post-description-info">
-                <span class="post-category">
+                <!--<span class="post-category">
                     <span>{{socialProblem.subcategory.name}}</span>
                     <div class="container-more-options" (click)="showActionCtrl()">
                         <ion-icon name="md-more"></ion-icon>
                     </div>
-                </span>
+                </span> -->
                 <h2>{{socialProblem.title}}</h2>
                 <p>{{socialProblem.description}}</p>
             </div>
@@ -65,7 +65,7 @@
                         <span class="icon-fulldate">
                             <ion-icon name="calendar" class="social-problem-state"></ion-icon>
                         </span>
-                        <span>{{socialProblem.created_at | beafitulDate}} </span>
+                        <span>{{socialProblem.date}} </span>
                     </p>
                     <p class="item-info">
                         <span class="icon-ubication">
@@ -77,13 +77,19 @@
                         <span class="icon-people">
                             <ion-icon name="people" class="social-problem-state"></ion-icon>
                         </span>
-                        <span>{{socialProblem.details.length}} personas les gusta</span>
+                          <span *ngIf="socialProblem.postLiked">
+                            A ti y {{socialProblem.details.length}} persona(s) más les gusta
+                         </span>
+                        <span *ngIf="!socialProblem.postLiked">
+                                    A {{socialProblem.details.length}} 
+                                    {{(socialProblem.details.length === 1) ? 'persona le gusta' : 'personas les gusta'}}
+                        </span>
                     </p>
                     <p class="item-info">
                         <span class="icon-attendance">
                             <ion-icon name="clipboard" class="social-problem-state"></ion-icon>
                         </span>
-                        <span>{{(socialProblem.is_attended)?'Ya ha sido Atendido':'Esta Pendiente de atención'}}</span>
+                        <span>{{(socialProblem.is_attended)?'Ya fue atendido':'Todavía no ha sido atendido'}}</span>
                     </p>
                 </div>
             </div>
@@ -108,3 +114,19 @@
         </div>
     </div>
 </ion-content>
+<ion-footer class="footer-fixed-posts" *ngIf="socialProblem">
+    <div class="social">
+        <!-- <div class="social-content">A 5 Personas les gusta</div> -->
+        <div class="social-options">
+            <div class="social-button dark" (click)="toggleLike(socialProblem.postLiked)" [class.active]="socialProblem.postLiked">
+                <ion-icon class="like" name="heart"></ion-icon>
+                <span>Me gusta</span>
+            </div>
+            <div class="social-button" (click)="sharePost(socialProblem)">
+                <ion-icon class="share" name="share"></ion-icon>
+                <span>Compartir</span>
+            </div>
+        </div>
+
+    </div>
+</ion-footer>

@@ -5,6 +5,8 @@ import { environment } from 'src/environments/environment';
 import { IUbication } from "src/app/interfaces/models";
 import { UtilsService } from "src/app/services/utils.service";
 import { getJSON } from "src/app/helpers/utils";
+import { MapService } from 'src/app/services/map.service';
+
 
 @Component({
     selector: 'simple-map',
@@ -26,7 +28,8 @@ export class SimpleMapComponent implements AfterViewInit {
     map: any;
 
     constructor(
-        private utilsService: UtilsService
+        private utilsService: UtilsService,
+        private mapService: MapService
     ) { }
 
     async ngAfterViewInit() {
@@ -46,7 +49,6 @@ export class SimpleMapComponent implements AfterViewInit {
             zoomAnimation: false,
             markerZoomAnimation: false
         });
-        console.log('Map coords', this.coordsMap);
         this.map.on('load', (e) => {
             console.log('MAPA SIMPLE CARGADO');
             Leaflet.control.scale().addTo(this.map);
@@ -60,7 +62,18 @@ export class SimpleMapComponent implements AfterViewInit {
             reuseTiles: true
         }).addTo(this.map);
 
-        Leaflet.marker([this.coordsMap.latitude, this.coordsMap.longitude]).addTo(this.map);
+        const icon = await this.mapService.getCustomIcon('red');
+        const coordenadas = [this.coordsMap.latitude, this.coordsMap.longitude];
+        let markerPosition;
+           if (icon) {
+                // tslint:disable-next-line: max-line-length
+                markerPosition = new Leaflet.Marker(new Leaflet.latLng(coordenadas), { icon: icon});
+            } else {
+                // tslint:disable-next-line: max-line-length
+                markerPosition = new Leaflet.Marker(new Leaflet.latLng(coordenadas));
+            }
+            markerPosition.addTo(this.map).bindPopup('Ubicación del Punto');
+            //Leaflet.marker([this.coordsMap.latitude, this.coordsMap.longitude]).addTo(this.map);
     }
 
     onTwoFingerDrag(e) {

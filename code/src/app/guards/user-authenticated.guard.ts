@@ -19,8 +19,9 @@ export class UserAuthenticatedGuard implements CanLoad {
     async canLoad(): Promise<boolean> {
         // const userObservable = this.authService.isAuthenticated();
         const tokenDecoded = await this.authService.isAuthenticated();
+        console.log('user auth guard', tokenDecoded);
         if (tokenDecoded) {
-            console.warn('can load', tokenDecoded);
+            //console.warn('can load', tokenDecoded);
             return true;
         } else {
             console.log('redirect to login');

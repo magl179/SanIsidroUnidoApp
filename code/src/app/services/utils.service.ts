@@ -60,6 +60,7 @@ export class UtilsService implements OnInit {
         return beatifulDate;
     }
 
+
     async shareSocial(publicacion: any) {
         // Verificar Si Existe Cordova
         if (this.platform.is('cordova')) {

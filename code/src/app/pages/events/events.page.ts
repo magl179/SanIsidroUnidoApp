@@ -147,13 +147,11 @@ export class EventsPage implements OnInit {
         this.eventsLoaded = false;
         this.postService.getEvents().pipe(
             map((res: any) => {
-                // console.log('res map', res);
                 if (res && res.data && res.data.data) {
                     // const events_to_map = res.data.data;
                     res.data.data.forEach((event: any) => {
                         event = mapEvent(event);
                     });
-                    // console.log('res maped', res.data.data);
                 }
                 return res;
             }),
@@ -166,7 +164,6 @@ export class EventsPage implements OnInit {
             eventsApi.push(...res.data.data);
 
             if (eventsApi.length === 0) {
-                // conso
                 if (event) {
                     event.target.disabled = true;
                     event.target.complete();
@@ -177,8 +174,10 @@ export class EventsPage implements OnInit {
                     const postAssistance = checkLikePost(event.details, this.AuthUser) || false;
                     event.postAssistance = postAssistance;
                 });
+
             }
             this.eventsList.push(...eventsApi);
+            console.log('eventos mapeados completamente', this.eventsList);
             if (event) {
                 event.target.complete();
             }

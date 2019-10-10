@@ -51,12 +51,9 @@
 
             <div class="post-info-container">
                 <div class="post-description-info">
-                    <span class="post-category">
+                    <!--<span class="post-category">
                         <span>General</span>
-                        <div class="container-more-options" (click)="showActionCtrl()">
-                            <ion-icon name="md-more"></ion-icon>
-                        </div>
-                    </span>
+                    </span>-->
                     <h2 class="post-title">
                         <span>{{event.title}}</span>
                     </h2>
@@ -69,7 +66,7 @@
                             <span class="icon-fulldate">
                                 <ion-icon name="calendar" class="social-problem-state"></ion-icon>
                             </span>
-                            <span>{{ event.fulldate | simpleBeatifulDate }}</span>
+                            <span>{{ event.fulldate  }}</span>
                         </p>
                         <p class="item-info">
                             <span class="icon-ubication">
@@ -81,17 +78,10 @@
                             <span class="icon-people">
                                 <ion-icon name="people" class="social-problem-state"></ion-icon>
                             </span>
-                            <span>
-                                {{event.details.length}}
-                                {{(event.details.length !== 1) ? 'personas asistirán': 'persona asistirá'}}
-                            </span>
-                        </p>
-                        <p class="item-info">
-                            <span class="icon-assistance">
-                                <ion-icon name="clipboard" class="social-problem-state"></ion-icon>
-                            </span>
-                            <span>
-                                {{(alternatePost)?'Voy a asistir':'Unirme'}}
+                            <span *ngIf="event.postAssistance">A ti y {{event.details.length}} persona(s) más les interesa</span>
+                            <span *ngIf="!event.postAssistance">
+                                A {{event.details.length}} 
+                                {{(event.details.length === 1) ? 'persona le interesa' : 'personas les interesa'}}
                             </span>
                         </p>
                     </div>
@@ -117,3 +107,23 @@
     </div>
 
 </ion-content>
+<ion-footer class="footer-fixed-posts" *ngIf="event">
+        <div class="social">
+            <!-- <div class="social-content">A 5 Personas les gusta</div> -->
+            <div class="social-options" (click)="toggleAssistance(event.postAssistance)">
+                <div class="social-button dark" [class.active]="postAssistance">
+                    <ion-icon class="assistance" name="star"></ion-icon>
+                    <span>Me interesa</span>
+                </div>
+                <!-- <div class="social-button">
+                            <ion-icon name="options"></ion-icon>
+                            <span>Comment</span>
+                        </div> -->
+                <div class="social-button dark" (click)="sharePost(event)">
+                    <ion-icon class="share" name="share"></ion-icon>
+                    <span><i class="fa fa-share"></i>Compartir</span>
+                </div>
+            </div>
+    
+        </div>
+    </ion-footer>

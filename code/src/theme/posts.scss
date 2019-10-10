@@ -49,3 +49,69 @@
     color: black !important;
   }
 }
+
+
+.social {
+  //   margin-top: 12px;
+  padding: 1rem;
+  .social-content {
+    margin-bottom: 1.4em;
+  }
+  .social-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .social-button {
+      padding: 0.5em 1em;
+      //   background: #efe7e9;
+      border-radius: 10px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      ion-icon {
+        margin-right: 6px;
+        transition: all 0.4s;
+        font-size: 1.1em;
+        &.like {
+          color: #a29696;
+        }
+        &.share {
+          color: #3171e0;
+        }
+        &.assistance {
+          color: #a29696;
+        }
+      }
+      span {
+        display: inline-block;
+      }
+      &.dark {
+        ion-icon.like {
+          color: #fff;
+        }
+        ion-icon.assistance {
+          color: #fff;
+        }
+        ion-icon.share{
+          color: #21b4e0;
+        }
+      }
+      &.active {
+        ion-icon.like {
+          color: #e0245e;
+        }
+        ion-icon.assistance {
+          color: #e25a18;
+        }
+      }
+    }
+  }
+}
+
+
+
+.footer-fixed-posts{
+    background: #455A64;
+    color: #ecfef1;
+}

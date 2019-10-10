@@ -41,16 +41,13 @@
     </div>
     <!-- Tarjeta Datos Cargados y Disponibles -->
     <div *ngIf="eventsLoaded  && eventsList.length > 0">
-        <ion-card class="event" *ngFor="let event of eventsList; let i = index;">
-            <div class="event-image" *ngIf="event.images && event.images.length > 0">
+        <ion-card class="event" *ngFor="let event of eventsList; let i = index;" (click)="postDetail(event.id)">
+            <!--<div class="event-image" *ngIf="event.images && event.images.length > 0">
                 <img [src]="event.images[0].url" alt="Imagen Tarjeta" class="img" />
-            </div>
+            </div>-->
             <ion-card-header class="event-header">
-                <ion-card-title class="event-title" (click)="postDetail(event.id)">
+                <ion-card-title class="event-title">
                     <span>{{event.title}}</span>
-                    <div class="container-more-options" (click)="showActionCtrl(event)">
-                        <ion-icon name="md-more"></ion-icon>
-                    </div>
                 </ion-card-title>
             </ion-card-header>
             <ion-card-content class="main-post-info">
@@ -58,7 +55,7 @@
                     <span class="icon-fulldate">
                         <ion-icon name="calendar"></ion-icon>
                     </span>
-                    <span class="description"> {{ event.fulldate | beafitulDate }} </span>
+                    <span class="description"> {{ event.fulldate }} </span>
                 </p>
                 <p class="item-info">
                     <span class="icon-ubication">
@@ -68,21 +65,34 @@
                         {{ (event.ubication && event.ubication.address) ? event.ubication.address : 'Direccion no encontrada' }}
                     </span>
                 </p>
-                <p class="item-info">
-                    <span class="icon-people">
-                        <ion-icon name="people"></ion-icon>
-                    </span>
-                    <span class="description">
-                        {{ event.details.length }}
-                        {{(event.details.length !== 1) ? 'personas asistirán': 'persona asistirá'}}
-                    </span>
-                </p>
             </ion-card-content>
+            <div class="social">
+                <div class="social-content">
+                    <span *ngIf="event.postAssistance">A ti y {{event.details.length}} personas más les interesa</span>
+                     <span *ngIf="!event.postAssistance">
+                        A {{event.details.length}} 
+                        {{(event.details.length === 1) ? 'persona le interesa' : 'personas les interesa'}}
+                    </span>
+                </div>
+                <div class="social-options">
+                    <div class="social-button"
+                        [class.active]="event.postAssistance"
+                        (click)="toggleAssistance(event.postAssistance, event.id)">
+                        <ion-icon class="assistance" name="star"></ion-icon>
+                        <span>Me interesa</span>
+                    </div>
+                    <div class="social-button" (click)="sharePost(event)">
+                        <ion-icon class="share" name="share"></ion-icon>
+                        <span><i class="fa fa-share"></i>Compartir</span>
+                    </div>
+                </div>
+
+            </div>
         </ion-card>
     </div>
     <!--Opciones del FabButton -->
     <ion-fab vertical="bottom" horizontal="center" slot="fixed">
-        <ion-fab-button color="primary">
+        <ion-fab-button color="primary" size="small">
             <ion-icon name="ios-keypad"></ion-icon>
         </ion-fab-button>
         <ion-fab-list side="top">
