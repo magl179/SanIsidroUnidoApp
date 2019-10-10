@@ -47,7 +47,7 @@ export class NotificationsService {
         //Configurar Onesignal en un Dispositivo
         if (this.platform.is('cordova')) {
             // console.log('Configurando OneSignal con San Isidro Unido App');
-            //obtener el onesginal id y el firebaseid
+            //obtener el onesginal_id y el firebaseid
             const OneSignalID = environment.onesignal_id;
             const firebaseID = environment.firebase_app_id;
             // Inicializar Onesignal con esas credenciales

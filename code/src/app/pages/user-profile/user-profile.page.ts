@@ -177,7 +177,6 @@ export class UserProfilePage implements OnInit {
     //Funcion remover dispositivo asociado a un usuario en la API
     removeUserDevice(device_id: number) {
         this.userService.sendRequestDeleteUserDevice(device_id).subscribe(async (res: IRespuestaApiSIUSingle) => {
-            const token = res.data.token;
             this.getUserDevices();
             this.utilsService.showToast('Dispositivo eliminado Correctamente');
         }, (err: HttpErrorResponse) => {
@@ -192,10 +191,6 @@ export class UserProfilePage implements OnInit {
 
     removeSocialProfileToUser(social_profile_id) {
         this.userService.sendRequestDeleteSocialProfile(social_profile_id).subscribe(async (res: IRespuestaApiSIUSingle) => {
-            // const token = res.data.token;
-            // const token_decoded = decodeToken(token);
-            // this.authService.saveUserInfo(token, token_decoded);
-            // this.authService.saveLocalStorageInfo(token, token_decoded);
             this.getUserSocialProfiles();
             this.utilsService.showToast('Perfil Social fue desconectado correctamente');
         },(err: HttpErrorResponse) => {

@@ -57,8 +57,7 @@ export class UserService implements OnInit {
     //Enviar una solicitud de cambio de contraseña
     sendChangeUserPassRequest(newPassword: string): Observable<any> {
         const headers = setHeaders(environment.AUTHORIZATION_NAME, this.AuthToken);
-        const user_id = this.AuthUser.id;
-        return this.httpRequest.patch(`${environment.apiBaseURL}/usuarios/${user_id}/cambiar-contrasenia`, {
+        return this.httpRequest.patch(`${environment.apiBaseURL}/usuarios/cambiar-contrasenia`, {
             password: newPassword,
             password_confirmation: newPassword
         }, headers );
@@ -66,42 +65,36 @@ export class UserService implements OnInit {
     // Enviar una solicitud para cambiar el avatar de un usuario
     sendChangeUserImageRequest(image: string): Observable<any> {
         const headers = setHeaders(environment.AUTHORIZATION_NAME, this.AuthToken);
-        const user_id = this.AuthUser.id;
-        return this.httpRequest.patch(`${environment.apiBaseURL}/usuarios/${user_id}/cambiar-avatar`, {
+        return this.httpRequest.patch(`${environment.apiBaseURL}/usuarios/cambiar-avatar`, {
             avatar: image
         }, headers);
     }
     // Enviar una solicitud para editar los datos de perfil de un usuario
     sendEditProfileRequest(profile: IEditProfile): Observable<any> {
         const headers = setHeaders(environment.AUTHORIZATION_NAME, this.AuthToken);
-        const user_id = this.AuthUser.id;
-        return this.httpRequest.patch(`${environment.apiBaseURL}/usuarios/${user_id}`, profile, headers);
+        return this.httpRequest.patch(`${environment.apiBaseURL}/usuarios/editar`, profile, headers);
     }
     // Enviar solicitud de afiliacion al barrio
     sendRequestUserMembership(image: string) {
         const headers = setHeaders(environment.AUTHORIZATION_NAME, this.AuthToken);
-        const user_id = this.AuthUser.id;
-        return this.httpRequest.patch(`${environment.apiBaseURL}/usuarios/${user_id}/solicitar-afiliacion`, {
+        return this.httpRequest.patch(`${environment.apiBaseURL}/usuarios/solicitar-afiliacion`, {
             basic_service_image: image
         }, headers );
     }
     // Enviar solicitud par agregar dispositivo asociado a un usuario
     sendRequestAddUserDevice(device: IPhoneUser) {
         const headers = setHeaders(environment.AUTHORIZATION_NAME, this.AuthToken);
-        const user_id = this.AuthUser.id;
-        return this.httpRequest.post(`${environment.apiBaseURL}/usuarios/${user_id}/dispositivos`, device, headers);
+        return this.httpRequest.post(`${environment.apiBaseURL}/usuarios/dispositivos`, device, headers);
     }
     // Enviar solicitud para eliminar dispositivo asociado a un usuario
     sendRequestDeleteUserDevice(device_id: number) {
         const headers = setHeaders(environment.AUTHORIZATION_NAME, this.AuthToken);
-        const user_id = this.AuthUser.id;
-        return this.httpRequest.delete(`${environment.apiBaseURL}/usuarios/${user_id}/dispositivos/${device_id}`, {}, headers );
+        return this.httpRequest.delete(`${environment.apiBaseURL}/usuarios/dispositivos/${device_id}`, {}, headers );
     }
     //Enviar solicitud para eliminar un perfil social de un usuario
     sendRequestDeleteSocialProfile(social_profile_id: number) {
         const headers = setHeaders(environment.AUTHORIZATION_NAME, this.AuthToken);
-        const user_id = this.AuthUser.id;
-        return this.httpRequest.delete(`${environment.apiBaseURL}/usuarios/${user_id}/perfiles-sociales/${social_profile_id}`, {}, headers );
+        return this.httpRequest.delete(`${environment.apiBaseURL}/usuarios/perfiles-sociales/${social_profile_id}`, {}, headers );
     }
 
     
