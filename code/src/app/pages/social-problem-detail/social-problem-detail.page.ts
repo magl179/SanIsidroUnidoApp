@@ -12,6 +12,7 @@ import { mapImagesApi, getImageURL } from "src/app/helpers/utils";
 import { checkLikePost } from 'src/app/helpers/user-helper';
 import { mapSocialProblem } from "../../helpers/utils";
 import { HttpErrorResponse } from '@angular/common/http';
+import { EventsService } from "../../services/events.service";
 
 
 
@@ -34,6 +35,7 @@ export class SocialProblemDetailPage implements OnInit {
         private route: ActivatedRoute,
         private postService: PostsService,
         public utilsService: UtilsService,
+        private events_app: EventsService,
         private actionSheetCtrl: ActionSheetController,
         private modalCtrl: ModalController,
         private networkService: NetworkService,
@@ -55,6 +57,9 @@ export class SocialProblemDetailPage implements OnInit {
         });
         this.getSocialProblem();
     }
+    // test() {
+    //     this.events_app.setEvent('like_problem_toggle');
+    // }
     //Obtener el detalle de un problema social
     getSocialProblem() {
         this.socialProblemLoaded = false;
@@ -141,6 +146,7 @@ export class SocialProblemDetailPage implements OnInit {
             this.postService.sendDeleteDetailToPost(this.socialProblem.id).subscribe((res: IRespuestaApiSIU) => {
                 console.log('detalle eliminado correctamente');
                 this.socialProblem.postLiked = false;
+                this.events_app.setEvent('like_problem_toggle');
             }, err => {
                 console.log('detalle no se pudo eliminar', err);
                 this.utilsService.showToast('El like no se pudo eliminar');    
@@ -154,6 +160,7 @@ export class SocialProblemDetailPage implements OnInit {
             this.postService.sendCreateDetailToPost(detailInfo).subscribe((res: IRespuestaApiSIU) => {
                 console.log('detalle creado correctamente');
                 this.socialProblem.postLiked = true;
+                this.events_app.setEvent('like_problem_toggle');
             }, err => {
                 console.log('detalle no se pudo crear', err);
                 this.utilsService.showToast('El like no pudo guardarse');

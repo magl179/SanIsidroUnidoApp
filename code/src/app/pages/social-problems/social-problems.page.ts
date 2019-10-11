@@ -13,6 +13,7 @@ import { SearchPage } from 'src/app/modals/search/search.page';
 import { checkLikePost } from 'src/app/helpers/user-helper';
 import { mapSocialProblem } from "../../helpers/utils";
 import { HttpErrorResponse } from '@angular/common/http';
+import { EventsService } from "../../services/events.service";
 
 
 @Component({
@@ -57,12 +58,12 @@ export class SocialProblemsPage implements OnInit {
         private authService: AuthService,
         private userService: UserService,
         private modalCtrl: ModalController,
-        private popoverCtrl: PopoverController,
+        private events_app: EventsService,
         private actionSheetCtrl: ActionSheetController
     ) {
     }
 
-    async ngOnInit() {
+    ngOnInit() {
         this.utilsService.enableMenu();
         console.log('ng on init');
         this.authService.sessionAuthUser.pipe(
@@ -76,7 +77,13 @@ export class SocialProblemsPage implements OnInit {
                 console.log('Error al traer la informacion del usuario', err);
                 this.utilsService.showToast('No se pudieron cargar la información del usuario');
             });
-        this.loadSocialProblems(null, true);
+        this.loadSocialProblems();
+        this.events_app.getEventsApp().subscribe((event_app: any) => {
+            if (event_app.type === 'like_problem_toggle') {
+                this.loadSocialProblems(null, true, true);
+            }
+        });
+
     }
 
     ionViewWillEnter() { }
@@ -118,46 +125,16 @@ export class SocialProblemsPage implements OnInit {
         }
     }
 
-    async showActionCtrl(socialProblem: ISocialProblem) {
-        const actionShare = {
-            text: 'Compartir',
-            icon: 'share',
-            cssClass: ['share-event'],
-            handler: () => {
-                console.log('compartir evento', event);
-                this.sharePost(socialProblem);
-            }
-        }
-        const actionToggleLike = {
-            text: 'Me gusta',
-            icon: 'heart',
-            cssClass: ['toggle-like', (socialProblem.postLiked) ? 'active' : ''],
-            handler: () => {
-                console.log('like toggle');
-                this.toggleLike(socialProblem.postLiked, socialProblem.id);
-            }
-        }
-
-        const actionSheet = await this.actionSheetCtrl.create({
-            buttons: [
-                actionShare,
-                actionToggleLike, {
-                    text: 'Cancelar',
-                    icon: 'close',
-                    cssClass: ['cancel-action'],
-                    role: 'cancel',
-                    handler: () => {
-                        console.log('Cancel clicked');
-                    }
-                }
-            ]
-        });
-        await actionSheet.present();
-    }
-
     //Cargar los problemas sociales
-    loadSocialProblems(event?: any, resetEvents?: any) {
+    loadSocialProblems(event?: any, resetEventsPagination = false, resetData = false) {
         this.socialProblemsLoaded = false;
+        if (resetData) {
+            this.socialProblemsList = [];
+            this.socialProblemsFilter = [];
+        }
+        if (resetEventsPagination) {
+            this.postsService.resetSocialProblemsPage();
+        }
         this.postsService.getSocialProblems().pipe(
             map((res: any) => {
                 // console.log('res map', res);
@@ -174,12 +151,18 @@ export class SocialProblemsPage implements OnInit {
             })
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let socialProblems = [];
-            socialProblems.push(...res.data.data);
+            socialProblems = res.data.data;
+            // if (event && event.type === 'refresher') {
+            //     socialProblems.unshift(...res.data.data);
+            // } else {
+            //     socialProblems.push(...res.data.data);
+            // }
+            
 
             if (socialProblems.length === 0) {
                 if (event) {
-                    event.target.disabled = true;
-                    event.target.complete();
+                    event.data.target.disabled = true;
+                    event.data.target.complete();
                 }
                 return;
             } else {
@@ -188,11 +171,18 @@ export class SocialProblemsPage implements OnInit {
                     return social_problem;
                 });
             }
+            if (event) {
+                event.data.target.complete();
+            }
+            if (event && event.type === 'refresher') {
+                this.socialProblemsList.unshift(...socialProblems);
+                this.socialProblemsFilter.unshift(...socialProblems);
+                return;
+            }
             this.socialProblemsList.push(...socialProblems);
             this.socialProblemsFilter.push(...socialProblems);
-            if (event) {
-                event.target.complete();
-            }
+
+
         }, (err: HttpErrorResponse) => {
             if (err.error instanceof Error) {
                 console.log("Client-side error", err);
@@ -202,8 +192,18 @@ export class SocialProblemsPage implements OnInit {
         });
     }
     //Obtener datos con el Infinite Scroll
-    getInfiniteScrollData(event) {
-        this.loadSocialProblems(event);
+    getInfiniteScrollData(event: any) {
+        this.loadSocialProblems({
+            type: 'infinite_scroll',
+            data: event
+        });
+    }
+    //Obtener datos con Refresher
+    doRefresh(event: any) {
+        this.loadSocialProblems({
+            type: 'refresher',
+            data: event
+        });
     }
     //Ir al detalle de un problema socialc
     postDetail(id) {
@@ -249,10 +249,6 @@ export class SocialProblemsPage implements OnInit {
         });
         //Presentar el Popover
         return await modal.present();
-    }
-
-    getBGCover(image_cover: any) {
-        return `linear-gradient(to bottom, rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.23)), url('${image_cover}')`;
     }
 
     async showModalSearchSocialProblems() {

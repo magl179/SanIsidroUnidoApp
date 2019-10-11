@@ -1,9 +1,15 @@
 <app-header-back title="Eventos"></app-header-back>
 <ion-content padding>
-    <p
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pullingIcon="arrow-dropdown" refreshingSpinner="circles"
+            refreshingText="Cargando Publicaciones...">
+        </ion-refresher-content>
+    </ion-refresher>
+    <!-- <p
         style="position: fixed;top: 3rem;left: 40%;background: black;color: white; padding: 1rem;z-index: 1000;">
         Num Eventos {{eventsList.length}}
-    </p>
+    </p> -->
+    <p> Num Eventos {{eventsList.length}}</p>
     <!-- Mensaje cuando no se pudieron cargar los datos-->
     <div class="flex-column-center message-fail-load"
         *ngIf="eventsLoaded && eventsList.length === 0">
@@ -41,42 +47,41 @@
     </div>
     <!-- Tarjeta Datos Cargados y Disponibles -->
     <div *ngIf="eventsLoaded  && eventsList.length > 0">
-        <ion-card class="event" *ngFor="let event of eventsList; let i = index;" (click)="postDetail(event.id)">
-            <!--<div class="event-image" *ngIf="event.images && event.images.length > 0">
-                <img [src]="event.images[0].url" alt="Imagen Tarjeta" class="img" />
-            </div>-->
-            <ion-card-header class="event-header">
-                <ion-card-title class="event-title">
-                    <span>{{event.title}}</span>
-                </ion-card-title>
-            </ion-card-header>
-            <ion-card-content class="main-post-info">
-                <p class="item-info">
-                    <span class="icon-fulldate">
-                        <ion-icon name="calendar"></ion-icon>
-                    </span>
-                    <span class="description"> {{ event.fulldate }} </span>
-                </p>
-                <p class="item-info">
-                    <span class="icon-ubication">
-                        <ion-icon name="pin"></ion-icon>
-                    </span>
-                    <span class="description">
-                        {{ (event.ubication && event.ubication.address) ? event.ubication.address : 'Direccion no encontrada' }}
-                    </span>
-                </p>
-            </ion-card-content>
+        <ion-card class="event" *ngFor="let event of eventsList; let i = index;">
+            <div (click)="postDetail(event.id)">
+                <ion-card-header class="event-header">
+                    <ion-card-title class="event-title">
+                        <span>{{event.title}}</span>
+                    </ion-card-title>
+                </ion-card-header>
+                <ion-card-content class="main-post-info">
+                    <p class="item-info">
+                        <span class="icon-fulldate">
+                            <ion-icon name="calendar"></ion-icon>
+                        </span>
+                        <span class="description"> {{ event.fulldate }} </span>
+                    </p>
+                    <p class="item-info">
+                        <span class="icon-ubication">
+                            <ion-icon name="pin"></ion-icon>
+                        </span>
+                        <span class="description">
+                            {{ (event.ubication && event.ubication.address) ? event.ubication.address : 'Direccion no encontrada' }}
+                        </span>
+                    </p>
+                </ion-card-content>
+            </div>
             <div class="social">
                 <div class="social-content">
-                    <span *ngIf="event.postAssistance">A ti y {{event.details.length}} personas más les interesa</span>
-                     <span *ngIf="!event.postAssistance">
-                        A {{event.details.length}} 
+                    <span *ngIf="event.postAssistance">A ti y {{event.details.length}} personas
+                        más les interesa</span>
+                    <span *ngIf="!event.postAssistance">
+                        A {{event.details.length}}
                         {{(event.details.length === 1) ? 'persona le interesa' : 'personas les interesa'}}
                     </span>
                 </div>
                 <div class="social-options">
-                    <div class="social-button"
-                        [class.active]="event.postAssistance"
+                    <div class="social-button" [class.active]="event.postAssistance"
                         (click)="toggleAssistance(event.postAssistance, event.id)">
                         <ion-icon class="assistance" name="star"></ion-icon>
                         <span>Me interesa</span>

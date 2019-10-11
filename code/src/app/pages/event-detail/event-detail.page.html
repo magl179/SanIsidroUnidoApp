@@ -83,7 +83,9 @@
                                 A {{event.details.length}} 
                                 {{(event.details.length === 1) ? 'persona le interesa' : 'personas les interesa'}}
                             </span>
+                            
                         </p>
+                        <!-- <p (click)="test()">test</p> -->
                     </div>
                 </div>
 
@@ -111,7 +113,7 @@
         <div class="social">
             <!-- <div class="social-content">A 5 Personas les gusta</div> -->
             <div class="social-options" (click)="toggleAssistance(event.postAssistance)">
-                <div class="social-button dark" [class.active]="postAssistance">
+                <div class="social-button dark" [class.active]="event.postAssistance">
                     <ion-icon class="assistance" name="star"></ion-icon>
                     <span>Me interesa</span>
                 </div>

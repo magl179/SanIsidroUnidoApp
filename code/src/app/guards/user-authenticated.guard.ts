@@ -19,12 +19,12 @@ export class UserAuthenticatedGuard implements CanLoad {
     async canLoad(): Promise<boolean> {
         // const userObservable = this.authService.isAuthenticated();
         const tokenDecoded = await this.authService.isAuthenticated();
-        console.log('user auth guard', tokenDecoded);
+        // console.log('user auth guard', tokenDecoded);
         if (tokenDecoded) {
-            //console.warn('can load', tokenDecoded);
+            console.warn('existe token can load');
             return true;
         } else {
-            console.log('redirect to login');
+            console.log('redirect to login no existe token');
             this.router.navigate(['/login']);
             return false;
         }

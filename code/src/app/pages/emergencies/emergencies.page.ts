@@ -47,50 +47,19 @@ export class EmergenciesPage implements OnInit {
     ngOnInit() {
         this.utilsService.enableMenu();
         this.authService.sessionAuthUser.subscribe(async (token_decoded: ITokenDecoded) => {
-            // console.log('token decoded', token_decoded)
-            // console.log('token decoded VERIFY', (token_decoded.user) ? 'true' : 'false');
             if (token_decoded) {
                 this.AuthUser = token_decoded.user;
                 console.log(this.AuthUser);
-                // this.getRoles();
             }
         });
-        this.loadEmergencies(null, true);
+        this.loadEmergencies();
     }
 
 
     ionViewWillEnter() {}
 
-    // async showActionCtrl(emergency) {
-    //     const actionToggleAssistance = {
-    //         text: (emergency.postAssistance) ? 'Unirme' : 'Ya no me interesa',
-    //         icon: 'clipboard',
-    //         cssClass: ['toggle-assistance'],
-    //         handler: () => {
-    //             console.log('Favorito Borrado');
-    //             this.toggleAssistance(event.postAssistance, event.id);
-    //         }
-    //     }
-
-    //     const actionSheet = await this.actionSheetCtrl.create({
-    //         buttons: [
-    //             actionToggleAssistance, {
-    //                 text: 'Cancelar',
-    //                 icon: 'close',
-    //                 cssClass: ['cancel-action'],
-    //                 role: 'cancel',
-    //                 handler: () => {
-    //                     console.log('Cancel clicked');
-    //                 }
-    //             }
-    //         ]
-    //     });
-    //     await actionSheet.present();
-    // }
-
-    loadEmergencies(event?: any, resetEvents?: any) {
+    loadEmergencies(event?: any) {
         this.emergenciesLoaded = false;
-        this.emergenciesFiltered = [];
         this.postsService.getEmergenciesByUser().pipe(
             map((res: any) => {
                 // console.log('res map', res);
@@ -108,21 +77,26 @@ export class EmergenciesPage implements OnInit {
             }),
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let emergenciesApi = [];
-            emergenciesApi = [...res.data.data];
+            emergenciesApi = res.data.data;
 
             if (emergenciesApi.length === 0) {
                 if (event) {
-                    event.target.disabled = true;
-                    event.target.complete();
+                    event.data.target.disabled = true;
+                    event.data.target.complete();
                 }
+                return;
+            }
+            if (event) {
+                event.data.target.complete();
+            }
+            if (event && event.type === 'refresher') {
+                this.emergenciesList.unshift(...emergenciesApi);
+                this.emergenciesFiltered.unshift(...emergenciesApi);
                 return;
             }
             this.emergenciesList.push(...emergenciesApi);
             this.emergenciesFiltered.push(...this.emergenciesList);
 
-            if (event) {
-                event.target.complete();
-            }
 
         },(err: HttpErrorResponse) => {
             if (err.error instanceof Error) {
@@ -200,9 +174,19 @@ export class EmergenciesPage implements OnInit {
     reportEmergency() {
         this.navCtrl.navigateForward('/emergency-create');
     }
-
+    
     getInfiniteScrollData(event: any) {
-        this.loadEmergencies(event);
+        this.loadEmergencies({
+            type: 'infinite_scroll',
+            data: event
+        });
+    }
+    //Obtener datos con Refresher
+    doRefresh(event: any) {
+        this.loadEmergencies({
+            type: 'refresher',
+            data: event
+        });
     }
 
 

@@ -11,6 +11,7 @@ import { IEvent, IRespuestaApiSIUPaginada } from "src/app/interfaces/models";
 import { checkLikePost } from 'src/app/helpers/user-helper';
 import { mapImagesApi, getJSON, mapEvent, getImagesPost } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
+import { EventsService } from "../../services/events.service";
 
 @Component({
     selector: 'app-events',
@@ -25,6 +26,7 @@ export class EventsPage implements OnInit {
 
     constructor(
         private navCtrl: NavController,
+        private events_app: EventsService,
         private utilsService: UtilsService,
         private postService: PostsService,
         private authService: AuthService,
@@ -41,47 +43,18 @@ export class EventsPage implements OnInit {
                 this.AuthUser = token_decoded.user;
             }
         });
+        console.log('llamada get events sin parametros');
         this.loadEvents();
+        this.events_app.getEventsApp().subscribe((event_app: any) => {
+            console.log('event emitted', event_app);
+            console.log('event emitted name', event_app.type);
+            if (event_app.type === 'assistance_toggle') {
+                this.loadEvents(null, true, true);
+            }
+        })
     }
 
     ionViewWillEnter() { }
-
-    async showActionCtrl(event: IEvent) {
-        const actionShare = {
-            text: 'Compartir',
-            icon: 'share',
-            cssClass: ['share-event'],
-            handler: () => {
-                console.log('compartir evento', event);
-                this.sharePost(event);
-            }
-        }
-        const actionToggleAssistance = {
-            text: (event.postAssistance) ? 'Unirme' : 'Ya no me interesa',
-            icon: 'clipboard',
-            cssClass: ['toggle-assistance'],
-            handler: () => {
-                console.log('Favorito Borrado');
-                this.toggleAssistance(event.postAssistance, event.id);
-            }
-        }
-
-        const actionSheet = await this.actionSheetCtrl.create({
-            buttons: [
-                actionShare,
-                actionToggleAssistance, {
-                    text: 'Cancelar',
-                    icon: 'close',
-                    cssClass: ['cancel-action'],
-                    role: 'cancel',
-                    handler: () => {
-                        console.log('Cancel clicked');
-                    }
-                }
-            ]
-        });
-        await actionSheet.present();
-    }
 
     toggleAssistance(assistance: boolean, id: number) {
         if (assistance) {
@@ -143,8 +116,14 @@ export class EventsPage implements OnInit {
         await modal.present();
     }
 
-    loadEvents(event?: any, resetEvents = false) {
+    loadEvents(event?: any, resetEvents = false, resetData = false) {
         this.eventsLoaded = false;
+        if (resetData) {
+            this.eventsList = [];
+        }
+        if (resetEvents) {
+            this.postService.resetEventsPage();
+        }
         this.postService.getEvents().pipe(
             map((res: any) => {
                 if (res && res.data && res.data.data) {
@@ -161,12 +140,13 @@ export class EventsPage implements OnInit {
             })
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let eventsApi = [];
-            eventsApi.push(...res.data.data);
+            eventsApi = res.data.data;
+            console.log('eventos ante subscribir', this.eventsList);
 
             if (eventsApi.length === 0) {
                 if (event) {
-                    event.target.disabled = true;
-                    event.target.complete();
+                    event.data.target.disabled = true;
+                    event.data.target.complete();
                 }
                 return;
             } else {
@@ -176,11 +156,18 @@ export class EventsPage implements OnInit {
                 });
 
             }
-            this.eventsList.push(...eventsApi);
-            console.log('eventos mapeados completamente', this.eventsList);
             if (event) {
-                event.target.complete();
+                event.data.target.complete();
             }
+            console.log('eventos api a pushear', eventsApi);
+            if (event && event.type === 'refresher') {
+                this.eventsList.unshift(...eventsApi);
+                console.log('eventos mapeados y totales actualmente', this.eventsList);
+                return;
+            }
+            this.eventsList.push(...eventsApi);
+            console.log('eventos mapeados y totales actualmente', this.eventsList);
+            
 
         },
             (err: HttpErrorResponse) => {
@@ -195,9 +182,19 @@ export class EventsPage implements OnInit {
     postDetail(id: number) {
         this.navCtrl.navigateForward(`/event-detail/${id}`);
     }
-
+    //Obtener datos con el Infinite Scroll
     getInfiniteScrollData(event: any) {
-        this.loadEvents(event);
+        this.loadEvents({
+            type: 'infinite_scroll',
+            data: event
+        });
+    }
+    //Obtener datos con Refresher
+    doRefresh(event: any) {
+        this.loadEvents({
+            type: 'refresher',
+            data: event
+        });
     }
 
 }

@@ -1,8 +1,15 @@
 <app-header-back title="Problemas Sociales"></app-header-back>
 <ion-content padding style="position: relative;">
-    <p style="position: fixed;top: 3rem;left: 40%;background: black;color: white; padding: 1rem;z-index: 1000;">
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pullingIcon="arrow-dropdown"
+            refreshingSpinner="circles" refreshingText="Cargando Publicaciones...">
+        </ion-refresher-content>
+    </ion-refresher>
+    <!-- <p
+        style="position: fixed;top: 3rem;left: 40%;background: black;color: white; padding: 1rem;z-index: 1000;">
         Num Problemas Sociales {{socialProblemsList.length}}
-    </p>
+    </p> -->
+    <p> Num Problemas Sociales {{socialProblemsFilter.length}}</p>
     <!-- Mensaje no cargaron los datos desde la Api -->
     <div class="flex-column-center message-fail-load"
         *ngIf="socialProblemsLoaded && socialProblemsList.length === 0">
@@ -52,36 +59,29 @@
     </div>
     <!-- Tarjeta con Datos Cargados -->
     <div *ngIf="socialProblemsLoaded  && socialProblemsList.length > 0">
-        <ion-card class="social-problem" *ngFor="let socialProblem of socialProblemsFilter" (click)="postDetail(socialProblem.id)">
-            <!--<div class="post-cover-image"
-                *ngIf="socialProblem.images && socialProblem.images.length > 0">
-                <img [src]="socialProblem.images[0].url" alt="Imagen Tarjeta" class="img" />
-            </div>-->
-            <ion-card-header class="post-header">
-                <!--<ion-card-subtitle class="post-subtitle">
-                    <span>{{socialProblem.subcategory.name}}</span>
-                    <div class="container-more-options" (click)="showActionCtrl(socialProblem)">
-                        <ion-icon name="md-more"></ion-icon>
-                    </div>
-                </ion-card-subtitle>-->
-                <ion-card-title class="post-title"> {{socialProblem.title}}
-                </ion-card-title>
-            </ion-card-header>
-            <ion-card-content class="post-content">
-                <p class="post-description">
-                    {{socialProblem.description}}
-                </p>
-            </ion-card-content>
+        <ion-card class="social-problem" *ngFor="let socialProblem of socialProblemsFilter">
+            <div (click)="postDetail(socialProblem.id)">
+                <ion-card-header class="post-header">
+                    <ion-card-title class="post-title"> {{socialProblem.title}}
+                    </ion-card-title>
+                </ion-card-header>
+                <ion-card-content class="post-content">
+                    <p class="post-description">
+                        {{socialProblem.description}}
+                    </p>
+                </ion-card-content>
+            </div>
             <div class="social">
                 <div class="social-content">
-                    <!--{{ (socialProblem.postLiked) ? 'A ti y 5 personas más les gusta': 'A 5 personas les gusta'}}-->
-                     <span *ngIf="socialProblem.postLiked">A ti y {{socialProblem.details.length}} persona(s) más les gusta</span>
+                    <span *ngIf="socialProblem.postLiked">A ti y {{socialProblem.details.length}}
+                        persona(s) más les gusta</span>
                     <span *ngIf="!socialProblem.postLiked">
-                                A {{socialProblem.details.length}} 
-                                {{(socialProblem.details.length === 1) ? 'persona le gusta' : 'personas les gusta'}}
+                        A {{socialProblem.details.length}}
+                        {{(socialProblem.details.length === 1) ? 'persona le gusta' : 'personas les gusta'}}
                     </span>
                 </div>
-                <div class="social-options" (click)="toggleLike(socialProblem.postLiked, socialProblem.id)">
+                <div class="social-options"
+                    (click)="toggleLike(socialProblem.postLiked, socialProblem.id)">
                     <div class="social-button" [class.active]="socialProblem.postLiked">
                         <ion-icon class="like" name="heart"></ion-icon>
                         <span>Me gusta</span>
