@@ -9,7 +9,7 @@ import { finalize } from 'rxjs/operators';
 import { NetworkService } from 'src/app/services/network.service';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { decodeToken } from 'src/app/helpers/auth-helper';
-import { setInputFocus } from 'src/app/helpers/utils';
+import { setInputFocus, manageErrorHTTP } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
@@ -20,7 +20,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class RegisterPage implements OnInit {
 
     // @ViewChild('passwordEyeRegister') passwordEye;
-    @ViewChild('passwordEyeRegister', {read: ElementRef}) passwordEye: ElementRef;
+    @ViewChild('passwordEyeRegister', { read: ElementRef }) passwordEye: ElementRef;
     passwordTypeInput = 'password';
     registerForm: FormGroup;
     errorMessages = null;
@@ -59,7 +59,7 @@ export class RegisterPage implements OnInit {
         //Obtener Token y Usuario
         const loadingManageRegister = await this.utilsService.createBasicLoading('Obteniendo Respuesta');
         loadingManageRegister.present();
-        const token = res.data; 
+        const token = res.data;
         const token_decoded = decodeToken(token);
         //Guardar Datos Token
         this.authService.saveUserInfo(token, token_decoded);
@@ -88,15 +88,10 @@ export class RegisterPage implements OnInit {
             finalize(() => {
                 loadingRegisterValidation.dismiss()
             })
-        ).subscribe(async res => { 
-                await this.manageRegister({provider: 'formulario', email, password }, res);
-        },(err: HttpErrorResponse) => {
-            this.utilsService.showToast('Ocurrio un error al registrar el usuario');
-            if (err.error instanceof Error) {
-                console.log("Client-side error", err);
-            } else {
-                console.log("Server-side error", err);
-            }
+        ).subscribe(async res => {
+            await this.manageRegister({ provider: 'formulario', email, password }, res);
+        }, (err: HttpErrorResponse) => {
+            this.utilsService.showToast(manageErrorHTTP(err, 'Ocurrio un error al completar el registro'));
         });
     }
     //Function para registrar usuario con Facebook
@@ -105,17 +100,14 @@ export class RegisterPage implements OnInit {
         this.socialDataService.fbLoginData.subscribe(async fbData => {
             if (fbData) {
                 const user = this.socialDataService.getFacebookDataParsed(fbData);
-                this.authService.register(user).subscribe(async res=> {
-                    await this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'facebook'}, res);
-                }, err => {
-                    const message_error = (err.error.message)?err.error.message: 'No se pudo guardar el registro';
-                    this.utilsService.showToast(message_error);
-                    console.log('Error Login', message_error);
+                this.authService.register(user).subscribe(async res => {
+                    await this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'facebook' }, res);
+                }, (err: HttpErrorResponse) => {
+                    this.utilsService.showToast(manageErrorHTTP(err, 'Ocurrio un error en el registro, intentalo más tarde'));
                 });
             }
-        }, err => {
-            this.utilsService.showToast('Fallo Obtener Datos de Facebook');
-            console.log('Error Login', err);
+        }, (err: HttpErrorResponse) => {
+            this.utilsService.showToast(manageErrorHTTP(err, 'Fallo la conexión con Facebook'));
         });
     }
     // Función para registrar al usuario con Google
@@ -126,15 +118,12 @@ export class RegisterPage implements OnInit {
                 const user = await this.socialDataService.getGoogleDataParsed(googleData);
                 this.authService.register(user).subscribe(async res => {
                     await this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'google' }, res);
-                }, err => {
-                    const message_error = (err.error.message)?err.error.message: 'No se pudo guardar el registro';
-                    this.utilsService.showToast(message_error);
-                    console.log('Error Login', message_error);
+                }, (err: HttpErrorResponse) => {
+                    this.utilsService.showToast(manageErrorHTTP(err, 'No se pudo completar el registro, intentalo mas tarde'));
                 });
             }
-        }, err => {
-            this.utilsService.showToast('Fallo Traer los datos de Google');
-            console.log('Error Login', err);
+        }, (err: HttpErrorResponse) => {
+            this.utilsService.showToast(manageErrorHTTP(err, 'Fallo la conexión con Google'));
         });
     }
 

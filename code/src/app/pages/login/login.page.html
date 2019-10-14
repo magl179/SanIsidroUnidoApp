@@ -24,7 +24,7 @@
                 <ion-row class="login-form-container">
                     <ion-col size="12">
                         <form [formGroup]="loginForm">
-                            <div class="item-form">
+                            <div class="item-form full">
                                 <ion-item class="input_item" lines="none">
                                     <ion-label class="label-padding" position="stacked">Email
                                     </ion-label>
@@ -32,7 +32,7 @@
                                         formControlName="email" type="email">
                                     </ion-input>
                                 </ion-item>
-                                <div class="feedback-icon">
+                                <!-- <div class="feedback-icon">
                                     <ion-item lines="none">
                                         <button class="icon-help-input" disabled>
                                             <ion-icon name="close-circle" class="error"
@@ -43,7 +43,7 @@
                                             </ion-icon>
                                         </button>
                                     </ion-item>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="form-errors padding-lateral-small">
                                 <p class="form-error"
@@ -63,7 +63,7 @@
                                     {{errorMessages.email.pattern.message}}
                                 </p>
                             </div>
-                            <div class="item-form">
+                            <div class="item-form full">
                                 <ion-item class="input_item" lines="none">
                                     <ion-label class="label-padding" position="stacked">Contraseña
                                     </ion-label>
@@ -76,7 +76,7 @@
                                         <ion-icon [name]="(passwordTypeInput === 'text')?'eye-off':'eye'"></ion-icon>
                                     </button>
                                 </ion-item>
-                                <div class="feedback-icon">
+                                <!-- <div class="feedback-icon">
                                     <ion-item lines="none">
                                         <button class="icon-help-input" disabled>
                                             <ion-icon name="close-circle" class="error"
@@ -87,7 +87,7 @@
                                             </ion-icon>
                                         </button>
                                     </ion-item>
-                                </div>
+                                </div> -->
                             </div>
                             <!-- <ion-item>
                                
@@ -113,7 +113,7 @@
                             </div>
                             <div padding>
                                 <ion-button (click)="loginUser()" color="primary" type="submit"
-                                    expand="block" [disabled]="!loginForm.valid">
+                                    expand="block" [disabled]="!loginForm.valid" class="ion-text-capitalize">
                                     Iniciar Sesión
                                 </ion-button>
                             </div>
@@ -122,7 +122,7 @@
                 </ion-row>
                 <ion-row class="social-networks">
                     <ion-col size="12">
-                        <p class="title_login padding-lateral">Tambien puedes ingresar utilizando
+                        <p class="title_login padding-lateral ion-text-center">Tambien puedes ingresar utilizando
                             tus redes sociales</p>
                     </ion-col>
                 </ion-row>

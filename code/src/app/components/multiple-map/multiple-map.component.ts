@@ -107,8 +107,8 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
         // Configurar la vista centrada
         this.map.setView([-0.1548643, -78.4822049], this.zoomMap);
         // Agregar la capa del Mapa
-        Leaflet.tileLayer(environment.googleMapLayer.url, {
-            attribution: environment.googleMapLayer.attribution,
+        Leaflet.tileLayer(environment.mapLayers.google.url, {
+            attribution: environment.mapLayers.google.attribution,
             maxZoom: 18,
             updateWhenIdle: true,
             reuseTiles: true

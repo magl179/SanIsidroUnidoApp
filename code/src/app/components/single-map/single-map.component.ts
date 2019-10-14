@@ -65,8 +65,8 @@ export class SingleMapComponent implements OnInit, AfterViewInit {
         });
         this.map.setView([this.currentCoordinate.latitude || -0.2188216, this.currentCoordinate.longitude || -78.5135489], this.zoomMap);
 
-        Leaflet.tileLayer(environment.googleMapLayer.url, {
-            attribution: environment.googleMapLayer.attribution,
+        Leaflet.tileLayer(environment.mapLayers.google.url, {
+            attribution: environment.mapLayers.google.attribution,
             maxZoom: 18,
             updateWhenIdle: true,
             reuseTiles: true

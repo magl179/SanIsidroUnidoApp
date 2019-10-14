@@ -144,11 +144,9 @@ export class EmergenciesPage implements OnInit {
             // console.log('data', dataReturned);
             if (modalReturn.data && modalReturn.data.data && modalReturn.data.filters) {
                 this.emergenciesFiltered = [...modalReturn.data.data];
-                console.log('Data Returned Modal Filter', [...modalReturn.data.data]);
-                console.log('Data Returned Modal Filterdespues', this.emergenciesFiltered);
                 this.filters = modalReturn.data.filters;
             }
-            //console.log('Data Returned Modal Filter', this.emergenciesFiltered);
+            console.log('Data Returned Modal Filter', modalReturn.data);
         });
         await modal.present();
     }

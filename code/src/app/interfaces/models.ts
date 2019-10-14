@@ -300,6 +300,7 @@ export interface IUser {
     state: number;
     basic_service_image?: any;
     number_phone?: any;
+    phone?: any;
     position_id?: any;
     created_at?: string;
     updated_at?: string;

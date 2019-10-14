@@ -10,7 +10,7 @@ import { NetworkService } from 'src/app/services/network.service';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { IRespuestaApiSIU } from "src/app/interfaces/models";
 import { decodeToken } from 'src/app/helpers/auth-helper';
-import { setInputFocus } from 'src/app/helpers/utils';
+import { setInputFocus, manageErrorHTTP } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
@@ -20,7 +20,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class LoginPage implements OnInit {
 
-    @ViewChild('passwordEyeLogin', {read: ElementRef}) passwordEye: ElementRef;
+    @ViewChild('passwordEyeLogin', { read: ElementRef }) passwordEye: ElementRef;
     appNetworkConnection = false;
     passwordTypeInput = 'password';
     loginForm: FormGroup;
@@ -55,7 +55,7 @@ export class LoginPage implements OnInit {
         //Obtener Token y Usuario
         const loadingManageLogin = await this.utilsService.createBasicLoading('Obteniendo Respuesta');
         loadingManageLogin.present();
-        const token = res.data; 
+        const token = res.data;
         const token_decoded = decodeToken(token);
         //Guardar Datos Token
         this.authService.saveUserInfo(token, token_decoded);
@@ -67,7 +67,7 @@ export class LoginPage implements OnInit {
         loadingManageLogin.dismiss();
         this.navCtrl.navigateRoot('/home');
     }
-   
+
     async loginUser() {
         const loadingLoginValidation = await this.utilsService.createBasicLoading('Validando Credenciales');
         loadingLoginValidation.present();
@@ -81,53 +81,44 @@ export class LoginPage implements OnInit {
         ).subscribe((res: IRespuestaApiSIU) => {
             this.manageLogin(loginData, res);
         }, (err: HttpErrorResponse) => {
-            this.utilsService.showToast('Ocurrio un error al iniciar sesión, intentalo más tarde');
-            if (err.error instanceof Error) {
-                console.log("Client-side error", err);
-            } else {
-                console.log("Server-side error", err);
-            }
+            this.utilsService.showToast(manageErrorHTTP(err, 'Ocurrio un error al iniciar sesión, intentalo más tarde'));
         });
     }
 
     async loginUserByFB() {
-            await this.socialDataService.loginByFacebook();
-            this.socialDataService.fbLoginData.subscribe(async fbData => {
-                if (fbData) {
-                    const user = this.socialDataService.getFacebookDataParsed(fbData);
-                    const { social_id, email } = user;
-                    this.authService.login(user).subscribe(res => {
-                            this.manageLogin({provider: 'facebook', social_id, email} , res);
-                    }, err => {
-                        this.utilsService.showToast(`Error: ${err.error.message}`);
-                        console.log('Error Login', err.error);
-                    });
-                }
-            }, async err => {
-                await this.utilsService.showToast('Fallo Iniciar Sesión con Facebook');
-                console.log('Error Login', err);
-            });
+        await this.socialDataService.loginByFacebook();
+        this.socialDataService.fbLoginData.subscribe(async fbData => {
+            if (fbData) {
+                const user = this.socialDataService.getFacebookDataParsed(fbData);
+                const { social_id, email } = user;
+                this.authService.login(user).subscribe(res => {
+                    this.manageLogin({ provider: 'facebook', social_id, email }, res);
+                }, (err: HttpErrorResponse) => {
+                    this.utilsService.showToast(manageErrorHTTP(err, 'Fallo la conexión con Facebook'));
+                });
+            }
+        }, (err: HttpErrorResponse) => {
+            this.utilsService.showToast(manageErrorHTTP(err, 'Fallo la conexión con Facebook'));
+        });
     }
 
     async loginUserByGoogle() {
-                await this.socialDataService.loginByGoogle();
-                this.socialDataService.googleLoginData.subscribe(async googleData => {
-                    if (googleData) {
-                        const user = this.socialDataService.getGoogleDataParsed(googleData);
-                        const { social_id, email } = user;
-                        this.authService.login(user).subscribe(async res => {
-                            console.log('Login First Response', res);
-                                await this.manageLogin({social_id, email, provider: 'google'} , res);
-                        }, err => {
-                            this.utilsService.showToast(`Error: ${err.error.message}`);
-                            console.log('Error Login', err.error);
-                        });
-                    }
-                }, async err => {
-                    await this.utilsService.showToast('Fallo Iniciar Sesión con Google');
-                    console.log('Error Login', err);
+        await this.socialDataService.loginByGoogle();
+        this.socialDataService.googleLoginData.subscribe(async googleData => {
+            if (googleData) {
+                const user = this.socialDataService.getGoogleDataParsed(googleData);
+                const { social_id, email } = user;
+                this.authService.login(user).subscribe(async res => {
+                    console.log('Login First Response', res);
+                    await this.manageLogin({ social_id, email, provider: 'google' }, res);
+                }, (err: HttpErrorResponse) => {
+                    this.utilsService.showToast(manageErrorHTTP(err, 'Fallo la conexión con Google'));
                 });
-        }
+            }
+        }, (err: HttpErrorResponse) => {
+            this.utilsService.showToast(manageErrorHTTP(err, 'Fallo la conexión con Google'));
+        });
+    }
 
     // Función Crea el Formulario
     createForm() {
@@ -135,18 +126,18 @@ export class LoginPage implements OnInit {
         const validations = this.localDataService.getFormValidations();
         // Campo Email
         const email = new FormControl('', Validators.compose([
-            Validators.required,    
+            Validators.required,
             Validators.email
         ]));
         // Campo Contraseña
-        const password= new FormControl('', Validators.compose([
+        const password = new FormControl('', Validators.compose([
             Validators.required
         ]));
         // Añado Propiedades al Form
         this.loginForm = this.formBuilder.group({ email, password });
-         // Cargo Mensajes de Validaciones
+        // Cargo Mensajes de Validaciones
         this.errorMessages = this.localDataService.getFormMessagesValidations(validations);
     }
 
-    
+
 }

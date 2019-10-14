@@ -61,6 +61,12 @@
         display: inline-block;
         width: 90%;
     }
+    &.full{
+        width: 100%;
+        .input_item {
+            width: 100%;
+        }
+    }
     .small-font{
         font-size: 13px;
     }

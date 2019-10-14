@@ -6,9 +6,9 @@ export const environment = {
     production: false,
     AUTHORIZATION_NAME: 'Authorization',
     googleClientID: '1051963029462-mht230ntj5grq6k0ng3get34kfq3ldvu.apps.googleusercontent.com',
-    onesignal_id : '2ffbdcc2-223e-4527-9164-9583ea47d0b4',
+    onesignal_id: '2ffbdcc2-223e-4527-9164-9583ea47d0b4',
     firebase_app_id: '729197860050',
-    apiBaseURL: 'http://192.168.1.5/github/SanIsidroApi/public/api/v1',
+    apiBaseURL: 'http://192.168.1.4/github/SanIsidroApi/public/api/v1',
     socialProblemSlug: 'problemas_sociales',
     eventsSlug: 'eventos',
     emergenciesSlug: 'emergencias',
@@ -16,15 +16,17 @@ export const environment = {
     image_assets: 'imagenes',
     roles_permitidos: ['morador', 'invitado', 'policia'],
     roles_permitidos_reportar: ['morador', 'policia'],
-    googleMapLayer: {
-        url: "https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}",
-        attribution: '&copy; <a target=_blank" href="https://www.google.com/intl/es-419_ec/help/terms_maps/">Google Maps</a>'
+    mapLayers: {
+        google: {
+            url: "https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}",
+            attribution: '&copy; <a target=_blank" href="https://www.google.com/intl/es-419_ec/help/terms_maps/">Google Maps</a>'
+        },
+        openstreetmap: {
+            url: "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            attribution: '&copy; <a target=_blank" href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }
     },
-    openMapsLayer: {
-        url: "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        attribution: '&copy; <a target=_blank" href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    },
-    headersApp : {
+    headersApp: {
         'Content-Type': 'application/json'
     }
 };

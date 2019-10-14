@@ -240,12 +240,18 @@ export class SocialProblemsPage implements OnInit {
             }
         });
         //Obtener datos popover cuando se vaya a cerrar
-        modal.onDidDismiss().then((modal: any) => {
-            console.log('modal returned', modal);
-            if (modal.data) {
-                this.socialProblemsFilter = [...modal.data.posts];
-                this.subcategory = modal.data.subcategory;
+        modal.onDidDismiss().then((modalReturn: any) => {
+            console.log('modal returned', modalReturn);
+            // if (modal.data) {
+            //     this.socialProblemsFilter = [...modal.data.posts];
+            //     this.subcategory = modal.data.subcategory;
+            // }
+            if (modalReturn.data && modalReturn.data.data && modalReturn.data.filters) {
+                this.socialProblemsFilter = [...modalReturn.data.data];
+                this.subcategory = modalReturn.data.subcategory;
+                this.filters = modalReturn.data.filters;
             }
+            console.log('Data Returned Modal Filter', modalReturn.data);
         });
         //Presentar el Popover
         return await modal.present();
@@ -265,49 +271,9 @@ export class SocialProblemsPage implements OnInit {
             }
         });
         //Obtener datos popover cuando se vaya a cerrar
-        modal.onDidDismiss().then((dataReturned: any) => {
-            // if (dataReturned !== null) {
-            //     this.socialProblemsFilter = [...dataReturned.data.data];
-            //     this.filters = dataReturned.data.filters;
-            //     // this.subcategory = dataReturned.data.subcategory;
-            // }
-        });
+        // modal.onDidDismiss().then((dataReturned: any) => {
+        // });
         await modal.present();
     }
-    async showFilterModal() {
-
-        const modal = await this.modalCtrl.create({
-            component: FilterPage,
-            componentProps: {
-                data: [...this.socialProblemsList],
-                filters: this.filters,
-                // filterInApi: true,
-                // postTypeSlug: environment.socialProblemSlug
-            }
-        });
-        //Obtener datos popover cuando se vaya a cerrar
-        modal.onDidDismiss().then((modalReturn: any) => {
-            if (modalReturn.data && modalReturn.data.data && modalReturn.data.filters) {
-                this.socialProblemsFilter = [...modalReturn.data.data];
-                this.filters = modalReturn.data.filters;
-                // this.subcategory = dataReturned.data.subcategory;
-            }
-        });
-        await modal.present();
-    }
-
-
-    // getHeaderBackData(event){
-    //     if (event.wannaSearch) {
-    //         this.showSearchModal();
-    //     }
-    //     if (event.wannaFilter) {
-    //         this.showFilterModal();
-    //     }
-    //     if (event.wannaReport) {
-    //         this.reportSocialProblem();
-    //     }
-    // }
-
-
+  
 }

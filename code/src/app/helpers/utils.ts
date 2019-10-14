@@ -3,6 +3,7 @@ import { environment } from 'src/environments/environment';
 import { Observable, interval, throwError, of } from 'rxjs';
 import { retryWhen, flatMap } from 'rxjs/operators';
 import { checkLikePost } from './user-helper';
+import { HttpErrorResponse } from '@angular/common/http';
 
 declare var moment: any;
 moment.locale('es');
@@ -17,12 +18,12 @@ const isJSON = (str: any) => {
     }
 }
 
-export const formatFulldate = (stringdate) => {   
+export const formatFulldate = (stringdate) => {
     let beatifulDate = null;
     if (moment(stringdate).isValid()) {
         //console.log('string full valid', stringdate)
         return moment(new Date(stringdate)).format('LLL');
-    }else{
+    } else {
         return stringdate;
     }
 }
@@ -32,7 +33,7 @@ export const formatDate = (stringdate) => {
     if (moment(stringdate).isValid()) {
         //console.log('string date valid', stringdate)
         return moment(new Date(stringdate)).format('LL');
-    }else{
+    } else {
         return stringdate;
     }
 }
@@ -42,7 +43,7 @@ export const formatTime = (stringdate) => {
     if (moment(stringdate).isValid()) {
         //console.log('string time valid', stringdate)
         return moment(new Date(stringdate)).format('LTS');
-    }else{
+    } else {
         return stringdate;
     }
 }
@@ -84,7 +85,7 @@ export const searchInArrayObj = (items: any[], filter: { [key: string]: any }) =
     return match;
 }
 
-export const ramdomItem = (array: any[]) =>  {
+export const ramdomItem = (array: any[]) => {
     const valueRamdom = ramdomValue(array.length);
     const item = array[valueRamdom];
     return item;
@@ -92,13 +93,13 @@ export const ramdomItem = (array: any[]) =>  {
 
 export const http_retry = <T>(maxRetry: number = 5, delayMs: number = 2000) => {
     return (src: Observable<T>) => src.pipe(
-      retryWhen(_ => {
-        return interval(delayMs).pipe(
-          flatMap(count => count == maxRetry ? throwError("Giving up") : of(count))
-        )
-      })
+        retryWhen(_ => {
+            return interval(delayMs).pipe(
+                flatMap(count => count == maxRetry ? throwError("Giving up") : of(count))
+            )
+        })
     )
-  }
+}
 
 const ramdomValue = (tamanio: number) => {
     return Math.floor(Math.random() * tamanio);
@@ -108,7 +109,7 @@ const imagenIsURL = (image_name: string) => {
     return URL_PATTERN.test(image_name);
 }
 
- //Obtener la URL de una imagen
+//Obtener la URL de una imagen
 export const getImageURL = (image_name: string) => {
     const imgIsURL = imagenIsURL(image_name);
     if (imgIsURL) {
@@ -141,25 +142,25 @@ export const isType = (type: any, val: any) => {
 }
 
 export const mapEvent = (event: any) => {
-     const dateFull = `${event.date} ${event.time}`;
-    event.fulldate =  formatFulldate(dateFull) ;
-    event.date =  formatDate(dateFull);
-    event.time =  formatTime(dateFull);
+    const dateFull = `${event.date} ${event.time}`;
+    event.fulldate = formatFulldate(dateFull);
+    event.date = formatDate(dateFull);
+    event.time = formatTime(dateFull);
     event.ubication = getJSON(event.ubication);
     if (event.images && event.images.length > 0) {
         event.images = mapImagesApi(event.images);
     }
     if (event.user && event.user.avatar) {
-        event.user.avatar= getImageURL(event.user.avatar);
+        event.user.avatar = getImageURL(event.user.avatar);
     }
     return event;
 }
 
 export const mapEmergency = (emergency: any) => {
-     const dateFull = `${emergency.date} ${emergency.time}`;
-    emergency.fulldate =  formatFulldate(dateFull) ;
-    emergency.date =  formatDate(dateFull);
-    emergency.time =  formatTime(dateFull);
+    const dateFull = `${emergency.date} ${emergency.time}`;
+    emergency.fulldate = formatFulldate(dateFull);
+    emergency.date = formatDate(dateFull);
+    emergency.time = formatTime(dateFull);
     emergency.ubication = getJSON(emergency.ubication);
     if (emergency.images && emergency.images.length > 0) {
         emergency.images = mapImagesApi(emergency.images);
@@ -176,15 +177,15 @@ export const mapReport = (report: any) => {
 }
 export const mapSocialProblem = (social_problem: any) => {
     const dateFull = `${social_problem.date} ${social_problem.time}`;
-    social_problem.fulldate =  formatFulldate(dateFull) ;
-    social_problem.date =  formatDate(dateFull);
-    social_problem.time =  formatTime(dateFull);
+    social_problem.fulldate = formatFulldate(dateFull);
+    social_problem.date = formatDate(dateFull);
+    social_problem.time = formatTime(dateFull);
     social_problem.ubication = getJSON(social_problem.ubication);
     if (social_problem.images && social_problem.images.length > 0) {
         social_problem.images = mapImagesApi(social_problem.images);
     }
     if (social_problem.user && social_problem.user.avatar) {
-        social_problem.user.avatar= getImageURL(social_problem.user.avatar);
+        social_problem.user.avatar = getImageURL(social_problem.user.avatar);
     }
     return social_problem;
 }
@@ -207,5 +208,18 @@ export const getImagesPost = ($imagesArray: any[]) => {
         }
     } else {
         return '';
+    }
+}
+
+export const manageErrorHTTP = (err: HttpErrorResponse, defaultMessage = "Ocurrio un error, intentalo más tarde") => {
+    if (err.error instanceof Error) {
+        console.log("Client-side error", err);
+    } else {
+        console.log("Server-side error", err);
+    }
+    if (err.error && err.error.message) {
+        return err.error.message;
+    } else {
+        return defaultMessage;
     }
 }

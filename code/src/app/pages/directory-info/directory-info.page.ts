@@ -46,7 +46,7 @@ export class DirectoryInfoPage implements OnInit {
                         directive = mapUser(directive);
                     });
                 }
-                console.log('res maped', res.data.data);
+                console.log('res maped', res.data);
                 return res;
             }),
             finalize(() => {

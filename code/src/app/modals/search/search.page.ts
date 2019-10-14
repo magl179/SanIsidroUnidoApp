@@ -108,6 +108,10 @@ export class SearchPage implements OnInit {
         return this.valueToSearch.asObservable();
     }
 
+    execSearchPosts(event: any) {
+        console.log('event search', event);
+        this.valueToSearch.next(event.detail.value);
+    }
     ngOnInit() {
         this.getValueObservable().pipe(
             map(search_term => search_term),
