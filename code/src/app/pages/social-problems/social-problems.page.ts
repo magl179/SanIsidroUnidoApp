@@ -56,10 +56,8 @@ export class SocialProblemsPage implements OnInit {
         private utilsService: UtilsService,
         private postsService: PostsService,
         private authService: AuthService,
-        private userService: UserService,
         private modalCtrl: ModalController,
         private events_app: EventsService,
-        private actionSheetCtrl: ActionSheetController
     ) {
     }
 
@@ -152,13 +150,6 @@ export class SocialProblemsPage implements OnInit {
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let socialProblems = [];
             socialProblems = res.data.data;
-            // if (event && event.type === 'refresher') {
-            //     socialProblems.unshift(...res.data.data);
-            // } else {
-            //     socialProblems.push(...res.data.data);
-            // }
-            
-
             if (socialProblems.length === 0) {
                 if (event) {
                     event.data.target.disabled = true;
@@ -234,20 +225,16 @@ export class SocialProblemsPage implements OnInit {
         const modal = await this.modalCtrl.create({
             component: FilterPage,
             componentProps: {
-                "data": [...this.socialProblemsList],
-                'postTypeSlug': this.subcategory,
-                'filters': this.filters
+                data: [...this.socialProblemsList],
+                postTypeSlug: this.subcategory,
+                filters: this.filters,
             }
         });
         //Obtener datos popover cuando se vaya a cerrar
         modal.onDidDismiss().then((modalReturn: any) => {
-            console.log('modal returned', modalReturn);
-            // if (modal.data) {
-            //     this.socialProblemsFilter = [...modal.data.posts];
-            //     this.subcategory = modal.data.subcategory;
-            // }
-            if (modalReturn.data && modalReturn.data.data && modalReturn.data.filters) {
-                this.socialProblemsFilter = [...modalReturn.data.data];
+            // console.log('modal returned', modalReturn);
+            if (modalReturn.data) {
+                this.socialProblemsFilter = modalReturn.data.dataFiltered;
                 this.subcategory = modalReturn.data.subcategory;
                 this.filters = modalReturn.data.filters;
             }

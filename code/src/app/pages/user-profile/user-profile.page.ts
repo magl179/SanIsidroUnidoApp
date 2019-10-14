@@ -6,7 +6,7 @@ import { ChangePasswordPage } from 'src/app/modals/change-password/change-passwo
 import { RequestMembershipPage } from 'src/app/modals/request-membership/request-membership.page';
 import { ChangeProfileImagePage } from 'src/app/modals/change-profile-image/change-profile-image.page';
 import { NotificationsService } from 'src/app/services/notifications.service';
-import { IRespuestaApiSIU, ITokenDecoded, IRespuestaApiSIUSingle, IDeviceUser } from "src/app//interfaces/models";
+import { IRespuestaApiSIU, ITokenDecoded, IRespuestaApiSIUSingle, IPhoneUser } from "src/app//interfaces/models";
 import { UserService } from 'src/app/services/user.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { decodeToken } from 'src/app/helpers/auth-helper';
@@ -32,7 +32,7 @@ export class UserProfilePage implements OnInit {
     // DeviceUser: IPhoneUser = null;
     UserDevices = [];
     UserSocialProfiles = [];
-    CurrentUserDevice: IDeviceUser = {
+    CurrentUserDevice: IPhoneUser = {
         id: null,
         phone_id: null,
         user_id: null
@@ -64,23 +64,27 @@ export class UserProfilePage implements OnInit {
                 this.AuthUser = token_decoded.user;
                 // console.log(this.AuthUser);
                 // this.getRoles()
+                this.getUserSocialProfiles();
+                this.getUserDevices();
+                this.notificationsService.getUserDevice().subscribe(userdevice => {
+                    if(userdevice){
+                        this.CurrentUserDevice = getUserDevice(this.UserDevices, userdevice);
+                        console.log('current user device', this.CurrentUserDevice)
+                    }
+                }, (err: HttpErrorResponse) => {
+                    if (err.error instanceof Error) {
+                        console.log("Client-side error", err);
+                    } else {
+                        console.log("Server-side error", err);
+                    }
+                });
             }
         });
 
-        this.getUserSocialProfiles();
-        this.getUserDevices();
+        // this.getUserSocialProfiles();
+        // this.getUserDevices();
       
-        this.notificationsService.getUserDevice().subscribe(userdevice => {
-            if(userdevice){
-                this.CurrentUserDevice = getUserDevice(this.UserDevices, userdevice);
-            }
-        }, (err: HttpErrorResponse) => {
-            if (err.error instanceof Error) {
-                console.log("Client-side error", err);
-            } else {
-                console.log("Server-side error", err);
-            }
-        });
+      
      }
 
     getUserSocialProfiles(){

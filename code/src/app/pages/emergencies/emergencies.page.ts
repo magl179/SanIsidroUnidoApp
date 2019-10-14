@@ -142,8 +142,8 @@ export class EmergenciesPage implements OnInit {
         modal.onDidDismiss().then((modalReturn: any) => {
             // console.dir(dataReturned);
             // console.log('data', dataReturned);
-            if (modalReturn.data && modalReturn.data.data && modalReturn.data.filters) {
-                this.emergenciesFiltered = [...modalReturn.data.data];
+            if (modalReturn.data) {
+                this.emergenciesFiltered = [...modalReturn.data.dataFiltered];
                 this.filters = modalReturn.data.filters;
             }
             console.log('Data Returned Modal Filter', modalReturn.data);

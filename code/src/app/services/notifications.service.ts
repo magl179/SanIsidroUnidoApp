@@ -32,7 +32,6 @@ export class NotificationsService {
     constructor(
         private device: Device,
         private oneSignal: OneSignal,
-        // private storage: Storage,
         private platform: Platform,
         private navCtrl: NavController,
         private userService: UserService,
@@ -40,7 +39,6 @@ export class NotificationsService {
         private utilsService: UtilsService
     ) {
         this.loadUser();
-        // this.loadUserDevices();
     }
 
     async initialConfig() {
@@ -74,28 +72,6 @@ export class NotificationsService {
     getUserDevice() {
         return this.userDevice.asObservable();
     }
-    //Obtener los Dispositivos del Usuario
-    // getUserDevices() {
-    //     if (this.AuthUser) {
-    //         if (this.AuthUser.devices) {
-    //             return this.AuthUser.devices.map((device: any) => device.phone_id);
-    //         } else {
-    //             return [];
-    //         }
-    //     } else {
-    //         return [];
-    //     }
-    // }
-    //Verificar si un usuario tiene dispositivos asociados
-    // hasDevices() {
-    //     if (this.AuthUser && this.userDevice.value.phone_id) {
-    //         let userDevices = this.getUserDevices();
-    //         let hasDevice = (userDevices.includes(this.userDevice.value.phone_id)) ? true : false;
-    //         return hasDevice;
-    //     } else {
-    //         return false;
-    //     }
-    // }
     //Carga la información del usuario autenticado
     loadUser() {
         this.authService.sessionAuthUser.subscribe(res => {
@@ -107,7 +83,7 @@ export class NotificationsService {
     //Registrar el dispositivo del usuario en la API
     registerUserDevice() {
         if (this.platform.is('cordova')) {
-            const data = {
+            const data: IPhoneUser = {
                 description: this.userDevice.value.description,
                 phone_id: this.userDevice.value.phone_id,
                 phone_model: this.userDevice.value.phone_model,

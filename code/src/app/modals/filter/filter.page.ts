@@ -35,17 +35,51 @@ export class FilterPage implements OnInit {
         this.defaulText = (this.navParams.data.defaulText) ? this.navParams.data.defaulText : 'Todas';
         this.data = this.navParams.data.data;
         this.filters = this.navParams.data.filters;
-        this.dataFiltered.push(...this.data);
+        // this.dataFiltered.push(...this.data);
         this.filterInApi = (this.navParams.data.filterInApi) ? this.navParams.data.filterInApi : false;
         this.postTypeSlug = (this.navParams.data.postTypeSlug) ? this.navParams.data.postTypeSlug : null;
+        // this.filtersToApply = (this.navParams.data.filtersToApply) ? this.navParams.data.filtersToApply : {};
         console.log('Filter params received', this.navParams);
     }
 
-    ngOnInit() { }
+    ngOnInit() { 
+        for (var key in this.filters) {
+            // console.log('key', key)
+            // console.log('value', this.filters[key].value)
+            if (this.filters[key].value !== "") {   
+                this.filtersToApply[key] = this.filters[key].value;  
+            }
+            // this.manageFilter(this.filters[key].value, key);
+        }
+        this.dataFiltered = this.getDataFiltered(this.data, this.filtersToApply);
+        // console.log('filters to appl')
+    }
+
+    applyFilterSelect(event: any, type: any) {
+        const value = event.detail.value;
+        // console.log('select value', value)
+        // console.log('select type', type)
+        this.manageFilter(value, type);
+        this.dataFiltered = this.getDataFiltered(this.data, this.filtersToApply);
+    }
+    applyFilterSegment(event: any, type: any) {
+        const value = (event.detail.value !== "") ? Number(event.detail.value): "";
+        // console.log('segment value', value)
+        // console.log('segment type', type)
+        this.manageFilter(value, type);
+        this.dataFiltered = this.getDataFiltered(this.data, this.filtersToApply);
+    }
+    applyFilterRadio(event: any, type: any) {
+        const value = event.detail.value;
+        // console.log('radio value', value)
+        // console.log('radio type', type)
+        this.manageFilter(value, type);
+        this.dataFiltered = this.getDataFiltered(this.data, this.filtersToApply);
+    }
 
     closeModal() {
         this.modalCtrl.dismiss({
-            'data': this.dataFiltered,
+            'dataFiltered': this.dataFiltered,
             'filters': this.filters
         });
     }
@@ -54,18 +88,21 @@ export class FilterPage implements OnInit {
         this.modalCtrl.dismiss();
     }
 
-    applyFilter(event: any, type: any, filterUIType: string) {
+    manageFilter(value: any, type: any) {
         for (const prop in this.filters) {
+            // console.log('manage filter', this.filters);
+            // console.log('manage prop', prop);
+            // console.log('manage filters apply', this.filtersToApply);
             if (prop === type) {
-                if (event.detail.value === "") {
+                this.filters[prop].value = value;
+                if (value === "") {
                     delete this.filtersToApply[prop];
                 } else {
-                    this.filters[prop].value = (filterUIType === 'segment') ? Number(event.detail.value) : event.detail.value;
                     this.filtersToApply[prop] = this.filters[prop].value;
                 }
             }
         }
-        this.dataFiltered = this.getDataFiltered(this.data, this.filtersToApply);
+        // console.log('filters apply madeit', this.filtersToApply)
     }
 
     getDataFiltered(items: any[], filter: { [key: string]: any }) {

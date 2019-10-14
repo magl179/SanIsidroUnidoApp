@@ -282,6 +282,7 @@ interface IPhones {
 }
 
 export interface IPhoneUser {
+    id?: number;
     phone_id: string;
     phone_model?: string;
     phone_platform?: string
@@ -399,3 +400,9 @@ export interface INotiPostOpen {
     type: "string";
     id: number;
 }
+
+// export const USER_DEVICE_DEFAULT: IPhoneUser = {
+//     phone_id: '',
+//     phone_model: '',
+//     phone_platform: ''
+// };

@@ -6,12 +6,12 @@
             (returnCurrentStep)="updateCurrentStep($event)"></app-stepbar>
         <section *ngIf="currentStep === 1">
             <form [formGroup]="emergencyForm">
-                <div class="item-form">
+                <div class="item-form full">
                     <ion-item class="input_item" lines="none">
                         <ion-label class="label-padding" position="stacked">Titulo</ion-label>
                         <ion-input placeholder="Ingresa el título de tu reporte" class="input-beatiful"formControlName="title" type="email"></ion-input>
                     </ion-item>
-                    <div class="feedback-icon">
+                    <!-- <div class="feedback-icon">
                         <ion-item lines="none">
                             <button class="icon-help-input" disabled>
                                 <ion-icon name="close-circle" class="error"
@@ -22,7 +22,7 @@
                                 </ion-icon>
                             </button>
                         </ion-item>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="form-errors padding-lateral">
                     <p class="form-error"
@@ -30,12 +30,12 @@
                         {{errorMessages.title.required.message}}
                     </p>
                 </div>
-                <div class="item-form">
+                <div class="item-form full">
                     <ion-item class="input_item" lines="none">
                         <ion-label class="label-padding" position="stacked">Descripción</ion-label>
                         <ion-textarea class="input-beatiful text-area" placeholder="Ingresa la descripción de tu reporte" formControlName="description" auto-grow="true"></ion-textarea>
                     </ion-item>
-                    <div class="feedback-icon">
+                    <!-- <div class="feedback-icon">
                         <ion-item lines="none">
                             <button class="icon-help-input" disabled>
                                 <ion-icon name="close-circle" class="error"
@@ -46,7 +46,7 @@
                                 </ion-icon>
                             </button>
                         </ion-item>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="form-errors padding-lateral">
                     <p class="form-error"
@@ -96,12 +96,12 @@
             <p *ngIf="emergencyPostCoordinate.address" class="padding-lateral">Tu Dirección es:
                 {{emergencyPostCoordinate.address}}</p>
             <form class="form-ubication" [formGroup]="ubicationForm">
-                    <div class="item-form">
+                    <div class="item-form full">
                         <ion-item class="input_item" lines="none">
                             <ion-label class="label-padding" position="stacked">Descripción de la Ubicación</ion-label>
                             <ion-textarea placeholder="Ingresa una descripción más detallada de la ubicación de tu reporte" class="input-beatiful text-area" formControlName="description_ubication" auto-grow="true"></ion-textarea>
                         </ion-item>
-                        <div class="feedback-icon">
+                        <!-- <div class="feedback-icon">
                             <ion-item lines="none">
                                 <button class="icon-help-input" disabled>
                                     <ion-icon name="close-circle" class="error"
@@ -112,7 +112,7 @@
                                     </ion-icon>
                                 </button>
                             </ion-item>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="form-errors padding-lateral">
                         <p class="form-error"
