@@ -112,20 +112,15 @@
 <ion-footer class="footer-fixed-posts" *ngIf="event">
         <div class="social">
             <!-- <div class="social-content">A 5 Personas les gusta</div> -->
-            <div class="social-options" (click)="toggleAssistance(event.postAssistance)">
-                <div class="social-button dark" [class.active]="event.postAssistance">
+            <div class="social-options">
+                <div class="social-button dark" [class.active]="event.postAssistance" (click)="toggleAssistance(event.postAssistance)">
                     <ion-icon class="assistance" name="star"></ion-icon>
                     <span>Me interesa</span>
                 </div>
-                <!-- <div class="social-button">
-                            <ion-icon name="options"></ion-icon>
-                            <span>Comment</span>
-                        </div> -->
                 <div class="social-button dark" (click)="sharePost(event)">
                     <ion-icon class="share" name="share"></ion-icon>
                     <span><i class="fa fa-share"></i>Compartir</span>
                 </div>
             </div>
-    
         </div>
     </ion-footer>

@@ -11,6 +11,7 @@ import { NavController } from '@ionic/angular';
 import { IRespuestaApiSIU } from "src/app/interfaces/models";
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { EventsService } from "../../services/events.service";
 
 
 // type PaneType = 'left' | 'right';
@@ -49,7 +50,7 @@ export class EmergencyCreatePage implements OnInit {
         private localizationService: LocalizationService,
         private postService: PostsService,
         private navCtrl: NavController,
-        // private networkService: NetworkService,
+        private events_app: EventsService,
         private localDataService: LocalDataService
     ) {
         this.createForm();
@@ -184,6 +185,7 @@ export class EmergencyCreatePage implements OnInit {
         ).subscribe(async (res: IRespuestaApiSIU) => {
             await this.utilsService.showToast("El Reporte fue enviado correctamente");
             // this.navCtrl.navigateRoot('/emergencies');
+            this.events_app.resetEmergenciesEmitter();
             this.router.navigate(['/emergencies'])
         }, (err: HttpErrorResponse) => {
             if (err.error instanceof Error) {

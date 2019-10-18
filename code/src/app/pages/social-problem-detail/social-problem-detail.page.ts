@@ -7,7 +7,7 @@ import { IPostShare, ISocialProblem, IRespuestaApiSIUSingle, IRespuestaApiSIU } 
 import { NetworkService } from 'src/app/services/network.service';
 import { ModalController, ActionSheetController } from "@ionic/angular";
 import { ImageDetailPage } from 'src/app/modals/image_detail/image_detail.page';
-import { finalize, map } from 'rxjs/operators';
+import { finalize, map, take } from 'rxjs/operators';
 import { mapImagesApi, getImageURL } from "src/app/helpers/utils";
 import { checkLikePost } from 'src/app/helpers/user-helper';
 import { mapSocialProblem } from "../../helpers/utils";
@@ -36,7 +36,6 @@ export class SocialProblemDetailPage implements OnInit {
         private postService: PostsService,
         public utilsService: UtilsService,
         private events_app: EventsService,
-        private actionSheetCtrl: ActionSheetController,
         private modalCtrl: ModalController,
         private networkService: NetworkService,
         private authService: AuthService) { }
@@ -57,13 +56,11 @@ export class SocialProblemDetailPage implements OnInit {
         });
         this.getSocialProblem();
     }
-    // test() {
-    //     this.events_app.setEvent('like_problem_toggle');
-    // }
     //Obtener el detalle de un problema social
     getSocialProblem() {
         this.socialProblemLoaded = false;
         this.postService.getSocialProblem(+this.id).pipe(
+            take(1),
             map((res: any) => {
                 if (res && res.data) {
                     const social_problem = res.data;
@@ -89,43 +86,6 @@ export class SocialProblemDetailPage implements OnInit {
         });
     }
 
-    async showActionCtrl() {
-        const actionShare = {
-            text: 'Compartir',
-            icon: 'share',
-            cssClass: ['share-event'],
-            handler: () => {
-                console.log('compartir evento', event);
-                this.sharePost(this.socialProblem);
-            }
-        }
-        const actionToggleLike = {
-            text: 'Me gusta',
-            icon: 'heart',
-            cssClass: ['toggle-like', (this.socialProblem.postLiked) ? 'active' : ''],
-            handler: () => {
-                console.log('like toggle');
-                this.toggleLike(this.socialProblem.postLiked);
-            }
-        }
-
-        const actionSheet = await this.actionSheetCtrl.create({
-            buttons: [
-                actionShare,
-                actionToggleLike, {
-                    text: 'Cancelar',
-                    icon: 'close',
-                    cssClass: ['cancel-action'],
-                    role: 'cancel',
-                    handler: () => {
-                        console.log('Cancel clicked');
-                    }
-                }
-            ]
-        });
-        await actionSheet.present();
-    }
-    
     getBGCover(image_cover: any) {
         return `linear-gradient(to bottom, rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.23)), url('${image_cover}')`;
     }
@@ -146,7 +106,7 @@ export class SocialProblemDetailPage implements OnInit {
             this.postService.sendDeleteDetailToPost(this.socialProblem.id).subscribe((res: IRespuestaApiSIU) => {
                 console.log('detalle eliminado correctamente');
                 this.socialProblem.postLiked = false;
-                this.events_app.setEvent('like_problem_toggle');
+                this.emitLikeEvent();
             }, err => {
                 console.log('detalle no se pudo eliminar', err);
                 this.utilsService.showToast('El like no se pudo eliminar');    
@@ -160,7 +120,7 @@ export class SocialProblemDetailPage implements OnInit {
             this.postService.sendCreateDetailToPost(detailInfo).subscribe((res: IRespuestaApiSIU) => {
                 console.log('detalle creado correctamente');
                 this.socialProblem.postLiked = true;
-                this.events_app.setEvent('like_problem_toggle');
+                this.emitLikeEvent();
             }, err => {
                 console.log('detalle no se pudo crear', err);
                 this.utilsService.showToast('El like no pudo guardarse');
@@ -189,6 +149,10 @@ export class SocialProblemDetailPage implements OnInit {
     seeImageDetail(image: string) {
         console.log('see image', image)
         this.utilsService.seeImageDetail(image, 'Imagen Evento');
+    }
+
+    emitLikeEvent() {
+        this.events_app.resetSocialProblemEmmiter();
     }
 
 }

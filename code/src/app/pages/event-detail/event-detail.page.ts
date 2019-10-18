@@ -7,7 +7,7 @@ import { IEvent, IPostShare, IRespuestaApiSIUSingle } from "src/app/interfaces/m
 import { NetworkService } from 'src/app/services/network.service';
 import { ModalController, ActionSheetController } from "@ionic/angular";
 import { ImageDetailPage } from "src/app/modals/image_detail/image_detail.page";
-import { finalize, map } from 'rxjs/operators';
+import { finalize, map, take } from 'rxjs/operators';
 import { getUsersFromDetails, checkUserInDetails } from "src/app/helpers/user-helper";
 import { checkLikePost } from "src/app/helpers/user-helper";
 import { getJSON, mapImagesApi } from "src/app/helpers/utils";
@@ -42,8 +42,6 @@ export class EventDetailPage implements OnInit {
         private postService: PostsService,
         private events_app: EventsService,
         private modalCtrl: ModalController,
-        private networkService: NetworkService,
-        private actionSheetCtrl: ActionSheetController,
         private authService: AuthService) { }
 
     ngOnInit() {
@@ -57,50 +55,10 @@ export class EventDetailPage implements OnInit {
         this.getEvent();
     }
 
-    // test() {
-    //     this.events_app.setEvent('assistance_toggle');
-    // }
-
-    async showActionCtrl() {
-        const actionShare = {
-            text: 'Compartir',
-            icon: 'share',
-            cssClass: ['share-event'],
-            handler: () => {
-                console.log('compartir evento', event);
-                this.sharePost(this.event);
-            }
-        }
-        const actionToggleAssistance = {
-            text: (this.event.postAssistance) ? 'Unirme' : 'Ya no me interesa',
-            icon: 'clipboard',
-            cssClass: ['toggle-assistance'],
-            handler: () => {
-                console.log('Favorito Borrado');
-                this.toggleAssistance(this.event.postAssistance);
-            }
-        }
-
-        const actionSheet = await this.actionSheetCtrl.create({
-            buttons: [
-                actionShare,
-                actionToggleAssistance, {
-                    text: 'Cancelar',
-                    icon: 'close',
-                    cssClass: ['cancel-action'],
-                    role: 'cancel',
-                    handler: () => {
-                        console.log('Cancel clicked');
-                    }
-                }
-            ]
-        });
-        await actionSheet.present();
-    }
-
     getEvent(event?: any, resetEvents?: any) {
         this.eventLoaded = false;
         this.postService.getEvent(+this.id).pipe(
+            take(1),
             map((res: any) => {
                 if (res && res.data) {
                     const event = res.data;
@@ -151,9 +109,8 @@ export class EventDetailPage implements OnInit {
         if (assistance) {
             this.postService.sendDeleteDetailToPost(this.event.id).subscribe(res => {
                 console.log('detalle eliminado correctamente');
-                // this.getEvent();
                 this.event.postAssistance = false;
-                this.events_app.setEvent('assistance_toggle');
+                this.emitAssistanceEvent();
             }, err => {
                 console.log('detalle no se pudo eliminar', err);
                 this.utilsService.showToast('La asistencia no ha podido ser eliminada');
@@ -168,12 +125,16 @@ export class EventDetailPage implements OnInit {
                 console.log('detalle creado correctamente');
                 // this.getEvent();
                 this.event.postAssistance = true;
-                this.events_app.setEvent('assistance_toggle');
+                this.emitAssistanceEvent();
             }, err => {
                 console.log('detalle no se pudo crear', err);
                 this.utilsService.showToast('No se pudo guardar la asistencia');
             });
         }
+    }
+
+    emitAssistanceEvent() {
+        this.events_app.resetEventsEmitter();
     }
 
     async sharePost(post: IEvent) {
@@ -182,7 +143,6 @@ export class EventDetailPage implements OnInit {
             description: post.description,
             image: this.getImages(post.images),
             url: ''
-
         };
         await this.utilsService.shareSocial(sharePost);
     }

@@ -8,10 +8,10 @@ import { PostsService } from 'src/app/services/posts.service';
 import { environment } from 'src/environments/environment';
 import { ISocialProblemReported, IUbication } from 'src/app/interfaces/models';
 import { finalize } from 'rxjs/operators';
-import { NetworkService } from 'src/app/services/network.service';
 import { NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { EventsService } from "src/app/services/events.service";
 
 @Component({
     selector: 'app-social-problem-create',
@@ -46,7 +46,7 @@ export class SocialProblemCreatePage implements OnInit {
         private router: Router,
         private localizationService: LocalizationService,
         private localDataService: LocalDataService,
-        private networkService: NetworkService,
+        private events_app: EventsService,
         private postService: PostsService,
         private navCtrl: NavController
     ) {
@@ -54,6 +54,7 @@ export class SocialProblemCreatePage implements OnInit {
     }
 
     async ngOnInit() {
+        console.warn('NG ON INIT SOCIAL PROBLEMS');
         const coords = await this.localizationService.getCoordinate();
         this.socialProblemCoordinate.latitude = coords.latitude;
         this.socialProblemCoordinate.longitude = coords.longitude;
@@ -131,7 +132,7 @@ export class SocialProblemCreatePage implements OnInit {
             })
         ).subscribe(async res => {
             await this.utilsService.showToast("El Reporte fue enviado correctamente");
-            // this.navCtrl.navigateRoot('/social-problems');
+            this.events_app.resetSocialProblemEmmiter();
             this.router.navigate(['/social-problems'])
         }, (err: HttpErrorResponse) => {
             this.utilsService.showToast('Ocurrio un error al enviar el reporte');

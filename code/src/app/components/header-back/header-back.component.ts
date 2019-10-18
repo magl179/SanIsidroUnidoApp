@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { NavController, PopoverController } from '@ionic/angular';
+import { NavController, PopoverController, ActionSheetController } from "@ionic/angular";
 import { PopNotificationsComponent } from '../pop-notifications/pop-notifications.component';
 
 @Component({
@@ -12,18 +12,77 @@ export class HeaderBackComponent implements OnInit {
     @Input() title: string;
     @Input() hrefDefault = 'home';
     @Input() showNoti = true;
-    @Input() searchAvalaible = false;
-    @Input() filterAvalaible = false;
-    @Input() reportAvalaible = false;
-    @Output() returnHeaderBackData = new EventEmitter();
+    @Input() search = false;
+    @Input() filter = false;
+    @Input() report = false;
+    @Output() optionSelected = new EventEmitter();
     notificationsIcon = 'notifications-outline';
-    
+    optionsHeaderIcon = 'more';
+
+    private optionsCtrl = [];
+    private options = {
+        filter: {
+            text: 'Filtrar',
+            cssClass: ['headerActionCtrl', 'btn-filter'],
+            icon: 'ios-funnel',
+            handler: () => {
+                console.log('Filter Selected');
+                this.optionSelected.emit({
+                    option: 'filter'
+                })
+            }
+        },
+        search: {
+            text: 'Buscar',
+            cssClass: ['headerActionCtrl', 'btn-search'],
+            icon: 'search',
+            handler: () => {
+                console.log('Search Selected');
+                this.optionSelected.emit({
+                    option: 'search'
+                });
+            }
+        },
+        report: {
+            text: 'Reportar',
+            cssClass: ['headerActionCtrl', 'btn-report'],
+            icon: 'send',
+            handler: () => {
+                console.log('Report Selected');
+                this.optionSelected.emit({
+                    option: 'report'
+                })
+            }
+        },
+        cancel: {
+            text: 'Cancelar',
+            icon: 'close',
+            role: 'cancel',
+            handler: () => {
+              console.log('Cancel clicked');
+            }
+        }
+    }
+
+
     constructor(
         private navCtrl: NavController,
+        private actionCtrl: ActionSheetController,
         private popoverCtrl: PopoverController
     ) { }
 
-    ngOnInit() { }
+    ngOnInit() {
+        if (this.search) {
+            this.optionsCtrl.push(this.options.search);
+        }
+        if (this.filter) {
+            this.optionsCtrl.push(this.options.filter);
+        }
+        if (this.report) {
+            this.optionsCtrl.push(this.options.report);
+        }
+        this.optionsCtrl.push(this.options.cancel)
+    }
 
     goToRoot() {
         this.navCtrl.navigateBack(this.hrefDefault);
@@ -33,17 +92,7 @@ export class HeaderBackComponent implements OnInit {
         this.notificationsIcon = (this.notificationsIcon === 'notifications-outline' ? 'notifications' : 'notifications-outline');
     }
 
-    throwSearch(event: any) {
-        this.returnHeaderBackData.emit({wannaSearch: true});
-    }
-    throwFilter(event: any) {
-        this.returnHeaderBackData.emit({wannaFilter: true});
-    }
-    throwReport(event: any) {
-        this.returnHeaderBackData.emit({wannaReport: true});
-    }
-
-    async showNotiPopover(evento) {
+    async showNotiPopover(evento: any) {
         const popover = await this.popoverCtrl.create({
             component: PopNotificationsComponent,
             event: evento,
@@ -51,6 +100,14 @@ export class HeaderBackComponent implements OnInit {
             showBackdrop: false
         });
         await popover.present();
+    }
+
+    async showOptionsHeader() {
+        const actionSheet = await this.actionCtrl.create({
+            header: 'Opciones',
+            buttons: this.optionsCtrl
+        });
+        await actionSheet.present();
     }
 
 }

@@ -5,17 +5,11 @@
         </ion-buttons>
         <ion-title class="ion-text-center">{{title}}</ion-title>
         <ion-buttons slot="end" *ngIf="showNoti">
-            <ion-button size="large" slot="icon-only" (click)="throwReport($event)" *ngIf="reportAvalaible">
-                <ion-icon class="icon-navigate" name="send"></ion-icon>
-            </ion-button>
-            <ion-button size="large" slot="icon-only" (click)="throwSearch($event)" *ngIf="searchAvalaible">
-                <ion-icon class="icon-search" name="search"></ion-icon>
-            </ion-button>
-            <ion-button size="large" slot="icon-only" (click)="throwFilter($event)" *ngIf="filterAvalaible">
-                <ion-icon class="icon-filter" name="options"></ion-icon>
-            </ion-button>
             <ion-button size="large" slot="icon-only" (click)="showNotiPopover($event)">
                 <ion-icon class="icon-noti" [name]="notificationsIcon"></ion-icon>
+            </ion-button>
+            <ion-button size="large" slot="icon-only" (click)="showOptionsHeader($event)" *ngIf="optionsCtrl.length > 1">
+                <ion-icon class="icon_noti" [name]="optionsHeaderIcon"></ion-icon>
             </ion-button>
         </ion-buttons>
     </ion-toolbar>

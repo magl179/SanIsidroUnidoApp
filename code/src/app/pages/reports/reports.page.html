@@ -14,12 +14,12 @@
     <div *ngIf="reportsLoaded && reportsList.length > 0">
         <ion-card class="card-event" *ngFor="let report of reportsList; let i = index;">
             <ion-card-header>
-                <ion-card-subtitle class="event-subtitle">
+                <!-- <ion-card-subtitle class="event-subtitle">
                     <p class="post-fulldate" style="display:flex;align-items: center;">
                         <ion-icon class="icon" style="font-size:1.2rem;margin-right: 5px;" name="calendar"></ion-icon>
                         <span>{{report.created_at | simpleBeatifulDate}}</span>
                     </p>
-                </ion-card-subtitle>
+                </ion-card-subtitle> -->
                 <ion-card-title>{{report.title}}</ion-card-title>
             </ion-card-header>
             <ion-card-content>

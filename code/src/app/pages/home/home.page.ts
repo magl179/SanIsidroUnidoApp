@@ -30,7 +30,7 @@ export class HomePage implements OnInit {
                 this.sessionAuth = token_decoded;
             }
         });
-        this.localDataService.getHomeOptions().subscribe((data) => {
+        this.localDataService.getHomeOptions().subscribe((data: any) => {
             this.servicesList = data;
             console.log('items home: ', data.length);
         });

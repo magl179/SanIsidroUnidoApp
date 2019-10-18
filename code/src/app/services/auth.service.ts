@@ -28,51 +28,39 @@ export class AuthService {
         private httpRequest: HttpRequestService,
         private platform: Platform
     ) {
-        // this.storage.get(TOKEN_ITEM_NAME).then(token_encoded => {
-        //     this.sessionAuthTokenSubject.next(token_encoded);
-        // });
-        // this.storage.get(USER_ITEM_NAME).then(token_decoded => {
-        //     this.sessionAuthUserSubject.next(token_decoded);
-        //     console.log('user storage constructor auth service', token_decoded)
-        // });
-        ///setTimeout(async () => {
-            this.storage.ready().then(async () => {
-                //this.storage.keys().then(keys => console.log('keys', keys));
-                //this.storage.length().then(length => console.log('length', length));
-                console.log('driver', this.storage.driver);
-                await this.getTokenandUserLS();
-            })
-            
-        //},1);
-        /*this.platform.ready().then(async () => {
+
+        this.storage.ready().then(async () => {
+            //this.storage.keys().then(keys => console.log('keys', keys));
+            //this.storage.length().then(length => console.log('length', length));
+            // console.log('driver', this.storage.driver);
             await this.getTokenandUserLS();
-        });*/
+        });
     }
-    
+
     // ngOnInit
     async getTokenandUserLS() {
         const getTokenLS = new Promise((resolve, reject) => {
-           this.storage.get(TOKEN_ITEM_NAME).then(token_encoded => {
-               this.sessionAuthTokenSubject.next(token_encoded);
-               resolve(true);
+            this.storage.get(TOKEN_ITEM_NAME).then(token_encoded => {
+                this.sessionAuthTokenSubject.next(token_encoded);
+                resolve(true);
             });
         });
         const getUserLS = new Promise((resolve, reject) => {
-             this.storage.get(USER_ITEM_NAME).then(token_decoded => {
+            this.storage.get(USER_ITEM_NAME).then(token_decoded => {
                 this.sessionAuthUserSubject.next(token_decoded);
                 console.log('user storage constructor auth service', token_decoded);
                 resolve(true);
             });
         });
         return await Promise.all([getTokenLS, getUserLS]);
-       
-        
+
+
     }
 
     // async isAuthenticated() {
     //     return !! await this.storage.get(TOKEN_ITEM_NAME); 
     // }
-   
+
     // Iniciar Sesion del Usuario
     login(loginData: any, getToken = null): Observable<any> {
         const headers = environment.headersApp;
@@ -94,8 +82,8 @@ export class AuthService {
         const headers = setHeaders(environment.AUTHORIZATION_NAME, token)
         return this.httpRequest.post(urlApi, {}, headers);
     }
-     //CERRAR SESION del usuario, borrando los datos del local storage
-     async logout() {
+    //CERRAR SESION del usuario, borrando los datos del local storage
+    async logout() {
         this.cleanLocalStorage();
         this.cleanAuthInfo();
         this.navCtrl.navigateRoot('/login');
@@ -136,16 +124,14 @@ export class AuthService {
     cleanAuthInfo() {
         this.sessionAuthTokenSubject.next(null);
         this.sessionAuthUserSubject.next(null);
-    } 
+    }
 
     async saveUserInfo(token_encoded: any, token_decoded: any) {
-        // token_decoded.user = await mapUser(token_decoded);
         this.sessionAuthTokenSubject.next(token_encoded);
         this.sessionAuthUserSubject.next(token_decoded);
     }
     async saveLocalStorageInfo(token_encoded: any, token_decoded: any) {
-        // token_decoded.user = await mapUser(token_decoded);
-        console.log('save local storage info called', {a: token_encoded, b: token_decoded})
+        console.log('save local storage info called', { a: token_encoded, b: token_decoded })
         this.storage.set(TOKEN_ITEM_NAME, token_encoded);
         this.storage.set(USER_ITEM_NAME, token_decoded);
         this.storage.get(USER_ITEM_NAME).then(token_decoded => {
@@ -156,11 +142,11 @@ export class AuthService {
     async isAuthenticated() {
         //const itemUser = await this.storage.get(USER_ITEM_NAME);
         const getTokenLS = new Promise((resolve, reject) => {
-           this.storage.get(TOKEN_ITEM_NAME).then(token_encoded => {
-               resolve(token_encoded);
+            this.storage.get(TOKEN_ITEM_NAME).then(token_encoded => {
+                resolve(token_encoded);
             });
         });
-        
+
         // const isAuthenticated = !!itemUser;
         return await getTokenLS;
     }

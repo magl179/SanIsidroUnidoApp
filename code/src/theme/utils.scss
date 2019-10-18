@@ -188,5 +188,24 @@
     }
 }
 
+//Iconos ActionCtrl Header
+.headerActionCtrl{
+    &.btn-filter{
+        ion-icon{
+            --color: #53387d;
+        }
+    }
+    &.btn-search{
+        ion-icon{
+            --color: #007bff;
+        }
+    }
+    &.btn-report{
+        ion-icon{
+            --color: #dc3545;
+        }
+    }
+}
+
 
 

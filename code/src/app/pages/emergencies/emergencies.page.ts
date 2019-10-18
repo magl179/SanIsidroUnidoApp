@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavController, ModalController, ActionSheetController } from "@ionic/angular";
 import { UtilsService } from "src/app/services/utils.service";
 import { PostsService } from "src/app/services/posts.service";
@@ -10,13 +10,14 @@ import { finalize, delay, retryWhen, map } from 'rxjs/operators';
 import { getJSON, mapEmergency } from "src/app/helpers/utils";
 import { AuthService } from 'src/app/services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { EventsService } from "src/app/services/events.service";
 
 @Component({
     selector: 'app-emergencies',
     templateUrl: './emergencies.page.html',
     styleUrls: ['./emergencies.page.scss'],
 })
-export class EmergenciesPage implements OnInit {
+export class EmergenciesPage implements OnInit, OnDestroy {
 
     emergenciesList = [];
     AuthUser = null;
@@ -40,11 +41,12 @@ export class EmergenciesPage implements OnInit {
         private utilsService: UtilsService,
         private postsService: PostsService,
         private modalCtrl: ModalController,
-        private actionSheetCtrl: ActionSheetController
+        private events_app: EventsService
     ) { }
 
 
     ngOnInit() {
+        this.postsService.resetEmergenciesPage();
         this.utilsService.enableMenu();
         this.authService.sessionAuthUser.subscribe(async (token_decoded: ITokenDecoded) => {
             if (token_decoded) {
@@ -53,10 +55,39 @@ export class EmergenciesPage implements OnInit {
             }
         });
         this.loadEmergencies();
+        this.events_app.emergenciesEmitter.subscribe((event_app: any) => {
+            if (this.emergenciesList.length > 0) {
+                console.log('tengo datos cargados resetear a 0');
+                this.emergenciesList = [];
+                this.emergenciesFiltered = [];
+                this.postsService.resetEmergenciesPage();
+            }
+            this.loadEmergencies();
+        })
     }
 
+    ngOnDestroy() {
+        console.warn('EMERGENCIES PAGE DESTROYED')
+    }
 
-    ionViewWillEnter() {}
+    getOptionSelected(event: any) {
+        console.log('option selected', event)
+        if (event && event.option) {
+            switch (event.option) {
+                case 'search':
+                    this.showModalSearchEmergencies();
+                    break;
+                case 'filter':
+                    this.showModalFilterEmergencies();
+                    break;
+                case 'report':
+                    this.reportEmergency();
+                    break;
+                default:
+                    console.log('Ninguna opcion coincide');
+            }
+        }
+    }
 
     loadEmergencies(event?: any) {
         this.emergenciesLoaded = false;

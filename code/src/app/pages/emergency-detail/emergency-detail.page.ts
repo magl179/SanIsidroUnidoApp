@@ -4,7 +4,7 @@ import { UtilsService } from "src/app/services/utils.service";
 import { PostsService } from "src/app/services/posts.service";
 import { NetworkService } from "src/app/services/network.service";
 import { AuthService } from "src/app/services/auth.service";
-import { finalize, map } from 'rxjs/operators';
+import { finalize, map, take } from 'rxjs/operators';
 import { IRespuestaApiSIUSingle } from 'src/app/interfaces/models';
 import { ModalController } from "@ionic/angular";
 import { ImageDetailPage } from 'src/app/modals/image_detail/image_detail.page';
@@ -45,17 +45,17 @@ export class EmergencyDetailPage implements OnInit {
     getEmergency(event?: any, resetEvents?: any) {
         this.emergencyLoaded = false;
         this.postsService.getEmergency(+this.id).pipe(
+            take(1),
             map((res: any) => {
                 // console.log('res map', res);
                 if (res && res.data) {
                     const emergency = res.data;
                     res.data = mapEmergency(emergency);
                 }
-                console.log('res maped', res.data);
                 return res;
             }),
             finalize(() => {
-                console.log('finalize loaded');
+                // console.log('finalize loaded');
                 this.emergencyLoaded = true;
             })
         ).subscribe((res: IRespuestaApiSIUSingle) => {

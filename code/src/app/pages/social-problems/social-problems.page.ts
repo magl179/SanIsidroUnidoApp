@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavController, PopoverController, ModalController, ActionSheetController } from "@ionic/angular";
 import { UtilsService } from 'src/app/services/utils.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -14,6 +14,7 @@ import { checkLikePost } from 'src/app/helpers/user-helper';
 import { mapSocialProblem } from "../../helpers/utils";
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from "../../services/events.service";
+import { NgFallimgModule } from "ng-fallimg";
 
 
 @Component({
@@ -21,7 +22,7 @@ import { EventsService } from "../../services/events.service";
     templateUrl: './social-problems.page.html',
     styleUrls: ['./social-problems.page.scss'],
 })
-export class SocialProblemsPage implements OnInit {
+export class SocialProblemsPage implements OnInit, OnDestroy {
     subcategory = '';
     AuthUser = null;
 
@@ -63,6 +64,7 @@ export class SocialProblemsPage implements OnInit {
 
     ngOnInit() {
         this.utilsService.enableMenu();
+        this.postsService.resetSocialProblemsPage();
         console.log('ng on init');
         this.authService.sessionAuthUser.pipe(
             finalize(() => { })
@@ -76,12 +78,39 @@ export class SocialProblemsPage implements OnInit {
                 this.utilsService.showToast('No se pudieron cargar la información del usuario');
             });
         this.loadSocialProblems();
-        this.events_app.getEventsApp().subscribe((event_app: any) => {
-            if (event_app.type === 'like_problem_toggle') {
-                this.loadSocialProblems(null, true, true);
+        this.events_app.socialProblemEmitter.subscribe((event_app: any) => {
+            if (this.socialProblemsList.length > 0) {
+                console.log('tengo datos cargados resetear a 0');
+                this.socialProblemsList = [];
+                this.socialProblemsFilter = [];
+                this.postsService.resetSocialProblemsPage();
             }
+            this.loadSocialProblems();
         });
 
+    }
+
+    ngOnDestroy() {
+        console.warn('SOCIAL PROBLEMS PAGE DESTROYED')
+    }
+
+    getOptionSelected(event: any) {
+        console.log('option selected', event)
+        if (event && event.option) {
+            switch (event.option) {
+                case 'search':
+                    this.showModalSearchSocialProblems();
+                    break;
+                case 'filter':
+                    this.showModalFilterSocialProblems();
+                    break;
+                case 'report':
+                    this.reportSocialProblem();
+                    break;
+                default:
+                    console.log('Ninguna opcion coincide');
+            }
+        }
     }
 
     ionViewWillEnter() { }
@@ -124,15 +153,8 @@ export class SocialProblemsPage implements OnInit {
     }
 
     //Cargar los problemas sociales
-    loadSocialProblems(event?: any, resetEventsPagination = false, resetData = false) {
+    loadSocialProblems(event?: any) {
         this.socialProblemsLoaded = false;
-        if (resetData) {
-            this.socialProblemsList = [];
-            this.socialProblemsFilter = [];
-        }
-        if (resetEventsPagination) {
-            this.postsService.resetSocialProblemsPage();
-        }
         this.postsService.getSocialProblems().pipe(
             map((res: any) => {
                 // console.log('res map', res);
@@ -220,7 +242,7 @@ export class SocialProblemsPage implements OnInit {
         }
     }
     //Funcion mostrar el filtro de publicaciones
-    async showModalFilterSocialProblems(event) {
+    async showModalFilterSocialProblems(event?: any) {
         //Crear Popover
         const modal = await this.modalCtrl.create({
             component: FilterPage,
@@ -262,5 +284,5 @@ export class SocialProblemsPage implements OnInit {
         // });
         await modal.present();
     }
-  
+
 }

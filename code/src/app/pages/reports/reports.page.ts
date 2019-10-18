@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PostsService } from "src/app/services/posts.service";
 import { finalize, map } from 'rxjs/operators';
 import { NavController } from '@ionic/angular';
@@ -13,7 +13,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   templateUrl: './reports.page.html',
   styleUrls: ['./reports.page.scss'],
 })
-export class ReportsPage implements OnInit {
+export class ReportsPage implements OnInit, OnDestroy {
 
     reportsList: any = [];
     reportsLoaded = false;
@@ -23,14 +23,14 @@ export class ReportsPage implements OnInit {
         private navCtrl: NavController,
         private utilsService: UtilsService
   ) { }
-
-    ionViewWillEnter() {
-        console.log('reports will enter');
-    }
     
     ngOnInit() { 
+        this.postsService.resetReportsPage();
         this.loadReports();
+    }
 
+    ngOnDestroy() {
+        console.warn('REPORTS  PAGE DESTROYED')
     }
 
     postDetail(id: number) {
@@ -39,19 +39,16 @@ export class ReportsPage implements OnInit {
     
     loadReports(event?: any, resetReports?: any) {
         this.reportsLoaded = false;
-        console.log('llamdo get reports');
         if (resetReports) {
             this.reportsList = [];
         }
         this.postsService.getReports().pipe(
             map((res: any) => {
-                console.log('res map', res);
                 if (res && res.data && res.data.data) {
                     const reports_to_map = res.data.data;
                     reports_to_map.forEach((report: any) => {
                         report = mapReport(report);
                     });
-                    console.log('res maped', res.data.data);
                 }
                 return res;
             }),
@@ -66,7 +63,6 @@ export class ReportsPage implements OnInit {
                     report.images = mapImagesApi(report.images);
                 }
             });
-            // console.log(res);
             console.log('reports list', this.reportsList);
         },(err: HttpErrorResponse) => {
             if (err.error instanceof Error) {

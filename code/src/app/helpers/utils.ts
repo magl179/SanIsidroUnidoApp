@@ -7,7 +7,14 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 declare var moment: any;
 moment.locale('es');
-const URL_PATTERN = new RegExp("^(?:(?:http(?:s)?|ftp)://)(?:\\S+(?::(?:\\S)*)?@)?(?:(?:[a-z0-9\u00a1-\uffff](?:-)*)*(?:[a-z0-9\u00a1-\uffff])+)(?:\\.(?:[a-z0-9\u00a1-\uffff](?:-)*)*(?:[a-z0-9\u00a1-\uffff])+)*(?:\\.(?:[a-z0-9\u00a1-\uffff]){2,})(?::(?:\\d){2,5})?(?:/(?:\\S)*)?$");
+const URL_PATTERN = new RegExp('^(https?:\\/\\/)?'+ // protocol
+'((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|'+ // domain name
+'((\\d{1,3}\\.){3}\\d{1,3}))'+ // ip (v4) address
+'(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ //port
+'(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+    '(\\#[-a-z\\d_]*)?$', 'i');
+
+const REGEX_URL = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
 
 //FUncion para verificar si una variable es un JSON
 const isJSON = (str: any) => {
@@ -106,12 +113,15 @@ const ramdomValue = (tamanio: number) => {
 }
 
 const imagenIsURL = (image_name: string) => {
-    return URL_PATTERN.test(image_name);
+    return REGEX_URL.test(image_name);
 }
 
 //Obtener la URL de una imagen
 export const getImageURL = (image_name: string) => {
+    // console.log('image to check url', image_name);
+    // console.trace();
     const imgIsURL = imagenIsURL(image_name);
+    // console.log('is image_url', imgIsURL);
     if (imgIsURL) {
         return image_name;
     } else {
@@ -120,14 +130,19 @@ export const getImageURL = (image_name: string) => {
 }
 
 export const mapImagesApi = (images: any[]) => {
+    // console.log('imagesapi', images)
     return images.map((image: any) => {
-        image.url = getImageURL(image.url);;
+        image.url = getImageURL(image.url);
         return image;
     });
 }
 
 export const mapUser = (user: any) => {
-    user.avatar = getImageURL(user.avatar);
+    if (user && user.avatar) {
+        user.avatar = getImageURL(user.avatar);
+    } else {
+        user.avatar = 'assets/img/default/img_avatar.png'; 
+    }
     return user;
 }
 

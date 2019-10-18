@@ -18,7 +18,6 @@ export class UserIsActiveGuard implements CanLoad {
 
     canLoad():Observable<boolean> | boolean {
         const userObservable = this.authService.sessionAuthUser;
-        // console.log('login guard');
         return userObservable.pipe(
             map(token_decoded => {
                 console.log('token decoded user authenticated guard', token_decoded);

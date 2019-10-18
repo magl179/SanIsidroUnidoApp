@@ -80,7 +80,7 @@
             </form>
         </section>
         <section *ngIf="currentStep === 3">
-            <p class="ion-text-center">Puedes agregar hasta 2 imagenes</p>
+            <p class="ion-text-center">Carga hasta 2 fotos para tu reporte</p>
             <ion-grid *ngIf="socialProblemImages.length > 0">
                 <ion-row>
                     <ion-col size="6" *ngFor="let image of socialProblemImages; let i = index;">
@@ -114,7 +114,7 @@
                 (returnCoordinateChoosen)="updateMapCoordinate($event)"></single-map>
             <!-- <p>Latitud PAGE EC: Market {{socialProblemCoordinate.latitude}}</p> -->
             <!-- <p>Longitud PAGE EC: Market {{socialProblemCoordinate.longitude}}</p> -->
-            <p class="padding-lateral" *ngIf="socialProblemCoordinate.address">Tu Dirección es:
+            <p class="padding-lateral name-ubication-pt" *ngIf="socialProblemCoordinate.address">Tu Dirección es:
                 {{socialProblemCoordinate.address}}</p>
             <form class="form-ubication" [formGroup]="ubicationForm">
                 <div class="item-form full">

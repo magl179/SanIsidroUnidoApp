@@ -28,7 +28,11 @@ export class UtilsService implements OnInit {
     // Funcion para obtener un valor aleatorio de un tamaño en especifico
     
     seeImageDetail(url: string, title = "Detalle Imagen", share = true) {
-        this.photoViewer.show(url, title, { share });
+        if (this.platform.is('cordova')) {
+            this.photoViewer.show(url, title, { share });
+        } else {
+            this.showToast('Cordova no disponible');
+        }
     }
     
     //Abrir el navegador

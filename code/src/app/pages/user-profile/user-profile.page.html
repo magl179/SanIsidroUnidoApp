@@ -5,7 +5,7 @@
         <!-- AVATAR USUARIO -->
         <div class="img-profile ion-padding-top">
             <div class="item_img" *ngIf="AuthUser">
-                <img [src]="getAvatar(AuthUser.avatar)" fallimg="user_avatar" />
+                <img [src]="AuthUser.avatar" fallimg="user_avatar" />
                 <div class="upload_image" (click)="showChangeUserImageProfileModal()">
                     <ion-icon name="camera"></ion-icon>
                 </div>
@@ -49,7 +49,7 @@
                     <p class="title_option">Cambiar Contraseña</p>
                 </ion-col>
                 <!-- <ng-container *ngIf="AuthUser && AuthUser.user"> -->
-                    <ion-col class="user_profile_options" *ngIf="AuthUser && !AuthUser.basic_service_image">
+                    <ion-col class="user_profile_options" *appHasRole="['invitado']">
                         <div class="icon_option" (click)="showRequestMembershipModal()">
                             <ion-icon name="document"></ion-icon>
                         </div>
@@ -168,8 +168,8 @@
         </div>
         <!-- INFO DISPOSITIVO -->
         <div *ngIf="CurrentUserDevice" style="padding-left: 1rem;">
-            <p>DeviceUser: {{CurrentUserDevice.phone_id}}</p>
-            <p>DeviceUser: {{CurrentUserDevice.phone_model}}</p>
+            <p>DeviceUser PhoneID: {{CurrentUserDevice.phone_id}}</p>
+            <p>DeviceUser PhoneModel: {{CurrentUserDevice.phone_model}}</p>
         </div>
         <div *ngIf="!CurrentUserDevice" style="padding-left: 1rem;">
             No se pudo obtener info device user

@@ -12,7 +12,8 @@ import { NetworkService } from 'src/app/services/network.service';
 import { environment } from 'src/environments/environment';
 import { LocalDataService } from './services/local-data.service';
 // import { mapUser } from './helpers/user-helper';
-import { getImageURL } from './helpers/utils';
+import { getImageURL, mapUser } from "./helpers/utils";
+import { map, finalize } from 'rxjs/operators';
 
 @Component({
     selector: 'app-root',
@@ -46,10 +47,6 @@ export class AppComponent implements OnInit {
 
     ngOnInit() { }
 
-    getAvatar(image_name: string) {
-        return getImageURL(image_name);
-    }
-
     async getMenuOptions() {
         this.localDataService.getMenuOptions().subscribe((data: any) => {
             this.menuComponents = data;
@@ -76,20 +73,28 @@ export class AppComponent implements OnInit {
         });
     }
 
-    manageInitialPage(token_decoded: any) {
-        if (!token_decoded) {
-            // console.log('app redirect login');
-            // this.navCtrl.navigateRoot('/login');
-        }
-    }
+    // manageInitialPage(token_decoded: any) {
+    //     if (!token_decoded) {
+    //         // console.log('app redirect login');
+    //         // this.navCtrl.navigateRoot('/login');
+    //     }
+    // }
 
     async checkUserLoggedIn() {
-        this.authService.sessionAuthUser.subscribe(async token_decoded => {
+        this.authService.sessionAuthUser.pipe(
+            map((token_decoded: any) => {
+                if (token_decoded && token_decoded.user) {
+                    token_decoded.user = mapUser(token_decoded.user);
+                }
+                return token_decoded;
+            }) ,
+            finalize(() => {
+                this.authService.checkValidToken();                
+            })
+        ).subscribe(token_decoded => {
             if (token_decoded) {
                 this.sessionAuth = token_decoded;
-                this.authService.checkValidToken();
             }
-            this.manageInitialPage(token_decoded);
         }, (err: any) => {
             console.log('Error', err);
         });

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 // const
@@ -8,23 +8,23 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class EventsService {
 
-    events_app = new BehaviorSubject({
-        type: 'none'
-    });
+    socialProblemEmitter = new EventEmitter();
+    eventsEmitter = new EventEmitter();
+    emergenciesEmitter = new EventEmitter();
 
     constructor() { }
-    
 
-    getEventsApp() {
-        return this.events_app.asObservable();
+    resetSocialProblemEmmiter() {
+        // console.log('post service emit event');
+        this.socialProblemEmitter.emit('reset-social-problems');
     }
 
-    setEvent(name: string) {
-        this.events_app.next({
-            type: name
-        });
-        // setTimeout(() => {
+    resetEventsEmitter() {
+        // console.log('post service emit event');
+        this.eventsEmitter.emit('reset-events');
+    }
 
-        // })
+    resetEmergenciesEmitter() {
+        this.emergenciesEmitter.emit('reset-emergencies');
     }
 }

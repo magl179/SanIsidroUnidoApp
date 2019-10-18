@@ -11,8 +11,8 @@ import { UserService } from 'src/app/services/user.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { decodeToken } from 'src/app/helpers/auth-helper';
 import { getUserDevice } from 'src/app/helpers/user-helper';
-import { finalize } from 'rxjs/operators';
-import { getImageURL } from 'src/app/helpers/utils';
+import { finalize, map } from 'rxjs/operators';
+import { getImageURL, mapUser } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
 
 const URL_PATTERN = new RegExp(/^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/);
@@ -59,7 +59,14 @@ export class UserProfilePage implements OnInit {
     }
 
     async ngOnInit() {
-        this.authService.sessionAuthUser.subscribe(async(token_decoded: ITokenDecoded) => {
+        this.authService.sessionAuthUser.pipe(
+                map((token_decoded: any) => {
+                    if (token_decoded && token_decoded.user) {
+                        token_decoded.user = mapUser(token_decoded.user);
+                    }
+                    return token_decoded;
+                }),    
+        ).subscribe(async(token_decoded: ITokenDecoded) => {
             if (token_decoded && token_decoded.user) {
                 this.AuthUser = token_decoded.user;
                 // console.log(this.AuthUser);
