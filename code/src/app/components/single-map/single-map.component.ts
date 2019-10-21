@@ -1,8 +1,9 @@
-import { Component, OnInit, EventEmitter, Input, Output, AfterViewInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import * as Leaflet from 'leaflet';
-import { GestureHandling } from 'leaflet-gesture-handling';
 import { LocalizationService } from "src/app/services/localization.service";
 import { environment } from "src/environments/environment";
+import { manageTwoFingerDrag } from 'src/app/helpers/utils';
+import { GestureHandling } from "leaflet-gesture-handling";
 
 @Component({
     selector: 'single-map',
@@ -12,8 +13,8 @@ import { environment } from "src/environments/environment";
 export class SingleMapComponent implements OnInit, AfterViewInit {
 
     @Input() idMap: string;
+    @Input() class = '';
     @Input() zoomMap = 15;
-    // @Input() mapPoints: IPostUbicationItem;
     @Input() enableGesture = false;
     @Output() returnCoordinateChoosen = new EventEmitter();
 
@@ -24,6 +25,7 @@ export class SingleMapComponent implements OnInit, AfterViewInit {
         longitude: null,
         address: null
     };
+    @ViewChild("singleMap") mapDOM: ElementRef;
 
     constructor(
         private localizationService: LocalizationService
@@ -37,26 +39,22 @@ export class SingleMapComponent implements OnInit, AfterViewInit {
             this.sendMarkerCoordinate();
         }
         await this.initializeMap();
-    }
-
-    onTwoFingerDrag(e) {
-        if (e.type === 'touchstart' && e.touches.length === 1) {
-            e.currentTarget.classList.add('swiping');
-        } else {
-            e.currentTarget.classList.remove('swiping');
+        if (this.enableGesture) {     
+            this.mapDOM.nativeElement.addEventListener("touchstart", manageTwoFingerDrag);
+            this.mapDOM.nativeElement.addEventListener("touchend", manageTwoFingerDrag);
         }
     }
 
     async initializeMap() {
         if (this.enableGesture) {
-            Leaflet.Map.addInitHook('addHandler', 'gestureHandling', GestureHandling);
+            Leaflet.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
         }
-        this.map = await Leaflet.map(this.idMap, {
+        this.map = Leaflet.map(this.idMap, {
             gestureHandling: this.enableGesture,
             fadeAnimation: false,
             zoomAnimation: false,
             markerZoomAnimation: false
-        });
+        } as Leaflet.MapOptions);
 
         await this.map.on('load', (e) => {
             console.log('MAPA SINGLE CARGADO');
@@ -70,9 +68,9 @@ export class SingleMapComponent implements OnInit, AfterViewInit {
             maxZoom: 18,
             updateWhenIdle: true,
             reuseTiles: true
-        }).addTo(this.map);
+        } as Leaflet.LayerOptions).addTo(this.map);
 
-        const mainMarker = await Leaflet.marker([this.currentCoordinate.latitude || -0.2188216, this.currentCoordinate.longitude || -78.5135489], {
+        const mainMarker = Leaflet.marker([this.currentCoordinate.latitude || -0.2188216, this.currentCoordinate.longitude || -78.5135489], {
             title: 'Mi Ubicación Actual',
             draggable: true
         });
@@ -92,7 +90,6 @@ export class SingleMapComponent implements OnInit, AfterViewInit {
         await this.returnCoordinateChoosen.emit({
             latitude: this.currentCoordinate.latitude,
             longitude: this.currentCoordinate.longitude,
-            // address:
         });
     }
 

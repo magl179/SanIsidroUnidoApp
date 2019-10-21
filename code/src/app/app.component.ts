@@ -158,7 +158,7 @@ export class AppComponent implements OnInit {
         this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
             this.isConnected = connected;
             if (!this.isConnected) {
-                this.utilsService.showToast('Por favor enciende tu conexión a Internet');
+                this.utilsService.showToast({message: 'Por favor enciende tu conexión a Internet'});
             }
         });
     }

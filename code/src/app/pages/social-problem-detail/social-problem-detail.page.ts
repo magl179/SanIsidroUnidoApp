@@ -5,10 +5,9 @@ import { PostsService } from 'src/app/services/posts.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { IPostShare, ISocialProblem, IRespuestaApiSIUSingle, IRespuestaApiSIU } from "src/app/interfaces/models";
 import { NetworkService } from 'src/app/services/network.service';
-import { ModalController, ActionSheetController } from "@ionic/angular";
+import { ModalController } from "@ionic/angular";
 import { ImageDetailPage } from 'src/app/modals/image_detail/image_detail.page';
-import { finalize, map, take } from 'rxjs/operators';
-import { mapImagesApi, getImageURL } from "src/app/helpers/utils";
+import { finalize, map, take } from 'rxjs/operators';;
 import { checkLikePost } from 'src/app/helpers/user-helper';
 import { mapSocialProblem } from "../../helpers/utils";
 import { HttpErrorResponse } from '@angular/common/http';
@@ -25,7 +24,6 @@ import { EventsService } from "../../services/events.service";
 export class SocialProblemDetailPage implements OnInit {
 
     id: string;
-    // idPost: number;
     socialProblem: ISocialProblem = null;
     socialProblemLoaded = false;
     AuthUser = null;
@@ -109,7 +107,7 @@ export class SocialProblemDetailPage implements OnInit {
                 this.emitLikeEvent();
             }, err => {
                 console.log('detalle no se pudo eliminar', err);
-                this.utilsService.showToast('El like no se pudo eliminar');    
+                this.utilsService.showToast({message: 'El like no se pudo guardar'});    
             });
         } else {
             const detailInfo = {
@@ -123,7 +121,7 @@ export class SocialProblemDetailPage implements OnInit {
                 this.emitLikeEvent();
             }, err => {
                 console.log('detalle no se pudo crear', err);
-                this.utilsService.showToast('El like no pudo guardarse');
+                this.utilsService.showToast({message: 'El like no pudo guardarse'});
             });
         }
     }

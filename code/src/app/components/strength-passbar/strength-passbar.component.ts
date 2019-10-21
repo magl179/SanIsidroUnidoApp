@@ -1,6 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-// const zxcvbn;
-// declare var zxcvbn: any;
 
 @Component({
     selector: 'app-strength-passbar',
@@ -12,7 +10,6 @@ export class StrengthPassbarComponent implements OnInit {
     @Input() align = 'right';
     @Input() width = 100;
     @Input() set text(text: string) {
-        // this.score = zxcvbn(text).score;
         this.score = 5;
         this.passText = text;
         this.isEmptyPass = (text !== '') ? false : true;
@@ -35,10 +32,6 @@ export class StrengthPassbarComponent implements OnInit {
     }
 
 
-    async ngOnInit() {
-        // console.log('text', this.text);
-        // this.score = await zxcvbn(this.text).score;
-        // console.log('score', this.score);
-    }
+    async ngOnInit() {}
 
 }

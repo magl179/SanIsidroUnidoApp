@@ -2,7 +2,15 @@ import { Component, OnInit, Input } from '@angular/core';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
+import { take, finalize, map } from 'rxjs/operators';
+import { MapNotification } from 'src/app/helpers/utils';
 
+
+interface NotiList {
+    id: number;
+    user: any;
+    title: string; user_id: string; message: string; state: number; type: string, created_at: string, updated_at: string
+}
 const URL_PATTERN = new RegExp(/^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/);
 
 @Component({
@@ -14,64 +22,33 @@ export class ListNotificationsComponent implements OnInit {
 
     @Input() showListHeader = true;
     @Input() maxNotifications = 0;
-    // @ViewChild(IonSegment) segment: IonSegment;
 
-    notificationsRequested = [];
-    notificationsList: { id: number, user: any, title: string, user_id: string, message: string, state: number, type: string, created_at: string, updated_at: string }[] = [];
-    notificationsList2: {title: string, author: string, user_img: string, description: string}[] = [
-        // tslint:disable-next-line: max-line-length
-        { title: 'Title Noti 1', author: 'Juan Manuel', user_img: 'assets/img/default/img_avatar.png', description: 'Descripcion de la Noti' },
-        // tslint:disable-next-line: max-line-length
-        { title: 'Title Noti 2', author: 'Rosa Mendez', user_img: 'assets/img/default/img_avatar.png', description: 'Descripcion de la Noti' },
-        // tslint:disable-next-line: max-line-length
-        { title: 'Title Noti 3', author: 'Juan Manuel', user_img: 'assets/img/default/img_avatar.png', description: 'Descripcion de la Noti' },
-        // tslint:disable-next-line: max-line-length
-        { title: 'Title Noti 4', author: 'Juan Manuel', user_img: 'assets/img/default/img_avatar.png', description: 'Descripcion de la Noti' },
-        // tslint:disable-next-line: max-line-length
-        { title: 'Title Noti 5', author: 'Juan Manuel', user_img: 'assets/img/default/img_avatar.png', description: 'Descripcion de la Noti' },
-        // tslint:disable-next-line: max-line-length
-        { title: 'Title Noti  6', author: 'Juan Manuel', user_img: 'assets/img/default/img_avatar.png', description: 'Descripcion de la Noti' },
-        // tslint:disable-next-line: max-line-length
-        { title: 'Title Noti 7', author: 'Juan Manuel', user_img: 'assets/img/default/img_avatar.png', description: 'Descripcion de la Noti' }
-    ];
+    notificationsRequested: NotiList[] = [];
+    notificationsList: NotiList[] = [];
 
     constructor(
         private notiService: NotificationsService,
         private usersService: UserService
     ) { }
 
-    async ngOnInit() {
-        // this.segment.value = 'todos';
-        await this.notificationsList.reverse();
-        await this.getNotifications();
+    ngOnInit() {
+        this.notificationsList.reverse();
+        this.getNotifications();
     }
 
-    getLinesState(indice) {
+    getLinesState(indice: number) {
         return ((indice + 1) !== this.notificationsRequested.length) ? 'full' : 'none';
     }
 
-    getImageURL(image_name) {
-        const imgIsURL = URL_PATTERN.test(image_name);
-        if (imgIsURL) {
-            return image_name;
-        } else {
-            return `${environment.apiBaseURL}/${environment.image_assets}/${image_name}`;
-        }
-    }
-
     getNotifications() {
-        // this.notiService.getNotifications().subscribe(async data => {
-        //     console.log('Data noti: ', data);
-        //     if (data) {
-        //         this.notificationsList = data;
-        //     }
-        //     this.cargarNotificacionesSolicitadas();
-        // });
-        this.usersService.getNotificationsUser().subscribe((res: any) => {
-            if (res.code === 200) {
-                this.notificationsList = res.data;
-                this.cargarNotificacionesSolicitadas();
-           } 
+        this.usersService.getNotificationsUser().pipe(take(1), map((res: any) => {
+            res.data.forEach((noti: any) => {
+                noti = MapNotification(noti);
+            });
+            return res;
+        }), finalize(() => console.log('notis cargadas'))).subscribe((res: any) => {
+            this.notificationsList = res.data;
+            this.cargarNotificacionesSolicitadas();
         });
     }
 

@@ -9,13 +9,10 @@ import { NotificationsService } from 'src/app/services/notifications.service';
 import { IRespuestaApiSIU, ITokenDecoded, IRespuestaApiSIUSingle, IPhoneUser } from "src/app//interfaces/models";
 import { UserService } from 'src/app/services/user.service';
 import { UtilsService } from 'src/app/services/utils.service';
-import { decodeToken } from 'src/app/helpers/auth-helper';
 import { getUserDevice } from 'src/app/helpers/user-helper';
 import { finalize, map } from 'rxjs/operators';
 import { getImageURL, mapUser } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
-
-const URL_PATTERN = new RegExp(/^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/);
 
 @Component({
     selector: 'app-user-profile',
@@ -24,12 +21,8 @@ const URL_PATTERN = new RegExp(/^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=
 })
 export class UserProfilePage implements OnInit {
 
-    //Guardar Subscripcion Usuario
-    // appNetworkConnection = false;
-    // imageServeURL = `${environment.apiBaseURL}/${environment.image_blob_url}/`;
     sizeOptions = 4;
     AuthUser = null;
-    // DeviceUser: IPhoneUser = null;
     UserDevices = [];
     UserSocialProfiles = [];
     CurrentUserDevice: IPhoneUser = {
@@ -43,7 +36,6 @@ export class UserProfilePage implements OnInit {
     };
     userDevicesLoaded = false;
     userSocialProfilesLoaded = false;
-    // UserSocialProfiles = [];
 
     constructor(
         private authService: AuthService,
@@ -69,8 +61,6 @@ export class UserProfilePage implements OnInit {
         ).subscribe(async(token_decoded: ITokenDecoded) => {
             if (token_decoded && token_decoded.user) {
                 this.AuthUser = token_decoded.user;
-                // console.log(this.AuthUser);
-                // this.getRoles()
                 this.getUserSocialProfiles();
                 this.getUserDevices();
                 this.notificationsService.getUserDevice().subscribe(userdevice => {
@@ -87,11 +77,6 @@ export class UserProfilePage implements OnInit {
                 });
             }
         });
-
-        // this.getUserSocialProfiles();
-        // this.getUserDevices();
-      
-      
      }
 
     getUserSocialProfiles(){
@@ -118,8 +103,6 @@ export class UserProfilePage implements OnInit {
         this.userService.getDevicesUser().pipe(
             finalize(() => {
                 this.userDevicesLoaded = true;
-                // console.log('finalize get events', this.eventsLoaded);
-                // console.log('finalize get events', this.eventsList);
             })
         ).subscribe((res: IRespuestaApiSIU) => {
             if (res.data) {
@@ -181,17 +164,13 @@ export class UserProfilePage implements OnInit {
         this.notificationsService.registerUserDevice();
     }
 
-    // removeDevicetoUser(device_id: number) {
-    //     this.notificationsService.removeUserDevice(device_id);
-    // }
-
     //Funcion remover dispositivo asociado a un usuario en la API
     removeUserDevice(device_id: number) {
         this.userService.sendRequestDeleteUserDevice(device_id).subscribe(async (res: IRespuestaApiSIUSingle) => {
             this.getUserDevices();
-            this.utilsService.showToast('Dispositivo eliminado Correctamente');
+            this.utilsService.showToast({message: 'Dispositivo eliminado Correctamente'});
         }, (err: HttpErrorResponse) => {
-            this.utilsService.showToast('Ocurrio un error al desconectar el dispositivo :( ');
+            this.utilsService.showToast({message: 'Ocurrio un error al desconectar el dispositivo'});
             if (err.error instanceof Error) {
                 console.log("Client-side error", err);
             } else {
@@ -203,9 +182,9 @@ export class UserProfilePage implements OnInit {
     removeSocialProfileToUser(social_profile_id) {
         this.userService.sendRequestDeleteSocialProfile(social_profile_id).subscribe(async (res: IRespuestaApiSIUSingle) => {
             this.getUserSocialProfiles();
-            this.utilsService.showToast('Perfil Social fue desconectado correctamente');
+            this.utilsService.showToast({message: 'Perfil Social fue desconectado correctamente'});
         },(err: HttpErrorResponse) => {
-            this.utilsService.showToast('El Perfil Social no se pudo desconectar');
+            this.utilsService.showToast({message: 'El Perfil Social no se pudo desconectar'});
             if (err.error instanceof Error) {
                 console.log("Client-side error", err);
             } else {

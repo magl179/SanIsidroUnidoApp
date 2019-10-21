@@ -31,13 +31,13 @@ export class UtilsService implements OnInit {
         if (this.platform.is('cordova')) {
             this.photoViewer.show(url, title, { share });
         } else {
-            this.showToast('Cordova no disponible');
+            this.showToast({message: 'Cordova no disponible'});
         }
     }
     
     //Abrir el navegador
     openInBrowser(url: string) {
-        const navegador = this.iab.create(url, '_system');
+        this.iab.create(url, '_system');
     }
 
     //Obtener la fecha formateada con MomentJS
@@ -84,30 +84,31 @@ export class UtilsService implements OnInit {
                     console.log('Compartido Correctamente');
                 }).catch(err => {
                     console.log('Error al compartir');
-                    this.showToast('No se pudo compartir');
+                    this.showToast({message: 'No se pudo compartir'});
                 });
             } else {
                 console.log('Tu dispositivo no soporta la función de compartir');
-                await this.showToast('Tu dispositivo no soporta la función de compartir');
+                await this.showToast({message: 'Tu dispositivo no soporta la función de compartir'});
             }
         }
     }
    
     //Crear un toast
-    async showToast(message?: string, duration?: number, position?: any, color?: string, cssClass?: string) {
-        const toast: ToastOptions = {
-            animated: true,
-            message: message || 'Test Message Toast',
-            duration: duration || 1000,
-            color: color || 'dark',
-            cssClass: cssClass || '',
-            position: position || 'top'
-        }
-        const toastItem = await this.toastCtrl.create(toast);
+    async showToast(toastObj: ToastOptions) {
+        const toastDefault = {
+            animated : true,
+            message : 'Notificación de Prueba',
+            duration: 2000,
+            color: 'dark',
+            cssClass: '',
+            position: 'top'
+        };
+        const new_toast = Object.assign(toastDefault, toastObj);
+        const toastItem = await this.toastCtrl.create(new_toast);
         toastItem.present();
     }
     //crear un loading
-    async createBasicLoading(message: string = 'Cargando') {
+    async createBasicLoading(message = 'Cargando') {
         const basicloading = await this.loadingCtrl.create({ message });
         return basicloading;
     }

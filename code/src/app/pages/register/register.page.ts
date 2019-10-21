@@ -19,16 +19,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class RegisterPage implements OnInit {
 
-    // @ViewChild('passwordEyeRegister') passwordEye;
     @ViewChild('passwordEyeRegister', { read: ElementRef }) passwordEye: ElementRef;
     passwordTypeInput = 'password';
     registerForm: FormGroup;
     errorMessages = null;
     appNetworkConnection = false;
-    // loginData = {
-    //     token: null,
-    //     user: null
-    // };
 
     constructor(
         private navCtrl: NavController,
@@ -91,7 +86,7 @@ export class RegisterPage implements OnInit {
         ).subscribe(async res => {
             await this.manageRegister({ provider: 'formulario', email, password }, res);
         }, (err: HttpErrorResponse) => {
-            this.utilsService.showToast(manageErrorHTTP(err, 'Ocurrio un error al completar el registro'));
+            this.utilsService.showToast({message: manageErrorHTTP(err, 'Ocurrio un error al completar el registro')});
         });
     }
     //Function para registrar usuario con Facebook
@@ -103,11 +98,11 @@ export class RegisterPage implements OnInit {
                 this.authService.register(user).subscribe(async res => {
                     await this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'facebook' }, res);
                 }, (err: HttpErrorResponse) => {
-                    this.utilsService.showToast(manageErrorHTTP(err, 'Ocurrio un error en el registro, intentalo más tarde'));
+                    this.utilsService.showToast({message: manageErrorHTTP(err, 'Ocurrio un error en el registro, intentalo más tarde')});
                 });
             }
         }, (err: HttpErrorResponse) => {
-            this.utilsService.showToast(manageErrorHTTP(err, 'Fallo la conexión con Facebook'));
+            this.utilsService.showToast({message: manageErrorHTTP(err, 'Fallo la conexión con Facebook')});
         });
     }
     // Función para registrar al usuario con Google
@@ -119,11 +114,11 @@ export class RegisterPage implements OnInit {
                 this.authService.register(user).subscribe(async res => {
                     await this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'google' }, res);
                 }, (err: HttpErrorResponse) => {
-                    this.utilsService.showToast(manageErrorHTTP(err, 'No se pudo completar el registro, intentalo mas tarde'));
+                    this.utilsService.showToast({message: manageErrorHTTP(err, 'No se pudo completar el registro, intentalo mas tarde')});
                 });
             }
         }, (err: HttpErrorResponse) => {
-            this.utilsService.showToast(manageErrorHTTP(err, 'Fallo la conexión con Google'));
+            this.utilsService.showToast({message: manageErrorHTTP(err, 'Fallo la conexión con Google')});
         });
     }
 
@@ -152,9 +147,6 @@ export class RegisterPage implements OnInit {
             Validators.minLength(validations.password.minlength)
             // Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,20}$/)
         ]));
-        // const termconditions = new FormControl(false, Validators.compose([
-        //     CheckboxValidator.isChecked, Validators.required
-        // ]));
         // Añado Propiedades al Forms
         this.registerForm = this.formBuilder.group({ firstname, lastname, email, password });
         // Cargo Mensajes de Validaciones

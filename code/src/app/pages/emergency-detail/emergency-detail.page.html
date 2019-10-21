@@ -84,7 +84,7 @@
                 <div class="map-container" *ngIf="emergency.ubication">
                     <h4 class="map-title title-section">Ubicación</h4>
                     <simple-map classMap="emergency-map" idMap="emergency-map-detail-{{id}}"
-                        [coordsMap]="emergency.ubication" [zoom]="16">
+                        [coordsMap]="emergency.ubication" [zoom]="16" [enableGesture]="true">
                     </simple-map>
                 </div>
                 <div class="image-gallery-container"

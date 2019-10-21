@@ -75,7 +75,6 @@ export class EventsPage implements OnInit, OnDestroy {
     toggleAssistance(assistance: boolean, id: number) {
         if (assistance) {
             this.postService.sendDeleteDetailToPost(id).subscribe(res => {
-                console.log('detalle eliminado correctamente');
                 this.eventsList.forEach(event => {
                     if (event.id == id) {
                         event.postAssistance = false;
@@ -83,7 +82,7 @@ export class EventsPage implements OnInit, OnDestroy {
                 });
             }, err => {
                 console.log('detalle no se pudo eliminar', err);
-                this.utilsService.showToast('La asistencia no pudo ser eliminada');
+                this.utilsService.showToast({message: 'La asistencia no pudo ser eliminada'});
             });
         } else {
             const detailInfo = {
@@ -91,8 +90,7 @@ export class EventsPage implements OnInit, OnDestroy {
                 user_id: this.AuthUser.id,
                 post_id: id
             }
-            this.postService.sendCreateDetailToPost(detailInfo).subscribe(res => {
-                console.log('detalle creado correctamente');
+            this.postService.sendCreateDetailToPost(detailInfo).subscribe((res: any) => {
                 this.eventsList.forEach(event => {
                     if (event.id == id) {
                         event.postAssistance = true;
@@ -100,7 +98,7 @@ export class EventsPage implements OnInit, OnDestroy {
                 });
             }, err => {
                 console.log('detalle no se pudo crear', err);
-                this.utilsService.showToast('No se pudo eliminar la asistencia');
+                this.utilsService.showToast({message: 'No se pudo crear la asistencia'});
             });
         }
     }

@@ -51,14 +51,14 @@ export class EditProfilePage implements OnInit {
             const token_decoded = decodeToken(token);
             this.authService.saveUserInfo(token, token_decoded);
             this.authService.saveLocalStorageInfo(token, token_decoded);
-            this.utilsService.showToast('Datos Actualizados Correctamente');
+            this.utilsService.showToast({message: 'Datos Actualizados Correctamente'});
         },(err: HttpErrorResponse) => {
             if (err.error instanceof Error) {
                 console.log("Client-side error", err);
             } else {
                 console.log("Server-side error", err);
             }
-            this.utilsService.showToast('Los datos no se pudieron actualizar');
+            this.utilsService.showToast({message: 'Los datos no se pudieron actualizar'});
         });
     }
 

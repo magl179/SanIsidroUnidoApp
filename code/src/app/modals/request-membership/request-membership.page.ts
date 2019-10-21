@@ -40,20 +40,19 @@ export class RequestMembershipPage implements OnInit {
     }
 
     sendRequestMembership() {
-        // alert(JSON.stringify(this.publicServiceImg));
         this.userService.sendRequestUserMembership(this.publicServiceImg[0]).subscribe(async (res: IRespuestaApiSIUSingle) => {
             const token = res.data.token;
             const token_decoded = decodeToken(token);
             this.authService.saveUserInfo(token, token_decoded);
             this.authService.saveLocalStorageInfo(token, token_decoded);
-            this.utilsService.showToast('Solicitud Enviada Correctamente');
+            this.utilsService.showToast({message: 'Solicitud Enviada Correctamente'});
         },(err: HttpErrorResponse) => {
             if (err.error instanceof Error) {
                 console.log("Client-side error", err);
             } else {
                 console.log("Server-side error", err);
             }
-            this.utilsService.showToast('La solicitud no ha podido ser enviada');
+            this.utilsService.showToast({message: 'La solicitud no ha podido ser enviada'});
         });
     }
 

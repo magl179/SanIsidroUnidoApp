@@ -146,6 +146,23 @@ export const mapUser = (user: any) => {
     return user;
 }
 
+export const manageTwoFingerDrag = (event: any) => {
+    console.warn('event map target', event);
+    console.dir('current target map', event.currentTarget);
+    if (event.type === 'touchstart' && event.touches.length === 1) {
+      event.currentTarget.classList.add('swiping')
+    } else {
+        event.currentTarget.classList.remove('swiping');
+    }
+  }
+
+export const MapNotification = (notification: any) => {
+    if (notification && notification.user) {
+        notification.user = mapUser(notification.user);
+    }
+    return notification;
+}
+
 //Función Obtener Backgound
 export const getBackgroundApp = (image_url: string) => {
     return `linear-gradient(rgba(2, 2, 2, 0.58), rgba(2, 2, 2, 0.58)), url(${image_url})`;
@@ -226,7 +243,7 @@ export const getImagesPost = ($imagesArray: any[]) => {
     }
 }
 
-export const manageErrorHTTP = (err: HttpErrorResponse, defaultMessage = "Ocurrio un error, intentalo más tarde") => {
+export const manageErrorHTTP = (err: HttpErrorResponse, defaultMessage = "Ocurrio un error, intentalo más tarde"): string => {
     if (err.error instanceof Error) {
         console.log("Client-side error", err);
     } else {

@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { UtilsService } from 'src/app/services/utils.service';
 import { Platform } from '@ionic/angular';
-// import { WebView } from '@ionic-native/ionic-webview/ngx';
 
 const cameraOptions: CameraOptions = {
     quality: 75,
@@ -18,34 +17,24 @@ const cameraOptions: CameraOptions = {
     styleUrls: ['./upload-image.component.scss'],
 })
 export class UploadImageComponent implements OnInit {
-
-    // uploadedImages = [];
-    imagenB64: string;
-    imagejpg: string;
     
-
     @Input() maxImages = 3;
-    // @Input() type = 'base64'; 
     @Input() uploadedImages = [];
     @Output() returnUploadedImages = new EventEmitter();
+    imagenB64: string;
+    imagejpg: string;  
+
 
     constructor(
         private camera: Camera,
         private utilsService: UtilsService,
         private platform: Platform
-    ) { 
-        // this.uploadedImages = Array(this.maxImages).fill().map(() => Math.round(Math.random() * 40));
-        // console.log('component upload_img', this.uploadedImages);
-    }
+    ) { }
 
     ngOnInit() {
-        // cameraOptions.destinationType = this.camera.DestinationType.DATA_URL;
         cameraOptions.destinationType = this.camera.DestinationType.DATA_URL;
         cameraOptions.encodingType = this.camera.EncodingType.JPEG;
         cameraOptions.mediaType = this.camera.MediaType.PICTURE;
-        // cameraOptions.destinationType = this.camera.DestinationType.FILE_URI;
-        // cameraOptions.encodingType = this.camera.EncodingType.JPEG;
-        // cameraOptions.mediaType = this.camera.MediaType.PICTURE;
     }
 
     async getUploadedImages() {
@@ -60,7 +49,7 @@ export class UploadImageComponent implements OnInit {
         if (this.uploadedImages.length < this.maxImages) {
             this.uploadImage();
         } else {
-            this.utilsService.showToast('Ya no puedes subir más imagenes', 1500);
+            this.utilsService.showToast({message: 'Ya no puedes subir más imagenes'});
         }
     }
 
@@ -74,11 +63,11 @@ export class UploadImageComponent implements OnInit {
         if (this.uploadedImages.length < this.maxImages) {
             this.uploadImage();
         } else {
-            this.utilsService.showToast('Ya no puedes subir más imagenes', 1500);
+            this.utilsService.showToast({message: 'Ya no puedes subir más imagenes'});
         }
     }
 
-    deleteImage(pos) {
+    deleteImage(pos: any) {
         this.uploadedImages.splice(pos, 1);
     }
 
@@ -95,10 +84,9 @@ export class UploadImageComponent implements OnInit {
                     });
             if (this.uploadedImages.length >= 1) {
                 this.getUploadedImages();
-                // this.utilsService.showToast('Imagenes Enviadas al Padre', 1500);
             }
         } else {
-            this.utilsService.showToast('Cordova no esta disponible', 1500);
+            this.utilsService.showToast({message: 'Cordova no esta disponible'});
         }
 
     }

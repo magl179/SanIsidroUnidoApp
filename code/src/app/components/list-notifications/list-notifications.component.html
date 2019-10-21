@@ -7,7 +7,7 @@
         <ng-container *ngIf="notificationsRequested && notificationsRequested.length > 0">
             <ion-item [lines]="getLinesState(i)" *ngFor="let noti of notificationsRequested; let i = index;" (click)="manageNoti(noti)">
                 <ion-avatar slot="start" *ngIf="noti.user">
-                    <img [src]="getImageURL(noti.user.avatar) || 'http://cmauriflama.sp.gov.br/app/webroot/img/avatar-user.png' ">
+                    <img [src]="noti.user.avatar">
                 </ion-avatar>
                 <ion-label class="notifications_description">
                     <h2 class="title">{{noti.title}}</h2>

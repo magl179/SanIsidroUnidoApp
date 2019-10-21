@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MenuController, NavController } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { ISlideTutorial } from 'src/app/interfaces/models';
 import { UtilsService } from "src/app/services/utils.service";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
     selector: 'app-tutorial',
@@ -12,26 +13,23 @@ import { UtilsService } from "src/app/services/utils.service";
 export class TutorialPage implements OnInit {
 
     @ViewChild('tutorialSlider') tutorialSlider: any;
-
     smSlidesOpts: {
         loop: true
     };
-
     slides: ISlideTutorial[] = [];
 
     constructor(
-        private menuCtrl: MenuController,
         private navCtrl: NavController,
         public utilsService: UtilsService,
         private localDataService: LocalDataService) { }
 
     async ngOnInit() {
         this.localDataService.getTutoSlides().subscribe(
-            res => {
+            (res: any) => {
                 this.slides = res;
-            }, err => {
+            }, (err: HttpErrorResponse) => {
                 console.log('Error al traer las opciones del tutorial');
-                this.utilsService.showToast('No se pudieron cargar las opciones del tutorial');
+                this.utilsService.showToast({message: 'No se pudieron cargar las opciones del tutorial'});
             }
         );
         await this.utilsService.disabledMenu();
@@ -70,7 +68,4 @@ export class TutorialPage implements OnInit {
     getBackgroundApp(image_url: string) {
         return `linear-gradient(rgba(2, 2, 2, 0.58), rgba(2, 2, 2, 0.58)), url(${image_url})`;
     }
-
-
-
 }

@@ -21,12 +21,9 @@ import { EventsService } from "src/app/services/events.service";
 export class SocialProblemCreatePage implements OnInit {
 
     currentStep = 1;
-    // fullFormIsValid = false;
-    // appNetworkConnection = false;
     socialProblemForm: FormGroup;
     ubicationForm: FormGroup;
-    errorMessages = null;
- 
+    errorMessages = null; 
     socialProblemFormStage = [
         { title: 'Paso 1' }, { title: 'Paso 2' },
         { title: 'Paso 3' }, { title: 'Paso 4' }
@@ -92,25 +89,18 @@ export class SocialProblemCreatePage implements OnInit {
     async sendSocialProblem() {
         
         if (this.socialProblemForm.valid !== true) {
-            await this.utilsService.showToast('Ingresa un titulo y una descripción', 2500);
+            await this.utilsService.showToast({message: 'Ingresa un titulo y una descripción'});
             return;
         }
         if (this.ubicationForm.valid !== true) {
-            await this.utilsService.showToast('Ingresa una descripción de tu ubicación', 2500);
+            await this.utilsService.showToast({message: 'Ingresa una descripción de tu ubicación'});
             return;
         }
         if (this.socialProblemCoordinate.address === null || this.socialProblemCoordinate.address === null) {
-            await this.utilsService.showToast('No se pudo obtener tu ubicación', 2500);
+            await this.utilsService.showToast({message: 'No se pudo obtener tu ubicación'});
             return;
         }
-        // if (this.socialProblemImages.length === 0) {
-        //     await this.utilsService.showToast('Sube alguna imagen por favor', 2500);
-        //     return;
-        // }
-        if (this.socialProblemImages.length === 0) {
-            await this.utilsService.showToast('No has enviado imagenes al reporte', 200);
-            // return;
-        }
+        if (this.socialProblemImages.length === 0) {}
 
         const loadingReportSocialProblem = await this.utilsService.createBasicLoading('Enviando Reporte');
 
@@ -125,17 +115,16 @@ export class SocialProblemCreatePage implements OnInit {
             subcategory_id: this.socialProblemForm.value.subcategory,
             ubication
         };
-        // await this.utilsService.showToast('Post Problema Social Valido', 2500);
         this.postService.sendSocialProblemReport(socialProblem).pipe(
             finalize(() => {
                 loadingReportSocialProblem.dismiss()
             })
         ).subscribe(async res => {
-            await this.utilsService.showToast("El Reporte fue enviado correctamente");
+            await this.utilsService.showToast({message: "El Reporte fue enviado correctamente"});
             this.events_app.resetSocialProblemEmmiter();
             this.router.navigate(['/social-problems'])
         }, (err: HttpErrorResponse) => {
-            this.utilsService.showToast('Ocurrio un error al enviar el reporte');
+                this.utilsService.showToast({ message: 'Ocurrio un error al enviar el reporte' });
             if (err.error instanceof Error) {
                 console.log("Client-side error", err);
             } else {
@@ -177,7 +166,7 @@ export class SocialProblemCreatePage implements OnInit {
         this.nextStep();
     }
 
-    updateMapCoordinate(event) {
+    updateMapCoordinate(event: any) {
         console.log({ datosHijo: event });
         if (event.lat !== null && event.lng !== null) {
             this.socialProblemCoordinate.latitude = event.latitude;
@@ -196,7 +185,6 @@ export class SocialProblemCreatePage implements OnInit {
             lng: longitud,
             zoom: 14
         }).subscribe(direccion => {
-            console.log({ add: direccion });
             this.socialProblemCoordinate.address = direccion.display_name;
         },(err: HttpErrorResponse) => {
             if (err.error instanceof Error) {
@@ -204,7 +192,7 @@ export class SocialProblemCreatePage implements OnInit {
             } else {
                 console.log("Server-side error", err);
             }
-            this.utilsService.showToast('No se pudo obtener la dirección de tu ubicación');
+            this.utilsService.showToast({message: 'No se pudo obtener la dirección de tu ubicación'});
         });
     }
 

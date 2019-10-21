@@ -39,14 +39,14 @@ export class ChangeProfileImagePage implements OnInit {
             const token_decoded = decodeToken(token);
             this.authService.saveUserInfo(token, token_decoded);
             this.authService.saveLocalStorageInfo(token, token_decoded);
-            this.utilsService.showToast('Imagen Actualizada Correctamente');
+            this.utilsService.showToast({message: 'Imagen Actualizada Correctamente'});
         },(err: HttpErrorResponse) => {
             if (err.error instanceof Error) {
                 console.log("Client-side error", err);
             } else {
                 console.log("Server-side error", err);
             }
-            this.utilsService.showToast('Imagen no ha podido ser actualizada');
+            this.utilsService.showToast({message: 'Imagen no ha podido ser actualizada'});
         });
     }
 

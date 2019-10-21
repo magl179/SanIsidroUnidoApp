@@ -1,14 +1,10 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { ModalController, NavParams } from '@ionic/angular';
-import { IBasicFilter } from 'src/app/interfaces/models';
 import { PostsService } from "src/app/services/posts.service";
 import { finalize } from 'rxjs/operators';
 import { HttpErrorResponse } from "@angular/common/http";
 import { UtilsService } from "../../services/utils.service";
 import { manageErrorHTTP } from "../../helpers/utils";
-
-
-
 
 @Component({
     selector: 'modal-filter',
@@ -35,44 +31,31 @@ export class FilterPage implements OnInit {
         this.defaulText = (this.navParams.data.defaulText) ? this.navParams.data.defaulText : 'Todas';
         this.data = this.navParams.data.data;
         this.filters = this.navParams.data.filters;
-        // this.dataFiltered.push(...this.data);
         this.filterInApi = (this.navParams.data.filterInApi) ? this.navParams.data.filterInApi : false;
         this.postTypeSlug = (this.navParams.data.postTypeSlug) ? this.navParams.data.postTypeSlug : null;
-        // this.filtersToApply = (this.navParams.data.filtersToApply) ? this.navParams.data.filtersToApply : {};
-        console.log('Filter params received', this.navParams);
     }
 
     ngOnInit() { 
         for (var key in this.filters) {
-            // console.log('key', key)
-            // console.log('value', this.filters[key].value)
             if (this.filters[key].value !== "") {   
                 this.filtersToApply[key] = this.filters[key].value;  
             }
-            // this.manageFilter(this.filters[key].value, key);
         }
         this.dataFiltered = this.getDataFiltered(this.data, this.filtersToApply);
-        // console.log('filters to appl')
     }
 
     applyFilterSelect(event: any, type: any) {
         const value = event.detail.value;
-        // console.log('select value', value)
-        // console.log('select type', type)
         this.manageFilter(value, type);
         this.dataFiltered = this.getDataFiltered(this.data, this.filtersToApply);
     }
     applyFilterSegment(event: any, type: any) {
         const value = (event.detail.value !== "") ? Number(event.detail.value): "";
-        // console.log('segment value', value)
-        // console.log('segment type', type)
         this.manageFilter(value, type);
         this.dataFiltered = this.getDataFiltered(this.data, this.filtersToApply);
     }
     applyFilterRadio(event: any, type: any) {
         const value = event.detail.value;
-        // console.log('radio value', value)
-        // console.log('radio type', type)
         this.manageFilter(value, type);
         this.dataFiltered = this.getDataFiltered(this.data, this.filtersToApply);
     }
@@ -90,9 +73,6 @@ export class FilterPage implements OnInit {
 
     manageFilter(value: any, type: any) {
         for (const prop in this.filters) {
-            // console.log('manage filter', this.filters);
-            // console.log('manage prop', prop);
-            // console.log('manage filters apply', this.filtersToApply);
             if (prop === type) {
                 this.filters[prop].value = value;
                 if (value === "") {
@@ -102,7 +82,6 @@ export class FilterPage implements OnInit {
                 }
             }
         }
-        // console.log('filters apply madeit', this.filtersToApply)
     }
 
     getDataFiltered(items: any[], filter: { [key: string]: any }) {
@@ -129,7 +108,7 @@ export class FilterPage implements OnInit {
                     console.log(`Hay ${this.dataFiltered.length} coincidencias`);
                 }
             }, (err: HttpErrorResponse) => {
-                    this.utilsService.showToast(manageErrorHTTP(err, 'Ocurrio un error al filtrar los datos'));
+                    this.utilsService.showToast({message: manageErrorHTTP(err, 'Ocurrio un error al filtrar los datos')});
             });
         }
         console.log('items was filtered', itemsFiltered);

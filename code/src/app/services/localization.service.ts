@@ -33,7 +33,6 @@ export class LocalizationService {
     async getCoordinate() {
         try {
             if (this.platform.is('cordova')) {
-                console.log('call before get coordinate');
                 await this.checkGPSPermissions();
             } else {
                 if (navigator.geolocation) {
@@ -47,7 +46,7 @@ export class LocalizationService {
             return this.misCoordenadas;
         } catch (err) {
             console.log('Error: ', err);
-            this.utilsService.showToast('Error al obtener la geolocalizacion' + err);
+            this.utilsService.showToast({message: 'Ocurrio un error al obtener la geolocalizacion'});
         }
     }
 
@@ -58,15 +57,13 @@ export class LocalizationService {
                     if (result.hasPermission) {
                         // Pedir encender GPS
                         await this.askTurnOnGPS();
-                        console.log('pedir encender gps');
                     } else {
                         // Pedir Permiso GPS
                         await this.requestGPSPermission();
-                        console.log('obtener permisos gps');
                     }
                 },
-                err => {
-                    this.utilsService.showToast('Fallo obtener los permisos de GPS');
+                (err: any) => {
+                    this.utilsService.showToast({message: 'No se pudo obtener los permisos de GPS'});
                     console.log(err);
                 }
             );
@@ -86,10 +83,9 @@ export class LocalizationService {
                         async () => {
                             // Metodo Encender GPS
                             await this.askTurnOnGPS();
-                            console.log('pedir encender gps');
                         },
-                        err => {
-                            this.utilsService.showToast('Error al pedir permisos al GPS: ');
+                        (err: any) => {
+                            this.utilsService.showToast({message: 'Ocurrio un error al solicitar los permisos del GPS: '});
                             console.log(err);
                         }
                     );
@@ -97,22 +93,19 @@ export class LocalizationService {
         });
     }
 
+    //Solicitar al usuario que encienda el GPS
     async askTurnOnGPS() {
         return await this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
             async () => {
-                // When GPS Turned ON call method to get Accurate location coordinates
-                console.log('You can request ubication');
                 const currentCoords = await this.geolocation.getCurrentPosition();
-                console.log('call after get coordinate');
                 if (currentCoords) {
                     this.misCoordenadas.latitude = currentCoords.coords.latitude;
                     this.misCoordenadas.longitude = currentCoords.coords.longitude;
-                    console.log('coordenadas obtenidas');
                 }
                 return;
             },
-            err => {
-                this.utilsService.showToast('Error al Obtener los Permisos de Localización');
+            (err: any) => {
+                this.utilsService.showToast({message: 'Ocurrio un error al obtener los permisos de Localización'});
                 console.log(err);
             }
         );

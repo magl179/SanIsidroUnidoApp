@@ -23,18 +23,11 @@ import { EventsService } from 'src/app/services/events.service';
 })
 export class EventDetailPage implements OnInit {
 
-    eventsAppSubscriptions = {};
     id: string;
     eventLoaded = false;
     appNetworkConnection = false;
     AuthUser = null;
     event: IEvent = null;
-
-    // mapPoints: ISimpleUbicationItem = {
-    //     latitude: 0.0456696,
-    //     longitude: -78.14502999999999,
-    //     title: 'Ubicación del Evento'
-    // };
 
     constructor(
         private route: ActivatedRoute,
@@ -46,7 +39,6 @@ export class EventDetailPage implements OnInit {
 
     ngOnInit() {
         this.id = this.route.snapshot.paramMap.get('id');
-        // console.log('ID RECIBIDO:', this.id);
         this.authService.sessionAuthUser.subscribe(token_decoded => {
             if (token_decoded && token_decoded.user) {
                 this.AuthUser = token_decoded.user;
@@ -77,7 +69,6 @@ export class EventDetailPage implements OnInit {
                 }
             }
             console.log('evento mapeado', this.event);
-
         },(err: HttpErrorResponse) => {
             if (err.error instanceof Error) {
                 console.log("Client-side error", err);
@@ -86,12 +77,6 @@ export class EventDetailPage implements OnInit {
             }
         });
     }
-
-    getFullDate(date, time) {
-        const fulldate = `${date} ${time}`;
-        return fulldate;
-    }
-
 
     checkLikePost($details: any) {
         if ($details && $details.length > 0) {
@@ -108,12 +93,11 @@ export class EventDetailPage implements OnInit {
         console.log((assistance) ? 'quitar assistencia' : 'dar asistencia');
         if (assistance) {
             this.postService.sendDeleteDetailToPost(this.event.id).subscribe(res => {
-                console.log('detalle eliminado correctamente');
                 this.event.postAssistance = false;
                 this.emitAssistanceEvent();
             }, err => {
                 console.log('detalle no se pudo eliminar', err);
-                this.utilsService.showToast('La asistencia no ha podido ser eliminada');
+                this.utilsService.showToast({message: 'La asistencia no ha podido ser eliminada'});
             });
         } else {
             const detailInfo = {
@@ -122,13 +106,11 @@ export class EventDetailPage implements OnInit {
                 post_id: this.event.id
             }
             this.postService.sendCreateDetailToPost(detailInfo).subscribe(res => {
-                console.log('detalle creado correctamente');
-                // this.getEvent();
                 this.event.postAssistance = true;
                 this.emitAssistanceEvent();
             }, err => {
                 console.log('detalle no se pudo crear', err);
-                this.utilsService.showToast('No se pudo guardar la asistencia');
+                this.utilsService.showToast({message: 'No se pudo guardar la asistencia'});
             });
         }
     }
@@ -145,10 +127,6 @@ export class EventDetailPage implements OnInit {
             url: ''
         };
         await this.utilsService.shareSocial(sharePost);
-    }
-
-    getBGCover(image_cover: string) {
-        return `linear-gradient(to bottom, rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.23)), url('${image_cover}')`;
     }
 
     getImages($imagesArray) {
@@ -172,13 +150,10 @@ export class EventDetailPage implements OnInit {
             }
         });
         await modal.present();
-        // if
     }
 
     seeImageDetail(image: string) {
         console.log('see image', image)
         this.utilsService.seeImageDetail(image, 'Imagen Evento');
     }
-
 }
-//

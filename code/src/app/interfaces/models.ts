@@ -271,6 +271,7 @@ interface IRoleUser {
 export interface IUbication {
     latitude: number;
     longitude: number;
+    altitude?: number;
     address: string;
     description?: string;
 }
@@ -359,50 +360,7 @@ export interface IUserDecoded {
     updated_at: string;
 }
 
-// interface ISocialProfileUser {
-//     created_at: string;
-//     id: number;
-//     provider: string;
-//     social_id: string;
-//     updated_at?: any;
-//     user_id: number;
-// }
-
-// interface Role {
-//     created_at: string;
-//     description: string;
-//     id: number;
-//     mobile_app: number;
-//     name: string;
-//     role_user: Roleuser;
-//     slug: string;
-//     updated_at: string;
-// }
-
-// interface Roleuser {
-//     created_at: string;
-//     role_id: number;
-//     state: number;
-//     updated_at: string;
-//     user_id: number;
-// }
-
-// interface Device {
-//     created_at: string;
-//     description: string;
-//     id: number;
-//     phone_id: string;
-//     phone_model: string;
-//     updated_at: string;
-//     user_id: number;
-// }
 export interface INotiPostOpen {
     type: "string";
     id: number;
 }
-
-// export const USER_DEVICE_DEFAULT: IPhoneUser = {
-//     phone_id: '',
-//     phone_model: '',
-//     phone_platform: ''
-// };

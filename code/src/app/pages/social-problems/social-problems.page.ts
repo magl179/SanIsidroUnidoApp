@@ -73,9 +73,9 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
                 this.AuthUser = token_decoded.user;
             }
         },
-            err => {
+            (err: any) => {
                 console.log('Error al traer la informacion del usuario', err);
-                this.utilsService.showToast('No se pudieron cargar la información del usuario');
+                this.utilsService.showToast({message: 'No se pudieron cargar la información del usuario'});
             });
         this.loadSocialProblems();
         this.events_app.socialProblemEmitter.subscribe((event_app: any) => {
@@ -128,9 +128,9 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
                         social_problem.postLiked = false;
                     }
                 });
-            }, err => {
+            }, (err: any) => {
                 console.log('detalle no se pudo eliminar', err);
-                this.utilsService.showToast('No se pudo eliminar el like');
+                this.utilsService.showToast({message: 'No se pudo guardar tu dislike'});
             });
         } else {
             const detailInfo = {
@@ -145,9 +145,9 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
                         social_problem.postLiked = true;
                     }
                 });
-            }, err => {
+            }, (err: any) => {
                 console.log('detalle no se pudo crear', err);
-                this.utilsService.showToast('No se pudo dar like');
+                this.utilsService.showToast({message: 'No se pudo guardar tu like'});
             });
         }
     }
@@ -163,7 +163,6 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
                         social_problem = mapSocialProblem(social_problem);
                     });
                 }
-                console.log('res maped', res.data.data);
                 return res;
             }),
             finalize(() => {
@@ -280,8 +279,6 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
             }
         });
         //Obtener datos popover cuando se vaya a cerrar
-        // modal.onDidDismiss().then((dataReturned: any) => {
-        // });
         await modal.present();
     }
 

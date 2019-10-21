@@ -91,8 +91,8 @@
 
                 <div class="map-container" *ngIf="event.ubication">
                     <p class="map-title">Ubicación</p>
-                    <simple-map classMap="event-map-detail map-center"
-                        idMap="eventMap-detail-{{id}}" [coordsMap]="event.ubication" [zoom]="16">
+                    <simple-map class="event-map-detail map-center map-touch"
+                        idMap="eventMap-detail-{{id}}" [coordsMap]="event.ubication" [zoom]="16" [enableGesture]="true">
                     </simple-map>
                 </div>
                 <div class="image-gallery-container"

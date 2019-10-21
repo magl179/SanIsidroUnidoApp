@@ -8,8 +8,7 @@ import { AuthService } from './auth.service';
 import { UtilsService } from './utils.service';
 import { IPhoneUser } from 'src/app/interfaces/models';
 import { Device } from '@ionic-native/device/ngx';
-import { IRespuestaApiSIUSingle, INotiPostOpen } from "src/app/interfaces/models";
-import { decodeToken} from 'src/app/helpers/auth-helper';
+import { INotiPostOpen } from "src/app/interfaces/models";
 
 
 const USER_DEVICE_DEFAULT: IPhoneUser = {
@@ -17,7 +16,6 @@ const USER_DEVICE_DEFAULT: IPhoneUser = {
     phone_model: '',
     phone_platform: ''
 };
-
 
 @Injectable({
     providedIn: 'root'
@@ -91,10 +89,9 @@ export class NotificationsService {
             };
             this.userService.sendRequestAddUserDevice(data)
                 .subscribe(async (res: any) => {
-                    // const token = res.data.token;
-                    this.utilsService.showToast('Dispositivo Añadido Correctamente');
+                    this.utilsService.showToast({message: 'Dispositivo Añadido Correctamente'});
                 }, (err: any) => {
-                    this.utilsService.showToast('Ocurrio un error al añadir el dispositivo');
+                    this.utilsService.showToast({message: 'Ocurrio un error al añadir el dispositivo'});
                     console.log('Ocurrio un error al añadir el dispositivo', err);
                 });
         }

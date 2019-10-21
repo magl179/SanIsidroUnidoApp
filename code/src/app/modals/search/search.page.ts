@@ -13,58 +13,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class SearchPage implements OnInit {
 
     searchIdeas = ['ferguson', 'Manual', 'Byron', 'Calderon', 'Lolita'];
-    // itemsSearchAvalaible2 = [
-    //     {
-    //         "id": 7,
-    //         "email": "michael.lawson@reqres.in",
-    //         "first_name": "Alfreds Futterkiste",
-    //         "last_name": "Lawson",
-    //         "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/follettkyle/128.jpg"
-    //     },
-    //     {
-    //         "id": 8,
-    //         "email": "lindsay.ferguson@reqres.in",
-    //         "first_name": "Ana Trujillo Emparedados y helados",
-    //         "last_name": "Ferguson",
-    //         "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/araa3185/128.jpg"
-    //     },
-    //     {
-    //         "id": 9,
-    //         "email": "tobias.funke@reqres.in",
-    //         "first_name": "Berglunds snabbköp",
-    //         "last_name": "Funke",
-    //         "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/vivekprvr/128.jpg"
-    //     },
-    //     {
-    //         "id": 10,
-    //         "email": "byron.fields@reqres.in",
-    //         "first_name": "Blauer See Delikatessen",
-    //         "last_name": "Fields",
-    //         "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/russoedu/128.jpg"
-    //     },
-    //     {
-    //         "id": 11,
-    //         "email": "george.edwards@reqres.in",
-    //         "first_name": "Blondel père et fils",
-    //         "last_name": "Edwards",
-    //         "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/mrmoiree/128.jpg"
-    //     },
-    //     {
-    //         "id": 12,
-    //         "email": "rachel.howell@reqres.in",
-    //         "first_name": "Drachenblut Delikatessend",
-    //         "last_name": "Howell",
-    //         "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/hebertialmeida/128.jpg"
-    //     },
-    //     {
-    //         "id": 13,
-    //         "email": "centro.howell@reqres.in",
-    //         "first_name": "Centro comercial Moctezuma Byron",
-    //         "last_name": "catalina",
-    //         "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/hebertialmeida/128.jpg"
-    //     }
-    // ];
-
     routeDetail = null;
     postTypeSlug = null;
     searchInApi = false;
@@ -73,7 +21,6 @@ export class SearchPage implements OnInit {
     searchPlaceholder = '';
     valueToSearch = new BehaviorSubject('');
     itemsSearchAvalaible = [];
-    fieldsToSearch2: any[] = ['title', 'description'];
     fieldsToSearch: any[] = [];
 
     constructor(

@@ -1,12 +1,13 @@
-import { Component, OnInit, Input, AfterViewInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import * as Leaflet from 'leaflet';
 import * as LeafletSearch from 'leaflet-search';
-import { GestureHandling } from 'leaflet-gesture-handling';
 import { MapService } from 'src/app/services/map.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { IPublicService } from 'src/app/interfaces/models';
 import { LocalizationService } from 'src/app/services/localization.service';
 import { environment } from "src/environments/environment";
+import { manageTwoFingerDrag } from 'src/app/helpers/utils';
+import { GestureHandling } from "leaflet-gesture-handling";
 
 @Component({
     selector: 'multiple-map',
@@ -16,6 +17,7 @@ import { environment } from "src/environments/environment";
 export class MultipleMapComponent implements OnInit, AfterViewInit {
 
     @Input() idMap: string;
+    @Input() class = '';
     @Input() zoomMap = 16;
     @Input() mapPoints: IPublicService[] = [];
     @Input() enableGesture = false;
@@ -32,6 +34,7 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
     currentService = null;
     currentCoordinate: any = null;
     mapLoading = null;
+    @ViewChild("multipleMap") mapDOM: ElementRef;
 
     constructor(
         private mapService: MapService,
@@ -71,6 +74,11 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
         this.currentCoordinate = await this.localizationService.getCoordinate();
         // Inicializar el Mapa
         await this.initializeMap();
+        //Mover Mapa con Dos Dedos
+        if (this.enableGesture) {     
+            this.mapDOM.nativeElement.addEventListener("touchstart", manageTwoFingerDrag);
+            this.mapDOM.nativeElement.addEventListener("touchend", manageTwoFingerDrag);
+        }
     }
 
     onTwoFingerDrag(e: any) {
@@ -82,9 +90,8 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
     }
 
     async initializeMap() {
-        // Verificar si se habilita el gesture handling
         if (this.enableGesture) {
-            Leaflet.Map.addInitHook('addHandler', 'gestureHandling', GestureHandling);
+            Leaflet.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
         }
         // Crear el Mapa
         this.map = Leaflet.map(this.idMap, {
@@ -92,7 +99,7 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
             zoomAnimation: true,
             markerZoomAnimation: true,
             zoomControl: true
-        });
+        } as Leaflet.MapOptions);
         // Agregar Evento al Mapa cuando esta cargado
         this.map.on('load', (e: any) => {
             this.mapIsLoaded = true;
@@ -112,19 +119,18 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
             maxZoom: 18,
             updateWhenIdle: true,
             reuseTiles: true
-        }).addTo(this.map);
+        } as Leaflet.LayerOptions).addTo(this.map);
         //Añadir Ruta Polyline
         this.polylineRoute.addTo(this.map);
         // Si obtuve coordenadas añadir el marcador
         if (this.currentCoordinate) {
             const iconCurrent = await this.mapService.getCustomIcon('red');
-            let currentPoint;
+            let currentPoint: any;
+            const iconLatLng = Leaflet.latLng(this.currentCoordinate.latitude, this.currentCoordinate.longitude);
             if (iconCurrent) {
-                // tslint:disable-next-line: max-line-length
-                currentPoint = new Leaflet.Marker(new Leaflet.latLng([this.currentCoordinate.latitude, this.currentCoordinate.longitude]), { icon: iconCurrent, title: 'Mi Posición Actual' });
+                currentPoint = new Leaflet.Marker(iconLatLng, { icon: iconCurrent, title: 'Mi Posición Actual' });
             } else {
-                // tslint:disable-next-line: max-line-length
-                currentPoint = new Leaflet.Marker(new Leaflet.latLng([this.currentCoordinate.latitude, this.currentCoordinate.longitude]), { title: 'Mi Posición Actual' });
+                currentPoint = new Leaflet.Marker(iconLatLng, { title: 'Mi Posición Actual' });
             }
             currentPoint.addTo(this.map).bindPopup('Mi Ubicación').openPopup();
         }
@@ -134,13 +140,11 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
             let punto = null;
             const title = `${point.name}`;
             const markerIcon = await this.mapService.getCustomIcon('green');
+            const leafletLatLng = Leaflet.latLng(point.ubication.latitude, point.ubication.longitude);
             if (markerIcon) {
-                // tslint:disable-next-line: max-line-length
-                punto = new Leaflet.Marker(new Leaflet.latLng(
-                    point.ubication.latitude, point.ubication.longitude), { title, icon: markerIcon, riseOnHover: true });
+                punto = new Leaflet.Marker(leafletLatLng, { title, icon: markerIcon});
             } else {
-                // tslint:disable-next-line: max-line-length
-                punto = new Leaflet.Marker(new Leaflet.latLng(point.ubication.latitude, point.ubication.longitude), { title });
+                punto = new Leaflet.Marker(leafletLatLng, { title });
             }
             // Evento marcador al hacer click para mostrar información
             punto.on('click', (e: any) => { this.showInfo(e); });

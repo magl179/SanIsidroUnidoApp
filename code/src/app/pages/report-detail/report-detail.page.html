@@ -43,23 +43,13 @@
     </div>
     <!-- Datos ya cargados -->
     <div *ngIf="reportLoaded && report">
-        <ion-card class="report-card detail">
+        <div class="report-card detail">
             <!-- <div class="report-cover-image"
                 [style.background-image]="(report.images && report.images.length > 0) ? getBGCover(report.images[0].url) : ''">
             </div> -->
             <ion-card-header class="report-card-header">
                 <ion-card-title class="report-card-title"> {{ report.title }}</ion-card-title>
             </ion-card-header>
-            <ion-card-subtitle class="report-info">
-                <p class="fulldate">
-                    <ion-icon name="calendar"></ion-icon>
-                    {{ report.created_at | simpleBeatifulDate}}
-                </p>
-                <p class="ubication">
-                    <ion-icon name="navigate"></ion-icon>
-                    {{ (report.ubication && report.ubication.address) ? report.ubication.address : 'Direccion no encontrada' }}
-                </p>
-            </ion-card-subtitle>
             <ion-card-content class="report-detail-description">
                 <h2 class="title title-section">Descripción</h2>
                 <p class="post_description">
@@ -82,7 +72,7 @@
                     </figure>
                 </div>
             </div>
-        </ion-card>
+        </div>
     </div>
 
 </ion-content>

@@ -7,14 +7,10 @@ import { IEmergencyReported, IUbication } from 'src/app/interfaces/models';
 import { PostsService } from 'src/app/services/posts.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { finalize } from 'rxjs/operators';
-import { NavController } from '@ionic/angular';
 import { IRespuestaApiSIU } from "src/app/interfaces/models";
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { EventsService } from "../../services/events.service";
-
-
-// type PaneType = 'left' | 'right';
+import { EventsService } from "src/app/services/events.service";
 
 @Component({
     selector: 'app-emergency-create',
@@ -24,10 +20,7 @@ import { EventsService } from "../../services/events.service";
 })
 export class EmergencyCreatePage implements OnInit {
 
-    // appNetworkConnection = false;
     currentStep = 1;
-    // emergencyPostValid = false;
-    // activePane: PaneType = 'left';
     emergencyFormStage = [
         { title: 'Paso 1' }, { title: 'Paso 2' },
         { title: 'Paso 3' }, { title: 'Paso 4' }
@@ -49,7 +42,6 @@ export class EmergencyCreatePage implements OnInit {
         private router: Router,
         private localizationService: LocalizationService,
         private postService: PostsService,
-        private navCtrl: NavController,
         private events_app: EventsService,
         private localDataService: LocalDataService
     ) {
@@ -60,7 +52,6 @@ export class EmergencyCreatePage implements OnInit {
         const coords = await this.localizationService.getCoordinate();
         this.emergencyPostCoordinate.latitude = coords.latitude;
         this.emergencyPostCoordinate.longitude = coords.longitude;
-        // console.log(this.emergencyPostCoordinate);
     }
 
     createForm() {
@@ -82,11 +73,10 @@ export class EmergencyCreatePage implements OnInit {
 
     async getUploadedImages(event) {
         this.emergencyImages = event.total_img;
-        // await this.utilsService.showToast('update emergency images');
 
     }
 
-    deleteImage(pos) {
+    deleteImage(pos: any) {
         this.emergencyImages.splice(pos, 1);
     }
 
@@ -114,7 +104,7 @@ export class EmergencyCreatePage implements OnInit {
         this.nextStep();
     }
 
-    updateMapCoordinate(event) {
+    updateMapCoordinate(event: any) {
         console.log({ datosHijo: event });
         if (event.lat !== null && event.lng !== null) {
             this.emergencyPostCoordinate.latitude = event.latitude;
@@ -140,29 +130,24 @@ export class EmergencyCreatePage implements OnInit {
             } else {
                 console.log("Server-side error", err);
             }
-            this.utilsService.showToast('No se pudo obtener la dirección de tu ubicación');
+            this.utilsService.showToast({message: 'No se pudo obtener la dirección de tu ubicación'});
         });
     }
 
     async sendEmergencyReport() { 
         if (this.emergencyForm.valid !== true) {
-            await this.utilsService.showToast('Ingresa un titulo y una descripción', 2500);
+            await this.utilsService.showToast({ message: 'Ingresa un titulo y una descripción'});
             return;
         }
 
         if (this.ubicationForm.valid !== true) {
-            await this.utilsService.showToast('Ingresa una descripción de la ubicación', 2500);
+            await this.utilsService.showToast({message: 'Ingresa una descripción de la ubicación'});
             return;
         }
 
         if (this.emergencyPostCoordinate.address === null || this.emergencyPostCoordinate.address === null) {
-            await this.utilsService.showToast('No se pudo obtener tu ubicación', 2500);
+            await this.utilsService.showToast({message: 'No se pudo obtener tu ubicación'});
             return;
-        }
-
-        if (this.emergencyImages.length === 0) {
-            await this.utilsService.showToast('No has enviado imagenes al reporte', 200);
-            // return;
         }
 
         const loadingEmergencyReport = await this.utilsService.createBasicLoading('Enviando Reporte');
@@ -183,8 +168,7 @@ export class EmergencyCreatePage implements OnInit {
                 loadingEmergencyReport.dismiss()
             })
         ).subscribe(async (res: IRespuestaApiSIU) => {
-            await this.utilsService.showToast("El Reporte fue enviado correctamente");
-            // this.navCtrl.navigateRoot('/emergencies');
+            await this.utilsService.showToast({message: "El Reporte fue enviado correctamente"});
             this.events_app.resetEmergenciesEmitter();
             this.router.navigate(['/emergencies'])
         }, (err: HttpErrorResponse) => {
@@ -193,7 +177,7 @@ export class EmergencyCreatePage implements OnInit {
             } else {
                 console.log("Server-side error", err);
             }
-            this.utilsService.showToast('Ocurrio un error al enviar el reporte');
+            this.utilsService.showToast({message: 'Ocurrio un error al enviar el reporte'});
         });
     }
 

@@ -18,16 +18,14 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class ChangePasswordPage implements OnInit {
 
-    // @ViewChild('passwordEyeChangePass') passwordEye;
-    // @ViewChild('passwordConfirmEyeChangePass') passwordConfirmEye;
     @ViewChild('passwordEyeChangePass', {read: ElementRef}) passwordEye: ElementRef;
     @ViewChild('passwordConfirmEyeChangePass', {read: ElementRef}) passwordEyeConfirmEye: ElementRef;
     passwordTypeInput = 'password';
     passwordConfirmTypeInput = 'password';
     changePassForm: FormGroup;
     errorMessages = null;
-    //Usuario Autenticado
     AuthUser = null;
+
     constructor(
         private modalCtrl: ModalController,
         public formBuilder: FormBuilder,
@@ -91,7 +89,7 @@ export class ChangePasswordPage implements OnInit {
             this.authService.saveUserInfo(token, token_decoded);
             this.authService.saveLocalStorageInfo(token, token_decoded);
             this.changePassForm.reset();
-            this.utilsService.showToast('Contraseña Actualizada Correctamente');
+            this.utilsService.showToast({message: 'Contraseña Actualizada Correctamente'});
 
         },(err: HttpErrorResponse) => {
             if (err.error instanceof Error) {
@@ -99,7 +97,7 @@ export class ChangePasswordPage implements OnInit {
             } else {
                 console.log("Server-side error", err);
             }
-            this.utilsService.showToast('La Contraseña no se ha podido actualizar');
+            this.utilsService.showToast({message: 'La Contraseña no se ha podido actualizar'});
         });
     }
 

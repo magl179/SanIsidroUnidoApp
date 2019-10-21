@@ -16,12 +16,7 @@ export class UserService implements OnInit {
     AuthUser = null;
     AuthToken = null;
 
-    // headersApp = new HttpHeaders({
-    //     'Content-Type': 'application/json'
-    // });
-
     constructor(
-        private http: HttpClient,
         private httpRequest: HttpRequestService,
         private authService: AuthService
     ) {

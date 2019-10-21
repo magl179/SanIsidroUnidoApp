@@ -5,7 +5,6 @@ import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
 import { GooglePlus as Google } from '@ionic-native/google-plus/ngx';
 import { Platform } from '@ionic/angular';
 import { UtilsService } from './utils.service';
-// import { environment } from 'src/environments/environment';
 import { HttpRequestService } from "./http-request.service";
 
 @Injectable({
@@ -59,10 +58,10 @@ export class SocialDataService {
                 this.getGoogleData(loginGoogle);
             } catch (error) {
                 console.log(error);
-                await this.utilsService.showToast('Error con la conexion a Google');
+                await this.utilsService.showToast({message: 'Error con la conexion a Google'});
             }
         } else {
-            await this.utilsService.showToast('Cordova Google no esta disponible', null, 'bottom');
+            await this.utilsService.showToast({message: 'Cordova Google no esta disponible'});
         }
     }
     // Funcion para usar el API de Facebook para mostrar pantalla login Facebook
@@ -76,10 +75,10 @@ export class SocialDataService {
                 await this.getFacebookData(accessToken, userId, permisos);
             } catch (err) {
                 console.log(err);
-                await this.utilsService.showToast('Ocurrio un error al conectarse con facebook', null, 'bottom');
+                await this.utilsService.showToast({message: 'Ocurrio un error al conectarse con facebook'});
             }
         } else {
-            await this.utilsService.showToast('Cordova no Disponible', null, 'bottom');
+            await this.utilsService.showToast({message: 'Cordova no Disponible'});
         }
     }
     // Function para llamar a la api de GRAPHQL y obtener los datos del perfil del usuario logueado
@@ -92,11 +91,11 @@ export class SocialDataService {
                 this.fbLoginData.next(profile);
                 this.closeFacebookSession();
             } else {
-                this.utilsService.showToast('No se pudo obtener los datos con Facebook');
+                this.utilsService.showToast({message: 'No se pudo obtener los datos con Facebook'});
             }
         } catch (err) {
             console.log(err);
-            this.utilsService.showToast('No se pudieron obtener los datos de facebook');
+            this.utilsService.showToast({message: 'No se pudieron obtener los datos de facebook'});
         }
     }
     // Function para llamar a la api de Google y obtener los datos del perfil del usuario logueado
@@ -111,11 +110,11 @@ export class SocialDataService {
                 },
                 (err: any) => {
                     console.log(err);
-                    this.utilsService.showToast('No se pudieron obtener los datos de Google');
+                    this.utilsService.showToast({message: 'No se pudieron obtener los datos de Google'});
                 });
         } catch (err) {
             console.log(err);
-            this.utilsService.showToast('No se pudieron obtener los datos de Google');
+            this.utilsService.showToast({message: 'No se pudieron obtener los datos de Google'});
         }
     }
 
@@ -125,7 +124,7 @@ export class SocialDataService {
             await this.google.logout();
         } catch (err) {
             console.log(err);
-            this.utilsService.showToast('No se pudo cerrar la sesion de Google');
+            this.utilsService.showToast({message: 'No se pudo cerrar la sesion de Google'});
         }
     }
      // Función para cerrar la sesión de facebook una vez obtenidos los datos
@@ -134,7 +133,7 @@ export class SocialDataService {
             await this.facebook.logout();
         } catch (err) {
             console.log(err);
-            this.utilsService.showToast('No se pudo cerrar la sesion de Facebook');
+            this.utilsService.showToast({message: 'No se pudo cerrar la sesion de Facebook'});
         }
     }
 
