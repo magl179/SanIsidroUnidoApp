@@ -61,7 +61,7 @@ export class SocialDataService {
                 await this.utilsService.showToast({message: 'Error con la conexion a Google'});
             }
         } else {
-            await this.utilsService.showToast({message: 'Cordova Google no esta disponible'});
+            await this.utilsService.showToast({message: 'App Google no disponible'});
         }
     }
     // Funcion para usar el API de Facebook para mostrar pantalla login Facebook
@@ -78,7 +78,7 @@ export class SocialDataService {
                 await this.utilsService.showToast({message: 'Ocurrio un error al conectarse con facebook'});
             }
         } else {
-            await this.utilsService.showToast({message: 'Cordova no Disponible'});
+            await this.utilsService.showToast({message: 'App de Facebook no Disponible'});
         }
     }
     // Function para llamar a la api de GRAPHQL y obtener los datos del perfil del usuario logueado

@@ -11,18 +11,6 @@
                         <ion-label class="label-padding" position="stacked">Titulo</ion-label>
                         <ion-input placeholder="Ingresa el título de tu reporte" class="input-beatiful"formControlName="title" type="email"></ion-input>
                     </ion-item>
-                    <!-- <div class="feedback-icon">
-                        <ion-item lines="none">
-                            <button class="icon-help-input" disabled>
-                                <ion-icon name="close-circle" class="error"
-                                    *ngIf="emergencyForm.get('title').touched && emergencyForm.get('title').invalid">
-                                </ion-icon>
-                                <ion-icon name="checkmark-circle" class="success"
-                                    *ngIf="emergencyForm.get('title').touched && emergencyForm.get('title').valid">
-                                </ion-icon>
-                            </button>
-                        </ion-item>
-                    </div> -->
                 </div>
                 <div class="form-errors padding-lateral">
                     <p class="form-error"
@@ -35,18 +23,6 @@
                         <ion-label class="label-padding" position="stacked">Descripción</ion-label>
                         <ion-textarea class="input-beatiful text-area" placeholder="Ingresa la descripción de tu reporte" formControlName="description" auto-grow="true"></ion-textarea>
                     </ion-item>
-                    <!-- <div class="feedback-icon">
-                        <ion-item lines="none">
-                            <button class="icon-help-input" disabled>
-                                <ion-icon name="close-circle" class="error"
-                                    *ngIf="emergencyForm.get('description').touched && emergencyForm.get('description').invalid">
-                                </ion-icon>
-                                <ion-icon name="checkmark-circle" class="success"
-                                    *ngIf="emergencyForm.get('description').touched && emergencyForm.get('description').valid">
-                                </ion-icon>
-                            </button>
-                        </ion-item>
-                    </div> -->
                 </div>
                 <div class="form-errors padding-lateral">
                     <p class="form-error"
@@ -68,7 +44,7 @@
                         <ion-item-sliding>
                             <ion-item lines="none">
                                 <ion-card>
-                                    <img [src]="image">
+                                    <img [src]="image | imageSanitizer">
                                 </ion-card>
                             </ion-item>
                             <ion-item-options side="end">
@@ -89,7 +65,7 @@
         </section>
         <section *ngIf="currentStep === 2">
             <p class="ion-text-center">Escoge la ubicación donde se genero la emergencia</p>
-            <single-map idMap="emergencyReportMap" [zoomMap]="17" [enableGesture]="false"
+            <single-map id="emergencyReportMap" [zoomMap]="17" [enableGesture]="false"
                 (returnCoordinateChoosen)="updateMapCoordinate($event)">
             </single-map>
             
@@ -101,18 +77,6 @@
                             <ion-label class="label-padding" position="stacked">Descripción de la Ubicación</ion-label>
                             <ion-textarea placeholder="Ingresa una descripción más detallada de la ubicación de tu reporte" class="input-beatiful text-area" formControlName="description_ubication" auto-grow="true"></ion-textarea>
                         </ion-item>
-                        <!-- <div class="feedback-icon">
-                            <ion-item lines="none">
-                                <button class="icon-help-input" disabled>
-                                    <ion-icon name="close-circle" class="error"
-                                        *ngIf="ubicationForm.get('description_ubication').touched && ubicationForm.get('description_ubication').invalid">
-                                    </ion-icon>
-                                    <ion-icon name="checkmark-circle" class="success"
-                                        *ngIf="ubicationForm.get('description_ubication').touched && ubicationForm.get('description_ubication').valid">
-                                    </ion-icon>
-                                </button>
-                            </ion-item>
-                        </div> -->
                     </div>
                     <div class="form-errors padding-lateral">
                         <p class="form-error"
@@ -134,7 +98,7 @@
             <p *ngIf="!emergencyPostCoordinate.address">Por favor escoge una ubicación</p>
             <div class="section-img-thumb" *ngIf="emergencyImages.length > 0">
                 <ion-thumbnail *ngFor="let image of emergencyImages">
-                    <img [src]="image">
+                    <img [src]="image | imageSanitizer">
                 </ion-thumbnail>
             </div>
             <p *ngIf="emergencyImages.length === 0">No hay ninguna imagen para enviar</p>

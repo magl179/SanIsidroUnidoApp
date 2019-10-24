@@ -53,7 +53,7 @@ export class MapService implements OnInit {
     async createMarker(markers, locationPoint) {
         const iconData = markers.filter((marker) => marker.color === locationPoint.iconColor);
         const iconMapa = this.createIcon(iconData[0].iconURL);
-        const newIcon = new Leaflet.marker([
+        const newIcon = Leaflet.marker([
             locationPoint.latitude,
             locationPoint.longitude
         ], { icon: iconMapa });

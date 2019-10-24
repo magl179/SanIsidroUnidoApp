@@ -8,7 +8,7 @@
         <ion-spinner name="crescent"></ion-spinner>
     </div>
     <div *ngIf="publicServicesLoaded && publicServices.length > 0">
-        <multiple-map *ngIf="publicServices.length > 0" idMap="public-services" [zoomMap]="12"
+        <multiple-map *ngIf="publicServices.length > 0" id="public-services" [zoomMap]="12"
             [mapPoints]="publicServices" [enableGesture]="false"
             (returnMapLoaded)="manageDataMap($event)">
         </multiple-map>

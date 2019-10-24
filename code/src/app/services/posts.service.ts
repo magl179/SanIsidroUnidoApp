@@ -144,8 +144,9 @@ export class PostsService implements OnInit {
     //Funcion para obtener el listado de informes registrados
     getReports(): Observable<IRespuestaApiSIUPaginada>{
         console.log('llamdo post service get reports');
+        this.currentPage.reports++;
         const reportsSlug = environment.reportsSlug;
-        return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/${reportsSlug}`);
+        return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/${reportsSlug}?page=${this.currentPage.reports}`);
     }
     // Función para obtener el listado de subcategorias de una categoria
     getSubcategoriesByCategory(category: string): Observable<any> {

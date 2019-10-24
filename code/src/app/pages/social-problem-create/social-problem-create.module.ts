@@ -9,6 +9,7 @@ import { SocialProblemCreatePage } from './social-problem-create.page';
 
 import { SmComponentsModule } from 'src/app/components/sm-components.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PipesModule } from 'src/app/pipes/pipes.module';
 
 
 const routes: Routes = [
@@ -25,6 +26,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     SmComponentsModule,
+    PipesModule,
     ReactiveFormsModule
   ],
   declarations: [SocialProblemCreatePage]

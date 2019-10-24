@@ -134,10 +134,9 @@ export class EventsPage implements OnInit, OnDestroy {
         this.eventsLoaded = false;
         this.postService.getEvents().pipe(
             take(1),
-            map((res: any) => {
-                if (res && res.data && res.data.data) {
-                    // const events_to_map = res.data.data;
-                    res.data.data.forEach((event: any) => {
+            map((res: IRespuestaApiSIUPaginada) => {
+                if (res && res.data && res.data) {
+                    res.data.forEach((event: any) => {
                         event = mapEvent(event);
                     });
                 }
@@ -145,11 +144,10 @@ export class EventsPage implements OnInit, OnDestroy {
             }),
             finalize(() => {
                 this.eventsLoaded = true;
-
             })
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let eventsApi = [];
-            eventsApi = res.data.data;
+            eventsApi = res.data;
             console.log('eventos ante subscribir', this.eventsList);
 
             if (eventsApi.length === 0) {
@@ -168,14 +166,13 @@ export class EventsPage implements OnInit, OnDestroy {
             if (event) {
                 event.data.target.complete();
             }
-            console.log('eventos api a pushear', eventsApi);
             if (event && event.type === 'refresher') {
                 this.eventsList.unshift(...eventsApi);
                 console.log('eventos mapeados refresher y totales actualmente', this.eventsList);
                 return;
             }
             this.eventsList.push(...eventsApi);
-            console.log('eventos mapeados inf scroll y totales actualmente', this.eventsList);
+            console.log('eventos mapeados normal o infinite scroll', this.eventsList);
             
 
         },

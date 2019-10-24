@@ -23,7 +23,7 @@ export class AuthInterceptorService implements HttpInterceptor {
         // console.log('Request', request);withCredentials': 'true'
         // console.log('Angular Interceptor', request);
         return next.handle(request).pipe(
-            this.http_retry(),
+            this.http_retry(2),
             map(data => {
                 // console.log('response success', data);
                 return data;

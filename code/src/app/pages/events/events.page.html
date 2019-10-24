@@ -1,12 +1,13 @@
 <app-header-back title="Eventos" [search]="true" (optionSelected)="getOptionSelected($event)"></app-header-back>
 <ion-content padding>
+    <!-- Refresher -->
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content pullingIcon="arrow-dropdown" refreshingSpinner="circles"
             refreshingText="Cargando Publicaciones...">
         </ion-refresher-content>
     </ion-refresher>
-    <p> Num Eventos {{eventsList.length}}</p>
-    <!-- Mensaje cuando no se pudieron cargar los datos-->
+    <!-- <p> Num Eventos {{eventsList.length}}</p> -->
+    <!-- Mensaje al no cargar los datos-->
     <div class="flex-column-center message-fail-load"
         *ngIf="eventsLoaded && eventsList.length === 0">
         <p>No se pudieron cargar los Eventos</p>
@@ -41,20 +42,20 @@
     <!-- Tarjeta Datos Cargados y Disponibles -->
     <div *ngIf="eventsLoaded  && eventsList.length > 0">
         <ion-card class="event" *ngFor="let event of eventsList; let i = index;">
-            <div (click)="postDetail(event.id)">
-                <ion-card-header class="event-header">
-                    <ion-card-title class="event-title">
+            <div class="event__header" (click)="postDetail(event.id)">
+                <ion-card-header class="main-section-header">
+                    <ion-card-title class="main-section-header__title">
                         <span>{{event.title}}</span>
                     </ion-card-title>
                 </ion-card-header>
-                <ion-card-content class="main-post-info">
-                    <p class="item-info">
+                <ion-card-content class="main-section-info">
+                    <p class="item">
                         <span class="icon-fulldate">
                             <ion-icon name="calendar"></ion-icon>
                         </span>
-                        <span class="description"> {{ event.fulldate }} </span>
+                        <span class="main-section-info__description"> {{ event.fulldate }} </span>
                     </p>
-                    <p class="item-info">
+                    <p class="__item">
                         <span class="icon-ubication">
                             <ion-icon name="pin"></ion-icon>
                         </span>
@@ -64,7 +65,7 @@
                     </p>
                 </ion-card-content>
             </div>
-            <div class="social">
+            <div class="event__footer social">
                 <div class="social-content">
                     <span *ngIf="event.postAssistance">A ti y {{event.details.length}} personas
                         más les interesa</span>
@@ -88,17 +89,6 @@
             </div>
         </ion-card>
     </div>
-    <!--Opciones del FabButton -->
-    <!-- <ion-fab vertical="bottom" horizontal="center" slot="fixed">
-        <ion-fab-button color="primary" size="small">
-            <ion-icon name="ios-keypad"></ion-icon>
-        </ion-fab-button>
-        <ion-fab-list side="top">
-            <ion-fab-button (click)="showModalSearchEvents()">
-                <ion-icon name="search"></ion-icon>
-            </ion-fab-button>
-        </ion-fab-list>
-    </ion-fab> -->
     <!-- Scroll Infinito -->
     <ion-infinite-scroll threshold="175px" (ionInfinite)="getInfiniteScrollData($event)">
         <ion-infinite-scroll-content loadingSpinner="crescent"

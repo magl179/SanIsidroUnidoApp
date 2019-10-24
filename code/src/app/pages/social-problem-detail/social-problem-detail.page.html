@@ -49,12 +49,6 @@
         </div>
         <div class="post-info-container">
             <div class="post-description-info">
-                <!--<span class="post-category">
-                    <span>{{socialProblem.subcategory.name}}</span>
-                    <div class="container-more-options" (click)="showActionCtrl()">
-                        <ion-icon name="md-more"></ion-icon>
-                    </div>
-                </span> -->
                 <h2>{{socialProblem.title}}</h2>
                 <p>{{socialProblem.description}}</p>
             </div>
@@ -97,27 +91,21 @@
 
             <div class="map-container" *ngIf="socialProblem.ubication">
                 <p class="map-title">Ubicación</p>
-                <simple-map classMap="social-problem-map-detail map-center"
-                    idMap="social-problem-detail-{{id}}" [coordsMap]="socialProblem.ubication"
+                <simple-map className="social-problem-map"
+                    id="social-problem-detail-{{id}}" [coordsMap]="socialProblem.ubication" [enableGesture]="true"
                     [zoom]="16">
                 </simple-map>
             </div>
             <div class="image-gallery-container"
                 *ngIf="socialProblem.images && socialProblem.images.length > 0">
                 <h4 class="image-gallery-title">Imágenes</h4>
-                <div class="image-gallery">
-                    <figure class="image-item" *ngFor="let image of socialProblem.images"
-                        (click)="seeImageDetail(image.url)">
-                        <img class="image" [src]="image.url" fallimg="image_full">
-                    </figure>
-                </div>
+                <gallery-image [images]="socialProblem.images"> </gallery-image>
             </div>
         </div>
     </div>
 </ion-content>
 <ion-footer class="footer-fixed-posts" *ngIf="socialProblem">
     <div class="social">
-        <!-- <div class="social-content">A 5 Personas les gusta</div> -->
         <div class="social-options">
             <div class="social-button dark" (click)="toggleLike(socialProblem.postLiked)" [class.active]="socialProblem.postLiked">
                 <ion-icon class="like" name="heart"></ion-icon>
@@ -128,6 +116,5 @@
                 <span>Compartir</span>
             </div>
         </div>
-
     </div>
 </ion-footer>

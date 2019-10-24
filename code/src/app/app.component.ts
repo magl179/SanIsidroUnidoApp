@@ -65,20 +65,12 @@ export class AppComponent implements OnInit {
             }
             await this.checkUserLoggedIn();
             await this.getMenuOptions();
-            // console.log('load info user logued');
-            timer(2800).subscribe(async () => {
-                this.showAppsplash = false;
+            this.showAppsplash = false;
+            timer(1000).subscribe(async () => {
                 await this.pushNotificationService.initialConfig();
             });
         });
     }
-
-    // manageInitialPage(token_decoded: any) {
-    //     if (!token_decoded) {
-    //         // console.log('app redirect login');
-    //         // this.navCtrl.navigateRoot('/login');
-    //     }
-    // }
 
     async checkUserLoggedIn() {
         this.authService.sessionAuthUser.pipe(
@@ -128,9 +120,6 @@ export class AppComponent implements OnInit {
                         console.log('Confirm Okay');
                         await this.authService.logout();
                         await this.menuCtrl.close();
-                        timer(400).subscribe(() => {
-                            this.navCtrl.navigateRoot('/tutorial');
-                        });
                     }
                 }
             ]

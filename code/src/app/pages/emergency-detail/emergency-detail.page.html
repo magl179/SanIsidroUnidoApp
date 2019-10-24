@@ -83,18 +83,14 @@
 
                 <div class="map-container" *ngIf="emergency.ubication">
                     <h4 class="map-title title-section">Ubicación</h4>
-                    <simple-map classMap="emergency-map" idMap="emergency-map-detail-{{id}}"
+                    <simple-map className="emergency-map" id="emergency-map-detail-{{id}}"
                         [coordsMap]="emergency.ubication" [zoom]="16" [enableGesture]="true">
                     </simple-map>
                 </div>
                 <div class="image-gallery-container"
                     *ngIf="emergency.images && emergency.images.length > 0">
                     <h4 class="image-gallery-title">Imágenes</h4>
-                    <div class="image-gallery">
-                        <figure class="image-item" *ngFor="let image of emergency.images" (click)="seeImageDetail(image.url)">
-                            <img class="image" [src]="image.url" fallimg="image_full">
-                        </figure>
-                    </div>
+                    <gallery-image [images]="emergency.images"> </gallery-image>
                 </div>
             </div>
         </div>

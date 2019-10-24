@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { NetworkService } from 'src/app/services/network.service';
 import { UtilsService } from 'src/app/services/utils.service';
+import { IPhoneUser } from 'src/app/interfaces/models';
 
 // declare var moment: any;
 // moment.locale('es');
@@ -14,7 +15,11 @@ import { UtilsService } from 'src/app/services/utils.service';
 })
 export class AboutPage implements OnInit {
     isConnected = true;
-    UserDevice = null;
+    CurrentUserDevice: IPhoneUser = {
+        id: null,
+        phone_id: null,
+        user_id: null
+    };
     constructor(
         private notiService: NotificationsService,
         private networkService: NetworkService,
@@ -24,9 +29,10 @@ export class AboutPage implements OnInit {
     }
 
     async ngOnInit() {
-        this.notiService.getUserDevice().subscribe(data => {
-            if (data) {
-                this.UserDevice = data;
+        this.notiService.getUserDevice().subscribe(userdevice => {
+            if(userdevice){
+                this.CurrentUserDevice = userdevice;
+                console.log('current user device about', this.CurrentUserDevice)
             }
         });
         this.networkService.getNetworkStatus().subscribe((connected: boolean) => {

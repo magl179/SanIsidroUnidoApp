@@ -16,8 +16,8 @@ import { GestureHandling } from "leaflet-gesture-handling";
 })
 export class MultipleMapComponent implements OnInit, AfterViewInit {
 
-    @Input() idMap: string;
-    @Input() class = '';
+    @Input() id: string;
+    @Input() className = '';
     @Input() zoomMap = 16;
     @Input() mapPoints: IPublicService[] = [];
     @Input() enableGesture = false;
@@ -94,7 +94,7 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
             Leaflet.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
         }
         // Crear el Mapa
-        this.map = Leaflet.map(this.idMap, {
+        this.map = Leaflet.map(this.id, {
             gestureHandling: this.enableGesture,
             zoomAnimation: true,
             markerZoomAnimation: true,

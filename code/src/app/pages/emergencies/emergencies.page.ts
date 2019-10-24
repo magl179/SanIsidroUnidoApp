@@ -92,15 +92,15 @@ export class EmergenciesPage implements OnInit, OnDestroy {
     loadEmergencies(event?: any) {
         this.emergenciesLoaded = false;
         this.postsService.getEmergenciesByUser().pipe(
-            map((res: any) => {
+            map((res: IRespuestaApiSIUPaginada) => {
                 // console.log('res map', res);
-                if (res && res.data && res.data.data) {
+                if (res && res.data) {
                     // const emergencies_to_map = res.data.data;
-                    res.data.data.forEach((emergency: any) => {
+                    res.data.forEach((emergency: any) => {
                         emergency = mapEmergency(emergency);
                     });
                 }
-                console.log('res maped', res.data.data);
+                console.log('res maped', res.data);
                 return res;
             }),
             finalize(() => {
@@ -108,8 +108,7 @@ export class EmergenciesPage implements OnInit, OnDestroy {
             }),
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let emergenciesApi = [];
-            emergenciesApi = res.data.data;
-
+            emergenciesApi = res.data;
             if (emergenciesApi.length === 0) {
                 if (event) {
                     event.data.target.disabled = true;

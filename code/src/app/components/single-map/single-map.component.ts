@@ -12,8 +12,8 @@ import { GestureHandling } from "leaflet-gesture-handling";
 })
 export class SingleMapComponent implements OnInit, AfterViewInit {
 
-    @Input() idMap: string;
-    @Input() class = '';
+    @Input() id: string;
+    @Input() className = '';
     @Input() zoomMap = 15;
     @Input() enableGesture = false;
     @Output() returnCoordinateChoosen = new EventEmitter();
@@ -49,7 +49,7 @@ export class SingleMapComponent implements OnInit, AfterViewInit {
         if (this.enableGesture) {
             Leaflet.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
         }
-        this.map = Leaflet.map(this.idMap, {
+        this.map = Leaflet.map(this.id, {
             gestureHandling: this.enableGesture,
             fadeAnimation: false,
             zoomAnimation: false,

@@ -112,10 +112,9 @@
             </div>
         </div>
 
-        <div class="flex-column-center message-fail-load"
+        <div class="flex-column-center"
             *ngIf="userSocialProfilesLoaded && UserSocialProfiles.length === 0">
-            <p>No se pudieron cargar tus redes sociales asociadas</p>
-            <ion-button (click)="getUserSocialProfiles()">Toca para reintentar</ion-button>
+            <p>No tienes redes sociales asociadas</p>
         </div>
         <!-- DISPOSITIVOS ASOCIADOS -->
         <div class="list-items-container animated flash slow infinite"
@@ -161,18 +160,17 @@
             </div>
         </div>
 
-        <div class="flex-column-center message-fail-load"
+        <div class="flex-column-center"
             *ngIf="userDevicesLoaded && UserDevices.length === 0">
-            <p>No se pudieron cargar tus dispositivos asociados</p>
-            <ion-button (click)="getUserDevices()">Toca para reintentar</ion-button>
+            <p>No tienes dispositivos asociados</p>
         </div>
         <!-- INFO DISPOSITIVO -->
-        <div *ngIf="CurrentUserDevice" style="padding-left: 1rem;">
+        <!-- <div *ngIf="CurrentUserDevice" style="padding-left: 1rem;">
             <p>DeviceUser PhoneID: {{CurrentUserDevice.phone_id}}</p>
             <p>DeviceUser PhoneModel: {{CurrentUserDevice.phone_model}}</p>
         </div>
         <div *ngIf="!CurrentUserDevice" style="padding-left: 1rem;">
             No se pudo obtener info device user
-        </div>
+        </div> -->
     </div>
 </ion-content>

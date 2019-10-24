@@ -6,11 +6,7 @@
             refreshingText="Cargando Publicaciones...">
         </ion-refresher-content>
     </ion-refresher>
-    <!-- <p
-        style="position: fixed;top: 3rem;left: 40%;background: black;color: white; padding: 1rem;z-index: 1000;">
-        Num emergencias {{emergenciesFiltered.length}}
-    </p> -->
-    <p>Num emergencias {{emergenciesFiltered.length}}</p>
+    <!-- <p>Num emergencias {{emergenciesFiltered.length}}</p> -->
     <div class="flex-column-center message-fail-load"
         *ngIf="emergenciesLoaded && emergenciesList.length === 0">
         <p>No existen emergencias disponibles</p>

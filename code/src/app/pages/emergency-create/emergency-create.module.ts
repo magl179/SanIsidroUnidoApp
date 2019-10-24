@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { EmergencyCreatePage } from './emergency-create.page';
 import { SmComponentsModule } from 'src/app/components/sm-components.module';
-
+import {PipesModule} from 'src/app/pipes/pipes.module';
 
 
 
@@ -25,7 +25,8 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
         SmComponentsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        PipesModule
   ],
   declarations: [EmergencyCreatePage]
 })

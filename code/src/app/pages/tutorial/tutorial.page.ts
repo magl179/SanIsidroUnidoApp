@@ -62,7 +62,7 @@ export class TutorialPage implements OnInit {
     }
     //Funcion para navegar a pagina de registro
     goToRegister() {
-        this.navCtrl.navigateForward('/register');
+        this.navCtrl.navigateForward('/register', {animated: true});
     }
     //Obtener el Background
     getBackgroundApp(image_url: string) {

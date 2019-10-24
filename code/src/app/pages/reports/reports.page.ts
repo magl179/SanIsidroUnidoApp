@@ -2,9 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PostsService } from "src/app/services/posts.service";
 import { finalize, map } from 'rxjs/operators';
 import { NavController } from '@ionic/angular';
-import { UtilsService } from "src/app/services/utils.service";
 import { IRespuestaApiSIUPaginada } from 'src/app/interfaces/models';
-import { mapImagesApi } from "src/app/helpers/utils";
 import { mapReport } from "../../helpers/utils";
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -20,8 +18,7 @@ export class ReportsPage implements OnInit, OnDestroy {
 
     constructor(
         private postsService: PostsService,
-        private navCtrl: NavController,
-        private utilsService: UtilsService
+        private navCtrl: NavController
   ) { }
     
     ngOnInit() { 
@@ -37,15 +34,12 @@ export class ReportsPage implements OnInit, OnDestroy {
         this.navCtrl.navigateForward(`/report-detail/${id}`);
     }
     
-    loadReports(event?: any, resetReports?: any) {
+    loadReports(event?: any) {
         this.reportsLoaded = false;
-        if (resetReports) {
-            this.reportsList = [];
-        }
         this.postsService.getReports().pipe(
-            map((res: any) => {
-                if (res && res.data && res.data.data) {
-                    const reports_to_map = res.data.data;
+            map((res: IRespuestaApiSIUPaginada) => {
+                if (res && res.data) {
+                    const reports_to_map = res.data;
                     reports_to_map.forEach((report: any) => {
                         report = mapReport(report);
                     });
@@ -55,21 +49,47 @@ export class ReportsPage implements OnInit, OnDestroy {
             finalize(() => {
                 this.reportsLoaded = true;
             })
-        ).subscribe((res: IRespuestaApiSIUPaginada) => {
-            this.reportsList = res.data.data;
-            this.reportsList.forEach((report: any) => {
-                report.fulldate = `${report.date} ${report.time}`;
-                if (report.images && report.images.length > 0) {
-                    report.images = mapImagesApi(report.images);
+        ).subscribe((res: IRespuestaApiSIUPaginada) => {            
+            let reportsList = [];
+            reportsList = res.data;
+            if (reportsList.length === 0) {
+                if (event) {
+                    event.data.target.disabled = true;
+                    event.data.target.complete();
                 }
-            });
-            console.log('reports list', this.reportsList);
+                return;
+            } 
+            if (event) {
+                event.data.target.complete();
+            }
+            if (event && event.type === 'refresher') {
+                this.reportsList.unshift(...reportsList);
+                // console.log('reports list', this.reportsList);
+                return;
+            }
+            this.reportsList.push(...reportsList);
+            // console.log('reports list', this.reportsList);
         },(err: HttpErrorResponse) => {
             if (err.error instanceof Error) {
                 console.log("Client-side error", err);
             } else {
                 console.log("Server-side error", err);
             }
+        });
+    }
+
+    //Obtener datos con el Infinite Scroll
+    doInfiniteScroll(event: any) {
+        this.loadReports({
+            type: 'infinite_scroll',
+            data: event
+        });
+    }
+    //Obtener datos con Refresher
+    doRefresh(event: any) {
+        this.loadReports({
+            type: 'refresher',
+            data: event
         });
     }
 

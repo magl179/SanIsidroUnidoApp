@@ -1,33 +1,54 @@
 <app-header-back title="Informes"></app-header-back>
 
 <ion-content padding>
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pullingIcon="arrow-dropdown" refreshingSpinner="circles"
+            refreshingText="Cargando Publicaciones...">
+        </ion-refresher-content>
+    </ion-refresher>
     <div class="flex-column-center message-fail-load"
         *ngIf="reportsLoaded && reportsList.length === 0">
         <p>No existen reportes disponibles</p>
-        <ion-button (click)="loadReports(null, true)">Toca para reintentar</ion-button>
     </div>
     <!-- animacion antes cargue datos -->
-    <div *ngIf="!reportsLoaded" class="flex-column-center message-fail-load">
-            <ion-spinner name="crescent"></ion-spinner>
-     </div>
-    <!-- Tarjetas con Datos -->
-    <div *ngIf="reportsLoaded && reportsList.length > 0">
-        <ion-card class="card-event" *ngFor="let report of reportsList; let i = index;">
+    <div *ngIf="!reportsLoaded">
+        <ion-card class="report animated flash slow infinite" *ngFor="let item of [1,1,1,1]">
             <ion-card-header>
-                <!-- <ion-card-subtitle class="event-subtitle">
-                    <p class="post-fulldate" style="display:flex;align-items: center;">
-                        <ion-icon class="icon" style="font-size:1.2rem;margin-right: 5px;" name="calendar"></ion-icon>
-                        <span>{{report.created_at | simpleBeatifulDate}}</span>
-                    </p>
-                </ion-card-subtitle> -->
-                <ion-card-title>{{report.title}}</ion-card-title>
+                <ion-card-title>
+                    <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                </ion-card-title>
             </ion-card-header>
             <ion-card-content>
-                <p class="post-description">
-                    {{report.description}}
+                <p>
+                    <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="width: 90%"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
                 </p>
-                <p class="post-see-more" (click)="postDetail(report.id)">Ver más...</p>
+                <p>
+                    <ion-skeleton-text animated style="width: 10%"></ion-skeleton-text>
+                </p>
             </ion-card-content>
         </ion-card>
     </div>
+    <!-- Tarjetas con Datos -->
+    <div *ngIf="reportsLoaded && reportsList.length > 0">
+        <ion-card class="report-container" *ngFor="let report of reportsList; let i = index;">
+            <ion-card-header>
+                <ion-card-title>{{report.title}}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content class="description-section">
+                <p class="description-section__content">
+                    {{report.description}}
+                </p>
+                <p class="description-section__see-more" (click)="postDetail(report.id)">Ver más...
+                </p>
+            </ion-card-content>
+        </ion-card>
+    </div>
+    <!-- Scroll Infinito -->
+    <ion-infinite-scroll threshold="150px" (ionInfinite)="doInfiniteScroll($event)">
+        <ion-infinite-scroll-content loadingSpinner="crescent"
+            loadingText="Cargando Publicaciones...">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
 </ion-content>

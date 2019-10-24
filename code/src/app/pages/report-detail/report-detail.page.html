@@ -8,71 +8,46 @@
     </div>
     <!-- Animacion hasta cargar datos -->
     <div *ngIf="!reportLoaded">
-        <ion-card class="report-card detail-card animated flash slow infinite">
-            <ion-card-header>
-                <ion-card-subtitle>
+        <div class="report-detail animated flash slow infinite">
+            <section>
+                <h1>
                     <ion-skeleton-text width="30%"></ion-skeleton-text>
-                </ion-card-subtitle>
-                <ion-card-title>
-                    <ion-skeleton-text width="10%"></ion-skeleton-text>
-                </ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-                <ion-skeleton-text width="100%"></ion-skeleton-text>
-                <ion-skeleton-text width="100%"></ion-skeleton-text>
-                <ion-skeleton-text width="100%"></ion-skeleton-text>
-            </ion-card-content>
-            <div>
-                <ion-skeleton-text width="100%" style="height: 200px;"></ion-skeleton-text>
-            </div>
-            <ion-row>
-                <ion-col>
-                    <ion-item lines="none" detail="false" button="true"
-                        class="container_events detail" [ngClass]="{'active': (i % 2) === 0}">
-                        <ion-skeleton-text width="50%"></ion-skeleton-text>
-                    </ion-item>
-                </ion-col>
-                <ion-col>
-                    <ion-item lines="none" detail="false" button="true"
-                        class="container_events detail" [ngClass]="{'active': (i % 2) !== 0}">
-                        <ion-skeleton-text width="50%"></ion-skeleton-text>
-                    </ion-item>
-                </ion-col>
-            </ion-row>
-        </ion-card>
+                </h1>
+            </section>
+            <section>
+                <h2>
+                    <ion-skeleton-text width="100%"></ion-skeleton-text>
+                </h2>
+                <p class="description-section__content">
+                    <ion-skeleton-text width="100%"></ion-skeleton-text>
+                    <ion-skeleton-text width="100%"></ion-skeleton-text>
+                    <ion-skeleton-text width="100%"></ion-skeleton-text>
+                </p>
+            </section>
+        </div>
     </div>
     <!-- Datos ya cargados -->
     <div *ngIf="reportLoaded && report">
-        <div class="report-card detail">
-            <!-- <div class="report-cover-image"
-                [style.background-image]="(report.images && report.images.length > 0) ? getBGCover(report.images[0].url) : ''">
-            </div> -->
-            <ion-card-header class="report-card-header">
-                <ion-card-title class="report-card-title"> {{ report.title }}</ion-card-title>
-            </ion-card-header>
-            <ion-card-content class="report-detail-description">
-                <h2 class="title title-section">Descripción</h2>
-                <p class="post_description">
+        <div class="report-detail">
+            <section class="report-detail__main">
+                <h1 class="main-section__title"> {{ report.title }}</h1>
+            </section>
+            <section class="report-detail__content">
+                <p class="report-detail__content__title section-title">Descripción</p>
+                <p class="report-detail__content__description">
                     {{report.description | truncate: 50}}
                 </p>
-            </ion-card-content>
-            <div class="map-container" *ngIf="report.ubication">
-                <p class="map-title title-section">Ubicación</p>
-                <simple-map classMap="report-map" idMap="report-map-detail-{{id}}"
-                    [coordsMap]="report.ubication" [zoom]="16">
+            </section>
+            <div class="report-detail__map" *ngIf="report.ubication">
+                <p class="report-detail__map__title section-title">Ubicación</p>
+                <simple-map class="report-detail__map__content" className="report-map" id="report-map-detail-{{id}}"
+                    [coordsMap]="report.ubication" [zoom]="16" [enableGesture]="true">
                 </simple-map>
             </div>
-            <div class="image_gallery_container"
-                *ngIf="report.images && report.images.length > 0">
-                <p class="image_gallery_title title-section">Imágenes</p>
-                <div class="image_gallery">
-                    <figure *ngFor="let image of report.images"
-                        (click)="seeImageDetail(image.url)">
-                        <img [src]="image.url" fallimg="image_full" />
-                    </figure>
-                </div>
+            <div class="report-detail__images" *ngIf="report.images && report.images.length > 0">
+                <p class="report_detail__images__title section-title">Imágenes</p>
+                <gallery-image [images]="report.images"></gallery-image>
             </div>
         </div>
     </div>
-
 </ion-content>

@@ -35,9 +35,11 @@ $font-title: 11vw;
         display: block;
         margin: 0 auto;
         width: 50%;
-        height: auto;
-        animation: animation 3000ms linear infinite both;
-        animation-delay: 1s;
+        height: 30%;
+        &.animation{
+            animation: animation 3000ms linear infinite both;
+            animation-delay: 1s;
+        }
     }
 }
 

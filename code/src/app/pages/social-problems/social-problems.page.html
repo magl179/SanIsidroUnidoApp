@@ -6,7 +6,7 @@
             refreshingText="Cargando Publicaciones...">
         </ion-refresher-content>
     </ion-refresher>
-    <p> Num Problemas Sociales {{socialProblemsFilter.length}}</p>
+    <!-- <p> Num Problemas Sociales {{socialProblemsFilter.length}}</p> -->
     <!-- Mensaje no cargaron los datos desde la Api -->
     <div class="flex-column-center message-fail-load"
         *ngIf="socialProblemsLoaded && socialProblemsList.length === 0">
@@ -77,29 +77,8 @@
             </div>
         </ion-card>
     </div>
-    <!--Opciones del FabButton -->
-    <!-- <ion-fab vertical="bottom" horizontal="center" slot="fixed">
-        <ion-fab-button color="primary" size="small">
-            <ion-icon name="ios-keypad"></ion-icon>
-        </ion-fab-button>
-        <ion-fab-list side="top">
-            <ion-fab-button color="secondary" (click)="showModalSearchSocialProblems()">
-                <ion-icon name="search"></ion-icon>
-            </ion-fab-button>
-        </ion-fab-list>
-        <ion-fab-list side="start">
-            <ion-fab-button color="danger" (click)="showModalFilterSocialProblems()">
-                <ion-icon name="ios-funnel"></ion-icon>
-            </ion-fab-button>
-        </ion-fab-list>
-        <ion-fab-list side="end" *appHasRole="['morador']">
-            <ion-fab-button color="tertiary" (click)="reportSocialProblem()">
-                <ion-icon name="send"></ion-icon>
-            </ion-fab-button>
-        </ion-fab-list>
-    </ion-fab> -->
     <!-- Scroll Infinito -->
-    <ion-infinite-scroll threshold="150px" (ionInfinite)="getInfiniteScrollData($event)">
+    <ion-infinite-scroll threshold="150px" (ionInfinite)="doInfiniteScroll($event)">
         <ion-infinite-scroll-content loadingSpinner="crescent"
             loadingText="Cargando Publicaciones...">
         </ion-infinite-scroll-content>

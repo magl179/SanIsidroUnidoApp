@@ -66,7 +66,7 @@ export class UserProfilePage implements OnInit {
                 this.notificationsService.getUserDevice().subscribe(userdevice => {
                     if(userdevice){
                         this.CurrentUserDevice = getUserDevice(this.UserDevices, userdevice);
-                        console.log('current user device', this.CurrentUserDevice)
+                       // console.log('current user device', this.CurrentUserDevice)
                     }
                 }, (err: HttpErrorResponse) => {
                     if (err.error instanceof Error) {

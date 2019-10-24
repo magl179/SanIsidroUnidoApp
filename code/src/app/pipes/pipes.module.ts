@@ -5,6 +5,8 @@ import { BeafitulDatePipe } from './beafitul-date.pipe';
 import { SimpleBeatifulDatePipe } from './simple-beatiful-date.pipe';
 import { TruncatePipe } from './truncate.pipe';
 import { JsonValidatePipe } from './json-validate.pipe';
+import { ImageSanitizerPipe } from './image-sanitizer.pipe';
+import { DomSanitizerPipe } from './dom-sanitizer.pipe';
 
 @NgModule({
     declarations: [
@@ -12,7 +14,9 @@ import { JsonValidatePipe } from './json-validate.pipe';
         BeafitulDatePipe,
         SimpleBeatifulDatePipe,
         TruncatePipe,
-        JsonValidatePipe
+        JsonValidatePipe,
+        ImageSanitizerPipe,
+        DomSanitizerPipe
     ],
     imports: [
         CommonModule
@@ -22,7 +26,9 @@ import { JsonValidatePipe } from './json-validate.pipe';
         BeafitulDatePipe,
         SimpleBeatifulDatePipe,
         TruncatePipe,
-        JsonValidatePipe
+        JsonValidatePipe,
+        ImageSanitizerPipe,
+        DomSanitizerPipe
     ]
 })
 export class PipesModule { }

@@ -156,10 +156,10 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
     loadSocialProblems(event?: any) {
         this.socialProblemsLoaded = false;
         this.postsService.getSocialProblems().pipe(
-            map((res: any) => {
+            map((res: IRespuestaApiSIUPaginada) => {
                 // console.log('res map', res);
-                if (res && res.data && res.data.data) {
-                    res.data.data.forEach((social_problem: any) => {
+                if (res && res.data) {
+                    res.data.forEach((social_problem: any) => {
                         social_problem = mapSocialProblem(social_problem);
                     });
                 }
@@ -170,7 +170,7 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
             })
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let socialProblems = [];
-            socialProblems = res.data.data;
+            socialProblems = res.data;
             if (socialProblems.length === 0) {
                 if (event) {
                     event.data.target.disabled = true;
@@ -204,7 +204,7 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
         });
     }
     //Obtener datos con el Infinite Scroll
-    getInfiniteScrollData(event: any) {
+    doInfiniteScroll(event: any) {
         this.loadSocialProblems({
             type: 'infinite_scroll',
             data: event

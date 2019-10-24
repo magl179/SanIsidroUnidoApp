@@ -14,9 +14,9 @@ import { MapService } from 'src/app/services/map.service';
 })
 export class SimpleMapComponent implements AfterViewInit {
 
-    @Input() idMap: string;
+    @Input() id: string;
     @Input() zoom = 14;
-    @Input() class = '';
+    @Input() className = '';
     @Input() coordsMap: IUbication = {
         latitude: null,
         longitude: null,
@@ -41,7 +41,7 @@ export class SimpleMapComponent implements AfterViewInit {
         }
         this.coordsMap = getJSON(this.coordsMap);
         console.log('enable gesture', this.enableGesture);
-        this.map = Leaflet.map(this.idMap, {
+        this.map = Leaflet.map(this.id, {
             gestureHandling: this.enableGesture,
             fadeAnimation: false,
             zoomAnimation: false,

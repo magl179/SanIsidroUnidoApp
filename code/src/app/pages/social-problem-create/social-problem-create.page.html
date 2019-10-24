@@ -11,18 +11,6 @@
                         <ion-label class="label-padding" position="stacked">Titulo</ion-label>
                         <ion-input placeholder="Ingresa el título de tu reporte" class="input-beatiful" formControlName="title" type="email"></ion-input>
                     </ion-item>
-                    <!-- <div class="feedback-icon">
-                        <ion-item lines="none">
-                            <button class="icon-help-input" disabled>
-                                <ion-icon name="close-circle" class="error"
-                                    *ngIf="socialProblemForm.get('title').touched && socialProblemForm.get('title').invalid">
-                                </ion-icon>
-                                <ion-icon name="checkmark-circle" class="success"
-                                    *ngIf="socialProblemForm.get('title').touched && socialProblemForm.get('title').valid">
-                                </ion-icon>
-                            </button>
-                        </ion-item>
-                    </div> -->
                 </div>
                 <div class="form-errors padding-lateral">
                     <p class="form-error"
@@ -35,18 +23,6 @@
                         <ion-label class="label-padding" position="stacked">Descripción</ion-label>
                         <ion-textarea placeholder="Ingresa una descripción sobre tu reporte" class="input-beatiful text-area" formControlName="description" auto-grow="true"></ion-textarea>
                     </ion-item>
-                    <!-- <div class="feedback-icon">
-                        <ion-item lines="none">
-                            <button class="icon-help-input" disabled>
-                                <ion-icon name="close-circle" class="error"
-                                    *ngIf="socialProblemForm.get('description').touched && socialProblemForm.get('description').invalid">
-                                </ion-icon>
-                                <ion-icon name="checkmark-circle" class="success"
-                                    *ngIf="socialProblemForm.get('description').touched && socialProblemForm.get('description').valid">
-                                </ion-icon>
-                            </button>
-                        </ion-item>
-                    </div> -->
                 </div>
                 <div class="form-errors padding-lateral">
                     <p class="form-error"
@@ -87,7 +63,7 @@
                         <ion-item-sliding>
                             <ion-item>
                                 <ion-card>
-                                    <img [src]="image">
+                                    <img [src]="image | imageSanitizer">
                                 </ion-card>
                             </ion-item>
                             <ion-item-options side="end">
@@ -110,10 +86,8 @@
         </section>
         <section *ngIf="currentStep === 2">
             <p class="ion-text-center">Escoge la ubicación donde se genero la emergencia</p>
-            <single-map idMap="socialProblemReportMap" [zoomMap]="17" [enableGesture]="false"
+            <single-map id="socialProblemReportMap" [zoomMap]="17" [enableGesture]="false"
                 (returnCoordinateChoosen)="updateMapCoordinate($event)"></single-map>
-            <!-- <p>Latitud PAGE EC: Market {{socialProblemCoordinate.latitude}}</p> -->
-            <!-- <p>Longitud PAGE EC: Market {{socialProblemCoordinate.longitude}}</p> -->
             <p class="padding-lateral name-ubication-pt" *ngIf="socialProblemCoordinate.address">Tu Dirección es:
                 {{socialProblemCoordinate.address}}</p>
             <form class="form-ubication" [formGroup]="ubicationForm">
@@ -122,18 +96,6 @@
                         <ion-label class="label-padding" position="stacked">Descripcion de la Ubicación</ion-label>
                         <ion-textarea placeholder="Ingresa una descripción más detallada de la ubicación de tu reporte" class="input-beatiful text-area" formControlName="description_ubication" auto-grow="true"></ion-textarea>
                     </ion-item>
-                    <!-- <div class="feedback-icon">
-                        <ion-item lines="none">
-                            <button class="icon-help-input" disabled>
-                                <ion-icon name="close-circle" class="error"
-                                    *ngIf="ubicationForm.get('description_ubication').touched && ubicationForm.get('description_ubication').invalid">
-                                </ion-icon>
-                                <ion-icon name="checkmark-circle" class="success"
-                                    *ngIf="ubicationForm.get('description_ubication').touched && ubicationForm.get('description_ubication').valid">
-                                </ion-icon>
-                            </button>
-                        </ion-item>
-                    </div> -->
                 </div>
                 <div class="form-errors padding-lateral">
                     <p class="form-error"
@@ -151,12 +113,11 @@
         <section *ngIf="currentStep === 4">
             <h2>{{socialProblemForm.get('title').value || 'Ingresa un Titulo'}}</h2>
             <p>{{socialProblemForm.get('title').value || 'Ingresa una descripción'}}</p>
-            <!-- <p *ngIf="socialProblemCoordinate.address">Dirección de la Emergencia</p> -->
             <p *ngIf="socialProblemCoordinate.address">{{socialProblemCoordinate.address}}</p>
             <p *ngIf="!socialProblemCoordinate.address">Por favor escoge una ubicación</p>
             <div class="section-img-thumb" *ngIf="socialProblemImages.length > 0">
                 <ion-thumbnail *ngFor="let image of socialProblemImages">
-                    <img [src]="image">
+                    <img [src]="image | imageSanitizer">
                 </ion-thumbnail>
             </div>
             <p *ngIf="socialProblemImages.length === 0">No hay ninguna imagen para enviar</p>

@@ -1,3 +1,7 @@
-.post-see-more{
-    padding-top: 1rem;;
+.report-container{
+    .description-section{
+        &__see-more{
+            padding-top: 1rem;
+        }
+    }
 }

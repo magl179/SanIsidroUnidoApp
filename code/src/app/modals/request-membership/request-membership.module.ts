@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { RequestMembershipPage } from './request-membership.page';
-import { SmComponentsModule } from '../../components/sm-components.module';
+import { SmComponentsModule } from 'src/app/components/sm-components.module';
+import { PipesModule } from 'src/app/pipes/pipes.module';
 
 
 @NgModule({
@@ -12,7 +13,8 @@ import { SmComponentsModule } from '../../components/sm-components.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    SmComponentsModule
+    SmComponentsModule,
+    PipesModule
   ],
   declarations: [RequestMembershipPage]
 })

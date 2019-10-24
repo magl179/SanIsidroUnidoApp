@@ -3,26 +3,7 @@
 // @import "./posts/reports.scss";
 // @import "./posts/social-problems.scss";
 
-.image-gallery-container {
-    .image-gallery-title{
-        font-size: 1em;
-        font-weight: bold;
-        color: var(--ion-color-dark);
-    }
-  .image-gallery {
-    .image-item {
-        margin: 0;  
 
-      margin-bottom: 0.7rem;
-      .image {
-        border: 0;
-        height: 150px;
-        width: 100%;
-        object-fit: cover;
-      }
-    }
-  }
-}
 // Action Sheet ICONS
 .share-event {
   ion-icon {

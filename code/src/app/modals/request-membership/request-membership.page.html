@@ -16,7 +16,7 @@
                 <ion-item-sliding>
                     <ion-item>
                         <ion-card>
-                            <img [src]="image">
+                            <img [src]="image | imageSanitizer">
                         </ion-card>
                     </ion-item>
                     <ion-item-options side="end">

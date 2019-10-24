@@ -1,0 +1,29 @@
+.report-detail {
+  &__main {
+    margin-bottom: 2rem;
+    &__title {
+    }
+  }
+  &__content {
+    margin-bottom: 2rem;
+    &__title {
+    }
+    &__description {
+    }
+  }
+  &__map {
+    margin-bottom: 2rem;
+    &__title {
+    }
+    &__content {
+    }
+  }
+  &__images {
+    &__title {
+    }
+  }
+}
+
+.section-title {
+  font-weight: bold;
+}

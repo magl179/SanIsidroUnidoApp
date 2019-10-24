@@ -15,6 +15,7 @@ import { ListNotificationsComponent } from './list-notifications/list-notificati
 import { StrengthPassbarComponent } from './strength-passbar/strength-passbar.component';
 import { NetworkStateBarComponent } from './network-state-bar/network-state-bar.component';
 import { NetworkBannerComponent } from './network-banner/network-banner.component';
+import { GalleryImageComponent } from "./gallery-image/gallery-image.component";
 
 @NgModule({
     declarations: [
@@ -30,7 +31,8 @@ import { NetworkBannerComponent } from './network-banner/network-banner.componen
         ListNotificationsComponent,
         StrengthPassbarComponent,
         NetworkStateBarComponent,
-        NetworkBannerComponent
+        NetworkBannerComponent,
+        GalleryImageComponent,
     ],
     imports: [
         CommonModule,
@@ -49,7 +51,8 @@ import { NetworkBannerComponent } from './network-banner/network-banner.componen
         ListNotificationsComponent,
         StrengthPassbarComponent,
         NetworkStateBarComponent,
-        NetworkBannerComponent
+        NetworkBannerComponent,
+        GalleryImageComponent
     ]
 })
 export class SmComponentsModule { }

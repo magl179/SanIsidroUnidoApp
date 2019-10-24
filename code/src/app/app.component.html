@@ -1,5 +1,5 @@
 <ion-app>
-    <splash-sm *ngIf="showAppsplash"></splash-sm>
+    <!-- <splash-sm *ngIf="showAppsplash"></splash-sm> -->
     <ion-split-pane contentId="main_router_outlet">
         <ion-menu side="start" menuId="main_app_menu" contentId="main_router_outlet">
             <ion-content class="menu_content_app">
@@ -7,7 +7,8 @@
                 <!-- Header Menu -->
                 <div class="header-menu">
                     <ion-item lines="none" color="primary">
-                        <ion-avatar slot="start" (click)="closeMenu()" *ngIf="sessionAuth && sessionAuth.user">
+                        <ion-avatar slot="start" (click)="closeMenu()"
+                            *ngIf="sessionAuth && sessionAuth.user">
                             <img [src]="sessionAuth.user.avatar" fallimg="user_avatar" />
                         </ion-avatar>
                         <ion-label>
@@ -65,7 +66,8 @@
                 </div>
                 <!--ITEM TO CLOSE SESSION-->
                 <ion-list>
-                    <ion-item class="item-sm item-close-sesion" tapable lines="none" (click)="closeAppSession()">
+                    <ion-item class="item-sm item-close-sesion" tapable lines="none"
+                        (click)="closeAppSession()">
                         <ion-icon slot="start" name="ios-log-out"></ion-icon>
                         <ion-label>Cerrar Sesión</ion-label>
                     </ion-item>
