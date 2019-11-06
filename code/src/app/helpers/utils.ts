@@ -4,14 +4,15 @@ import { Observable, interval, throwError, of } from 'rxjs';
 import { retryWhen, flatMap } from 'rxjs/operators';
 import { checkLikePost } from './user-helper';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ISubcategory } from '../interfaces/models';
 
 declare var moment: any;
 moment.locale('es');
-const URL_PATTERN = new RegExp('^(https?:\\/\\/)?'+ // protocol
-'((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|'+ // domain name
-'((\\d{1,3}\\.){3}\\d{1,3}))'+ // ip (v4) address
-'(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ //port
-'(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+const URL_PATTERN = new RegExp('^(https?:\\/\\/)?' + // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|' + // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))' + // ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + //port
+    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
     '(\\#[-a-z\\d_]*)?$', 'i');
 
 const REGEX_URL = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
@@ -73,6 +74,49 @@ export const setHeaders = (key: any, value: any) => {
     return newHeaders;
 }
 
+const getValueKeyFromArrObj = (arr: object[], key: string) => {
+    const arrFilter = arr.map(item => item[key]);
+    return arrFilter;
+}
+
+//
+export const setFilterKeys = (filters: object, type: string, value: any) => {
+    for (const prop in filters) {
+        filters[prop] = value;
+    }
+    return filters;
+}
+
+// Función para obtener la distancia en KM entre dos coordenadas
+export const getDistanceInKm = (lat1: number,lon1: number,lat2: number,lon2: number) => {
+    let R = 6371;
+    let dLat = (lat2-lat1) * (Math.PI/180);
+    let dLon = (lon2-lon1) * (Math.PI/180);
+    let a =
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(lat1 * (Math.PI/180)) * Math.cos(lat2 * (Math.PI/180)) *
+      Math.sin(dLon/2) * Math.sin(dLon/2)
+      ;
+    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    let d = R * c;
+    return d;
+}
+  
+export const roundDecimal = (numero: number) => {
+    return Math.round(numero * 100) / 100;
+}
+
+export const filterDataInObject = (data: any[], filter: {}) => {
+    let new_data = data.filter(function (item) {
+        for (var key in filter) {
+            if (item[key] === undefined || item[key] != filter[key])
+                return false;
+        }
+        return true;
+    });
+    return new_data;
+}
+
 //Recibe array objetos y un objeto con el valor a buscar y devuelve true/false si existe ese valor
 // Ejemplo [{id: 1, name: 'lola}, {id: 2, name: 'bebe'}], {name: 'bebe}
 export const searchInArrayObj = (items: any[], filter: { [key: string]: any }) => {
@@ -118,10 +162,7 @@ const imagenIsURL = (image_name: string) => {
 
 //Obtener la URL de una imagen
 export const getImageURL = (image_name: string) => {
-    // console.log('image to check url', image_name);
-    // console.trace();
     const imgIsURL = imagenIsURL(image_name);
-    // console.log('is image_url', imgIsURL);
     if (imgIsURL) {
         return image_name;
     } else {
@@ -141,7 +182,7 @@ export const mapUser = (user: any) => {
     if (user && user.avatar) {
         user.avatar = getImageURL(user.avatar);
     } else {
-        user.avatar = 'assets/img/default/img_avatar.png'; 
+        user.avatar = 'assets/img/default/img_avatar.png';
     }
     return user;
 }
@@ -150,11 +191,11 @@ export const manageTwoFingerDrag = (event: any) => {
     console.warn('event map target', event);
     console.dir('current target map', event.currentTarget);
     if (event.type === 'touchstart' && event.touches.length === 1) {
-      event.currentTarget.classList.add('swiping')
+        event.currentTarget.classList.add('swiping')
     } else {
         event.currentTarget.classList.remove('swiping');
     }
-  }
+}
 
 export const MapNotification = (notification: any) => {
     if (notification && notification.user) {
@@ -181,11 +222,18 @@ export const mapEvent = (event: any) => {
     event.ubication = getJSON(event.ubication);
     if (event.images && event.images.length > 0) {
         event.images = mapImagesApi(event.images);
+        event.imagesArr = getValueKeyFromArrObj(event.images, 'url');
     }
     if (event.user && event.user.avatar) {
         event.user.avatar = getImageURL(event.user.avatar);
     }
     return event;
+}
+
+export const getRandomColor = () => {
+    const avalaibleColors = ['primary', 'secondary', 'tertiary', 'success', 'light', 'medium', 'dark'];
+    return ramdomItem(avalaibleColors);
+
 }
 
 export const mapEmergency = (emergency: any) => {
@@ -196,6 +244,7 @@ export const mapEmergency = (emergency: any) => {
     emergency.ubication = getJSON(emergency.ubication);
     if (emergency.images && emergency.images.length > 0) {
         emergency.images = mapImagesApi(emergency.images);
+        emergency.imagesArr = getValueKeyFromArrObj(emergency.images, 'url');
     }
     return emergency;
 }
@@ -204,6 +253,7 @@ export const mapReport = (report: any) => {
     report.ubication = getJSON(report.ubication);
     if (report.images && report.images.length > 0) {
         report.images = mapImagesApi(report.images);
+        report.imagesArr = getValueKeyFromArrObj(report.images, 'url');
     }
     return report;
 }
@@ -215,11 +265,24 @@ export const mapSocialProblem = (social_problem: any) => {
     social_problem.ubication = getJSON(social_problem.ubication);
     if (social_problem.images && social_problem.images.length > 0) {
         social_problem.images = mapImagesApi(social_problem.images);
+        social_problem.imagesArr = getValueKeyFromArrObj(social_problem.images, 'url');
     }
     if (social_problem.user && social_problem.user.avatar) {
         social_problem.user.avatar = getImageURL(social_problem.user.avatar);
     }
     return social_problem;
+}
+
+export const mapCategory = (category: ISubcategory) => {
+    const avalaibleIcons = [
+        'http://localhost/resources/svg/chat.svg',
+        'http://localhost/resources/svg/envelope.svg',
+        'http://localhost/resources/svg/headset.svg',
+        'http://localhost/resources/svg/imac.svg'
+    ];
+    const category_icon = ramdomItem(avalaibleIcons);
+    category.icon = category_icon;
+    return category;
 }
 
 export const setInputFocus = (inputElement: any) => {

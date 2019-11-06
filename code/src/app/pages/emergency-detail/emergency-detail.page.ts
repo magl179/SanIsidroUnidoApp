@@ -8,7 +8,7 @@ import { finalize, map, take } from 'rxjs/operators';
 import { IRespuestaApiSIUSingle } from 'src/app/interfaces/models';
 import { ModalController } from "@ionic/angular";
 import { ImageDetailPage } from 'src/app/modals/image_detail/image_detail.page';
-import { mapImagesApi, getJSON, mapEmergency } from 'src/app/helpers/utils';
+import { mapEmergency } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
@@ -21,7 +21,6 @@ export class EmergencyDetailPage implements OnInit {
     emergency = null;
     emergencyLoaded = false;
     AuthUser = null;
-    // postLoaded = false;
 
     constructor(private route: ActivatedRoute,
         public utilsService: UtilsService,

@@ -122,7 +122,7 @@ export class SocialProblemCreatePage implements OnInit {
         ).subscribe(async res => {
             await this.utilsService.showToast({message: "El Reporte fue enviado correctamente"});
             this.events_app.resetSocialProblemEmmiter();
-            this.router.navigate(['/social-problems'])
+            // this.router.navigate(['/social-problems'])
         }, (err: HttpErrorResponse) => {
                 this.utilsService.showToast({ message: 'Ocurrio un error al enviar el reporte' });
             if (err.error instanceof Error) {

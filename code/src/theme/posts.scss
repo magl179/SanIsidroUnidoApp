@@ -96,3 +96,12 @@
     background: #455A64;
     color: #ecfef1;
 }
+//ComponenteSlideShowFull
+.slideImageFull{
+    // width: 100%;
+    height: 200px !important;
+    img{
+        width: 100% !important;
+        object-fit: cover !important;
+    }
+}

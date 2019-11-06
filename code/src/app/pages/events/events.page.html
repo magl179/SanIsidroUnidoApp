@@ -1,4 +1,5 @@
-<app-header-back title="Eventos" [search]="true" (optionSelected)="getOptionSelected($event)"></app-header-back>
+<app-header-back title="Eventos" [search]="true" (optionSelected)="getOptionSelected($event)">
+</app-header-back>
 <ion-content padding>
     <!-- Refresher -->
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
@@ -6,12 +7,9 @@
             refreshingText="Cargando Publicaciones...">
         </ion-refresher-content>
     </ion-refresher>
-    <!-- <p> Num Eventos {{eventsList.length}}</p> -->
-    <!-- Mensaje al no cargar los datos-->
-    <div class="flex-column-center message-fail-load"
-        *ngIf="eventsLoaded && eventsList.length === 0">
-        <p>No se pudieron cargar los Eventos</p>
-    </div>
+    <!-- Mensaje si datos no cargan o son tamaño 0 -->
+    <app-no-results-found *ngIf="eventsLoaded && eventsList.length === 0"
+        message="No existen eventos disponibles"></app-no-results-found>
     <!-- Tarjetas Animacion hasta cargar datos-->
     <div *ngIf="!eventsLoaded">
         <ion-card *ngFor="let event of [1,1,1,1]" class="event animated flash slow infinite">

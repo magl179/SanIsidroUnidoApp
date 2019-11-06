@@ -38,14 +38,13 @@ export class UploadImageComponent implements OnInit {
     }
 
     async getUploadedImages() {
-        await this.returnUploadedImages.emit({
+        this.returnUploadedImages.emit({
             total_img: this.uploadedImages
         });
     }
 
     loadImageFromGallery() {
         cameraOptions.sourceType = this.camera.PictureSourceType.PHOTOLIBRARY;
-        console.log({ gallery: cameraOptions });
         if (this.uploadedImages.length < this.maxImages) {
             this.uploadImage();
         } else {
@@ -59,7 +58,6 @@ export class UploadImageComponent implements OnInit {
 
     loadImageFromCamera() {
         cameraOptions.sourceType = this.camera.PictureSourceType.CAMERA;
-        console.log({ cm: cameraOptions });
         if (this.uploadedImages.length < this.maxImages) {
             this.uploadImage();
         } else {
@@ -86,7 +84,7 @@ export class UploadImageComponent implements OnInit {
                 this.getUploadedImages();
             }
         } else {
-            this.utilsService.showToast({message: 'Cordova no esta disponible'});
+            this.utilsService.showToast({message: 'Solo disponible en Smartphones'});
         }
 
     }

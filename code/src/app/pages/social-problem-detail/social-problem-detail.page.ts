@@ -24,6 +24,7 @@ import { EventsService } from "../../services/events.service";
 export class SocialProblemDetailPage implements OnInit {
 
     id: string;
+    slugSubcategory: string;
     socialProblem: ISocialProblem = null;
     socialProblemLoaded = false;
     AuthUser = null;
@@ -40,6 +41,7 @@ export class SocialProblemDetailPage implements OnInit {
 
     async ngOnInit() {
         this.id = this.route.snapshot.paramMap.get('id');
+        this.slugSubcategory = this.route.snapshot.paramMap.get('slug_subcategory');
         this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
             this.appNetworkConnection = connected;
         });

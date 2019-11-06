@@ -32,7 +32,6 @@ export class HomePage implements OnInit {
         });
         this.localDataService.getHomeOptions().subscribe((data: any) => {
             this.servicesList = data;
-            console.log('items home: ', data.length);
         });
         await this.utilsService.enableMenu();
     }

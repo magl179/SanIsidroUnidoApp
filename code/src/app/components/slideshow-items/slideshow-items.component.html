@@ -1,0 +1,10 @@
+<ion-slides [options]="slideOpts" (ionSlideDidChange)="slideChange($event)">
+    <ion-slide class="slide-items" *ngFor="let item of items; let i = index;">
+        <ion-card [color]="item.color">
+            <div style="padding: .5em">
+                <p style="font-size: 1em;margin: .7em;"><ion-icon name="beer"></ion-icon></p>
+                <h1 class="ion-text" style="font-size: 1.2em;">Farmacia {{ i}} Juanito</h1>
+            </div>
+        </ion-card>
+    </ion-slide>
+</ion-slides>

@@ -1,16 +1,17 @@
 //INTERFACES RECIBIR DATOS
-// Respuesta Api
 export interface IRespuestaApiSIU {
     code: number;
-    message: string;
     data: any[];
-    errors: any[]
+    errors: any[];
+    message: string;
+    status: string;
 }
 export interface IRespuestaApiSIUSingle {
     code: number;
-    message: string;
     data: any;
     errors: any[]
+    message: string;
+    status: string;
 }
 
 export interface IRespuestaApiSIUPaginada {
@@ -24,6 +25,7 @@ export interface IRespuestaApiSIUPaginada {
     path: string;
     per_page: number;
     prev_page_url?: any;
+    status: string;
     to: number;
 }
 
@@ -192,6 +194,17 @@ export interface I_ImagesApi {
     post_id: number;
     updated_at: string;
     url: string;
+}
+
+export interface ISubcategory {
+    id: number;
+    name: string;
+    slug: string;
+    description: string;
+    category_id: number;
+    created_at?: any;
+    updated_at?: any;
+    icon?: string;
 }
 
 export interface IEvent {

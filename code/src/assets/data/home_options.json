@@ -2,25 +2,25 @@
     {
         "title": "Mis Emergencias",
         "icon": "assets/img/svg/alarm.svg",
-        "url": "/emergencies",
+        "url": "/emergencies-tabs/list",
         "valid_roles": ["morador"]
     },
     {
         "title": "Problemas Sociales",
         "icon": "assets/img/svg/protest.svg",
-        "url": "/social-problems",
+        "url": "/social-problems-tabs",
         "valid_roles": ["morador", "invitado", "policia"]
     },
     {
         "title": "Eventos",
         "icon": "assets/img/svg/calendar.svg",
-        "url": "/events",
+        "url": "/events-tabs",
         "valid_roles": ["morador", "invitado", "policia"]
     },
     {
         "title": "Servicios Públicos",
         "icon": "assets/img/svg/information-point.svg",
-        "url": "/public-services",
+        "url": "/public-services-categories",
         "valid_roles": ["morador", "invitado", "policia"]
     },
     {
@@ -32,7 +32,7 @@
     {
         "title": "Informes",
         "icon": "assets/img/svg/analytics.svg",
-        "url": "/reports",
+        "url": "/reports-tabs",
         "valid_roles": ["morador", "invitado", "policia"]
     }
 ]

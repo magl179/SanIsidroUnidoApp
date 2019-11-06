@@ -93,7 +93,12 @@ export class LoginPage implements OnInit {
             if (fbData) {
                 const user = this.socialDataService.getFacebookDataParsed(fbData);
                 const { social_id, email } = user;
-                this.authService.login(user).subscribe(res => {
+                const loginData = {
+                    email: user.email,
+                    provider: user.provider,
+                    social_id: user.social_id
+                };
+                this.authService.login(loginData).subscribe(res => {
                     this.manageLogin({ provider: 'facebook', social_id, email }, res);
                 }, (err: HttpErrorResponse) => {
                     this.utilsService.showToast({
@@ -114,7 +119,12 @@ export class LoginPage implements OnInit {
             if (googleData) {
                 const user = this.socialDataService.getGoogleDataParsed(googleData);
                 const { social_id, email } = user;
-                this.authService.login(user).subscribe(async res => {
+                const loginData = {
+                    email: user.email,
+                    provider: user.provider,
+                    social_id: user.social_id
+                };
+                this.authService.login(loginData).subscribe(async res => {
                     console.log('Login First Response', res);
                     await this.manageLogin({ social_id, email, provider: 'google' }, res);
                 }, (err: HttpErrorResponse) => {

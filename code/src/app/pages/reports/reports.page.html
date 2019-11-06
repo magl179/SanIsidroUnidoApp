@@ -1,16 +1,16 @@
 <app-header-back title="Informes"></app-header-back>
 
 <ion-content padding>
+    <!-- Componente Refresher Data -->
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content pullingIcon="arrow-dropdown" refreshingSpinner="circles"
             refreshingText="Cargando Publicaciones...">
         </ion-refresher-content>
     </ion-refresher>
-    <div class="flex-column-center message-fail-load"
-        *ngIf="reportsLoaded && reportsList.length === 0">
-        <p>No existen reportes disponibles</p>
-    </div>
-    <!-- animacion antes cargue datos -->
+    <!-- Mensaje si falla traer datos o datos son 0 -->
+    <app-no-results-found *ngIf="reportsLoaded && reportsList.length === 0"
+        message="No existen reportes disponibles" class="ion-padding"></app-no-results-found>
+    <!-- Animación al cargar los datos -->
     <div *ngIf="!reportsLoaded">
         <ion-card class="report animated flash slow infinite" *ngFor="let item of [1,1,1,1]">
             <ion-card-header>
@@ -30,7 +30,7 @@
             </ion-card-content>
         </ion-card>
     </div>
-    <!-- Tarjetas con Datos -->
+    <!-- Tarjetas con Información de los Reportes -->
     <div *ngIf="reportsLoaded && reportsList.length > 0">
         <ion-card class="report-container" *ngFor="let report of reportsList; let i = index;">
             <ion-card-header>
@@ -45,7 +45,7 @@
             </ion-card-content>
         </ion-card>
     </div>
-    <!-- Scroll Infinito -->
+    <!-- Componente Scroll Infinito -->
     <ion-infinite-scroll threshold="150px" (ionInfinite)="doInfiniteScroll($event)">
         <ion-infinite-scroll-content loadingSpinner="crescent"
             loadingText="Cargando Publicaciones...">

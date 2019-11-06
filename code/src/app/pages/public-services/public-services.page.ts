@@ -3,12 +3,14 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { IPublicService } from 'src/app/interfaces/models';
 import { PostsService } from 'src/app/services/posts.service';
 import { NetworkService } from 'src/app/services/network.service';
-import { ModalController } from "@ionic/angular";
+import { ModalController, NavController } from "@ionic/angular";
 import { MapInfoPage } from "src/app/modals/map-info/map-info.page";
-import { finalize, take } from 'rxjs/operators';
+import { finalize, take, map } from 'rxjs/operators';
 // import { CacheService } from 'ionic-cache';
 import { IRespuestaApiSIU } from "src/app/interfaces/models";
 import { Subscription } from 'rxjs';
+import { getRandomColor } from 'src/app/helpers/utils';
+import { PublicService } from 'src/app/services/public.service';
 
 @Component({
     selector: 'app-public-services',
@@ -28,7 +30,8 @@ export class PublicServicesPage implements OnInit {
 
     constructor(
         private utilsService: UtilsService,
-        private postService: PostsService,
+        private publicService: PublicService,
+        private navCtrl: NavController,
         private modalCtrl: ModalController
     ) { }
 
@@ -39,14 +42,19 @@ export class PublicServicesPage implements OnInit {
     loadPublicServices() {
         
         this.publicServicesLoaded = false;
-        this.postService.getPublicServices().pipe(
+        this.publicService.getPublicServices().pipe(
+            map((res: IRespuestaApiSIU )=> {
+                res.data.forEach(public_service => {
+                    public_service.color = getRandomColor()
+                });
+                return res;
+            }),
             take(1),
             finalize(() => {
             this.publicServicesLoaded = true;
         })).subscribe((response: IRespuestaApiSIU) => {
             this.publicServices = response.data;
         }, (err: any) => {
-                this.utilsService.showToast({message: 'No se pudieron cargar los servicios públicos'});
                 console.log('Servicios Publicos', err);
         });
     }
@@ -85,5 +93,9 @@ export class PublicServicesPage implements OnInit {
             this.markerSelected = event.markerSelected;
             this.lanzarModal();
         }
+    }
+
+    goToDetail(id = 3) {
+        this.navCtrl.navigateForward(`/public-service-detail/${id}`)
     }
 }

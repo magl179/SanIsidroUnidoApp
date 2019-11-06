@@ -16,19 +16,13 @@ export class PostsService implements OnInit {
     //DatosUsuario
     AuthUser = null;
     AuthToken = null;
-    //Cabeceras
-    // headersApp = new HttpHeaders({
-    //     'Content-Type': 'application/json'
-    // });
-    // headersApp = new HttpHeaders({
-    //     'Content-Type': 'application/json'
-    // })
     //Paginas Actuales
     currentPage = {
         events: 0,
         socialProblems: 0,
         emergencies: 0,
-        reports: 0
+        reports: 0,
+        socialProblemsBySubcategory: 0
     }
     //Categorias Actuales
     currentCategory = {
@@ -36,10 +30,8 @@ export class PostsService implements OnInit {
     }
     socialProblemsCurrentSubcategory = '';
     socialProblemsSubcategoriesPage = 0;
-    // categoriesPostsPagesNumber = 0;
 
     constructor(
-        private http: HttpClient,
         private authService: AuthService,
         private httpRequest: HttpRequestService
     ) {
@@ -71,6 +63,7 @@ export class PostsService implements OnInit {
     resetReportsPage() {
         this.currentPage.reports = 0;
     }
+    //METODOS POST
     // Función para enviar un Reporte de Emergencia
     sendEmergencyReport(emergencyPost: IEmergencyReported): Observable<any> {
         const headers = setHeaders(environment.AUTHORIZATION_NAME, this.AuthToken);
@@ -93,64 +86,69 @@ export class PostsService implements OnInit {
     sendDeleteDetailToPost(post_id: number) {
         const headers = setHeaders(environment.AUTHORIZATION_NAME, this.AuthToken);
         headers[environment.AUTHORIZATION_NAME] = this.AuthToken;
-        // console.log('auth token', this.AuthToken);
         return this.httpRequest.delete(`${environment.apiBaseURL}/detalles/${post_id}`, {}, headers);
+    }
+    //METODOS GET
+    //Función para obtener detalle publicaciones
+    getPostDetail(slug: string, id: number) {
+        return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/categoria/${slug}/detalle/${id}`);
+    }
+    //Función para obtener detalle publicaciones
+    getPosts(slug: string, page: number) {
+        return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/categoria/${slug}?page=${page}`);
     }
     // Función para obtener los problemas sociales de la API
     getSocialProblems(): Observable<any> {
         this.currentPage.socialProblems++;
-        console.warn('social prlblems Current Page', this.currentPage.socialProblems);
         const socialProblemsSlug = environment.socialProblemSlug;
-        return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/${socialProblemsSlug}?page=${this.currentPage.socialProblems}`);
+        return this.getPosts(socialProblemsSlug, this.currentPage.socialProblems);
     }
     // Función para obtener el listado de emergencias reportadas por un usuario
     getEmergenciesByUser() {
         const user_id = this.AuthUser.id;
         this.currentPage.emergencies++;
-        console.warn('emergencies Current Page', this.currentPage.emergencies);
         return this.httpRequest.get(`${environment.apiBaseURL}/usuarios/${user_id}/emergencias?page=${this.currentPage.emergencies}`);
     }
     // Función para obtener el listado de eventos publicados
     getEvents(): Observable<IRespuestaApiSIUPaginada> {
         this.currentPage.events++;
-        console.warn('Events Current Page', this.currentPage.events);
         const eventsSlug = environment.eventsSlug;
-        return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/${eventsSlug}?page=${this.currentPage.events}`);
+        return this.getPosts(eventsSlug, this.currentPage.events);
+    }
+    //Funcion para obtener el listado de informes registrados
+    getReports(): Observable<IRespuestaApiSIUPaginada>{
+        this.currentPage.reports++;
+        const reportsSlug = environment.reportsSlug;
+        return this.getPosts(reportsSlug, this.currentPage.reports);
     }
     // Función para obtener el detalle de un problema social
     getSocialProblem(id: number): Observable<any> {
         const socialProblemsSlug = environment.socialProblemSlug;
-        return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/${socialProblemsSlug}/${id}`);
+        return this.getPostDetail(socialProblemsSlug, id);
     }
     // Función para obtener el detalle de un evento
     getEvent(id: number): Observable<any> {
         const eventsSlug = environment.eventsSlug;
-        return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/${eventsSlug}/${id}`);
+        return this.getPostDetail(eventsSlug, id);
     }
     // Función para obtener el detalle de una emergencia
     getEmergency(id: number): Observable<any> {
         const emergenciesSlug = environment.emergenciesSlug;
-        return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/${emergenciesSlug}/${id}`);
+        return this.getPostDetail(emergenciesSlug, id);
     }
     // Función para obtener el detalle de un informe
     getReport(id: number): Observable<any> {
         const reportsSlug = environment.reportsSlug;
-        return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/${reportsSlug}/${id}`);
-    }
-    // Función para obtener el listado de servicios publicos registrados
-    getPublicServices(): Observable<any> {
-        return this.httpRequest.get(`${environment.apiBaseURL}/servicios-publicos`);
-    }
-    //Funcion para obtener el listado de informes registrados
-    getReports(): Observable<IRespuestaApiSIUPaginada>{
-        console.log('llamdo post service get reports');
-        this.currentPage.reports++;
-        const reportsSlug = environment.reportsSlug;
-        return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/${reportsSlug}?page=${this.currentPage.reports}`);
+        return this.getPostDetail(reportsSlug, id);
     }
     // Función para obtener el listado de subcategorias de una categoria
     getSubcategoriesByCategory(category: string): Observable<any> {
         const url = `${environment.apiBaseURL}/categorias/${category}/subcategorias`;
+        return this.httpRequest.get(url);
+    }
+    getPostsBySubCategory(category: string, subcategory: string) {
+        this.currentPage.socialProblemsBySubcategory++;
+        const url = `${environment.apiBaseURL}/publicaciones/categoria/${category}/subcategoria/${subcategory}`;
         return this.httpRequest.get(url);
     }
     // Función para buscar las publicaciones relacionadas a una categoria de una busqueda en especifico

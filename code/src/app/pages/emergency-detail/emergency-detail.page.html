@@ -44,9 +44,8 @@
     <!-- Datos ya cargados -->
     <div *ngIf="emergencyLoaded && emergency">
         <div class="emergency-detail">
-            <div class="post-cover"
-                *ngIf="emergency && emergency.images && emergency.images.length > 0">
-                <img [src]="emergency.images[0].url" alt="Imagen Tarjeta" class="img" />
+            <div *ngIf="emergency.imagesArr && emergency.imagesArr.length > 0">
+                <slideshow-images-full ionSlideClass="slideImageFull" [listImages]="emergency.imagesArr" title="Imagen de un Evento"></slideshow-images-full>
             </div>
             <div class="post-info-container">
                 <div class="post-description-info">
@@ -86,11 +85,6 @@
                     <simple-map className="emergency-map" id="emergency-map-detail-{{id}}"
                         [coordsMap]="emergency.ubication" [zoom]="16" [enableGesture]="true">
                     </simple-map>
-                </div>
-                <div class="image-gallery-container"
-                    *ngIf="emergency.images && emergency.images.length > 0">
-                    <h4 class="image-gallery-title">Imágenes</h4>
-                    <gallery-image [images]="emergency.images"> </gallery-image>
                 </div>
             </div>
         </div>

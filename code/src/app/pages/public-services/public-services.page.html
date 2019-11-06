@@ -1,16 +1,41 @@
-<app-header-back title="Servicios Públicos"></app-header-back>
+<app-header-back title="Servicios" hrefDefault="public-services-categories" [search]="true" [showNoti]="false">
+</app-header-back>
 <ion-content>
-    <div class="flex-column-center message-fail-load" *ngIf="publicServicesLoaded && publicServices.length === 0">
-        <p>No se pudieron cargar los servicios públicos</p>
-        <ion-button (click)="loadPublicServices()">Toca para reintentar</ion-button>
+    <!-- Mensaje si datos no cargan o son tamaño 0 -->
+   <app-no-results-found *ngIf="publicServicesLoaded && publicServices.length === 0" message="No existen servicios públicos disponibles"></app-no-results-found>
+    <!-- Componente Carga mientras se traen los datos -->
+    <div class="loading-app" *ngIf="!publicServicesLoaded">
+        <loader-app class="flex-column-center"></loader-app>
     </div>
-    <div class="flex-column-center message-fail-load" *ngIf="!publicServicesLoaded">
-        <ion-spinner name="crescent"></ion-spinner>
-    </div>
+    <!-- Tarjetas Datos Servicios Publicos -->
     <div *ngIf="publicServicesLoaded && publicServices.length > 0">
-        <multiple-map *ngIf="publicServices.length > 0" id="public-services" [zoomMap]="12"
-            [mapPoints]="publicServices" [enableGesture]="false"
-            (returnMapLoaded)="manageDataMap($event)">
-        </multiple-map>
+        <ion-grid>
+            <ion-row>
+                <ion-col size="6" *ngFor="let publicService of publicServices">
+                    <ion-card class="ion-text-center">
+                        <ion-card-header>
+                            <!-- <ion-card-subtitle>{{(publicService.ubication.address) ? publicService.ubication.address: 'Direccion no encontrada'}}</ion-card-subtitle> -->
+                            <ion-card-title>{{publicService.name}}</ion-card-title>
+                        </ion-card-header>
+                        <ion-card-content>
+                            <div style="padding-bottom: 14px;">
+                                <p style="font-weight: bold;">Direccion: </p>
+                                <p class="ion-text">
+                                    {{(publicService.ubication.address) ? publicService.ubication.address: 'Direccion no encontrada'}}
+                                </p>
+                            </div>
+                            <!-- <p>
+                                <span style="font-weight: bold;">Breve Descripción: </span>
+                                <span>{{publicService.description}}</span>
+                            </p> -->
+                        </ion-card-content>
+                        <div style="padding: 14px;padding-top: 0;">
+                            <ion-button color="primary" expand="full" (click)="goToDetail(publicService.id)">Más
+                                información</ion-button>
+                        </div>
+                    </ion-card>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
     </div>
 </ion-content>

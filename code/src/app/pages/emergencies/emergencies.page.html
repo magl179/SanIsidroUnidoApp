@@ -1,17 +1,31 @@
-<app-header-back title="Mis Emergencias" [search]="true" [filter]="true" [report]="true" (optionSelected)="getOptionSelected($event)"></app-header-back>
+<app-header-back title="Mis Emergencias" [search]="true" [report]="true"
+    (optionSelected)="getOptionSelected($event)"></app-header-back>
 
 <ion-content padding>
+    <ion-segment value="" (ionChange)="segmentChanged($event)">
+        <ion-segment-button value="">
+            <ion-icon color="secondary" name="document"></ion-icon>
+            <ion-label>Todos</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="1">
+            <ion-icon color="success" name="checkbox"></ion-icon>
+            <ion-label>Atendidos</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="0">
+            <ion-icon color="danger" name="clock"></ion-icon>
+            <ion-label>Pendientes</ion-label>
+        </ion-segment-button>
+    </ion-segment>
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content pullingIcon="arrow-dropdown" refreshingSpinner="circles"
             refreshingText="Cargando Publicaciones...">
         </ion-refresher-content>
     </ion-refresher>
-    <!-- <p>Num emergencias {{emergenciesFiltered.length}}</p> -->
-    <div class="flex-column-center message-fail-load"
-        *ngIf="emergenciesLoaded && emergenciesList.length === 0">
-        <p>No existen emergencias disponibles</p>
-    </div>
-    <!-- Tarjetas Animacion hasta cargar datos-->
+    <!-- Mensaje cuando no hay datos disponibles-->
+    <app-no-results-found class="ion-padding"
+        *ngIf="emergenciesLoaded && emergenciesList.length === 0"
+        message="No existen emergencias disponibles"></app-no-results-found>
+    <!-- Tarjetas de Animacion mientras se cargan los datos-->
     <div *ngIf="!emergenciesLoaded">
         <ion-card *ngFor="let animations of [1,1,1,1,1,1,1];"
             class="emergency animated flash slow infinite">
@@ -26,8 +40,9 @@
             </ion-card-content>
         </ion-card>
     </div>
-    <!-- Tarjetas con Datos -->
+    <!-- Posts con Datos -->
     <div *ngIf="emergenciesLoaded  && emergenciesList.length > 0">
+        <!-- Posts Filtrados con Datos -->
         <ion-card class="emergency" *ngFor="let emergency of emergenciesFiltered; let i = index;">
             <ion-card-header class="post-header">
                 <ion-card-title class="post-title">
@@ -42,6 +57,9 @@
                 <p class="see-more" (click)="postDetail(emergency.id)">Ver más...</p>
             </ion-card-content>
         </ion-card>
+        <!-- Posts Filtrados Sin Resultados -->
+        <app-no-results-found class="ion-padding" *ngIf="emergenciesFiltered.length === 0"
+            message="No hay publicaciones disponibles"></app-no-results-found>
     </div>
     <!-- Scroll Infinito -->
     <ion-infinite-scroll threshold="150px" (ionInfinite)="getInfiniteScrollData($event)">

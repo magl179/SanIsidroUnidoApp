@@ -16,10 +16,11 @@ import { NgFallimgModule } from 'ng-fallimg';
 import { DirectivesModule } from "../../directives/directives.module";
 
 const routes: Routes = [
-  {
-    path: '',
-    component: SocialProblemsPage
-  }
+    {
+        path: '',
+        component: SocialProblemsPage
+    },
+    
 ];
 
 @NgModule({
@@ -28,19 +29,19 @@ const routes: Routes = [
         FilterPage,
         SearchPage
     ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    RouterModule.forChild(routes),
-    SmComponentsModule,
-      PipesModule,
-      ImageDetailPageModule,
-      FilterPageModule,
-      DirectivesModule,
-      SearchPageModule,
-      NgFallimgModule
-  ],
-  declarations: [SocialProblemsPage]
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        RouterModule.forChild(routes),
+        SmComponentsModule,
+        PipesModule,
+        ImageDetailPageModule,
+        FilterPageModule,
+        DirectivesModule,
+        SearchPageModule,
+        NgFallimgModule
+    ],
+    declarations: [SocialProblemsPage]
 })
-export class SocialProblemsPageModule {}
+export class SocialProblemsPageModule { }

@@ -27,7 +27,6 @@ export class AppComponent implements OnInit {
     menuComponents: IMenuComponent[];
     automaticClose = true;
     sessionAuth: any = null;
-    // AuthUserRol = null;
 
     constructor(
         private platform: Platform,
@@ -57,7 +56,7 @@ export class AppComponent implements OnInit {
     initializeApp() {
         //Execute all Code Here
         this.platform.ready().then(async () => {
-            console.log('platform ready');
+            // console.log('platform ready');
             await this.checkInitialStateNetwork();
             if (this.platform.is('cordova')) {
                 this.statusBar.styleDefault();

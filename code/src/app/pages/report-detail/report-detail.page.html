@@ -1,34 +1,21 @@
 <app-header-back title="Informe" hrefDefault="/reports"></app-header-back>
 
 <ion-content padding>
-    <!-- Mensaje no cargaron los datos desde la Api -->
-    <div class="flex-column-center message-fail-load" *ngIf="reportLoaded && !report">
-        <p>No se pudo cargar el reporte solicitado</p>
-        <ion-button (click)="getReport(null,true)">Toca para reintentar</ion-button>
-    </div>
+    <!-- Mensaje si datos no cargan o son tamaño 0 -->
+    <app-no-results-found *ngIf="reportLoaded && !report" message="No se pudo cargar el reporte">
+    </app-no-results-found>
     <!-- Animacion hasta cargar datos -->
-    <div *ngIf="!reportLoaded">
-        <div class="report-detail animated flash slow infinite">
-            <section>
-                <h1>
-                    <ion-skeleton-text width="30%"></ion-skeleton-text>
-                </h1>
-            </section>
-            <section>
-                <h2>
-                    <ion-skeleton-text width="100%"></ion-skeleton-text>
-                </h2>
-                <p class="description-section__content">
-                    <ion-skeleton-text width="100%"></ion-skeleton-text>
-                    <ion-skeleton-text width="100%"></ion-skeleton-text>
-                    <ion-skeleton-text width="100%"></ion-skeleton-text>
-                </p>
-            </section>
-        </div>
+    <div class="loading-app" *ngIf="!reportLoaded">
+        <loader-app class="flex-column-center"></loader-app>
     </div>
     <!-- Datos ya cargados -->
     <div *ngIf="reportLoaded && report">
         <div class="report-detail">
+            <div *ngIf="report.imagesArr && report.imagesArr.length > 0">
+                <slideshow-images-full ionSlideClass="slideImageFull"
+                    [listImages]="report.imagesArr" title="Imagen de un Evento">
+                </slideshow-images-full>
+            </div>
             <section class="report-detail__main">
                 <h1 class="main-section__title"> {{ report.title }}</h1>
             </section>
@@ -40,13 +27,10 @@
             </section>
             <div class="report-detail__map" *ngIf="report.ubication">
                 <p class="report-detail__map__title section-title">Ubicación</p>
-                <simple-map class="report-detail__map__content" className="report-map" id="report-map-detail-{{id}}"
-                    [coordsMap]="report.ubication" [zoom]="16" [enableGesture]="true">
+                <simple-map class="report-detail__map__content" className="report-map"
+                    id="report-map-detail-{{id}}" [coordsMap]="report.ubication" [zoom]="16"
+                    [enableGesture]="true">
                 </simple-map>
-            </div>
-            <div class="report-detail__images" *ngIf="report.images && report.images.length > 0">
-                <p class="report_detail__images__title section-title">Imágenes</p>
-                <gallery-image [images]="report.images"></gallery-image>
             </div>
         </div>
     </div>

@@ -16,6 +16,14 @@ import { StrengthPassbarComponent } from './strength-passbar/strength-passbar.co
 import { NetworkStateBarComponent } from './network-state-bar/network-state-bar.component';
 import { NetworkBannerComponent } from './network-banner/network-banner.component';
 import { GalleryImageComponent } from "./gallery-image/gallery-image.component";
+import { SlideshowItemsComponent } from "./slideshow-items/slideshow-items.component";
+
+import {MaterialAppModule} from 'src/app/material-app.module'
+import { SelectOptionsComponent } from "./select-options/select-options.component";
+import { LoadingAppComponent } from "./loading-app/loading-app.component";
+import { NoResultsFoundComponent } from "./no-results-found/no-results-found.component";
+import { SimpleRoutingMapComponent } from "./simple-routing-map/simple-routing-map.component";
+import { SlideshowImagesFullComponent } from './slideshow-images-full/slideshow-images-full.component';
 
 @NgModule({
     declarations: [
@@ -33,10 +41,17 @@ import { GalleryImageComponent } from "./gallery-image/gallery-image.component";
         NetworkStateBarComponent,
         NetworkBannerComponent,
         GalleryImageComponent,
+        SlideshowItemsComponent,
+        SlideshowImagesFullComponent,
+        SelectOptionsComponent,
+        LoadingAppComponent,
+        NoResultsFoundComponent,
+        SimpleRoutingMapComponent,
     ],
     imports: [
         CommonModule,
-        IonicModule
+        IonicModule,
+        MaterialAppModule
     ],
     exports: [
         HeaderComponent,
@@ -52,7 +67,13 @@ import { GalleryImageComponent } from "./gallery-image/gallery-image.component";
         StrengthPassbarComponent,
         NetworkStateBarComponent,
         NetworkBannerComponent,
-        GalleryImageComponent
+        GalleryImageComponent,
+        SlideshowItemsComponent,
+        SlideshowImagesFullComponent,
+        SelectOptionsComponent,
+        LoadingAppComponent,
+        NoResultsFoundComponent,
+        SimpleRoutingMapComponent
     ]
 })
 export class SmComponentsModule { }

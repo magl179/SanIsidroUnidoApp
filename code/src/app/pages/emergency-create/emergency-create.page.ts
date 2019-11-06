@@ -170,7 +170,7 @@ export class EmergencyCreatePage implements OnInit {
         ).subscribe(async (res: IRespuestaApiSIU) => {
             await this.utilsService.showToast({message: "El Reporte fue enviado correctamente"});
             this.events_app.resetEmergenciesEmitter();
-            this.router.navigate(['/emergencies'])
+            // this.router.navigate(['/emergencies'])
         }, (err: HttpErrorResponse) => {
             if (err.error instanceof Error) {
                 console.log("Client-side error", err);

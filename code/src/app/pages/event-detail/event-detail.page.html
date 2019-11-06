@@ -1,11 +1,9 @@
 <app-header-back title="Evento" hrefDefault="/events"></app-header-back>
 
 <ion-content>
-    <!-- Mensaje no cargaron los datos desde la Api -->
-    <div class="flex-column-center message-fail-load" *ngIf="eventLoaded && !event">
-        <p>No se pudo cargar el evento solicitado</p>
-        <ion-button (click)="getEvent()">Toca para reintentar</ion-button>
-    </div>
+    <!-- Mensaje si datos no cargan o son tamaño 0 -->
+    <app-no-results-found *ngIf="eventLoaded && !event"
+        message="No se pudo cargar el evento"></app-no-results-found>
     <!-- Animacion Eventos Cargados -->
     <div *ngIf="!eventLoaded">
         <ion-card class="event-detail animated flash slow infinite">
@@ -45,8 +43,10 @@
     <!-- Datos Cargados -->
     <div *ngIf="eventLoaded && event">
         <div class="event-detail">
-            <div class="post-cover" *ngIf="event && event.images && event.images.length > 0">
-                <img [src]="event.images[0].url" alt="Imagen Tarjeta" class="img" />
+            <div *ngIf="event.imagesArr && event.imagesArr.length > 0">
+                <slideshow-images-full ionSlideClass="slideImageFull" [listImages]="event.imagesArr"
+                    title="Imagen de un Evento">
+                </slideshow-images-full>
             </div>
 
             <div class="post-info-container">
@@ -78,12 +78,13 @@
                             <span class="icon-people">
                                 <ion-icon name="people" class="social-problem-state"></ion-icon>
                             </span>
-                            <span *ngIf="event.postAssistance">A ti y {{event.details.length}} persona(s) más les interesa</span>
+                            <span *ngIf="event.postAssistance">A ti y {{event.details.length}}
+                                persona(s) más les interesa</span>
                             <span *ngIf="!event.postAssistance">
-                                A {{event.details.length}} 
+                                A {{event.details.length}}
                                 {{(event.details.length === 1) ? 'persona le interesa' : 'personas les interesa'}}
                             </span>
-                            
+
                         </p>
                         <!-- <p (click)="test()">test</p> -->
                     </div>
@@ -91,31 +92,33 @@
 
                 <div class="map-container" *ngIf="event.ubication">
                     <p class="map-title">Ubicación</p>
-                    <simple-map className="event-map" id="eventMap-detail-{{id}}" [coordsMap]="event.ubication" [zoom]="16" [enableGesture]="true">
+                    <simple-map className="event-map" id="eventMap-detail-{{id}}"
+                        [coordsMap]="event.ubication" [zoom]="16" [enableGesture]="true">
                     </simple-map>
                 </div>
-                <div class="image-gallery-container"
+                <!-- <div class="image-gallery-container"
                     *ngIf="event.images && event.images.length > 0">
                     <h4 class="image-gallery-title">Imágenes</h4>
                     <gallery-image [images]="event.images"> </gallery-image>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
 
 </ion-content>
 <ion-footer class="footer-fixed-posts" *ngIf="event">
-        <div class="social">
-            <!-- <div class="social-content">A 5 Personas les gusta</div> -->
-            <div class="social-options">
-                <div class="social-button dark" [class.active]="event.postAssistance" (click)="toggleAssistance(event.postAssistance)">
-                    <ion-icon class="assistance" name="star"></ion-icon>
-                    <span>Me interesa</span>
-                </div>
-                <div class="social-button dark" (click)="sharePost(event)">
-                    <ion-icon class="share" name="share"></ion-icon>
-                    <span><i class="fa fa-share"></i>Compartir</span>
-                </div>
+    <div class="social">
+        <!-- <div class="social-content">A 5 Personas les gusta</div> -->
+        <div class="social-options">
+            <div class="social-button dark" [class.active]="event.postAssistance"
+                (click)="toggleAssistance(event.postAssistance)">
+                <ion-icon class="assistance" name="star"></ion-icon>
+                <span>Me interesa</span>
+            </div>
+            <div class="social-button dark" (click)="sharePost(event)">
+                <ion-icon class="share" name="share"></ion-icon>
+                <span><i class="fa fa-share"></i>Compartir</span>
             </div>
         </div>
-    </ion-footer>
+    </div>
+</ion-footer>

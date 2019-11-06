@@ -16,11 +16,9 @@ export class UserHasRoleGuard implements CanLoad {
         private authService: AuthService
     ) { }
 
-    canLoad(): boolean {
-        const authValue = this.authService.sessionAuthUserSubject.value;
-        console.log('auth value', authValue)
-        const hasRole = hasRoles(authValue, environment.roles_permitidos_reportar)
-        console.log('has role', hasRole);
+    async canLoad(): Promise<boolean> {
+        const tokenDecoded = await this.authService.getTokenUserAuthenticated();
+        const hasRole = hasRoles(tokenDecoded, environment.roles_permitidos_reportar);
         if (hasRole) {
             return true;
         } else {

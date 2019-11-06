@@ -208,4 +208,13 @@
 }
 
 
-
+.loading-app{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem 2rem;
+    .message{
+        margin-top: 2rem;
+    }
+}

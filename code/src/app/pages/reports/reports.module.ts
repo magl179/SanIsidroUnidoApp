@@ -12,22 +12,22 @@ import { NgFallimgModule } from 'ng-fallimg';
 
 
 const routes: Routes = [
-  {
-    path: '',
-    component: ReportsPage
-  }
+    {
+        path: '',
+        component: ReportsPage
+    }
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    RouterModule.forChild(routes),
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        RouterModule.forChild(routes),
         SmComponentsModule,
         PipesModule,
-    NgFallimgModule
-  ],
-  declarations: [ReportsPage]
+        NgFallimgModule
+    ],
+    declarations: [ReportsPage]
 })
-export class ReportsPageModule {}
+export class ReportsPageModule { }

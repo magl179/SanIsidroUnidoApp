@@ -1,0 +1,11 @@
+.no-results-container {
+  --size-img: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  img {
+    width: var(--size-img);
+    height: var(--size-img);
+  }
+}

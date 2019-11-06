@@ -72,20 +72,5 @@ export class MapService implements OnInit {
         console.log('address params', addressParams);
         return this.httpRequest.get(REVERSE_GEOCODING_ENDPOINT, addressParams);
     }
-    // Función para obtener la distancia en KM entre dos coordenadas
-    getDistanceInKm(lat1,lon1,lat2,lon2) {
-        let R = 6371;
-        let dLat = (lat2-lat1) * (Math.PI/180);
-        let dLon = (lon2-lon1) * (Math.PI/180);
-        let a =
-          Math.sin(dLat/2) * Math.sin(dLat/2) +
-          Math.cos(lat1 * (Math.PI/180)) * Math.cos(lat2 * (Math.PI/180)) *
-          Math.sin(dLon/2) * Math.sin(dLon/2)
-          ;
-        let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        let d = R * c;
-        return d;
-      }
-
 
 }

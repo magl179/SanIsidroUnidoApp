@@ -11,10 +11,11 @@ import { environment } from 'src/environments/environment';
 import { FilterPage } from "src/app/modals/filter/filter.page";
 import { SearchPage } from 'src/app/modals/search/search.page';
 import { checkLikePost } from 'src/app/helpers/user-helper';
-import { mapSocialProblem } from "../../helpers/utils";
+import { mapSocialProblem, setFilterKeys, filterDataInObject } from "../../helpers/utils";
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from "../../services/events.service";
 import { NgFallimgModule } from "ng-fallimg";
+import { ActivatedRoute } from "@angular/router";
 
 
 @Component({
@@ -25,6 +26,8 @@ import { NgFallimgModule } from "ng-fallimg";
 export class SocialProblemsPage implements OnInit, OnDestroy {
     subcategory = '';
     AuthUser = null;
+    slugSubcategory: string = '';
+    filtersToApply: any = { is_attended: ""};
 
     socialProblemsList: ISocialProblem[] = [];
     socialProblemsFilter: ISocialProblem[] = [];
@@ -53,6 +56,7 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
     };
 
     constructor(
+        private route: ActivatedRoute,
         private navCtrl: NavController,
         private utilsService: UtilsService,
         private postsService: PostsService,
@@ -63,6 +67,7 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.slugSubcategory = this.route.snapshot.paramMap.get('slug_subcategory');
         this.utilsService.enableMenu();
         this.postsService.resetSocialProblemsPage();
         console.log('ng on init');
@@ -155,9 +160,8 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
     //Cargar los problemas sociales
     loadSocialProblems(event?: any) {
         this.socialProblemsLoaded = false;
-        this.postsService.getSocialProblems().pipe(
+        this.postsService.getPostsBySubCategory(environment.socialProblemSlug, this.slugSubcategory).pipe(
             map((res: IRespuestaApiSIUPaginada) => {
-                // console.log('res map', res);
                 if (res && res.data) {
                     res.data.forEach((social_problem: any) => {
                         social_problem = mapSocialProblem(social_problem);
@@ -218,8 +222,8 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
         });
     }
     //Ir al detalle de un problema socialc
-    postDetail(id) {
-        this.navCtrl.navigateForward(`/social-problem-detail/${id}`);
+    postDetail(id: any) {
+        this.navCtrl.navigateForward(`/social-problem-detail/${this.slugSubcategory}/${id}`);
     }
     //Compartir el Problema Social
     async sharePost(post: ISocialProblem) {
@@ -280,6 +284,19 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
         });
         //Obtener datos popover cuando se vaya a cerrar
         await modal.present();
+    }
+
+    segmentChanged(event: any) {
+        const value = (event.detail.value !== "") ? Number(event.detail.value) : "";
+        const type = 'is_attended';
+        if (value !== "") {
+            const filterApplied = setFilterKeys({...this.filtersToApply}, type, value);
+            this.filtersToApply = filterApplied;
+            this.socialProblemsFilter = filterDataInObject([...this.socialProblemsList], {...this.filtersToApply});
+        } else {
+            this.socialProblemsFilter = this.socialProblemsList;
+        }
+        // console.log('data changed', this.socialProblemsFilter.length);
     }
 
 }

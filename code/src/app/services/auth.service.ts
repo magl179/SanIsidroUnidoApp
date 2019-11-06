@@ -48,7 +48,6 @@ export class AuthService {
         const getUserLS = new Promise((resolve, reject) => {
             this.storage.get(USER_ITEM_NAME).then(token_decoded => {
                 this.sessionAuthUserSubject.next(token_decoded);
-                console.log('user storage constructor auth service', token_decoded);
                 resolve(true);
             });
         });
@@ -57,17 +56,10 @@ export class AuthService {
 
     }
 
-    // async isAuthenticated() {
-    //     return !! await this.storage.get(TOKEN_ITEM_NAME); 
-    // }
-
     // Iniciar Sesion del Usuario
-    login(loginData: any, getToken = null): Observable<any> {
+    login(loginData: {email: string, password?: string, social_id?: string, provider: string}): Observable<any> {
         const headers = environment.headersApp;
         const urlApi = `${environment.apiBaseURL}/login`;
-        if (getToken !== null) {
-            loginData.getToken = true;
-        }
         return this.httpRequest.post(urlApi, loginData, headers);
     }
     // Registrar al Usuario
@@ -140,15 +132,21 @@ export class AuthService {
     }
     //Verificar si el usuario esta autenticado, es decir tiene su datos en el local storage
     async isAuthenticated() {
-        //const itemUser = await this.storage.get(USER_ITEM_NAME);
         const getTokenLS = new Promise((resolve, reject) => {
             this.storage.get(TOKEN_ITEM_NAME).then(token_encoded => {
                 resolve(token_encoded);
             });
         });
-
-        // const isAuthenticated = !!itemUser;
         return await getTokenLS;
+    }
+    //Obtener el usuario autenticado del Local Storage
+    async getTokenUserAuthenticated() {
+        const getTokenDecodedLS = new Promise((resolve, reject) => {
+            this.storage.get(USER_ITEM_NAME).then(token_decoded => {
+                resolve(token_decoded);
+            });
+        });
+        return await getTokenDecodedLS;
     }
 
     // Verificar si el token esta guardado en el local storage

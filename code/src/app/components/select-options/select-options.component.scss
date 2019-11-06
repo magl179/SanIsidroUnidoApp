@@ -1,0 +1,19 @@
+.mat-button-toggle-group {
+  flex-wrap: wrap;
+  border: none;
+  width: 100%;
+  box-shadow: none;
+}
+  .mat-button-toggle{
+      background: #fff;
+      border: #ddd 1px solid;
+      color: #666;
+      width: 33%;
+      &-checked{
+        background: #3880ff !important;
+        color: #fff !important;
+      }
+  }
+  .mat-button-toggle-button, .mat-button-toggle-button:host{
+    text-transform: uppercase !important;
+  }

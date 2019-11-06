@@ -6,7 +6,7 @@ import { SimpleBeatifulDatePipe } from './simple-beatiful-date.pipe';
 import { TruncatePipe } from './truncate.pipe';
 import { JsonValidatePipe } from './json-validate.pipe';
 import { ImageSanitizerPipe } from './image-sanitizer.pipe';
-import { DomSanitizerPipe } from './dom-sanitizer.pipe';
+import { BackgroundUrlPipe } from './background-url.pipe';
 
 @NgModule({
     declarations: [
@@ -16,7 +16,7 @@ import { DomSanitizerPipe } from './dom-sanitizer.pipe';
         TruncatePipe,
         JsonValidatePipe,
         ImageSanitizerPipe,
-        DomSanitizerPipe
+        BackgroundUrlPipe
     ],
     imports: [
         CommonModule
@@ -28,7 +28,7 @@ import { DomSanitizerPipe } from './dom-sanitizer.pipe';
         TruncatePipe,
         JsonValidatePipe,
         ImageSanitizerPipe,
-        DomSanitizerPipe
+        BackgroundUrlPipe
     ]
 })
 export class PipesModule { }

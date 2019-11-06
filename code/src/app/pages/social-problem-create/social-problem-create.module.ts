@@ -4,31 +4,30 @@ import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
-
 import { SocialProblemCreatePage } from './social-problem-create.page';
-
 import { SmComponentsModule } from 'src/app/components/sm-components.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PipesModule } from 'src/app/pipes/pipes.module';
-
+import { MaterialAppModule } from 'src/app/material-app.module';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: SocialProblemCreatePage
-  }
+    {
+        path: '',
+        component: SocialProblemCreatePage
+    }
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    RouterModule.forChild(routes),
-    SmComponentsModule,
-    PipesModule,
-    ReactiveFormsModule
-  ],
-  declarations: [SocialProblemCreatePage]
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        RouterModule.forChild(routes),
+        SmComponentsModule,
+        PipesModule,
+        ReactiveFormsModule,
+        MaterialAppModule
+    ],
+    declarations: [SocialProblemCreatePage]
 })
-export class SocialProblemCreatePageModule {}
+export class SocialProblemCreatePageModule { }

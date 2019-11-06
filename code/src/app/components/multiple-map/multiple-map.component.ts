@@ -1,13 +1,14 @@
-import { Component, OnInit, Input, AfterViewInit, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
-import * as Leaflet from 'leaflet';
+import 'leaflet-routing-machine';
 import * as LeafletSearch from 'leaflet-search';
+import { manageTwoFingerDrag } from 'src/app/helpers/utils';
+import { GestureHandling } from "leaflet-gesture-handling";
+declare let L: any;
+import { Component, OnInit, Input, AfterViewInit, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { MapService } from 'src/app/services/map.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { IPublicService } from 'src/app/interfaces/models';
 import { LocalizationService } from 'src/app/services/localization.service';
 import { environment } from "src/environments/environment";
-import { manageTwoFingerDrag } from 'src/app/helpers/utils';
-import { GestureHandling } from "leaflet-gesture-handling";
 
 @Component({
     selector: 'multiple-map',
@@ -28,8 +29,8 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
     map: any;
     mapMarkers: any[] = null;
     mapIsLoaded = false;
-    markersLayer = new Leaflet.LayerGroup();
-    currentUserLayer = new Leaflet.LayerGroup();
+    markersLayer = new L.LayerGroup();
+    currentUserLayer = new L.LayerGroup();
     markerSelected = false;
     currentService = null;
     currentCoordinate: any = null;
@@ -41,7 +42,7 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
         private utilsService: UtilsService,
         private localizationService: LocalizationService
     ) {
-        this.polylineRoute= Leaflet.polyline([
+        this.polylineRoute= L.polyline([
             [0.27672266086355024, -81.6663098484375]
         ],
             {
@@ -57,7 +58,7 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
     async ngOnInit() { }
 
     createLatLng(latitude: number, longitude: number) {
-        return Leaflet.latLng(latitude, longitude);
+        return L.latLng(latitude, longitude);
     }
 
     createWayPoints(lat1: number, lng1: number, lat2: number, lng2: number) {
@@ -91,15 +92,15 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
 
     async initializeMap() {
         if (this.enableGesture) {
-            Leaflet.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
+            L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
         }
         // Crear el Mapa
-        this.map = Leaflet.map(this.id, {
+        this.map = L.map(this.id, {
             gestureHandling: this.enableGesture,
             zoomAnimation: true,
             markerZoomAnimation: true,
             zoomControl: true
-        } as Leaflet.MapOptions);
+        });
         // Agregar Evento al Mapa cuando esta cargado
         this.map.on('load', (e: any) => {
             this.mapIsLoaded = true;
@@ -114,23 +115,23 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
         // Configurar la vista centrada
         this.map.setView([-0.1548643, -78.4822049], this.zoomMap);
         // Agregar la capa del Mapa
-        Leaflet.tileLayer(environment.mapLayers.google.url, {
+        L.tileLayer(environment.mapLayers.google.url, {
             attribution: environment.mapLayers.google.attribution,
             maxZoom: 18,
             updateWhenIdle: true,
             reuseTiles: true
-        } as Leaflet.LayerOptions).addTo(this.map);
+        }).addTo(this.map);
         //Añadir Ruta Polyline
         this.polylineRoute.addTo(this.map);
         // Si obtuve coordenadas añadir el marcador
         if (this.currentCoordinate) {
             const iconCurrent = await this.mapService.getCustomIcon('red');
             let currentPoint: any;
-            const iconLatLng = Leaflet.latLng(this.currentCoordinate.latitude, this.currentCoordinate.longitude);
+            const iconLatLng = L.latLng(this.currentCoordinate.latitude, this.currentCoordinate.longitude);
             if (iconCurrent) {
-                currentPoint = new Leaflet.Marker(iconLatLng, { icon: iconCurrent, title: 'Mi Posición Actual' });
+                currentPoint = new L.Marker(iconLatLng, { icon: iconCurrent, title: 'Mi Posición Actual' });
             } else {
-                currentPoint = new Leaflet.Marker(iconLatLng, { title: 'Mi Posición Actual' });
+                currentPoint = new L.Marker(iconLatLng, { title: 'Mi Posición Actual' });
             }
             currentPoint.addTo(this.map).bindPopup('Mi Ubicación').openPopup();
         }
@@ -140,11 +141,11 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
             let punto = null;
             const title = `${point.name}`;
             const markerIcon = await this.mapService.getCustomIcon('green');
-            const leafletLatLng = Leaflet.latLng(point.ubication.latitude, point.ubication.longitude);
+            const leafletLatLng = L.latLng(point.ubication.latitude, point.ubication.longitude);
             if (markerIcon) {
-                punto = new Leaflet.Marker(leafletLatLng, { title, icon: markerIcon});
+                punto = new L.Marker(leafletLatLng, { title, icon: markerIcon});
             } else {
-                punto = new Leaflet.Marker(leafletLatLng, { title });
+                punto = new L.Marker(leafletLatLng, { title });
             }
             // Evento marcador al hacer click para mostrar información
             punto.on('click', (e: any) => { this.showInfo(e); });

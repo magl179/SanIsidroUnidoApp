@@ -1,129 +1,148 @@
 <app-header-back title="Reportar Problema"></app-header-back>
 
 <ion-content padding>
-    <div>
-        <app-stepbar [progressSteps]="socialProblemFormStage" [currentStep]="currentStep"
-            (returnCurrentStep)="updateCurrentStep($event)"></app-stepbar>
-        <section *ngIf="currentStep === 1">
-            <form [formGroup]="socialProblemForm">
-                <div class="item-form full">
-                    <ion-item class="input_item" lines="none">
-                        <ion-label class="label-padding" position="stacked">Titulo</ion-label>
-                        <ion-input placeholder="Ingresa el título de tu reporte" class="input-beatiful" formControlName="title" type="email"></ion-input>
-                    </ion-item>
-                </div>
-                <div class="form-errors padding-lateral">
-                    <p class="form-error"
-                        *ngIf="socialProblemForm.get('title').hasError('required') && socialProblemForm.get('title').touched">
-                        {{errorMessages.title.required.message}}
-                    </p>
-                </div>
-                <div class="item-form full">
-                    <ion-item class="input_item" lines="none">
-                        <ion-label class="label-padding" position="stacked">Descripción</ion-label>
-                        <ion-textarea placeholder="Ingresa una descripción sobre tu reporte" class="input-beatiful text-area" formControlName="description" auto-grow="true"></ion-textarea>
-                    </ion-item>
-                </div>
-                <div class="form-errors padding-lateral">
-                    <p class="form-error"
-                        *ngIf="socialProblemForm.get('description').hasError('required') && socialProblemForm.get('description').touched">
-                        {{errorMessages.description.required.message}}
-                    </p>
-                </div>
-                
-                <div class="item-form padding-top" *ngIf="subcategories.length > 0">
-                    <ion-item lines="none" class="small-font">
-                        <ion-label class="label-padding">Categoria</ion-label>
-                        <ion-select formControlName="subcategory" placeholder="Escoge una categoría">
-                            <ion-select-option [selected]="(i===0) ? true: false"
-                                *ngFor="let subcategory of subcategories; let i = index"
-                                [value]="subcategory.id">
-                                {{subcategory.name}}</ion-select-option>
-                        </ion-select>
-                    </ion-item>
-                </div>
-                <div class="form-errors padding-lateral">
-                    <p class="form-error"
-                        *ngIf="socialProblemForm.get('subcategory').hasError('required') && socialProblemForm.get('subcategory').touched">
-                        {{errorMessages.subcategory.required.message}}
-                    </p>
-                </div>
-                <div padding>
-                    <ion-button [disabled]="!socialProblemForm.valid" color="primary" type="submit"
-                        expand="block" (click)="validatePhase3()">Siguiente
+        <mat-vertical-stepper linear="true" #stepper_social_problems>
+            <!-- Paso1 -->
+            <mat-step>
+                <ng-template matStepLabel>Rellena los datos de tu reporte</ng-template>
+                <form [formGroup]="socialProblemForm">
+                    <div class="item-form full">
+                        <ion-item class="input_item" lines="none">
+                            <ion-label class="label-padding" position="stacked">Titulo</ion-label>
+                            <ion-input placeholder="Ingresa el título"
+                                class="input-beatiful" formControlName="title" type="email">
+                            </ion-input>
+                        </ion-item>
+                    </div>
+                    <div class="form-errors padding-lateral">
+                        <p class="form-error"
+                            *ngIf="socialProblemForm.get('title').hasError('required') && socialProblemForm.get('title').touched">
+                            {{errorMessages.title.required.message}}
+                        </p>
+                    </div>
+                    <div class="item-form full">
+                        <ion-item class="input_item" lines="none">
+                            <ion-label class="label-padding" position="stacked">Descripción
+                            </ion-label>
+                            <ion-textarea placeholder="Ingresa una descripción"
+                                class="input-beatiful text-area" formControlName="description"
+                                auto-grow="true"></ion-textarea>
+                        </ion-item>
+                    </div>
+                    <div class="form-errors padding-lateral">
+                        <p class="form-error"
+                            *ngIf="socialProblemForm.get('description').hasError('required') && socialProblemForm.get('description').touched">
+                            {{errorMessages.description.required.message}}
+                        </p>
+                    </div>
+
+                    <div class="item-form padding-top" *ngIf="subcategories.length > 0">
+                        <ion-item lines="none" class="small-font">
+                            <ion-label class="label-padding">Categoria</ion-label>
+                            <ion-select formControlName="subcategory"
+                                placeholder="Escoge una categoría">
+                                <ion-select-option [selected]="(i===0) ? true: false"
+                                    *ngFor="let subcategory of subcategories; let i = index"
+                                    [value]="subcategory.id">
+                                    {{subcategory.name}}</ion-select-option>
+                            </ion-select>
+                        </ion-item>
+                    </div>
+                    <div class="form-errors padding-lateral">
+                        <p class="form-error"
+                            *ngIf="socialProblemForm.get('subcategory').hasError('required') && socialProblemForm.get('subcategory').touched">
+                            {{errorMessages.category.required.message}}
+                        </p>
+                    </div>
+                    <div padding>
+                        <ion-button [disabled]="!socialProblemForm.valid" color="primary"
+                            type="submit" expand="block" (click)="stepper_social_problems.next()">
+                            Siguiente
+                        </ion-button>
+                    </div>
+                </form>
+            </mat-step>
+            <!-- Paso 2 -->
+            <mat-step>
+                <ng-template matStepLabel>Selecciona la ubicación del reporte</ng-template>
+                <single-map id="socialProblemReportMap" [zoomMap]="17" [enableGesture]="false"
+                    (returnCoordinateChoosen)="updateMapCoordinate($event)"></single-map>
+                <p class="name-ubication-pt preview-text"
+                    *ngIf="socialProblemCoordinate.address">Tu
+                    Dirección es:
+                    {{socialProblemCoordinate.address}}</p>
+                <form class="form-ubication" [formGroup]="ubicationForm">
+                    <div class="item-form full">
+                        <ion-item class="input_item padding-lateral-none" lines="none">
+                            <ion-label class="label-padding" position="stacked">Descripcion de la
+                                Ubicación</ion-label>
+                            <ion-textarea
+                                placeholder="Ingresa una breve descripción sobre la ubicación de tu reporte"
+                                class="input-beatiful text-area"
+                                formControlName="description_ubication" auto-grow="true">
+                            </ion-textarea>
+                        </ion-item>
+                    </div>
+                    <div class="form-errors">
+                        <p class="form-error"
+                            *ngIf="ubicationForm.get('description_ubication').hasError('required') && ubicationForm.get('description_ubication').touched">
+                            {{errorMessages.description.required.message}}
+                        </p>
+                    </div>
+                </form>
+                <div>
+                    <ion-button [disabled]="!ubicationForm.valid" color="primary" expand="full"
+                        type="submit" (click)="stepper_social_problems.next()">
+                        Siguiente
                     </ion-button>
                 </div>
-            </form>
-        </section>
-        <section *ngIf="currentStep === 3">
-            <p class="ion-text-center">Carga hasta 2 fotos para tu reporte</p>
-            <ion-grid *ngIf="socialProblemImages.length > 0">
-                <ion-row>
-                    <ion-col size="6" *ngFor="let image of socialProblemImages; let i = index;">
-                        <ion-item-sliding>
-                            <ion-item>
-                                <ion-card>
-                                    <img [src]="image | imageSanitizer">
-                                </ion-card>
-                            </ion-item>
-                            <ion-item-options side="end">
-                                <ion-item-option (click)="deleteImage(i)" color="danger"
-                                    expandable="true">
-                                    <ion-icon slot="icon-only" name="trash"></ion-icon>
-                                </ion-item-option>
-                            </ion-item-options>
-                        </ion-item-sliding>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-            <app-upload-image [uploadedImages]="socialProblemImages" [maxImages]="2"
-                (retornarImagenesSubidas)="getUploadedImages($event)"></app-upload-image>
-            <div padding>
-                <ion-button color="primary" type="submit" expand="block" (click)="validatePhase1()">
-                    Siguiente
-                </ion-button>
-            </div>
-        </section>
-        <section *ngIf="currentStep === 2">
-            <p class="ion-text-center">Escoge la ubicación donde se genero la emergencia</p>
-            <single-map id="socialProblemReportMap" [zoomMap]="17" [enableGesture]="false"
-                (returnCoordinateChoosen)="updateMapCoordinate($event)"></single-map>
-            <p class="padding-lateral name-ubication-pt" *ngIf="socialProblemCoordinate.address">Tu Dirección es:
-                {{socialProblemCoordinate.address}}</p>
-            <form class="form-ubication" [formGroup]="ubicationForm">
-                <div class="item-form full">
-                    <ion-item class="input_item" lines="none">
-                        <ion-label class="label-padding" position="stacked">Descripcion de la Ubicación</ion-label>
-                        <ion-textarea placeholder="Ingresa una descripción más detallada de la ubicación de tu reporte" class="input-beatiful text-area" formControlName="description_ubication" auto-grow="true"></ion-textarea>
-                    </ion-item>
+            </mat-step>
+            <!-- Paso 3 -->
+            <mat-step>
+                <ng-template matStepLabel>Carga hasta 2 fotos para tu reporte</ng-template>
+                <ion-grid *ngIf="socialProblemImages.length > 0">
+                    <ion-row>
+                        <ion-col size="6" *ngFor="let image of socialProblemImages; let i = index;">
+                            <ion-item-sliding>
+                                <ion-item>
+                                    <ion-card>
+                                        <img [src]="image | imageSanitizer">
+                                    </ion-card>
+                                </ion-item>
+                                <ion-item-options side="end">
+                                    <ion-item-option (click)="deleteImage(i)" color="danger"
+                                        expandable="true">
+                                        <ion-icon slot="icon-only" name="trash"></ion-icon>
+                                    </ion-item-option>
+                                </ion-item-options>
+                            </ion-item-sliding>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+                <app-upload-image [uploadedImages]="socialProblemImages" [maxImages]="2"
+                    (retornarImagenesSubidas)="getUploadedImages($event)"></app-upload-image>
+                <div padding>
+                    <ion-button color="primary" type="submit" expand="block" (click)="stepper_social_problems.next()">
+                        Siguiente
+                    </ion-button>
                 </div>
-                <div class="form-errors padding-lateral">
-                    <p class="form-error"
-                        *ngIf="ubicationForm.get('description_ubication').hasError('required') && ubicationForm.get('description_ubication').touched">
-                        {{errorMessages.description.required.message}}
-                    </p>
+            </mat-step>
+            <!-- Paso Final -->
+            <mat-step>
+                <ng-template matStepLabel>Listo, ahora ya puedes enviar tu reporte</ng-template>
+                <h3>{{socialProblemForm.get('title').value || 'Ingresa un Titulo'}}</h3>
+                <p class="preview-text">{{socialProblemForm.get('title').value || 'Ingresa una descripción'}}</p>
+                <p class="preview-text" *ngIf="socialProblemCoordinate.address">{{socialProblemCoordinate.address}}</p>
+                <!-- <p class="preview-text" *ngIf="!socialProblemCoordinate.address">Por favor escoge una ubicación</p> -->
+                <div class="section-img-thumb" *ngIf="socialProblemImages.length > 0">
+                    <ion-thumbnail *ngFor="let image of socialProblemImages">
+                        <img [src]="image | imageSanitizer">
+                    </ion-thumbnail>
                 </div>
-            </form>
-            <div>
-                <ion-button [disabled]="!ubicationForm.valid" color="primary" expand="full" type="submit" (click)="validatePhase2()">
-                    Siguiente
-                </ion-button>
-            </div>
-        </section>
-        <section *ngIf="currentStep === 4">
-            <h2>{{socialProblemForm.get('title').value || 'Ingresa un Titulo'}}</h2>
-            <p>{{socialProblemForm.get('title').value || 'Ingresa una descripción'}}</p>
-            <p *ngIf="socialProblemCoordinate.address">{{socialProblemCoordinate.address}}</p>
-            <p *ngIf="!socialProblemCoordinate.address">Por favor escoge una ubicación</p>
-            <div class="section-img-thumb" *ngIf="socialProblemImages.length > 0">
-                <ion-thumbnail *ngFor="let image of socialProblemImages">
-                    <img [src]="image | imageSanitizer">
-                </ion-thumbnail>
-            </div>
-            <p *ngIf="socialProblemImages.length === 0">No hay ninguna imagen para enviar</p>
-            <div>
-                <ion-button expand="full" (click)="sendSocialProblem()">Reportar</ion-button>
-            </div>
-        </section>
-    </div>
+                <!-- <p class="preview-text" *ngIf="socialProblemImages.length === 0">No hay ninguna imagen para enviar</p> -->
+                <div>
+                    <ion-button expand="full" (click)="sendSocialProblem()">Reportar</ion-button>
+                </div>
+            </mat-step>
+        </mat-vertical-stepper>
 </ion-content>

@@ -12,7 +12,7 @@ import { HttpErrorResponse } from "@angular/common/http";
 })
 export class TutorialPage implements OnInit {
 
-    @ViewChild('tutorialSlider') tutorialSlider: any;
+    // @ViewChild('tutorialSlider') tutorialSlider: any;
     smSlidesOpts: {
         loop: true
     };
@@ -35,7 +35,7 @@ export class TutorialPage implements OnInit {
         await this.utilsService.disabledMenu();
     }
     //Función cuando cambia el Slide para prevenir ir a la slide -1 y slide n+1
-     slideChange(event) {
+     slideChange(event: any) {
         event.target.isBeginning().then(is_first_slide => {
             if (is_first_slide) {
                 event.target.lockSwipeToPrev(true);
@@ -52,7 +52,7 @@ export class TutorialPage implements OnInit {
         });
      }
     // Funcion cuando el slide carga
-    slidesLoaded(event) {
+    slidesLoaded(event: any) {
         //console.dir(event);
         event.target.lockSwipeToPrev(true);
     }

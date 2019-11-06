@@ -7,7 +7,7 @@ import { FilterPage } from "src/app/modals/filter/filter.page";
 import { SearchPage } from "src/app/modals/search/search.page";
 import { environment } from 'src/environments/environment';
 import { finalize, delay, retryWhen, map } from 'rxjs/operators';
-import { getJSON, mapEmergency } from "src/app/helpers/utils";
+import { getJSON, mapEmergency, setFilterKeys, filterDataInObject } from "src/app/helpers/utils";
 import { AuthService } from 'src/app/services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from "src/app/services/events.service";
@@ -23,6 +23,8 @@ export class EmergenciesPage implements OnInit, OnDestroy {
     AuthUser = null;
     emergenciesFiltered = [];
     emergenciesLoaded = false;
+    
+    filtersToApply: any = { is_attended: ""};
     filters: IBasicFilter = {
         is_attended: {
             name: 'Estado',
@@ -215,6 +217,19 @@ export class EmergenciesPage implements OnInit, OnDestroy {
             type: 'refresher',
             data: event
         });
+    }
+
+    segmentChanged(event: any) {
+        const value = (event.detail.value !== "") ? Number(event.detail.value) : "";
+        const type = 'is_attended';
+        if (value !== "") {
+            const filterApplied = setFilterKeys({...this.filtersToApply}, type, value);
+            this.filtersToApply = filterApplied;
+            this.emergenciesFiltered = filterDataInObject([...this.emergenciesList], {...this.filtersToApply});
+        } else {
+            this.emergenciesFiltered = this.emergenciesList;
+        }
+        // console.log('data changed', this.socialProblemsFilter.length);
     }
 
 

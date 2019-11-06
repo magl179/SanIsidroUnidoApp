@@ -1,11 +1,9 @@
-<app-header-back title="Problema Social" hrefDefault="/social-problems"></app-header-back>
+<app-header-back title="Problema Social" hrefDefault="/social-problems/{{slugSubcategory}}"></app-header-back>
 
 <ion-content>
-    <!-- Mensaje no cargaron los datos desde la Api -->
-    <div class="flex-column-center message-fail-load" *ngIf="socialProblemLoaded && !socialProblem">
-        <p>No se pudo cargar el problema social solicitado</p>
-        <ion-button (click)="getSocialProblem()">Toca para reintentar</ion-button>
-    </div>
+     <!-- Mensaje si datos no cargan o son tamaño 0 -->
+     <app-no-results-found *ngIf="socialProblemLoaded && !socialProblem"
+     message="No se pudo cargar el problema social"></app-no-results-found>
     <!-- Animacion cuando estan cargando datos -->
     <div *ngIf="!socialProblemLoaded">
         <ion-card class="card_social detail-card animated flash slow infinite">
@@ -43,10 +41,15 @@
     </div>
     <!-- Datos ya cargados -->
     <div class="social-problem-detail" *ngIf="socialProblemLoaded && socialProblem">
-        <div class="post-cover-image"
+        <!-- <div class="post-cover-image"
             *ngIf="socialProblem.images && socialProblem.images.length > 0">
             <img [src]="socialProblem.images[0].url" alt="Imagen Tarjeta" class="img" />
-        </div>
+        </div> -->
+        <div *ngIf="socialProblem.images && socialProblem.images.length > 0">
+                <slideshow-images-full ionSlideClass="slideImageFull" [listImages]="socialProblem.imagesArr"
+                    [title]="socialProblem.title">
+                </slideshow-images-full>
+            </div>
         <div class="post-info-container">
             <div class="post-description-info">
                 <h2>{{socialProblem.title}}</h2>
@@ -95,11 +98,6 @@
                     id="social-problem-detail-{{id}}" [coordsMap]="socialProblem.ubication" [enableGesture]="true"
                     [zoom]="16">
                 </simple-map>
-            </div>
-            <div class="image-gallery-container"
-                *ngIf="socialProblem.images && socialProblem.images.length > 0">
-                <h4 class="image-gallery-title">Imágenes</h4>
-                <gallery-image [images]="socialProblem.images"> </gallery-image>
             </div>
         </div>
     </div>

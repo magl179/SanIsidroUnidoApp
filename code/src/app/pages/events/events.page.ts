@@ -43,7 +43,6 @@ export class EventsPage implements OnInit, OnDestroy {
                 this.AuthUser = token_decoded.user;
             }
         });
-        console.log('llamada get events sin parametros');
         this.loadEvents();
         this.events_app.eventsEmitter.subscribe((event_app: any) => {
             if (this.eventsList.length > 0) {
@@ -148,8 +147,7 @@ export class EventsPage implements OnInit, OnDestroy {
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let eventsApi = [];
             eventsApi = res.data;
-            console.log('eventos ante subscribir', this.eventsList);
-
+            // console.log('eventos ante subscribir', this.eventsList);
             if (eventsApi.length === 0) {
                 if (event) {
                     event.data.target.disabled = true;

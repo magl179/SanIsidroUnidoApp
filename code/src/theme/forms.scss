@@ -60,6 +60,10 @@
     .input_item {
         display: inline-block;
         width: 90%;
+        &.padding-lateral-none{
+            --padding-start: 0px;
+            --padding-end: 0px;
+        }
     }
     &.full{
         width: 100%;
