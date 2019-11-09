@@ -1,0 +1,44 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-searchbar mode="ios" type="text" [placeholder]="searchPlaceholder" animated
+            (ionChange)="execSearchPosts($event)" [value]="valueToSearch.value">
+        </ion-searchbar>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <!-- Loading mientras se realiza la busqueda -->
+    <div class="loading-app" *ngIf="searchingPosts">
+        <loader-app class="flex-column-center" message="Buscando..."></loader-app>
+    </div>
+    <!-- Listado Sugerenciasº -->
+    <ion-list *ngIf="!valueToSearch.value && searchIdeas.length > 0">
+        <ion-list-header>
+            <ion-label>Sugerencias</ion-label>
+        </ion-list-header>
+        <ion-item *ngFor="let idea of searchIdeas; let i = index;" (click)="setSuggessValue(idea)" lines="none">
+            <ion-label color="dark">{{idea}}</ion-label>
+        </ion-item>
+    </ion-list>
+    <!-- Mostrar si se encontro resultado -->
+    <ion-list *ngIf="valueToSearch.value && requestStatus === 'success' && itemsSearchFound.length > 0">
+        <ion-list-header>
+            <ion-label>Resultados Encontrados</ion-label>
+        </ion-list-header>
+        <ion-item detail="true" *ngFor="let item of itemsSearchFound; let i = index;" lines="none"
+            (click)="seeDetailItemFound(item.category_name, item.subcategory_name, item.id)" class="item-{{item.id}}">
+            <ion-label>
+                <h3>{{item.title}}</h3>
+            </ion-label>
+        </ion-item>
+    </ion-list>
+    <!-- Mostrar si hay un valor de busqueda y no se encontraron resultados -->
+    <ion-list *ngIf="valueToSearch.value && requestStatus === 'success' && itemsSearchFound.length === 0">
+        <app-no-results-found class="ion-padding"
+        message="No existen resultados que coincidan con la busqueda"></app-no-results-found>
+    </ion-list>
+    <!-- Mostrar si hay un valor de busqueda y fallo la petición -->
+    <ion-list *ngIf="valueToSearch.value && requestStatus === 'fails' && itemsSearchFound.length === 0">
+        <app-no-results-found class="ion-padding"
+        message="No existen resultados disponibles"></app-no-results-found>
+    </ion-list>
+</ion-content>

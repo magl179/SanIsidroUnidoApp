@@ -6,12 +6,14 @@ import { Platform, NavController } from '@ionic/angular';
 import { UserService } from './user.service';
 import { AuthService } from './auth.service';
 import { UtilsService } from './utils.service';
-import { IPhoneUser } from 'src/app/interfaces/models';
+import { IDeviceUser } from 'src/app/interfaces/models';
 import { Device } from '@ionic-native/device/ngx';
 import { INotiPostOpen } from "src/app/interfaces/models";
 
 
-const USER_DEVICE_DEFAULT: IPhoneUser = {
+const USER_DEVICE_DEFAULT: IDeviceUser = {
+    id: null,
+    user_id: null,
     phone_id: '',
     phone_model: '',
     phone_platform: ''
@@ -25,7 +27,7 @@ export class NotificationsService {
     currentUser = null;
     pushListener = new EventEmitter<OSNotificationPayload>();
     AuthUser = null;
-    userDevice = new BehaviorSubject<IPhoneUser>(USER_DEVICE_DEFAULT);
+    userDevice = new BehaviorSubject<IDeviceUser>(USER_DEVICE_DEFAULT);
 
     constructor(
         private device: Device,
@@ -81,7 +83,9 @@ export class NotificationsService {
     //Registrar el dispositivo del usuario en la API
     registerUserDevice() {
         if (this.platform.is('cordova')) {
-            const data: IPhoneUser = {
+            const data: IDeviceUser = {
+                user_id: null,
+                id: null,
                 description: this.userDevice.value.description,
                 phone_id: this.userDevice.value.phone_id,
                 phone_model: this.userDevice.value.phone_model,
@@ -89,21 +93,23 @@ export class NotificationsService {
             };
             this.userService.sendRequestAddUserDevice(data)
                 .subscribe(async (res: any) => {
-                    this.utilsService.showToast({message: 'Dispositivo Añadido Correctamente'});
+                    this.utilsService.showToast({ message: 'Dispositivo Añadido Correctamente' });
                 }, (err: any) => {
-                    this.utilsService.showToast({message: 'Ocurrio un error al añadir el dispositivo'});
+                    this.utilsService.showToast({ message: 'Ocurrio un error al añadir el dispositivo' });
                     console.log('Ocurrio un error al añadir el dispositivo', err);
                 });
         }
     }
-    
+
 
     // Función para Obtener ID de Suscriptor de Onesignal
     async getOneSignalIDSubscriptor() {
         //Pedir acceso a notificaciones, en caso de no tenerlas
         this.oneSignal.provideUserConsent(true);
         const deviceID = await this.oneSignal.getIds();
-        const userDevice: IPhoneUser = {
+        const userDevice: IDeviceUser = {
+            user_id: null,
+            id: null,
             phone_id: deviceID.userId,
             phone_model: this.device.model || 'Modelo Generico',
             phone_platform: this.device.platform || 'Sistema Generico',

@@ -1,7 +1,8 @@
-<app-header-back title="Mis Emergencias" [search]="true" [report]="true"
-    (optionSelected)="getOptionSelected($event)"></app-header-back>
-
+<!-- Cabecera -->
+<app-header-back title="Mis Emergencias"></app-header-back>
+<!-- Contenido -->
 <ion-content padding>
+    <!-- Filtro por Estado Atención -->
     <ion-segment value="" (ionChange)="segmentChanged($event)">
         <ion-segment-button value="">
             <ion-icon color="secondary" name="document"></ion-icon>
@@ -16,6 +17,7 @@
             <ion-label>Pendientes</ion-label>
         </ion-segment-button>
     </ion-segment>
+    <!-- Refresher de los Datos -->
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content pullingIcon="arrow-dropdown" refreshingSpinner="circles"
             refreshingText="Cargando Publicaciones...">

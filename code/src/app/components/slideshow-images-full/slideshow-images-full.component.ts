@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { UtilsService } from "../../services/utils.service";
+import { UtilsService } from "src/app/services/utils.service";
 
 @Component({
   selector: 'slideshow-images-full',
@@ -9,18 +9,23 @@ import { UtilsService } from "../../services/utils.service";
 export class SlideshowImagesFullComponent implements OnInit {
 
     @Input() listImages: any[] = [];
-    @Input() title: string = 'Imagen';
-    @Input() ionSlideClass: string = '';
-    @Input() ionSlidesClass: string = '';
+    @Input() title = 'Imagen';
+    @Input() ionSlideClass = '';
+    @Input() ionSlidesClass = '';
     @Input() imgClass: string = '';
+    @Input() slideAutoPlay = false;
+    @Input() slideSpeed = 500;
+    @Input() slidePager = false;
+
     constructor(
         private utilsService: UtilsService
     ) { }
     
-    slideOpts = {};
+    slideOpts:any = {};
 
     ngOnInit() {
-      console.log('listImages', this.listImages)
+        this.slideOpts.autoplay = this.slideAutoPlay;
+        this.slideOpts.slideSpeed = this.slideSpeed;
     }
     
     seeImageDetail(url: string) {

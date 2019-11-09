@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { NetworkService } from 'src/app/services/network.service';
 import { UtilsService } from 'src/app/services/utils.service';
-import { IPhoneUser } from 'src/app/interfaces/models';
+import { IDeviceUser } from 'src/app/interfaces/models';
 
 // declare var moment: any;
 // moment.locale('es');
@@ -15,7 +15,7 @@ import { IPhoneUser } from 'src/app/interfaces/models';
 })
 export class AboutPage implements OnInit {
     isConnected = true;
-    CurrentUserDevice: IPhoneUser = {
+    CurrentUserDevice: IDeviceUser = {
         id: null,
         phone_id: null,
         user_id: null

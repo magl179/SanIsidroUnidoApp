@@ -8,13 +8,13 @@
     {
         "title": "Problemas Sociales",
         "icon": "assets/img/svg/protest.svg",
-        "url": "/social-problems-tabs",
+        "url": "/social-problems-tabs/categories",
         "valid_roles": ["morador", "invitado", "policia"]
     },
     {
         "title": "Eventos",
         "icon": "assets/img/svg/calendar.svg",
-        "url": "/events-tabs",
+        "url": "/events-tabs/list",
         "valid_roles": ["morador", "invitado", "policia"]
     },
     {
@@ -32,7 +32,7 @@
     {
         "title": "Informes",
         "icon": "assets/img/svg/analytics.svg",
-        "url": "/reports-tabs",
+        "url": "/reports-tabs/list",
         "valid_roles": ["morador", "invitado", "policia"]
     }
 ]

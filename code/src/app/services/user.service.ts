@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { environment } from 'src/environments/environment';
 import { IEditProfile } from 'src/app/interfaces/models';
-import { IPhoneUser } from 'src/app/interfaces/models';
+import { IDeviceUser } from 'src/app/interfaces/models';
 import { HttpRequestService } from "./http-request.service";
 import { setHeaders } from 'src/app/helpers/utils';
 
@@ -77,7 +77,7 @@ export class UserService implements OnInit {
         }, headers );
     }
     // Enviar solicitud par agregar dispositivo asociado a un usuario
-    sendRequestAddUserDevice(device: IPhoneUser) {
+    sendRequestAddUserDevice(device: IDeviceUser) {
         const headers = setHeaders(environment.AUTHORIZATION_NAME, this.AuthToken);
         return this.httpRequest.post(`${environment.apiBaseURL}/usuarios/dispositivos`, device, headers);
     }

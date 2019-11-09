@@ -26,6 +26,6 @@
         <simple-routing-map [zoom]="11" className="public-service-map"
             id="public-service-map-detail-{{id}}"
             [destinationCoords]="publicServiceDetail.ubication" [usePolyline]="true"
-            (mapEvent)="manageMapEvent($event)"></simple-routing-map>
+            (mapEvent)="manageMapEvent($event)" [enableGesture]="true"></simple-routing-map>
     </div>
 </ion-content>

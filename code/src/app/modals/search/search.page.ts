@@ -112,7 +112,7 @@ export class SearchPage implements OnInit {
                 }, 2000);
             } else if (this.searchInApi && this.postTypeSlug) {
                 this.searchingPosts = true;
-                this.postsService.searchPosts(value, this.postTypeSlug).pipe(
+                this.postsService.searchPosts({}).pipe(
                     finalize(() => {
                         this.searchingPosts = false;
                     })

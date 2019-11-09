@@ -29,10 +29,6 @@ const routes: Routes = [
         loadChildren: './pages/tutorial/tutorial.module#TutorialPageModule'
     },
     {
-        path: 'social-problems/:slug_subcategory',
-        loadChildren: './pages/social-problems/social-problems.module#SocialProblemsPageModule', canLoad: [UserAuthenticatedGuard]
-    },
-    {
         path: 'public-services',
         loadChildren: './pages/public-services/public-services.module#PublicServicesPageModule',
         canLoad: [UserAuthenticatedGuard]
@@ -46,38 +42,7 @@ const routes: Routes = [
         path: 'user-profile',
         loadChildren: './pages/user-profile/user-profile.module#UserProfilePageModule',
         canLoad: [UserAuthenticatedGuard]
-    },
-    {
-        path: 'social-problem-detail/:slug_subcategory/:id',
-        loadChildren: './pages/social-problem-detail/social-problem-detail.module#SocialProblemDetailPageModule',
-        canLoad: [UserAuthenticatedGuard]
-    },
-    {
-        path: 'social-problem-create',
-        loadChildren: './pages/social-problem-create/social-problem-create.module#SocialProblemCreatePageModule',
-        canLoad: [UserAuthenticatedGuard, UserHasRoleGuard],
-        data: { roles: ['morador_afiliado'] }
-    },
-    {
-        path: 'social-problems-categories',
-        loadChildren: './pages/social-problems-categories/social-problems-categories.module#SocialProblemsCategoriesPageModule'
-    },
-    {
-        path: 'emergency-create',
-        loadChildren: './pages/emergency-create/emergency-create.module#EmergencyCreatePageModule',
-        canLoad: [UserAuthenticatedGuard, UserHasRoleGuard],
-        data: { roles: ['morador_afiliado'] }
-    },
-    {
-        path: 'events',
-        loadChildren: './pages/events/events.module#EventsPageModule',
-        canLoad: [UserAuthenticatedGuard]
-    },
-    {
-        path: 'event-detail/:id',
-        loadChildren: './pages/event-detail/event-detail.module#EventDetailPageModule',
-        canLoad: [UserAuthenticatedGuard]
-    },
+    },    
     {
         path: 'about',
         loadChildren: './pages/about/about.module#AboutPageModule',
@@ -93,25 +58,6 @@ const routes: Routes = [
         canLoad: [UserAuthenticatedGuard]
     },
     {
-        path: 'emergencies',
-        loadChildren: './pages/emergencies/emergencies.module#EmergenciesPageModule',
-        canLoad: [UserAuthenticatedGuard]
-    },
-    {
-        path: 'emergency-detail/:id',
-        loadChildren: './pages/emergency-detail/emergency-detail.module#EmergencyDetailPageModule'
-    },
-    {
-        path: 'reports',
-        loadChildren: './pages/reports/reports.module#ReportsPageModule',
-        canLoad: [UserAuthenticatedGuard]
-    },
-    {
-        path: 'report-detail/:id',
-        loadChildren: './pages/report-detail/report-detail.module#ReportDetailPageModule',
-        canLoad: [UserAuthenticatedGuard]
-    },
-    {
         path: 'public-services-categories',
         loadChildren: './pages/public-services-categories/public-services-categories.module#PublicServicesCategoriesPageModule'
     },
@@ -119,10 +65,22 @@ const routes: Routes = [
         path: 'public-service-detail/:id',
         loadChildren: './pages/public-service-detail/public-service-detail.module#PublicServiceDetailPageModule'
     },
-    { path: 'emergencies-tabs', loadChildren: './pages/emergencies-tabs/emergencies-tabs.module#EmergenciesTabsPageModule' },
-    { path: 'social-problems-tabs', loadChildren: './pages/social-problems-tabs/social-problems-tabs.module#SocialProblemsTabsPageModule' },
-    { path: 'events-tabs', loadChildren: './pages/events-tabs/events-tabs.module#EventsTabsPageModule' },
-    { path: 'reports-tabs', loadChildren: './pages/reports-tabs/reports-tabs.module#ReportsTabsPageModule' },
+    {
+        path: 'emergencies-tabs',
+        loadChildren: './pages/emergencies-tabs/emergencies-tabs.module#EmergenciesTabsPageModule'
+    },
+    {
+        path: 'social-problems-tabs',
+        loadChildren: './pages/social-problems-tabs/social-problems-tabs.module#SocialProblemsTabsPageModule'
+    },
+    {
+        path: 'events-tabs',
+        loadChildren: './pages/events-tabs/events-tabs.module#EventsTabsPageModule'
+    },
+    {
+        path: 'reports-tabs',
+        loadChildren: './pages/reports-tabs/reports-tabs.module#ReportsTabsPageModule'
+    },
     {
         path: '404',
         loadChildren: './pages/not-found/not-found.module#NotFoundPageModule'
@@ -130,7 +88,8 @@ const routes: Routes = [
     {
         path: '**',
         redirectTo: '/404'
-    },
+    }
+
 
 
 

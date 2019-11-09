@@ -12,6 +12,7 @@ export class HeaderBackComponent implements OnInit {
     @Input() title: string;
     @Input() hrefDefault = 'home';
     @Input() showNoti = true;
+    @Input() showBackButton = true;
     @Input() search = false;
     @Input() filter = false;
     @Input() report = false;

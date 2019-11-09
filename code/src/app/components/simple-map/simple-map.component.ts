@@ -43,7 +43,6 @@ export class SimpleMapComponent implements AfterViewInit {
         }
         
         this.coordsMap = getJSON(this.coordsMap);
-        console.log('enable gesture', this.enableGesture);
         this.map = L.map(this.id, {
             gestureHandling: this.enableGesture,
             fadeAnimation: false,

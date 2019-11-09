@@ -18,6 +18,6 @@ export class PublicService {
     }
 
     getPublicService(id: number): Observable<any> {
-        return this.httpRequest.get(`${environment.apiBaseURL}/servicios-publicos/detalle/${id}`);
+        return this.httpRequest.get(`${environment.apiBaseURL}/servicios-publicos/${id}`);
     }
 }

@@ -275,10 +275,10 @@ export const mapSocialProblem = (social_problem: any) => {
 
 export const mapCategory = (category: ISubcategory) => {
     const avalaibleIcons = [
-        'http://localhost/resources/svg/chat.svg',
-        'http://localhost/resources/svg/envelope.svg',
-        'http://localhost/resources/svg/headset.svg',
-        'http://localhost/resources/svg/imac.svg'
+        'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/bot.svg?sanitize=true',
+        'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/envelope.svg?sanitize=true',
+        'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/headset.svg?sanitize=true',
+        'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/imac.svg?sanitize=true'
     ];
     const category_icon = ramdomItem(avalaibleIcons);
     category.icon = category_icon;

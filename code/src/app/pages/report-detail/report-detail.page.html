@@ -1,4 +1,4 @@
-<app-header-back title="Informe" hrefDefault="/reports"></app-header-back>
+<app-header-back title="Informe" hrefDefault="/reports-tabs/list"></app-header-back>
 
 <ion-content padding>
     <!-- Mensaje si datos no cargan o son tamaño 0 -->
@@ -13,7 +13,7 @@
         <div class="report-detail">
             <div *ngIf="report.imagesArr && report.imagesArr.length > 0">
                 <slideshow-images-full ionSlideClass="slideImageFull"
-                    [listImages]="report.imagesArr" title="Imagen de un Evento">
+                    [listImages]="report.imagesArr" title="Imagen de un Evento" [slideAutoPlay]="true">
                 </slideshow-images-full>
             </div>
             <section class="report-detail__main">

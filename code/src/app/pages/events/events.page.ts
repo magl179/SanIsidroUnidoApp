@@ -28,7 +28,7 @@ export class EventsPage implements OnInit, OnDestroy {
         private navCtrl: NavController,
         private events_app: EventsService,
         private utilsService: UtilsService,
-        private postService: PostsService,
+        private postsService: PostsService,
         private authService: AuthService,
         private modalCtrl: ModalController,
     ) {
@@ -36,8 +36,8 @@ export class EventsPage implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.postsService.resetEventsPage();
         this.utilsService.enableMenu();
-        this.postService.resetEventsPage();
         this.authService.sessionAuthUser.subscribe(token_decoded => {
             if (token_decoded && token_decoded.user) {
                 this.AuthUser = token_decoded.user;
@@ -48,32 +48,19 @@ export class EventsPage implements OnInit, OnDestroy {
             if (this.eventsList.length > 0) {
                 console.log('tengo datos cargados resetear a 0');
                 this.eventsList = [];
-                this.postService.resetEventsPage();
+                this.postsService.resetEventsPage();
             }
             this.loadEvents();
         });
     }
 
-    ngOnDestroy() {
-        console.warn('EVENTS PAGE DESTROYED')
-    }
-
-    getOptionSelected(event: any) {
-        console.log('option selected', event)
-        if (event && event.option) {
-            switch (event.option) {
-                case 'search':
-                    this.showModalSearchEvents();
-                    break;
-                default:
-                    console.log('Ninguna opcion coincide');
-            }
-        }
-    }
+    ngOnDestroy() { console.warn('EVENTS PAGE DESTROYED') }
+    ionViewWillEnter() { }
+    ionViewWillLeave() { this.postsService.resetEventsPage(); }
 
     toggleAssistance(assistance: boolean, id: number) {
         if (assistance) {
-            this.postService.sendDeleteDetailToPost(id).subscribe(res => {
+            this.postsService.sendDeleteDetailToPost(id).subscribe(res => {
                 this.eventsList.forEach(event => {
                     if (event.id == id) {
                         event.postAssistance = false;
@@ -89,7 +76,7 @@ export class EventsPage implements OnInit, OnDestroy {
                 user_id: this.AuthUser.id,
                 post_id: id
             }
-            this.postService.sendCreateDetailToPost(detailInfo).subscribe((res: any) => {
+            this.postsService.sendCreateDetailToPost(detailInfo).subscribe((res: any) => {
                 this.eventsList.forEach(event => {
                     if (event.id == id) {
                         event.postAssistance = true;
@@ -113,25 +100,9 @@ export class EventsPage implements OnInit, OnDestroy {
         await this.utilsService.shareSocial(sharePost);
     }
 
-    async showModalSearchEvents() {
-        const modal = await this.modalCtrl.create({
-            component: SearchPage,
-            componentProps: {
-                searchPlaceholder: 'Buscar Eventos',
-                searchIdeas: [],
-                originalSearchData: [...this.eventsList],
-                routeDetail: '/event-detail',
-                fieldsToSearch: ['title', 'description'],
-                searchInApi: true,
-                postTypeSlug: environment.eventsSlug
-            }
-        });
-        await modal.present();
-    }
-
     loadEvents(event?: any) {
         this.eventsLoaded = false;
-        this.postService.getEvents().pipe(
+        this.postsService.getEvents().pipe(
             take(1),
             map((res: IRespuestaApiSIUPaginada) => {
                 if (res && res.data && res.data) {
@@ -184,7 +155,7 @@ export class EventsPage implements OnInit, OnDestroy {
     }
 
     postDetail(id: number) {
-        this.navCtrl.navigateForward(`/event-detail/${id}`);
+        this.navCtrl.navigateForward(`/events-tabs/detail/${id}`);
     }
     //Obtener datos con el Infinite Scroll
     getInfiniteScrollData(event: any) {

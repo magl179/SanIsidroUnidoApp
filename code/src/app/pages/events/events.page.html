@@ -1,7 +1,9 @@
-<app-header-back title="Eventos" [search]="true" (optionSelected)="getOptionSelected($event)">
+<!-- Cabecera -->
+<app-header-back title="Eventos">
 </app-header-back>
+<!-- Contenido -->
 <ion-content padding>
-    <!-- Refresher -->
+    <!-- Refresher de los Datos -->
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content pullingIcon="arrow-dropdown" refreshingSpinner="circles"
             refreshingText="Cargando Publicaciones...">

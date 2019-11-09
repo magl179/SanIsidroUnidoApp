@@ -1,4 +1,4 @@
-<app-header-back title="Emergencia" hrefDefault="/emergencies"></app-header-back>
+<app-header-back title="Emergencia" hrefDefault="/emergencies-tabs/list"></app-header-back>
 
 <ion-content>
     <!-- Mensaje no cargaron los datos desde la Api -->
@@ -45,7 +45,7 @@
     <div *ngIf="emergencyLoaded && emergency">
         <div class="emergency-detail">
             <div *ngIf="emergency.imagesArr && emergency.imagesArr.length > 0">
-                <slideshow-images-full ionSlideClass="slideImageFull" [listImages]="emergency.imagesArr" title="Imagen de un Evento"></slideshow-images-full>
+                <slideshow-images-full ionSlideClass="slideImageFull" [listImages]="emergency.imagesArr" title="Imagen de un Evento" [slideAutoPlay]="true"></slideshow-images-full>
             </div>
             <div class="post-info-container">
                 <div class="post-description-info">

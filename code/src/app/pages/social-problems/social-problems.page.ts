@@ -67,9 +67,9 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.postsService.resetSocialProblemsPage();
         this.slugSubcategory = this.route.snapshot.paramMap.get('slug_subcategory');
         this.utilsService.enableMenu();
-        this.postsService.resetSocialProblemsPage();
         console.log('ng on init');
         this.authService.sessionAuthUser.pipe(
             finalize(() => { })
@@ -95,34 +95,9 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
 
     }
 
-    ngOnDestroy() {
-        console.warn('SOCIAL PROBLEMS PAGE DESTROYED')
-    }
-
-    getOptionSelected(event: any) {
-        console.log('option selected', event)
-        if (event && event.option) {
-            switch (event.option) {
-                case 'search':
-                    this.showModalSearchSocialProblems();
-                    break;
-                case 'filter':
-                    this.showModalFilterSocialProblems();
-                    break;
-                case 'report':
-                    this.reportSocialProblem();
-                    break;
-                default:
-                    console.log('Ninguna opcion coincide');
-            }
-        }
-    }
-
+    ngOnDestroy() { console.warn('SOCIAL PROBLEMS PAGE DESTROYED') }
     ionViewWillEnter() { }
-    //Ir a la pagina para reportar problemas sociales
-    reportSocialProblem() {
-        this.navCtrl.navigateForward('/social-problem-create')
-    }
+    ionViewWillLeave() { this.postsService.resetSocialProblemsBySubcategoryPage(); }
     //Eliminar o agregar like a una publicacion
     toggleLike(like: boolean, id: number) {
         if (like) {
@@ -223,7 +198,7 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
     }
     //Ir al detalle de un problema socialc
     postDetail(id: any) {
-        this.navCtrl.navigateForward(`/social-problem-detail/${this.slugSubcategory}/${id}`);
+        this.navCtrl.navigateForward(`/social-problems-tabs/detail/${this.slugSubcategory}/${id}`);
     }
     //Compartir el Problema Social
     async sharePost(post: ISocialProblem) {
@@ -244,48 +219,7 @@ export class SocialProblemsPage implements OnInit, OnDestroy {
             return $imagesArray[0].url;
         }
     }
-    //Funcion mostrar el filtro de publicaciones
-    async showModalFilterSocialProblems(event?: any) {
-        //Crear Popover
-        const modal = await this.modalCtrl.create({
-            component: FilterPage,
-            componentProps: {
-                data: [...this.socialProblemsList],
-                postTypeSlug: this.subcategory,
-                filters: this.filters,
-            }
-        });
-        //Obtener datos popover cuando se vaya a cerrar
-        modal.onDidDismiss().then((modalReturn: any) => {
-            // console.log('modal returned', modalReturn);
-            if (modalReturn.data) {
-                this.socialProblemsFilter = modalReturn.data.dataFiltered;
-                this.subcategory = modalReturn.data.subcategory;
-                this.filters = modalReturn.data.filters;
-            }
-            console.log('Data Returned Modal Filter', modalReturn.data);
-        });
-        //Presentar el Popover
-        return await modal.present();
-    }
-
-    async showModalSearchSocialProblems() {
-        const modal = await this.modalCtrl.create({
-            component: SearchPage,
-            componentProps: {
-                searchIdeas: [],
-                originalSearchData: [...this.socialProblemsList],
-                routeDetail: '/social-problem-detail',
-                searchPlaceholder: 'Buscar Problemas Sociales',
-                fieldsToSearch: ['title', 'description'],
-                searchInApi: true,
-                postTypeSlug: environment.socialProblemSlug
-            }
-        });
-        //Obtener datos popover cuando se vaya a cerrar
-        await modal.present();
-    }
-
+    //Filtrar por Estado Atención
     segmentChanged(event: any) {
         const value = (event.detail.value !== "") ? Number(event.detail.value) : "";
         const type = 'is_attended';

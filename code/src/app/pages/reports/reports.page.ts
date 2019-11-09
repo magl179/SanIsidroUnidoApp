@@ -26,13 +26,13 @@ export class ReportsPage implements OnInit, OnDestroy {
         this.loadReports();
     }
 
-    ngOnDestroy() {
-        console.warn('REPORTS  PAGE DESTROYED')
+    postDetail(id: number) {
+        this.navCtrl.navigateForward(`/reports-tabs/detail/${id}`);
     }
 
-    postDetail(id: number) {
-        this.navCtrl.navigateForward(`/report-detail/${id}`);
-    }
+    ngOnDestroy() { console.warn('REPORTS PAGE DESTROYED') }
+    ionViewWillEnter() { }
+    ionViewWillLeave() { this.postsService.resetReportsPage(); }
     
     loadReports(event?: any) {
         this.reportsLoaded = false;

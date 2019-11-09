@@ -11,17 +11,12 @@ export class PublicServicesCategoriesPage implements OnInit {
   constructor(private navCtrl: NavController) { }
 
   items = [
-    { title: 'Carpinteria', image: 'http://localhost/resources/svg/chat.svg', color: 'primary' },
-    { title: 'Tiendas',  image: 'http://localhost/resources/svg/envelope.svg',color: 'secondary' },
-    { title: 'Cajeros',  image: 'http://localhost/resources/svg/headset.svg',color: 'tertiary' },
-    { title: 'Centros Médicos',  image: 'http://localhost/resources/svg/imac.svg',color: 'warning' },
-    { title: 'Farmacias',  image: 'http://localhost/resources/svg/internet.svg',color: 'warning' },
-    { title: 'Fruterias',  image: 'http://localhost/resources/svg/letter.svg',color: 'warning' },
-    // { title: '', color: 'dark' },
-    // { title: '', color: 'success' },
-    // { title: '', color: 'light' },
-    // { title: '', color: 'medium' },
-    // { title: '', color: 'orange' }
+    { title: 'Carpinteria', image: 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/bot.svg?sanitize=true', color: 'primary' },
+    { title: 'Tiendas',  image: 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/envelope.svg?sanitize=true',color: 'secondary' },
+    { title: 'Cajeros',  image: 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/headset.svg?sanitize=true',color: 'tertiary' },
+    { title: 'Centros Médicos',  image: 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/imac.svg?sanitize=true',color: 'warning' },
+    { title: 'Farmacias',  image: 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/internet.svg?sanitize=true',color: 'warning' },
+    { title: 'Fruterias',  image: 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/letter.svg?sanitize=true',color: 'warning' }
 ];
 
   ngOnInit() {

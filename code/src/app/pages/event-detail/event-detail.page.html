@@ -1,4 +1,4 @@
-<app-header-back title="Evento" hrefDefault="/events"></app-header-back>
+<app-header-back title="Evento" hrefDefault="/events-tabs/list"></app-header-back>
 
 <ion-content>
     <!-- Mensaje si datos no cargan o son tamaño 0 -->
@@ -45,7 +45,7 @@
         <div class="event-detail">
             <div *ngIf="event.imagesArr && event.imagesArr.length > 0">
                 <slideshow-images-full ionSlideClass="slideImageFull" [listImages]="event.imagesArr"
-                    title="Imagen de un Evento">
+                    title="Imagen de un Evento" [slideAutoPlay]="true">
                 </slideshow-images-full>
             </div>
 

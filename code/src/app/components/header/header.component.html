@@ -1,6 +1,6 @@
 <ion-header>
     <ion-toolbar color="primary">
-        <ion-buttons menu-id="menu_principal_app" slot="start">
+        <ion-buttons menu-id="menu_principal_app" slot="start" *ngIf="showBackButton">
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-title (click)="testiconNoti()" class="ion-text-center">{{title}}</ion-title>

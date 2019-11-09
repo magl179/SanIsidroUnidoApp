@@ -6,7 +6,7 @@ import { ChangePasswordPage } from 'src/app/modals/change-password/change-passwo
 import { RequestMembershipPage } from 'src/app/modals/request-membership/request-membership.page';
 import { ChangeProfileImagePage } from 'src/app/modals/change-profile-image/change-profile-image.page';
 import { NotificationsService } from 'src/app/services/notifications.service';
-import { IRespuestaApiSIU, ITokenDecoded, IRespuestaApiSIUSingle, IPhoneUser } from "src/app//interfaces/models";
+import { IRespuestaApiSIU, ITokenDecoded, IRespuestaApiSIUSingle, IDeviceUser } from "src/app//interfaces/models";
 import { UserService } from 'src/app/services/user.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { getUserDevice } from 'src/app/helpers/user-helper';
@@ -25,7 +25,7 @@ export class UserProfilePage implements OnInit {
     AuthUser = null;
     UserDevices = [];
     UserSocialProfiles = [];
-    CurrentUserDevice: IPhoneUser = {
+    CurrentUserDevice: IDeviceUser = {
         id: null,
         phone_id: null,
         user_id: null

@@ -54,6 +54,9 @@ export class PostsService implements OnInit {
     resetSocialProblemsPage() {
         this.currentPage.socialProblems = 0;
     }
+    resetSocialProblemsBySubcategoryPage() {
+        this.currentPage.socialProblemsBySubcategory = 0;
+    }
     resetEventsPage() {
         this.currentPage.events = 0;
     }
@@ -91,11 +94,17 @@ export class PostsService implements OnInit {
     //METODOS GET
     //Función para obtener detalle publicaciones
     getPostDetail(slug: string, id: number) {
-        return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/categoria/${slug}/detalle/${id}`);
+        return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/${id}`);
     }
     //Función para obtener detalle publicaciones
     getPosts(slug: string, page: number) {
-        return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones/categoria/${slug}?page=${page}`);
+        const params = {
+            "filter[category]": slug,
+            "include": "user, category, subcategory, details, images",
+            "pagination": "true",
+            "page": page
+        };
+        return this.httpRequest.get(`${environment.apiBaseURL}/publicaciones`, params);
     }
     // Función para obtener los problemas sociales de la API
     getSocialProblems(): Observable<any> {
@@ -148,13 +157,20 @@ export class PostsService implements OnInit {
     }
     getPostsBySubCategory(category: string, subcategory: string) {
         this.currentPage.socialProblemsBySubcategory++;
-        const url = `${environment.apiBaseURL}/publicaciones/categoria/${category}/subcategoria/${subcategory}`;
-        return this.httpRequest.get(url);
+        const params = {
+            "filter[category]": category,
+            "filter[subcategory]": subcategory,
+            "include": "user, category, subcategory, details, images",
+            "pagination": "true",
+            "page": this.currentPage.socialProblemsBySubcategory
+        };
+        const url = `${environment.apiBaseURL}/publicaciones`;
+        return this.httpRequest.get(url, params);
     }
     // Función para buscar las publicaciones relacionadas a una categoria de una busqueda en especifico
-    searchPosts(search_term: string, slugCategory: string) {
-        const url = `${environment.apiBaseURL}/search/${slugCategory}?search_term=${search_term}`;
-        return this.httpRequest.get(url);
+    searchPosts(params: object) {
+        const url = `${environment.apiBaseURL}/publicaciones`;
+        return this.httpRequest.get(url, params);
     }
     // Función para filtrar las publicaciones de acuerdo a unos parametros
     filterPosts(filter_params: object , slugCategory: string) {

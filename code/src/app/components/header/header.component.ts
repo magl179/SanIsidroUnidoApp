@@ -12,6 +12,7 @@ export class HeaderComponent implements OnInit {
 
     @Input() title: string;
     @Input() showNoti = true;
+    @Input() showBackButton = true;
     @Input() showOptions = true;
     @Output() optionsSelected = new EventEmitter();
 

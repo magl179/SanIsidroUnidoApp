@@ -22,7 +22,7 @@ export class EmergencyDetailPage implements OnInit {
     emergencyLoaded = false;
     AuthUser = null;
 
-    constructor(private route: ActivatedRoute,
+    constructor(private activatedRoute: ActivatedRoute,
         public utilsService: UtilsService,
         private postsService: PostsService,
         private modalCtrl: ModalController,
@@ -31,7 +31,7 @@ export class EmergencyDetailPage implements OnInit {
 
     ngOnInit() {
 
-        this.id = this.route.snapshot.paramMap.get('id');
+        this.id = this.activatedRoute.snapshot.paramMap.get('id');
         // console.log('ID RECIBIDO:', this.id);
         this.authService.sessionAuthUser.subscribe(token_decoded => {
             if (token_decoded && token_decoded.user) {

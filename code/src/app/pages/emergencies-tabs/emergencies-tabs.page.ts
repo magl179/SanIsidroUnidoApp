@@ -10,6 +10,10 @@ export class EmergenciesTabsPage implements OnInit {
   constructor() { }
 
   ngOnInit() {
-  }
+    }
+    
+    openSearchModal(){
+    console.log('open modal');
+    }
 
 }

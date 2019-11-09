@@ -135,7 +135,6 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
             }
             currentPoint.addTo(this.map).bindPopup('Mi Ubicación').openPopup();
         }
-        console.log('map points', this.mapPoints);
         //Recorrer los puntos del mapa
         this.mapPoints.forEach(async point => {
             let punto = null;
@@ -161,10 +160,9 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
             autoCollapse: true,
             autoCollapseTime: 2000,
             // Function al mover localización
-            moveToLocation: async (latlng, title, map) => {
+            moveToLocation: async (latlng: any, title: string, map: any) => {
                 this.map = map;
                 if (this.currentCoordinate) {
-                    console.log('Redraw route', title);
                     const wp1 = this.createLatLng(this.currentCoordinate.latitude, this.currentCoordinate.longitude);
                     this.polylineRoute.setLatLngs([wp1, latlng]);
                     this.map.fitBounds(this.polylineRoute.getBounds());

@@ -1,4 +1,4 @@
-<app-header-back title="Problema Social" hrefDefault="/social-problems/{{slugSubcategory}}"></app-header-back>
+<app-header-back title="Problema Social" hrefDefault="/social-problems-tabs/list/{{slugSubcategory}}"></app-header-back>
 
 <ion-content>
      <!-- Mensaje si datos no cargan o son tamaño 0 -->
@@ -41,13 +41,9 @@
     </div>
     <!-- Datos ya cargados -->
     <div class="social-problem-detail" *ngIf="socialProblemLoaded && socialProblem">
-        <!-- <div class="post-cover-image"
-            *ngIf="socialProblem.images && socialProblem.images.length > 0">
-            <img [src]="socialProblem.images[0].url" alt="Imagen Tarjeta" class="img" />
-        </div> -->
         <div *ngIf="socialProblem.images && socialProblem.images.length > 0">
                 <slideshow-images-full ionSlideClass="slideImageFull" [listImages]="socialProblem.imagesArr"
-                    [title]="socialProblem.title">
+                    [title]="socialProblem.title" [slideAutoPlay]="true">
                 </slideshow-images-full>
             </div>
         <div class="post-info-container">

@@ -53,7 +53,6 @@ export class EmergenciesPage implements OnInit, OnDestroy {
         this.authService.sessionAuthUser.subscribe(async (token_decoded: ITokenDecoded) => {
             if (token_decoded) {
                 this.AuthUser = token_decoded.user;
-                console.log(this.AuthUser);
             }
         });
         this.loadEmergencies();
@@ -68,41 +67,20 @@ export class EmergenciesPage implements OnInit, OnDestroy {
         })
     }
 
-    ngOnDestroy() {
-        console.warn('EMERGENCIES PAGE DESTROYED')
-    }
-
-    getOptionSelected(event: any) {
-        console.log('option selected', event)
-        if (event && event.option) {
-            switch (event.option) {
-                case 'search':
-                    this.showModalSearchEmergencies();
-                    break;
-                case 'filter':
-                    this.showModalFilterEmergencies();
-                    break;
-                case 'report':
-                    this.reportEmergency();
-                    break;
-                default:
-                    console.log('Ninguna opcion coincide');
-            }
-        }
-    }
+    ngOnDestroy() { console.warn('emergencies PAGE DESTROYED') }
+    ionViewWillEnter() { }
+    ionViewWillLeave() { this.postsService.resetEmergenciesPage(); }
 
     loadEmergencies(event?: any) {
         this.emergenciesLoaded = false;
         this.postsService.getEmergenciesByUser().pipe(
             map((res: IRespuestaApiSIUPaginada) => {
-                // console.log('res map', res);
                 if (res && res.data) {
                     // const emergencies_to_map = res.data.data;
                     res.data.forEach((emergency: any) => {
                         emergency = mapEmergency(emergency);
                     });
                 }
-                console.log('res maped', res.data);
                 return res;
             }),
             finalize(() => {
@@ -151,58 +129,8 @@ export class EmergenciesPage implements OnInit, OnDestroy {
         }
     }
 
-    getFullDate(date: string, time: string) {
-        const fulldate = `${date} ${time}`;
-        return fulldate;
-    }
-
     postDetail(id: number) {
-        this.navCtrl.navigateForward(`/emergency-detail/${id}`);
-    }
-
-
-
-    async showModalFilterEmergencies() {
-        const modal = await this.modalCtrl.create({
-            component: FilterPage,
-            componentProps: {
-                data: [...this.emergenciesList],
-                filters: this.filters
-            }
-        });
-        //Obtener datos popover cuando se vaya a cerrar
-        modal.onDidDismiss().then((modalReturn: any) => {
-            // console.dir(dataReturned);
-            // console.log('data', dataReturned);
-            if (modalReturn.data) {
-                this.emergenciesFiltered = [...modalReturn.data.dataFiltered];
-                this.filters = modalReturn.data.filters;
-            }
-            console.log('Data Returned Modal Filter', modalReturn.data);
-        });
-        await modal.present();
-    }
-
-    async showModalSearchEmergencies() {
-        const modal = await this.modalCtrl.create({
-            component: SearchPage,
-            componentProps: {
-                // data: [...this.emergencies],
-                searchPlaceholder: 'Buscar Emergencias',
-                searchIdeas: [],
-                originalSearchData: [...this.emergenciesList],
-                routeDetail: '/emergency-detail',
-                fieldsToSearch: ['title', 'description'],
-                searchInApi: true,
-                postTypeSlug: environment.emergenciesSlug
-                // filters: this.filters
-            }
-        });
-        await modal.present();
-    }
-
-    reportEmergency() {
-        this.navCtrl.navigateForward('/emergency-create');
+        this.navCtrl.navigateForward(`/emergencies-tabs/detail/${id}`);
     }
     
     getInfiniteScrollData(event: any) {
@@ -229,7 +157,6 @@ export class EmergenciesPage implements OnInit, OnDestroy {
         } else {
             this.emergenciesFiltered = this.emergenciesList;
         }
-        // console.log('data changed', this.socialProblemsFilter.length);
     }
 
 

@@ -1,35 +1,86 @@
 //INTERFACES RECIBIR DATOS
-export interface IRespuestaApiSIU {
+interface IBasicResponse {
     code: number;
-    data: any[];
-    errors: any[];
     message: string;
     status: string;
+    errors?: any[];
 }
-export interface IRespuestaApiSIUSingle {
-    code: number;
+export interface IRespuestaApiSIU extends IBasicResponse{
+    data: any[];
+}
+export interface IRespuestaApiSIUSingle extends IBasicResponse{
     data: any;
-    errors: any[]
-    message: string;
-    status: string;
 }
 
-export interface IRespuestaApiSIUPaginada {
-    code: number;
+export interface IRespuestaApiSIUPaginada extends IBasicResponse{
     current_page: number;
     data: any[];
     first_page_url: string;
     from: number;
     next_page_url: string;
-    message: string;
     path: string;
     per_page: number;
     prev_page_url?: any;
-    status: string;
     to: number;
 }
+//Interfaz Publicaciones
+export interface IPost {
+    id: any;
+    title: string;
+    description: string;
+    date: string;
+    time: string;
+    is_attended: number;
+    user_id: number;
+    category_id: number;
+    subcategory_id?: any;
+    created_at?: any;
+    updated_at?: any;
+    ubication?: IUbication;
+    images?: I_ImagesApi[];
+    details?: any[],
+    category?: any;
+    subcategory?: ISubcategory;
+    user?: any;
+    category_name?: string;
+    subcategory_name?: string;
+}
 
-// Compartir Publicaciones
+export interface ISocialProblem extends IPost {
+    likes: number;
+    postLiked?: any;
+    fulldate?: any;
+}
+export interface IEvent extends IPost {
+    postAssistance?: any;
+    fulldate?: string;
+}
+//Imagenes
+export interface I_ImagesApi {
+    created_at: string;
+    id: number;
+    post_id: number;
+    updated_at: string;
+    url: string;
+}
+// Servicios Publicos
+export interface IPublicService {
+    id: number;
+    name: string;
+    description: string;
+    ubication: IUbication;
+    phones?: IPhones[];
+    created_at?: string;
+    updated_at?: string;
+}
+//Telefonos Servicio Publico
+interface IPhones {
+    id: number;
+    public_service_id: number;
+    phone_number: string;
+}
+
+// Interfaces Extras
 export interface IPostShare {
     title: string;
     description: string;
@@ -48,69 +99,6 @@ export interface IHomeOptions {
     url: string;
     valid_roles: string[];
 };
-export interface IPublicService {
-    id: number;
-    name: string;
-    description: string;
-    ubication: IUbication;
-    phones?: IPhones[];
-    created_at?: string;
-    updated_at?: string;
-}
-
-export interface IDirective {
-    id: number;
-    firstname: string;
-    lastname: string;
-    email: string;
-    avatar?: any;
-    password?: any;
-    state: number;
-    basic_service_image?: any;
-    number_phone?: any;
-    position_id?: number;
-    position: IPosition[];
-    created_at?: string;
-    updated_at?: string;
-    roles?: IRole[];
-}
-
-export interface ISocialProblem {
-    id: number;
-    title: string;
-    description: string;
-    category_id: number;
-    date: string;
-    time: string;
-    ubication: IUbication;
-    user_id: number;
-    likes: number;
-    images?: I_ImagesApi[];
-    category?: any;
-    user?: any;
-    details?: any;
-    postLiked?: any;
-    fulldate?: any;
-}
-
-export interface ISocialProfile {
-    id: Number;
-    user_id: number;
-    social_id: string;
-    provider: string;
-    created_at?: string;
-    updated_at?: string;
-}
-
-export interface IDeviceUser {
-    id: Number;
-    phone_id: number;
-    user_id: number;
-    phone_model?: string;
-    description?: string;
-    created_at?: string;
-    updated_at?: string;
-}
 
 export interface IMenuComponent {
     icon: string;
@@ -144,24 +132,106 @@ export interface ISimpleCoordinates {
     longitude: number;
 }
 
-// export interface IPublicService {
-//     id: number;
-//     name: string;
-//     description: string;
-//     phones?: string[];
-//     ubication: ISimpleCoordinates;
-//     created_at?: string;
-//     updated_at?: string;
-// }
-
-// INTERFACES ENVIAR DATOS
-
-export interface IEmergencyReported extends IBaseReportSend {
-
+interface IFilterOptions {
+    id: any;
+    name: string;
 }
 
-export interface ISocialProblemReported extends IBaseReportSend {
-    subcategory_id?: number;
+export interface IBasicFilter {
+    [key: string]: IFilterFields;
+}
+interface IFilterFields {
+    name: string;
+    value: any;
+    type?: string;
+    options: IFilterOptions[];
+}
+
+export interface INotiPostOpen {
+    type: "string";
+    id: number;
+}
+
+export interface ISlideTutorial {
+    img: string;
+    title: string;
+    description: string;
+}
+
+
+//Interfaz Usuario
+export interface IUser {
+    id: number;
+    firstname: string;
+    lastname: string;
+    email: string;
+    email_verified_at?: any;
+    avatar?: string;
+    password?: any;
+    state: number;
+    basic_service_image?: any;
+    number_phone?: any;
+    phone?: any;
+    position_id?: any;
+    created_at?: string;
+    updated_at?: string;
+    devices?: IDeviceUser[];
+    social_profiles?: ISocialProfile[];
+    roles?: IRole[];
+}
+export interface IDirective extends IUser {
+    position: IPosition[];
+}
+interface IPosition {
+    id: number;
+    name: string;
+    slug: string;
+    allocation: string;
+    created_at?: string;
+    updated_at?: string;
+}
+interface IRole {
+    id: number;
+    name: string;
+    slug: string;
+    description: string;
+    created_at?: string;
+    updated_at?: string;
+    role_user?: IRoleUser;
+}
+
+interface IRoleUser {
+    user_id: number;
+    role_id: number;
+    position?: string;
+}
+
+//Token Decodificado
+export interface ITokenDecoded {
+    exp: number;
+    iat: number;
+    sub: number;
+    user: IUser;
+}
+
+export interface ISocialProfile {
+    id: Number;
+    user_id: number;
+    social_id: string;
+    provider: string;
+    created_at?: string;
+    updated_at?: string;
+}
+
+export interface IDeviceUser {
+    id: Number;
+    phone_id: string;
+    user_id: number;
+    phone_model?: string;
+    phone_platform?: string;
+    description?: string;
+    created_at?: string;
+    updated_at?: string;
 }
 
 export interface ILoginUser {
@@ -185,17 +255,41 @@ export interface IEditProfile {
     firstname: string;
     lastname: string;
     email: string;
-    number
+    number: string
+}
+// INTERFACES ENVIAR DATOS
+interface IBaseReportSend {
+    title: string;
+    description: string;
+    user_id?: number;
+    ubication: IUbication;
+    description_ubication?: string;
+    images?: string[]
 }
 
-export interface I_ImagesApi {
-    created_at: string;
+export interface IEmergencyReported extends IBaseReportSend {
+}
+
+export interface ISocialProblemReported extends IBaseReportSend {
+    subcategory_id?: number;
+}
+
+export interface ICreateDetail {
+    type: string,
+    user_id: number,
+    post_id: number
+}
+
+//Categoria
+export interface ICategory{
     id: number;
-    post_id: number;
-    updated_at: string;
-    url: string;
+    name: string;
+    slug: string;
+    description: string;
+    created_at?: any;
+    updated_at?: any;
 }
-
+//SubCategoria
 export interface ISubcategory {
     id: number;
     name: string;
@@ -206,166 +300,11 @@ export interface ISubcategory {
     updated_at?: any;
     icon?: string;
 }
-
-export interface IEvent {
-    id: number;
-    title: string;
-    description: string;
-    date: string;
-    time: string;
-    ubication: IUbication;
-    user_id: number;
-    category_id: number;
-    created_at?: string;
-    updated_at?: string;
-    images?: I_ImagesApi[]
-    details?: any;
-    postAssistance?: any;
-    fulldate?: string;
-}
-
-export interface ICreateDetail {
-    type: string,
-    user_id: number,
-    post_id: number
-}
-
-//INTERFACES NO EXPORTADAS
-interface Notification {
-    user_id: number;
-    title: string;
-    description: string;
-}
-
-
-interface IBaseReportSend {
-    title: string;
-    description: string;
-    user_id?: number;
-    ubication: IUbication;
-    description_ubication?: string;
-    images?: string[]
-}
-
-interface IPosition {
-    id: number;
-    name: string;
-    slug: string;
-    allocation: string;
-    created_at?: string;
-    updated_at?: string;
-}
-
-
-interface IRole {
-    id: number;
-    name: string;
-    slug: string;
-    description: string;
-    created_at?: string;
-    updated_at?: string;
-    role_user?: IRoleUser;
-}
-
-interface IRoleUser {
-    user_id: number;
-    role_id: number;
-    position?: string;
-}
-
+//Ubicacion
 export interface IUbication {
     latitude: number;
     longitude: number;
     altitude?: number;
     address: string;
     description?: string;
-}
-
-interface IPhones {
-    id: number;
-    public_service_id: number;
-    phone_number: string;
-}
-
-export interface IPhoneUser {
-    id?: number;
-    phone_id: string;
-    phone_model?: string;
-    phone_platform?: string
-    description?: string;
-    user_id?: number;
-}
-
-export interface IUser {
-    id: number;
-    firstname: string;
-    lastname: string;
-    email: string;
-    email_verified_at?: any;
-    avatar?: string;
-    password?: any;
-    state: number;
-    basic_service_image?: any;
-    number_phone?: any;
-    phone?: any;
-    position_id?: any;
-    created_at?: string;
-    updated_at?: string;
-    devices?: IDeviceUser[];
-    social_profiles: ISocialProfile[];
-    roles: IRole[];
-}
-
-export interface ISlideTutorial {
-    img: string;
-    title: string;
-    description: string;
-}
-
-//Modelos de Filtrado
-interface IFilterOptions {
-    id: any;
-    name: string;
-}
-interface IFilterFields {
-    name: string;
-    value: any;
-    type?: string;
-    options: IFilterOptions[];
-}
-export interface IBasicFilter {
-    [key: string]: IFilterFields;
-}
-
-
-//Token Decodificado
-export interface ITokenDecoded {
-    exp: number;
-    iat: number;
-    sub: number;
-    user: IUserDecoded;
-}
-
-export interface IUserDecoded {
-    avatar: string;
-    basic_service_image?: any;
-    created_at: string;
-    devices: IDeviceUser[];
-    email: string;
-    email_verified_at?: any;
-    firstname: string;
-    id: number;
-    lastname: string;
-    number_phone?: any;
-    password: string;
-    position_id?: any;
-    roles: IRole[];
-    social_profiles: ISocialProfile[];
-    state: number;
-    updated_at: string;
-}
-
-export interface INotiPostOpen {
-    type: "string";
-    id: number;
 }

@@ -31,7 +31,7 @@ export class SocialProblemsCategoriesPage implements OnInit {
   }
     
     goToList(slug_subcategory: string) {
-        this.navCtrl.navigateForward(`/social-problems/${slug_subcategory}`);
+        this.navCtrl.navigateForward(`/social-problems-tabs/list/${slug_subcategory}`);
     }
 
     loadCategories() {
