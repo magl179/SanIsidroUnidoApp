@@ -22,7 +22,7 @@ const routes: Routes = [
                 path: 'search',
                 loadChildren: "src/app/pages/search-posts/search-posts.module#SearchPostsPageModule",
                 data: {
-                    searchIdeas: ['ferguson', 'Manual', 'Byron', 'Calderon', 'Lolita'],
+                    searchIdeas: [],
                     searchPlaceholder: 'Buscar Eventos',
                     searchRouteDetail: '/events-tabs/detail',
                     searchSlug: environment.eventsSlug

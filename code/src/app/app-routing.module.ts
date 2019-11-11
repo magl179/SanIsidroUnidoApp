@@ -45,8 +45,7 @@ const routes: Routes = [
     },    
     {
         path: 'about',
-        loadChildren: './pages/about/about.module#AboutPageModule',
-        canLoad: [UserAuthenticatedGuard]
+        loadChildren: './pages/about/about.module#AboutPageModule'
     },
     {
         path: 'configuration',
@@ -54,8 +53,7 @@ const routes: Routes = [
     },
     {
         path: 'frequent-questions',
-        loadChildren: './pages/frequent-questions/frequent-questions.module#FrequentQuestionsPageModule',
-        canLoad: [UserAuthenticatedGuard]
+        loadChildren: './pages/frequent-questions/frequent-questions.module#FrequentQuestionsPageModule'
     },
     {
         path: 'public-services-categories',

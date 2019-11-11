@@ -58,16 +58,16 @@
           line-height: 1.7rem;
         }
         .icon-fulldate {
-          color: #1a78c8;
+          color: var(--ion-color-primary);
         }
         .icon-ubication {
-          color: #cf4331;
+          color: var(--ion-color-danger);
         }
         .icon-people {
-          color: #ff5722;
+          color: var(--ion-color-primary);
         }
         .icon-assistance{
-            color: #1a78c8; 
+            color: var(--ion-color-orange);
         }
       }
     }

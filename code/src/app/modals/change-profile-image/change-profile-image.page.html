@@ -28,8 +28,10 @@
             </ion-col>
         </ion-row>
     </ion-grid>
-    <app-upload-image [uploadedImages]="profileUserImg" [maxImages]="1"
-        (returnUploadedImages)="getUploadedImages($event)"></app-upload-image>
+    <section class="section-uplodad-image">
+        <app-upload-image [uploadedImages]="profileUserImg" [maxImages]="1"
+            (returnUploadedImages)="getUploadedImages($event)"></app-upload-image>
+    </section>
     <ion-button class="btn_send_request_membership" expand="block" (click)="sendRequestChangeUserProfile()"
         [disabled]="profileUserImg.length === 0">Enviar</ion-button>
 </ion-content>

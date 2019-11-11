@@ -4,6 +4,14 @@
       position: relative;
       padding: 0.6em 0;
     }
+    .post-header{
+        .post-status{
+            color: var(--ion-color-danger);
+            .active{
+                color: var(--ion-color-success) !important;
+            }
+        }
+    }
     .post-title {
       font-weight: bold;
       color: #2a2c31;

@@ -8,7 +8,7 @@ export const environment = {
     googleClientID: '1051963029462-mht230ntj5grq6k0ng3get34kfq3ldvu.apps.googleusercontent.com',
     onesignal_id: '2ffbdcc2-223e-4527-9164-9583ea47d0b4',
     firebase_app_id: '729197860050',
-    apiBaseURL: 'http://localhost/github/SanIsidroApi/public/api/v1',
+    apiBaseURL: 'http://192.168.1.7/github/sanisidroapi/public/api/v1',
     socialProblemSlug: 'problemas_sociales',
     mapBoxApiKey: 'pk.eyJ1Ijoic3RhbGlubWF6YWRldjk3IiwiYSI6ImNrMDQyZXY1cDExY3Mzbm1rdXJka3lpbzgifQ.jHDtbzUgiYBPshiRHwSfLQ',
     eventsSlug: 'eventos',

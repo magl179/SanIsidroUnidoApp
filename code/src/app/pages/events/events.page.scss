@@ -13,20 +13,22 @@
         .main-section-info {
             padding-bottom: 5px;
             &__item {
+                margin-bottom: .7rem;
               ion-icon {
-                margin-right: 1rem;
+                margin-right: .7rem;
+                font-size: 1rem;
               }
               .description {
                 line-height: 1.7rem;
               }
               .icon-fulldate {
-                color: #1a78c8;
+                color: var(--ion-color-primary);
               }
               .icon-ubication {
-                color: #cf4331;
+                color: var(--ion-color-orange);
               }
               .icon-people {
-                color: #1a78c8;
+                color: var(--ion-color-primary);
               }
             }
           }

@@ -100,7 +100,12 @@ export interface IHomeOptions {
     valid_roles: string[];
 };
 
-export interface IMenuComponent {
+export interface IMenuOptions{
+    authenticated: IMenuComponent[];
+    not_authenticated: IMenuComponent[];
+}
+
+interface IMenuComponent {
     icon: string;
     name: string;
     redirectTo: string;

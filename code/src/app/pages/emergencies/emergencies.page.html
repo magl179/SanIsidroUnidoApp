@@ -24,13 +24,11 @@
         </ion-refresher-content>
     </ion-refresher>
     <!-- Mensaje cuando no hay datos disponibles-->
-    <app-no-results-found class="ion-padding"
-        *ngIf="emergenciesLoaded && emergenciesList.length === 0"
+    <app-no-results-found class="ion-padding" *ngIf="emergenciesLoaded && emergenciesList.length === 0"
         message="No existen emergencias disponibles"></app-no-results-found>
     <!-- Tarjetas de Animacion mientras se cargan los datos-->
     <div *ngIf="!emergenciesLoaded">
-        <ion-card *ngFor="let animations of [1,1,1,1,1,1,1];"
-            class="emergency animated flash slow infinite">
+        <ion-card *ngFor="let animations of [1,1,1,1,1,1,1];" class="emergency animated flash slow infinite">
             <ion-card-header class="post-header">
                 <ion-card-title class="post-title">
                     <ion-skeleton-text width="80%"></ion-skeleton-text>
@@ -47,6 +45,9 @@
         <!-- Posts Filtrados con Datos -->
         <ion-card class="emergency" *ngFor="let emergency of emergenciesFiltered; let i = index;">
             <ion-card-header class="post-header">
+                <ion-card-subtitle class="post-status" [class.active]="(emergency.is_attended)">
+                    {{(emergency.is_attended) ? 'Atendido': 'Pendiente'}}
+                </ion-card-subtitle>
                 <ion-card-title class="post-title">
                     {{emergency.title}}
                 </ion-card-title>
@@ -54,10 +55,10 @@
 
             <ion-card-content class="post-content">
                 <p class="post-description">
-                    {{emergency.description | truncate: 50}}
+                    {{emergency.description | truncate: 80}}
                 </p>
-                <p class="see-more" (click)="postDetail(emergency.id)">Ver más...</p>
             </ion-card-content>
+            <ion-button expand="block" color="primary" (click)="postDetail(emergency.id)">Saber más</ion-button>
         </ion-card>
         <!-- Posts Filtrados Sin Resultados -->
         <app-no-results-found class="ion-padding" *ngIf="emergenciesFiltered.length === 0"
@@ -65,8 +66,7 @@
     </div>
     <!-- Scroll Infinito -->
     <ion-infinite-scroll threshold="150px" (ionInfinite)="getInfiniteScrollData($event)">
-        <ion-infinite-scroll-content loadingSpinner="crescent"
-            loadingText="Cargando Publicaciones...">
+        <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando Publicaciones...">
         </ion-infinite-scroll-content>
     </ion-infinite-scroll>
 </ion-content>

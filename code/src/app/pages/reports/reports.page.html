@@ -38,11 +38,10 @@
             </ion-card-header>
             <ion-card-content class="description-section">
                 <p class="description-section__content">
-                    {{report.description}}
-                </p>
-                <p class="description-section__see-more" (click)="postDetail(report.id)">Ver más...
+                    {{report.description | truncate: 80}}
                 </p>
             </ion-card-content>
+            <ion-button color="primary"  expand="block" (click)="postDetail(report.id)">Saber más</ion-button>
         </ion-card>
     </div>
     <!-- Componente Scroll Infinito -->

@@ -3,7 +3,7 @@ import { Platform, NavController, MenuController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { timer } from 'rxjs';
-import { IMenuComponent } from './interfaces/models';
+import { IMenuOptions } from './interfaces/models';
 import { AlertController } from '@ionic/angular';
 import { AuthService } from './services/auth.service';
 import { UtilsService } from './services/utils.service';
@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment';
 import { LocalDataService } from './services/local-data.service';
 // import { mapUser } from './helpers/user-helper';
 import { getImageURL, mapUser } from "./helpers/utils";
-import { map, finalize } from 'rxjs/operators';
+import { map, finalize, take } from 'rxjs/operators';
 
 @Component({
     selector: 'app-root',
@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
 
     showAppsplash = true;
     isConnected = false;
-    menuComponents: IMenuComponent[];
+    menuComponents: IMenuOptions;
     automaticClose = true;
     sessionAuth: any = null;
 
@@ -47,9 +47,10 @@ export class AppComponent implements OnInit {
     ngOnInit() { }
 
     async getMenuOptions() {
-        this.localDataService.getMenuOptions().subscribe((data: any) => {
+        this.localDataService.getMenuOptions().subscribe((data: IMenuOptions) => {
+            console.log('menu options', data);
             this.menuComponents = data;
-            this.menuComponents[0].open = false;
+            // this.menuComponents[0].open = false;
         });
     }
 
@@ -62,6 +63,7 @@ export class AppComponent implements OnInit {
                 this.statusBar.styleDefault();
                 this.splashScreen.hide();
             }
+            //verificar token en el backend
             await this.checkUserLoggedIn();
             await this.getMenuOptions();
             this.showAppsplash = false;
@@ -78,13 +80,12 @@ export class AppComponent implements OnInit {
                     token_decoded.user = mapUser(token_decoded.user);
                 }
                 return token_decoded;
-            }) ,
-            finalize(() => {
-                this.authService.checkValidToken();                
             })
         ).subscribe(token_decoded => {
+            // console.log('subscribe app to server');
             if (token_decoded) {
                 this.sessionAuth = token_decoded;
+                this.authService.checkValidToken();
             }
         }, (err: any) => {
             console.log('Error', err);
@@ -93,6 +94,10 @@ export class AppComponent implements OnInit {
 
     closeAppSession() {
         this.confirmCloseSession();
+    }
+
+    loginAppSesion() {
+        this.authService.logout();
     }
 
     closeMenu() {
@@ -127,10 +132,10 @@ export class AppComponent implements OnInit {
         await alert.present();
     }
 
-    toggleSection(index: any, hasChild: boolean) {
-        this.menuComponents[index].open = !this.menuComponents[index].open;
-        if (this.automaticClose && this.menuComponents[index].open) {
-            this.menuComponents
+    toggleSection(component_name: string, index: any, hasChild: boolean) {
+        this.menuComponents[component_name][index].open = !this.menuComponents[component_name][index].open;
+        if (this.automaticClose && this.menuComponents[component_name][index].open) {
+            this.menuComponents[component_name]
                 .filter((item, itemIndex) => {
                     if (hasChild) {
                         return itemIndex !== index && item.children.length > 0;
@@ -138,7 +143,7 @@ export class AppComponent implements OnInit {
                         return item.children.length > 0;
                     }
                 })
-                .map(item => item.open = false);
+                .map((item: any) => item.open = false);
         }
     }
 

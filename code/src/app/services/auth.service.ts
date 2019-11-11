@@ -8,6 +8,7 @@ import { setHeaders } from "src/app/helpers/utils";
 import { NavController, Platform } from "@ionic/angular";
 import { tokenIsExpired } from 'src/app/helpers/auth-helper';
 import { IRespuestaApiSIUSingle } from "../interfaces/models";
+import { UtilsService } from './utils.service';
 
 const TOKEN_ITEM_NAME = "accessToken";
 const USER_ITEM_NAME = "currentUser";
@@ -26,7 +27,8 @@ export class AuthService {
         private storage: Storage,
         private navCtrl: NavController,
         private httpRequest: HttpRequestService,
-        private platform: Platform
+        private platform: Platform,
+        private utilsService: UtilsService
     ) {
 
         this.storage.ready().then(async () => {
@@ -57,7 +59,7 @@ export class AuthService {
     }
 
     // Iniciar Sesion del Usuario
-    login(loginData: {email: string, password?: string, social_id?: string, provider: string}): Observable<any> {
+    login(loginData: { email: string, password?: string, social_id?: string, provider: string }): Observable<any> {
         const headers = environment.headersApp;
         const urlApi = `${environment.apiBaseURL}/login`;
         return this.httpRequest.post(urlApi, loginData, headers);
@@ -78,35 +80,41 @@ export class AuthService {
     async logout() {
         this.cleanLocalStorage();
         this.cleanAuthInfo();
+        await this.utilsService.showToast({ message: 'Tu sesión expiro, inicia sesión por favor' });
         this.navCtrl.navigateRoot('/login');
     }
     //VERIFICAR SI SE DEBE CHECKEAR VALIDEZ TOKEN
     async checkValidToken() {
+        console.log('checking token...');
         if (this.tokenExists()) {
             const itemToken = await this.storage.get(TOKEN_ITEM_NAME);
-            //console.log('value check token get', itemToken)
-            if (itemToken) {
-                const isTokenExpired = tokenIsExpired(itemToken);
-                if (isTokenExpired) {
-                    this.tokenIsValid(itemToken).subscribe((res: IRespuestaApiSIUSingle) => {
-                        if (res.data && res.data.token) {
-                            if (res.data.token === 'invalid') {
-                                this.logout();
-                            } else {
-                                console.log('Token Válido');
-                            }
+            // console.log('value check token get', itemToken)
+            const isTokenExpired = tokenIsExpired(itemToken);
+            if (itemToken && isTokenExpired) {
+                this.tokenIsValid(itemToken).subscribe(async(res: IRespuestaApiSIUSingle) => {
+                    if (res.data && res.data.token) {
+                        if (res.data.token === 'invalid') {
+                            await this.logout();
+                            return;
                         } else {
-                            console.log('Error al Validar el Token en el servidor', res);
+                            console.log('Token Válido');
+                            return;
                         }
-                    }, err => {
-                        console.log('Error al Validar el Token en el servidor', err);
-                    });
-                } else {
-                    // console.log('Token no expirado');
-                }
+                    } else {
+                        console.log('Error al Validar el Token en el servidor', res);
+                        return;
+                    }
+                }, err => {
+                    console.log('Error al Validar el Token en el servidor', err);
+                    return;
+                });
             } else {
-                // console.log('No existe Token');
+                console.log('Token no expirado');
+                return;
             }
+        } else {
+            console.log('No existe token');
+            return;
         }
     }
     cleanLocalStorage() {

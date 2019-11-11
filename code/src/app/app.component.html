@@ -6,70 +6,125 @@
                 <!-- <div> -->
                 <!-- Header Menu -->
                 <div class="header-menu">
-                    <ion-item lines="none" color="primary">
-                        <ion-avatar slot="start" (click)="closeMenu()"
-                            *ngIf="sessionAuth && sessionAuth.user">
+                    <ion-item lines="none" color="primary" *ngIf="sessionAuth">
+                        <ion-avatar slot="start" (click)="closeMenu()">
                             <img [src]="sessionAuth.user.avatar" fallimg="user_avatar" />
                         </ion-avatar>
                         <ion-label>
                             <h1>
-                                {{(sessionAuth && sessionAuth.user) ? sessionAuth.user.firstname : 'Nombres'}}
-                                {{(sessionAuth && sessionAuth.user) ? sessionAuth.user.lastname : 'Apellidos'}}
+                                {{sessionAuth.user.firstname }}
+                                {{ sessionAuth.user.lastname }}
                             </h1>
-                            <p class="ion-text-capitalize" *ngIf="sessionAuth && sessionAuth.user">
+                            <p class="ion-text-capitalize">
                                 {{ (sessionAuth.user.roles.length > 0) ? sessionAuth.user.roles[0].name : 'No tienes un rol registrado' }}
                             </p>
                         </ion-label>
                     </ion-item>
+                    <ion-item lines="none" color="primary" *ngIf="!sessionAuth">
+                        <p>Inicia Sesión</p>
+                    </ion-item>
+                    <!-- <p>{{(sessionAuth) ? 'existe token': 'no existe token'}}</p> -->
                 </div>
                 <div class="body-menu">
-                    <ion-list class="list-no-padding"
-                        *ngFor="let c of menuComponents;let i = index;">
-                        <!-- Items Without Children-->
-                        <ion-menu-toggle autoHide="false" *ngIf="c.redirectTo">
-                            <ion-item class="item-sm item-menu" tapable
-                                *ngIf="c.children==undefined || c.children?.length == 0"
-                                lines="none" detail="false" [routerLink]="c.redirectTo"
-                                routerDirection="root" routerLinkActive="is_active"
-                                (click)="toggleSection(i,false)">
-                                <ion-icon [name]="c.icon" slot="start"></ion-icon>
-                                <ion-label>
-                                    {{ c.name }}
-                                </ion-label>
-                            </ion-item>
-                        </ion-menu-toggle>
-                        <!-- Item with Children -->
-                        <ion-item class="item-sm item-menu" lines="none" detail="false"
-                            *ngIf="c.children?.length > 0" (click)="toggleSection(i,true)"
-                            [class.parent-active]="c.open">
-                            <ion-icon slot="end" name="arrow-down" *ngIf="!c.open"></ion-icon>
-                            <ion-icon slot="end" name="arrow-up" *ngIf="c.open"></ion-icon>
-                            <ion-label>{{ c.name }}</ion-label>
-                            <ion-icon slot="start" [name]="c.icon"></ion-icon>
-                        </ion-item>
-                        <!-- Children List for clicked Item -->
-                        <ion-list class="item-child list-no-padding submeny-body" *ngIf="c.open">
-                            <ion-menu-toggle autoHide="false">
-                                <ion-item class="item-sm sub-item item-submenu" tapable lines="none"
-                                    detail="false" *ngFor="let sub of c.children"
-                                    [routerLink]="sub.redirectTo" routerDirection="root"
-                                    routerLinkActive="is_active">
-                                    <ion-icon [name]="sub.icon" slot="start"></ion-icon>
+                    <ng-container *ngIf="sessionAuth && menuComponents">
+                        <ion-list class="list-no-padding"
+                            *ngFor="let c of menuComponents.authenticated;let i = index;">
+                            <!-- Items Without Children-->
+                            <ion-menu-toggle autoHide="false" *ngIf="c.redirectTo">
+                                <ion-item class="item-sm item-menu" tapable
+                                    *ngIf="c.children==undefined || c.children?.length == 0"
+                                    lines="none" detail="false" [routerLink]="c.redirectTo"
+                                    routerDirection="root" routerLinkActive="is_active"
+                                    (click)="toggleSection('authenticated',i,false)">
+                                    <ion-icon [name]="c.icon" slot="start"></ion-icon>
                                     <ion-label>
-                                        {{ sub.name }}
+                                        {{ c.name }}
                                     </ion-label>
                                 </ion-item>
                             </ion-menu-toggle>
+                            <!-- Item with Children -->
+                            <ion-item class="item-sm item-menu" lines="none" detail="false"
+                                *ngIf="c.children?.length > 0" (click)="toggleSection('authenticated',i,true)"
+                                [class.parent-active]="c.open">
+                                <ion-icon slot="end" name="arrow-down" *ngIf="!c.open"></ion-icon>
+                                <ion-icon slot="end" name="arrow-up" *ngIf="c.open"></ion-icon>
+                                <ion-label>{{ c.name }}</ion-label>
+                                <ion-icon slot="start" [name]="c.icon"></ion-icon>
+                            </ion-item>
+                            <!-- Children List for clicked Item -->
+                            <ion-list class="item-child list-no-padding submeny-body" *ngIf="c.open">
+                                <ion-menu-toggle autoHide="false">
+                                    <ion-item class="item-sm sub-item item-submenu" tapable lines="none"
+                                        detail="false" *ngFor="let sub of c.children"
+                                        [routerLink]="sub.redirectTo" routerDirection="root"
+                                        routerLinkActive="is_active">
+                                        <ion-icon [name]="sub.icon" slot="start"></ion-icon>
+                                        <ion-label>
+                                            {{ sub.name }}
+                                        </ion-label>
+                                    </ion-item>
+                                </ion-menu-toggle>
+                            </ion-list>
+                            <!--FIN ELEMENTOS HIJOS-->
                         </ion-list>
-                        <!--FIN ELEMENTOS HIJOS-->
-                    </ion-list>
+                    </ng-container>
+                    <ng-container *ngIf="!sessionAuth && menuComponents">
+                        <ion-list class="list-no-padding"
+                            *ngFor="let c of menuComponents.not_authenticated;let i = index;">
+                            <!-- Items Without Children-->
+                            <ion-menu-toggle autoHide="false" *ngIf="c.redirectTo">
+                                <ion-item class="item-sm item-menu" tapable
+                                    *ngIf="c.children==undefined || c.children?.length == 0"
+                                    lines="none" detail="false" [routerLink]="c.redirectTo"
+                                    routerDirection="root" routerLinkActive="is_active"
+                                    (click)="toggleSection('not_authenticated', i,false)">
+                                    <ion-icon [name]="c.icon" slot="start"></ion-icon>
+                                    <ion-label>
+                                        {{ c.name }}
+                                    </ion-label>
+                                </ion-item>
+                            </ion-menu-toggle>
+                            <!-- Item with Children -->
+                            <ion-item class="item-sm item-menu" lines="none" detail="false"
+                                *ngIf="c.children?.length > 0" (click)="toggleSection('not_authenticated',i,true)"
+                                [class.parent-active]="c.open">
+                                <ion-icon slot="end" name="arrow-down" *ngIf="!c.open"></ion-icon>
+                                <ion-icon slot="end" name="arrow-up" *ngIf="c.open"></ion-icon>
+                                <ion-label>{{ c.name }}</ion-label>
+                                <ion-icon slot="start" [name]="c.icon"></ion-icon>
+                            </ion-item>
+                            <!-- Children List for clicked Item -->
+                            <ion-list class="item-child list-no-padding submeny-body" *ngIf="c.open">
+                                <ion-menu-toggle autoHide="false">
+                                    <ion-item class="item-sm sub-item item-submenu" tapable lines="none"
+                                        detail="false" *ngFor="let sub of c.children"
+                                        [routerLink]="sub.redirectTo" routerDirection="root"
+                                        routerLinkActive="is_active">
+                                        <ion-icon [name]="sub.icon" slot="start"></ion-icon>
+                                        <ion-label>
+                                            {{ sub.name }}
+                                        </ion-label>
+                                    </ion-item>
+                                </ion-menu-toggle>
+                            </ion-list>
+                            <!--FIN ELEMENTOS HIJOS-->
+                        </ion-list>
+                    </ng-container>
                 </div>
                 <!--ITEM TO CLOSE SESSION-->
-                <ion-list>
+                <ion-list *ngIf="sessionAuth">
                     <ion-item class="item-sm item-close-sesion" tapable lines="none"
                         (click)="closeAppSession()">
-                        <ion-icon slot="start" name="ios-log-out"></ion-icon>
+                        <ion-icon slot="start" name="log-out"></ion-icon>
                         <ion-label>Cerrar Sesión</ion-label>
+                    </ion-item>
+                </ion-list>
+                <!--ITEM TO LOGIN IN APP-->
+                <ion-list *ngIf="!sessionAuth">
+                    <ion-item class="item-sm item-close-sesion" tapable lines="none"
+                        (click)="loginAppSesion()">
+                        <ion-icon slot="start" name="log-in"></ion-icon>
+                        <ion-label>Iniciar Sesión</ion-label>
                     </ion-item>
                 </ion-list>
                 <!-- <hr class="gray">

@@ -48,6 +48,9 @@
                     </div>
                 </div>
                 <ion-card-header class="post-header">
+                    <ion-card-subtitle class="post-status" [class.active]="(socialProblem.is_attended)">
+                        {{(socialProblem.is_attended) ? 'Atendido': 'Pendiente'}}
+                    </ion-card-subtitle>
                     <ion-card-title class="post-title">
                         <span>
                             {{socialProblem.title}}
