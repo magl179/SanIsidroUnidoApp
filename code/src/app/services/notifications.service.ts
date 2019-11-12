@@ -144,20 +144,24 @@ export class NotificationsService {
         if (aditionalData) {
             //Verificar si tengo dato posts
             const post: INotiPostOpen = aditionalData.post;
-            if (post && post.type && post.id) {
+            if (post && post.category && post.id) {
                 //Switch de Opciones segun el slug del posts
-                switch (post.type) {
+                switch (post.category) {
                     case environment.emergenciesSlug: //caso posts emergencia creado
-                        await this.navCtrl.navigateForward(`/emergency-detail/${post.id}`);
+                        await this.navCtrl.navigateForward(`/emergencies-tabs/detail/${post.id}`);
                         break;
                     case environment.eventsSlug: //caso posts evento creado
-                        await this.navCtrl.navigateForward(`/event-detail/${post.id}`);
+                        await this.navCtrl.navigateForward(`/events-tabs/detail/${post.id}`);
                         break;
                     case environment.socialProblemSlug: // caso posts problema social
-                        await this.navCtrl.navigateForward(`/social-problem-detail/${post.id}`);
+                        if (post.subcategory) {
+                            await this.navCtrl.navigateForward(`/social-problems-tabs/detail/${post.subcategory}/${post.id}`);
+                        } else {
+                            await this.navCtrl.navigateForward(`/social-problems-tabs/categories`);
+                        }
                         break;
                     case environment.reportsSlug: //caso reporte o informe
-                        await this.navCtrl.navigateForward(`/report-detail/${post.id}`);
+                        await this.navCtrl.navigateForward(`/reports-tabs/detail/${post.id}`);
                         break;
                     default:
                         return;

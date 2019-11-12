@@ -153,7 +153,8 @@ interface IFilterFields {
 }
 
 export interface INotiPostOpen {
-    type: "string";
+    subcategory?: string;
+    category: "string";
     id: number;
 }
 
