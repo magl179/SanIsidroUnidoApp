@@ -11,12 +11,13 @@ export class PublicServicesCategoriesPage implements OnInit {
   constructor(private navCtrl: NavController) { }
 
   items = [
-    { title: 'Carpinteria', image: 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/bot.svg?sanitize=true', color: 'primary' },
-    { title: 'Tiendas',  image: 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/envelope.svg?sanitize=true',color: 'secondary' },
-    { title: 'Cajeros',  image: 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/headset.svg?sanitize=true',color: 'tertiary' },
-    { title: 'Centros Médicos',  image: 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/imac.svg?sanitize=true',color: 'warning' },
-    { title: 'Farmacias',  image: 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/internet.svg?sanitize=true',color: 'warning' },
-    { title: 'Fruterias',  image: 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/letter.svg?sanitize=true',color: 'warning' }
+    { title: 'Ferreterias', image: 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/ironmongery.svg?sanitize=true', color: 'primary' },
+    { title: 'Tiendas',  image: 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/store.svg?sanitize=true',color: 'secondary' },
+    { title: 'Cajeros',  image: 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/cashier-machine.svg?sanitize=true',color: 'tertiary' },
+    { title: 'Centros Médicos',  image: 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/hospital.svg?sanitize=true',color: 'warning' },
+    { title: 'Farmacias',  image: 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/medicine.svg?sanitize=true',color: 'warning' },
+    { title: 'Restaurantes',  image: 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/baker.svg?sanitize=true',color: 'warning' },
+    { title: 'Hospedaje',  image: 'https://raw.githubusercontent.com/StalinMazaEpn/StalinResources/master/svg/hotel.svg?sanitize=true',color: 'warning' }
 ];
 
   ngOnInit() {

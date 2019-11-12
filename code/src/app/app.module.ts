@@ -39,6 +39,11 @@ import { NgFallimgModule } from 'ng-fallimg';
 import { ImageDetailPage } from "./modals/image_detail/image_detail.page";
 import { ImageDetailPageModule } from './modals/image_detail/image_detail.module';
 
+import { File } from '@ionic-native/file/ngx';
+import { FileTransfer } from '@ionic-native/file-transfer/ngx';
+import { DocumentViewer } from '@ionic-native/document-viewer/ngx';
+import { FileOpener } from '@ionic-native/file-opener/ngx';
+
 @NgModule({
     declarations: [AppComponent],
     entryComponents: [PopNotificationsComponent, ShowListNotificationsPage, ImageDetailPage],
@@ -72,6 +77,10 @@ import { ImageDetailPageModule } from './modals/image_detail/image_detail.module
         LocationAccuracy,
         GooglePlus,
         Facebook,
+        File,
+        FileOpener,
+        FileTransfer,
+        DocumentViewer,
         OneSignal,
         PhotoViewer,
         SocialSharing,

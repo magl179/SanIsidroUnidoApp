@@ -75,6 +75,13 @@
                             <span>{{ (event.ubication && event.ubication.address) ? event.ubication.address : 'Direccion no encontrada' }}</span>
                         </p>
                         <p class="item-info">
+                            <span class="icon-ubication">
+                                <ion-icon name="contact" class="social-problem-state"></ion-icon>
+                            </span>
+                            <span *ngIf="event.responsible">Responsable: {{ event.responsible}}</span>
+                            <span *ngIf="!event.responsible">No hay un responsable designado</span>
+                        </p>
+                        <p class="item-info">
                             <span class="icon-people">
                                 <ion-icon name="people" class="social-problem-state"></ion-icon>
                             </span>
@@ -86,7 +93,6 @@
                             </span>
 
                         </p>
-                        <!-- <p (click)="test()">test</p> -->
                     </div>
                 </div>
 

@@ -7,6 +7,8 @@ import { IRespuestaApiSIUSingle } from 'src/app/interfaces/models';
 import { UtilsService } from "src/app/services/utils.service";
 import { mapReport } from "../../helpers/utils";
 import { HttpErrorResponse } from '@angular/common/http';
+import { ManageDocsService } from '../../services/manage-docs.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-report-detail',
@@ -24,6 +26,7 @@ export class ReportDetailPage implements OnInit {
         private route: ActivatedRoute,
         private authService: AuthService,
         private postsService: PostsService,
+        private manageDocsService: ManageDocsService,
         private utilsService: UtilsService
     ) { }
 
@@ -71,6 +74,10 @@ export class ReportDetailPage implements OnInit {
     seeImageDetail(image: string) {
         console.log('see image', image)
         this.utilsService.seeImageDetail(image, 'Imagen Evento');
+    }
+
+    openReportPDF() {
+        this.manageDocsService.downloadAndOpenPDF(`${environment.apiBaseURL}/pdf/javascript.pdf`);
     }
 
 }

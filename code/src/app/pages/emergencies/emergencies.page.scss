@@ -7,7 +7,7 @@
     .post-header{
         .post-status{
             color: var(--ion-color-danger);
-            .active{
+            &.active{
                 color: var(--ion-color-success) !important;
             }
         }
