@@ -13,7 +13,10 @@
         color: var(--ion-color-success);
     }
 }
-
+.input-container{
+    position: relative;
+    width: 100%;
+}
 .input-beatiful{
     background-color: var(--ion-color-input-bg);
     color: var(--ion-color-dark-tint);
@@ -21,13 +24,12 @@
     border: none !important;
     padding: .375rem .75rem !important;
     font-size: 1rem;
-    line-height: 1.5;
+    // line-height: 1.5;
     width: 100%;
     border: 1px solid var(--ion-color-input-border) !important;
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
     height: 37px;
     margin: 0 auto;
-    margin-top: 10px;
     border-radius: .25rem;
     background-clip: padding-box;
     &.text-area{
@@ -37,10 +39,11 @@
 
 .btn_eye_icon {
     position: absolute;
-    right: 22px;
-    bottom: 4px;
+    right: 10px;
+    bottom: 50%;
     background: transparent;
     z-index: 1000;
+    transform: translateY(50%);
 
     ion-icon {
         font-size: 22px;
@@ -134,6 +137,9 @@
 
 .label-padding{
     margin: .5rem 0 !important;
+}
+.label-margin{
+    margin-bottom: 1rem !important;
 }
 .google-btn-alt{
     --border-color: var(--ion-color-google);

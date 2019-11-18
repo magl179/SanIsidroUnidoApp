@@ -24,6 +24,7 @@ import { LoadingAppComponent } from "./loading-app/loading-app.component";
 import { NoResultsFoundComponent } from "./no-results-found/no-results-found.component";
 import { SimpleRoutingMapComponent } from "./simple-routing-map/simple-routing-map.component";
 import { SlideshowImagesFullComponent } from './slideshow-images-full/slideshow-images-full.component';
+import { NgFallimgModule } from "ng-fallimg";
 
 @NgModule({
     declarations: [
@@ -51,7 +52,8 @@ import { SlideshowImagesFullComponent } from './slideshow-images-full/slideshow-
     imports: [
         CommonModule,
         IonicModule,
-        MaterialAppModule
+        MaterialAppModule,
+        NgFallimgModule
     ],
     exports: [
         HeaderComponent,

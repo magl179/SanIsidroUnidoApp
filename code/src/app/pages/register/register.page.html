@@ -9,7 +9,8 @@
 
 <ion-content>
     <ion-grid class="grid-container-center">
-        <ion-row style="background: url('/assets/img/default/background_first.jpg');background-size:contain;">
+        <!-- <ion-row style="background: url('/assets/img/default/background_first.jpg');background-size:contain;"> -->
+        <ion-row>
             <div style="display: flex;justify-content: center; width: 100%; margin: 1rem 0;">
                 <img src="assets/img/svg/sanIsidroIconTransparent.svg" alt="logo"
                     style="height: 105px;width: 105px;">
@@ -22,7 +23,7 @@
                         <form [formGroup]="registerForm">
                             <div class="item-form full">
                                 <ion-item class="input_item" lines="none">
-                                    <ion-label class="label-padding" position="stacked">Nombres
+                                    <ion-label class="label-padding label-margin" position="stacked">Nombres
                                     </ion-label>
                                     <ion-input class="input-beatiful" placeholder="John" type="text"
                                         formControlName="firstname"></ion-input>
@@ -56,7 +57,7 @@
                             </div>
                             <div class="item-form full">
                                 <ion-item class="input_item" lines="none">
-                                    <ion-label class="label-padding" position="stacked">Apellidos
+                                    <ion-label class="label-padding label-margin" position="stacked">Apellidos
                                     </ion-label>
                                     <ion-input class="input-beatiful" placeholder="Doe" type="text"
                                         formControlName="lastname"></ion-input>
@@ -90,7 +91,7 @@
                             </div>
                             <div class="item-formcfull">
                                 <ion-item class="input_item" lines="none">
-                                    <ion-label class="label-padding" position="stacked">Email
+                                    <ion-label class="label-padding label-margin" position="stacked">Email
                                     </ion-label>
                                     <ion-input class="input-beatiful" placeholder="john@gmail.com"
                                         type="text" formControlName="email"></ion-input>
@@ -128,28 +129,19 @@
                             </div>
                             <div class="item-form full">
                                 <ion-item class="input_item" lines="none">
-                                    <ion-label class="label-padding" position="stacked">Contraseña
+                                    <ion-label class="label-padding label-margin" position="stacked">Contraseña
                                     </ion-label>
-                                    <ion-input class="input-beatiful" #passwordEyeRegister
-                                        [type]="passwordTypeInput" placeholder="********"
-                                        formControlName="password" clearOnEdit="false"></ion-input>
-                                    <button item-end class="btn_eye_icon"
-                                        (click)="togglePasswordMode()">
-                                        <ion-icon [name]="(passwordTypeInput === 'text')?'eye-off':'eye'"></ion-icon>
-                                    </button>
-                                </ion-item>
-                                <!-- <div class="feedback-icon">
-                                    <ion-item lines="none">
-                                        <button class="icon-help-input" disabled>
-                                            <ion-icon name="close-circle" class="error"
-                                                *ngIf="registerForm.get('password').touched && registerForm.get('password').invalid">
-                                            </ion-icon>
-                                            <ion-icon name="checkmark-circle" class="success"
-                                                *ngIf="registerForm.get('password').touched && registerForm.get('password').valid">
-                                            </ion-icon>
+                                    <div class="input-container">
+                                        <ion-input class="input-beatiful input_relative" #passwordEyeRegister
+                                            [type]="passwordTypeInput" placeholder="********"
+                                            formControlName="password" clearOnEdit="false">
+                                        </ion-input>
+                                        <button item-end class="btn_eye_icon"
+                                            (click)="togglePasswordMode()">
+                                            <ion-icon [name]="(passwordTypeInput === 'text')?'eye-off':'eye'"></ion-icon>
                                         </button>
-                                    </ion-item>
-                                </div> -->
+                                    </div>
+                                </ion-item>
                             </div>
                             <div class="form-errors padding-lateral">
                                 <p class="form-error"

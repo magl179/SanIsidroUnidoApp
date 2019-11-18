@@ -44,6 +44,7 @@ export class AuthService {
         const getTokenLS = new Promise((resolve, reject) => {
             this.storage.get(TOKEN_ITEM_NAME).then(token_encoded => {
                 this.sessionAuthTokenSubject.next(token_encoded);
+                console.warn(token_encoded);
                 resolve(true);
             });
         });
@@ -134,9 +135,11 @@ export class AuthService {
         console.log('save local storage info called', { a: token_encoded, b: token_decoded })
         this.storage.set(TOKEN_ITEM_NAME, token_encoded);
         this.storage.set(USER_ITEM_NAME, token_decoded);
-        this.storage.get(USER_ITEM_NAME).then(token_decoded => {
-            console.log('user storage save local storage info', token_decoded)
-        });
+        setTimeout(() => {
+            this.storage.get(USER_ITEM_NAME).then(token_decoded => {
+                console.log('user storage save local storage info', token_decoded)
+            });
+        }, 500);
     }
     //Verificar si el usuario esta autenticado, es decir tiene su datos en el local storage
     async isAuthenticated() {

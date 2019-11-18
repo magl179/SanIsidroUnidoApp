@@ -82,7 +82,8 @@ export class LoginPage implements OnInit {
             this.manageLogin(loginData, res);
         }, (err: HttpErrorResponse) => {
             this.utilsService.showToast({
-                message: manageErrorHTTP(err, 'Ocurrio un error, intentalo más tarde')
+                message: manageErrorHTTP(err, 'Ocurrio un error, intentalo más tarde'),
+                color: 'danger'
             });
         });
     }
@@ -102,13 +103,15 @@ export class LoginPage implements OnInit {
                     this.manageLogin({ provider: 'facebook', social_id, email }, res);
                 }, (err: HttpErrorResponse) => {
                     this.utilsService.showToast({
-                        message: manageErrorHTTP(err, 'Fallo la conexión con Facebook')
+                        message: manageErrorHTTP(err, 'Fallo la conexión con Facebook'),
+                        color: 'danger'
                     });
                 });
             }
         }, (err: HttpErrorResponse) => {
             this.utilsService.showToast({
-                message: manageErrorHTTP(err, 'Fallo la conexión con Facebook')
+                message: manageErrorHTTP(err, 'Fallo la conexión con Facebook'),
+                color: 'danger'
             });
         });
     }

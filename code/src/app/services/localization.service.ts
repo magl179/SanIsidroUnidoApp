@@ -39,75 +39,99 @@ export class LocalizationService {
                     const positionweb: any = await this.getPositionWeb();
                     this.misCoordenadas.latitude = positionweb.coords.latitude;
                     this.misCoordenadas.longitude = positionweb.coords.longitude;
-                } else {
-                    return this.misCoordenadas;
                 }
             }
-            return this.misCoordenadas;
+            
         } catch (err) {
             console.log('Error: ', err);
-            this.utilsService.showToast({message: 'Ocurrio un error al obtener la geolocalizacion'});
+            await this.utilsService.showToast({ message: 'Ocurrio un error al obtener la geolocalizacion' });
+        } finally {
+            console.log('finally get coordinates')
+            return this.misCoordenadas;
         }
     }
 
     async checkGPSPermissions() {
-        if (this.platform.is('cordova')) {
-            return await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
-                async result => {
-                    if (result.hasPermission) {
-                        // Pedir encender GPS
-                        await this.askTurnOnGPS();
-                    } else {
-                        // Pedir Permiso GPS
-                        await this.requestGPSPermission();
+        return new Promise(async(resolve, reject) => { 
+            if (this.platform.is('cordova')) {
+                await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
+                    async (result: any) => {
+                        try {
+                            if (result.hasPermission) {
+                                // Pedir encender GPS
+                                await this.askTurnOnGPS();
+                            } else {
+                                // Pedir Permiso GPS
+                                await this.requestGPSPermission();
+                            }
+                        } catch (err) {
+                            reject(err);
+                        }
+                    },
+                    (err: any) => {
+                        this.utilsService.showToast({message: 'No se pudo obtener los permisos de GPS'});
+                        console.log(err);
+                        reject(err);
                     }
-                },
-                (err: any) => {
-                    this.utilsService.showToast({message: 'No se pudo obtener los permisos de GPS'});
-                    console.log(err);
-                }
-            );
-        } else {
-            return;
-        }
+                );
+            } else {
+                resolve(true);
+            }
+        });
     }
 
-    requestGPSPermission() {
-        return this.locationAccuracy.canRequest().then((canRequest: boolean) => {
-            if (canRequest) {
-                return;
-            } else {
-                // Show 'GPS Permission Request' dialogue
-                this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION)
-                    .then(
-                        async () => {
-                            // Metodo Encender GPS
-                            await this.askTurnOnGPS();
-                        },
-                        (err: any) => {
-                            this.utilsService.showToast({message: 'Ocurrio un error al solicitar los permisos del GPS: '});
-                            console.log(err);
-                        }
-                    );
-            }
+    async requestGPSPermission() {
+        return new Promise((resolve, reject) => { 
+            this.locationAccuracy.canRequest().then((canRequest: boolean) => {
+                if (canRequest) {
+                    resolve(true);
+                } else {
+                    // Show 'GPS Permission Request' dialogue
+                    this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION)
+                        .then(
+                            async () => {
+                                // Metodo Encender GPS
+                                try {
+                                    await this.askTurnOnGPS();
+                                    resolve(true);
+                                } catch (err) {
+                                    reject(err);
+                                }
+                            },
+                            (err: any) => {
+                                this.utilsService.showToast({message: 'Ocurrio un error al solicitar los permisos del GPS: '});
+                                console.log(err);
+                                reject(err);
+                            }
+                        );
+                }
+            });
         });
     }
 
     //Solicitar al usuario que encienda el GPS
     async askTurnOnGPS() {
-        return await this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
-            async () => {
-                const currentCoords = await this.geolocation.getCurrentPosition();
-                if (currentCoords) {
-                    this.misCoordenadas.latitude = currentCoords.coords.latitude;
-                    this.misCoordenadas.longitude = currentCoords.coords.longitude;
+        return new Promise((resolve, reject) => {
+            this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
+                async () => {
+                    try {     
+                        const currentCoords = await this.geolocation.getCurrentPosition();
+                        if (currentCoords) {
+                            this.misCoordenadas.latitude = currentCoords.coords.latitude;
+                            this.misCoordenadas.longitude = currentCoords.coords.longitude;
+                        }
+                        resolve(true);
+                    } catch (err) {
+                        reject(err);
+                    }
+                    // return;
+                },
+                (err: any) => {
+                    this.utilsService.showToast({message: 'Ocurrio un error al obtener los permisos de Localización'});
+                    // console.log(err);
+                    reject(err);
                 }
-                return;
-            },
-            (err: any) => {
-                this.utilsService.showToast({message: 'Ocurrio un error al obtener los permisos de Localización'});
-                console.log(err);
-            }
-        );
+            );
+        });
     }
 }

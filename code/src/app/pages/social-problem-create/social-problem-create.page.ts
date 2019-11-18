@@ -12,6 +12,7 @@ import { NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from "src/app/services/events.service";
+import { IRespuestaApiSIU } from "../../interfaces/models";
 
 @Component({
     selector: 'app-social-problem-create',
@@ -50,11 +51,7 @@ export class SocialProblemCreatePage implements OnInit {
         this.createForm();
     }
 
-    async ngOnInit() {
-        console.warn('NG ON INIT SOCIAL PROBLEMS');
-        const coords = await this.localizationService.getCoordinate();
-        this.socialProblemCoordinate.latitude = coords.latitude;
-        this.socialProblemCoordinate.longitude = coords.longitude;
+    loadSubcategories() {
         this.postService.getSubcategoriesByCategory(environment.socialProblemSlug).subscribe(res => {
             this.subcategories = res.data;
             console.log('subcategories', res.data);
@@ -65,6 +62,14 @@ export class SocialProblemCreatePage implements OnInit {
                 console.log("Server-side error", err);
             }
         });
+    }
+
+    async ngOnInit() {
+        console.warn('NG ON INIT SOCIAL PROBLEMS');
+        this.loadSubcategories();
+        const coords = await this.localizationService.getCoordinate();
+        this.socialProblemCoordinate.latitude = coords.latitude;
+        this.socialProblemCoordinate.longitude = coords.longitude;
     }
 
     createForm() {
@@ -119,12 +124,12 @@ export class SocialProblemCreatePage implements OnInit {
             finalize(() => {
                 loadingReportSocialProblem.dismiss()
             })
-        ).subscribe(async res => {
+        ).subscribe(async (res: IRespuestaApiSIU) => {
             await this.utilsService.showToast({message: "El Reporte fue enviado correctamente"});
             this.events_app.resetSocialProblemEmmiter();
             // this.router.navigate(['/social-problems'])
         }, (err: HttpErrorResponse) => {
-                this.utilsService.showToast({ message: 'Ocurrio un error al enviar el reporte' });
+                this.utilsService.showToast({ message: 'Ocurrio un error, por favor intentalo más tarde' });
             if (err.error instanceof Error) {
                 console.log("Client-side error", err);
             } else {

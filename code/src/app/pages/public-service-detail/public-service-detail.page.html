@@ -1,4 +1,4 @@
-<app-header-back title="Servicio" defaulHref="public-services" [showNoti]="false"></app-header-back>
+<app-header-back title="Servicio" hrefDefault="public-services" [showNoti]="false"></app-header-back>
 
 <ion-content class="ion-padding">
     <!-- Loader mientras cargan datos -->
@@ -19,10 +19,16 @@
             <p>El destino se encuentra a {{publicServiceDetail.distance}} km desde tu ubicación
                 actual</p>
         </div>
+
+
+        <!-- Mensaje no pudo cargarse el mapa -->
+        <!-- <div *ngIf="publicServiceDetail">
+
+        </div> -->
         <!-- Loader mientras carga el mapa -->
-        <div class="loading-app" *ngIf="!mapLoaded">
+        <!-- <div class="loading-app" *ngIf="!mapLoaded">
             <loader-app class="flex-column-center"></loader-app>
-        </div>
+        </div> -->
         <simple-routing-map [zoom]="11" className="public-service-map"
             id="public-service-map-detail-{{id}}"
             [destinationCoords]="publicServiceDetail.ubication" [usePolyline]="true"
