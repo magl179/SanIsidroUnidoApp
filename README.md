@@ -50,6 +50,7 @@ Se incluyen los siguientes directorios:
 ## Recomendaciones
 
 - Para poder observar la aplicación de la mejor manera se debe tener el Navegador con el WebView actualizado
+- Modo Dev: agregar ips en archivo "code\resources\android\xml\network_security_config.xml" para evitar problemas cors
 
 # Validaciones
 
