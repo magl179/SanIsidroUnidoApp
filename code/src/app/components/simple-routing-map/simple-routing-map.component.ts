@@ -47,12 +47,16 @@ export class SimpleRoutingMapComponent implements OnInit {
 
 
     async ngAfterViewInit() {
+        try {     
+            this.mapMarkers = await this.mapService.getMarkers().toPromise();
+            // Obtener Coordenadas
+            this.currentCoordinate = await this.localizationService.getCoordinate();
+            // Inicializar el Mapa
+            await this.initializeMap();
+        } catch (err) {
+            
+        }
         // Obtener marcadores
-        this.mapMarkers = await this.mapService.getMarkers().toPromise();
-        // Obtener Coordenadas
-        this.currentCoordinate = await this.localizationService.getCoordinate();
-        // Inicializar el Mapa
-        await this.initializeMap();
     }
 
     async initializeMap() {
@@ -63,6 +67,7 @@ export class SimpleRoutingMapComponent implements OnInit {
         this.arrRoutesLatLng[0] = this.createLatLng(this.currentCoordinate.latitude, this.currentCoordinate.longitude);
         this.arrRoutesLatLng[1] = this.createLatLng(this.destinationCoords.latitude, this.destinationCoords.longitude);
         // Crear el Mapa
+        console.log('crear mapa')
         this.map = L.map(this.id, {
             gestureHandling: this.enableGesture,
             zoomAnimation: true,
@@ -71,6 +76,7 @@ export class SimpleRoutingMapComponent implements OnInit {
         });
         // Agregar Evento al Mapa cuando esta cargado
         this.map.on('load', (e: any) => {
+            console.log('Simple coordinate map loaded')
             this.mapIsLoaded = true;
             // Invalidar Tamanio
             this.map.invalidateSize();

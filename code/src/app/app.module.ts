@@ -60,7 +60,8 @@ import { FileOpener } from '@ionic-native/file-opener/ngx';
             default: 'https://via.placeholder.com/600?text=SanIsidroImage',
             user_avatar:  'assets/img/default/img_avatar.png',
             image_full: 'assets/img/default/image_full.png',
-            cover_image: 'https://via.placeholder.com/600x300?text=SanIsidroImage'
+            cover_image: 'https://via.placeholder.com/600x300?text=SanIsidroImage',
+            no_result_image: 'assets/img/svg/robot_sad.svg'
         }),
         ShowListNotificationsPageModule,
         PipesModule,

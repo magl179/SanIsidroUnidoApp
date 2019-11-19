@@ -110,6 +110,7 @@
   "description": "San Isidro Unido",
   "cordova": {
     "plugins": {
+      "onesignal-cordova-plugin": {},
       "cordova-plugin-geolocation": {},
       "cordova-plugin-camera": {},
       "cordova-plugin-android-permissions": {},
@@ -136,7 +137,6 @@
         "FACEBOOK_ANDROID_SDK_VERSION": "5.0.2"
       },
       "cordova-plugin-inappbrowser": {},
-      "onesignal-cordova-plugin": {},
       "cordova-plugin-x-socialsharing": {
         "ANDROID_SUPPORT_V4_VERSION": "27.+"
       },

@@ -37,9 +37,13 @@ export class PublicServiceDetailPage implements OnInit {
             take(1),
             flatMap(async (res: IRespuestaApiSIUSingle) => {
                 if (res && res.data) {
-                    const currentPosition = await this.localizationService.getCoordinate();
-                    if (res.data.ubication.latitude && res.data.ubication.longitude) {
-                        res.data.distance = roundDecimal(getDistanceInKm(currentPosition.latitude, currentPosition.longitude, res.data.ubication.latitude, res.data.ubication.longitude));
+                    try {     
+                        const currentPosition = await this.localizationService.getCoordinate();
+                        if (res.data.ubication.latitude && res.data.ubication.longitude && currentPosition) {
+                            res.data.distance = roundDecimal(getDistanceInKm(currentPosition.latitude, currentPosition.longitude, res.data.ubication.latitude, res.data.ubication.longitude));
+                        }
+                    } catch (err) {
+                        console.log(err);
                     }
                 }
                 return res;

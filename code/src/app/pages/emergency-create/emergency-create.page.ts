@@ -177,7 +177,7 @@ export class EmergencyCreatePage implements OnInit {
             } else {
                 console.log("Server-side error", err);
             }
-            this.utilsService.showToast({message: 'Ocurrio un error al enviar el reporte'});
+            this.utilsService.showToast({message: 'Ocurrio un error, por favor intentalo más tarde'});
         });
     }
 
