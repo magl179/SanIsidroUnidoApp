@@ -8,13 +8,6 @@ import { ISubcategory } from '../interfaces/models';
 
 declare var moment: any;
 moment.locale('es');
-const URL_PATTERN = new RegExp('^(https?:\\/\\/)?' + // protocol
-    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|' + // domain name
-    '((\\d{1,3}\\.){3}\\d{1,3}))' + // ip (v4) address
-    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + //port
-    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-    '(\\#[-a-z\\d_]*)?$', 'i');
-
 const REGEX_URL = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
 
 //FUncion para verificar si una variable es un JSON
@@ -26,30 +19,26 @@ const isJSON = (str: any) => {
     }
 }
 
-export const formatFulldate = (stringdate) => {
+export const formatFulldate = (stringdate: any) => {
     let beatifulDate = null;
     if (moment(stringdate).isValid()) {
-        //console.log('string full valid', stringdate)
         return moment(new Date(stringdate)).format('LLL');
     } else {
         return stringdate;
     }
 }
 
-export const formatDate = (stringdate) => {
+export const formatDate = (stringdate: any) => {
     let beatifulDate = null;
     if (moment(stringdate).isValid()) {
-        //console.log('string date valid', stringdate)
         return moment(new Date(stringdate)).format('LL');
     } else {
         return stringdate;
     }
 }
 
-export const formatTime = (stringdate) => {
-    let beatifulDate = null;
+export const formatTime = (stringdate: any) => {
     if (moment(stringdate).isValid()) {
-        //console.log('string time valid', stringdate)
         return moment(new Date(stringdate)).format('LTS');
     } else {
         return stringdate;
@@ -306,13 +295,8 @@ export const getImagesPost = ($imagesArray: any[]) => {
     }
 }
 
-export const manageErrorHTTP = (err: HttpErrorResponse, defaultMessage = "Ocurrio un error, intentalo más tarde"): string => {
-    if (err.error instanceof Error) {
-        console.log("Client-side error", err);
-    } else {
-        console.log("Server-side error", err);
-    }
-    if (err.error && err.error.message) {
+export const manageErrorHTTP = (err: HttpErrorResponse, defaultMessage = "Ocurrio un error, intentalo más tarde", showDefault = true): string => {
+    if (err.error && err.error.message && showDefault) {
         return err.error.message;
     } else {
         return defaultMessage;

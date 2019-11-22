@@ -29,7 +29,7 @@ const routes: Routes = [
         loadChildren: './pages/tutorial/tutorial.module#TutorialPageModule'
     },
     {
-        path: 'public-services',
+        path: 'public-services/:slug',
         loadChildren: './pages/public-services/public-services.module#PublicServicesPageModule',
         canLoad: [UserAuthenticatedGuard]
     },

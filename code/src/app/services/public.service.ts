@@ -17,7 +17,15 @@ export class PublicService {
         return this.httpRequest.get(`${environment.apiBaseURL}/servicios-publicos`);
     }
 
+    getPublicServicesByCategory(category: string): Observable<any>{
+        return this.httpRequest.get(`${environment.apiBaseURL}/servicios-publicos/categoria/${category}`)
+    }
+
     getPublicService(id: number): Observable<any> {
         return this.httpRequest.get(`${environment.apiBaseURL}/servicios-publicos/${id}`);
+    }
+
+    getPublicServiceCategories(): Observable<any> {
+        return this.httpRequest.get(`${environment.apiBaseURL}/servicios-publicos/categorias`)
     }
 }

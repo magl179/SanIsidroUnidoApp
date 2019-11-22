@@ -11,6 +11,7 @@ import { IRespuestaApiSIU } from "src/app/interfaces/models";
 import { Subscription } from 'rxjs';
 import { getRandomColor } from 'src/app/helpers/utils';
 import { PublicService } from 'src/app/services/public.service';
+import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 
 @Component({
     selector: 'app-public-services',
@@ -27,13 +28,19 @@ export class PublicServicesPage implements OnInit {
     currentLocation = null;
     markerSelected = false;
     publicServicesLoaded = false;
+    category: string;
 
     constructor(
         private utilsService: UtilsService,
         private publicService: PublicService,
+        private activatedRoute: ActivatedRoute,
         private navCtrl: NavController,
+        private router: Router,
         private modalCtrl: ModalController
-    ) { }
+    ) { 
+        console.log('constructor', this.router.getCurrentNavigation().extras.state)
+        this.category = this.router.getCurrentNavigation().extras.state.category || '';
+    }
 
     async ngOnInit() {
         this.loadPublicServices();
@@ -42,7 +49,7 @@ export class PublicServicesPage implements OnInit {
     loadPublicServices() {
         
         this.publicServicesLoaded = false;
-        this.publicService.getPublicServices().pipe(
+        this.publicService.getPublicServicesByCategory(this.category).pipe(
             map((res: IRespuestaApiSIU )=> {
                 res.data.forEach(public_service => {
                     public_service.color = getRandomColor()
@@ -96,6 +103,10 @@ export class PublicServicesPage implements OnInit {
     }
 
     goToDetail(id = 3) {
-        this.navCtrl.navigateForward(`/public-service-detail/${id}`)
+        // this.navCtrl.navigateForward(`/public-service-detail/${id}`)
+        let navigationExtras: NavigationExtras = {
+            state: { category: this.category }
+          };
+        this.navCtrl.navigateForward(`/public-service-detail/${id}`, navigationExtras)
     }
 }

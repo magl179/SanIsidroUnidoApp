@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from '@angular/router';
 import { IRespuestaApiSIUSingle } from 'src/app/interfaces/models';
 import { PublicService } from "src/app/services/public.service";
-import { take, map, finalize, flatMap } from 'rxjs/operators';
+import { take, finalize, flatMap } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LocalizationService } from "../../services/localization.service";
 import { getDistanceInKm, roundDecimal } from 'src/app/helpers/utils';
@@ -15,19 +15,23 @@ import { getDistanceInKm, roundDecimal } from 'src/app/helpers/utils';
 export class PublicServiceDetailPage implements OnInit {
 
     id: string;
+    category: string;
     publicServiceLoaded = false;
     publicServiceDetail = null;
     mapLoaded = false;
 
 
     constructor(
-        private route: ActivatedRoute,
+        private activatedRoute: ActivatedRoute,
+        private router: Router,
         private localizationService: LocalizationService,
         private publicService: PublicService
-  ) { }
+    ) { 
+        this.category = this.router.getCurrentNavigation().extras.state.category || '';
+  }
 
     ngOnInit() {
-        this.id = this.route.snapshot.paramMap.get('id');
+        this.id = this.activatedRoute.snapshot.paramMap.get('id');
         this.getPublicServiceDetail();
     }
     

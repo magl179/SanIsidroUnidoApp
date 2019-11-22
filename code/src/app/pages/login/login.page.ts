@@ -82,7 +82,7 @@ export class LoginPage implements OnInit {
             this.manageLogin(loginData, res);
         }, (err: HttpErrorResponse) => {
             this.utilsService.showToast({
-                message: manageErrorHTTP(err, 'Ocurrio un error, intentalo más tarde'),
+                message: manageErrorHTTP(err, 'Ocurrio un error, intentalo más tarde', false),
                 color: 'danger'
             });
         });

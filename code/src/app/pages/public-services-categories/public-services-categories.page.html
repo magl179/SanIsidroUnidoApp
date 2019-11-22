@@ -1,17 +1,23 @@
 <app-header-back title="Categorias" hrefDefault="home" [showNoti]="false"></app-header-back>
 
 <ion-content>
-    <ion-grid>
+      <!-- Mensaje si datos no cargan o son tamaño 0 -->
+   <app-no-results-found *ngIf="categoriesLoaded && publicServiceCategories.length === 0" message="No existen servicios públicos disponibles"></app-no-results-found>
+   <!-- Componente Carga mientras se traen los datos -->
+   <div class="loading-app" *ngIf="!categoriesLoaded">
+       <loader-app class="flex-column-center"></loader-app>
+   </div>
+    <ion-grid *ngIf="categoriesLoaded && publicServiceCategories.length > 0"> 
         <ion-row style="justify-content: center;">
             <ion-col size="4"
-                *ngFor="let item of items; let i = index;">
-                <ion-card style="box-shadow:none !important;" (click)="goToList()">
+                *ngFor="let category of publicServiceCategories; let i = index;">
+                <ion-card style="box-shadow:none !important;" (click)="goToList(category.slug)">
                     <div style="padding: .5em;display: flex;align-items: center;flex-direction: column;">
-                        <div class="public-service-category" [style]="item.image | backgroundUrl">
+                        <div class="public-service-category" [style]="category.image | backgroundUrl">
                         </div>
                         <h1 class="ion-text"
                             style="font-size: 1em;text-align:center;text-transform: uppercase;">
-                         {{item.title}}</h1>
+                         {{category.name}}</h1>
                     </div>
                 </ion-card>
             </ion-col>

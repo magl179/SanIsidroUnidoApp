@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
-import { NavController } from '@ionic/angular';
 import { tap, catchError, map, delay, mergeMap, retryWhen } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -14,14 +14,11 @@ export class AuthInterceptorService implements HttpInterceptor {
 
 
     constructor(
-        private authService: AuthService,
-        private navCtrl: NavController,
+        private authService: AuthService
     ) { }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const request = req.clone();
-        // console.log('Request', request);withCredentials': 'true'
-        // console.log('Angular Interceptor', request);
         return next.handle(request).pipe(
             this.http_retry(2),
             map(data => {
@@ -32,9 +29,12 @@ export class AuthInterceptorService implements HttpInterceptor {
                 (err: HttpErrorResponse) => {
                     // console.log('response unsuccess', err);
                     if (err.error instanceof Error) {
-                        console.log("Client-side error");
+                        console.log("Ocurrio un error en la petición del cliente");
                     } else {
-                        console.log("Server-side error");
+                        console.log("Ocurrio un error en el servidor");
+                    }
+                    if (!environment.production) {
+                        console.log('Http Error: ', err);
                     }
                     if (err.status === 401) {
                         this.authService.logout();
