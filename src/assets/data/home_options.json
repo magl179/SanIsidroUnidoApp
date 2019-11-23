@@ -1,0 +1,38 @@
+[ 
+    {
+        "title": "Mis Emergencias",
+        "icon": "assets/img/svg/alarm.svg",
+        "url": "/emergencies/list",
+        "valid_roles": ["morador"]
+    },
+    {
+        "title": "Problemas Sociales",
+        "icon": "assets/img/svg/protest.svg",
+        "url": "/social-problems/categories",
+        "valid_roles": ["morador", "invitado", "policia"]
+    },
+    {
+        "title": "Eventos",
+        "icon": "assets/img/svg/calendar.svg",
+        "url": "/events/list",
+        "valid_roles": ["morador", "invitado", "policia"]
+    },
+    {
+        "title": "Servicios Públicos",
+        "icon": "assets/img/svg/information-point.svg",
+        "url": "/public-services",
+        "valid_roles": ["morador", "invitado", "policia"]
+    },
+    {
+        "title": "Directorio Barrial",
+        "icon": "assets/img/svg/agenda.svg",
+        "url": "/directory",
+        "valid_roles": ["morador", "invitado", "policia"]
+    },
+    {
+        "title": "Informes",
+        "icon": "assets/img/svg/analytics.svg",
+        "url": "/reports/list",
+        "valid_roles": ["morador", "invitado", "policia"]
+    }
+]

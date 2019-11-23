@@ -1,0 +1,92 @@
+<app-header-back title="Emergencia" backUrl="/emergencies/list"></app-header-back>
+
+<ion-content>
+    <!-- Mensaje no cargaron los datos desde la Api -->
+    <div class="flex-column-center message-fail-load" *ngIf="emergencyLoaded && !emergency">
+        <p>No se pudo cargar la emergencia solicitada</p>
+        <ion-button (click)="getEmergency(null,true)">Toca para reintentar</ion-button>
+    </div>
+    <!-- Animacion hasta cargar datos -->
+    <div *ngIf="!emergencyLoaded">
+        <ion-card class="detail-card animated flash slow infinite">
+            <ion-card-header>
+                <ion-card-subtitle>
+                    <ion-skeleton-text width="30%"></ion-skeleton-text>
+                </ion-card-subtitle>
+                <ion-card-title>
+                    <ion-skeleton-text width="10%"></ion-skeleton-text>
+                </ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <ion-skeleton-text width="100%"></ion-skeleton-text>
+                <ion-skeleton-text width="100%"></ion-skeleton-text>
+                <ion-skeleton-text width="100%"></ion-skeleton-text>
+            </ion-card-content>
+            <div>
+                <ion-skeleton-text width="100%" style="height: 200px;"></ion-skeleton-text>
+            </div>
+            <ion-row>
+                <ion-col>
+                    <ion-item lines="none" detail="false" button="true"
+                        class="container_events detail" [ngClass]="{'active': (i % 2) === 0}">
+                        <ion-skeleton-text width="50%"></ion-skeleton-text>
+                    </ion-item>
+                </ion-col>
+                <ion-col>
+                    <ion-item lines="none" detail="false" button="true"
+                        class="container_events detail" [ngClass]="{'active': (i % 2) !== 0}">
+                        <ion-skeleton-text width="50%"></ion-skeleton-text>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+        </ion-card>
+    </div>
+    <!-- Datos ya cargados -->
+    <div *ngIf="emergencyLoaded && emergency">
+        <div class="emergency-detail">
+            <div *ngIf="emergency.imagesArr && emergency.imagesArr.length > 0">
+                <slideshow-images-full ionSlideClass="slideImageFull" [listImages]="emergency.imagesArr" title="Imagen de un Evento" [slideAutoPlay]="true"></slideshow-images-full>
+            </div>
+            <div class="post-info-container">
+                <div class="post-description-info">
+                    <h2>{{emergency.title}}</h2>
+                    <p>{{emergency.description}}</p>
+                </div>
+                <div class="post-container-main-info">
+                    <div class="main-post-info">
+                        <h4 class="post-title-info">Detalle de la Emergencia</h4>
+                        <p class="item-info">
+                            <span class="icon-fulldate">
+                                <ion-icon name="calendar" class="social-problem-state"></ion-icon>
+                            </span>
+                            <span>
+                                {{emergency.date}}
+                            </span>
+                        </p>
+                        <p class="item-info">
+                            <span class="icon-ubication">
+                                <ion-icon name="pin" class="social-problem-state"></ion-icon>
+                            </span>
+                            <span>
+                                {{ (emergency.ubication && emergency.ubication.address) || 'Direccion no encontrada'}}
+                            </span>
+                        </p>
+                        <p class="item-info">
+                            <span class="icon-people">
+                                <ion-icon name="clipboard" class="social-problem-state"></ion-icon>
+                            </span>
+                            <span>{{(emergency.is_attended)?'Su emergencia ya ha sido atendida':'Su emergencia esta pendiente de atención'}}</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="map-container" *ngIf="emergency.ubication">
+                    <h4 class="map-title title-section">Ubicación</h4>
+                    <simple-map className="emergency-map" id="emergency-map-detail-{{id}}"
+                        [coordsMap]="emergency.ubication" [zoom]="16" [enableGesture]="true">
+                    </simple-map>
+                </div>
+            </div>
+        </div>
+    </div>
+</ion-content>

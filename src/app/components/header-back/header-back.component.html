@@ -1,0 +1,16 @@
+<ion-header no-border>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start" *ngIf="showBackButton">
+            <ion-back-button [defaultHref]="backUrl" text=""></ion-back-button>
+        </ion-buttons>
+        <ion-title class="ion-text-center">{{title}}</ion-title>
+        <ion-buttons slot="end" *ngIf="showNoti">
+            <ion-button size="large" slot="icon-only" (click)="showNotiPopover($event)">
+                <ion-icon class="icon-noti" [name]="notificationsIcon"></ion-icon>
+            </ion-button>
+            <ion-button size="large" slot="icon-only" (click)="showOptionsHeader($event)" *ngIf="optionsCtrl.length > 1">
+                <ion-icon class="icon_noti" [name]="optionsHeaderIcon"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>

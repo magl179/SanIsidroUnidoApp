@@ -1,0 +1,100 @@
+<!-- Cabecera -->
+<app-header-back title="Eventos">
+</app-header-back>
+<!-- Contenido -->
+<ion-content padding>
+    <!-- Refresher de los Datos -->
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pullingIcon="arrow-dropdown" refreshingSpinner="circles"
+            refreshingText="Cargando Publicaciones...">
+        </ion-refresher-content>
+    </ion-refresher>
+    <!-- Mensaje si datos no cargan o son tamaño 0 -->
+    <app-no-results-found *ngIf="eventsLoaded && eventsList.length === 0"
+        message="No existen eventos disponibles"></app-no-results-found>
+    <!-- Tarjetas Animacion hasta cargar datos-->
+    <div *ngIf="!eventsLoaded">
+        <ion-card *ngFor="let event of [1,1,1,1]" class="event animated flash slow infinite">
+            <ion-card-header class="event-header">
+                <ion-card-title class="event-title">
+                    <ion-skeleton-text width="30%"></ion-skeleton-text>
+                </ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <ion-skeleton-text width="40%"></ion-skeleton-text>
+                <ion-skeleton-text width="40%"></ion-skeleton-text>
+                <ion-skeleton-text width="80%"></ion-skeleton-text>
+            </ion-card-content>
+            <ion-row>
+                <ion-col size="6">
+                    <ion-item lines="none" detail="false" button="true" class="container_events">
+                        <ion-skeleton-text width="60%"></ion-skeleton-text>
+                    </ion-item>
+                </ion-col>
+                <ion-col size="6">
+                    <ion-item class="container_events" detail="false" button="true" lines="none">
+                        <ion-skeleton-text width="60%"></ion-skeleton-text>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+        </ion-card>
+    </div>
+    <!-- Tarjeta Datos Cargados y Disponibles -->
+    <div *ngIf="eventsLoaded  && eventsList.length > 0">
+        <ion-card class="event" *ngFor="let event of eventsList; let i = index;">
+            <div class="event__header" (click)="postDetail(event.id)">
+                <ion-card-header class="main-section-header">
+                    <ion-card-title class="main-section-header__title">
+                        <span>{{event.title}}</span>
+                    </ion-card-title>
+                </ion-card-header>
+                <ion-card-content class="main-section-info">
+                    <p class="main-section-info__item">
+                        <span class="icon-fulldate">
+                            <ion-icon name="calendar"></ion-icon>
+                        </span>
+                        <span class="main-section-info__description">
+                            {{ event.fulldate }} 
+                        </span>
+                    </p>
+                    <p class="main-section-info__item">
+                        <span class="icon-ubication">
+                            <ion-icon name="pin"></ion-icon>
+                        </span>
+                        <span class="description">
+                            {{ (event.ubication && event.ubication.address) ? event.ubication.address : 'Direccion no encontrada' }}
+                        </span>
+                    </p>
+                </ion-card-content>
+            </div>
+            <div class="event__footer social">
+                <div class="social-content">
+                    <span *ngIf="event.postAssistance">A ti y {{event.details.length}} personas
+                        más les interesa</span>
+                    <span *ngIf="!event.postAssistance">
+                        A {{event.details.length}}
+                        {{(event.details.length === 1) ? 'persona le interesa' : 'personas les interesa'}}
+                    </span>
+                </div>
+                <div class="social-options">
+                    <div class="social-button" [class.active]="event.postAssistance"
+                        (click)="toggleAssistance(event.postAssistance, event.id)">
+                        <ion-icon class="assistance" name="star"></ion-icon>
+                        <span>Me interesa</span>
+                    </div>
+                    <div class="social-button" (click)="sharePost(event)">
+                        <ion-icon class="share" name="share"></ion-icon>
+                        <span><i class="fa fa-share"></i>Compartir</span>
+                    </div>
+                </div>
+
+            </div>
+        </ion-card>
+    </div>
+    <!-- Scroll Infinito -->
+    <ion-infinite-scroll threshold="175px" (ionInfinite)="getInfiniteScrollData($event)">
+        <ion-infinite-scroll-content loadingSpinner="crescent"
+            loadingText="Cargando Publicaciones...">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+</ion-content>

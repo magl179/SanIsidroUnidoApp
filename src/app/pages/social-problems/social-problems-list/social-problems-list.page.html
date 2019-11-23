@@ -1,0 +1,105 @@
+<app-header-back title="Problemas Sociales" backUrl="social-problems/categories" >
+</app-header-back>
+<ion-content padding style="position: relative;">
+    <ion-segment value="" (ionChange)="segmentChanged($event)">
+        <ion-segment-button value="">
+            <ion-icon color="secondary" name="document"></ion-icon>
+            <ion-label>Todos</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="1">
+            <ion-icon color="success" name="checkbox"></ion-icon>
+            <ion-label>Atendidos</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="0">
+            <ion-icon color="danger" name="clock"></ion-icon>
+            <ion-label>Pendientes</ion-label>
+        </ion-segment-button>
+    </ion-segment>
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pullingIcon="arrow-dropdown" refreshingSpinner="circles"
+            refreshingText="Cargando Publicaciones...">
+        </ion-refresher-content>
+    </ion-refresher>
+     <!-- Mensaje si datos no cargan o son tamaño 0 -->
+     <app-no-results-found *ngIf="socialProblemsLoaded && socialProblemsList.length === 0"
+     message="No hay problemas sociales disponibles"></app-no-results-found>
+    <!-- Animacion Tarjeta hasta tener los Datos Cargados -->
+    <!-- *ngIf="!socialProblemsLoaded" -->
+    <div class="loading-app" *ngIf="!socialProblemsLoaded">
+        <loader-app class="flex-column-center"></loader-app>
+    </div>
+    
+    <!-- Tarjeta con Datos Cargados -->
+    <div *ngIf="socialProblemsLoaded  && socialProblemsList.length > 0">
+        <!-- Posts Filtrados con Datos -->
+        <ion-card style="position:relative" class="social-problem"
+            *ngFor="let socialProblem of socialProblemsFilter">
+            <div (click)="postDetail(socialProblem.id)">
+                <div class="ion-padding" style="display: flex;align-items:Center;">
+                    <div class="left-section">
+                        <img style="width: 50px;height:50px;border-radius:50%;"
+                            [src]="socialProblem.user.avatar">
+                    </div>
+                    <div class="right-section" style="margin-left: 1rem">
+                        <p style="color: var(--ion-color-dark);margin-bottom: .7em;">
+                            {{socialProblem.user.firstname}} {{socialProblem.user.lastname }}</p>
+                        <span style="font-size: .9em;">{{socialProblem.fulldate}}</span>
+                    </div>
+                </div>
+                <ion-card-header class="post-header">
+                    <ion-card-subtitle class="post-status" [class.active]="(socialProblem.is_attended)">
+                        {{(socialProblem.is_attended) ? 'Atendido': 'Pendiente'}}
+                    </ion-card-subtitle>
+                    <ion-card-title class="post-title">
+                        <span>
+                            {{socialProblem.title}}
+                        </span>
+                        <span>
+                        </span>
+                    </ion-card-title>
+                </ion-card-header>
+                <ion-card-content class="post-content">
+                    <p class="post-description">
+                        {{socialProblem.description}}
+                    </p>
+                    <!-- <p>
+                        <ion-chip [color]="(socialProblem.is_attended) ? 'success': 'orange'">
+                            <ion-icon [name]="(socialProblem.is_attended) ? 'checkbox': 'clock'">
+                            </ion-icon>
+                        </ion-chip>
+                    </p> -->
+                </ion-card-content>
+            </div>
+            <div class="social">
+                <div class="social-content">
+                    <span *ngIf="socialProblem.postLiked">A ti y {{socialProblem.details.length}}
+                        persona(s) más les gusta</span>
+                    <span *ngIf="!socialProblem.postLiked">
+                        A {{socialProblem.details.length}}
+                        {{(socialProblem.details.length === 1) ? 'persona le gusta' : 'personas les gusta'}}
+                    </span>
+                </div>
+                <div class="social-options"
+                    (click)="toggleLike(socialProblem.postLiked, socialProblem.id)">
+                    <div class="social-button" [class.active]="socialProblem.postLiked">
+                        <ion-icon class="like" name="heart"></ion-icon>
+                        <span>Me gusta</span>
+                    </div>
+                    <div class="social-button" (click)="sharePost(socialProblem)">
+                        <ion-icon class="share" name="share"></ion-icon>
+                        <span>Compartir</span>
+                    </div>
+                </div>
+            </div>
+        </ion-card>
+        <!-- Posts Filtrados Sin Datos -->
+        <app-no-results-found class="ion-padding" *ngIf="socialProblemsFilter.length === 0"
+            message="No hay publicaciones disponibles"></app-no-results-found>
+    </div>
+    <!-- Scroll Infinito -->
+    <ion-infinite-scroll threshold="150px" (ionInfinite)="doInfiniteScroll($event)">
+        <ion-infinite-scroll-content loadingSpinner="crescent"
+            loadingText="Cargando Publicaciones...">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+</ion-content>

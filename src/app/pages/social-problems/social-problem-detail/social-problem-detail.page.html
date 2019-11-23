@@ -1,0 +1,114 @@
+<app-header-back title="Problema Social" [backUrl]="backUrl"></app-header-back>
+
+<ion-content>
+     <!-- Mensaje si datos no cargan o son tamaño 0 -->
+     <app-no-results-found *ngIf="socialProblemLoaded && !socialProblem"
+     message="No se pudo cargar el problema social"></app-no-results-found>
+    <!-- Animacion cuando estan cargando datos -->
+    <div *ngIf="!socialProblemLoaded">
+        <ion-card class="card_social detail-card animated flash slow infinite">
+            <ion-skeleton-text animated style="width: 80%" style="height: 300px;">
+            </ion-skeleton-text>
+            <ion-card-header>
+                <ion-card-title>
+                    <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+                </ion-card-title>
+                <ion-card-subtitle class="post_user">
+                    <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+                </ion-card-subtitle>
+                <ion-card-subtitle>
+                    <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+                </ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content class="post_description">
+                <p class="post_content">
+                    <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                </p>
+            </ion-card-content>
+            <div class="options detail">
+                <div class="option_actions">
+                    <div class="btn_icon" style="width: 50%;height: 30px;">
+                        <ion-skeleton-text width="100%"></ion-skeleton-text>
+                    </div>
+                    <div class="btn_icon" style="width: 50%;height: 30px;">
+                        <ion-skeleton-text width="100%"></ion-skeleton-text>
+                    </div>
+                </div>
+            </div>
+        </ion-card>
+    </div>
+    <!-- Datos ya cargados -->
+    <div class="social-problem-detail" *ngIf="socialProblemLoaded && socialProblem">
+        <div *ngIf="socialProblem.images && socialProblem.images.length > 0">
+                <slideshow-images-full ionSlideClass="slideImageFull" [listImages]="socialProblem.imagesArr"
+                    [title]="socialProblem.title" [slideAutoPlay]="true">
+                </slideshow-images-full>
+            </div>
+        <div class="post-info-container">
+            <div class="post-description-info">
+                <h2>{{socialProblem.title}}</h2>
+                <p>{{socialProblem.description}}</p>
+            </div>
+            <div class="post-container-main-info">
+                <div class="main-post-info">
+                    <h4 class="post-title-info">Detalle del Problema</h4>
+                    <p class="item-info">
+                        <span class="icon-fulldate">
+                            <ion-icon name="calendar" class="social-problem-state"></ion-icon>
+                        </span>
+                        <span>{{socialProblem.date}} </span>
+                    </p>
+                    <p class="item-info">
+                        <span class="icon-ubication">
+                            <ion-icon name="pin" class="social-problem-state"></ion-icon>
+                        </span>
+                        <span>{{(socialProblem.ubication && socialProblem.ubication.address) ? socialProblem.ubication.address: 'No existe ubicación'}}</span>
+                    </p>
+                    <p class="item-info">
+                        <span class="icon-people">
+                            <ion-icon name="people" class="social-problem-state"></ion-icon>
+                        </span>
+                          <span *ngIf="socialProblem.postLiked">
+                            A ti y {{socialProblem.details.length}} persona(s) más les gusta
+                         </span>
+                        <span *ngIf="!socialProblem.postLiked">
+                                    A {{socialProblem.details.length}} 
+                                    {{(socialProblem.details.length === 1) ? 'persona le gusta' : 'personas les gusta'}}
+                        </span>
+                    </p>
+                    <p class="item-info">
+                        <span class="icon-attendance">
+                            <ion-icon name="clipboard" class="social-problem-state"></ion-icon>
+                        </span>
+                        <span>{{(socialProblem.is_attended)?'Ya fue atendido':'Todavía no ha sido atendido'}}</span>
+                    </p>
+                    <!-- <p (click)="test()">test</p> -->
+                </div>
+            </div>
+
+            <div class="map-container" *ngIf="socialProblem.ubication">
+                <p class="map-title">Ubicación</p>
+                <simple-map className="social-problem-map"
+                    id="social-problem-detail-{{id}}" [coordsMap]="socialProblem.ubication" [enableGesture]="true"
+                    [zoom]="16">
+                </simple-map>
+            </div>
+        </div>
+    </div>
+</ion-content>
+<ion-footer class="footer-fixed-posts" *ngIf="socialProblem">
+    <div class="social">
+        <div class="social-options">
+            <div class="social-button dark" (click)="toggleLike(socialProblem.postLiked)" [class.active]="socialProblem.postLiked">
+                <ion-icon class="like" name="heart"></ion-icon>
+                <span>Me gusta</span>
+            </div>
+            <div class="social-button" (click)="sharePost(socialProblem)">
+                <ion-icon class="share" name="share"></ion-icon>
+                <span>Compartir</span>
+            </div>
+        </div>
+    </div>
+</ion-footer>

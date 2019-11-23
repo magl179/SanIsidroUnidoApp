@@ -1,0 +1,19 @@
+<app-header title="Inicio"></app-header>
+<ion-content>
+    <ion-grid class="ion-padding-top">
+        <ion-row class="ion-justify-content-center" *ngIf="servicesList !== null || servicesList.length > 0">
+                <ng-container *ngFor="let service of servicesList">
+                    <ion-col size="6" class="service_item" *appHasRole="service.valid_roles">
+                        <a (click)="navigate(service.url)"> 
+                            <ion-card>
+                                <div class="icon">
+                                        <h2 class="title">{{service.title}}</h2>
+                                        <img class="img" [src]="service.icon">
+                                </div>
+                            </ion-card>
+                        </a>
+                    </ion-col>
+                </ng-container>
+        </ion-row>
+    </ion-grid>
+</ion-content>
