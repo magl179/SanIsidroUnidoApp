@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Network } from '@ionic-native/network/ngx';
 import { Platform } from '@ionic/angular';
 import { Observable, fromEvent, merge, of, BehaviorSubject, from } from 'rxjs';
-import { mapTo, finalize } from "rxjs/operators";
-import { HttpRequestService } from "./http-request.service";
+import { mapTo } from "rxjs/operators";
+import { HttpClient } from '@angular/common/http';
 
 
 @Injectable({
@@ -17,7 +17,7 @@ export class NetworkService {
     constructor(
         private network: Network,
         private platform: Platform,
-        private httpRequest: HttpRequestService) {
+        private httpClient: HttpClient) {
 
         if (this.platform.is('cordova')) {
             //Función si estamos en un dispositivo para subscribirnos a los 
@@ -61,9 +61,13 @@ export class NetworkService {
     public getNetworkStatus(): Observable<boolean> {
         return this.hasConnection.asObservable();
     }
+    // Funcion obtener subject de la red
+    public getNetworkValue(){
+        return this.hasConnection.value;
+    }
     // Función para hacer una petición a JSON Placeholder
     private getNetworkTestRequest(): Observable<any> {
-        return this.httpRequest.get('https://jsonplaceholder.typicode.com/todos/1');
+        return this.httpClient.get('https://jsonplaceholder.typicode.com/todos/1');
     }
     // Función para hace una peticion a una url y comprobar si fue exitosa o no
     public async testNetworkConnection() {

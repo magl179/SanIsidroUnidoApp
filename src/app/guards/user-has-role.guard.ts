@@ -5,6 +5,7 @@ import { NavController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
 import { hasRoles } from "src/app/helpers/user-helper";
 import { environment } from "src/environments/environment";
+import { CONFIG } from 'src/config/config';
 
 @Injectable({
     providedIn: 'root'
@@ -18,7 +19,7 @@ export class UserHasRoleGuard implements CanLoad {
 
     async canLoad(): Promise<boolean> {
         const tokenDecoded = await this.authService.getTokenUserAuthenticated();
-        const hasRole = hasRoles(tokenDecoded, environment.roles_permitidos_reportar);
+        const hasRole = hasRoles(tokenDecoded, CONFIG.ALLOWED_ROLES_REPORT);
         if (hasRole) {
             return true;
         } else {

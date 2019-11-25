@@ -7,6 +7,7 @@ import { SocialProblemsPage } from './social-problems.page';
 import { environment } from 'src/environments/environment';
 import { UserAuthenticatedGuard } from 'src/app/guards/user-authenticated.guard';
 import { UserHasRoleGuard } from 'src/app/guards/user-has-role.guard';
+import { CONFIG } from 'src/config/config';
 
 const routes: Routes = [
     {
@@ -30,7 +31,7 @@ const routes: Routes = [
                     searchIdeas: [],
                     searchPlaceholder: 'Buscar Problemas',
                     searchRouteDetail: '/social-problems/list',
-                    searchSlug: environment.socialProblemSlug,
+                    searchSlug: CONFIG.SOCIAL_PROBLEMS_SLUG,
                     redirectWith: 'subcategory+id'
                 }
 

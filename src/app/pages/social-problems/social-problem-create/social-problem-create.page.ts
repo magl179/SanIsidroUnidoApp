@@ -11,7 +11,8 @@ import { finalize } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from "src/app/services/events.service";
 import { IRespuestaApiSIU } from "src/app/interfaces/models";
-import { manageErrorHTTP } from 'src/app/helpers/utils';
+import { CONFIG } from 'src/config/config';
+import { ErrorService } from 'src/app/services/error.service';
 
 @Component({
     selector: 'app-social-problem-create',
@@ -32,6 +33,7 @@ export class SocialProblemCreatePage implements OnInit {
 
     constructor(
         private utilsService: UtilsService,
+        private errorService: ErrorService,
         private mapService: MapService,
         public formBuilder: FormBuilder,
         private localizationService: LocalizationService,
@@ -43,13 +45,11 @@ export class SocialProblemCreatePage implements OnInit {
     }
 
     loadSubcategories() {
-        this.postService.getSubcategoriesByCategory(environment.socialProblemSlug).subscribe(res => {
+        this.postService.getSubcategoriesByCategory(CONFIG.SOCIAL_PROBLEMS_SLUG).subscribe(res => {
             this.subcategories = res.data;
             console.log('subcategories', res.data);
         }, (err: HttpErrorResponse) => {
-            this.utilsService.showToast({
-                message: manageErrorHTTP(err, 'Ocurrio un error al cargar las categorias', false)
-            });
+            this.errorService.manageHttpError(err, 'Ocurrio un error al cargar las categorias');
         });
     }
 
@@ -113,9 +113,7 @@ export class SocialProblemCreatePage implements OnInit {
             await this.utilsService.showToast({message: "El Reporte fue enviado correctamente"});
             this.events_app.resetSocialProblemEmmiter();
         }, (err: HttpErrorResponse) => {
-            this.utilsService.showToast({
-                message: manageErrorHTTP(err, 'Ocurrio un error al enviar tu reporte, intentalo más tarde', false)
-            });
+            this.errorService.manageHttpError(err, 'Ocurrio un error al enviar tu reporte, intentalo más tarde');
         });
     }
 
@@ -145,9 +143,7 @@ export class SocialProblemCreatePage implements OnInit {
         }).subscribe(direccion => {
             this.socialProblemCoordinate.address = direccion.display_name;
         }, (err: HttpErrorResponse) => {
-            this.utilsService.showToast({
-                message: manageErrorHTTP(err, 'Ocurrio un error al obtener tu dirección, intentalo más tarde', false)
-            });
+            this.errorService.manageHttpError(err, 'Ocurrio un error al obtener tu dirección, intentalo más tarde');
         });
     }
 

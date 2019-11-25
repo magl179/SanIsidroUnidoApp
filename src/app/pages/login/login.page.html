@@ -1,7 +1,7 @@
 <ion-header no-border>
     <ion-toolbar>
         <ion-buttons slot="start">
-            <ion-back-button [backUrl]="backUrl"></ion-back-button>
+            <ion-back-button [defaultHref]="backUrl"></ion-back-button>
         </ion-buttons>
         <ion-title>Iniciar Sesión</ion-title>
     </ion-toolbar>
@@ -46,6 +46,10 @@
                                     *ngIf="loginForm.get('email').hasError('pattern') && loginForm.get('email').touched">
                                     {{errorMessages.email.pattern.message}}
                                 </p>
+                                <p class="form-error"
+                                *ngIf="loginForm.get('email').hasError('email') && loginForm.get('email').touched">
+                                {{errorMessages.email.email.message}}
+                            </p>
                             </div>
                             <div class="item-form full">
                                 <ion-item class="input_item" lines="none">

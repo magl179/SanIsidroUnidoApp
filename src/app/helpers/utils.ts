@@ -5,6 +5,7 @@ import { retryWhen, flatMap } from 'rxjs/operators';
 import { checkLikePost } from './user-helper';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ISubcategory } from '../interfaces/models';
+import { CONFIG } from 'src/config/config';
 
 declare var moment: any;
 moment.locale('es');
@@ -64,7 +65,7 @@ export const getJSON = (variable: any) => {
 
 
 export const setHeaders = (key: any, value: any) => {
-    const newHeaders = environment.headersApp;
+    const newHeaders = CONFIG.API_HEADERS;
     newHeaders[key] = value;
     return newHeaders;
 }
@@ -161,7 +162,7 @@ export const getImageURL = (image_name: string) => {
     if (imgIsURL) {
         return image_name;
     } else {
-        return `${environment.apiBaseURL}/${environment.image_assets}/${image_name}`;
+        return `${environment.APIBASEURL}/${CONFIG.IMAGE_ASSETS}/${image_name}`;
     }
 }
 
@@ -309,13 +310,5 @@ export const getImagesPost = ($imagesArray: any[]) => {
         }
     } else {
         return '';
-    }
-}
-
-export const manageErrorHTTP = (err: HttpErrorResponse, defaultMessage = "Ocurrio un error, intentalo más tarde", showDefault = true): string => {
-    if (err.error && err.error.message && showDefault) {
-        return err.error.message;
-    } else {
-        return defaultMessage;
     }
 }

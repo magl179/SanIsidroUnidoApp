@@ -4,7 +4,7 @@ import { IDirective, IRespuestaApiSIU } from 'src/app/interfaces/models';
 import { finalize, take } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UtilsService } from 'src/app/services/utils.service';
-import { manageErrorHTTP } from 'src/app/helpers/utils';
+import { ErrorService } from 'src/app/services/error.service';
 
 @Component({
     selector: 'app-directory-list',
@@ -18,7 +18,8 @@ export class DirectoryListPage implements OnInit {
 
     constructor(
         private directivesService: DirectivesService,
-        private utilsService: UtilsService
+        private utilsService: UtilsService,
+        private errorService: ErrorService
     ) { }
 
     async ngOnInit() {
@@ -36,9 +37,7 @@ export class DirectoryListPage implements OnInit {
             this.directivesList = response.data;
             console.log('directives length', this.directivesList.length)
         }, (err: HttpErrorResponse) => {
-            this.utilsService.showToast({
-                message: manageErrorHTTP(err, 'Ocurrio un error al traer el listado de directivos', false)
-            });
+            this.errorService.manageHttpError(err, 'Ocurrio un error al traer el listado de directivos');
         });
     }
 }

@@ -10,7 +10,7 @@ import { finalize } from 'rxjs/operators';
 import { IRespuestaApiSIU } from "src/app/interfaces/models";
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from "src/app/services/events.service";
-import { manageErrorHTTP } from 'src/app/helpers/utils';
+import { ErrorService } from 'src/app/services/error.service';
 
 @Component({
     selector: 'app-emergency-create',
@@ -33,6 +33,7 @@ export class EmergencyCreatePage implements OnInit {
     constructor(
         private utilsService: UtilsService,
         private mapService: MapService,
+        private errorService: ErrorService,
         public formBuilder: FormBuilder,
         private localizationService: LocalizationService,
         private postService: PostsService,
@@ -91,9 +92,7 @@ export class EmergencyCreatePage implements OnInit {
         }).subscribe(direccion => {
             this.emergencyPostCoordinate.address = direccion.display_name;
         },(err: HttpErrorResponse) => {
-                this.utilsService.showToast({
-                    message: manageErrorHTTP(err, 'Ocurrio un error al obtener la dirección de tu ubicación', false)
-                });
+            this.errorService.manageHttpError(err, 'Ocurrio un error al obtener la dirección de tu ubicación');
         });
     }
 
@@ -130,9 +129,7 @@ export class EmergencyCreatePage implements OnInit {
             await this.utilsService.showToast({message: "El Reporte fue enviado correctamente"});
             this.events_app.resetEmergenciesEmitter();
         }, (err: HttpErrorResponse) => {
-            this.utilsService.showToast({
-                message: manageErrorHTTP(err, 'Ocurrio un error al enviar tu reporte', false)
-            });
+            this.errorService.manageHttpError(err, 'Ocurrio un error al enviar tu reporte');
         });
     }
 

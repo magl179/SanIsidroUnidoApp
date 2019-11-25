@@ -9,6 +9,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { IPublicService } from 'src/app/interfaces/models';
 import { LocalizationService } from 'src/app/services/localization.service';
 import { environment } from "src/environments/environment";
+import { CONFIG } from 'src/config/config';
 
 @Component({
     selector: 'multiple-map',
@@ -115,8 +116,8 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
         // Configurar la vista centrada
         this.map.setView([-0.1548643, -78.4822049], this.zoomMap);
         // Agregar la capa del Mapa
-        L.tileLayer(environment.mapLayers.google.url, {
-            attribution: environment.mapLayers.google.attribution,
+        L.tileLayer(CONFIG.MAPLAYERS.GOOGLE.URL, {
+            attribution: CONFIG.MAPLAYERS.GOOGLE.ATRIBUTION,
             maxZoom: 18,
             updateWhenIdle: true,
             reuseTiles: true

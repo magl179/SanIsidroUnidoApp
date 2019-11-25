@@ -5,10 +5,11 @@ import { PostsService } from "src/app/services/posts.service";
 import { finalize, map, take } from 'rxjs/operators';
 import { IRespuestaApiSIUSingle } from 'src/app/interfaces/models';
 import { UtilsService } from "src/app/services/utils.service";
-import { mapReport, manageErrorHTTP } from "src/app/helpers/utils";
+import { mapReport } from "src/app/helpers/utils";
 import { HttpErrorResponse } from '@angular/common/http';
 import { ManageDocsService } from 'src/app/services/manage-docs.service';
 import { environment } from 'src/environments/environment';
+import { ErrorService } from 'src/app/services/error.service';
 
 @Component({
     selector: 'app-report-detail',
@@ -24,6 +25,7 @@ export class ReportDetailPage implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
+        private errorService: ErrorService,
         private authService: AuthService,
         private postsService: PostsService,
         private manageDocsService: ManageDocsService,
@@ -58,9 +60,7 @@ export class ReportDetailPage implements OnInit {
         ).subscribe((res: IRespuestaApiSIUSingle) => {
             this.report = res.data;
         },(err: HttpErrorResponse) => {
-            this.utilsService.showToast({
-                message: manageErrorHTTP(err, 'Ocurrio un error al traer el detalle del reporte', false)
-            });
+            this.errorService.manageHttpError(err, 'Ocurrio un error al traer el detalle del reporte');
         });
     }
 
@@ -70,7 +70,7 @@ export class ReportDetailPage implements OnInit {
     }
 
     openReportPDF() {
-        this.manageDocsService.downloadAndOpenPDF(`${environment.apiBaseURL}/pdf/javascript.pdf`);
+        this.manageDocsService.downloadAndOpenPDF(`${environment.APIBASEURL}/pdf/javascript.pdf`);
     }
 
 }

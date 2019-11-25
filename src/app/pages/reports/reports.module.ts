@@ -5,6 +5,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { ReportsPage } from './reports.page';
 import { environment } from 'src/environments/environment';
+import { CONFIG } from 'src/config/config';
 
 const routes: Routes = [
     {
@@ -21,7 +22,7 @@ const routes: Routes = [
                     searchIdeas: [],
                     searchPlaceholder: 'Buscar Informes',
                     searchRouteDetail: '/reports/list',
-                    searchSlug: environment.reportsSlug
+                    searchSlug: CONFIG.REPORTS_SLUG
                 }
             },
             {

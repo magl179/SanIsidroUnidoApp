@@ -114,6 +114,9 @@ export class LocalDataService {
                 },
                 pattern: {
                     message: `Ingresa un email válido`
+                },
+                email: {
+                    message: 'Ingresa un email válido'
                 }
             },
             password: {

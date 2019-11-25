@@ -7,6 +7,7 @@ import { MapService } from "src/app/services/map.service";
 import { LocalizationService } from "src/app/services/localization.service";
 import { environment } from 'src/environments/environment';
 import { IUbication } from "src/app/interfaces/models";
+import { CONFIG } from 'src/config/config';
 
 
 @Component({
@@ -88,8 +89,8 @@ export class SimpleRoutingMapComponent implements OnInit {
         // Configurar la vista centrada
         this.map.setView([-0.1548643, -78.4822049], this.zoom);
         // Agregar la capa del Mapa
-        L.tileLayer(environment.mapLayers.google.url, {
-            attribution: environment.mapLayers.google.attribution,
+        L.tileLayer(CONFIG.MAPLAYERS.GOOGLE.URL, {
+            attribution: CONFIG.MAPLAYERS.GOOGLE.ATRIBUTION,
             maxZoom: 18,
             updateWhenIdle: true,
             reuseTiles: true
@@ -150,7 +151,7 @@ export class SimpleRoutingMapComponent implements OnInit {
             waypoints: arrCoords,
             show: false,
             routeWhileDragging: false,
-            router: new L.Routing.mapbox(environment.mapBoxApiKey),
+            router: new L.Routing.mapbox(environment.MAPBOX_APIKEY),
             createMarker: function () { return null; }
         });
         this.routeControl.addTo(this.map);

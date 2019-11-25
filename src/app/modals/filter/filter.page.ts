@@ -4,7 +4,7 @@ import { PostsService } from "src/app/services/posts.service";
 import { finalize } from 'rxjs/operators';
 import { HttpErrorResponse } from "@angular/common/http";
 import { UtilsService } from "../../services/utils.service";
-import { manageErrorHTTP } from "../../helpers/utils";
+import { ErrorService } from 'src/app/services/error.service';
 
 @Component({
     selector: 'modal-filter',
@@ -25,6 +25,7 @@ export class FilterPage implements OnInit {
     constructor(
         private modalCtrl: ModalController,
         private navParams: NavParams,
+        private errorService: ErrorService,
         private utilsService: UtilsService,
         private postsService: PostsService
     ) {
@@ -108,7 +109,7 @@ export class FilterPage implements OnInit {
                     console.log(`Hay ${this.dataFiltered.length} coincidencias`);
                 }
             }, (err: HttpErrorResponse) => {
-                    this.utilsService.showToast({message: manageErrorHTTP(err, 'Ocurrio un error al filtrar los datos')});
+                this.errorService.manageHttpError(err, 'Ocurrio un error al filtrar los datos');
             });
         }
         console.log('items was filtered', itemsFiltered);

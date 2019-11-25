@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { CONFIG } from 'src/config/config';
 
 @Component({
   selector: 'app-not-found-page',
@@ -8,7 +9,7 @@ import { environment } from 'src/environments/environment';
 })
 export class NotFoundPage implements OnInit {
 
-    urlRedirect = `/${environment.home_route}`;
+    urlRedirect = `/${CONFIG.HOME_ROUTE}`;
 
   constructor() { }
 

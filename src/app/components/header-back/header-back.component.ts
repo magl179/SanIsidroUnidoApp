@@ -3,6 +3,7 @@ import { NavController, PopoverController, ActionSheetController } from "@ionic/
 import { PopNotificationsComponent } from '../pop-notifications/pop-notifications.component';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { environment } from 'src/environments/environment';
+import { CONFIG } from 'src/config/config';
 
 @Component({
     selector: 'app-header-back',
@@ -76,7 +77,7 @@ export class HeaderBackComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.backUrl = this.backUrl || `/${environment.home_route}`;
+        this.backUrl = this.backUrl || `/${CONFIG.HOME_ROUTE}`;
         if (this.search) {
             this.optionsCtrl.push(this.options.search);
         }

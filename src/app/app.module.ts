@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler  } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -43,6 +43,7 @@ import { File } from '@ionic-native/file/ngx';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { DocumentViewer } from '@ionic-native/document-viewer/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
+//import { ErrorsHandler } from './helpers/error-handler';
 
 @NgModule({
     declarations: [AppComponent],

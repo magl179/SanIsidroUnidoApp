@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpRequestService } from "src/app/services/http-request.service";
+import { CONFIG } from 'src/config/config';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -12,20 +13,20 @@ export class PublicService {
         private httpRequest: HttpRequestService
     ) { }
     
-    // Función para obtener el listado de servicios publicos registrados
+    // Función para obtener el listado de servicios publicos
     getPublicServices(): Observable<any> {
-        return this.httpRequest.get(`${environment.apiBaseURL}/servicios-publicos`);
+        return this.httpRequest.get(`${environment.APIBASEURL}/servicios-publicos`);
     }
-
+    //Obtener el listado de servicios públicos por categoria
     getPublicServicesByCategory(category: string): Observable<any>{
-        return this.httpRequest.get(`${environment.apiBaseURL}/servicios-publicos/categoria/${category}`)
+        return this.httpRequest.get(`${environment.APIBASEURL}/servicios-publicos/categoria/${category}`)
     }
-
+    //Obtener el detalle de un servicio público
     getPublicService(id: number): Observable<any> {
-        return this.httpRequest.get(`${environment.apiBaseURL}/servicios-publicos/${id}`);
+        return this.httpRequest.get(`${environment.APIBASEURL}/servicios-publicos/${id}`);
     }
-
+    //Obtener el listado de categorias de los servicios públicos
     getPublicServiceCategories(): Observable<any> {
-        return this.httpRequest.get(`${environment.apiBaseURL}/servicios-publicos/categorias`)
+        return this.httpRequest.get(`${environment.APIBASEURL}/servicios-publicos/categorias`)
     }
 }

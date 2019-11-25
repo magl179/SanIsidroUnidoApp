@@ -13,6 +13,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from "src/app/services/events.service";
 import { ActivatedRoute, Router, NavigationExtras } from "@angular/router";
 import { NavigationService } from 'src/app/services/navigation.service';
+import { CONFIG } from 'src/config/config';
 
 
 @Component({
@@ -131,7 +132,7 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
     //Cargar los problemas sociales
     loadSocialProblems(event?: any) {
         this.socialProblemsLoaded = false;
-        this.postsService.getPostsBySubCategory(environment.socialProblemSlug, this.subcategory).pipe(
+        this.postsService.getPostsBySubCategory(CONFIG.SOCIAL_PROBLEMS_SLUG, this.subcategory).pipe(
             map((res: IRespuestaApiSIUPaginada) => {
                 if (res && res.data) {
                     res.data.forEach((social_problem: any) => {

@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
 import { IUbication } from "src/app/interfaces/models";
 import { getJSON } from "src/app/helpers/utils";
 import { MapService } from 'src/app/services/map.service';
+import { CONFIG } from 'src/config/config';
 
 
 @Component({
@@ -55,8 +56,8 @@ export class SimpleMapComponent implements AfterViewInit {
         });
 
         this.map.setView([this.coordsMap.latitude, this.coordsMap.longitude], this.zoom);
-        L.tileLayer(environment.mapLayers.google.url, {
-            attribution: environment.mapLayers.google.attribution,
+        L.tileLayer(CONFIG.MAPLAYERS.GOOGLE.URL, {
+            attribution: CONFIG.MAPLAYERS.GOOGLE.ATRIBUTION,
             maxZoom: 18,
             updateWhenIdle: true,
             reuseTiles: true

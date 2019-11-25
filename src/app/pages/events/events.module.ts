@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { EventsPage } from './events.page';
 import { environment } from 'src/environments/environment';
 import { UserAuthenticatedGuard } from 'src/app/guards/user-authenticated.guard';
+import { CONFIG } from 'src/config/config';
 
 const routes: Routes = [
     {
@@ -23,7 +24,7 @@ const routes: Routes = [
                     searchIdeas: [],
                     searchPlaceholder: 'Buscar Eventos',
                     searchRouteDetail: '/events/detail',
-                    searchSlug: environment.eventsSlug
+                    searchSlug: CONFIG.EVENTS_SLUG
                 }
 
             },

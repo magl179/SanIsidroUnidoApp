@@ -19,7 +19,7 @@ export class DirectivesService {
     }
 
     getDirectives(): Observable<any> {
-        return this.httpRequest.get(`${environment.apiBaseURL}/directivos`).pipe(
+        return this.httpRequest.get(`${environment.APIBASEURL}/directivos`).pipe(
             map((res: any) => {
             if (res && res.data) {
                 res.data.forEach((directive: any) => {

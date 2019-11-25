@@ -8,6 +8,7 @@ import { ISubcategory, IRespuestaApiSIUSingle } from "src/app/interfaces/models"
 import { NavigationExtras } from '@angular/router';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { NavigationService } from 'src/app/services/navigation.service';
+import { CONFIG } from 'src/config/config';
 
 @Component({
   selector: 'app-social-problems-categories',
@@ -32,7 +33,7 @@ export class SocialProblemsCategoriesPage implements OnInit {
     }
 
     loadCategories() {
-        this.postsService.getSubcategoriesByCategory(environment.socialProblemSlug).pipe(
+        this.postsService.getSubcategoriesByCategory(CONFIG.SOCIAL_PROBLEMS_SLUG).pipe(
             map((res: IRespuestaApiSIUSingle) => {
                 if (res && res.data) {
                     res.data.forEach((category: ISubcategory) => {

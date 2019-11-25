@@ -9,6 +9,7 @@ import { NavController, Platform } from "@ionic/angular";
 import { tokenIsExpired } from 'src/app/helpers/auth-helper';
 import { IRespuestaApiSIUSingle } from "../interfaces/models";
 import { UtilsService } from './utils.service';
+import { CONFIG } from 'src/config/config';
 
 const TOKEN_ITEM_NAME = "accessToken";
 const USER_ITEM_NAME = "currentUser";
@@ -44,7 +45,6 @@ export class AuthService {
         const getTokenLS = new Promise((resolve, reject) => {
             this.storage.get(TOKEN_ITEM_NAME).then(token_encoded => {
                 this.sessionAuthTokenSubject.next(token_encoded);
-                // console.warn(token_encoded);
                 resolve(true);
             });
         });
@@ -61,20 +61,20 @@ export class AuthService {
 
     // Iniciar Sesion del Usuario
     login(loginData: { email: string, password?: string, social_id?: string, provider: string }): Observable<any> {
-        const headers = environment.headersApp;
-        const urlApi = `${environment.apiBaseURL}/login`;
+        const headers = CONFIG.API_HEADERS;
+        const urlApi = `${environment.APIBASEURL}/login`;
         return this.httpRequest.post(urlApi, loginData, headers);
     }
     // Registrar al Usuario
     register(registerData: IRegisterUser): Observable<any> {
-        const headers = environment.headersApp;
-        const urlApi = `${environment.apiBaseURL}/registro`;
+        const headers = CONFIG.API_HEADERS;
+        const urlApi = `${environment.APIBASEURL}/registro`;
         return this.httpRequest.post(urlApi, registerData, headers);
     }
     //COMPROBAR EN EL API SI TOKEN ES VÁLIDO
     tokenIsValid(token: any) {
-        const urlApi = `${environment.apiBaseURL}/verificar-token`;
-        const headers = setHeaders(environment.AUTHORIZATION_NAME, token)
+        const urlApi = `${environment.APIBASEURL}/verificar-token`;
+        const headers = setHeaders(CONFIG.AUTHORIZATION_NAME, token)
         return this.httpRequest.post(urlApi, {}, headers);
     }
     //CERRAR SESION del usuario, borrando los datos del local storage
@@ -89,7 +89,6 @@ export class AuthService {
         console.log('checking token...');
         if (this.tokenExists()) {
             const itemToken = await this.storage.get(TOKEN_ITEM_NAME);
-            // console.log('value check token get', itemToken)
             const isTokenExpired = tokenIsExpired(itemToken);
             if (itemToken && isTokenExpired) {
                 this.tokenIsValid(itemToken).subscribe(async(res: IRespuestaApiSIUSingle) => {

@@ -6,6 +6,7 @@ import { Component, OnInit, EventEmitter, Input, Output, AfterViewInit, ViewChil
 import { LocalizationService } from "src/app/services/localization.service";
 import { environment } from "src/environments/environment";
 import { manageTwoFingerDrag } from 'src/app/helpers/utils';
+import { CONFIG } from 'src/config/config';
 
 @Component({
     selector: 'single-map',
@@ -65,8 +66,8 @@ export class SingleMapComponent implements OnInit, AfterViewInit {
         });
         this.map.setView([this.currentCoordinate.latitude || -0.2188216, this.currentCoordinate.longitude || -78.5135489], this.zoomMap);
 
-        L.tileLayer(environment.mapLayers.google.url, {
-            attribution: environment.mapLayers.google.attribution,
+        L.tileLayer(CONFIG.MAPLAYERS.GOOGLE.URL, {
+            attribution: CONFIG.MAPLAYERS.GOOGLE.ATRIBUTION,
             maxZoom: 18,
             updateWhenIdle: true,
             reuseTiles: true

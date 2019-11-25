@@ -1,7 +1,7 @@
 <ion-header no-border>
     <ion-toolbar>
         <ion-buttons slot="start">
-            <ion-back-button [backUrl]="backUrl"></ion-back-button>
+            <ion-back-button [defaultHref]="backUrl"></ion-back-button>
         </ion-buttons>
         <ion-title>Registrarme</ion-title>
     </ion-toolbar>
@@ -28,18 +28,6 @@
                                     <ion-input class="input-beatiful" placeholder="John" type="text"
                                         formControlName="firstname"></ion-input>
                                 </ion-item>
-                                <!-- <div class="feedback-icon">
-                                    <ion-item lines="none">
-                                        <button class="icon-help-input" disabled>
-                                            <ion-icon name="close-circle" class="error"
-                                                *ngIf="registerForm.get('firstname').touched && registerForm.get('firstname').invalid">
-                                            </ion-icon>
-                                            <ion-icon name="checkmark-circle" class="success"
-                                                *ngIf="registerForm.get('firstname').touched && registerForm.get('firstname').valid">
-                                            </ion-icon>
-                                        </button>
-                                    </ion-item>
-                                </div> -->
                             </div>
                             <div class="form-errors padding-lateral">
                                 <p class="form-error"
@@ -62,18 +50,6 @@
                                     <ion-input class="input-beatiful" placeholder="Doe" type="text"
                                         formControlName="lastname"></ion-input>
                                 </ion-item>
-                                <!-- <div class="feedback-icon">
-                                    <ion-item lines="none">
-                                        <button class="icon-help-input" disabled>
-                                            <ion-icon name="close-circle" class="error"
-                                                *ngIf="registerForm.get('lastname').touched && registerForm.get('lastname').invalid">
-                                            </ion-icon>
-                                            <ion-icon name="checkmark-circle" class="success"
-                                                *ngIf="registerForm.get('lastname').touched && registerForm.get('lastname').valid">
-                                            </ion-icon>
-                                        </button>
-                                    </ion-item>
-                                </div> -->
                             </div>
                             <div class="form-errors padding-lateral">
                                 <p class="form-error"
@@ -96,18 +72,6 @@
                                     <ion-input class="input-beatiful" placeholder="john@gmail.com"
                                         type="text" formControlName="email"></ion-input>
                                 </ion-item>
-                                <!-- <div class="feedback-icon">
-                                    <ion-item lines="none">
-                                        <button class="icon-help-input" disabled>
-                                            <ion-icon name="close-circle" class="error"
-                                                *ngIf="registerForm.get('email').touched && registerForm.get('email').invalid">
-                                            </ion-icon>
-                                            <ion-icon name="checkmark-circle" class="success"
-                                                *ngIf="registerForm.get('email').touched && registerForm.get('email').valid">
-                                            </ion-icon>
-                                        </button>
-                                    </ion-item>
-                                </div> -->
                             </div>
                             <div class="form-errors padding-lateral">
                                 <p class="form-error"
@@ -125,6 +89,10 @@
                                 <p class="form-error"
                                     *ngIf="registerForm.get('email').hasError('pattern') && registerForm.get('email').touched">
                                     {{errorMessages.email.pattern.message}}
+                                </p>
+                                <p class="form-error"
+                                    *ngIf="registerForm.get('email').hasError('email') && registerForm.get('email').touched">
+                                    {{errorMessages.email.email.message}}
                                 </p>
                             </div>
                             <div class="item-form full">

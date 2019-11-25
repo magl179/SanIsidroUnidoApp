@@ -9,6 +9,7 @@ import { UtilsService } from './utils.service';
 import { IDeviceUser } from 'src/app/interfaces/models';
 import { Device } from '@ionic-native/device/ngx';
 import { INotiPostOpen } from "src/app/interfaces/models";
+import { CONFIG } from 'src/config/config';
 
 
 const USER_DEVICE_DEFAULT: IDeviceUser = {
@@ -46,8 +47,8 @@ export class NotificationsService {
         if (this.platform.is('cordova')) {
             // console.log('Configurando OneSignal con San Isidro Unido App');
             //obtener el onesginal_id y el firebaseid
-            const OneSignalID = environment.onesignal_id;
-            const firebaseID = environment.firebase_app_id;
+            const OneSignalID = environment.ONESIGNAL_ID;
+            const firebaseID = environment.FIREBASE_APP_ID;
             // Inicializar Onesignal con esas credenciales
             this.oneSignal.startInit(OneSignalID, firebaseID);
             // Configurar tipo de notificaciones a mostrar, en este caso notificaciones push
@@ -147,21 +148,21 @@ export class NotificationsService {
             if (post && post.category && post.id) {
                 //Switch de Opciones segun el slug del posts
                 switch (post.category) {
-                    case environment.emergenciesSlug: //caso posts emergencia creado
-                        await this.navCtrl.navigateForward(`/emergencies-tabs/detail/${post.id}`);
+                    case CONFIG.EMERGENCIES_SLUG: //caso posts emergencia creado
+                        await this.navCtrl.navigateForward(`/emergencies/detail/${post.id}`);
                         break;
-                    case environment.eventsSlug: //caso posts evento creado
-                        await this.navCtrl.navigateForward(`/events-tabs/detail/${post.id}`);
+                    case CONFIG.EVENTS_SLUG: //caso posts evento creado
+                        await this.navCtrl.navigateForward(`/events/detail/${post.id}`);
                         break;
-                    case environment.socialProblemSlug: // caso posts problema social
+                    case CONFIG.EVENTS_SLUG: // caso posts problema social
                         if (post.subcategory) {
-                            await this.navCtrl.navigateForward(`/social-problems-tabs/detail/${post.subcategory}/${post.id}`);
+                            await this.navCtrl.navigateForward(`/social-problems/list/${post.subcategory}/${post.id}`);
                         } else {
-                            await this.navCtrl.navigateForward(`/social-problems-tabs/categories`);
+                            await this.navCtrl.navigateForward(`/social-problems/categories`);
                         }
                         break;
-                    case environment.reportsSlug: //caso reporte o informe
-                        await this.navCtrl.navigateForward(`/reports-tabs/detail/${post.id}`);
+                    case CONFIG.REPORTS_SLUG: //caso reporte o informe
+                        await this.navCtrl.navigateForward(`/reports/detail/${post.id}`);
                         break;
                     default:
                         return;

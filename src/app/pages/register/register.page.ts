@@ -9,9 +9,11 @@ import { finalize } from 'rxjs/operators';
 import { NetworkService } from 'src/app/services/network.service';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { decodeToken } from 'src/app/helpers/auth-helper';
-import { setInputFocus, manageErrorHTTP } from 'src/app/helpers/utils';
+import { setInputFocus } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { CONFIG } from 'src/config/config';
+import { ErrorService } from 'src/app/services/error.service';
 
 @Component({
     selector: 'app-register',
@@ -29,6 +31,7 @@ export class RegisterPage implements OnInit {
 
     constructor(
         private navCtrl: NavController,
+        private errorService: ErrorService,
         public formBuilder: FormBuilder,
         private utilsService: UtilsService,
         private authService: AuthService,
@@ -66,13 +69,12 @@ export class RegisterPage implements OnInit {
         this.notificationsService.registerUserDevice();
         //Redirigir Usuario
         loadingManageRegister.dismiss();
-        this.navCtrl.navigateRoot(`/${environment.home_route}`);
+        this.navCtrl.navigateRoot(`/${CONFIG.HOME_ROUTE}`);
     }
     //Function registrar al usuario por formulario
     async registerUser() {
         const loadingRegisterValidation = await this.utilsService.createBasicLoading('Registrando Usuario');
         loadingRegisterValidation.present();
-        console.log(this.registerForm.value);
         // Datos Formulario Registro
         const firstname = this.registerForm.value.firstname;
         const lastname = this.registerForm.value.lastname;
@@ -89,7 +91,7 @@ export class RegisterPage implements OnInit {
         ).subscribe(async res => {
             await this.manageRegister({ provider: 'formulario', email, password }, res);
         }, (err: HttpErrorResponse) => {
-            this.utilsService.showToast({message: manageErrorHTTP(err, 'Ocurrio un error al completar el registro')});
+            this.errorService.manageHttpError(err, 'Ocurrio un error al completar el registro');
         });
     }
     //Function para registrar usuario con Facebook
@@ -101,11 +103,11 @@ export class RegisterPage implements OnInit {
                 this.authService.register(user).subscribe(async res => {
                     await this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'facebook' }, res);
                 }, (err: HttpErrorResponse) => {
-                    this.utilsService.showToast({message: manageErrorHTTP(err, 'Ocurrio un error en el registro, intentalo más tarde')});
+                    this.errorService.manageHttpError(err, 'Ocurrio un error en el registro, intentalo más tarde');
                 });
             }
         }, (err: HttpErrorResponse) => {
-            this.utilsService.showToast({message: manageErrorHTTP(err, 'Fallo la conexión con Facebook')});
+            this.errorService.manageHttpError(err, 'Fallo la conexión con Facebook');
         });
     }
     // Función para registrar al usuario con Google
@@ -117,11 +119,11 @@ export class RegisterPage implements OnInit {
                 this.authService.register(user).subscribe(async res => {
                     await this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'google' }, res);
                 }, (err: HttpErrorResponse) => {
-                    this.utilsService.showToast({message: manageErrorHTTP(err, 'No se pudo completar el registro, intentalo mas tarde')});
+                    this.errorService.manageHttpError(err, 'No se pudo completar el registro, intentalo mas tarde');
                 });
             }
         }, (err: HttpErrorResponse) => {
-            this.utilsService.showToast({message: manageErrorHTTP(err, 'Fallo la conexión con Google')});
+            this.errorService.manageHttpError(err, 'Fallo la conexión con Google');
         });
     }
 

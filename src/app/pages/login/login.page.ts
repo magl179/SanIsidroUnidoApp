@@ -10,9 +10,10 @@ import { NetworkService } from 'src/app/services/network.service';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { IRespuestaApiSIU } from "src/app/interfaces/models";
 import { decodeToken } from 'src/app/helpers/auth-helper';
-import { setInputFocus, manageErrorHTTP } from 'src/app/helpers/utils';
+import { setInputFocus } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
+import { CONFIG } from 'src/config/config';
+import { ErrorService } from 'src/app/services/error.service';
 
 @Component({
     selector: 'app-login',
@@ -30,6 +31,7 @@ export class LoginPage implements OnInit {
 
     constructor(
         public formBuilder: FormBuilder,
+        private errorService: ErrorService,
         private navCtrl: NavController,
         private utilsService: UtilsService,
         private authService: AuthService,
@@ -68,7 +70,7 @@ export class LoginPage implements OnInit {
         this.loginForm.reset();
         //Redirigir Usuario
         loadingManageLogin.dismiss();
-        this.navCtrl.navigateRoot(`/${environment.home_route}`);
+        this.navCtrl.navigateRoot(`/${CONFIG.HOME_ROUTE}`);
     }
 
     async loginUser() {
@@ -84,11 +86,8 @@ export class LoginPage implements OnInit {
         ).subscribe((res: IRespuestaApiSIU) => {
             this.manageLogin(loginData, res);
         }, (err: HttpErrorResponse) => {
-            this.utilsService.showToast({
-                message: manageErrorHTTP(err, 'Ocurrio un error, intentalo más tarde', false),
-                color: 'danger'
-            });
-        });
+            this.errorService.manageHttpError(err, 'Ocurrio un error, intentalo más tarde')
+        });               
     }
 
     async loginUserByFB() {
@@ -105,17 +104,11 @@ export class LoginPage implements OnInit {
                 this.authService.login(loginData).subscribe(res => {
                     this.manageLogin({ provider: 'facebook', social_id, email }, res);
                 }, (err: HttpErrorResponse) => {
-                    this.utilsService.showToast({
-                        message: manageErrorHTTP(err, 'Fallo la conexión con Facebook'),
-                        color: 'danger'
-                    });
+                    this.errorService.manageHttpError(err, 'Fallo la conexión con Facebook');
                 });
             }
         }, (err: HttpErrorResponse) => {
-            this.utilsService.showToast({
-                message: manageErrorHTTP(err, 'Fallo la conexión con Facebook'),
-                color: 'danger'
-            });
+            this.errorService.manageHttpError(err, 'Fallo la conexión con Facebook');
         });
     }
 
@@ -134,15 +127,11 @@ export class LoginPage implements OnInit {
                     console.log('Login First Response', res);
                     await this.manageLogin({ social_id, email, provider: 'google' }, res);
                 }, (err: HttpErrorResponse) => {
-                    this.utilsService.showToast({
-                        message: manageErrorHTTP(err, 'Ocurrio un error al conectar con Google')
-                    });
+                    this.errorService.manageHttpError(err, 'Ocurrio un error al conectar con Google');
                 });
             }
         }, (err: HttpErrorResponse) => {
-            this.utilsService.showToast({
-                message: manageErrorHTTP(err, 'Fallo la conexión con Google')
-            });
+            this.errorService.manageHttpError(err, 'Fallo la conexión con Google');
         });
     }
 

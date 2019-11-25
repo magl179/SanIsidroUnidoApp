@@ -7,6 +7,7 @@ import { EmergenciesPage } from './emergencies.page';
 import { environment } from 'src/environments/environment';
 import { UserAuthenticatedGuard } from 'src/app/guards/user-authenticated.guard';
 import { UserHasRoleGuard } from 'src/app/guards/user-has-role.guard';
+import { CONFIG } from 'src/config/config';
 
 const routes: Routes = [
     {
@@ -38,7 +39,7 @@ const routes: Routes = [
                     searchIdeas: [],
                     searchPlaceholder: 'Buscar Mis Emergencias',
                     searchRouteDetail: '/emergencies/detail',
-                    searchSlug: environment.emergenciesSlug,
+                    searchSlug: CONFIG.EMERGENCIES_SLUG,
                     includeUserFilter: true
                 }
             }           
