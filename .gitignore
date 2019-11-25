@@ -21,6 +21,8 @@ npm-debug.log*
 coverage/
 www/
 node_modules/
+src/environments/environment.prod.ts
+src/environments/environment.ts
 tmp/
 temp/
 platforms/
@@ -28,7 +30,6 @@ plugins/
 plugins/android.json
 plugins/ios.json
 $RECYCLE.BIN/
-
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
