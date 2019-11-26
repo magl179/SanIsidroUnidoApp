@@ -16,7 +16,6 @@ import {
   mergeMap,
   retryWhen
 } from "rxjs/operators";
-import { environment } from "../../environments/environment";
 
 import { ErrorService } from "src/app/services/error.service";
 
