@@ -160,7 +160,9 @@ export class UserPage implements OnInit {
     }
 
     addDeviceToUser() {
-        this.notificationsService.registerUserDevice();
+        if (this.AuthUser && this.AuthUser.user) {
+            this.notificationsService.registerUserDevice(this.AuthUser.user.id);
+        }
     }
 
     //Funcion remover dispositivo asociado a un usuario en la API

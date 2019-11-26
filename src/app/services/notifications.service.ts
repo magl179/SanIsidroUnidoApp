@@ -82,10 +82,10 @@ export class NotificationsService {
         });
     }
     //Registrar el dispositivo del usuario en la API
-    registerUserDevice() {
+    registerUserDevice(user_id: number) {
         if (this.platform.is('cordova')) {
             const data: IDeviceUser = {
-                user_id: null,
+                user_id: user_id,
                 id: null,
                 description: this.userDevice.value.description,
                 phone_id: this.userDevice.value.phone_id,
@@ -138,15 +138,20 @@ export class NotificationsService {
         appNotification.payload.additionalData
         //Verificar si recibe data adicional
         const aditionalData = appNotification.payload.additionalData;
-        await this.managePostNotification(aditionalData);
+        await this.manageAppNotification(aditionalData);
     }
 
-    async managePostNotification(aditionalData: any) {
-        if (aditionalData) {
-            //Verificar si tengo dato posts
-            const post: INotiPostOpen = aditionalData.post;
+    async manageAppNotification(aditionalData: any) {
+         //Verificar si tengo dato posts
+        if (aditionalData && aditionalData.post) {
+            this.managePostNotification(aditionalData.post);
+        }
+    }
+    async managePostNotification(aditionalDataPost: INotiPostOpen) {     
+            const post = aditionalDataPost;
             if (post && post.category && post.id) {
                 //Switch de Opciones segun el slug del posts
+                console.warn('post catgory', post.category )
                 switch (post.category) {
                     case CONFIG.EMERGENCIES_SLUG: //caso posts emergencia creado
                         await this.navCtrl.navigateForward(`/emergencies/detail/${post.id}`);
@@ -154,7 +159,7 @@ export class NotificationsService {
                     case CONFIG.EVENTS_SLUG: //caso posts evento creado
                         await this.navCtrl.navigateForward(`/events/detail/${post.id}`);
                         break;
-                    case CONFIG.EVENTS_SLUG: // caso posts problema social
+                    case CONFIG.SOCIAL_PROBLEMS_SLUG: // caso posts problema social
                         if (post.subcategory) {
                             await this.navCtrl.navigateForward(`/social-problems/list/${post.subcategory}/${post.id}`);
                         } else {
@@ -165,9 +170,9 @@ export class NotificationsService {
                         await this.navCtrl.navigateForward(`/reports/detail/${post.id}`);
                         break;
                     default:
+                        console.log('No match any noti')
                         return;
                 }
             }
-        }
     }
 }

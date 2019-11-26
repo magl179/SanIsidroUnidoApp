@@ -64,7 +64,7 @@ export class ListNotificationsComponent implements OnInit {
 
     manageNoti(noti: any) {
         if (noti && noti.additional_data) {
-            this.notiService.managePostNotification(noti.additional_data);
+            this.notiService.manageAppNotification(noti.additional_data);
         }
     }
 
