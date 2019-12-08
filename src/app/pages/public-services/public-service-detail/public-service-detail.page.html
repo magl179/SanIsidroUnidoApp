@@ -20,18 +20,9 @@
                 actual</p>
         </div>
 
-
-        <!-- Mensaje no pudo cargarse el mapa -->
-        <!-- <div *ngIf="publicServiceDetail">
-
-        </div> -->
-        <!-- Loader mientras carga el mapa -->
-        <!-- <div class="loading-app" *ngIf="!mapLoaded">
-            <loader-app class="flex-column-center"></loader-app>
-        </div> -->
         <simple-routing-map [zoom]="11" className="public-service-map"
             id="public-service-map-detail-{{id}}"
-            [destinationCoords]="publicServiceDetail.ubication" [usePolyline]="true"
+            [destinationCoords]="publicServiceDetail.ubication" [usePolyline]="false"
             (mapEvent)="manageMapEvent($event)" [enableGesture]="true"></simple-routing-map>
     </div>
 </ion-content>

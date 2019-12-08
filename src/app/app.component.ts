@@ -121,7 +121,7 @@ export class AppComponent implements OnInit {
                     cssClass: 'confirm_button',
                     handler: async () => {
                         console.log('Confirm Okay');
-                        await this.authService.logout();
+                        await this.authService.logout('Has cerrado sesión correctamente');
                         await this.menuCtrl.close();
                     }
                 }

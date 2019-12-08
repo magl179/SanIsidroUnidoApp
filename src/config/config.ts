@@ -3,8 +3,9 @@ import { ICONFIG } from './config.model';
 export const CONFIG: ICONFIG = {
     ALLOWED_ROLES_SIGN_IN: ['morador', 'invitado', 'policia'],
     API_HEADERS: { 'content-type': 'aplication/json'},
+    SHOW_BEATIFUL_ROUTES: false,
     ALLOWED_ROLES_REPORT: ['morador', 'policia'],
-    AUTHORIZATION_NAME: 'Autorization',
+    AUTHORIZATION_NAME: 'Authorization',
     EMERGENCIES_SLUG: 'emergencias',
     EVENTS_SLUG: 'eventos',
     HOME_ROUTE: 'home-list',    

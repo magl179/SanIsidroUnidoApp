@@ -20,6 +20,7 @@ export interface ICONFIG {
   REPORTS_SLUG: string;
   SOCIAL_PROBLEMS_SLUG: string;
   VERSION: string;
+  SHOW_BEATIFUL_ROUTES?: boolean;
 }
 
 export interface IMAPLAYERS {

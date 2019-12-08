@@ -96,7 +96,7 @@ export class SimpleRoutingMapComponent implements OnInit {
             reuseTiles: true
         }).addTo(this.map);
         //Añadir la Ruta en caso de ser necesario
-        if (!this.usePolyline) {
+        if (CONFIG.SHOW_BEATIFUL_ROUTES) {
             this.setRoutingMachine(this.arrRoutesLatLng);
         }
         this.map.addLayer(this.markersLayer);
@@ -125,7 +125,7 @@ export class SimpleRoutingMapComponent implements OnInit {
         // Añadir el punto a la capa de marcadores
         this.markersLayer.addLayer(punto);
         //Añado la polilinea de ser necesario
-        if (this.usePolyline) {
+        if (!CONFIG.SHOW_BEATIFUL_ROUTES) {
             this.addPolyline(this.arrRoutesLatLng);
         }
 

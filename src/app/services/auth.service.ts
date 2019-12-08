@@ -78,10 +78,10 @@ export class AuthService {
         return this.httpRequest.post(urlApi, {}, headers);
     }
     //CERRAR SESION del usuario, borrando los datos del local storage
-    async logout() {
+    async logout(message = 'Tu sesión expiro, inicia sesión por favor') {
         this.cleanLocalStorage();
         this.cleanAuthInfo();
-        await this.utilsService.showToast({ message: 'Tu sesión expiro, inicia sesión por favor' });
+        await this.utilsService.showToast({ message });
         this.navCtrl.navigateRoot('/login');
     }
     //VERIFICAR SI SE DEBE CHECKEAR VALIDEZ TOKEN

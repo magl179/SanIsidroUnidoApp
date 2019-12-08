@@ -66,7 +66,7 @@ export class LoginPage implements OnInit {
         this.authService.saveUserInfo(token, token_decoded);
         this.authService.saveLocalStorageInfo(token, token_decoded);
         //Registrar Dispositivo
-        this.notificationsService.registerUserDevice();
+        this.notificationsService.registerUserDevice(token_decoded.user);
         this.loginForm.reset();
         //Redirigir Usuario
         loadingManageLogin.dismiss();
