@@ -4,6 +4,7 @@ import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
 import { take, finalize, map } from 'rxjs/operators';
 import { MapNotification } from 'src/app/helpers/utils';
+import { PopoverController } from '@ionic/angular';
 
 
 interface NotiList {
@@ -28,7 +29,8 @@ export class ListNotificationsComponent implements OnInit {
 
     constructor(
         private notiService: NotificationsService,
-        private usersService: UserService
+        private usersService: UserService,
+        private popoverCtrl: PopoverController
     ) { }
 
     ngOnInit() {
@@ -52,18 +54,17 @@ export class ListNotificationsComponent implements OnInit {
         });
     }
 
-    async cargarNotificacionesSolicitadas() {
-        console.log('Noti Solicited Load', this.notificationsList);
+    async cargarNotificacionesSolicitadas() {;
         if (this.maxNotifications === 0) {
             this.notificationsRequested = this.notificationsList;
         } else {
             this.notificationsRequested = this.notificationsList.slice(0, (this.maxNotifications));
         }
-        console.log('Noti Requested', this.notificationsRequested);
     }
 
-    manageNoti(noti: any) {
+    async manageNoti(noti: any) {
         if (noti && noti.additional_data) {
+            await this.popoverCtrl.dismiss();
             this.notiService.manageAppNotification(noti.additional_data);
         }
     }

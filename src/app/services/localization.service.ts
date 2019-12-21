@@ -46,7 +46,6 @@ export class LocalizationService {
             console.log('Error: ', err);
             await this.utilsService.showToast({ message: 'Ocurrio un error al obtener la geolocalizacion' });
         } finally {
-            console.log('finally get coordinates')
             return this.misCoordenadas;
         }
     }
@@ -128,7 +127,7 @@ export class LocalizationService {
                 },
                 (err: any) => {
                     this.utilsService.showToast({message: 'Ocurrio un error al obtener los permisos de Localización'});
-                    // console.log(err);
+                    console.log(err);
                     reject(err);
                 }
             );

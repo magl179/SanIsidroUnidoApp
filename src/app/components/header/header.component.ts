@@ -39,21 +39,18 @@ export class HeaderComponent implements OnInit {
             text: 'Filtrar',
             icon: 'ios-funnel',
             handler: () => {
-                console.log('Filter Selected');
             }
         };
         const searchOption = {
             text: 'Buscar',
             icon: 'search',
             handler: () => {
-                console.log('Search Selected');
             }
         };
         const reportOption = {
             text: 'Reportar',
             icon: 'send',
             handler: () => {
-                console.log('Report Selected');
             }
         };
 

@@ -54,7 +54,6 @@ export class EmergenciesPage implements OnInit, OnDestroy {
         this.loadEmergencies();
         this.events_app.emergenciesEmitter.subscribe((event_app: any) => {
             if (this.emergenciesList.length > 0) {
-                console.log('tengo datos cargados resetear a 0');
                 this.emergenciesList = [];
                 this.emergenciesFiltered = [];
                 this.postsService.resetEmergenciesPage();
@@ -63,7 +62,7 @@ export class EmergenciesPage implements OnInit, OnDestroy {
         })
     }
 
-    ngOnDestroy() { console.warn('emergencies PAGE DESTROYED') }
+    ngOnDestroy() { }
     ionViewWillEnter() { }
     ionViewWillLeave() { this.postsService.resetEmergenciesPage(); }
 

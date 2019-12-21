@@ -45,7 +45,6 @@ export class EmergencyDetailPage implements OnInit {
         this.postsService.getEmergency(+this.id).pipe(
             take(1),
             map((res: any) => {
-                // console.log('res map', res);
                 if (res && res.data) {
                     const emergency = res.data;
                     res.data = mapEmergency(emergency);
@@ -53,11 +52,9 @@ export class EmergencyDetailPage implements OnInit {
                 return res;
             }),
             finalize(() => {
-                // console.log('finalize loaded');
                 this.emergencyLoaded = true;
             })
         ).subscribe((res: IRespuestaApiSIUSingle) => {
-            console.log('Dato post subscribe', res.data);
             this.emergency = res.data;
         },(err: HttpErrorResponse) => {
             if (err.error instanceof Error) {
@@ -83,7 +80,6 @@ export class EmergencyDetailPage implements OnInit {
     }
 
     seeImageDetail(image: string) {
-        console.log('see image', image)
         this.utilsService.seeImageDetail(image, 'Imagen Evento');
     }
 

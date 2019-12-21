@@ -1,10 +1,10 @@
 <app-header title="Reportar Problema" [showBackButton]="false"></app-header>
 
 <ion-content padding>
-        <mat-vertical-stepper linear="true" #stepper_social_problems>
+        <mat-horizontal-stepper linear="true" #stepper_social_problems>
             <!-- Paso1 -->
             <mat-step>
-                <ng-template matStepLabel>Rellena los datos de tu reporte</ng-template>
+                <h5 class="ion-padding ion-text-center">Rellena los datos de tu reporte</h5>
                 <form [formGroup]="socialProblemForm">
                     <div class="item-form full">
                         <ion-item class="input_item" lines="none">
@@ -55,7 +55,7 @@
                         </p>
                     </div>
                     <div padding>
-                        <ion-button [disabled]="!socialProblemForm.valid" color="primary"
+                        <ion-button [disabled]="!socialProblemForm.valid" color="blue-logo"
                             type="submit" expand="block" (click)="stepper_social_problems.next()">
                             Siguiente
                         </ion-button>
@@ -64,7 +64,7 @@
             </mat-step>
             <!-- Paso 2 -->
             <mat-step>
-                <ng-template matStepLabel>Selecciona la ubicación del reporte</ng-template>
+                <h5 class="ion-padding ion-text-center">Selecciona la ubicación del reporte</h5>
                 <single-map id="socialProblemReportMap" [zoomMap]="17" [enableGesture]="false"
                     (returnCoordinateChoosen)="updateMapCoordinate($event)"></single-map>
                 <p class="name-ubication-pt preview-text"
@@ -91,7 +91,7 @@
                     </div>
                 </form>
                 <div>
-                    <ion-button [disabled]="!ubicationForm.valid" color="primary" expand="full"
+                    <ion-button [disabled]="!ubicationForm.valid" color="blue-logo" expand="full"
                         type="submit" (click)="stepper_social_problems.next()">
                         Siguiente
                     </ion-button>
@@ -99,7 +99,7 @@
             </mat-step>
             <!-- Paso 3 -->
             <mat-step>
-                <ng-template matStepLabel>Carga hasta 2 fotos para tu reporte</ng-template>
+                <h5 class="ion-padding ion-text-center">Carga hasta 2 fotos para tu reporte</h5>
                 <ion-grid *ngIf="socialProblemImages.length > 0">
                     <ion-row>
                         <ion-col size="6" *ngFor="let image of socialProblemImages; let i = index;">
@@ -122,14 +122,14 @@
                 <app-upload-image [uploadedImages]="socialProblemImages" [maxImages]="2"
                     (retornarImagenesSubidas)="getUploadedImages($event)"></app-upload-image>
                 <div padding>
-                    <ion-button color="primary" type="submit" expand="block" (click)="stepper_social_problems.next()">
+                    <ion-button color="blue-logo" type="submit" expand="block" (click)="stepper_social_problems.next()">
                         Siguiente
                     </ion-button>
                 </div>
             </mat-step>
             <!-- Paso Final -->
             <mat-step>
-                <ng-template matStepLabel>Listo, ahora ya puedes enviar tu reporte</ng-template>
+                <h5 class="ion-padding ion-text-center">Listo, ahora ya puedes enviar tu reporte</h5>
                 <h3>{{socialProblemForm.get('title').value || 'Ingresa un Titulo'}}</h3>
                 <p class="preview-text">{{socialProblemForm.get('title').value || 'Ingresa una descripción'}}</p>
                 <p class="preview-text" *ngIf="socialProblemCoordinate.address">{{socialProblemCoordinate.address}}</p>
@@ -141,8 +141,8 @@
                 </div>
                 <!-- <p class="preview-text" *ngIf="socialProblemImages.length === 0">No hay ninguna imagen para enviar</p> -->
                 <div>
-                    <ion-button expand="full" (click)="sendSocialProblem()">Reportar</ion-button>
+                    <ion-button expand="full" color="blue-logo" (click)="sendSocialProblem()">Reportar</ion-button>
                 </div>
             </mat-step>
-        </mat-vertical-stepper>
+        </mat-horizontal-stepper>
 </ion-content>

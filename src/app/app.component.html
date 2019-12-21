@@ -6,7 +6,7 @@
                 <!-- <div> -->
                 <!-- Header Menu -->
                 <div class="header-menu">
-                    <ion-item lines="none" color="primary" *ngIf="sessionAuth">
+                    <ion-item lines="none" color="blue-logo" *ngIf="sessionAuth">
                         <ion-avatar slot="start" (click)="closeMenu()">
                             <img [src]="sessionAuth.user.avatar" fallimg="user_avatar" />
                         </ion-avatar>
@@ -20,7 +20,7 @@
                             </p>
                         </ion-label>
                     </ion-item>
-                    <ion-item lines="none" color="primary" *ngIf="!sessionAuth">
+                    <ion-item lines="none" color="blue-logo" *ngIf="!sessionAuth">
                         <p>Inicia Sesión</p>
                     </ion-item>
                     <!-- <p>{{(sessionAuth) ? 'existe token': 'no existe token'}}</p> -->

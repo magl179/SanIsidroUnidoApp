@@ -57,7 +57,6 @@ export class PublicServiceDetailPage implements OnInit {
             })
         ).subscribe((res: IRespuestaApiSIUSingle) => {
             this.publicServiceDetail = res.data;
-            console.log('Dato post', this.publicServiceDetail);
         },(err: HttpErrorResponse) => {
             if (err.error instanceof Error) {
                 console.log("Client-side error", err);
@@ -68,7 +67,6 @@ export class PublicServiceDetailPage implements OnInit {
     }
 
     manageMapEvent(event: any) {
-        console.log(event);
         if (event && event.loaded) {
             this.mapLoaded = true;
         }

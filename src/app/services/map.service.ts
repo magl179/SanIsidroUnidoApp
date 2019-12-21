@@ -61,7 +61,6 @@ export class MapService implements OnInit {
     }
     // Función para obtener la dirección de unas coordenadas
     getAddress(coords): Observable<IReverseGeocodeResponse> {
-        console.log('coordenadas conseguir direccion', coords);
         const addressParams = {
             format: 'json',
             zoom: (coords.zoom) ? coords.zoom.toString(): '',
@@ -69,7 +68,6 @@ export class MapService implements OnInit {
             lat: (coords && coords.lat) ? coords.lat.toString(): '',
             lon: (coords && coords.lng) ? coords.lng.toString(): ''
         };
-        console.log('address params', addressParams);
         return this.httpRequest.get(REVERSE_GEOCODING_ENDPOINT, addressParams);
     }
 

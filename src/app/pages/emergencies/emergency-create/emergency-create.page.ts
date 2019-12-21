@@ -76,7 +76,6 @@ export class EmergencyCreatePage implements OnInit {
     }
 
     updateMapCoordinate(event: any) {
-        console.log({ datosHijo: event });
         if (event.lat !== null && event.lng !== null) {
             this.emergencyPostCoordinate.latitude = event.latitude;
             this.emergencyPostCoordinate.longitude = event.longitude;

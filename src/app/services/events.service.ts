@@ -14,14 +14,17 @@ export class EventsService {
 
     constructor() { }
 
-    resetSocialProblemEmmiter() {
+    resetSocialProblemEmmiter(id: number) {
         // console.log('post service emit event');
-        this.socialProblemEmitter.emit('reset-social-problems');
+        this.socialProblemEmitter.emit({
+            type: 'reset-social-problems',
+            id
+        });
     }
 
-    resetEventsEmitter() {
+    resetEventsEmitter(id: number) {
         // console.log('post service emit event');
-        this.eventsEmitter.emit('reset-events');
+        this.eventsEmitter.emit({type: 'reset-events', id});
     }
 
     resetEmergenciesEmitter() {

@@ -69,7 +69,6 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
         this.subcategory = this.activatedRoute.snapshot.paramMap.get('subcategory');
         this.postsService.resetSocialProblemsPage();
         this.utilsService.enableMenu();
-        console.log('ng on init',  this.subcategory);
         this.authService.sessionAuthUser.pipe(
             finalize(() => { })
         ).subscribe(token_decoded => {
@@ -77,36 +76,38 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
                 this.AuthUser = token_decoded.user;
             }
         },(err: any) => {
-                console.log('Error al traer la informacion del usuario', err);
                 this.utilsService.showToast({message: 'No se pudieron cargar la información del usuario'});
         });
         this.loadSocialProblems();
         this.events_app.socialProblemEmitter.subscribe((event_app: any) => {
-            if (this.socialProblemsList.length > 0) {
-                console.log('tengo datos cargados resetear a 0');
-                this.socialProblemsList = [];
-                this.socialProblemsFilter = [];
-                this.postsService.resetSocialProblemsPage();
-            }
-            this.loadSocialProblems();
+            this.toggleLikes(event_app.id);
         });
     }
 
-    ngOnDestroy() { console.warn('SOCIAL PROBLEMS PAGE DESTROYED') }
+    toggleLikes(id: number) {
+        const newSocialProblems = this.socialProblemsList.map((social_problem: any) => {
+            if (social_problem.id === id) {
+                social_problem.postLiked = !social_problem.postLiked;
+            }
+            return social_problem;
+        });
+        this.socialProblemsList = [...newSocialProblems];
+        this.socialProblemsFilter = [...this.socialProblemsList];
+    }
+
+    ngOnDestroy() {}
     ionViewWillEnter() { }
     ionViewWillLeave() { this.postsService.resetSocialProblemsBySubcategoryPage(); }
     //Eliminar o agregar like a una publicacion
     toggleLike(like: boolean, id: number) {
         if (like) {
             this.postsService.sendDeleteDetailToPost(id).subscribe((res: IRespuestaApiSIU) => {
-                console.log('detalle eliminado correctamente');
                 this.socialProblemsList.forEach(social_problem => {
                     if (social_problem.id === id) {
                         social_problem.postLiked = false;
                     }
                 });
             }, (err: any) => {
-                console.log('detalle no se pudo eliminar', err);
                 this.utilsService.showToast({message: 'No se pudo guardar tu dislike'});
             });
         } else {
@@ -116,14 +117,12 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
                 post_id: id
             }
             this.postsService.sendCreateDetailToPost(detailInfo).subscribe((res: IRespuestaApiSIU) => {
-                console.log('detalle creado correctamente');
                 this.socialProblemsList.forEach(social_problem => {
                     if (social_problem.id === id) {
                         social_problem.postLiked = true;
                     }
                 });
             }, (err: any) => {
-                console.log('detalle no se pudo crear', err);
                 this.utilsService.showToast({message: 'No se pudo guardar tu like'});
             });
         }
@@ -227,7 +226,6 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
         } else {
             this.socialProblemsFilter = this.socialProblemsList;
         }
-        // console.log('data changed', this.socialProblemsFilter.length);
     }
 
 }

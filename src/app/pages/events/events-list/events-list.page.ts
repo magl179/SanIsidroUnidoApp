@@ -30,7 +30,6 @@ export class EventsListPage implements OnInit, OnDestroy {
         private authService: AuthService,
         private modalCtrl: ModalController,
     ) {
-        console.log('Constructor Eventos');
     }
 
     ngOnInit() {
@@ -43,16 +42,22 @@ export class EventsListPage implements OnInit, OnDestroy {
         });
         this.loadEvents();
         this.events_app.eventsEmitter.subscribe((event_app: any) => {
-            if (this.eventsList.length > 0) {
-                console.log('tengo datos cargados resetear a 0');
-                this.eventsList = [];
-                this.postsService.resetEventsPage();
-            }
-            this.loadEvents();
+            this.toggleAssistances(event_app.id)
         });
     }
 
-    ngOnDestroy() { console.warn('EVENTS PAGE DESTROYED') }
+    toggleAssistances(id: number) {
+        const newEvents= this.eventsList.map((event: any) => {
+            if (event.id === id) {
+                event.postAssistance = !event.postAssistance;
+            }
+            return event;
+        });
+        this.eventsList = [...newEvents];
+        // this.evens = [...this.socialProblemsList];
+    }
+
+    ngOnDestroy() { }
     ionViewWillEnter() { }
     ionViewWillLeave() { this.postsService.resetEventsPage(); }
 
@@ -116,7 +121,6 @@ export class EventsListPage implements OnInit, OnDestroy {
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let eventsApi = [];
             eventsApi = res.data;
-            // console.log('eventos ante subscribir', this.eventsList);
             if (eventsApi.length === 0) {
                 if (event) {
                     event.data.target.disabled = true;
@@ -135,13 +139,9 @@ export class EventsListPage implements OnInit, OnDestroy {
             }
             if (event && event.type === 'refresher') {
                 this.eventsList.unshift(...eventsApi);
-                console.log('eventos mapeados refresher y totales actualmente', this.eventsList);
                 return;
             }
             this.eventsList.push(...eventsApi);
-            console.log('eventos mapeados normal o infinite scroll', this.eventsList);
-            
-
         },
             (err: HttpErrorResponse) => {
                 if (err.error instanceof Error) {

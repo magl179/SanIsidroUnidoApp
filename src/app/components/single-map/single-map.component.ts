@@ -60,7 +60,6 @@ export class SingleMapComponent implements OnInit, AfterViewInit {
         });
 
         await this.map.on('load', (e) => {
-            console.log('MAPA SINGLE CARGADO');
             L.control.scale().addTo(this.map);
             this.mapIsLoaded = true;
         });

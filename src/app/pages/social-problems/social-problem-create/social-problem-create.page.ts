@@ -47,14 +47,12 @@ export class SocialProblemCreatePage implements OnInit {
     loadSubcategories() {
         this.postService.getSubcategoriesByCategory(CONFIG.SOCIAL_PROBLEMS_SLUG).subscribe(res => {
             this.subcategories = res.data;
-            console.log('subcategories', res.data);
         }, (err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error al cargar las categorias');
         });
     }
 
     async ngOnInit() {
-        console.warn('NG ON INIT SOCIAL PROBLEMS');
         this.loadSubcategories();
         const coords = await this.localizationService.getCoordinate();
         this.socialProblemCoordinate.latitude = coords.latitude;
@@ -111,7 +109,7 @@ export class SocialProblemCreatePage implements OnInit {
             })
         ).subscribe(async (res: IRespuestaApiSIU) => {
             await this.utilsService.showToast({message: "El Reporte fue enviado correctamente"});
-            this.events_app.resetSocialProblemEmmiter();
+            // this.events_app.resetSocialProblemEmmiter();
         }, (err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error al enviar tu reporte, intentalo más tarde');
         });
@@ -127,7 +125,6 @@ export class SocialProblemCreatePage implements OnInit {
     }
 
     updateMapCoordinate(event: any) {
-        console.log({ datosHijo: event });
         if (event.lat !== null && event.lng !== null) {
             this.socialProblemCoordinate.latitude = event.latitude;
             this.socialProblemCoordinate.longitude = event.longitude;

@@ -30,7 +30,7 @@ export class ReportsListPage implements OnInit, OnDestroy {
         this.navCtrl.navigateForward(`/reports/list/${id}`);
     }
 
-    ngOnDestroy() { console.warn('REPORTS PAGE DESTROYED') }
+    ngOnDestroy() { }
     ionViewWillLeave() { this.postsService.resetReportsPage(); }
     
     loadReports(event?: any) {
@@ -66,7 +66,6 @@ export class ReportsListPage implements OnInit, OnDestroy {
                 return;
             }
             this.reportsList.push(...reportsList);
-            // console.log('reports list', this.reportsList);
         },(err: HttpErrorResponse) => {
             if (err.error instanceof Error) {
                 console.log("Client-side error", err);

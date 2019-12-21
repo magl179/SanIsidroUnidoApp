@@ -47,7 +47,7 @@ export class SocialProblemDetailPage implements OnInit {
                 this.AuthUser = token_decoded.user;
             }
         }, (err: HttpErrorResponse) => {
-            console.log('Error al traer los problemas sociales');
+            console.log('Error al traer los datos del usuario autenticado');
         });
         this.getSocialProblem();
 
@@ -73,7 +73,6 @@ export class SocialProblemDetailPage implements OnInit {
                 this.socialProblem = res.data;
                 this.socialProblem.postLiked = checkLikePost(this.socialProblem.details, this.AuthUser);
             }
-            console.log('problema social mapeado', this.socialProblem);
         }, (err: HttpErrorResponse) => {
             if (err.error instanceof Error) {
                 console.log("Client-side error", err);
@@ -98,14 +97,11 @@ export class SocialProblemDetailPage implements OnInit {
     }
 
     toggleLike(like: boolean) {
-        console.log((like) ? 'quitar like' : 'dar like');
         if (like) {
             this.postService.sendDeleteDetailToPost(this.socialProblem.id).subscribe((res: IRespuestaApiSIU) => {
-                console.log('detalle eliminado correctamente');
                 this.socialProblem.postLiked = false;
-                this.emitLikeEvent();
+                this.emitLikeEvent(this.socialProblem.id);
             }, err => {
-                console.log('detalle no se pudo eliminar', err);
                 this.utilsService.showToast({ message: 'El like no se pudo guardar' });
             });
         } else {
@@ -115,11 +111,9 @@ export class SocialProblemDetailPage implements OnInit {
                 post_id: this.socialProblem.id
             }
             this.postService.sendCreateDetailToPost(detailInfo).subscribe((res: IRespuestaApiSIU) => {
-                console.log('detalle creado correctamente');
                 this.socialProblem.postLiked = true;
-                this.emitLikeEvent();
+                this.emitLikeEvent(this.socialProblem.id);
             }, err => {
-                console.log('detalle no se pudo crear', err);
                 this.utilsService.showToast({ message: 'El like no pudo guardarse' });
             });
         }
@@ -144,12 +138,11 @@ export class SocialProblemDetailPage implements OnInit {
     }
 
     seeImageDetail(image: string) {
-        console.log('see image', image)
         this.utilsService.seeImageDetail(image, 'Imagen Evento');
     }
 
-    emitLikeEvent() {
-        this.events_app.resetSocialProblemEmmiter();
+    emitLikeEvent(id: number) {
+        this.events_app.resetSocialProblemEmmiter(id);
     }
 
 }

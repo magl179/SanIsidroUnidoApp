@@ -4,11 +4,11 @@
 <!-- Contenido -->
 <ion-content padding>
     <!-- Refresher de los Datos -->
-    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <!-- <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content pullingIcon="arrow-dropdown" refreshingSpinner="circles"
             refreshingText="Cargando Publicaciones...">
         </ion-refresher-content>
-    </ion-refresher>
+    </ion-refresher> -->
     <!-- Mensaje si datos no cargan o son tamaño 0 -->
     <app-no-results-found *ngIf="eventsLoaded && eventsList.length === 0"
         message="No existen eventos disponibles"></app-no-results-found>

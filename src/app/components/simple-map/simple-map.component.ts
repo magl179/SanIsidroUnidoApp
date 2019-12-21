@@ -51,7 +51,6 @@ export class SimpleMapComponent implements AfterViewInit {
             markerZoomAnimation: false
         });
         this.map.on('load', (e: any) => {
-            console.log('MAPA SIMPLE CARGADO');
             L.control.scale().addTo(this.map);
         });
 

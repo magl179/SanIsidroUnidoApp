@@ -35,7 +35,6 @@ export class DirectoryListPage implements OnInit {
             })
         ).subscribe((response: IRespuestaApiSIU) => {
             this.directivesList = response.data;
-            console.log('directives length', this.directivesList.length)
         }, (err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error al traer el listado de directivos');
         });

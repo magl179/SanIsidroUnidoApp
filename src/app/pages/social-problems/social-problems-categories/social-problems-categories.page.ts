@@ -46,7 +46,6 @@ export class SocialProblemsCategoriesPage implements OnInit {
                 this.categoriesLoaded = true;
             })
         ).subscribe((res : any) => {
-            console.log(res.data);
             this.categories = res.data;
         });
     }

@@ -85,7 +85,6 @@ export class UserPage implements OnInit {
             })
         ).subscribe((res: IRespuestaApiSIU) => {
             if (res.data) {
-                console.log('res social profiles', res.data);
                 this.UserSocialProfiles = res.data;
                 
             }
@@ -105,7 +104,6 @@ export class UserPage implements OnInit {
             })
         ).subscribe((res: IRespuestaApiSIU) => {
             if (res.data) {
-                console.log('res devices', res.data);
                 this.UserDevices = res.data;
                 
             }

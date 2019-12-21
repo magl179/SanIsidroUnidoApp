@@ -68,7 +68,6 @@ export class SimpleRoutingMapComponent implements OnInit {
         this.arrRoutesLatLng[0] = this.createLatLng(this.currentCoordinate.latitude, this.currentCoordinate.longitude);
         this.arrRoutesLatLng[1] = this.createLatLng(this.destinationCoords.latitude, this.destinationCoords.longitude);
         // Crear el Mapa
-        console.log('crear mapa')
         this.map = L.map(this.id, {
             gestureHandling: this.enableGesture,
             zoomAnimation: true,
@@ -77,7 +76,7 @@ export class SimpleRoutingMapComponent implements OnInit {
         });
         // Agregar Evento al Mapa cuando esta cargado
         this.map.on('load', (e: any) => {
-            console.log('Simple coordinate map loaded')
+            // console.log('Simple coordinkate map loaded')
             this.mapIsLoaded = true;
             // Invalidar Tamanio
             this.map.invalidateSize();

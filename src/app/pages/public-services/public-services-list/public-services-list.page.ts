@@ -72,23 +72,17 @@ export class PublicServicesListPage implements OnInit {
             });
             await modal.present();    
             const { data } = await modal.onDidDismiss();    
-            if (data == null) {
-                console.log('No hay datos que Retorne el Modal');
-            } else {
-                console.log('Retorno de Datos del Modal: ', data);
-            }
+            // console.log('Retorno de Datos del Modal: ', data);
         }
 
     }
 
     async showPublicService(indice) {
-        console.log('Mostrar Servicio Público con el ID: ', indice);
         await this.utilsService.showToast({message: `Mostrar Servicio Público con el ID: ${indice}`});
     }
 
     goToDetail(id: number) {
         const url = `/public-services/list/${this.category}/${id}`;
-        console.warn(url);
         this.navCtrl.navigateForward(url);
     }
 }

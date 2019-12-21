@@ -30,7 +30,6 @@ export class HeaderBackComponent implements OnInit {
             cssClass: ['headerActionCtrl', 'btn-filter'],
             icon: 'ios-funnel',
             handler: () => {
-                console.log('Filter Selected');
                 this.optionSelected.emit({
                     option: 'filter'
                 })
@@ -41,7 +40,6 @@ export class HeaderBackComponent implements OnInit {
             cssClass: ['headerActionCtrl', 'btn-search'],
             icon: 'search',
             handler: () => {
-                console.log('Search Selected');
                 this.optionSelected.emit({
                     option: 'search'
                 });
@@ -52,7 +50,6 @@ export class HeaderBackComponent implements OnInit {
             cssClass: ['headerActionCtrl', 'btn-report'],
             icon: 'send',
             handler: () => {
-                console.log('Report Selected');
                 this.optionSelected.emit({
                     option: 'report'
                 })

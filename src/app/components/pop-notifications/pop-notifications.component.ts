@@ -32,14 +32,6 @@ export class PopNotificationsComponent implements OnInit {
             }
         });
         await modal.present();
-
-        // const { data } = await modal.onDidDismiss();
-
-        // if (data == null) {
-        //     console.log('No hay datos que Retorne el Modal');
-        // } else {
-        //     console.log('Retorno de Datos del Modal: ', data);
-        // }
     }
 
 }
