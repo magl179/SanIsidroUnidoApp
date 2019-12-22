@@ -5,6 +5,7 @@ import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { Platform } from '@ionic/angular';
 import { UtilsService } from './utils.service';
 import { ISimpleCoordinates } from 'src/app/interfaces/models';
+import { throwError } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -31,12 +32,14 @@ export class LocalizationService {
     }
 
     getPositionNative() {
-        return this.geolocation.getCurrentPosition();
+        return this.geolocation.getCurrentPosition({
+            timeout: 5500
+        });
     }
 
     async getCoordinates() {
         try {
-            return this.getLocationCoordinates();
+            return await this.getLocationCoordinates();
         } catch (err) {
             console.log('err', err)
             throw (err);
@@ -46,9 +49,9 @@ export class LocalizationService {
     async getLocationCoordinates() {
         return new Promise(async (resolve, reject) => {
             if (this.platform.is('cordova')) {
-                await this.requestGPSPermission();
+                await this.checkGPSPermissions();
                 this.getPositionNative().then((currentCoords: any) => {
-                    console.log('native current coords', currentCoords);
+                    // console.log('native current coords', currentCoords);
                     this.misCoordenadas.latitude = currentCoords.coords.latitude;
                     this.misCoordenadas.longitude = currentCoords.coords.longitude;
                     resolve(this.misCoordenadas);
@@ -67,35 +70,36 @@ export class LocalizationService {
 
     async checkGPSPermissions() {
         // console.log('verificar permisos gps')
-        return new Promise(async (resolve, reject) => {
-            await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
+            return await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
                 async (result: any) => {
                     if (result.hasPermission) {
                         // console.log('pedir encender gps en verificar permisos gps')
-                        resolve(this.askTurnOnGPS());
+                        return await this.askTurnOnGPS();
                     } else {
                         // console.log('solicitar permisos gps en verificar permisos gps')
-                        resolve(this.requestGPSPermission());
+                        return await this.requestGPSPermission();
                     }
 
                 }
-            ).catch(err => reject(err));
-        });
+            ).catch(err => {
+                throw (err);
+            });
     }
 
     async requestGPSPermission() {
         // console.log('solicitar permisos gps');
-        return new Promise((resolve, reject) => {
-            return this.locationAccuracy.canRequest().then(async (canRequest: boolean) => {
+            return await this.locationAccuracy.canRequest().then(async (canRequest: boolean) => {
                 if (canRequest) {
                     // console.log('pedir encender gps  en solicitar permisos gps');
-                    resolve(this.askTurnOnGPS());
+                    return await this.askTurnOnGPS();
                 } else {
                     // console.log('verificar permisos gps  en solicitar permisos gps' );
-                    resolve(this.checkGPSPermissions());
+                    this.utilsService.showToast({ message: 'Por favor habilita el acceso de la aplicación a la geolocalización' });
+                    throwError('Por favor habilita el acceso de la aplicación a la geolocalización');
                 }
-            }).catch(err => reject(err));
-        });
+            }).catch(err => {
+                throw(err);
+            });
     }
 
     //Solicitar al usuario que encienda el GPS

@@ -29,12 +29,14 @@ export class SocialProblemCreatePage implements OnInit {
         longitude: null,
         address: null
     };
+    // coordinates = n
     subcategories = [];
 
     constructor(
         private utilsService: UtilsService,
         private errorService: ErrorService,
         private mapService: MapService,
+        private locationService: LocalizationService,
         public formBuilder: FormBuilder,
         private localizationService: LocalizationService,
         private localDataService: LocalDataService,
@@ -53,6 +55,8 @@ export class SocialProblemCreatePage implements OnInit {
     }
 
     async ngOnInit() {
+        // const coordinates = await this.locationService.getCoordinates();
+
         this.loadSubcategories();
         const coords: any = await this.localizationService.getCoordinates();
         this.socialProblemCoordinate.latitude = coords.latitude;

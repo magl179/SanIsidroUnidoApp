@@ -55,3 +55,9 @@ Size of a request header field exceeds server limit.</p>
 Solución
 disminuir el tamaño del token no traendo datos innecesarios
 
+# Onesignal Before
+En el archivo platforms\android\app\build.gradle  debe ir lo siguiente
+
+apply from: "../onesignal-cordova-plugin/sanisidrounido-build-extras-onesignal.gradle"
+apply plugin: 'com.android.application'
+

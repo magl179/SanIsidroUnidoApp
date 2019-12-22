@@ -55,7 +55,7 @@ export class SimpleRoutingMapComponent implements OnInit {
             // Inicializar el Mapa
             await this.initializeMap();
         } catch (err) {
-            
+            console.log('Error al cargar mapa', err)
         }
         // Obtener marcadores
     }
@@ -70,8 +70,8 @@ export class SimpleRoutingMapComponent implements OnInit {
         // Crear el Mapa
         this.map = L.map(this.id, {
             gestureHandling: this.enableGesture,
-            zoomAnimation: true,
-            markerZoomAnimation: true,
+            zoomAnimation: false,
+            markerZoomAnimation: false,
             zoomControl: true
         });
         // Agregar Evento al Mapa cuando esta cargado

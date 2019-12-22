@@ -14,6 +14,7 @@
     <preference name="KeyboardDisplayRequiresUserAction" value="false" />
     <preference name="ScrollEnabled" value="false" />
     <preference name="android-minSdkVersion" value="19" />
+    <preference name="android-targetSdkVersion" value="28" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashMaintainAspectRatio" value="true" />
     <preference name="FadeSplashScreenDuration" value="300" />
@@ -121,6 +122,5 @@
     <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryUsageDescription">
         <string>Se necesita el acceso a tu galeria para que puedas subir imagenes desde la galeria</string>
     </edit-config>
-    <allow-navigation href="https://*" sessionid="3cfee7e0" />
     <allow-navigation href="http://*" sessionid="3cfee7e0" />
 </widget>
