@@ -121,5 +121,6 @@
     <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryUsageDescription">
         <string>Se necesita el acceso a tu galeria para que puedas subir imagenes desde la galeria</string>
     </edit-config>
-    <allow-navigation href="http://localhost:8100" sessionid="3cfee7e0" />
+    <allow-navigation href="https://*" sessionid="3cfee7e0" />
+    <allow-navigation href="http://*" sessionid="3cfee7e0" />
 </widget>

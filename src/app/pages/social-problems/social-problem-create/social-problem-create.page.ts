@@ -54,7 +54,7 @@ export class SocialProblemCreatePage implements OnInit {
 
     async ngOnInit() {
         this.loadSubcategories();
-        const coords = await this.localizationService.getCoordinate();
+        const coords: any = await this.localizationService.getCoordinates();
         this.socialProblemCoordinate.latitude = coords.latitude;
         this.socialProblemCoordinate.longitude = coords.longitude;
     }

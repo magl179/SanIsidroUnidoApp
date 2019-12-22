@@ -44,7 +44,7 @@ export class EmergencyCreatePage implements OnInit {
     }
 
     async ngOnInit() {
-        const coords = await this.localizationService.getCoordinate();
+        const coords: any = await this.localizationService.getCoordinates();
         this.emergencyPostCoordinate.latitude = coords.latitude;
         this.emergencyPostCoordinate.longitude = coords.longitude;
     }

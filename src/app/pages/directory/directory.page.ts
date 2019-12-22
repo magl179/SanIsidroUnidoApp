@@ -7,11 +7,11 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { ErrorService } from 'src/app/services/error.service';
 
 @Component({
-    selector: 'app-directory-list',
-    templateUrl: './directory-list.page.html',
-    styleUrls: ['./directory-list.page.scss'],
+  selector: 'app-directory',
+  templateUrl: './directory.page.html',
+  styleUrls: ['./directory.page.scss'],
 })
-export class DirectoryListPage implements OnInit {
+export class DirectoryPage implements OnInit {
 
     directivesList: IDirective[] = [];
     loadDirectives = false;
@@ -39,4 +39,6 @@ export class DirectoryListPage implements OnInit {
             this.errorService.manageHttpError(err, 'Ocurrio un error al traer el listado de directivos');
         });
     }
+    
+
 }

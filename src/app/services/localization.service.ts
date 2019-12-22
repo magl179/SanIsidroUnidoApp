@@ -26,111 +26,87 @@ export class LocalizationService {
 
     getPositionWeb() {
         return new Promise(function (resolve, reject) {
-          navigator.geolocation.getCurrentPosition(resolve, reject);
+            navigator.geolocation.getCurrentPosition(resolve, reject);
         });
     }
 
-    async getCoordinate() {
+    getPositionNative() {
+        return this.geolocation.getCurrentPosition();
+    }
+
+    async getCoordinates() {
         try {
-            if (this.platform.is('cordova')) {
-                await this.checkGPSPermissions();
-            } else {
-                if (navigator.geolocation) {
-                    const positionweb: any = await this.getPositionWeb();
-                    this.misCoordenadas.latitude = positionweb.coords.latitude;
-                    this.misCoordenadas.longitude = positionweb.coords.longitude;
-                }
-            }
-            
+            return this.getLocationCoordinates();
         } catch (err) {
-            console.log('Error: ', err);
-            await this.utilsService.showToast({ message: 'Ocurrio un error al obtener la geolocalizacion' });
-        } finally {
-            return this.misCoordenadas;
+            console.log('err', err)
+            throw (err);
         }
     }
 
-    async checkGPSPermissions() {
-        return new Promise(async(resolve, reject) => { 
+    async getLocationCoordinates() {
+        return new Promise(async (resolve, reject) => {
             if (this.platform.is('cordova')) {
-                await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
-                    async (result: any) => {
-                        try {
-                            if (result.hasPermission) {
-                                // Pedir encender GPS
-                                await this.askTurnOnGPS();
-                            } else {
-                                // Pedir Permiso GPS
-                                await this.requestGPSPermission();
-                            }
-                        } catch (err) {
-                            reject(err);
-                        }
-                    },
-                    (err: any) => {
-                        this.utilsService.showToast({message: 'No se pudo obtener los permisos de GPS'});
-                        console.log(err);
-                        reject(err);
-                    }
-                );
+                await this.requestGPSPermission();
+                this.getPositionNative().then((currentCoords: any) => {
+                    console.log('native current coords', currentCoords);
+                    this.misCoordenadas.latitude = currentCoords.coords.latitude;
+                    this.misCoordenadas.longitude = currentCoords.coords.longitude;
+                    resolve(this.misCoordenadas);
+                }).catch(err => reject(err));
             } else {
-                resolve(true);
+                if (navigator.geolocation) {
+                    this.getPositionWeb().then((currentCoords: any) => {
+                        this.misCoordenadas.latitude = currentCoords.coords.latitude;
+                        this.misCoordenadas.longitude = currentCoords.coords.longitude;
+                        resolve(this.misCoordenadas);
+                    }).catch(err => reject(err))
+                }
             }
+        });
+    }
+
+    async checkGPSPermissions() {
+        // console.log('verificar permisos gps')
+        return new Promise(async (resolve, reject) => {
+            await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
+                async (result: any) => {
+                    if (result.hasPermission) {
+                        // console.log('pedir encender gps en verificar permisos gps')
+                        resolve(this.askTurnOnGPS());
+                    } else {
+                        // console.log('solicitar permisos gps en verificar permisos gps')
+                        resolve(this.requestGPSPermission());
+                    }
+
+                }
+            ).catch(err => reject(err));
         });
     }
 
     async requestGPSPermission() {
-        return new Promise((resolve, reject) => { 
-            this.locationAccuracy.canRequest().then((canRequest: boolean) => {
+        // console.log('solicitar permisos gps');
+        return new Promise((resolve, reject) => {
+            return this.locationAccuracy.canRequest().then(async (canRequest: boolean) => {
                 if (canRequest) {
-                    resolve(true);
+                    // console.log('pedir encender gps  en solicitar permisos gps');
+                    resolve(this.askTurnOnGPS());
                 } else {
-                    // Show 'GPS Permission Request' dialogue
-                    this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION)
-                        .then(
-                            async () => {
-                                // Metodo Encender GPS
-                                try {
-                                    await this.askTurnOnGPS();
-                                    resolve(true);
-                                } catch (err) {
-                                    reject(err);
-                                }
-                            },
-                            (err: any) => {
-                                this.utilsService.showToast({message: 'Ocurrio un error al solicitar los permisos del GPS: '});
-                                console.log(err);
-                                reject(err);
-                            }
-                        );
+                    // console.log('verificar permisos gps  en solicitar permisos gps' );
+                    resolve(this.checkGPSPermissions());
                 }
-            });
+            }).catch(err => reject(err));
         });
     }
 
     //Solicitar al usuario que encienda el GPS
     async askTurnOnGPS() {
+        // console.log('pedir encender gps')
         return new Promise((resolve, reject) => {
             this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
-                async () => {
-                    try {     
-                        const currentCoords = await this.geolocation.getCurrentPosition();
-                        if (currentCoords) {
-                            this.misCoordenadas.latitude = currentCoords.coords.latitude;
-                            this.misCoordenadas.longitude = currentCoords.coords.longitude;
-                        }
-                        resolve(true);
-                    } catch (err) {
-                        reject(err);
-                    }
-                    // return;
-                },
-                (err: any) => {
-                    this.utilsService.showToast({message: 'Ocurrio un error al obtener los permisos de Localización'});
-                    console.log(err);
-                    reject(err);
+                (resp) => {
+                    resolve(resp);
                 }
-            );
+            ).catch((err) => reject(err));
         });
     }
 }

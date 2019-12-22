@@ -51,7 +51,7 @@ export class SimpleRoutingMapComponent implements OnInit {
         try {     
             this.mapMarkers = await this.mapService.getMarkers().toPromise();
             // Obtener Coordenadas
-            this.currentCoordinate = await this.localizationService.getCoordinate();
+            this.currentCoordinate = await this.localizationService.getCoordinates();
             // Inicializar el Mapa
             await this.initializeMap();
         } catch (err) {

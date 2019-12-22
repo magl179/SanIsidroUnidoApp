@@ -15,7 +15,7 @@ const routes: Routes = [
     },
     {
         path: 'directory',
-        loadChildren: './pages/directory/directory-list/directory-list.module#DirectoryListPageModule'
+        loadChildren: './pages/directory/directory.module#DirectoryPageModule'
     },
     {
         path: 'emergencies',

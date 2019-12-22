@@ -37,7 +37,7 @@ export class SingleMapComponent implements OnInit, AfterViewInit {
     async ngOnInit() { }
 
     async ngAfterViewInit() {
-        this.currentCoordinate = await this.localizationService.getCoordinate();
+        this.currentCoordinate = await this.localizationService.getCoordinates();
         if (this.currentCoordinate) {
             this.sendMarkerCoordinate();
         }

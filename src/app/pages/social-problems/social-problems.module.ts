@@ -19,7 +19,7 @@ const routes: Routes = [
                 loadChildren: "./social-problems-categories/social-problems-categories.module#SocialProblemsCategoriesPageModule"
             },
             {
-                path: 'report',
+                path: 'create',
                 loadChildren: "./social-problem-create/social-problem-create.module#SocialProblemCreatePageModule",
                 canLoad: [UserAuthenticatedGuard, UserHasRoleGuard],
                 data: { roles: ['morador_afiliado'] }

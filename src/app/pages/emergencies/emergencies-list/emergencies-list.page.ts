@@ -14,7 +14,7 @@ import { EventsService } from "src/app/services/events.service";
     templateUrl: './emergencies-list.page.html',
     styleUrls: ['./emergencies-list.page.scss'],
 })
-export class EmergenciesPage implements OnInit, OnDestroy {
+export class EmergenciesListPage implements OnInit, OnDestroy {
 
     emergenciesList = [];
     AuthUser = null;

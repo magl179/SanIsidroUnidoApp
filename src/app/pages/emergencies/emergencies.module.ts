@@ -28,10 +28,12 @@ const routes: Routes = [
                 path: 'list',
                 loadChildren: "./emergencies-list/emergencies-list.module#EmergenciesListPageModule"
             },
-            {
-                path: 'report',
-                loadChildren: "./emergency-create/emergency-create.module#EmergencyCreatePageModule"
-            },
+            // {
+            //     path: 'report',
+            //     loadChildren: "./emergency-create/emergency-create.module#EmergencyCreatePageModule",
+            //     canLoad: [UserAuthenticatedGuard, UserHasRoleGuard],
+            //     data: { roles: ['morador_afiliado'] }
+            // },
             {
                 path: 'search',
                 loadChildren: "src/app/pages/shared/search-posts/search-posts.module#SearchPostsPageModule",
