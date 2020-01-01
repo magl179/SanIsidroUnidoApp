@@ -5,6 +5,7 @@ import { finalize, take } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UtilsService } from 'src/app/services/utils.service';
 import { ErrorService } from 'src/app/services/error.service';
+import { MessagesService } from 'src/app/services/messages.service';
 
 @Component({
   selector: 'app-directory',
@@ -19,6 +20,7 @@ export class DirectoryPage implements OnInit {
     constructor(
         private directivesService: DirectivesService,
         private utilsService: UtilsService,
+        private messageService: MessagesService,
         private errorService: ErrorService
     ) { }
 
@@ -35,6 +37,7 @@ export class DirectoryPage implements OnInit {
             })
         ).subscribe((response: IRespuestaApiSIU) => {
             this.directivesList = response.data;
+            this.messageService.showSuccess('Datos traídos correctamente');
         }, (err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error al traer el listado de directivos');
         });

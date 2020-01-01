@@ -48,7 +48,7 @@ export class ListNotificationsComponent implements OnInit {
                 noti = MapNotification(noti);
             });
             return res;
-        }), finalize(() => console.log('notis cargadas'))).subscribe((res: any) => {
+        })).subscribe((res: any) => {
             this.notificationsList = res.data;
             this.cargarNotificacionesSolicitadas();
         });

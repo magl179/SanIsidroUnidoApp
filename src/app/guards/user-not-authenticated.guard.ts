@@ -22,8 +22,7 @@ export class UserNotAuthenticatedGuard implements CanLoad {
 
         return userObservable.pipe(
             map(token_decoded => {
-                console.log('token decoded user not authenticated guard', token_decoded);
-                // console.log('url previous', state.url);
+            //console.log('token decoded user not authenticated guard', token_decoded);
               if(token_decoded) {
                 this.router.navigate(['/home']);
                 return false;

@@ -13,6 +13,7 @@ import { EventsService } from "src/app/services/events.service";
 import { IRespuestaApiSIU } from "src/app/interfaces/models";
 import { CONFIG } from 'src/config/config';
 import { ErrorService } from 'src/app/services/error.service';
+import { MessagesService } from 'src/app/services/messages.service';
 
 @Component({
     selector: 'app-social-problem-create',
@@ -36,7 +37,7 @@ export class SocialProblemCreatePage implements OnInit {
         private utilsService: UtilsService,
         private errorService: ErrorService,
         private mapService: MapService,
-        private locationService: LocalizationService,
+        private messageService: MessagesService,
         public formBuilder: FormBuilder,
         private localizationService: LocalizationService,
         private localDataService: LocalDataService,
@@ -85,13 +86,13 @@ export class SocialProblemCreatePage implements OnInit {
     async sendSocialProblem() {
         
         if (this.socialProblemForm.valid !== true) {
-            return await this.utilsService.showToast({message: 'Ingresa un titulo y una descripción'});
+            return this.messageService.showInfo("Ingresa un titulo y una descripción");
         }
         if (this.ubicationForm.valid !== true) {
-            return await this.utilsService.showToast({message: 'Ingresa una descripción de tu ubicación'});
+            return this.messageService.showInfo("Ingresa una descripción de tu ubicación");
         }
         if (this.socialProblemCoordinate.address === null || this.socialProblemCoordinate.address === null) {
-            return await this.utilsService.showToast({message: 'No se pudo obtener tu ubicación'});
+            return this.messageService.showInfo("No se pudo obtener tu ubicación");
         }
 
         const loadingReportSocialProblem = await this.utilsService.createBasicLoading('Enviando Reporte');
@@ -112,7 +113,7 @@ export class SocialProblemCreatePage implements OnInit {
                 loadingReportSocialProblem.dismiss()
             })
         ).subscribe(async (res: IRespuestaApiSIU) => {
-            await this.utilsService.showToast({message: "El Reporte fue enviado correctamente"});
+            this.messageService.showSuccess("El Reporte fue enviado correctamente");
             // this.events_app.resetSocialProblemEmmiter();
         }, (err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error al enviar tu reporte, intentalo más tarde');

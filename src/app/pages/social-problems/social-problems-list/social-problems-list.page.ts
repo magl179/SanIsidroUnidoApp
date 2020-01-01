@@ -14,6 +14,8 @@ import { EventsService } from "src/app/services/events.service";
 import { ActivatedRoute, Router, NavigationExtras } from "@angular/router";
 import { NavigationService } from 'src/app/services/navigation.service';
 import { CONFIG } from 'src/config/config';
+import { ErrorService } from 'src/app/services/error.service';
+import { MessagesService } from 'src/app/services/messages.service';
 
 
 @Component({
@@ -54,10 +56,11 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
 
     constructor(
         private navigationService: NavigationService,
-        private router: Router,
+        private errorService: ErrorService,
         private activatedRoute: ActivatedRoute,
         private navCtrl: NavController,
         private utilsService: UtilsService,
+        private messageService: MessagesService,
         private postsService: PostsService,
         private authService: AuthService,
         private events_app: EventsService,
@@ -75,8 +78,8 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
             if (token_decoded && token_decoded.user) {
                 this.AuthUser = token_decoded.user;
             }
-        },(err: any) => {
-                this.utilsService.showToast({message: 'No se pudieron cargar la información del usuario'});
+        },(err: any) => {;
+            this.errorService.manageHttpError(err, 'No se pudo cargar la información del usuario');
         });
         this.loadSocialProblems();
         this.events_app.socialProblemEmitter.subscribe((event_app: any) => {
@@ -108,7 +111,7 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
                     }
                 });
             }, (err: any) => {
-                this.utilsService.showToast({message: 'No se pudo guardar tu dislike'});
+                this.errorService.manageHttpError(err, 'El me gusta no pudo ser borrado');
             });
         } else {
             const detailInfo = {
@@ -123,7 +126,7 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
                     }
                 });
             }, (err: any) => {
-                this.utilsService.showToast({message: 'No se pudo guardar tu like'});
+                this.errorService.manageHttpError(err, 'El me gusta no pudo ser guardado');
             });
         }
     }
@@ -168,14 +171,9 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
             }
             this.socialProblemsList.push(...socialProblems);
             this.socialProblemsFilter.push(...socialProblems);
-
-
+            this.messageService.showSuccess('Datos traidos correctamente');
         }, (err: HttpErrorResponse) => {
-            if (err.error instanceof Error) {
-                console.log("Client-side error", err);
-            } else {
-                console.log("Server-side error", err);
-            }
+            this.errorService.manageHttpError(err, 'Ocurrio un error al cargar el listado de problemas sociales');
         });
     }
     //Obtener datos con el Infinite Scroll

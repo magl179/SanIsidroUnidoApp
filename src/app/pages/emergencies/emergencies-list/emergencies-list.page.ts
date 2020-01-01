@@ -8,6 +8,7 @@ import { mapEmergency, setFilterKeys, filterDataInObject } from "src/app/helpers
 import { AuthService } from 'src/app/services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from "src/app/services/events.service";
+import { ErrorService } from '../../../services/error.service';
 
 @Component({
     selector: 'app-emergencies-list',
@@ -38,7 +39,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         private authService: AuthService,
         private utilsService: UtilsService,
         private postsService: PostsService,
-        private modalCtrl: ModalController,
+        private errorService: ErrorService,
         private events_app: EventsService
     ) { }
 
@@ -104,11 +105,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
 
 
         },(err: HttpErrorResponse) => {
-            if (err.error instanceof Error) {
-                console.log("Client-side error", err);
-            } else {
-                console.log("Server-side error", err);
-            }
+            this.errorService.manageHttpError(err, 'Ocurrio un error al traer el listado de emergencias');
         });
     }
 

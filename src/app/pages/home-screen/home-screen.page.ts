@@ -4,6 +4,7 @@ import { LocalDataService } from 'src/app/services/local-data.service';
 import { ISlideTutorial } from 'src/app/interfaces/models';
 import { UtilsService } from "src/app/services/utils.service";
 import { HttpErrorResponse } from "@angular/common/http";
+import { ErrorService } from 'src/app/services/error.service';
 
 @Component({
     selector: 'app-home-screen',
@@ -19,6 +20,7 @@ export class HomeScreenPage implements OnInit {
 
     constructor(
         private navCtrl: NavController,
+        private errorService: ErrorService,
         public utilsService: UtilsService,
         private localDataService: LocalDataService) { }
 
@@ -27,8 +29,7 @@ export class HomeScreenPage implements OnInit {
             (res: any) => {
                 this.slides = res;
             }, (err: HttpErrorResponse) => {
-                console.log('Error al traer las opciones del tutorial');
-                this.utilsService.showToast({message: 'No se pudieron cargar las opciones del tutorial'});
+                this.errorService.manageHttpError(err, 'No se pudieron cargar las opciones del tutorial');
             }
         );
         await this.utilsService.disabledMenu();
@@ -52,7 +53,6 @@ export class HomeScreenPage implements OnInit {
      }
     // Funcion cuando el slide carga
     slidesLoaded(event: any) {
-        //console.dir(event);
         event.target.lockSwipeToPrev(true);
     }
     //Funcion navegar hacia pagina de Login

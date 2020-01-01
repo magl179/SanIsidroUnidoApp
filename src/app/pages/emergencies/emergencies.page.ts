@@ -13,7 +13,6 @@ export class EmergenciesPage implements OnInit {
     }
     
     openSearchModal(){
-    console.log('open modal');
     }
 
 }

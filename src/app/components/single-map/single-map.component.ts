@@ -44,9 +44,6 @@ export class SingleMapComponent implements OnInit, AfterViewInit {
         // this.currentCoordinate = await this.localizationService.getCoordinates();
         this.currentCoordinate.latitude = this.latitude;
         this.currentCoordinate.longitude = this.longitude;
-        console.log('inputs coordinates', this.currentCoordinate)
-        
-        console.log('single map current coordinates despues')
         if (this.latitude && this.longitude) {
             this.sendMarkerCoordinate();
         }
@@ -71,7 +68,6 @@ export class SingleMapComponent implements OnInit, AfterViewInit {
         await this.map.on('load', (e: any) => {
             L.control.scale().addTo(this.map);
             this.mapIsLoaded = true;
-            console.log('mapa single map cargado')
         });
         this.map.setView([this.latitude || -0.2188216, this.longitude || -78.5135489], this.zoomMap);
 
@@ -106,7 +102,6 @@ export class SingleMapComponent implements OnInit, AfterViewInit {
         mainMarker.bindPopup('Mi Ubicación').openPopup();
 
         this.map.addLayer(mainMarker);
-        console.log('agregado capa marcador single map')
     }
 
     // Cuando se lance el evento click en la plantilla llamaremos a este método

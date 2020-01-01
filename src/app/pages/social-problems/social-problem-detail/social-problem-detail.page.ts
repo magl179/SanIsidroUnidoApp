@@ -11,6 +11,8 @@ import { checkLikePost } from 'src/app/helpers/user-helper';
 import { mapSocialProblem } from "src/app/helpers/utils";
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from "src/app/services/events.service";
+import { MessagesService } from 'src/app/services/messages.service';
+import { ErrorService } from 'src/app/services/error.service';
 
 @Component({
     selector: 'app-social-problem-detail',
@@ -29,11 +31,12 @@ export class SocialProblemDetailPage implements OnInit {
 
     constructor(
         private activatedRoute: ActivatedRoute,
-        private router: Router,
+        private errorService: ErrorService,
         private postService: PostsService,
         public utilsService: UtilsService,
         private events_app: EventsService,
         private modalCtrl: ModalController,
+        private messagesService: MessagesService,
         private authService: AuthService) {
        
     }
@@ -47,7 +50,7 @@ export class SocialProblemDetailPage implements OnInit {
                 this.AuthUser = token_decoded.user;
             }
         }, (err: HttpErrorResponse) => {
-            console.log('Error al traer los datos del usuario autenticado');
+            this.messagesService.showError("Ocurrio un error al traer los datos del usuario autenticado'");
         });
         this.getSocialProblem();
 
@@ -74,11 +77,7 @@ export class SocialProblemDetailPage implements OnInit {
                 this.socialProblem.postLiked = checkLikePost(this.socialProblem.details, this.AuthUser);
             }
         }, (err: HttpErrorResponse) => {
-            if (err.error instanceof Error) {
-                console.log("Client-side error", err);
-            } else {
-                console.log("Server-side error", err);
-            }
+            this.errorService.manageHttpError(err, 'Ocurrio un error al traer el detalle del problema social ');
         });
     }
 
@@ -102,7 +101,7 @@ export class SocialProblemDetailPage implements OnInit {
                 this.socialProblem.postLiked = false;
                 this.emitLikeEvent(this.socialProblem.id);
             }, err => {
-                this.utilsService.showToast({ message: 'El like no se pudo guardar' });
+                this.errorService.manageHttpError(err, 'El me gusta no pudo ser borrado');
             });
         } else {
             const detailInfo = {
@@ -114,7 +113,7 @@ export class SocialProblemDetailPage implements OnInit {
                 this.socialProblem.postLiked = true;
                 this.emitLikeEvent(this.socialProblem.id);
             }, err => {
-                this.utilsService.showToast({ message: 'El like no pudo guardarse' });
+                this.errorService.manageHttpError(err, 'El me gusta no pudo ser guardado');
             });
         }
     }

@@ -10,6 +10,7 @@ import { ModalController } from "@ionic/angular";
 import { ImageDetailPage } from 'src/app/modals/image_detail/image_detail.page';
 import { mapEmergency } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ErrorService } from 'src/app/services/error.service';
 
 @Component({
     selector: 'app-emergency-detail',
@@ -26,7 +27,7 @@ export class EmergencyDetailPage implements OnInit {
         public utilsService: UtilsService,
         private postsService: PostsService,
         private modalCtrl: ModalController,
-        private networkService: NetworkService,
+        private errorService: ErrorService,
         private authService: AuthService) { }
 
     ngOnInit() {
@@ -57,11 +58,7 @@ export class EmergencyDetailPage implements OnInit {
         ).subscribe((res: IRespuestaApiSIUSingle) => {
             this.emergency = res.data;
         },(err: HttpErrorResponse) => {
-            if (err.error instanceof Error) {
-                console.log("Client-side error", err);
-            } else {
-                console.log("Server-side error", err);
-            }
+            this.errorService.manageHttpError(err, 'Ocurrio un error al traer el detalle de la emergencia');
         });
     }
 

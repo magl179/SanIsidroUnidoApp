@@ -10,6 +10,8 @@ import { IDeviceUser } from 'src/app/interfaces/models';
 import { Device } from '@ionic-native/device/ngx';
 import { INotiPostOpen } from "src/app/interfaces/models";
 import { CONFIG } from 'src/config/config';
+import { MessagesService } from './messages.service';
+import { ErrorService } from './error.service';
 
 
 const USER_DEVICE_DEFAULT: IDeviceUser = {
@@ -34,7 +36,9 @@ export class NotificationsService {
         private device: Device,
         private oneSignal: OneSignal,
         private platform: Platform,
+        private errorService: ErrorService,
         private navCtrl: NavController,
+        private messageService: MessagesService,
         private userService: UserService,
         private authService: AuthService,
         private utilsService: UtilsService
@@ -94,10 +98,9 @@ export class NotificationsService {
             };
             this.userService.sendRequestAddUserDevice(data)
                 .subscribe(async (res: any) => {
-                    this.utilsService.showToast({ message: 'Dispositivo Añadido Correctamente' });
+                    this.messageService.showSuccess('Dispositivo Añadido Correctamente');
                 }, (err: any) => {
-                    this.utilsService.showToast({ message: 'Ocurrio un error al añadir el dispositivo' });
-                    console.log('Ocurrio un error al añadir el dispositivo', err);
+                    this.errorService.manageHttpError(err, 'Ocurrio un error al añadir el dispositivo');
                 });
         }
     }

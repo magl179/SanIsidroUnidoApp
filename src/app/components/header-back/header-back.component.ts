@@ -60,7 +60,6 @@ export class HeaderBackComponent implements OnInit {
             icon: 'close',
             role: 'cancel',
             handler: () => {
-              console.log('Cancel clicked');
             }
         }
     }

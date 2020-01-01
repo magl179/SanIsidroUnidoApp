@@ -8,6 +8,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from 'src/app/services/auth.service';
 import { ITokenDecoded } from 'src/app/interfaces/models';
 import { IPost } from 'src/app/interfaces/models';
+import { ErrorService } from '../../../services/error.service';
 
 @Component({
     selector: 'app-search-posts',
@@ -33,7 +34,8 @@ export class SearchPostsPage implements OnInit {
         private activatedRoute: ActivatedRoute,
         private authService: AuthService,
         private postsService: PostsService,
-        private navCtrl: NavController
+        private navCtrl: NavController,
+        private errorService: ErrorService,
     ) {
     }
 
@@ -85,9 +87,6 @@ export class SearchPostsPage implements OnInit {
             }
         });
 
-
-
-
         this.getValueObservable().pipe(
             map(search_term => search_term),
             debounceTime(1000),
@@ -131,11 +130,7 @@ export class SearchPostsPage implements OnInit {
             }, (err: HttpErrorResponse) => {
                 this.itemsSearchFound = [];
                 this.requestStatus = 'fails';
-                if (err.error instanceof Error) {
-                    console.log("Client-side error", err);
-                } else {
-                    console.log("Server-side error", err);
-                }
+                this.errorService.manageHttpError(err, 'Ocurrio un error al realizar la búsqueda');
             });
 
         });

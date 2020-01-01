@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UtilsService } from 'src/app/services/utils.service';
 import { PostsService } from 'src/app/services/posts.service';
@@ -12,6 +12,7 @@ import { checkLikePost } from "src/app/helpers/user-helper";
 import { mapEvent } from "src/app//helpers/utils";
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from 'src/app/services/events.service';
+import { ErrorService } from 'src/app/services/error.service';
 
 
 @Component({
@@ -32,8 +33,10 @@ export class EventDetailPage implements OnInit {
         private utilsService: UtilsService,
         private postService: PostsService,
         private events_app: EventsService,
+        private errorService: ErrorService,
         private modalCtrl: ModalController,
-        private authService: AuthService) { }
+        private authService: AuthService) { 
+        }
 
     ngOnInit() {
         this.id = this.route.snapshot.paramMap.get('id');
@@ -92,7 +95,7 @@ export class EventDetailPage implements OnInit {
                 this.event.postAssistance = false;
                 this.emitAssistanceEvent(this.event.id);
             }, err => {
-                this.utilsService.showToast({message: 'La asistencia no ha podido ser eliminada'});
+                this.errorService.manageHttpError(err,'No se pudo borrar su asistencia' );
             });
         } else {
             const detailInfo = {
@@ -104,7 +107,7 @@ export class EventDetailPage implements OnInit {
                 this.event.postAssistance = true;
                 this.emitAssistanceEvent(this.event.id);
             }, err => {
-                this.utilsService.showToast({message: 'No se pudo guardar la asistencia'});
+                this.errorService.manageHttpError(err,'No se pudo guardar su asistencia' );
             });
         }
     }

@@ -10,6 +10,7 @@ import { tokenIsExpired } from 'src/app/helpers/auth-helper';
 import { IRespuestaApiSIUSingle } from "../interfaces/models";
 import { UtilsService } from './utils.service';
 import { CONFIG } from 'src/config/config';
+import { MessagesService } from './messages.service';
 
 const TOKEN_ITEM_NAME = "accessToken";
 const USER_ITEM_NAME = "currentUser";
@@ -28,7 +29,7 @@ export class AuthService {
         private storage: Storage,
         private navCtrl: NavController,
         private httpRequest: HttpRequestService,
-        private platform: Platform,
+        private messageService: MessagesService,
         private utilsService: UtilsService
     ) {
 
@@ -81,7 +82,7 @@ export class AuthService {
     async logout(message = 'Tu sesión expiro, inicia sesión por favor') {
         this.cleanLocalStorage();
         this.cleanAuthInfo();
-        await this.utilsService.showToast({ message });
+        this.messageService.showInfo(message);
         this.navCtrl.navigateRoot('/login');
     }
     //VERIFICAR SI SE DEBE CHECKEAR VALIDEZ TOKEN

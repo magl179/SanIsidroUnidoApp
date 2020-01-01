@@ -6,6 +6,7 @@ import { Platform } from '@ionic/angular';
 import { UtilsService } from './utils.service';
 import { ISimpleCoordinates } from 'src/app/interfaces/models';
 import { throwError } from 'rxjs';
+import { MessagesService } from './messages.service';
 
 @Injectable({
     providedIn: 'root'
@@ -22,7 +23,8 @@ export class LocalizationService {
         private androidPermissions: AndroidPermissions,
         private locationAccuracy: LocationAccuracy,
         private utilsService: UtilsService,
-        private platform: Platform
+        private platform: Platform,
+        private messageService: MessagesService,
     ) { }
 
     getPositionWeb() {
@@ -93,8 +95,7 @@ export class LocalizationService {
                     // console.log('pedir encender gps  en solicitar permisos gps');
                     return await this.askTurnOnGPS();
                 } else {
-                    // console.log('verificar permisos gps  en solicitar permisos gps' );
-                    this.utilsService.showToast({ message: 'Por favor habilita el acceso de la aplicación a la geolocalización' });
+                    this.messageService.showInfo("Por favor habilita el acceso de la aplicación a la geolocalización");
                     throwError('Por favor habilita el acceso de la aplicación a la geolocalización');
                 }
             }).catch(err => {

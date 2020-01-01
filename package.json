@@ -71,6 +71,7 @@
         "leaflet-routing-machine": "^3.2.12",
         "leaflet-search": "^2.9.8",
         "ng-fallimg": "0.0.1",
+        "ngx-toastr": "^10.1.0",
         "onesignal-cordova-plugin": "2.8.1",
         "rxjs": "~6.5.1",
         "tslib": "^1.9.0",

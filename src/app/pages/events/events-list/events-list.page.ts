@@ -10,6 +10,7 @@ import { checkLikePost } from 'src/app/helpers/user-helper';
 import { mapEvent, getImagesPost } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from "src/app/services/events.service";
+import { ErrorService } from 'src/app/services/error.service';
 
 @Component({
     selector: 'app-events-list',
@@ -28,7 +29,7 @@ export class EventsListPage implements OnInit, OnDestroy {
         private utilsService: UtilsService,
         private postsService: PostsService,
         private authService: AuthService,
-        private modalCtrl: ModalController,
+        private errorService: ErrorService,
     ) {
     }
 
@@ -54,7 +55,6 @@ export class EventsListPage implements OnInit, OnDestroy {
             return event;
         });
         this.eventsList = [...newEvents];
-        // this.evens = [...this.socialProblemsList];
     }
 
     ngOnDestroy() { }
@@ -70,8 +70,7 @@ export class EventsListPage implements OnInit, OnDestroy {
                     }
                 });
             }, err => {
-                console.log('detalle no se pudo eliminar', err);
-                this.utilsService.showToast({message: 'La asistencia no pudo ser eliminada'});
+                this.errorService.manageHttpError(err,'No se pudo borrar su asistencia' );
             });
         } else {
             const detailInfo = {
@@ -86,8 +85,7 @@ export class EventsListPage implements OnInit, OnDestroy {
                     }
                 });
             }, err => {
-                console.log('detalle no se pudo crear', err);
-                this.utilsService.showToast({message: 'No se pudo crear la asistencia'});
+                this.errorService.manageHttpError(err,'No se pudo guardar su asistencia' );
             });
         }
     }

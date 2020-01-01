@@ -6,6 +6,8 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { IRespuestaApiSIUSingle } from "src/app/interfaces/models";
 import { decodeToken } from 'src/app/helpers/auth-helper';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ErrorService } from 'src/app/services/error.service';
+import { MessagesService } from 'src/app/services/messages.service';
 
 @Component({
     selector: 'app-request-membership',
@@ -20,7 +22,9 @@ export class RequestMembershipPage implements OnInit {
         private modalCtrl: ModalController,
         private userService: UserService,
         private authService: AuthService,
-        private utilsService: UtilsService
+        private utilsService: UtilsService,
+        private errorService: ErrorService,
+        private messageService: MessagesService,
     ) { }
 
     ngOnInit() {
@@ -45,14 +49,9 @@ export class RequestMembershipPage implements OnInit {
             const token_decoded = decodeToken(token);
             this.authService.saveUserInfo(token, token_decoded);
             this.authService.saveLocalStorageInfo(token, token_decoded);
-            this.utilsService.showToast({message: 'Solicitud Enviada Correctamente'});
+            this.messageService.showSuccess("Solicitud Enviada Correctamente");
         },(err: HttpErrorResponse) => {
-            if (err.error instanceof Error) {
-                console.log("Client-side error", err);
-            } else {
-                console.log("Server-side error", err);
-            }
-            this.utilsService.showToast({message: 'La solicitud no ha podido ser enviada'});
+            this.errorService.manageHttpError(err, 'La solicitud no ha podido ser enviada');
         });
     }
 

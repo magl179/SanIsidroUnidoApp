@@ -28,7 +28,6 @@ export class AboutPage implements OnInit {
         this.notiService.getUserDevice().subscribe(userdevice => {
             if(userdevice){
                 this.CurrentUserDevice = userdevice;
-                console.log('current user device about', this.CurrentUserDevice)
             }
         });
         this.networkService.getNetworkStatus().subscribe((connected: boolean) => {

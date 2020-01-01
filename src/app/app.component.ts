@@ -13,6 +13,7 @@ import { LocalDataService } from './services/local-data.service';
 import { mapUser } from "./helpers/utils";
 import { map} from 'rxjs/operators';
 import { NavigationService } from './services/navigation.service';
+import { MessagesService } from './services/messages.service';
 
 @Component({
     selector: 'app-root',
@@ -39,7 +40,8 @@ export class AppComponent implements OnInit {
         private navigationService: NavigationService,
         private menuCtrl: MenuController,
         private pushNotificationService: NotificationsService,
-        private networkService: NetworkService
+        private networkService: NetworkService,
+        private messageService: MessagesService,
     ) {
         this.initializeApp();
     }
@@ -55,7 +57,6 @@ export class AppComponent implements OnInit {
     initializeApp() {
         //Execute all Code Here
         this.platform.ready().then(async () => {
-            // console.log('platform ready');
             await this.checkInitialStateNetwork();
             if (this.platform.is('cordova')) {
                 this.statusBar.styleDefault();
@@ -81,7 +82,6 @@ export class AppComponent implements OnInit {
                 return token_decoded;
             })
         ).subscribe(token_decoded => {
-            // console.log('subscribe app to server');
             if (token_decoded) {
                 this.sessionAuth = token_decoded;
                 this.authService.checkValidToken();
@@ -114,13 +114,11 @@ export class AppComponent implements OnInit {
                     role: 'cancel',
                     cssClass: 'cancel_button',
                     handler: (blah) => {
-                        console.log('Confirm Cancel: blah');
                     }
                 }, {
                     text: 'Cerrar Sesión',
                     cssClass: 'confirm_button',
                     handler: async () => {
-                        console.log('Confirm Okay');
                         await this.authService.logout('Has cerrado sesión correctamente');
                         await this.menuCtrl.close();
                     }
@@ -135,7 +133,7 @@ export class AppComponent implements OnInit {
         this.menuComponents[component_name][index].open = !this.menuComponents[component_name][index].open;
         if (this.automaticClose && this.menuComponents[component_name][index].open) {
             this.menuComponents[component_name]
-                .filter((item, itemIndex) => {
+                .filter((item: any, itemIndex: number) => {
                     if (hasChild) {
                         return itemIndex !== index && item.children.length > 0;
                     } else {
@@ -150,7 +148,7 @@ export class AppComponent implements OnInit {
         this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
             this.isConnected = connected;
             if (!this.isConnected) {
-                this.utilsService.showToast({message: 'Por favor enciende tu conexión a Internet'});
+                this.messageService.showInfo('Por favor enciende tu conexión a Internet');
             }
         });
     }

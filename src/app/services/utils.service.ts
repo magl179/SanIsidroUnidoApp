@@ -31,7 +31,6 @@ export class UtilsService implements OnInit {
         if (this.platform.is('cordova')) {
             this.photoViewer.show(url, title, { share });
         } else {
-            // this.showToast({ message: 'No se pudo abrir la imagen completa' });
             this.openInBrowser(`${url}`);
         }
     }

@@ -53,7 +53,6 @@ export class PublicServiceDetailPage implements OnInit {
                 return res;
             }),
             finalize(() => {
-                console.log('servicio publico cargado')
                 this.publicServiceLoaded = true;
             })
         ).subscribe((res: IRespuestaApiSIUSingle) => {

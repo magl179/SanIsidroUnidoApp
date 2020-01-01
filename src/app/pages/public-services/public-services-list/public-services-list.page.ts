@@ -8,6 +8,7 @@ import { IRespuestaApiSIU } from "src/app/interfaces/models";
 import { getRandomColor } from 'src/app/helpers/utils';
 import { PublicService } from 'src/app/services/public.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ErrorService } from 'src/app/services/error.service';
 
 @Component({
     selector: 'siu-public-services-list',
@@ -30,7 +31,7 @@ export class PublicServicesListPage implements OnInit {
         private utilsService: UtilsService,
         private publicService: PublicService,
         private navCtrl: NavController,
-        private router: Router,
+        private errorService: ErrorService,
         private modalCtrl: ModalController
     ) { 
      
@@ -56,7 +57,7 @@ export class PublicServicesListPage implements OnInit {
         })).subscribe((response: IRespuestaApiSIU) => {
             this.publicServices = response.data;
         }, (err: any) => {
-                console.log('Servicios Publicos', err);
+            this.errorService.manageHttpError(err, 'Ocurrio un error al cargar el listado de serviciós públicos')
         });
     }
 
@@ -71,15 +72,11 @@ export class PublicServicesListPage implements OnInit {
                 }
             });
             await modal.present();    
-            const { data } = await modal.onDidDismiss();    
-            // console.log('Retorno de Datos del Modal: ', data);
+            const { data } = await modal.onDidDismiss();
         }
 
     }
 
-    async showPublicService(indice) {
-        await this.utilsService.showToast({message: `Mostrar Servicio Público con el ID: ${indice}`});
-    }
 
     goToDetail(id: number) {
         const url = `/public-services/list/${this.category}/${id}`;

@@ -76,7 +76,6 @@ export class SimpleRoutingMapComponent implements OnInit {
         });
         // Agregar Evento al Mapa cuando esta cargado
         this.map.on('load', (e: any) => {
-            // console.log('Simple coordinkate map loaded')
             this.mapIsLoaded = true;
             // Invalidar Tamanio
             this.map.invalidateSize();
