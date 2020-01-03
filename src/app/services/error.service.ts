@@ -1,8 +1,8 @@
 import { Injectable, ErrorHandler, Injector } from "@angular/core";
 import { HttpErrorResponse } from "@angular/common/http";
 import { ToastController } from "@ionic/angular";
-import { ToastOptions } from '@ionic/core';
 import { MessagesService } from './messages.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: "root"
@@ -35,6 +35,12 @@ export class ErrorService {
 
   async manageHttpError(httpError: HttpErrorResponse, defaultMessage: string){
     const online = navigator.onLine;
+
+    // if(!environment.production){
+    //     console.log('Error HTTP: ', httpError);
+    // }
+    console.log('Error HTTP: ', httpError);
+
     if (!online) {
       // No Internet connection
       console.log("No hay conexión a Internet");
