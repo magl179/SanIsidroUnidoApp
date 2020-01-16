@@ -8,6 +8,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from 'src/app/services/auth.service';
 import { ITokenDecoded } from 'src/app/interfaces/models';
 import { IPost } from 'src/app/interfaces/models';
+import { ErrorService } from '../../../services/error.service';
 
 @Component({
     selector: 'app-search-posts',
@@ -33,7 +34,8 @@ export class SearchPostsPage implements OnInit {
         private activatedRoute: ActivatedRoute,
         private authService: AuthService,
         private postsService: PostsService,
-        private navCtrl: NavController
+        private navCtrl: NavController,
+        private errorService: ErrorService,
     ) {
     }
 
@@ -50,8 +52,6 @@ export class SearchPostsPage implements OnInit {
                 urlRedirect = `${this.searchRouteDetail}/${id}`;//id
                 break;
         }
-        console.log('redirectWith', this.redirectWith);
-        console.log('urlRedirect', urlRedirect);
         this.navCtrl.navigateForward(urlRedirect);
 
     }
@@ -65,7 +65,6 @@ export class SearchPostsPage implements OnInit {
     }
 
     execSearchPosts(event: any) {
-        console.log('event search', event);
         this.valueToSearch.next(event.detail.value);
     }
 
@@ -77,8 +76,6 @@ export class SearchPostsPage implements OnInit {
         this.searchRouteDetail = (routeData.searchRouteDetail) ? routeData.searchRouteDetail : '';
         this.includeUserFilter = (routeData.includeUserFilter) ? (routeData.includeUserFilter) : false;
         this.redirectWith = (routeData.redirectWith) ? (routeData.redirectWith) : false;
-        console.log('params', this.searchSlug);
-
     }
 
     ngOnInit() {
@@ -90,9 +87,6 @@ export class SearchPostsPage implements OnInit {
             }
         });
 
-
-
-
         this.getValueObservable().pipe(
             map(search_term => search_term),
             debounceTime(1000),
@@ -101,11 +95,9 @@ export class SearchPostsPage implements OnInit {
                 this.searchingPosts = false;
             }),
         ).subscribe(async (value: any) => {
-            console.log('value', value);
             this.searchingPosts = true;
             if (value.length === 0) {
                 this.searchingPosts = false;
-                console.log('No buscar valor vacio');
                 this.itemsSearchFound = [];
                 return;
             }
@@ -113,7 +105,6 @@ export class SearchPostsPage implements OnInit {
             this.searchingPosts = true;
             this.requestStatus = '';
             let searchParams = {};
-            console.log('includeUserFilter', this.includeUserFilter);
             if (this.includeUserFilter) {
                 searchParams = {
                     'filter[category]': this.searchSlug,
@@ -121,7 +112,6 @@ export class SearchPostsPage implements OnInit {
                     'filter[title]': value
                 }
             } else {
-                console.log('include user filter');
                 searchParams = {
                     'filter[category]': this.searchSlug,
                     'filter[title]': value
@@ -132,22 +122,15 @@ export class SearchPostsPage implements OnInit {
                     this.searchingPosts = false;
                 })
             ).subscribe((res: any) => {
-                console.log('events search', res);
                 this.itemsSearchFound = res.data;
                 this.requestStatus = 'success';
                 if (res.data.length === 0) {
-                    console.log('No hay coincidencias');
                 } else {
-                    console.log(`Hay ${this.itemsSearchFound.length} coincidencias`);
                 }
             }, (err: HttpErrorResponse) => {
                 this.itemsSearchFound = [];
                 this.requestStatus = 'fails';
-                if (err.error instanceof Error) {
-                    console.log("Client-side error", err);
-                } else {
-                    console.log("Server-side error", err);
-                }
+                this.errorService.manageHttpError(err, 'Ocurrio un error al realizar la búsqueda');
             });
 
         });

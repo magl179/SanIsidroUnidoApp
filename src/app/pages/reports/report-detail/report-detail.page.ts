@@ -65,7 +65,6 @@ export class ReportDetailPage implements OnInit {
     }
 
     seeImageDetail(image: string) {
-        console.log('see image', image)
         this.utilsService.seeImageDetail(image, 'Imagen Evento');
     }
 

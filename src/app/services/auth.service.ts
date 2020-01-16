@@ -10,6 +10,7 @@ import { tokenIsExpired } from 'src/app/helpers/auth-helper';
 import { IRespuestaApiSIUSingle } from "../interfaces/models";
 import { UtilsService } from './utils.service';
 import { CONFIG } from 'src/config/config';
+import { MessagesService } from './messages.service';
 
 const TOKEN_ITEM_NAME = "accessToken";
 const USER_ITEM_NAME = "currentUser";
@@ -28,7 +29,7 @@ export class AuthService {
         private storage: Storage,
         private navCtrl: NavController,
         private httpRequest: HttpRequestService,
-        private platform: Platform,
+        private messageService: MessagesService,
         private utilsService: UtilsService
     ) {
 
@@ -81,7 +82,7 @@ export class AuthService {
     async logout(message = 'Tu sesión expiro, inicia sesión por favor') {
         this.cleanLocalStorage();
         this.cleanAuthInfo();
-        await this.utilsService.showToast({ message });
+        this.messageService.showInfo(message);
         this.navCtrl.navigateRoot('/login');
     }
     //VERIFICAR SI SE DEBE CHECKEAR VALIDEZ TOKEN
@@ -96,23 +97,18 @@ export class AuthService {
                             await this.logout();
                             return;
                         } else {
-                            console.log('Token Válido');
                             return;
                         }
                     } else {
-                        console.log('Error al Validar el Token en el servidor', res);
                         return;
                     }
                 }, err => {
-                    console.log('Error al Validar el Token en el servidor', err);
                     return;
                 });
             } else {
-                console.log('Token no expirado');
                 return;
             }
         } else {
-            console.log('No existe token');
             return;
         }
     }
@@ -130,12 +126,10 @@ export class AuthService {
         this.sessionAuthUserSubject.next(token_decoded);
     }
     async saveLocalStorageInfo(token_encoded: any, token_decoded: any) {
-        // console.log('save local storage info called', { a: token_encoded, b: token_decoded })
         this.storage.set(TOKEN_ITEM_NAME, token_encoded);
         this.storage.set(USER_ITEM_NAME, token_decoded);
         setTimeout(() => {
             this.storage.get(USER_ITEM_NAME).then(token_decoded => {
-                // console.log('user storage save local storage info', token_decoded)
             });
         }, 500);
     }

@@ -124,7 +124,6 @@ export class LoginPage implements OnInit {
                     social_id: user.social_id
                 };
                 this.authService.login(loginData).subscribe(async res => {
-                    console.log('Login First Response', res);
                     await this.manageLogin({ social_id, email, provider: 'google' }, res);
                 }, (err: HttpErrorResponse) => {
                     this.errorService.manageHttpError(err, 'Ocurrio un error al conectar con Google');

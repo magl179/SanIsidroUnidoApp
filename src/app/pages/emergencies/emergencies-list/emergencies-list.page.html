@@ -6,24 +6,24 @@
     <!-- Filtro por Estado Atención -->
     <ion-segment value="" (ionChange)="segmentChanged($event)">
         <ion-segment-button value="">
-            <ion-icon color="secondary" name="document"></ion-icon>
+            <ion-icon color="blue-logo" name="document"></ion-icon>
             <ion-label>Todos</ion-label>
         </ion-segment-button>
         <ion-segment-button value="1">
-            <ion-icon color="success" name="checkbox"></ion-icon>
+            <ion-icon color="green-logo" name="checkbox"></ion-icon>
             <ion-label>Atendidos</ion-label>
         </ion-segment-button>
         <ion-segment-button value="0">
-            <ion-icon color="danger" name="clock"></ion-icon>
+            <ion-icon color="red-logo" name="clock"></ion-icon>
             <ion-label>Pendientes</ion-label>
         </ion-segment-button>
     </ion-segment>
     <!-- Refresher de los Datos -->
-    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <!-- <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content pullingIcon="arrow-dropdown" refreshingSpinner="circles"
             refreshingText="Cargando Publicaciones...">
         </ion-refresher-content>
-    </ion-refresher>
+    </ion-refresher> -->
     <!-- Mensaje cuando no hay datos disponibles-->
     <app-no-results-found class="ion-padding" *ngIf="showloading && emergenciesList.length === 0"
         message="No existen emergencias disponibles"></app-no-results-found>
@@ -59,7 +59,7 @@
                     {{emergency.description | truncate: 80}}
                 </p>
             </ion-card-content>
-            <ion-button expand="block" color="primary" (click)="postDetail(emergency.id)">Saber más</ion-button>
+            <ion-button expand="block" color="blue-logo" (click)="postDetail(emergency.id)">Saber más</ion-button>
         </ion-card>
         <!-- Posts Filtrados Sin Resultados -->
         <app-no-results-found class="ion-padding" *ngIf="emergenciesFiltered.length === 0"

@@ -10,6 +10,8 @@ import { IRespuestaApiSIUSingle } from "src/app/interfaces/models";
 import { decodeToken } from 'src/app/helpers/auth-helper';
 import { setInputFocus } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MessagesService } from 'src/app/services/messages.service';
+import { ErrorService } from '../../services/error.service';
 
 @Component({
     selector: 'app-change-password',
@@ -31,7 +33,8 @@ export class ChangePasswordPage implements OnInit {
         public formBuilder: FormBuilder,
         private authService: AuthService,
         private userService: UserService,
-        private utilsService: UtilsService,
+        private errorService: ErrorService,
+        private messageService: MessagesService,
         private localDataService: LocalDataService
     ) {
         this.createForm();
@@ -89,15 +92,9 @@ export class ChangePasswordPage implements OnInit {
             this.authService.saveUserInfo(token, token_decoded);
             this.authService.saveLocalStorageInfo(token, token_decoded);
             this.changePassForm.reset();
-            this.utilsService.showToast({message: 'Contraseña Actualizada Correctamente'});
-
+            this.messageService.showSuccess('Contraseña actualizado correctamente');
         },(err: HttpErrorResponse) => {
-            if (err.error instanceof Error) {
-                console.log("Client-side error", err);
-            } else {
-                console.log("Server-side error", err);
-            }
-            this.utilsService.showToast({message: 'La Contraseña no se ha podido actualizar'});
+            this.errorService.manageHttpError(err, 'La Contraseña no se ha podido actualizar')
         });
     }
 

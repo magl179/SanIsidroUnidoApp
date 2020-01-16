@@ -5,6 +5,7 @@ import { NavController } from '@ionic/angular';
 import { IRespuestaApiSIUPaginada } from 'src/app/interfaces/models';
 import { mapReport } from "src/app/helpers/utils";
 import { HttpErrorResponse } from '@angular/common/http';
+import { ErrorService } from 'src/app/services/error.service';
 
 @Component({
   selector: 'app-reports-list',
@@ -18,7 +19,8 @@ export class ReportsListPage implements OnInit, OnDestroy {
 
     constructor(
         private postsService: PostsService,
-        private navCtrl: NavController
+        private navCtrl: NavController,
+        private errorService: ErrorService,
   ) { }
     
     ngOnInit() { 
@@ -30,7 +32,7 @@ export class ReportsListPage implements OnInit, OnDestroy {
         this.navCtrl.navigateForward(`/reports/list/${id}`);
     }
 
-    ngOnDestroy() { console.warn('REPORTS PAGE DESTROYED') }
+    ngOnDestroy() { }
     ionViewWillLeave() { this.postsService.resetReportsPage(); }
     
     loadReports(event: any = null, first_loading=false) {
@@ -71,11 +73,7 @@ export class ReportsListPage implements OnInit, OnDestroy {
                 this.reportsList.push(...reportsList);
             }
         },(err: HttpErrorResponse) => {
-            if (err.error instanceof Error) {
-                console.log("Client-side error", err);
-            } else {
-                console.log("Server-side error", err);
-            }
+            this.errorService.manageHttpError(err, 'Ocurrio un error al traer el listado de informes');
         });
     }
 

@@ -4,3 +4,12 @@
 .preview-text{
     font-size: .9em !important;
 }
+.mat-horizontal-stepper-header {
+    &[ng-reflect-selected="true"].mat-step-header {
+      background-color: green;
+    }
+  &[ng-reflect-selected="false"].mat-step-header {
+      background-color: pink;
+    }
+  }
+  //rgba(0,0,0,.54)

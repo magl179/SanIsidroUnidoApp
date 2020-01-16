@@ -13,6 +13,8 @@ import { getUserDevice } from 'src/app/helpers/user-helper';
 import { finalize, map } from 'rxjs/operators';
 import { getImageURL, mapUser } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ErrorService } from 'src/app/services/error.service';
+import { MessagesService } from '../../services/messages.service';
 
 @Component({
     selector: 'app-user',
@@ -42,6 +44,8 @@ export class UserPage implements OnInit {
         private modalCtrl: ModalController,
         private userService: UserService,
         private utilsService: UtilsService,
+        private messageService: MessagesService,
+        private errorService: ErrorService,
         private notificationsService: NotificationsService
     ) {
     }
@@ -68,11 +72,7 @@ export class UserPage implements OnInit {
                         this.CurrentUserDevice = getUserDevice(this.UserDevices, userdevice);
                     }
                 }, (err: HttpErrorResponse) => {
-                    if (err.error instanceof Error) {
-                        console.log("Client-side error", err);
-                    } else {
-                        console.log("Server-side error", err);
-                    }
+                    this.errorService.manageHttpError(err, 'Ocurrio un error al obtener tus dispositivos asociados');
                 });
             }
         });
@@ -85,16 +85,11 @@ export class UserPage implements OnInit {
             })
         ).subscribe((res: IRespuestaApiSIU) => {
             if (res.data) {
-                console.log('res social profiles', res.data);
                 this.UserSocialProfiles = res.data;
                 
             }
         }, (err: HttpErrorResponse) => {
-            if (err.error instanceof Error) {
-                console.log("Client-side error", err);
-            } else {
-                console.log("Server-side error", err);
-            }
+            this.errorService.manageHttpError(err, 'Ocurrio un error al obtener tus perfiles sociales');
         });
     }
 
@@ -105,16 +100,11 @@ export class UserPage implements OnInit {
             })
         ).subscribe((res: IRespuestaApiSIU) => {
             if (res.data) {
-                console.log('res devices', res.data);
                 this.UserDevices = res.data;
                 
             }
         }, (err: HttpErrorResponse) => {
-            if (err.error instanceof Error) {
-                console.log("Client-side error", err);
-            } else {
-                console.log("Server-side error", err);
-            }
+            this.errorService.manageHttpError(err, 'Ocurrio un error al obtener la información de tus dispositivos');
         });
     }
 
@@ -169,28 +159,18 @@ export class UserPage implements OnInit {
     removeUserDevice(device_id: number) {
         this.userService.sendRequestDeleteUserDevice(device_id).subscribe(async (res: IRespuestaApiSIUSingle) => {
             this.getUserDevices();
-            this.utilsService.showToast({message: 'Dispositivo eliminado Correctamente'});
+            this.messageService.showSuccess("Dispositivo eliminado Correctamente");
         }, (err: HttpErrorResponse) => {
-            this.utilsService.showToast({message: 'Ocurrio un error al desconectar el dispositivo'});
-            if (err.error instanceof Error) {
-                console.log("Client-side error", err);
-            } else {
-                console.log("Server-side error", err);
-            }
+            this.errorService.manageHttpError(err, 'Ocurrio un error al desconectar el dispositivo');
         });
     }
 
     removeSocialProfileToUser(social_profile_id) {
         this.userService.sendRequestDeleteSocialProfile(social_profile_id).subscribe(async (res: IRespuestaApiSIUSingle) => {
             this.getUserSocialProfiles();
-            this.utilsService.showToast({message: 'Perfil Social fue desconectado correctamente'});
+            this.messageService.showSuccess("El Perfil Social fue desconectado correctamente");
         },(err: HttpErrorResponse) => {
-            this.utilsService.showToast({message: 'El Perfil Social no se pudo desconectar'});
-            if (err.error instanceof Error) {
-                console.log("Client-side error", err);
-            } else {
-                console.log("Server-side error", err);
-            }
+            this.errorService.manageHttpError(err, 'El Perfil Social no se pudo desconectar');
         });
     }
 

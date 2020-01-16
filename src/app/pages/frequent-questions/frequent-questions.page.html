@@ -3,7 +3,7 @@
 <ion-content padding>
     <ion-list>
         <div class="item_question" *ngFor="let question of frequentQuestions;let i = index;">
-              <ion-item color="primary" (click)="toggleSection(i,true)">
+              <ion-item color="blue-logo" (click)="toggleSection(i,true)">
                 <ion-label class="ion-text-wrap" slot="start">
                     {{question.title}}
                 </ion-label>

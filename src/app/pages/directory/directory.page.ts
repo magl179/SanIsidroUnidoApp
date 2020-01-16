@@ -5,13 +5,14 @@ import { finalize, take } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UtilsService } from 'src/app/services/utils.service';
 import { ErrorService } from 'src/app/services/error.service';
+import { MessagesService } from 'src/app/services/messages.service';
 
 @Component({
-    selector: 'app-directory-list',
-    templateUrl: './directory-list.page.html',
-    styleUrls: ['./directory-list.page.scss'],
+  selector: 'app-directory',
+  templateUrl: './directory.page.html',
+  styleUrls: ['./directory.page.scss'],
 })
-export class DirectoryListPage implements OnInit {
+export class DirectoryPage implements OnInit {
 
     directivesList: IDirective[] = [];
     loadDirectives = false;
@@ -19,6 +20,7 @@ export class DirectoryListPage implements OnInit {
     constructor(
         private directivesService: DirectivesService,
         private utilsService: UtilsService,
+        private messageService: MessagesService,
         private errorService: ErrorService
     ) { }
 
@@ -35,9 +37,11 @@ export class DirectoryListPage implements OnInit {
             })
         ).subscribe((response: IRespuestaApiSIU) => {
             this.directivesList = response.data;
-            // console.log('directives length', this.directivesList.length)
+            this.messageService.showSuccess('Datos traídos correctamente');
         }, (err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error al traer el listado de directivos');
         });
     }
+    
+
 }

@@ -49,7 +49,6 @@ export class SlideshowItemsComponent implements OnInit {
 
     // Funcion cuando el slide carga
     slidesLoaded(event: any) {
-        //console.dir(event);
         event.target.lockSwipeToPrev(true);
     }
 

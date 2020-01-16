@@ -10,6 +10,7 @@ import { checkLikePost } from 'src/app/helpers/user-helper';
 import { mapEvent, getImagesPost } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from "src/app/services/events.service";
+import { ErrorService } from 'src/app/services/error.service';
 
 @Component({
     selector: 'app-events-list',
@@ -28,9 +29,8 @@ export class EventsListPage implements OnInit, OnDestroy {
         private utilsService: UtilsService,
         private postsService: PostsService,
         private authService: AuthService,
-        private modalCtrl: ModalController,
+        private errorService: ErrorService,
     ) {
-        console.log('Constructor Eventos');
     }
 
     ngOnInit() {
@@ -48,11 +48,12 @@ export class EventsListPage implements OnInit, OnDestroy {
                 this.eventsList = [];
                 this.postsService.resetEventsPage();
             }
-            this.loadEvents();
+            return event;
         });
+        // this.eventsList = [...newEvents];
     }
 
-    ngOnDestroy() { console.warn('EVENTS PAGE DESTROYED') }
+    ngOnDestroy() { }
     ionViewWillEnter() { }
     ionViewWillLeave() { this.postsService.resetEventsPage(); }
 
@@ -65,8 +66,7 @@ export class EventsListPage implements OnInit, OnDestroy {
                     }
                 });
             }, err => {
-                console.log('detalle no se pudo eliminar', err);
-                this.utilsService.showToast({message: 'La asistencia no pudo ser eliminada'});
+                this.errorService.manageHttpError(err,'No se pudo borrar su asistencia' );
             });
         } else {
             const detailInfo = {
@@ -81,8 +81,7 @@ export class EventsListPage implements OnInit, OnDestroy {
                     }
                 });
             }, err => {
-                console.log('detalle no se pudo crear', err);
-                this.utilsService.showToast({message: 'No se pudo crear la asistencia'});
+                this.errorService.manageHttpError(err,'No se pudo guardar su asistencia' );
             });
         }
     }
@@ -118,7 +117,6 @@ export class EventsListPage implements OnInit, OnDestroy {
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let eventsApi = [];
             eventsApi = res.data;
-            // console.log('eventos ante subscribir', this.eventsList);
             if (eventsApi.length === 0) {
                 if (event) {
                     event.data.target.disabled = true;

@@ -16,6 +16,8 @@ const routes: Routes = [
     {
         path: 'directory', //Pantalla de Pàgina de Directorio Barrial
         loadChildren: './pages/directory/directory-list/directory-list.module#DirectoryListPageModule'
+        // path: 'directory',
+        // loadChildren: './pages/directory/directory.module#DirectoryPageModule'
     },
     {
         path: 'emergencies', //Pantalla de Pagina de Emergencias

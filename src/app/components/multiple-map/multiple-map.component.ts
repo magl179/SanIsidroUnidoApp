@@ -73,7 +73,7 @@ export class MultipleMapComponent implements OnInit, AfterViewInit {
         // Obtener marcadores
         this.mapMarkers = await this.mapService.getMarkers().toPromise();
         // Obtener Coordenadas
-        this.currentCoordinate = await this.localizationService.getCoordinate();
+        this.currentCoordinate = await this.localizationService.getCoordinates();
         // Inicializar el Mapa
         await this.initializeMap();
         //Mover Mapa con Dos Dedos

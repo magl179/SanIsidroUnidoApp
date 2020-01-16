@@ -5,7 +5,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { EmergenciesPage } from './emergencies-list.page';
+import { EmergenciesListPage } from './emergencies-list.page';
 import { SmComponentsModule } from "src/app/components/sm-components.module";
 import { PipesModule } from "src/app/pipes/pipes.module";
 import { FilterPage } from "src/app/modals/filter/filter.page";
@@ -18,7 +18,7 @@ import { DirectivesModule } from "src/app/directives/directives.module";
 const routes: Routes = [
   {
     path: '',
-    component: EmergenciesPage
+    component: EmergenciesListPage
   }
 ];
 
@@ -39,6 +39,6 @@ const routes: Routes = [
       SearchPageModule,
       NgFallimgModule
   ],
-  declarations: [EmergenciesPage]
+  declarations: [EmergenciesListPage]
 })
 export class EmergenciesListPageModule {}

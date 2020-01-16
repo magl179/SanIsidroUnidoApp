@@ -27,8 +27,8 @@ export class StrengthPassbarComponent implements OnInit {
     passText = '';
 
     constructor() {
-        console.log('score', this.score);
-        console.log('text', this.passText);
+        // console.log('score', this.score);
+        // console.log('text', this.passText);
     }
 
 

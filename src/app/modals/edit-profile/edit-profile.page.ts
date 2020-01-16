@@ -7,6 +7,8 @@ import { UserService } from 'src/app/services/user.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { decodeToken } from 'src/app/helpers/auth-helper';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ErrorService } from 'src/app/services/error.service';
+import { MessagesService } from 'src/app/services/messages.service';
 
 @Component({
     selector: 'modal-edit-profile',
@@ -25,6 +27,8 @@ export class EditProfilePage implements OnInit {
         public formBuilder: FormBuilder,
         private localDataService: LocalDataService,
         private userService: UserService,
+        private errorService: ErrorService,
+        private messageService: MessagesService,
         private utilsService: UtilsService) {
         this.createForm();
     }
@@ -51,14 +55,9 @@ export class EditProfilePage implements OnInit {
             const token_decoded = decodeToken(token);
             this.authService.saveUserInfo(token, token_decoded);
             this.authService.saveLocalStorageInfo(token, token_decoded);
-            this.utilsService.showToast({message: 'Datos Actualizados Correctamente'});
+            this.messageService.showSuccess('Tus datos fueron actualizados correctamente');
         },(err: HttpErrorResponse) => {
-            if (err.error instanceof Error) {
-                console.log("Client-side error", err);
-            } else {
-                console.log("Server-side error", err);
-            }
-            this.utilsService.showToast({message: 'Los datos no se pudieron actualizar'});
+            this.errorService.manageHttpError(err, 'Tus datos no se pudieron actualizar');
         });
     }
 

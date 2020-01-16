@@ -226,7 +226,7 @@ export const mapEvent = (event: any) => {
     if (event.range_date) {
         event.fulldate = formatEventRangeDate(event.range_date.start_date, event.range_date.end_date);
     }
-    console.log('evento retornado', event);
+    // console.log('evento retornado', event);
     return event;
 }
 

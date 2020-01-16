@@ -8,13 +8,14 @@ import { mapEmergency, setFilterKeys, filterDataInObject } from "src/app/helpers
 import { AuthService } from 'src/app/services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from "src/app/services/events.service";
+import { ErrorService } from 'src/app/services/error.service';
 
 @Component({
     selector: 'app-emergencies-list',
     templateUrl: './emergencies-list.page.html',
     styleUrls: ['./emergencies-list.page.scss'],
 })
-export class EmergenciesPage implements OnInit, OnDestroy {
+export class EmergenciesListPage implements OnInit, OnDestroy {
 
     AuthUser = null;
     showloading = true;    
@@ -38,6 +39,7 @@ export class EmergenciesPage implements OnInit, OnDestroy {
         private navCtrl: NavController,
         private authService: AuthService,
         private utilsService: UtilsService,
+        private errorService: ErrorService,
         private postsService: PostsService,
         private events_app: EventsService
     ) { }
@@ -56,7 +58,6 @@ export class EmergenciesPage implements OnInit, OnDestroy {
 
         this.events_app.emergenciesEmitter.subscribe((event_app: any) => {
             if (this.emergenciesList.length > 0) {
-                console.log('tengo datos cargados resetear a 0');
                 this.emergenciesList = [];
                 this.emergenciesFiltered = [];
                 this.postsService.resetEmergenciesPage();
@@ -65,7 +66,7 @@ export class EmergenciesPage implements OnInit, OnDestroy {
         })
     }
 
-    ngOnDestroy() { console.warn('emergencies PAGE DESTROYED') }
+    ngOnDestroy() { }
     ionViewWillEnter() { }
     ionViewWillLeave() { this.postsService.resetEmergenciesPage(); }
 
@@ -109,11 +110,7 @@ export class EmergenciesPage implements OnInit, OnDestroy {
                 this.emergenciesFiltered.push(...this.emergenciesList);
             }
         },(err: HttpErrorResponse) => {
-            if (err.error instanceof Error) {
-                console.log("Client-side error", err);
-            } else {
-                console.log("Server-side error", err);
-            }
+            this.errorService.manageHttpError(err, 'Ocurrio un error al traer el listado de emergencias');
         });
     }
 

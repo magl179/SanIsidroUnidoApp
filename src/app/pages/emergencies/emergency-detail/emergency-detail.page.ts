@@ -10,6 +10,7 @@ import { ModalController } from "@ionic/angular";
 import { ImageDetailPage } from 'src/app/modals/image_detail/image_detail.page';
 import { mapEmergency } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ErrorService } from 'src/app/services/error.service';
 
 @Component({
     selector: 'app-emergency-detail',
@@ -26,7 +27,7 @@ export class EmergencyDetailPage implements OnInit {
         public utilsService: UtilsService,
         private postsService: PostsService,
         private modalCtrl: ModalController,
-        private networkService: NetworkService,
+        private errorService: ErrorService,
         private authService: AuthService) { }
 
     ngOnInit() {
@@ -45,7 +46,6 @@ export class EmergencyDetailPage implements OnInit {
         this.postsService.getEmergency(+this.id).pipe(
             take(1),
             map((res: any) => {
-                // console.log('res map', res);
                 if (res && res.data) {
                     const emergency = res.data;
                     res.data = mapEmergency(emergency);
@@ -53,18 +53,12 @@ export class EmergencyDetailPage implements OnInit {
                 return res;
             }),
             finalize(() => {
-                // console.log('finalize loaded');
                 this.emergencyLoaded = true;
             })
         ).subscribe((res: IRespuestaApiSIUSingle) => {
-            console.log('Dato post subscribe', res.data);
             this.emergency = res.data;
         },(err: HttpErrorResponse) => {
-            if (err.error instanceof Error) {
-                console.log("Client-side error", err);
-            } else {
-                console.log("Server-side error", err);
-            }
+            this.errorService.manageHttpError(err, 'Ocurrio un error al traer el detalle de la emergencia');
         });
     }
 
@@ -83,7 +77,6 @@ export class EmergencyDetailPage implements OnInit {
     }
 
     seeImageDetail(image: string) {
-        console.log('see image', image)
         this.utilsService.seeImageDetail(image, 'Imagen Evento');
     }
 

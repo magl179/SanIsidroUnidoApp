@@ -13,6 +13,7 @@ import { EventsService } from "src/app/services/events.service";
 import { IRespuestaApiSIU } from "src/app/interfaces/models";
 import { CONFIG } from 'src/config/config';
 import { ErrorService } from 'src/app/services/error.service';
+import { MessagesService } from 'src/app/services/messages.service';
 
 @Component({
     selector: 'app-social-problem-create',
@@ -29,12 +30,14 @@ export class SocialProblemCreatePage implements OnInit {
         longitude: null,
         address: null
     };
+    // coordinates = n
     subcategories = [];
 
     constructor(
         private utilsService: UtilsService,
         private errorService: ErrorService,
         private mapService: MapService,
+        private messageService: MessagesService,
         public formBuilder: FormBuilder,
         private localizationService: LocalizationService,
         private localDataService: LocalDataService,
@@ -47,16 +50,16 @@ export class SocialProblemCreatePage implements OnInit {
     loadSubcategories() {
         this.postService.getSubcategoriesByCategory(CONFIG.SOCIAL_PROBLEMS_SLUG).subscribe(res => {
             this.subcategories = res.data;
-            console.log('subcategories', res.data);
         }, (err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error al cargar las categorias');
         });
     }
 
     async ngOnInit() {
-        console.warn('NG ON INIT SOCIAL PROBLEMS');
+        // const coordinates = await this.locationService.getCoordinates();
+
         this.loadSubcategories();
-        const coords = await this.localizationService.getCoordinate();
+        const coords: any = await this.localizationService.getCoordinates();
         this.socialProblemCoordinate.latitude = coords.latitude;
         this.socialProblemCoordinate.longitude = coords.longitude;
     }
@@ -83,13 +86,13 @@ export class SocialProblemCreatePage implements OnInit {
     async sendSocialProblem() {
         
         if (this.socialProblemForm.valid !== true) {
-            return await this.utilsService.showToast({message: 'Ingresa un titulo y una descripción'});
+            return this.messageService.showInfo("Ingresa un titulo y una descripción");
         }
         if (this.ubicationForm.valid !== true) {
-            return await this.utilsService.showToast({message: 'Ingresa una descripción de tu ubicación'});
+            return this.messageService.showInfo("Ingresa una descripción de tu ubicación");
         }
         if (this.socialProblemCoordinate.address === null || this.socialProblemCoordinate.address === null) {
-            return await this.utilsService.showToast({message: 'No se pudo obtener tu ubicación'});
+            return this.messageService.showInfo("No se pudo obtener tu ubicación");
         }
 
         const loadingReportSocialProblem = await this.utilsService.createBasicLoading('Enviando Reporte');
@@ -110,8 +113,8 @@ export class SocialProblemCreatePage implements OnInit {
                 loadingReportSocialProblem.dismiss()
             })
         ).subscribe(async (res: IRespuestaApiSIU) => {
-            await this.utilsService.showToast({message: "El Reporte fue enviado correctamente"});
-            this.events_app.resetSocialProblemEmmiter();
+            this.messageService.showSuccess("El Reporte fue enviado correctamente");
+            // this.events_app.resetSocialProblemEmmiter();
         }, (err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error al enviar tu reporte, intentalo más tarde');
         });
@@ -127,7 +130,6 @@ export class SocialProblemCreatePage implements OnInit {
     }
 
     updateMapCoordinate(event: any) {
-        console.log({ datosHijo: event });
         if (event.lat !== null && event.lng !== null) {
             this.socialProblemCoordinate.latitude = event.latitude;
             this.socialProblemCoordinate.longitude = event.longitude;

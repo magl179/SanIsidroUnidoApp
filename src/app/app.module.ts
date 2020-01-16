@@ -43,13 +43,18 @@ import { File } from '@ionic-native/file/ngx';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { DocumentViewer } from '@ionic-native/document-viewer/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
-//import { ErrorsHandler } from './helpers/error-handler';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
     declarations: [AppComponent],
     entryComponents: [PopNotificationsComponent, ShowListNotificationsPage, ImageDetailPage],
     imports: [
         BrowserModule,
+        ToastrModule.forRoot({
+            positionClass: 'toast-bottom-right',
+            preventDuplicates: true,
+            timeOut: 2500,
+        }),
         BrowserAnimationsModule,
         IonicModule.forRoot(),
         AppRoutingModule,

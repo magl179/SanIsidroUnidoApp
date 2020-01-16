@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { UserService } from 'src/app/services/user.service';
-import { UtilsService } from 'src/app/services/utils.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { decodeToken } from 'src/app/helpers/auth-helper';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ErrorService } from 'src/app/services/error.service';
+import { MessagesService } from 'src/app/services/messages.service';
 
 @Component({
     selector: 'app-change-profile-image',
@@ -17,8 +18,9 @@ export class ChangeProfileImagePage implements OnInit {
     constructor(
         private modalCtrl: ModalController,
         private userService: UserService,
-        private utilsService: UtilsService,
-        private authService: AuthService
+        private authService: AuthService,
+        private errorService: ErrorService,
+        private messageService: MessagesService,
     ) { }
 
     ngOnInit() {
@@ -39,14 +41,9 @@ export class ChangeProfileImagePage implements OnInit {
             const token_decoded = decodeToken(token);
             this.authService.saveUserInfo(token, token_decoded);
             this.authService.saveLocalStorageInfo(token, token_decoded);
-            this.utilsService.showToast({message: 'Imagen Actualizada Correctamente'});
+            this.messageService.showSuccess('Imagen Actualizada Correctamente');
         },(err: HttpErrorResponse) => {
-            if (err.error instanceof Error) {
-                console.log("Client-side error", err);
-            } else {
-                console.log("Server-side error", err);
-            }
-            this.utilsService.showToast({message: 'Imagen no ha podido ser actualizada'});
+            this.errorService.manageHttpError(err, 'Imagen no ha podido ser actualizada');
         });
     }
 

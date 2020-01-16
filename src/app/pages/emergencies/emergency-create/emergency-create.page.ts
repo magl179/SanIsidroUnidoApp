@@ -11,6 +11,7 @@ import { IRespuestaApiSIU } from "src/app/interfaces/models";
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from "src/app/services/events.service";
 import { ErrorService } from 'src/app/services/error.service';
+import { MessagesService } from 'src/app/services/messages.service';
 
 @Component({
     selector: 'app-emergency-create',
@@ -33,6 +34,7 @@ export class EmergencyCreatePage implements OnInit {
     constructor(
         private utilsService: UtilsService,
         private mapService: MapService,
+        private messageService: MessagesService,
         private errorService: ErrorService,
         public formBuilder: FormBuilder,
         private localizationService: LocalizationService,
@@ -44,7 +46,7 @@ export class EmergencyCreatePage implements OnInit {
     }
 
     async ngOnInit() {
-        const coords = await this.localizationService.getCoordinate();
+        const coords: any = await this.localizationService.getCoordinates();
         this.emergencyPostCoordinate.latitude = coords.latitude;
         this.emergencyPostCoordinate.longitude = coords.longitude;
     }
@@ -76,7 +78,6 @@ export class EmergencyCreatePage implements OnInit {
     }
 
     updateMapCoordinate(event: any) {
-        console.log({ datosHijo: event });
         if (event.lat !== null && event.lng !== null) {
             this.emergencyPostCoordinate.latitude = event.latitude;
             this.emergencyPostCoordinate.longitude = event.longitude;
@@ -97,16 +98,15 @@ export class EmergencyCreatePage implements OnInit {
     }
 
     async sendEmergencyReport() { 
+
         if (this.emergencyForm.valid !== true) {
-            return await this.utilsService.showToast({ message: 'Ingresa un titulo y una descripción'});
+            return this.messageService.showInfo("Ingresa un titulo y una descripción");
         }
-
         if (this.ubicationForm.valid !== true) {
-            return await this.utilsService.showToast({message: 'Ingresa una descripción de la ubicación'});
+            return this.messageService.showInfo("Ingresa una descripción de tu ubicación");
         }
-
         if (this.emergencyPostCoordinate.address === null || this.emergencyPostCoordinate.address === null) {
-            return await this.utilsService.showToast({message: 'No se pudo obtener tu ubicación'});
+            return this.messageService.showInfo("No se pudo obtener tu ubicación");
         }
 
         const loadingEmergencyReport = await this.utilsService.createBasicLoading('Enviando Reporte');
@@ -126,7 +126,7 @@ export class EmergencyCreatePage implements OnInit {
                 loadingEmergencyReport.dismiss()
             })
         ).subscribe(async (res: IRespuestaApiSIU) => {
-            await this.utilsService.showToast({message: "El Reporte fue enviado correctamente"});
+            this.messageService.showSuccess("El Reporte fue enviado correctamente");
             this.events_app.resetEmergenciesEmitter();
         }, (err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error al enviar tu reporte');

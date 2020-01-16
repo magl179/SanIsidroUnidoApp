@@ -3,23 +3,23 @@
 <ion-content padding style="position: relative;">
     <ion-segment value="" (ionChange)="segmentChanged($event)">
         <ion-segment-button value="">
-            <ion-icon color="secondary" name="document"></ion-icon>
+            <ion-icon color="blue-logo" name="document"></ion-icon>
             <ion-label>Todos</ion-label>
         </ion-segment-button>
         <ion-segment-button value="1">
-            <ion-icon color="success" name="checkbox"></ion-icon>
+            <ion-icon color="green-logo" name="checkbox"></ion-icon>
             <ion-label>Atendidos</ion-label>
         </ion-segment-button>
         <ion-segment-button value="0">
-            <ion-icon color="danger" name="clock"></ion-icon>
+            <ion-icon color="red-logo" name="clock"></ion-icon>
             <ion-label>Pendientes</ion-label>
         </ion-segment-button>
     </ion-segment>
-    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <!-- <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content pullingIcon="arrow-dropdown" refreshingSpinner="circles"
             refreshingText="Cargando Publicaciones...">
         </ion-refresher-content>
-    </ion-refresher>
+    </ion-refresher> -->
      <!-- Mensaje si datos no cargan o son tamaño 0 -->
      <app-no-results-found *ngIf="showLoading && socialProblemsList.length === 0"
      message="No hay problemas sociales disponibles"></app-no-results-found>
