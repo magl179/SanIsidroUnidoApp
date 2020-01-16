@@ -23,12 +23,10 @@ export class NetworkService {
             //Función si estamos en un dispositivo para subscribirnos a los 
             // eventos on connect y disconnect de la red de internet
             this.network.onConnect().subscribe(() => {
-                // console.log('network was connected :-)');
                 this.hasConnection.next(true);
                 return;
             });
             this.network.onDisconnect().subscribe(() => {
-                // console.log('network was disconnected :-(');
                 this.hasConnection.next(false);
                 return;
             });
@@ -43,9 +41,7 @@ export class NetworkService {
             this.online.subscribe((isOnline) => {
                 if (isOnline) {
                     this.hasConnection.next(true);
-                    // console.log('network was connected :-)');
                 } else {
-                    // console.log('network was disconnected :-(');
                     this.hasConnection.next(false);
                 }
             });
@@ -81,7 +77,6 @@ export class NetworkService {
                     return;
                 });            
         } catch (err) {
-            // console.log('err testNetworkConnection', err);
             this.hasConnection.next(false);
             return;
         }

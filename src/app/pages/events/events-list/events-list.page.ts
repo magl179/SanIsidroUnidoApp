@@ -19,7 +19,7 @@ import { ErrorService } from 'src/app/services/error.service';
 })
 export class EventsListPage implements OnInit, OnDestroy {
 
-    eventsLoaded = false;
+    showLoading = true;
     eventsList: IEvent[] = [];
     AuthUser = null;
 
@@ -41,20 +41,16 @@ export class EventsListPage implements OnInit, OnDestroy {
                 this.AuthUser = token_decoded.user;
             }
         });
-        this.loadEvents();
+        this.loadEvents(null,true);
         this.events_app.eventsEmitter.subscribe((event_app: any) => {
-            this.toggleAssistances(event_app.id)
-        });
-    }
-
-    toggleAssistances(id: number) {
-        const newEvents= this.eventsList.map((event: any) => {
-            if (event.id === id) {
-                event.postAssistance = !event.postAssistance;
+            if (this.eventsList.length > 0) {
+                // console.log('tengo datos cargados resetear a 0');
+                this.eventsList = [];
+                this.postsService.resetEventsPage();
             }
             return event;
         });
-        this.eventsList = [...newEvents];
+        // this.eventsList = [...newEvents];
     }
 
     ngOnDestroy() { }
@@ -101,8 +97,8 @@ export class EventsListPage implements OnInit, OnDestroy {
         await this.utilsService.shareSocial(sharePost);
     }
 
-    loadEvents(event?: any) {
-        this.eventsLoaded = false;
+    loadEvents(event: any = null, first_loading=false) {
+        
         this.postsService.getEvents().pipe(
             take(1),
             map((res: IRespuestaApiSIUPaginada) => {
@@ -114,7 +110,9 @@ export class EventsListPage implements OnInit, OnDestroy {
                 return res;
             }),
             finalize(() => {
-                this.eventsLoaded = true;
+                if(first_loading){
+                    this.showLoading = false;
+                }
             })
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let eventsApi = [];
@@ -138,8 +136,11 @@ export class EventsListPage implements OnInit, OnDestroy {
             if (event && event.type === 'refresher') {
                 this.eventsList.unshift(...eventsApi);
                 return;
-            }
-            this.eventsList.push(...eventsApi);
+            }else if(event && event.type == 'infinite_scroll'){
+                this.eventsList.push(...eventsApi);
+            }else{
+                this.eventsList.push(...eventsApi);
+            }         
         },
             (err: HttpErrorResponse) => {
                 if (err.error instanceof Error) {

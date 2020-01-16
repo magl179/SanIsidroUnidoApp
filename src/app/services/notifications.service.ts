@@ -49,7 +49,6 @@ export class NotificationsService {
     async initialConfig() {
         //Configurar Onesignal en un Dispositivo
         if (this.platform.is('cordova')) {
-            // console.log('Configurando OneSignal con San Isidro Unido App');
             //obtener el onesginal_id y el firebaseid
             const OneSignalID = environment.ONESIGNAL_ID;
             const firebaseID = environment.FIREBASE_APP_ID;
@@ -59,12 +58,12 @@ export class NotificationsService {
             this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.Notification);
             //Funcion hacer algo cuando se recibe una notificación
             this.oneSignal.handleNotificationReceived().subscribe((myNotification) => {
-                console.log('Una notificación fue recibida', myNotification);
+                //console.log('Una notificación fue recibida', myNotification);
                 this.manageNotificationReceived(myNotification);
             });
             //Funcion para hacer algo cuando una notificacion es recibida
             this.oneSignal.handleNotificationOpened().subscribe(async (myNotification) => {
-                console.log('Una notificación fue recibida y abierta', myNotification);
+                //console.log('Una notificación fue recibida y abierta', myNotification);
                 await this.manageNotificationOpened(myNotification.notification);
             });
             //Función acabar la configuración de Onesignal
@@ -157,20 +156,20 @@ export class NotificationsService {
                 console.warn('post catgory', post.category )
                 switch (post.category) {
                     case CONFIG.EMERGENCIES_SLUG: //caso posts emergencia creado
-                        await this.navCtrl.navigateForward(`/emergencies/detail/${post.id}`);
+                        this.navCtrl.navigateForward(`/emergencies/detail/${post.id}`);
                         break;
                     case CONFIG.EVENTS_SLUG: //caso posts evento creado
-                        await this.navCtrl.navigateForward(`/events/detail/${post.id}`);
+                        this.navCtrl.navigateForward(`/events/detail/${post.id}`);
                         break;
                     case CONFIG.SOCIAL_PROBLEMS_SLUG: // caso posts problema social
                         if (post.subcategory) {
-                            await this.navCtrl.navigateForward(`/social-problems/list/${post.subcategory}/${post.id}`);
+                            this.navCtrl.navigateForward(`/social-problems/list/${post.subcategory}/${post.id}`);
                         } else {
-                            await this.navCtrl.navigateForward(`/social-problems/categories`);
+                            this.navCtrl.navigateForward(`/social-problems/categories`);
                         }
                         break;
                     case CONFIG.REPORTS_SLUG: //caso reporte o informe
-                        await this.navCtrl.navigateForward(`/reports/detail/${post.id}`);
+                        this.navCtrl.navigateForward(`/reports/detail/${post.id}`);
                         break;
                     default:
                         console.log('No match any noti')

@@ -68,3 +68,5 @@ La validación verifica que la contraseña ingresada sea mínimo 8 caracteres y 
 
 ```
 
+### Mejoras en iOS
+https://reviblog.net/2017/09/06/como-mejorar-el-rendimiento-de-ionic-en-ios-y-solucion-al-problema-de-las-peticiones-http-cors/

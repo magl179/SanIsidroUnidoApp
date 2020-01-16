@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { UserAuthenticatedGuard } from './guards/user-authenticated.guard';
-import { UserHasRoleGuard } from "./guards/user-has-role.guard";
+// import { UserHasRoleGuard } from "./guards/user-has-role.guard";
 
 const routes: Routes = [
     {
@@ -10,61 +10,69 @@ const routes: Routes = [
         pathMatch: 'full'
     },
     {
-        path: 'about',
+        path: 'about', //Pantalla de la Página que muestra información sobre la aplicación
         loadChildren: './pages/about/about.module#AboutPageModule'
     },
     {
-        path: 'directory',
-        loadChildren: './pages/directory/directory.module#DirectoryPageModule'
+        path: 'directory', //Pantalla de Pàgina de Directorio Barrial
+        loadChildren: './pages/directory/directory-list/directory-list.module#DirectoryListPageModule'
+        // path: 'directory',
+        // loadChildren: './pages/directory/directory.module#DirectoryPageModule'
     },
     {
-        path: 'emergencies',
-        loadChildren: './pages/emergencies/emergencies.module#EmergenciesPageModule'
+        path: 'emergencies', //Pantalla de Pagina de Emergencias
+        loadChildren: './pages/emergencies/emergencies.module#EmergenciesPageModule',
+        canLoad: [UserAuthenticatedGuard]
     },
     {
-        path: 'events',
-        loadChildren: './pages/events/events.module#EventsPageModule'
+        path: 'events', //Pantalla de Pagina de Eventos
+        loadChildren: './pages/events/events.module#EventsPageModule',
+        canLoad: [UserAuthenticatedGuard]
     },
     {
-        path: 'frequent-questions',
+        path: 'frequent-questions', //Pantalla de Pagina de Preguntas Frecuentes
         loadChildren: './pages/frequent-questions/frequent-questions.module#FrequentQuestionsPageModule'
     },
     {
-        path: 'home-list',
+        path: 'home-list', //Pantalla Home Items Menu App
         loadChildren: './pages/home-list/home-list.module#HomeListPageModule',
         canLoad: [UserAuthenticatedGuard]
     },
     {
-        path: 'home-screen',
+        path: 'home-screen', //Pantalla Slider al Inicio App
         loadChildren: './pages/home-screen/home-screen.module#HomeScreenPageModule'
     },
     {
-        path: 'login',
+        path: 'login', //Pantalla de Login
         loadChildren: './pages/login/login.module#LoginPageModule'
     },
     {
-        path: 'public-services',
+        path: 'public-services', //Pantalla de Servicios Públicos
         loadChildren: './pages/public-services/public-services-app.module#PublicServicesAppPageModule',
+        canLoad: [UserAuthenticatedGuard]
     }, 
     {
-        path: 'register',
-        loadChildren: './pages/register/register.module#RegisterPageModule'
+        path: 'register', //Pantalla de Registro
+        loadChildren: './pages/register/register.module#RegisterPageModule',
+        canLoad: [UserAuthenticatedGuard]
     },
     {
-        path: 'reports',
-        loadChildren: './pages/reports/reports.module#ReportsPageModule'
+        path: 'reports', //Pantalla de Reportes
+        loadChildren: './pages/reports/reports.module#ReportsPageModule',
+        canLoad: [UserAuthenticatedGuard]
     },
     {
-        path: 'social-problems',
-        loadChildren: './pages/social-problems/social-problems.module#SocialProblemsPageModule'
+        path: 'social-problems', //Pantalla de Problemas Sociales
+        loadChildren: './pages/social-problems/social-problems.module#SocialProblemsPageModule',
+        canLoad: [UserAuthenticatedGuard]
     },
     {
-        path: 'user-profile',
+        path: 'user-profile', //Pantalla del Perfil de Usuario
         loadChildren: './pages/user/user.module#UserPageModule',
         canLoad: [UserAuthenticatedGuard]
     },
     {
-        path: '404',
+        path: '404', //Pantalla de Error
         loadChildren: './pages/not-found/not-found.module#NotFoundPageModule'
     },
     {

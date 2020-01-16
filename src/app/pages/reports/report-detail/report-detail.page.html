@@ -29,8 +29,11 @@
                 <p class="report-detail_attached__title section-title">Adjuntos</p>
                 <ion-list>
                     <ion-item>
-                        <ion-label>Informe_Marzo.pdf</ion-label>
-                        <ion-button (click)="openReportPDF()" color="blue-logo" slot="end">Abrir</ion-button>
+                        <!-- <ion-label>Informe_Marzo.pdf</ion-label> -->
+                        <ion-label class="item_document">
+                            <img src="assets/img/svg/pdf.svg" />
+                        </ion-label>
+                        <ion-button (click)="openReportPDF()" slot="end">Abrir</ion-button>
                     </ion-item>
                 </ion-list>
             </section>

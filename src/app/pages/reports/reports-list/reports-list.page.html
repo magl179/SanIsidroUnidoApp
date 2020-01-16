@@ -8,10 +8,10 @@
         </ion-refresher-content>
     </ion-refresher> -->
     <!-- Mensaje si falla traer datos o datos son 0 -->
-    <app-no-results-found *ngIf="reportsLoaded && reportsList.length === 0"
+    <app-no-results-found *ngIf="showLoading && reportsList.length === 0"
         message="No existen reportes disponibles" class="ion-padding"></app-no-results-found>
     <!-- Animación al cargar los datos -->
-    <div *ngIf="!reportsLoaded">
+    <div *ngIf="showLoading">
         <ion-card class="report animated flash slow infinite" *ngFor="let item of [1,1,1,1]">
             <ion-card-header>
                 <ion-card-title>
@@ -31,7 +31,7 @@
         </ion-card>
     </div>
     <!-- Tarjetas con Información de los Reportes -->
-    <div *ngIf="reportsLoaded && reportsList.length > 0">
+    <div *ngIf="!showLoading && reportsList.length > 0">
         <ion-card class="report-container" *ngFor="let report of reportsList; let i = index;">
             <ion-card-header>
                 <ion-card-title>{{report.title}}</ion-card-title>
@@ -45,7 +45,7 @@
         </ion-card>
     </div>
     <!-- Componente Scroll Infinito -->
-    <ion-infinite-scroll threshold="150px" (ionInfinite)="doInfiniteScroll($event)">
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="doInfiniteScroll($event)">
         <ion-infinite-scroll-content loadingSpinner="crescent"
             loadingText="Cargando Publicaciones...">
         </ion-infinite-scroll-content>

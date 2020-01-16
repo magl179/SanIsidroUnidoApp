@@ -23,6 +23,7 @@ export class ListNotificationsComponent implements OnInit {
 
     @Input() showListHeader = true;
     @Input() maxNotifications = 0;
+    @Input() getUnreaded = false;
 
     notificationsRequested: NotiList[] = [];
     notificationsList: NotiList[] = [];
@@ -60,6 +61,11 @@ export class ListNotificationsComponent implements OnInit {
         } else {
             this.notificationsRequested = this.notificationsList.slice(0, (this.maxNotifications));
         }
+        //Filtrar Notificaciones Leidas
+        if(this.getUnreaded){
+            this.notificationsRequested = this.notificationsRequested.filter(noti => noti.state === 0);
+        }
+        console.log('Noti Requested', this.notificationsRequested);
     }
 
     async manageNoti(noti: any) {

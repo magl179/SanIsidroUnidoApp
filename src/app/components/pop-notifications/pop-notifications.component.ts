@@ -10,6 +10,9 @@ import { ShowListNotificationsPage } from 'src/app/modals/show-list-notification
 })
 export class PopNotificationsComponent implements OnInit {
 
+    getUnreadedNotifications = true;
+
+
     constructor(
         private modalCtrl: ModalController,
         private popoverCtrl: PopoverController
@@ -19,6 +22,7 @@ export class PopNotificationsComponent implements OnInit {
 
     showAllNotifications() {
         // alert('Show all notifications');
+        this.getUnreadedNotifications = false;
         this.showListNotificationsModal();
     }
 
