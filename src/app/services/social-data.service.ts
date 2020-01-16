@@ -57,7 +57,7 @@ export class SocialDataService {
                 const loginGoogle = await this.google.login({});
                 this.getGoogleData(loginGoogle);
             } catch (error) {
-                console.log(error);
+                // console.log(error);
                 await this.utilsService.showToast({message: 'Error con la conexion a Google'});
             }
         } else {
@@ -74,7 +74,7 @@ export class SocialDataService {
                 const accessToken = respuestaLogin.authResponse.accessToken;
                 await this.getFacebookData(accessToken, userId, permisos);
             } catch (err) {
-                console.log(err);
+                // console.log(err);
                 await this.utilsService.showToast({message: 'Ocurrio un error al conectarse con facebook'});
             }
         } else {
@@ -94,7 +94,7 @@ export class SocialDataService {
                 this.utilsService.showToast({message: 'No se pudo obtener los datos con Facebook'});
             }
         } catch (err) {
-            console.log(err);
+            // console.log(err);
             this.utilsService.showToast({message: 'No se pudieron obtener los datos de facebook'});
         }
     }
@@ -109,11 +109,11 @@ export class SocialDataService {
                     await this.closeGoogleSession();                    
                 },
                 (err: any) => {
-                    console.log(err);
+                    // console.log(err);
                     this.utilsService.showToast({message: 'No se pudieron obtener los datos de Google'});
                 });
         } catch (err) {
-            console.log(err);
+            // console.log(err);
             this.utilsService.showToast({message: 'No se pudieron obtener los datos de Google'});
         }
     }
@@ -123,7 +123,7 @@ export class SocialDataService {
         try {
             await this.google.logout();
         } catch (err) {
-            console.log(err);
+            // console.log(err);
             this.utilsService.showToast({message: 'No se pudo cerrar la sesion de Google'});
         }
     }
@@ -132,7 +132,7 @@ export class SocialDataService {
         try {
             await this.facebook.logout();
         } catch (err) {
-            console.log(err);
+            // console.log(err);
             this.utilsService.showToast({message: 'No se pudo cerrar la sesion de Facebook'});
         }
     }

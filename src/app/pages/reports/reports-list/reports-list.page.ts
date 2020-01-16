@@ -14,7 +14,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class ReportsListPage implements OnInit, OnDestroy {
 
     reportsList: any = [];
-    reportsLoaded = false;
+    showLoading = true;
 
     constructor(
         private postsService: PostsService,
@@ -23,7 +23,7 @@ export class ReportsListPage implements OnInit, OnDestroy {
     
     ngOnInit() { 
         this.postsService.resetReportsPage();
-        this.loadReports();
+        this.loadReports(null, true);
     }
 
     postDetail(id: number) {
@@ -33,8 +33,7 @@ export class ReportsListPage implements OnInit, OnDestroy {
     ngOnDestroy() { console.warn('REPORTS PAGE DESTROYED') }
     ionViewWillLeave() { this.postsService.resetReportsPage(); }
     
-    loadReports(event?: any) {
-        this.reportsLoaded = false;
+    loadReports(event: any = null, first_loading=false) {
         this.postsService.getReports().pipe(
             map((res: IRespuestaApiSIUPaginada) => {
                 if (res && res.data) {
@@ -46,7 +45,9 @@ export class ReportsListPage implements OnInit, OnDestroy {
                 return res;
             }),
             finalize(() => {
-                this.reportsLoaded = true;
+                if(first_loading){
+                    this.showLoading = false;
+                }
             })
         ).subscribe((res: IRespuestaApiSIUPaginada) => {            
             let reportsList = [];
@@ -64,9 +65,11 @@ export class ReportsListPage implements OnInit, OnDestroy {
             if (event && event.type === 'refresher') {
                 this.reportsList.unshift(...reportsList);
                 return;
+            }else if(event && event.type == 'infinite_scroll'){
+                this.reportsList.push(...reportsList);
+            }else{
+                this.reportsList.push(...reportsList);
             }
-            this.reportsList.push(...reportsList);
-            // console.log('reports list', this.reportsList);
         },(err: HttpErrorResponse) => {
             if (err.error instanceof Error) {
                 console.log("Client-side error", err);

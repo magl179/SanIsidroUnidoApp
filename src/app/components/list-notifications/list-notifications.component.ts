@@ -22,6 +22,7 @@ export class ListNotificationsComponent implements OnInit {
 
     @Input() showListHeader = true;
     @Input() maxNotifications = 0;
+    @Input() getUnreaded = false;
 
     notificationsRequested: NotiList[] = [];
     notificationsList: NotiList[] = [];
@@ -54,10 +55,15 @@ export class ListNotificationsComponent implements OnInit {
 
     async cargarNotificacionesSolicitadas() {
         console.log('Noti Solicited Load', this.notificationsList);
+        //Filtrar Maximo Notificaciones
         if (this.maxNotifications === 0) {
             this.notificationsRequested = this.notificationsList;
         } else {
             this.notificationsRequested = this.notificationsList.slice(0, (this.maxNotifications));
+        }
+        //Filtrar Notificaciones Leidas
+        if(this.getUnreaded){
+            this.notificationsRequested = this.notificationsRequested.filter(noti => noti.state === 0);
         }
         console.log('Noti Requested', this.notificationsRequested);
     }

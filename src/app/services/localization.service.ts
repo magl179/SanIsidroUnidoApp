@@ -43,10 +43,10 @@ export class LocalizationService {
             }
             
         } catch (err) {
-            console.log('Error: ', err);
+            // console.log('Error: ', err);
             await this.utilsService.showToast({ message: 'Ocurrio un error al obtener la geolocalizacion' });
         } finally {
-            console.log('finally get coordinates')
+            // console.log('finally get coordinates')
             return this.misCoordenadas;
         }
     }
@@ -70,7 +70,7 @@ export class LocalizationService {
                     },
                     (err: any) => {
                         this.utilsService.showToast({message: 'No se pudo obtener los permisos de GPS'});
-                        console.log(err);
+                        // console.log(err);
                         reject(err);
                     }
                 );
@@ -100,7 +100,7 @@ export class LocalizationService {
                             },
                             (err: any) => {
                                 this.utilsService.showToast({message: 'Ocurrio un error al solicitar los permisos del GPS: '});
-                                console.log(err);
+                                // console.log(err);
                                 reject(err);
                             }
                         );

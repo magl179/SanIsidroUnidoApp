@@ -15,7 +15,7 @@ export class NavigationService implements OnInit {
     ) { }
 
     ngOnInit() {
-        console.log('on init route', console.log(this.router.url));
+        // console.log('on init route', console.log(this.router.url));
     }
 
     keepHistoryTracking() {
@@ -29,7 +29,7 @@ export class NavigationService implements OnInit {
         )
         .subscribe(
             ( event: NavigationEnd ) => {
-                console.warn("route:", event.url);
+                // console.warn("route:", event.url);
             }
         )
     ;

@@ -21,16 +21,15 @@
         </ion-refresher-content>
     </ion-refresher>
      <!-- Mensaje si datos no cargan o son tamaño 0 -->
-     <app-no-results-found *ngIf="socialProblemsLoaded && socialProblemsList.length === 0"
+     <app-no-results-found *ngIf="showLoading && socialProblemsList.length === 0"
      message="No hay problemas sociales disponibles"></app-no-results-found>
     <!-- Animacion Tarjeta hasta tener los Datos Cargados -->
-    <!-- *ngIf="!socialProblemsLoaded" -->
-    <div class="loading-app" *ngIf="!socialProblemsLoaded">
+    <div class="loading-app" *ngIf="showLoading">
         <loader-app class="flex-column-center"></loader-app>
     </div>
     
     <!-- Tarjeta con Datos Cargados -->
-    <div *ngIf="socialProblemsLoaded  && socialProblemsList.length > 0">
+    <div *ngIf="!showLoading  && socialProblemsList.length > 0">
         <!-- Posts Filtrados con Datos -->
         <ion-card style="position:relative" class="social-problem"
             *ngFor="let socialProblem of socialProblemsFilter">
@@ -62,12 +61,6 @@
                     <p class="post-description">
                         {{socialProblem.description}}
                     </p>
-                    <!-- <p>
-                        <ion-chip [color]="(socialProblem.is_attended) ? 'success': 'orange'">
-                            <ion-icon [name]="(socialProblem.is_attended) ? 'checkbox': 'clock'">
-                            </ion-icon>
-                        </ion-chip>
-                    </p> -->
                 </ion-card-content>
             </div>
             <div class="social">
@@ -97,7 +90,7 @@
             message="No hay publicaciones disponibles"></app-no-results-found>
     </div>
     <!-- Scroll Infinito -->
-    <ion-infinite-scroll threshold="150px" (ionInfinite)="doInfiniteScroll($event)">
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="doInfiniteScroll($event)">
         <ion-infinite-scroll-content loadingSpinner="crescent"
             loadingText="Cargando Publicaciones...">
         </ion-infinite-scroll-content>

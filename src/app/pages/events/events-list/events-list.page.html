@@ -10,10 +10,10 @@
         </ion-refresher-content>
     </ion-refresher>
     <!-- Mensaje si datos no cargan o son tamaño 0 -->
-    <app-no-results-found *ngIf="eventsLoaded && eventsList.length === 0"
+    <app-no-results-found *ngIf="showLoading && eventsList.length === 0"
         message="No existen eventos disponibles"></app-no-results-found>
     <!-- Tarjetas Animacion hasta cargar datos-->
-    <div *ngIf="!eventsLoaded">
+    <div *ngIf="showLoading">
         <ion-card *ngFor="let event of [1,1,1,1]" class="event animated flash slow infinite">
             <ion-card-header class="event-header">
                 <ion-card-title class="event-title">
@@ -40,7 +40,7 @@
         </ion-card>
     </div>
     <!-- Tarjeta Datos Cargados y Disponibles -->
-    <div *ngIf="eventsLoaded  && eventsList.length > 0">
+    <div *ngIf="!showLoading  && eventsList.length > 0">
         <ion-card class="event" *ngFor="let event of eventsList; let i = index;">
             <div class="event__header" (click)="postDetail(event.id)">
                 <ion-card-header class="main-section-header">
@@ -92,7 +92,7 @@
         </ion-card>
     </div>
     <!-- Scroll Infinito -->
-    <ion-infinite-scroll threshold="175px" (ionInfinite)="getInfiniteScrollData($event)">
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="getInfiniteScrollData($event)">
         <ion-infinite-scroll-content loadingSpinner="crescent"
             loadingText="Cargando Publicaciones...">
         </ion-infinite-scroll-content>

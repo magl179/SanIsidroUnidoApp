@@ -1,3 +1,4 @@
+
 <!-- Cabecera -->
 <app-header-back title="Mis Emergencias"></app-header-back>
 <!-- Contenido -->
@@ -24,10 +25,10 @@
         </ion-refresher-content>
     </ion-refresher>
     <!-- Mensaje cuando no hay datos disponibles-->
-    <app-no-results-found class="ion-padding" *ngIf="emergenciesLoaded && emergenciesList.length === 0"
+    <app-no-results-found class="ion-padding" *ngIf="showloading && emergenciesList.length === 0"
         message="No existen emergencias disponibles"></app-no-results-found>
     <!-- Tarjetas de Animacion mientras se cargan los datos-->
-    <div *ngIf="!emergenciesLoaded">
+    <div *ngIf="showloading">
         <ion-card *ngFor="let animations of [1,1,1,1,1,1,1];" class="emergency animated flash slow infinite">
             <ion-card-header class="post-header">
                 <ion-card-title class="post-title">
@@ -41,7 +42,7 @@
         </ion-card>
     </div>
     <!-- Posts con Datos -->
-    <div *ngIf="emergenciesLoaded  && emergenciesList.length > 0">
+    <div *ngIf="!showloading  && emergenciesList.length > 0">
         <!-- Posts Filtrados con Datos -->
         <ion-card class="emergency" *ngFor="let emergency of emergenciesFiltered; let i = index;">
             <ion-card-header class="post-header">
@@ -65,7 +66,7 @@
             message="No hay publicaciones disponibles"></app-no-results-found>
     </div>
     <!-- Scroll Infinito -->
-    <ion-infinite-scroll threshold="150px" (ionInfinite)="getInfiniteScrollData($event)">
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="getInfiniteScrollData($event)">
         <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando Publicaciones...">
         </ion-infinite-scroll-content>
     </ion-infinite-scroll>

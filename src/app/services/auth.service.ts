@@ -86,7 +86,6 @@ export class AuthService {
     }
     //VERIFICAR SI SE DEBE CHECKEAR VALIDEZ TOKEN
     async checkValidToken() {
-        console.log('checking token...');
         if (this.tokenExists()) {
             const itemToken = await this.storage.get(TOKEN_ITEM_NAME);
             const isTokenExpired = tokenIsExpired(itemToken);
@@ -131,12 +130,12 @@ export class AuthService {
         this.sessionAuthUserSubject.next(token_decoded);
     }
     async saveLocalStorageInfo(token_encoded: any, token_decoded: any) {
-        console.log('save local storage info called', { a: token_encoded, b: token_decoded })
+        // console.log('save local storage info called', { a: token_encoded, b: token_decoded })
         this.storage.set(TOKEN_ITEM_NAME, token_encoded);
         this.storage.set(USER_ITEM_NAME, token_decoded);
         setTimeout(() => {
             this.storage.get(USER_ITEM_NAME).then(token_decoded => {
-                console.log('user storage save local storage info', token_decoded)
+                // console.log('user storage save local storage info', token_decoded)
             });
         }, 500);
     }

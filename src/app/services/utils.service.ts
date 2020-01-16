@@ -60,7 +60,7 @@ export class UtilsService implements OnInit {
                 beatifulDate = lastDate.format('LL');
             }
         } else {
-            console.log('Invalid Date', stringDate);
+            // console.log('Invalid Date', stringDate);
         }
         return beatifulDate;
     }
@@ -81,14 +81,15 @@ export class UtilsService implements OnInit {
                     text: publicacion.description,
                     title: publicacion.title,
                     url: publicacion.url || ''
-                }).then(() => {
-                    console.log('Compartido Correctamente');
-                }).catch(err => {
-                    console.log('Error al compartir');
-                    this.showToast({message: 'No se pudo compartir'});
+                }).then(async() => {
+                    // console.log('Compartido Correctamente');
+                    await this.showToast({message: 'Compartido Correctamente'});
+                }).catch(async(err) => {
+                    // console.log('Error al compartir');
+                   this.showToast({message: 'No se pudo compartir'});
                 });
             } else {
-                console.log('Tu dispositivo no soporta la función de compartir');
+                // console.log('Tu dispositivo no soporta la función de compartir');
                 await this.showToast({message: 'Tu dispositivo no soporta la función de compartir'});
             }
         }

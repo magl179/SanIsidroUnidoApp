@@ -165,7 +165,7 @@ export class PostsService implements OnInit {
             "pagination": "true",
             "page": this.currentPage.socialProblemsBySubcategory
         };
-        console.log(category, subcategory);
+        // console.log(category, subcategory);
         const url = `${environment.APIBASEURL}/publicaciones`;
         return this.httpRequest.get(url, params);
     }

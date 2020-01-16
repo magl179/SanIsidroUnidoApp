@@ -16,10 +16,11 @@ import { EventsService } from "src/app/services/events.service";
 })
 export class EmergenciesPage implements OnInit, OnDestroy {
 
-    emergenciesList = [];
     AuthUser = null;
+    showloading = true;    
+    emergenciesList = [];
     emergenciesFiltered = [];
-    emergenciesLoaded = false;    
+
     filtersToApply: any = { is_attended: ""};
     filters: IBasicFilter = {
         is_attended: {
@@ -38,7 +39,6 @@ export class EmergenciesPage implements OnInit, OnDestroy {
         private authService: AuthService,
         private utilsService: UtilsService,
         private postsService: PostsService,
-        private modalCtrl: ModalController,
         private events_app: EventsService
     ) { }
 
@@ -51,7 +51,9 @@ export class EmergenciesPage implements OnInit, OnDestroy {
                 this.AuthUser = token_decoded.user;
             }
         });
-        this.loadEmergencies();
+        //Primera Carga
+        this.loadEmergencies(null,true);
+
         this.events_app.emergenciesEmitter.subscribe((event_app: any) => {
             if (this.emergenciesList.length > 0) {
                 console.log('tengo datos cargados resetear a 0');
@@ -67,12 +69,10 @@ export class EmergenciesPage implements OnInit, OnDestroy {
     ionViewWillEnter() { }
     ionViewWillLeave() { this.postsService.resetEmergenciesPage(); }
 
-    loadEmergencies(event?: any) {
-        this.emergenciesLoaded = false;
+    loadEmergencies(event: any = null, first_loading=false) {
         this.postsService.getEmergenciesByUser().pipe(
             map((res: IRespuestaApiSIUPaginada) => {
                 if (res && res.data) {
-                    // const emergencies_to_map = res.data.data;
                     res.data.forEach((emergency: any) => {
                         emergency = mapEmergency(emergency);
                     });
@@ -80,7 +80,9 @@ export class EmergenciesPage implements OnInit, OnDestroy {
                 return res;
             }),
             finalize(() => {
-                this.emergenciesLoaded = true;
+                if(first_loading){
+                    this.showloading = false;
+                }
             }),
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let emergenciesApi = [];
@@ -92,18 +94,20 @@ export class EmergenciesPage implements OnInit, OnDestroy {
                 }
                 return;
             }
-            if (event) {
+            if (event) {                
                 event.data.target.complete();
             }
-            if (event && event.type === 'refresher') {
-                this.emergenciesList.unshift(...emergenciesApi);
+            if (event && event.type == 'refresher') {
+                this.emergenciesList.unshift(...emergenciesApi);;
                 this.emergenciesFiltered.unshift(...emergenciesApi);
                 return;
+            }else if(event && event.type == 'infinite_scroll'){
+                this.emergenciesList.push(...emergenciesApi);
+                this.emergenciesFiltered.push(...this.emergenciesList);
+            }else{
+                this.emergenciesList.push(...emergenciesApi);
+                this.emergenciesFiltered.push(...this.emergenciesList);
             }
-            this.emergenciesList.push(...emergenciesApi);
-            this.emergenciesFiltered.push(...this.emergenciesList);
-
-
         },(err: HttpErrorResponse) => {
             if (err.error instanceof Error) {
                 console.log("Client-side error", err);
