@@ -21,6 +21,9 @@ const isJSON = (str: any) => {
 }
 
 export const momentFormat = (stringdate: any, formatDate="LLL") => {
+    if(!stringdate){
+        return '';
+    }
     if (moment(stringdate).isValid()) {
         return moment(new Date(stringdate)).format(formatDate);
     } else {
@@ -225,6 +228,14 @@ export const mapEvent = (event: any) => {
     }
     if (event.range_date) {
         event.fulldate = formatEventRangeDate(event.range_date.start_date, event.range_date.end_date);
+        event.initial_date = momentFormat(event.range_date.start_date, 'LLL')
+        event.end_date = momentFormat(event.range_date.end_date , 'LLL')
+    }
+
+    if (event.range_date && event.range_date.start_date && event.range_date.end_date) {
+        event.hasRangeDate = true;
+    }else{
+        event.hasRangeDate = false;
     }
     // console.log('evento retornado', event);
     return event;

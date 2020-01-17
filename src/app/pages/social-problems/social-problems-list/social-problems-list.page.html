@@ -15,11 +15,11 @@
             <ion-label>Pendientes</ion-label>
         </ion-segment-button>
     </ion-segment>
-    <!-- <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content pullingIcon="arrow-dropdown" refreshingSpinner="circles"
             refreshingText="Cargando Publicaciones...">
         </ion-refresher-content>
-    </ion-refresher> -->
+    </ion-refresher>
      <!-- Mensaje si datos no cargan o son tamaño 0 -->
      <app-no-results-found *ngIf="showLoading && socialProblemsList.length === 0"
      message="No hay problemas sociales disponibles"></app-no-results-found>

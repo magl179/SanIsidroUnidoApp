@@ -4,11 +4,11 @@
 <!-- Contenido -->
 <ion-content padding>
     <!-- Refresher de los Datos -->
-    <!-- <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content pullingIcon="arrow-dropdown" refreshingSpinner="circles"
             refreshingText="Cargando Publicaciones...">
         </ion-refresher-content>
-    </ion-refresher> -->
+    </ion-refresher>
     <!-- Mensaje si datos no cargan o son tamaño 0 -->
     <app-no-results-found *ngIf="showLoading && eventsList.length === 0"
         message="No existen eventos disponibles"></app-no-results-found>
@@ -49,14 +49,34 @@
                     </ion-card-title>
                 </ion-card-header>
                 <ion-card-content class="main-section-info">
-                    <p class="main-section-info__item">
-                        <span class="icon-fulldate">
-                            <ion-icon name="calendar"></ion-icon>
-                        </span>
-                        <span class="main-section-info__description">
-                            {{ event.fulldate }} 
-                        </span>
-                    </p>
+                    <ng-container *ngIf="event.hasRangeDate">
+                        <p class="main-section-info__item">
+                            <span class="icon-fulldate">
+                                <ion-icon name="calendar"></ion-icon>
+                            </span>
+                            <span class="main-section-info__description">
+                                {{ event.initial_date }} 
+                            </span>
+                        </p>
+                        <p class="main-section-info__item">
+                            <span class="icon-fulldate">
+                                <ion-icon name="calendar"></ion-icon>
+                            </span>
+                            <span class="main-section-info__description">
+                                {{ event.end_date }} 
+                            </span>
+                        </p>
+                    </ng-container>
+                    <ng-container *ngIf="!event.hasRangeDate">
+                        <p class="main-section-info__item">
+                            <span class="icon-fulldate">
+                                <ion-icon name="calendar"></ion-icon>
+                            </span>
+                            <span class="main-section-info__description">
+                                {{ event.fulldate }} 
+                            </span>
+                        </p>                       
+                    </ng-container>
                     <p class="main-section-info__item">
                         <span class="icon-ubication">
                             <ion-icon name="pin"></ion-icon>

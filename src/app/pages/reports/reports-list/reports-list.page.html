@@ -2,11 +2,11 @@
 
 <ion-content padding>
     <!-- Componente Refresher Data -->
-    <!-- <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content pullingIcon="arrow-dropdown" refreshingSpinner="circles"
             refreshingText="Cargando Publicaciones...">
         </ion-refresher-content>
-    </ion-refresher> -->
+    </ion-refresher>
     <!-- Mensaje si falla traer datos o datos son 0 -->
     <app-no-results-found *ngIf="showLoading && reportsList.length === 0"
         message="No existen reportes disponibles" class="ion-padding"></app-no-results-found>

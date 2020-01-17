@@ -67,7 +67,8 @@ import { ToastrModule } from 'ngx-toastr';
             user_avatar:  'assets/img/default/img_avatar.png',
             image_full: 'assets/img/default/image_full.png',
             cover_image: 'https://via.placeholder.com/600x300?text=SanIsidroImage',
-            no_result_image: 'assets/img/svg/robot_sad.svg'
+            no_result_image: 'assets/img/svg/robot_sad.svg',
+            'gallery_default': "assets/img/default/image_full.png"
         }),
         ShowListNotificationsPageModule,
         PipesModule,

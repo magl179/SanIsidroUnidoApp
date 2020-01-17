@@ -105,10 +105,19 @@
         </mat-step>
         <!-- Paso Final -->
         <mat-step>
-            <h5 class="ion-padding ion-text-center">Listo, ahora ya puedes enviar tu reporte</h5>
+            <h5 class="ion-padding ion-text-center">
+                Listo, ahora ya puedes enviar tu reporte
+            </h5>
             <h3>{{emergencyForm.get('title').value || 'Ingresa un Titulo'}}</h3>
-            <p class="preview-text">{{emergencyForm.get('description').value || 'Ingresa una descripción'}}</p>
-            <p class="preview-text" *ngIf="emergencyPostCoordinate.address">{{emergencyPostCoordinate.address}}</p>
+            <p class="preview-text">
+                {{emergencyForm.get('description').value || 'Ingresa una descripción'}}
+            </p>
+            <p class="preview-text" *ngIf="emergencyPostCoordinate.address">
+                {{emergencyPostCoordinate.address}}
+            </p>
+            <p class="preview-text">
+                {{ubicationForm.get('description_ubication').value || 'Ingresa una descripción de la ubicación'}}
+            </p>
             <div class="section-img-thumb" *ngIf="emergencyImages.length > 0">
                 <ion-thumbnail *ngFor="let image of emergencyImages">
                     <img [src]="image | imageSanitizer">

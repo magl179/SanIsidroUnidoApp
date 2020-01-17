@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment';
 import { UserAuthenticatedGuard } from 'src/app/guards/user-authenticated.guard';
 import { UserHasRoleGuard } from 'src/app/guards/user-has-role.guard';
 import { CONFIG } from 'src/config/config';
+import { DirectivesModule } from 'src/app/directives/directives.module';
 
 const routes: Routes = [
     {
@@ -54,7 +55,8 @@ const routes: Routes = [
         CommonModule,
         FormsModule,
         IonicModule,
-        RouterModule.forChild(routes)
+        RouterModule.forChild(routes),
+        DirectivesModule
     ],
     declarations: [SocialProblemsPage]
 })

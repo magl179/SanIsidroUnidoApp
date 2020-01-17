@@ -129,11 +129,19 @@
             </mat-step>
             <!-- Paso Final -->
             <mat-step>
-                <h5 class="ion-padding ion-text-center">Listo, ahora ya puedes enviar tu reporte</h5>
+                <h5 class="ion-padding ion-text-center">
+                    Listo, ahora ya puedes enviar tu reporte
+                </h5>
                 <h3>{{socialProblemForm.get('title').value || 'Ingresa un Titulo'}}</h3>
-                <p class="preview-text">{{socialProblemForm.get('description').value || 'Ingresa una descripción'}}</p>
-                <p class="preview-text" *ngIf="socialProblemCoordinate.address">{{socialProblemCoordinate.address}}</p>
-                <!-- <p class="preview-text" *ngIf="!socialProblemCoordinate.address">Por favor escoge una ubicación</p> -->
+                <p class="preview-text">
+                    {{socialProblemForm.get('description').value || 'Ingresa una descripción'}}
+                </p>
+                <p class="preview-text" *ngIf="socialProblemCoordinate.address">
+                    {{socialProblemCoordinate.address}}
+                </p>
+                <p class="preview-text"">
+                    {{ubicationForm.get('description_ubication').value || 'Ingresa una descripción de la ubicación'}}
+                </p>
                 <div class="section-img-thumb" *ngIf="socialProblemImages.length > 0">
                     <ion-thumbnail *ngFor="let image of socialProblemImages">
                         <img [src]="image | imageSanitizer">

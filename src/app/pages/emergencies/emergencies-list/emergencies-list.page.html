@@ -19,11 +19,11 @@
         </ion-segment-button>
     </ion-segment>
     <!-- Refresher de los Datos -->
-    <!-- <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content pullingIcon="arrow-dropdown" refreshingSpinner="circles"
             refreshingText="Cargando Publicaciones...">
         </ion-refresher-content>
-    </ion-refresher> -->
+    </ion-refresher>
     <!-- Mensaje cuando no hay datos disponibles-->
     <app-no-results-found class="ion-padding" *ngIf="showloading && emergenciesList.length === 0"
         message="No existen emergencias disponibles"></app-no-results-found>
