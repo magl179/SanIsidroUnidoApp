@@ -25,6 +25,8 @@ export class SimpleRoutingMapComponent implements OnInit {
     @Input() enableGesture = false;
     @Input() usePolyline = true;
     @Input() targetUbicacionIcon = null;
+
+    @Input() currentCoordinate: any = null;
     @Output() mapEvent = new EventEmitter();
 
 
@@ -33,7 +35,6 @@ export class SimpleRoutingMapComponent implements OnInit {
     mapMarkers: any[] = null;
     mapIsLoaded = false;
     markersLayer = new L.LayerGroup();
-    currentCoordinate: any = null;
     routeControl: any;
 
     arrRoutesLatLng = [];
@@ -52,7 +53,8 @@ export class SimpleRoutingMapComponent implements OnInit {
         try {     
             this.mapMarkers = await this.mapService.getMarkers().toPromise();
             // Obtener Coordenadas
-            this.currentCoordinate = await this.localizationService.getCoordinates();
+            // this.currentCoordinate = await this.localizationService.getCoordinates();
+            console.log('current coordinate simple routing map', this.currentCoordinate)
             // Inicializar el Mapa
             await this.initializeMap();
         } catch (err) {

@@ -56,12 +56,18 @@ export class SocialProblemCreatePage implements OnInit {
     }
 
     async ngOnInit() {
-        // const coordinates = await this.locationService.getCoordinates();
-
         this.loadSubcategories();
-        const coords: any = await this.localizationService.getCoordinates();
-        this.socialProblemCoordinate.latitude = coords.latitude;
-        this.socialProblemCoordinate.longitude = coords.longitude;
+
+        // const coords: any = await this.localizationService.getCoordinates();
+        // this.socialProblemCoordinate.latitude = coords.latitude;
+        // this.socialProblemCoordinate.longitude = coords.longitude;
+
+        await this.localizationService.getCoordinates().then((coordinates: any)=>{
+            this.socialProblemCoordinate.latitude = coordinates.latitude;
+            this.socialProblemCoordinate.longitude = coordinates.longitude;
+        }).catch(err=>{
+            console.log('Error al obtener geolocalizacion', err);
+        });
     }
 
     createForm() {

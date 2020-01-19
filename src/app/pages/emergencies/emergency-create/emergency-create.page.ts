@@ -46,9 +46,15 @@ export class EmergencyCreatePage implements OnInit {
     }
 
     async ngOnInit() {
-        const coords: any = await this.localizationService.getCoordinates();
-        this.emergencyPostCoordinate.latitude = coords.latitude;
-        this.emergencyPostCoordinate.longitude = coords.longitude;
+        // const coords: any = await this.localizationService.getCoordinates();
+        // this.emergencyPostCoordinate.latitude = coords.latitude;
+        // this.emergencyPostCoordinate.longitude = coords.longitude;
+        await this.localizationService.getCoordinates().then((coordinates: any)=>{
+            this.emergencyPostCoordinate.latitude = coordinates.latitude;
+            this.emergencyPostCoordinate.longitude = coordinates.longitude;
+        }).catch(err=>{
+            console.log('Error al obtener geolocalizacion', err);
+        });
     }
 
     createForm() {

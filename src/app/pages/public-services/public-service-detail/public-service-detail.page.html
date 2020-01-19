@@ -24,6 +24,7 @@
             [targetUbicacionIcon]="(publicServiceDetail.category && publicServiceDetail.category.image)?publicServiceDetail.category.image: null"
             id="public-service-map-detail-{{id}}"
             [destinationCoords]="publicServiceDetail.ubication" [usePolyline]="false"
-            (mapEvent)="manageMapEvent($event)" [enableGesture]="true"></simple-routing-map>
+            *ngIf="currentPosition"
+            (mapEvent)="manageMapEvent($event)" [enableGesture]="true" [currentCoordinate]="currentPosition"></simple-routing-map>
     </div>
 </ion-content>
