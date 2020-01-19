@@ -21,6 +21,7 @@
         </div>
 
         <simple-routing-map [zoom]="11" className="public-service-map"
+            [targetUbicacionIcon]="(publicServiceDetail.category && publicServiceDetail.category.image)?publicServiceDetail.category.image: null"
             id="public-service-map-detail-{{id}}"
             [destinationCoords]="publicServiceDetail.ubication" [usePolyline]="false"
             (mapEvent)="manageMapEvent($event)" [enableGesture]="true"></simple-routing-map>

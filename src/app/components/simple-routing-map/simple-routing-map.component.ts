@@ -24,6 +24,7 @@ export class SimpleRoutingMapComponent implements OnInit {
     @Input() destinationCoords: IUbication;
     @Input() enableGesture = false;
     @Input() usePolyline = true;
+    @Input() targetUbicacionIcon = null;
     @Output() mapEvent = new EventEmitter();
 
 
@@ -99,9 +100,9 @@ export class SimpleRoutingMapComponent implements OnInit {
         }
         this.map.addLayer(this.markersLayer);
         // Si obtuve coordenadas añadir el marcador
+        let currentPoint: any;
         if (this.currentCoordinate) {
-            const iconCurrent = await this.mapService.getCustomIcon('red');
-            let currentPoint: any;
+            const iconCurrent = (this.targetUbicacionIcon) ? this.mapService.createExternalIcon(this.targetUbicacionIcon) : await this.mapService.getCustomIcon('red');
             this.arrRoutesLatLng[0] = this.createLatLng(this.currentCoordinate.latitude, this.currentCoordinate.longitude);
             if (iconCurrent) {
                 currentPoint = new L.Marker(this.arrRoutesLatLng[0], { icon: iconCurrent, title: 'Mi Posición Actual' });
@@ -113,7 +114,7 @@ export class SimpleRoutingMapComponent implements OnInit {
         }
         //Añadir el destino final
         let punto = null;
-        const markerIcon = await this.mapService.getCustomIcon('green');
+        const markerIcon = await this.mapService.getCustomIcon('red');
 
         if (markerIcon) {
             punto = new L.Marker(this.arrRoutesLatLng[1], { icon: markerIcon });
@@ -126,6 +127,10 @@ export class SimpleRoutingMapComponent implements OnInit {
         if (!CONFIG.SHOW_BEATIFUL_ROUTES) {
             this.addPolyline(this.arrRoutesLatLng);
         }
+
+        //Fit Map
+        var group_markers = new L.featureGroup([currentPoint, markerIcon]);
+        this.map.fitBounds(group_markers.getBounds());
 
     }
 

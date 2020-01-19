@@ -23,6 +23,18 @@ export class MapService implements OnInit {
     getMarkers() {
         return this.httpRequest.get('assets/data/markers.json');
     }
+
+    createExternalIcon(ownIconUrl){
+        const iconMap = new Leaflet.Icon({
+            iconUrl: ownIconUrl,
+            shadowUrl: shadowIcon,
+            shadowSize: [40, 40],
+            iconSize: [40, 40],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+        });
+        return iconMap;
+    }
     //Funcion crear un icono con una imagen específica
     createIcon(ownIconURL) {
         const iconMap = new Leaflet.Icon({
