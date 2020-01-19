@@ -22,6 +22,8 @@ export const CONFIG: ICONFIG = {
     },
     REPORTS_SLUG: 'reportes',
     SOCIAL_PROBLEMS_SLUG: 'problemas_sociales',
-    VERSION: '1.0.1'
+    VERSION: '1.0.1',
+    MESSAGE_APP_INFO: 'Por San Isidro Unido con ❤',
+    MESSAGE_APP_URL: 'https://www.facebook.com/stalinmaza97'
 }
 

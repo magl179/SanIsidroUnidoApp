@@ -5,6 +5,7 @@ import { Storage } from '@ionic/storage';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { ToastOptions } from "@ionic/core";
 import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
+import { CONFIG } from '../../config/config';
 
 declare var moment: any;
 
@@ -66,25 +67,52 @@ export class UtilsService implements OnInit {
 
 
     async shareSocial(publicacion: any) {
+
+
+        const message_publication = `${publicacion.description} \n\n${CONFIG.MESSAGE_APP_INFO}\n`;
+
         // Verificar Si Existe Cordova
         if (this.platform.is('cordova')) {
-            await this.socialSharing.share(
-                publicacion.description, // message
-                publicacion.title, // subject
-                (publicacion.image) ? publicacion.image : '', // file image or [] images
-                publicacion.url || '' // url to share
-            );
+            const share_options = {
+                message: message_publication, // not supported on some apps (Facebook, Instagram)
+                subject: publicacion.title, // fi. for email
+                files: (publicacion.image) ? publicacion.image : '', // an array of filenames either locally or remotely
+                url: CONFIG.MESSAGE_APP_URL,
+                // chooserTitle: 'Pick an app', // Android only, you can override the default share sheet title
+                // appPackageName: 'com.apple.social.facebook', // Android only, you can provide id of the App you want to share with
+                // iPadCoordinates: '0,0,0,0' //IOS only iPadCoordinates for where the popover should be point.  Format with x,y,width,height
+              };
+               
+            // return await this.socialSharing.share(
+            //     publicacion.description, // message
+            //     publicacion.title, // subject
+            //     (publicacion.image) ? publicacion.image : '', // file image or [] images
+            //     publicacion.url || '' // url to share
+            // )
+            return await this.socialSharing.shareWithOptions(share_options)
+            .then(async(result) => {
+                console.log(result);
+                if(result.completed){
+                    console.log('Compartido Correctamente', result);
+                    await this.showToast({message: 'Compartido Correctamente'});
+                }
+            }).catch(async(err) => {
+                console.log('Error al compartir');
+                console.log(err);
+               this.showToast({message: 'No se pudo compartir'});
+            });
         } else {
             if (navigator['share']) {
-                await navigator['share']({
+                return await navigator['share']({
                     text: publicacion.description,
                     title: publicacion.title,
                     url: publicacion.url || ''
                 }).then(async() => {
-                    // console.log('Compartido Correctamente');
+                    console.log('Compartido Correctamente');
                     await this.showToast({message: 'Compartido Correctamente'});
                 }).catch(async(err) => {
-                    // console.log('Error al compartir');
+                    console.log('Error al compartir');
+                    console.log(err);
                    this.showToast({message: 'No se pudo compartir'});
                 });
             } else {

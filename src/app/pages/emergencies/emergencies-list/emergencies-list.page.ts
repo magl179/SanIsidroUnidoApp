@@ -18,7 +18,8 @@ import { ErrorService } from 'src/app/services/error.service';
 export class EmergenciesListPage implements OnInit, OnDestroy {
 
     AuthUser = null;
-    showloading = true;    
+    showloading = true;   
+    showNotFound = false; 
     emergenciesList = [];
     emergenciesFiltered = [];
 
@@ -88,6 +89,11 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let emergenciesApi = [];
             emergenciesApi = res.data;
+
+            if(first_loading && res.data.length === 0){
+                this.showNotFound = true;
+            }
+
             if (emergenciesApi.length === 0) {
                 if (event) {
                     event.data.target.disabled = true;

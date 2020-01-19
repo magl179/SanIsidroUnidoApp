@@ -101,13 +101,15 @@
 <ion-footer class="footer-fixed-posts" *ngIf="socialProblem">
     <div class="social">
         <div class="social-options">
-            <div class="social-button dark" (click)="toggleLike(socialProblem.postLiked)" [class.active]="socialProblem.postLiked">
+            <div class="social-button dark ion-activatable" (click)="toggleLike(socialProblem.postLiked)" [class.active]="socialProblem.postLiked">
                 <ion-icon class="like" name="heart"></ion-icon>
                 <span>Me gusta</span>
+                <ion-ripple-effect></ion-ripple-effect>
             </div>
-            <div class="social-button" (click)="sharePost(socialProblem)">
+            <div class="social-button ion-activatable" (click)="sharePost(socialProblem)">
                 <ion-icon class="share" name="share"></ion-icon>
                 <span>Compartir</span>
+                <ion-ripple-effect></ion-ripple-effect>
             </div>
         </div>
     </div>

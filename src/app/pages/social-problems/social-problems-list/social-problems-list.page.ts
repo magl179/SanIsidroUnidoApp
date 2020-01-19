@@ -26,6 +26,7 @@ import { MessagesService } from 'src/app/services/messages.service';
 export class SocialProblemsListPage implements OnInit, OnDestroy {
 
     showLoading = true;
+    showNotFound = false;
     subcategory: string;
     AuthUser = null;
     slugSubcategory: string = '';
@@ -152,6 +153,11 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let socialProblems = [];
             socialProblems = res.data;
+
+            if(first_loading && res.data.length === 0){
+                this.showNotFound = true;
+            }
+
             if (socialProblems.length === 0) {
                 if (event) {
                     event.data.target.disabled = true;

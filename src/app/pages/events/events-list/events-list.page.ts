@@ -20,6 +20,7 @@ import { ErrorService } from 'src/app/services/error.service';
 export class EventsListPage implements OnInit, OnDestroy {
 
     showLoading = true;
+    showNotFound = false;
     eventsList: IEvent[] = [];
     AuthUser = null;
 
@@ -90,9 +91,7 @@ export class EventsListPage implements OnInit, OnDestroy {
         const sharePost: IPostShare = {
             title: post.title,
             description: post.description,
-            image: getImagesPost(post.images),
-            url: ''
-
+            image: getImagesPost(post.images)
         };
         await this.utilsService.shareSocial(sharePost);
     }
@@ -112,11 +111,16 @@ export class EventsListPage implements OnInit, OnDestroy {
             finalize(() => {
                 if(first_loading){
                     this.showLoading = false;
-                }
+                }                
             })
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let eventsApi = [];
             eventsApi = res.data;
+
+            if(first_loading && res.data.length === 0){
+                this.showNotFound = true;
+            }
+
             if (eventsApi.length === 0) {
                 if (event) {
                     event.data.target.disabled = true;
@@ -148,6 +152,9 @@ export class EventsListPage implements OnInit, OnDestroy {
                 } else {
                     console.log("Server-side error", err);
                 }
+                // if(first_loading && res.data.length === 0){
+                //     this.showNotFound = true;
+                // }
             });
     }
 

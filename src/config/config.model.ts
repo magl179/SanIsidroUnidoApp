@@ -21,6 +21,8 @@ export interface ICONFIG {
   SOCIAL_PROBLEMS_SLUG: string;
   VERSION: string;
   SHOW_BEATIFUL_ROUTES?: boolean;
+  MESSAGE_APP_INFO: string;
+  MESSAGE_APP_URL: string;
 }
 
 export interface IMAPLAYERS {

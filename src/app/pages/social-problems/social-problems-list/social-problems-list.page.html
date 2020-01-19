@@ -21,7 +21,7 @@
         </ion-refresher-content>
     </ion-refresher>
      <!-- Mensaje si datos no cargan o son tamaño 0 -->
-     <app-no-results-found *ngIf="showLoading && socialProblemsList.length === 0"
+     <app-no-results-found *ngIf="showNotFound && socialProblemsList.length === 0"
      message="No hay problemas sociales disponibles"></app-no-results-found>
     <!-- Animacion Tarjeta hasta tener los Datos Cargados -->
     <div class="loading-app" *ngIf="showLoading">
@@ -74,13 +74,15 @@
                 </div>
                 <div class="social-options"
                     (click)="toggleLike(socialProblem.postLiked, socialProblem.id)">
-                    <div class="social-button" [class.active]="socialProblem.postLiked">
+                    <div class="social-button ion-activatable" [class.active]="socialProblem.postLiked">
                         <ion-icon class="like" name="heart"></ion-icon>
                         <span>Me gusta</span>
+                        <ion-ripple-effect></ion-ripple-effect>
                     </div>
-                    <div class="social-button" (click)="sharePost(socialProblem)">
+                    <div class="social-button ion-activatable" (click)="sharePost(socialProblem)">
                         <ion-icon class="share" name="share"></ion-icon>
                         <span>Compartir</span>
+                        <ion-ripple-effect></ion-ripple-effect>
                     </div>
                 </div>
             </div>

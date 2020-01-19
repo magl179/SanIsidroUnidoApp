@@ -25,7 +25,7 @@
         </ion-refresher-content>
     </ion-refresher>
     <!-- Mensaje cuando no hay datos disponibles-->
-    <app-no-results-found class="ion-padding" *ngIf="showloading && emergenciesList.length === 0"
+    <app-no-results-found class="ion-padding" *ngIf="showNotFound && emergenciesList.length === 0"
         message="No existen emergencias disponibles"></app-no-results-found>
     <!-- Tarjetas de Animacion mientras se cargan los datos-->
     <div *ngIf="showloading">

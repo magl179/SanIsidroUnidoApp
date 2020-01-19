@@ -16,6 +16,7 @@ export class ReportsListPage implements OnInit, OnDestroy {
 
     reportsList: any = [];
     showLoading = true;
+    showNotFound = false;
 
     constructor(
         private postsService: PostsService,
@@ -54,6 +55,11 @@ export class ReportsListPage implements OnInit, OnDestroy {
         ).subscribe((res: IRespuestaApiSIUPaginada) => {            
             let reportsList = [];
             reportsList = res.data;
+
+            if(first_loading && res.data.length === 0){
+                this.showNotFound = true;
+            }
+
             if (reportsList.length === 0) {
                 if (event) {
                     event.data.target.disabled = true;

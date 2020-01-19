@@ -8,7 +8,7 @@
         </ion-refresher-content>
     </ion-refresher>
     <!-- Mensaje si falla traer datos o datos son 0 -->
-    <app-no-results-found *ngIf="showLoading && reportsList.length === 0"
+    <app-no-results-found *ngIf="showNotFound && reportsList.length === 0"
         message="No existen reportes disponibles" class="ion-padding"></app-no-results-found>
     <!-- Animación al cargar los datos -->
     <div *ngIf="showLoading">
