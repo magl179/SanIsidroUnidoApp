@@ -5,11 +5,9 @@ import { LocalizationService } from 'src/app/services/localization.service';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { PostsService } from 'src/app/services/posts.service';
-import { environment } from 'src/environments/environment';
 import { ISocialProblemReported, IUbication } from 'src/app/interfaces/models';
 import { finalize } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
-import { EventsService } from "src/app/services/events.service";
 import { IRespuestaApiSIU } from "src/app/interfaces/models";
 import { CONFIG } from 'src/config/config';
 import { ErrorService } from 'src/app/services/error.service';
@@ -21,6 +19,7 @@ import { MessagesService } from 'src/app/services/messages.service';
     styleUrls: ['./social-problem-create.page.scss'],
 })
 export class SocialProblemCreatePage implements OnInit {
+
     socialProblemForm: FormGroup;
     ubicationForm: FormGroup;
     errorMessages = null; 
@@ -32,6 +31,8 @@ export class SocialProblemCreatePage implements OnInit {
     };
     // coordinates = n
     subcategories = [];
+    formSended = false;
+    subcategoryName = null;
 
     constructor(
         private utilsService: UtilsService,
@@ -41,7 +42,6 @@ export class SocialProblemCreatePage implements OnInit {
         public formBuilder: FormBuilder,
         private localizationService: LocalizationService,
         private localDataService: LocalDataService,
-        private events_app: EventsService,
         private postService: PostsService
     ) {
         this.createForm();
@@ -50,6 +50,7 @@ export class SocialProblemCreatePage implements OnInit {
     loadSubcategories() {
         this.postService.getSubcategoriesByCategory(CONFIG.SOCIAL_PROBLEMS_SLUG).subscribe(res => {
             this.subcategories = res.data;
+            this.subcategoryName =res.data[0].name;
         }, (err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error al cargar las categorias');
         });
@@ -57,10 +58,6 @@ export class SocialProblemCreatePage implements OnInit {
 
     async ngOnInit() {
         this.loadSubcategories();
-
-        // const coords: any = await this.localizationService.getCoordinates();
-        // this.socialProblemCoordinate.latitude = coords.latitude;
-        // this.socialProblemCoordinate.longitude = coords.longitude;
 
         await this.localizationService.getCoordinates().then((coordinates: any)=>{
             this.socialProblemCoordinate.latitude = coordinates.latitude;
@@ -97,7 +94,7 @@ export class SocialProblemCreatePage implements OnInit {
         if (this.ubicationForm.valid !== true) {
             return this.messageService.showInfo("Ingresa una descripción de tu ubicación");
         }
-        if (this.socialProblemCoordinate.address === null || this.socialProblemCoordinate.address === null) {
+        if (this.socialProblemCoordinate.address === null) {
             return this.messageService.showInfo("No se pudo obtener tu ubicación");
         }
 
@@ -107,6 +104,7 @@ export class SocialProblemCreatePage implements OnInit {
         ubication.description = this.ubicationForm.value.description_ubication;
 
         loadingReportSocialProblem.present();
+
         const socialProblem: ISocialProblemReported = {
             title: this.socialProblemForm.value.title,
             description: this.socialProblemForm.value.description,
@@ -114,12 +112,17 @@ export class SocialProblemCreatePage implements OnInit {
             subcategory_id: this.socialProblemForm.value.subcategory,
             ubication
         };
+
         this.postService.sendSocialProblemReport(socialProblem).pipe(
             finalize(() => {
                 loadingReportSocialProblem.dismiss()
             })
         ).subscribe(async (res: IRespuestaApiSIU) => {
+
             this.messageService.showSuccess("El Reporte fue enviado correctamente");
+            
+            this.formSended = true;
+            console.log('this.formsedn', this.formSended);
             // this.events_app.resetSocialProblemEmmiter();
         }, (err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error al enviar tu reporte, intentalo más tarde');
@@ -155,5 +158,12 @@ export class SocialProblemCreatePage implements OnInit {
             this.errorService.manageHttpError(err, 'Ocurrio un error al obtener tu dirección, intentalo más tarde');
         });
     }
+
+    changeSubcategoryName(event){
+        console.log('event change', event)
+        this.subcategoryName = this.subcategories.filter(subcategory => subcategory.id == event.detail.value).map(subcategory=>subcategory.name);
+    }
+
+    
 
 }

@@ -56,14 +56,12 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         });
         //Primera Carga
         this.loadEmergencies(null,true);
-
+        //Simular Un Refresh cuando se crea nuevas emergencias
         this.events_app.emergenciesEmitter.subscribe((event_app: any) => {
-            if (this.emergenciesList.length > 0) {
-                this.emergenciesList = [];
-                this.emergenciesFiltered = [];
-                this.postsService.resetEmergenciesPage();
-            }
-            this.loadEmergencies();
+            this.loadEmergencies({
+                type: 'refresher',
+                data: event
+            });
         })
     }
 
@@ -95,13 +93,13 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
             }
 
             if (emergenciesApi.length === 0) {
-                if (event) {
+                if (event && event.data && event.data.target) {
                     event.data.target.disabled = true;
                     event.data.target.complete();
                 }
                 return;
             }
-            if (event) {                
+            if (event && event.data && event.data.target) {                
                 event.data.target.complete();
             }
             if (event && event.type == 'refresher') {
@@ -161,6 +159,8 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
             this.emergenciesFiltered = this.emergenciesList;
         }
     }
+
+    
 
 
 }

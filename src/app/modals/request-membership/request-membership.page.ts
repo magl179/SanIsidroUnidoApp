@@ -17,6 +17,7 @@ import { MessagesService } from 'src/app/services/messages.service';
 export class RequestMembershipPage implements OnInit {
 
     publicServiceImg = [];
+    formSended = false;
 
     constructor(
         private modalCtrl: ModalController,
@@ -50,6 +51,7 @@ export class RequestMembershipPage implements OnInit {
             this.authService.saveUserInfo(token, token_decoded);
             this.authService.saveLocalStorageInfo(token, token_decoded);
             this.messageService.showSuccess("Solicitud Enviada Correctamente");
+            this.formSended = true;
         },(err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'La solicitud no ha podido ser enviada');
         });

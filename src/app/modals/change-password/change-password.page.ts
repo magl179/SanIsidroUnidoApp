@@ -28,6 +28,8 @@ export class ChangePasswordPage implements OnInit {
     errorMessages = null;
     AuthUser = null;
 
+    formSended = false;
+
     constructor(
         private modalCtrl: ModalController,
         public formBuilder: FormBuilder,
@@ -93,6 +95,7 @@ export class ChangePasswordPage implements OnInit {
             this.authService.saveLocalStorageInfo(token, token_decoded);
             this.changePassForm.reset();
             this.messageService.showSuccess('Contraseña actualizado correctamente');
+            this.formSended = true;
         },(err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'La Contraseña no se ha podido actualizar')
         });

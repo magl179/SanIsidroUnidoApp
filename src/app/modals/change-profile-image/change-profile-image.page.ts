@@ -13,7 +13,9 @@ import { MessagesService } from 'src/app/services/messages.service';
     styleUrls: ['./change-profile-image.page.scss'],
 })
 export class ChangeProfileImagePage implements OnInit {
+    
     profileUserImg = [];
+    formSended = false;
 
     constructor(
         private modalCtrl: ModalController,
@@ -42,6 +44,7 @@ export class ChangeProfileImagePage implements OnInit {
             this.authService.saveUserInfo(token, token_decoded);
             this.authService.saveLocalStorageInfo(token, token_decoded);
             this.messageService.showSuccess('Imagen Actualizada Correctamente');
+            this.formSended = true;
         },(err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Imagen no ha podido ser actualizada');
         });

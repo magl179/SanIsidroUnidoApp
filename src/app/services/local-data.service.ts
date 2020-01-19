@@ -146,10 +146,10 @@ export class LocalDataService {
                     message: 'El Número de Télefono es Obligatorio'
                 },
                 minlength: {
-                    message: `El Número de Télefono debe contener al menos ${validations.password.minlength} caracteres`
+                    message: `El Número de Télefono debe contener al menos ${validations.phone.minlength} caracteres`
                 },
                 maxlength: {
-                    message: `El Número de Télefono debe contener máximo ${validations.password.minlength} caracteres`
+                    message: `El Número de Télefono debe contener máximo ${validations.phone.maxlength} caracteres`
                 },
                 pattern: {
                     message: `Ingresa una contraseña segura`

@@ -15,7 +15,8 @@ const routes: Routes = [
     },
     {
         path: 'directory', //Pantalla de Pàgina de Directorio Barrial
-        loadChildren: './pages/directory/directory.module#DirectoryPageModule'
+        loadChildren: './pages/directory/directory.module#DirectoryPageModule',
+        canLoad: [UserAuthenticatedGuard]
         // path: 'directory',
         // loadChildren: './pages/directory/directory.module#DirectoryPageModule'
     },

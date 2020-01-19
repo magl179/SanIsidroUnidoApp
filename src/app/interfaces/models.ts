@@ -154,7 +154,7 @@ interface IFilterFields {
 
 export interface INotiPostOpen {
     subcategory?: string;
-    category: "string";
+    category: string;
     id: number;
 }
 

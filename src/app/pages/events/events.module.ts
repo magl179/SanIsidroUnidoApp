@@ -15,7 +15,8 @@ const routes: Routes = [
         children: [
             {
                 path: 'list',
-                loadChildren: "./events-list/events-list.module#EventsListPageModule"
+                loadChildren: "./events-list/events-list.module#EventsListPageModule",
+                canLoad: [UserAuthenticatedGuard]
             },
             {
                 path: 'search',
@@ -25,7 +26,8 @@ const routes: Routes = [
                     searchPlaceholder: 'Buscar Eventos',
                     searchRouteDetail: '/events/detail',
                     searchSlug: CONFIG.EVENTS_SLUG
-                }
+                },
+                canLoad: [UserAuthenticatedGuard]
 
             },
             {

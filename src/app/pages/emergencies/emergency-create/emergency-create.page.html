@@ -122,8 +122,14 @@
                     <img [src]="image | imageSanitizer">
                 </ion-thumbnail>
             </div>
+            <p>
+                {{
+                    (formSended) ? 'form sended': 'form not sended'
+                }}
+            </p>
             <div>
-                <ion-button expand="full" (click)="sendEmergencyReport()" color="red-logo">Reportar</ion-button>
+                <ion-button expand="full" color="blue-logo" (click)="sendEmergencyReport()"
+                [disabled]="formSended">Reportar</ion-button>
             </div>
         </mat-step>
     </mat-horizontal-stepper>

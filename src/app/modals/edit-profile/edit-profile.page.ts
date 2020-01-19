@@ -9,6 +9,7 @@ import { decodeToken } from 'src/app/helpers/auth-helper';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from 'src/app/services/messages.service';
+import { threadId } from 'worker_threads';
 
 @Component({
     selector: 'modal-edit-profile',
@@ -20,6 +21,7 @@ export class EditProfilePage implements OnInit {
     AuthUser = null;
     editProfileForm: FormGroup;
     errorMessages = null;
+    formSended = false;
 
     constructor(
         private modalCtrl: ModalController,
@@ -30,19 +32,26 @@ export class EditProfilePage implements OnInit {
         private errorService: ErrorService,
         private messageService: MessagesService,
         private utilsService: UtilsService) {
-        this.createForm();
+        
     }
 
     async ngOnInit() {
-
+        this.loadUserData();
+        this.createForm();
     }
 
-    loadUserData() {
-        this.authService.sessionAuthUser.subscribe(res => {
-            if (res) {
-                this.AuthUser = res.user;
-            }
-        });
+    async loadUserData() {
+        // this.authService.sessionAuthUser.subscribe(res => {
+        //     if (res) {
+        //         this.AuthUser = res.user;
+        //         console.log('auth user', res.user)
+        //     }
+        // });
+        const response_auth: any =  await this.authService.getTokenUserAuthenticated().catch(err=>console.log('err', err))
+        if (response_auth) {
+            this.AuthUser = response_auth.user;
+            console.log('auth user', response_auth.user)
+        }
     }
 
     closeModal() {
@@ -56,6 +65,7 @@ export class EditProfilePage implements OnInit {
             this.authService.saveUserInfo(token, token_decoded);
             this.authService.saveLocalStorageInfo(token, token_decoded);
             this.messageService.showSuccess('Tus datos fueron actualizados correctamente');
+            this.formSended = true;
         },(err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Tus datos no se pudieron actualizar');
         });
@@ -73,17 +83,16 @@ export class EditProfilePage implements OnInit {
             Validators.required
         ]));
         const email = new FormControl(this.AuthUser.email || '', Validators.compose([
-            Validators.required,
             Validators.email
         ]));
         // Campo Contraseña
-        const number_phone = new FormControl(this.AuthUser.number_phone || '',
+        const phone = new FormControl(this.AuthUser.phone || '',
             Validators.compose([
                 Validators.minLength(validations.phone.minlength),
                 Validators.maxLength(validations.phone.maxlength)
             ]));
         // Añado Propiedades al Form
-        this.editProfileForm = this.formBuilder.group({firstname, lastname, email, number_phone});
+        this.editProfileForm = this.formBuilder.group({firstname, lastname, email, phone});
         this.errorMessages = this.localDataService.getFormMessagesValidations(validations);
     }
 

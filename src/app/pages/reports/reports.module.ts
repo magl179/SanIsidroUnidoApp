@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { ReportsPage } from './reports.page';
-import { environment } from 'src/environments/environment';
 import { CONFIG } from 'src/config/config';
+import { UserAuthenticatedGuard } from 'src/app/guards/user-authenticated.guard';
 
 const routes: Routes = [
     {
@@ -13,7 +13,8 @@ const routes: Routes = [
         component: ReportsPage,
         children: [
             {   path: 'list',
-                loadChildren: "./reports-list/reports-list.module#ReportsListPageModule"
+                loadChildren: "./reports-list/reports-list.module#ReportsListPageModule",
+                canLoad: [UserAuthenticatedGuard]
             },
             {
                 path: 'search',
@@ -23,11 +24,13 @@ const routes: Routes = [
                     searchPlaceholder: 'Buscar Informes',
                     searchRouteDetail: '/reports/list',
                     searchSlug: CONFIG.REPORTS_SLUG
-                }
+                },
+                canLoad: [UserAuthenticatedGuard]
             },
             {
                 path: 'list/:id',
-                loadChildren: './report-detail/report-detail.module#ReportDetailPageModule'
+                loadChildren: './report-detail/report-detail.module#ReportDetailPageModule',
+                canLoad: [UserAuthenticatedGuard]
             },
         ]
     }

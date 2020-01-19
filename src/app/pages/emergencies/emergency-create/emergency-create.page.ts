@@ -9,9 +9,9 @@ import { LocalDataService } from 'src/app/services/local-data.service';
 import { finalize } from 'rxjs/operators';
 import { IRespuestaApiSIU } from "src/app/interfaces/models";
 import { HttpErrorResponse } from '@angular/common/http';
-import { EventsService } from "src/app/services/events.service";
 import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from 'src/app/services/messages.service';
+import { EventsService } from '../../../services/events.service';
 
 @Component({
     selector: 'app-emergency-create',
@@ -29,6 +29,7 @@ export class EmergencyCreatePage implements OnInit {
     };
     emergencyForm: FormGroup;
     ubicationForm: FormGroup;
+    formSended = false;
     errorMessages = null;
 
     constructor(
@@ -37,18 +38,15 @@ export class EmergencyCreatePage implements OnInit {
         private messageService: MessagesService,
         private errorService: ErrorService,
         public formBuilder: FormBuilder,
+        public events_app: EventsService,
         private localizationService: LocalizationService,
         private postService: PostsService,
-        private events_app: EventsService,
         private localDataService: LocalDataService
     ) {
         this.createForm();
     }
 
     async ngOnInit() {
-        // const coords: any = await this.localizationService.getCoordinates();
-        // this.emergencyPostCoordinate.latitude = coords.latitude;
-        // this.emergencyPostCoordinate.longitude = coords.longitude;
         await this.localizationService.getCoordinates().then((coordinates: any)=>{
             this.emergencyPostCoordinate.latitude = coordinates.latitude;
             this.emergencyPostCoordinate.longitude = coordinates.longitude;
@@ -74,7 +72,7 @@ export class EmergencyCreatePage implements OnInit {
         this.errorMessages = this.localDataService.getFormMessagesValidations(validations);
     }
 
-    getUploadedImages(event) {
+    getUploadedImages(event: any) {
         console.log('images uploades event', event)
         this.emergencyImages = event.total_img;
 
@@ -112,33 +110,43 @@ export class EmergencyCreatePage implements OnInit {
         if (this.ubicationForm.valid !== true) {
             return this.messageService.showInfo("Ingresa una descripción de tu ubicación");
         }
-        if (this.emergencyPostCoordinate.address === null || this.emergencyPostCoordinate.address === null) {
+        if (this.emergencyPostCoordinate.address === null) {
             return this.messageService.showInfo("No se pudo obtener tu ubicación");
         }
 
         const loadingEmergencyReport = await this.utilsService.createBasicLoading('Enviando Reporte');
+
         const ubication = this.emergencyPostCoordinate;
         ubication.description = this.ubicationForm.value.description_ubication;
 
         loadingEmergencyReport.present();
-        const socialProblem: IEmergencyReported = {
+
+        const emergencyProblem: IEmergencyReported = {
             title: this.emergencyForm.value.title,
             description: this.emergencyForm.value.description,
             ubication,
             images: this.emergencyImages
         };
 
-        this.postService.sendEmergencyReport(socialProblem).pipe(
+        this.postService.sendEmergencyReport(emergencyProblem).pipe(
             finalize(() => {
                 loadingEmergencyReport.dismiss()
             })
         ).subscribe(async (res: IRespuestaApiSIU) => {
+
             this.messageService.showSuccess("El Reporte fue enviado correctamente");
+
+            this.formSended = true;
+            console.log('this.formsend', this.formSended);
+
             this.events_app.resetEmergenciesEmitter();
+
         }, (err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error al enviar tu reporte');
         });
     }
+
+   
 
 
 

@@ -33,5 +33,5 @@
             (returnUploadedImages)="getUploadedImages($event)"></app-upload-image>
     </section>
     <ion-button class="btn_send_request_membership" expand="block" (click)="sendRequestChangeUserProfile()"
-        [disabled]="profileUserImg.length === 0">Enviar</ion-button>
+        [disabled]="profileUserImg.length === 0 || formSended">Enviar</ion-button>
 </ion-content>

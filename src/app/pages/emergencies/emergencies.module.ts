@@ -17,7 +17,8 @@ const routes: Routes = [
         children: [
             {
                 path: 'detail/:id',
-                loadChildren: './emergency-detail/emergency-detail.module#EmergencyDetailPageModule'
+                loadChildren: './emergency-detail/emergency-detail.module#EmergencyDetailPageModule',
+                canLoad: [UserAuthenticatedGuard]
             },
             {
                 path: 'create',
@@ -27,7 +28,8 @@ const routes: Routes = [
             },
             {
                 path: 'list',
-                loadChildren: "./emergencies-list/emergencies-list.module#EmergenciesListPageModule"
+                loadChildren: "./emergencies-list/emergencies-list.module#EmergenciesListPageModule",
+                canLoad: [UserAuthenticatedGuard]
             },
             // {
             //     path: 'report',
@@ -44,7 +46,8 @@ const routes: Routes = [
                     searchRouteDetail: '/emergencies/detail',
                     searchSlug: CONFIG.EMERGENCIES_SLUG,
                     includeUserFilter: true
-                }
+                },
+                canLoad: [UserAuthenticatedGuard]
             }           
         ]
     }

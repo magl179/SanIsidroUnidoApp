@@ -17,7 +17,8 @@ const routes: Routes = [
         children: [
             {
                 path: 'categories',
-                loadChildren: "./social-problems-categories/social-problems-categories.module#SocialProblemsCategoriesPageModule"
+                loadChildren: "./social-problems-categories/social-problems-categories.module#SocialProblemsCategoriesPageModule",
+                canLoad: [UserAuthenticatedGuard]
             },
             {
                 path: 'create',
@@ -34,7 +35,8 @@ const routes: Routes = [
                     searchRouteDetail: '/social-problems/list',
                     searchSlug: CONFIG.SOCIAL_PROBLEMS_SLUG,
                     redirectWith: 'subcategory+id'
-                }
+                },
+                canLoad: [UserAuthenticatedGuard]
 
             },
             {

@@ -31,5 +31,5 @@
     <app-upload-image [uploadedImages]="publicServiceImg" [maxImages]="1"
         (returnUploadedImages)="getUploadedImages($event)"></app-upload-image>
     <ion-button class="btn_send_request_membership" expand="block" (click)="sendRequestMembership()"
-        [disabled]="publicServiceImg.length === 0">Enviar</ion-button>
+        [disabled]="publicServiceImg.length === 0 || formSended">Enviar</ion-button>
 </ion-content>

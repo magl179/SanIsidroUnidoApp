@@ -38,7 +38,7 @@
                 <div class="item-form padding-top" *ngIf="subcategories.length > 0">
                     <ion-item lines="none" class="small-font">
                         <ion-label class="label-padding">Categoria</ion-label>
-                        <ion-select formControlName="subcategory" placeholder="Escoge una categoría">
+                        <ion-select formControlName="subcategory" placeholder="Escoge una categoría" (ionChange)="changeSubcategoryName($event)">
                             <ion-select-option [selected]="(i===0) ? true: false"
                                 *ngFor="let subcategory of subcategories; let i = index" [value]="subcategory.id">
                                 {{subcategory.name}}</ion-select-option>
@@ -122,6 +122,9 @@
         </mat-step>
         <!-- Paso Final -->
         <mat-step>
+            <p class="preview-text">
+                Categoria: {{ (subcategoryName) ? subcategoryName: 'No has escogido categoria'}}
+            </p>
             <h5 class="ion-padding ion-text-center">
                 Listo, ahora ya puedes enviar tu reporte
             </h5>
@@ -140,9 +143,8 @@
                     <img [src]="image | imageSanitizer">
                 </ion-thumbnail>
             </div>
-            <!-- <p class="preview-text" *ngIf="socialProblemImages.length === 0">No hay ninguna imagen para enviar</p> -->
             <div>
-                <ion-button expand="full" color="blue-logo" (click)="sendSocialProblem()">Reportar</ion-button>
+                <ion-button expand="full" color="blue-logo" (click)="sendSocialProblem()" [disabled]="formSended">Reportar</ion-button>
             </div>
         </mat-step>
     </mat-horizontal-stepper>

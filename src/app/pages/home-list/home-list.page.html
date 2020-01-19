@@ -1,6 +1,9 @@
 <app-header title="Inicio"></app-header>
 <ion-content>
     <ion-grid class="ion-padding-top">
+        <ion-row>
+            <ion-button (click)="probarNotiExterna()">Pruebas de Notificaciones</ion-button>
+        </ion-row>
         <ion-row class="ion-justify-content-center" *ngIf="servicesList !== null || servicesList.length > 0">
                 <ng-container *ngFor="let service of servicesList">
                     <ion-col size="6" class="service_item" *appHasRole="service.valid_roles">

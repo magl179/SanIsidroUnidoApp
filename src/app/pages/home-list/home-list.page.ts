@@ -4,6 +4,7 @@ import { LocalDataService } from 'src/app/services/local-data.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { IHomeOptions } from 'src/app/interfaces/models';
 import { NavController } from '@ionic/angular';
+import { PruebasService } from 'src/app/services/pruebas.service';
 
 @Component({
     selector: 'app-home-list',
@@ -19,7 +20,8 @@ export class HomeListPage implements OnInit {
         private utilsService: UtilsService,
         private navCtrl: NavController,
         private localDataService: LocalDataService,
-        private authService: AuthService
+        private authService: AuthService,
+        private pruebasService: PruebasService
     ) { }
 
     async ngOnInit() {
@@ -36,6 +38,10 @@ export class HomeListPage implements OnInit {
     
     navigate(url: string) {
         this.navCtrl.navigateForward(url);
+    }
+
+    probarNotiExterna(){
+        this.pruebasService.probarNotificacionesConDatos();
     }
 
 }
