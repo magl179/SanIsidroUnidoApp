@@ -126,6 +126,7 @@ export class SocialProblemCreatePage implements OnInit {
     }
 
     getUploadedImages(event) {
+        console.log('images uploades event', event)
         this.socialProblemImages = event.total_img;
     }
 

@@ -68,7 +68,8 @@ export class EmergencyCreatePage implements OnInit {
         this.errorMessages = this.localDataService.getFormMessagesValidations(validations);
     }
 
-    async getUploadedImages(event) {
+    getUploadedImages(event) {
+        console.log('images uploades event', event)
         this.emergencyImages = event.total_img;
 
     }

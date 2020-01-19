@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { UtilsService } from 'src/app/services/utils.service';
 import { Platform } from '@ionic/angular';
@@ -21,6 +21,7 @@ export class UploadImageComponent implements OnInit {
 
     @Input() maxImages = 3;
     @Input() uploadedImages = [];
+    // uploadedImages = [];
     @Output() returnUploadedImages = new EventEmitter();
     imagenB64: string;
     imagejpg: string;
@@ -38,11 +39,13 @@ export class UploadImageComponent implements OnInit {
         cameraOptions.destinationType = this.camera.DestinationType.DATA_URL;
         cameraOptions.encodingType = this.camera.EncodingType.JPEG;
         cameraOptions.mediaType = this.camera.MediaType.PICTURE;
+        this.uploadedImages = [... this.uploadedImages];
     }
 
     async getUploadedImages() {
+        console.log('send uoload images', this.uploadedImages)
         this.returnUploadedImages.emit({
-            total_img: this.uploadedImages
+            total_img: [...this.uploadedImages]
         });
     }
 
@@ -80,13 +83,11 @@ export class UploadImageComponent implements OnInit {
                         // DatoImagen es un string codificado en base64 - BASE URI
                         this.imagenB64 = `data:image/jpeg;base64,${datosImagen}`;
                         this.uploadedImages.push(this.imagenB64);
+                        this.getUploadedImages();
                     }, err => {
                         console.log({ errorCapturarImagen: err });
                         this.messageService.showError('Ocurrio un error al capturar la imagen');
-                    });
-            if (this.uploadedImages.length >= 1) {
-                this.getUploadedImages();
-            }
+                    });           
         } else {
             this.uploadImageWeb();
         }
@@ -97,11 +98,13 @@ export class UploadImageComponent implements OnInit {
     uploadImageWeb() {
         let input = document.createElement('input');
         input.type = 'file';
+        input.value = '';
         input.accept = "image/png,image/jpg,image/jpeg";
         input.multiple = true;
         // this.web_upload_image.addEventListener("change", async (event_upload: any) => {
         input.addEventListener("change", async (event_upload: any) => {
             if (event_upload.target.files && event_upload.target.files.length > 0) {
+                console.log('dentro del if event tartget');
                 // Referencia a los archivos y convertirlos a un array
                 const eventFiles = event_upload.target.files;
                 let files_selected = Array.prototype.slice.call(eventFiles);
@@ -114,11 +117,17 @@ export class UploadImageComponent implements OnInit {
                             if (this.uploadedImages.length < this.maxImages) {
                                 this.uploadedImages.push(content);
                             }
+                            resolve();
                         }
                         reader.readAsDataURL(file);
                     });
                 }));
-                event_upload.target.value = "";
+                console.log('acabo leer imagenes promesa', event_upload);
+                console.log('acabo leer imagenes promesas', this.uploadedImages);
+                if(event_upload.target){
+                    event_upload.target.value = "";
+                }
+                this.getUploadedImages();
             }
         });
         input.click();

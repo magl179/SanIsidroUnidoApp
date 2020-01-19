@@ -9,8 +9,8 @@
                 <div class="item-form full">
                     <ion-item class="input_item" lines="none">
                         <ion-label class="label-padding" position="stacked">Titulo</ion-label>
-                        <ion-input placeholder="Ingresa el título de tu reporte"
-                            class="input-beatiful" formControlName="title" type="email"></ion-input>
+                        <ion-input placeholder="Ingresa el título de tu reporte" class="input-beatiful"
+                            formControlName="title" type="email"></ion-input>
                     </ion-item>
                 </div>
                 <div class="form-errors padding-lateral">
@@ -23,8 +23,8 @@
                     <ion-item class="input_item" lines="none">
                         <ion-label class="label-padding" position="stacked">Descripción</ion-label>
                         <ion-textarea class="input-beatiful text-area"
-                            placeholder="Ingresa la descripción de tu reporte"
-                            formControlName="description" auto-grow="true"></ion-textarea>
+                            placeholder="Ingresa la descripción de tu reporte" formControlName="description"
+                            auto-grow="true"></ion-textarea>
                     </ion-item>
                 </div>
                 <div class="form-errors padding-lateral">
@@ -34,8 +34,8 @@
                     </p>
                 </div>
                 <div padding>
-                    <ion-button [disabled]="!emergencyForm.valid" color="red-logo" type="submit" expand="block"
-                    (click)="stepper_emergencies.next()">Siguiente
+                    <ion-button [disabled]="!emergencyForm.valid" color="blue-logo" type="submit" expand="block"
+                        (click)="stepper_emergencies.next()">Siguiente
                     </ion-button>
                 </div>
             </form>
@@ -43,7 +43,8 @@
         <!-- Paso 2 -->
         <mat-step>
             <h5 class="ion-padding ion-text-center">Selecciona la ubicación del reporte</h5>
-            <single-map id="emergencyReportMap" [zoomMap]="17" [latitude]="emergencyPostCoordinate.latitude" [longitude]="emergencyPostCoordinate.longitude" [enableGesture]="false"
+            <single-map id="emergencyReportMap" [zoomMap]="17" [latitude]="emergencyPostCoordinate.latitude"
+                [longitude]="emergencyPostCoordinate.longitude" [enableGesture]="false"
                 (returnCoordinateChoosen)="updateMapCoordinate($event)">
             </single-map>
             <p *ngIf="emergencyPostCoordinate.address" class="name-ubication-pt">Tu
@@ -54,10 +55,9 @@
                     <ion-item class="input_item padding-lateral-none" lines="none">
                         <ion-label class="label-padding" position="stacked">Descripción de la
                             Ubicación</ion-label>
-                        <ion-textarea
-                            placeholder="Ingresa una descripción más detallada de la ubicación de tu reporte"
-                            class="input-beatiful text-area" formControlName="description_ubication"
-                            auto-grow="true"></ion-textarea>
+                        <ion-textarea placeholder="Ingresa una descripción más detallada de la ubicación de tu reporte"
+                            class="input-beatiful text-area" formControlName="description_ubication" auto-grow="true">
+                        </ion-textarea>
                     </ion-item>
                 </div>
                 <div class="form-errors padding-lateral">
@@ -68,8 +68,8 @@
                 </div>
             </form>
             <div>
-                <ion-button color="red-logo" [disabled]="!ubicationForm.valid" expand="full"
-                    type="submit" (click)="stepper_emergencies.next()">Siguiente
+                <ion-button color="blue-logo" [disabled]="!ubicationForm.valid" expand="full" type="submit"
+                    (click)="stepper_emergencies.next()">Siguiente
                 </ion-button>
             </div>
         </mat-step>
@@ -78,27 +78,26 @@
             <h5 class="ion-padding ion-text-center">Carga hasta 2 fotos para tu reporte</h5>
             <ion-grid *ngIf="emergencyImages.length > 0">
                 <ion-row>
-                    <ion-col size="6" *ngFor="let image of emergencyImages; let i = index;">
-                        <ion-item-sliding>
-                            <ion-item lines="none">
-                                <ion-card>
-                                    <img [src]="image | imageSanitizer">
-                                </ion-card>
-                            </ion-item>
-                            <ion-item-options side="end">
-                                <ion-item-option (click)="deleteImage(i)" color="danger"
-                                    expandable="true">
-                                    <ion-icon slot="icon-only" name="trash"></ion-icon>
-                                </ion-item-option>
-                            </ion-item-options>
-                        </ion-item-sliding>
+                    <ion-col size="6" class="image_col" *ngFor="let image of emergencyImages; let i = index;">
+                        <ion-item lines="none">
+                            <ion-card>
+                                <img [src]="image | imageSanitizer">
+                                <div class="container_image_actions">
+                                    <ion-button size="small" color="danger" (click)="deleteImage(i)">
+                                        <ion-icon name="trash"></ion-icon>
+                                    </ion-button>
+                                </div>
+                            </ion-card>
+                        </ion-item>
                     </ion-col>
                 </ion-row>
             </ion-grid>
             <app-upload-image [uploadedImages]="emergencyImages" [maxImages]="2"
-                (returnUploadedImages)="getUploadedImages($event)"></app-upload-image>
+                (returnUploadedImages)="getUploadedImages($event)">
+            </app-upload-image>
+
             <div padding>
-                <ion-button color="red-logo" type="submit" expand="block" (click)="stepper_emergencies.next()">
+                <ion-button color="blue-logo" type="submit" expand="block" (click)="stepper_emergencies.next()">
                     Siguiente
                 </ion-button>
             </div>
