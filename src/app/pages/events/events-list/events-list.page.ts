@@ -122,7 +122,7 @@ export class EventsListPage implements OnInit, OnDestroy {
             }
 
             if (eventsApi.length === 0) {
-                if (event && event.data && event.data.target) {
+                if (event && event.data && event.data.target && event.data.target.complete) {
                     event.data.target.disabled = true;
                     event.data.target.complete();
                 }
@@ -134,7 +134,7 @@ export class EventsListPage implements OnInit, OnDestroy {
                 });
 
             }
-            if (event && event.data && event.data.target) {
+            if (event && event.data && event.data.target && event.data.target.complete) {
                 event.data.target.complete();
             }
             if (event && event.type === 'refresher') {

@@ -93,13 +93,13 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
             }
 
             if (emergenciesApi.length === 0) {
-                if (event && event.data && event.data.target) {
+                if (event && event.data && event.data.target && event.data.target.complete) {
                     event.data.target.disabled = true;
                     event.data.target.complete();
                 }
                 return;
             }
-            if (event && event.data && event.data.target) {                
+            if (event && event.data && event.data.target && event.data.target.complete) {                
                 event.data.target.complete();
             }
             if (event && event.type == 'refresher') {

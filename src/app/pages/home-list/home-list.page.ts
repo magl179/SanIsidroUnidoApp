@@ -40,8 +40,11 @@ export class HomeListPage implements OnInit {
         this.navCtrl.navigateForward(url);
     }
 
-    probarNotiExterna(){
+    probarNotiLocal(){
         this.pruebasService.probarNotificacionesConDatos();
+    }
+    probarNotiExterna(){
+        this.pruebasService.probarNotificationExternaConDatos();
     }
 
 }

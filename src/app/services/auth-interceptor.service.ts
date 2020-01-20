@@ -23,7 +23,9 @@ import { ErrorService } from "src/app/services/error.service";
   providedIn: "root"
 })
 export class AuthInterceptorService implements HttpInterceptor {
-  private statusCodeAvoid = [401];
+  
+    private statusCodeAvoid = [401];
+    private numIntentos = 2;
 
   constructor(
     private authService: AuthService,
@@ -36,7 +38,7 @@ export class AuthInterceptorService implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     const request = req.clone();
     return next.handle(request).pipe(
-      this.http_retry(2),
+      this.http_retry(this.numIntentos),
       map(data => {
         // console.log('response success', data);
         return data;

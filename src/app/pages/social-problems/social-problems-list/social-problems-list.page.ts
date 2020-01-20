@@ -159,7 +159,7 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
             }
 
             if (socialProblems.length === 0) {
-                if (event && event.data && event.data.target) {
+                if (event && event.data && event.data.target && event.data.target.complete) {
                     event.data.target.disabled = true;
                     event.data.target.complete();
                 }
@@ -170,7 +170,7 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
                     return social_problem;
                 });
             }
-            if (event && event.data && event.data.target) {
+            if (event && event.data && event.data.target && event.data.target.complete) {
                 event.data.target.complete();
             }
             if (event && event.type === 'refresher') {

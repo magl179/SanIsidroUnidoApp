@@ -65,33 +65,9 @@
             </ion-row>
         </ion-grid>
         <!-- REDES SOCIALES ASOCIADAS -->
-        <!-- <div class="list-items-container animated flash slow infinite"
-            *ngIf="!userSocialProfilesLoaded">
-            <p class="title">
-                <ion-skeleton-text width="60%"></ion-skeleton-text>
-            </p>
-            <div class="list-items">
-                <div class="list-item" *ngFor="let i of [1,1,1]; let i = index">
-                    <div class="item-left">
-                        <ion-thumbnail slot="start" class="icon">
-                            <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
-                        </ion-thumbnail>
-                        <span class="label">
-                            <ion-skeleton-text width="40%"></ion-skeleton-text>
-                        </span>
-                    </div>
-                    <div class="item-right">
-                        <ion-button color="light" class="ion-text-capitalize">
-                            <ion-skeleton-text width="60%"></ion-skeleton-text>
-                        </ion-button>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-
         <div class="list-items-container"
             *ngIf="UserSocialProfiles && UserSocialProfiles.length > 0">
-            <p class="title">Redes Sociales Asociadas</p>
+            <p class="title title_font">Redes Sociales Asociadas</p>
             <div class="list-items">
                 <div class="list-item"
                     *ngFor="let user_social_profile of UserSocialProfiles; let i = index">
@@ -117,38 +93,17 @@
             <p>No tienes redes sociales asociadas</p>
         </div>
         <!-- DISPOSITIVOS ASOCIADOS -->
-        <!-- <div class="list-items-container animated flash slow infinite"
-            *ngIf="!userSocialProfilesLoaded">
-            <p class="title">
-                <ion-skeleton-text width="60%"></ion-skeleton-text>
-            </p>
-            <div class="list-items">
-                <div class="list-item" *ngFor="let i of [1,1]; let i = index">
-                    <div class="item-left">
-                        <img class="icon" src="/assets/img/svg/smartphone.svg">
-                        <div class="label">
-                            <p>
-                                <ion-skeleton-text width="40%"></ion-skeleton-text>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="item-right">
-                        <ion-button color="light" class="ion-text-capitalize">
-                            <ion-skeleton-text width="30%"></ion-skeleton-text>
-                        </ion-button>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-
         <div class="list-items-container" *ngIf="UserDevices && UserDevices.length > 0">
-            <p class="title">Dispositivos asociados</p>
+            <p class="title title_font">Dispositivos asociados</p>
             <div class="list-items">
                 <div class="list-item" *ngFor="let user_device of UserDevices; let i = index">
                     <div class="item-left">
                         <img class="icon" src="/assets/img/svg/smartphone.svg">
                         <div class="label">
                             <p>{{user_device.phone_model}}</p>
+                            <p class="device_last_conexion">
+                                {{ (user_device.updated_at) ? (user_device.updated_at | beafitulDate) : ''}}
+                            </p>
                         </div>
                     </div>
                     <div class="item-right">
