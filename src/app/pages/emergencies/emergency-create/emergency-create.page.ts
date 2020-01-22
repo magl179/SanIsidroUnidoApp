@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { UtilsService } from 'src/app/services/utils.service';
 import { MapService } from 'src/app/services/map.service';
 import { LocalizationService } from 'src/app/services/localization.service';
@@ -6,12 +6,13 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { IEmergencyReported, IUbication } from 'src/app/interfaces/models';
 import { PostsService } from 'src/app/services/posts.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
-import { finalize } from 'rxjs/operators';
+import { finalize, timeout, delay, take } from 'rxjs/operators';
 import { IRespuestaApiSIU } from "src/app/interfaces/models";
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from 'src/app/services/messages.service';
 import { EventsService } from '../../../services/events.service';
+import { BehaviorSubject, interval, Observable, of, from } from 'rxjs';
 
 @Component({
     selector: 'app-emergency-create',
@@ -30,10 +31,12 @@ export class EmergencyCreatePage implements OnInit {
     emergencyForm: FormGroup;
     ubicationForm: FormGroup;
     formSended = false;
+    // formSended = new BehaviorSubject(false);
     errorMessages = null;
 
     constructor(
         private utilsService: UtilsService,
+        private cdRef:ChangeDetectorRef,
         private mapService: MapService,
         private messageService: MessagesService,
         private errorService: ErrorService,
@@ -47,17 +50,17 @@ export class EmergencyCreatePage implements OnInit {
     }
 
     async ngOnInit() {
-        await this.localizationService.getCoordinates().then((coordinates: any)=>{
+        await this.localizationService.getCoordinates().then((coordinates: any) => {
             this.emergencyPostCoordinate.latitude = coordinates.latitude;
             this.emergencyPostCoordinate.longitude = coordinates.longitude;
-        }).catch(err=>{
+        }).catch(err => {
             console.log('Error al obtener geolocalizacion', err);
         });
     }
 
     createForm() {
         const validations = this.localDataService.getFormValidations();
-        const title= new FormControl('', Validators.compose([
+        const title = new FormControl('', Validators.compose([
             Validators.required,
         ]));
         const description = new FormControl('', Validators.compose([
@@ -68,7 +71,7 @@ export class EmergencyCreatePage implements OnInit {
         ]));
 
         this.emergencyForm = this.formBuilder.group({ title, description });
-        this.ubicationForm = this.formBuilder.group({description_ubication});
+        this.ubicationForm = this.formBuilder.group({ description_ubication });
         this.errorMessages = this.localDataService.getFormMessagesValidations(validations);
     }
 
@@ -97,12 +100,14 @@ export class EmergencyCreatePage implements OnInit {
             zoom: 14
         }).subscribe(direccion => {
             this.emergencyPostCoordinate.address = direccion.display_name;
-        },(err: HttpErrorResponse) => {
+            //Ejecutar la deteccion de cambios de Angular de forma manual
+            this.cdRef.detectChanges();
+        }, (err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error al obtener la dirección de tu ubicación');
         });
     }
 
-    async sendEmergencyReport() { 
+    async sendEmergencyReport() {
 
         if (this.emergencyForm.valid !== true) {
             return this.messageService.showInfo("Ingresa un titulo y una descripción");
@@ -133,20 +138,18 @@ export class EmergencyCreatePage implements OnInit {
                 loadingEmergencyReport.dismiss()
             })
         ).subscribe(async (res: IRespuestaApiSIU) => {
-
             this.messageService.showSuccess("El Reporte fue enviado correctamente");
-
             this.formSended = true;
-            console.log('this.formsend', this.formSended);
-
+            console.log('this.formsedn', this.formSended);
             this.events_app.resetEmergenciesEmitter();
+            this.cdRef.detectChanges();
 
         }, (err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error al enviar tu reporte');
         });
     }
 
-   
+
 
 
 

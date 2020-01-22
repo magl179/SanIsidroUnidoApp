@@ -12,7 +12,10 @@ import { INotiPostOpen } from "src/app/interfaces/models";
 import { CONFIG } from 'src/config/config';
 import { MessagesService } from './messages.service';
 import { ErrorService } from './error.service';
+import { Storage } from '@ionic/storage'
+import { Router } from '@angular/router';
 
+const USER_DEVICE_ID_STORAGE = "siuDevice";
 
 const USER_DEVICE_DEFAULT: IDeviceUser = {
     id: null,
@@ -41,6 +44,8 @@ export class NotificationsService {
         private messageService: MessagesService,
         private userService: UserService,
         private authService: AuthService,
+        private storage: Storage,
+        private router: Router,
         private utilsService: UtilsService
     ) {
         this.loadUser();
@@ -62,8 +67,8 @@ export class NotificationsService {
                 this.manageNotificationReceived(myNotification);
             });
             //Funcion para hacer algo cuando una notificacion es recibida
-            this.oneSignal.handleNotificationOpened().subscribe(async (myNotification) => {
-                //console.log('Una notificación fue recibida y abierta', myNotification);
+            //console.log('Una notificación fue recibida y abierta', myNotification);
+                this.oneSignal.handleNotificationOpened().subscribe(async (myNotification) => {
                 await this.manageNotificationOpened(myNotification.notification);
             });
             //Función acabar la configuración de Onesignal
@@ -72,6 +77,20 @@ export class NotificationsService {
             this.getOneSignalIDSubscriptor();
         }
     }
+    //Guardar ID Dispositivo en el Storage
+    async saveDeviceInfo(device_id: any) {
+        this.storage.set(USER_DEVICE_ID_STORAGE, device_id);
+    }
+    //Obtener ID Dispositivo en el Storage
+    async getUserDeviceInfo() {
+        const getUserDeviceID = new Promise((resolve, reject) => {
+            this.storage.get(USER_DEVICE_ID_STORAGE).then(user_device => {
+                resolve(user_device);
+            });
+        });
+        return await getUserDeviceID;
+    }
+
     //Retornar la información del dispositivo del usuario como un observable
     getUserDevice() {
         return this.userDevice.asObservable();
@@ -98,6 +117,7 @@ export class NotificationsService {
             this.userService.sendRequestAddUserDevice(data)
                 .subscribe(async (res: any) => {
                     this.messageService.showSuccess('Dispositivo Añadido Correctamente');
+                    this.saveDeviceInfo(this.userDevice.value.phone_id);
                 }, (err: any) => {
                     this.errorService.manageHttpError(err, 'Ocurrio un error al añadir el dispositivo');
                 });
@@ -144,37 +164,48 @@ export class NotificationsService {
     }
 
     async manageAppNotification(aditionalData: any) {
-         //Verificar si tengo dato posts
+        //Verificar si tengo dato posts
         if (aditionalData && aditionalData.post) {
             this.managePostNotification(aditionalData.post);
         }
     }
-    async managePostNotification(aditionalDataPost: INotiPostOpen) {     
-            const post = aditionalDataPost;
-            if (post && post.category && post.id) {
-                //Switch de Opciones segun el slug del posts
-                console.warn('post catgory', post.category )
-                switch (post.category) {
-                    case CONFIG.EMERGENCIES_SLUG: //caso posts emergencia creado
-                        this.navCtrl.navigateForward(`/emergencies/detail/${post.id}`);
-                        break;
-                    case CONFIG.EVENTS_SLUG: //caso posts evento creado
-                        this.navCtrl.navigateForward(`/events/detail/${post.id}`);
-                        break;
-                    case CONFIG.SOCIAL_PROBLEMS_SLUG: // caso posts problema social
-                        if (post.subcategory) {
-                            this.navCtrl.navigateForward(`/social-problems/list/${post.subcategory}/${post.id}`);
-                        } else {
-                            this.navCtrl.navigateForward(`/social-problems/categories`);
-                        }
-                        break;
-                    case CONFIG.REPORTS_SLUG: //caso reporte o informe
-                        this.navCtrl.navigateForward(`/reports/detail/${post.id}`);
-                        break;
-                    default:
-                        console.log('No match any noti')
-                        return;
-                }
+    async managePostNotification(aditionalDataPost: INotiPostOpen) {
+        const post = aditionalDataPost;
+        let urlNavigate = null;
+
+        if (post && post.category && post.id) {
+            //Switch de Opciones segun el slug del posts
+            console.warn('post catgory', post.category)
+            console.warn('post aditiondal data', aditionalDataPost)
+            switch (post.category.toLowerCase()) {
+                case CONFIG.EMERGENCIES_SLUG: //caso posts emergencia creado
+                    urlNavigate = this.navCtrl.navigateForward(`/emergencies/detail/${post.id}`);
+                    break;
+                case CONFIG.EVENTS_SLUG: //caso posts evento creado
+                    urlNavigate = this.navCtrl.navigateForward(`/events/detail/${post.id}`);
+                    break;
+                case CONFIG.SOCIAL_PROBLEMS_SLUG: // caso posts problema social
+                    if (post.subcategory) {
+                        urlNavigate = this.navCtrl.navigateForward(`/social-problems/list/${post.subcategory}/${post.id}`);
+                    } else {
+                        urlNavigate = this.navCtrl.navigateForward(`/social-problems/categories`);
+                    }
+                    break;
+                case CONFIG.REPORTS_SLUG: //caso reporte o informe
+                    urlNavigate = this.navCtrl.navigateForward(`/reports/list/${post.id}`);
+                    break;
+                default:
+                    console.log('No match any noti')
+                    urlNavigate = null;
+                    break;
             }
+            console.warn('URL NAVIGATE', urlNavigate)
+            if(urlNavigate){
+                setTimeout(()=>{
+                    // this.navCtrl.navigateForward(urlNavigate);
+                    this.router.navigateByUrl(urlNavigate);
+                }, 2000);
+            }
+        }
     }
 }
