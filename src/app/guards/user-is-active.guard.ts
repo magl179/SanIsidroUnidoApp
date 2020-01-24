@@ -20,7 +20,7 @@ export class UserIsActiveGuard implements CanLoad {
         const userObservable = this.authService.sessionAuthUser;
         return userObservable.pipe(
             map(token_decoded => {
-                console.log('token decoded user authenticated guard', token_decoded);
+                // console.log('token decoded user authenticated guard', token_decoded);
                 if (token_decoded) {
                     if (token_decoded.user && token_decoded.user.roles && token_decoded.user.roles[0].role_user.state === 1) {
                         return true;

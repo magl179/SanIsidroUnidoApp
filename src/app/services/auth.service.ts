@@ -11,6 +11,7 @@ import { IRespuestaApiSIUSingle } from "../interfaces/models";
 import { UtilsService } from './utils.service';
 import { CONFIG } from 'src/config/config';
 import { MessagesService } from './messages.service';
+import { EventsService } from './events.service';
 
 const TOKEN_ITEM_NAME = "accessToken";
 const USER_ITEM_NAME = "currentUser";
@@ -30,7 +31,8 @@ export class AuthService {
         private navCtrl: NavController,
         private httpRequest: HttpRequestService,
         private messageService: MessagesService,
-        private utilsService: UtilsService
+        private utilsService: UtilsService,
+        private events_appService: EventsService
     ) {
 
         this.storage.ready().then(async () => {
@@ -83,6 +85,8 @@ export class AuthService {
         this.cleanLocalStorage();
         this.cleanAuthInfo();
         this.messageService.showInfo(message);
+        // this.notificationService.logoutOnesignal();
+        this.events_appService.emitLogoutEvent();
         this.navCtrl.navigateRoot('/login');
     }
     //VERIFICAR SI SE DEBE CHECKEAR VALIDEZ TOKEN

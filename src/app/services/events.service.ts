@@ -11,8 +11,13 @@ export class EventsService {
     socialProblemEmitter = new EventEmitter();
     eventsEmitter = new EventEmitter();
     emergenciesEmitter = new EventEmitter();
+    logoutAppEmitter = new EventEmitter();
 
     constructor() { }
+
+    emitLogoutEvent(){
+        this.logoutAppEmitter.emit();
+    }
 
     resetSocialProblemEmmiter(id: number) {
         // console.log('post service emit event');

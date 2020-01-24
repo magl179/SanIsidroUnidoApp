@@ -67,6 +67,8 @@ export class LoginPage implements OnInit {
         this.authService.saveLocalStorageInfo(token, token_decoded);
         //Registrar Dispositivo
         this.notificationsService.registerUserDevice(token_decoded.user);
+        //Activar notificaciones Onesignal
+        this.notificationsService.activateOnesignalSubscription();
         this.loginForm.reset();
         //Redirigir Usuario
         loadingManageLogin.dismiss();

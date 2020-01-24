@@ -67,8 +67,11 @@ export class RegisterPage implements OnInit {
         this.authService.saveLocalStorageInfo(token, token_decoded);
         //Registrar Dispositivo
         this.notificationsService.registerUserDevice(token_decoded.user);
+        //Activar notificaciones onesignal
+        this.notificationsService.activateOnesignalSubscription();
         //Redirigir Usuario
         loadingManageRegister.dismiss();
+        //Redigirir a la ruta HOME
         this.navCtrl.navigateRoot(`/${CONFIG.HOME_ROUTE}`);
     }
     //Function registrar al usuario por formulario

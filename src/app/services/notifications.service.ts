@@ -1,4 +1,4 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable, EventEmitter, OnInit } from '@angular/core';
 import { OneSignal, OSNotification, OSNotificationPayload } from '@ionic-native/onesignal/ngx';
 import { environment } from 'src/environments/environment';
 import { BehaviorSubject } from 'rxjs';
@@ -14,6 +14,7 @@ import { MessagesService } from './messages.service';
 import { ErrorService } from './error.service';
 import { Storage } from '@ionic/storage'
 import { Router } from '@angular/router';
+import { EventsService } from './events.service';
 
 const USER_DEVICE_ID_STORAGE = "siuDevice";
 
@@ -28,7 +29,7 @@ const USER_DEVICE_DEFAULT: IDeviceUser = {
 @Injectable({
     providedIn: 'root'
 })
-export class NotificationsService {
+export class NotificationsService implements OnInit {
 
     currentUser = null;
     pushListener = new EventEmitter<OSNotificationPayload>();
@@ -46,9 +47,15 @@ export class NotificationsService {
         private authService: AuthService,
         private storage: Storage,
         private router: Router,
-        private utilsService: UtilsService
+        private events_appService: EventsService
     ) {
         this.loadUser();
+    }
+
+    ngOnInit() {
+        this.events_appService.logoutAppEmitter.subscribe(res => {
+            this.logoutOnesignal();
+        });
     }
 
     async initialConfig() {
@@ -68,9 +75,10 @@ export class NotificationsService {
             });
             //Funcion para hacer algo cuando una notificacion es recibida
             //console.log('Una notificación fue recibida y abierta', myNotification);
-                this.oneSignal.handleNotificationOpened().subscribe(async (myNotification) => {
+            this.oneSignal.handleNotificationOpened().subscribe(async (myNotification) => {
                 await this.manageNotificationOpened(myNotification.notification);
             });
+            // this.oneSignal.            
             //Función acabar la configuración de Onesignal
             this.oneSignal.endInit();
             // Obtener el ID De Subscriptor de este dispositivo
@@ -121,6 +129,30 @@ export class NotificationsService {
                 }, (err: any) => {
                     this.errorService.manageHttpError(err, 'Ocurrio un error al añadir el dispositivo');
                 });
+        }
+    }
+
+    activateOnesignalSubscription() {
+        //Activar notificaciones
+        if (this.platform.is('cordova')) {
+            this.oneSignal.setSubscription(true);
+        }
+    }
+
+    async logoutOnesignal() {
+        if (this.platform.is('cordova')) {
+            const onesignalDevice = await this.oneSignal.getIds();
+            const deviceID = onesignalDevice.userId;
+            this.oneSignal.setSubscription(false);
+            console.log('logout onesignal device ID', onesignalDevice);
+            if (deviceID) {
+                this.userService.sendRequestDeleteUserPhoneDevice(deviceID).subscribe(async (res: any) => {
+                    this.messageService.showSuccess('Dispositivo Desuscrito Correctamente');
+                    this.saveDeviceInfo(this.userDevice.value.phone_id);
+                }, (err: any) => {
+                    this.errorService.manageHttpError(err, 'Ocurrio un error al desuscribir el dispositivo');
+                });;
+            }
         }
     }
 
@@ -179,20 +211,21 @@ export class NotificationsService {
             console.warn('post aditiondal data', aditionalDataPost)
             switch (post.category.toLowerCase()) {
                 case CONFIG.EMERGENCIES_SLUG: //caso posts emergencia creado
-                    urlNavigate = this.navCtrl.navigateForward(`/emergencies/detail/${post.id}`);
+                    urlNavigate = `/emergencies/detail/${post.id}`;
                     break;
                 case CONFIG.EVENTS_SLUG: //caso posts evento creado
-                    urlNavigate = this.navCtrl.navigateForward(`/events/detail/${post.id}`);
+                    urlNavigate = `/events/detail/${post.id}`;
                     break;
                 case CONFIG.SOCIAL_PROBLEMS_SLUG: // caso posts problema social
                     if (post.subcategory) {
-                        urlNavigate = this.navCtrl.navigateForward(`/social-problems/list/${post.subcategory}/${post.id}`);
+                        urlNavigate = `/social-problems/list/${post.subcategory}/${post.id}`;
                     } else {
-                        urlNavigate = this.navCtrl.navigateForward(`/social-problems/categories`);
+                        urlNavigate = `/social-problems/categories`;
                     }
                     break;
                 case CONFIG.REPORTS_SLUG: //caso reporte o informe
-                    urlNavigate = this.navCtrl.navigateForward(`/reports/list/${post.id}`);
+                    // urlNavigate = this.navCtrl.navigateForward(`/reports/list/${post.id}`);
+                    urlNavigate = `/reports/list/${post.id}`;
                     break;
                 default:
                     console.log('No match any noti')
@@ -200,11 +233,11 @@ export class NotificationsService {
                     break;
             }
             console.warn('URL NAVIGATE', urlNavigate)
-            if(urlNavigate){
-                setTimeout(()=>{
+            if (urlNavigate) {
+                setTimeout(() => {
                     // this.navCtrl.navigateForward(urlNavigate);
                     this.router.navigateByUrl(urlNavigate);
-                }, 2000);
+                }, 1000);
             }
         }
     }

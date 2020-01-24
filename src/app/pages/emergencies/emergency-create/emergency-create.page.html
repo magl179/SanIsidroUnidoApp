@@ -122,11 +122,7 @@
                     <img [src]="image | imageSanitizer">
                 </ion-thumbnail>
             </div>
-            <p>
-                {{
-                    (formSended) ? 'form sended': 'form not sended'
-                }}
-            </p>
+           
             <div>
                 <ion-button expand="full" color="blue-logo" (click)="sendEmergencyReport()"
                 [disabled]="formSended">Reportar</ion-button>
