@@ -3,12 +3,13 @@ import { NavController, ModalController } from "@ionic/angular";
 import { UtilsService } from "src/app/services/utils.service";
 import { PostsService } from "src/app/services/posts.service";
 import { IBasicFilter, IRespuestaApiSIUPaginada, ITokenDecoded } from "src/app/interfaces/models";
-import { finalize, map } from 'rxjs/operators';
+import { finalize, map, takeUntil } from 'rxjs/operators';
 import { mapEmergency, setFilterKeys, filterDataInObject } from "src/app/helpers/utils";
 import { AuthService } from 'src/app/services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from "src/app/services/events.service";
 import { ErrorService } from 'src/app/services/error.service';
+import { Subject } from 'rxjs';
 
 @Component({
     selector: 'app-emergencies-list',
@@ -17,6 +18,8 @@ import { ErrorService } from 'src/app/services/error.service';
 })
 export class EmergenciesListPage implements OnInit, OnDestroy {
 
+    //Desuscribir
+    private unsubscribe$ = new Subject<void>();
     AuthUser = null;
     showloading = true;   
     showNotFound = false; 
@@ -65,7 +68,11 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         })
     }
 
-    ngOnDestroy() { }
+    ngOnDestroy() {
+        //Desuscribirnos de los Observables al destruir el componente
+        this.unsubscribe$.next();
+        this.unsubscribe$.complete();
+    }
     ionViewWillEnter() { }
     ionViewWillLeave() { this.postsService.resetEmergenciesPage(); }
 
@@ -84,6 +91,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
                     this.showloading = false;
                 }
             }),
+            takeUntil(this.unsubscribe$) //Marcar como completada una suscripción
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let emergenciesApi = [];
             emergenciesApi = res.data;

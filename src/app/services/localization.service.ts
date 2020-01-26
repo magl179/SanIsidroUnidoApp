@@ -145,4 +145,47 @@ export class LocalizationService {
             ).catch((err) => reject(err));
         });
     }
+
+    async checkInitialGPSPermissions() {
+        if(this.platform.is('cordova')){
+            const permisosGPS = new Promise(async(resolve, reject) => {
+                await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
+                    async (result: any) => {
+                        // console.log('check permission', result)
+                        if (result.hasPermission) {
+                            resolve('tengo permisos para acceder al GPS');
+                        } else {
+                            // console.log('solicitar permisos gps en verificar permisos gps')
+                            // return await this.requestGPSPermission();
+                            return new Promise(async(resolve, reject) => {
+                                // console.log('solicitar permisos gps');
+                                await this.locationAccuracy.canRequest().then(async (canRequest: any) => {
+                                    console.log('can request', canRequest)
+                                    if (canRequest) {
+                                        // console.log('puedo pedir enceder GPS');
+                                        resolve('puedo pedir enceder GPS');
+                                    } else {
+                                        reject('Por favor habilita el acceso de la aplicación a la geolocalización');
+                                    }
+                                }).catch(err => {
+                                    reject(err);
+                                });
+                            });
+                        }
+    
+                    }
+                ).catch(err => {
+                    // throw (err);
+                    reject(err);
+                });
+            });
+            permisosGPS.then(res=>{console.log('res', res)}).catch(err=>{
+                console.log('error', err);
+            })
+        }else{
+            return;
+        }
+    }
+
+
 }

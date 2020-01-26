@@ -25,6 +25,8 @@ export class ListNotificationsComponent implements OnInit {
     @Input() maxNotifications = 0;
     @Input() getUnreaded = false;
 
+    requestFinished = false;
+
     notificationsRequested: NotiList[] = [];
     notificationsList: NotiList[] = [];
 
@@ -66,6 +68,7 @@ export class ListNotificationsComponent implements OnInit {
             this.notificationsRequested = this.notificationsRequested.filter(noti => noti.state === 0);
         }
         console.log('Noti Requested', this.notificationsRequested);
+        this.requestFinished = true;
     }
 
     async manageNoti(noti: any) {

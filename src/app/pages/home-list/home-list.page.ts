@@ -47,4 +47,9 @@ export class HomeListPage implements OnInit {
         this.pruebasService.probarNotificationExternaConDatos();
     }
 
+    probarToggleSubscription(){
+        this.pruebasService.switchSubscription();
+    }
+    
+
 }

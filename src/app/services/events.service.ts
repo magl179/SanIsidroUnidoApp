@@ -16,7 +16,9 @@ export class EventsService {
     constructor() { }
 
     emitLogoutEvent(){
-        this.logoutAppEmitter.emit();
+        this.logoutAppEmitter.emit({
+            type: 'logout-app'
+        });
     }
 
     resetSocialProblemEmmiter(id: number) {

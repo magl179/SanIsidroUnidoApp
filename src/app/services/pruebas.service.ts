@@ -30,4 +30,8 @@ export class PruebasService {
         console.log('res err', err)
       });
   }
+  
+  switchSubscription(){
+    this.notificationService.toggleOnesignalSubscription();
+  }
 }

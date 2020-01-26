@@ -14,6 +14,7 @@ import { mapUser } from "./helpers/utils";
 import { map} from 'rxjs/operators';
 import { NavigationService } from './services/navigation.service';
 import { MessagesService } from './services/messages.service';
+import { LocalizationService } from './services/localization.service';
 
 @Component({
     selector: 'app-root',
@@ -37,6 +38,7 @@ export class AppComponent implements OnInit {
         private alertController: AlertController,
         private authService: AuthService,
         private utilsService: UtilsService,
+        private localizationService: LocalizationService,
         private navigationService: NavigationService,
         private menuCtrl: MenuController,
         private pushNotificationService: NotificationsService,
@@ -68,6 +70,7 @@ export class AppComponent implements OnInit {
             this.showAppsplash = false;
             timer(1000).subscribe(async () => {
                 await this.pushNotificationService.initialConfig();
+                 await this.localizationService.checkInitialGPSPermissions();
             });
             this.navigationService.keepHistoryTracking();
         });

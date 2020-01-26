@@ -15,6 +15,7 @@ import { ErrorService } from './error.service';
 import { Storage } from '@ionic/storage'
 import { Router } from '@angular/router';
 import { EventsService } from './events.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 const USER_DEVICE_ID_STORAGE = "siuDevice";
 
@@ -31,6 +32,7 @@ const USER_DEVICE_DEFAULT: IDeviceUser = {
 })
 export class NotificationsService implements OnInit {
 
+    onesignalSubscription = true;
     currentUser = null;
     pushListener = new EventEmitter<OSNotificationPayload>();
     AuthUser = null;
@@ -59,6 +61,11 @@ export class NotificationsService implements OnInit {
     }
 
     async initialConfig() {
+        console.log('on innit notifications service')
+        this.events_appService.logoutAppEmitter.subscribe((event: any) => {
+            console.log('logout onesignal event', event);
+            this.logoutOnesignal();
+        });
         //Configurar Onesignal en un Dispositivo
         if (this.platform.is('cordova')) {
             //obtener el onesginal_id y el firebaseid
@@ -85,6 +92,7 @@ export class NotificationsService implements OnInit {
             this.getOneSignalIDSubscriptor();
         }
     }
+    
     //Guardar ID Dispositivo en el Storage
     async saveDeviceInfo(device_id: any) {
         this.storage.set(USER_DEVICE_ID_STORAGE, device_id);
@@ -139,17 +147,42 @@ export class NotificationsService implements OnInit {
         }
     }
 
+    setEmailOnesignal(email: string){
+        if (this.platform.is('cordova')) {
+            this.oneSignal.setEmail(email);
+        }
+    }
+    logOutEmailOnesignal(){
+        if (this.platform.is('cordova')) {
+            this.oneSignal.logoutEmail();
+        }
+    }
+
+    toggleOnesignalSubscription(){
+        this.onesignalSubscription = !this.onesignalSubscription;
+        if(this.onesignalSubscription){
+            this.messageService.showSuccess('Te has suscrito a las notificaciones :)');
+        }else{
+            this.messageService.showWarning('Te has desuscrito a las notificaciones :(');
+        }
+        this.oneSignal.setSubscription(this.onesignalSubscription);
+    }
+
     async logoutOnesignal() {
+        this.messageService.showInfo('call logout onesignal');
         if (this.platform.is('cordova')) {
             const onesignalDevice = await this.oneSignal.getIds();
             const deviceID = onesignalDevice.userId;
+            this.messageService.showInfo('this.oneSignal.setSubscription(false)');
+            this.messageService.showInfo(JSON.stringify(deviceID));
             this.oneSignal.setSubscription(false);
+            this.logOutEmailOnesignal();
             console.log('logout onesignal device ID', onesignalDevice);
             if (deviceID) {
                 this.userService.sendRequestDeleteUserPhoneDevice(deviceID).subscribe(async (res: any) => {
                     this.messageService.showSuccess('Dispositivo Desuscrito Correctamente');
-                    this.saveDeviceInfo(this.userDevice.value.phone_id);
-                }, (err: any) => {
+                    console.log('res', res);
+                }, (err: HttpErrorResponse) => {
                     this.errorService.manageHttpError(err, 'Ocurrio un error al desuscribir el dispositivo');
                 });;
             }
