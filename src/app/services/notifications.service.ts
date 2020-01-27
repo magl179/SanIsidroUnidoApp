@@ -55,9 +55,6 @@ export class NotificationsService implements OnInit {
     }
 
     ngOnInit() {
-        this.events_appService.logoutAppEmitter.subscribe(res => {
-            this.logoutOnesignal();
-        });
     }
 
     async initialConfig() {
@@ -81,15 +78,16 @@ export class NotificationsService implements OnInit {
                 this.manageNotificationReceived(myNotification);
             });
             //Funcion para hacer algo cuando una notificacion es recibida
-            //console.log('Una notificación fue recibida y abierta', myNotification);
             this.oneSignal.handleNotificationOpened().subscribe(async (myNotification) => {
+                //console.log('Una notificación fue recibida y abierta', myNotification);
                 await this.manageNotificationOpened(myNotification.notification);
-            });
-            // this.oneSignal.            
+            });           
             //Función acabar la configuración de Onesignal
             this.oneSignal.endInit();
             // Obtener el ID De Subscriptor de este dispositivo
             this.getOneSignalIDSubscriptor();
+            //Desactivar suscripcion
+            this.deactivateOnesignalSubscription();
         }
     }
     
@@ -146,6 +144,12 @@ export class NotificationsService implements OnInit {
             this.oneSignal.setSubscription(true);
         }
     }
+    deactivateOnesignalSubscription() {
+        //Desactivar notificaciones
+        if (this.platform.is('cordova')) {
+            this.oneSignal.setSubscription(false);
+        }
+    }
 
     setEmailOnesignal(email: string){
         if (this.platform.is('cordova')) {
@@ -175,8 +179,8 @@ export class NotificationsService implements OnInit {
             const deviceID = onesignalDevice.userId;
             this.messageService.showInfo('this.oneSignal.setSubscription(false)');
             this.messageService.showInfo(JSON.stringify(deviceID));
-            this.oneSignal.setSubscription(false);
-            this.logOutEmailOnesignal();
+            this.deactivateOnesignalSubscription();
+            // this.logOutEmailOnesignal();
             console.log('logout onesignal device ID', onesignalDevice);
             if (deviceID) {
                 this.userService.sendRequestDeleteUserPhoneDevice(deviceID).subscribe(async (res: any) => {

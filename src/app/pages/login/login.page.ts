@@ -69,7 +69,7 @@ export class LoginPage implements OnInit {
         this.notificationsService.registerUserDevice(token_decoded.user);
         //Activar notificaciones Onesignal
         this.notificationsService.activateOnesignalSubscription();
-        this.notificationsService.setEmailOnesignal(loginData.email);
+        // this.notificationsService.setEmailOnesignal(loginData.email);
         this.loginForm.reset();
         //Redirigir Usuario
         loadingManageLogin.dismiss();

@@ -69,7 +69,7 @@ export class RegisterPage implements OnInit {
         this.notificationsService.registerUserDevice(token_decoded.user);
         //Activar notificaciones onesignal
         this.notificationsService.activateOnesignalSubscription();
-        this.notificationsService.setEmailOnesignal(loginData.email);
+        // this.notificationsService.setEmailOnesignal(loginData.email);
         //Redirigir Usuario
         loadingManageRegister.dismiss();
         //Redigirir a la ruta HOME

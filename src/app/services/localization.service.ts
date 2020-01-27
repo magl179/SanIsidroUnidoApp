@@ -49,15 +49,17 @@ export class LocalizationService {
         }
     }
 
+
+
     async getLocationCoordinates() {
         return new Promise(async (resolve, reject) => {
             if (this.platform.is('cordova')) {
-                await this.checkGPSPermissions().catch(err=>{
-                    this.messageService.showInfo("Por favor habilita el acceso de la aplicación a tu ubicación");
-                    console.log('err checkGPSPermissions', err)
-                });
+                // await this.checkGPSPermissions().catch(err=>{
+                //     this.messageService.showInfo("Por favor habilita el acceso de la aplicación a tu ubicación");
+                //     console.log('err checkGPSPermissions', err)
+                // });
                 this.getPositionNative().then((currentCoords: any) => {
-                    // console.log('native current coords', currentCoords);
+                    console.log('native current coords', currentCoords);
                     this.misCoordenadas.latitude = currentCoords.coords.latitude;
                     this.misCoordenadas.longitude = currentCoords.coords.longitude;
                     resolve(this.misCoordenadas);
@@ -75,23 +77,7 @@ export class LocalizationService {
     }
 
     async checkGPSPermissions() {
-        // console.log('verificar permisos gps')
-        // return await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
-        //     async (result: any) => {
-        //         if (result.hasPermission) {
-        //             // console.log('pedir encender gps en verificar permisos gps')
-        //             return await this.askTurnOnGPS();
-        //         } else {
-        //             // console.log('solicitar permisos gps en verificar permisos gps')
-        //             return await this.requestGPSPermission();
-        //         }
-
-        //     }
-        // ).catch(err => {
-        //     throw (err);
-        // });
-
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
                 async (result: any) => {
                     console.log('check permission', result)
@@ -114,7 +100,7 @@ export class LocalizationService {
     }
 
     async requestGPSPermission() {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             // console.log('solicitar permisos gps');
             await this.locationAccuracy.canRequest().then(async (canRequest: any) => {
                 console.log('can nrequets', canRequest)
@@ -136,56 +122,35 @@ export class LocalizationService {
     //Solicitar al usuario que encienda el GPS
     async askTurnOnGPS() {
         // console.log('pedir encender gps')
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             await this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
                 (resp) => {
                     console.log('location accuracy', resp)
-                    resolve(resp);
+                    resolve(true);
                 }
             ).catch((err) => reject(err));
         });
     }
 
     async checkInitialGPSPermissions() {
-        if(this.platform.is('cordova')){
-            const permisosGPS = new Promise(async(resolve, reject) => {
-                await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
-                    async (result: any) => {
-                        // console.log('check permission', result)
-                        if (result.hasPermission) {
-                            resolve('tengo permisos para acceder al GPS');
-                        } else {
-                            // console.log('solicitar permisos gps en verificar permisos gps')
-                            // return await this.requestGPSPermission();
-                            return new Promise(async(resolve, reject) => {
-                                // console.log('solicitar permisos gps');
-                                await this.locationAccuracy.canRequest().then(async (canRequest: any) => {
-                                    console.log('can request', canRequest)
-                                    if (canRequest) {
-                                        // console.log('puedo pedir enceder GPS');
-                                        resolve('puedo pedir enceder GPS');
-                                    } else {
-                                        reject('Por favor habilita el acceso de la aplicación a la geolocalización');
-                                    }
-                                }).catch(err => {
-                                    reject(err);
-                                });
-                            });
-                        }
-    
-                    }
-                ).catch(err => {
-                    // throw (err);
-                    reject(err);
-                });
-            });
-            permisosGPS.then(res=>{console.log('res', res)}).catch(err=>{
-                console.log('error', err);
-            })
-        }else{
+        if (this.platform.is('cordova')) {
+            //Verificar Permisos Android
+            const androidPermissions: any = await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION);
+            if (androidPermissions.hasPermission) {
+                this.messageService.showInfo('Tengo permisos GPS');
+                return;
+            }
+            //Verificar si puedo pedir Localizacion
+            const canRequestLocation = await this.locationAccuracy.canRequest();
+            if (canRequestLocation) {
+                this.messageService.showInfo('puedo pedir encender GPS');
+                return;
+            } else {
+                this.messageService.showInfo('Por favor habilita el acceso de la aplicación a la geolocalización');
+                return;
+            }
+        } else {
             return;
         }
     }
-
-
 }
