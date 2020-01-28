@@ -25,6 +25,7 @@ import { NoResultsFoundComponent } from "./no-results-found/no-results-found.com
 import { SimpleRoutingMapComponent } from "./simple-routing-map/simple-routing-map.component";
 import { SlideshowImagesFullComponent } from './slideshow-images-full/slideshow-images-full.component';
 import { NgFallimgModule } from "ng-fallimg";
+import { LocalizationInfoComponent } from './localization-info/localization-info.component';
 
 @NgModule({
     declarations: [
@@ -48,6 +49,7 @@ import { NgFallimgModule } from "ng-fallimg";
         LoadingAppComponent,
         NoResultsFoundComponent,
         SimpleRoutingMapComponent,
+        LocalizationInfoComponent
     ],
     imports: [
         CommonModule,
@@ -75,7 +77,8 @@ import { NgFallimgModule } from "ng-fallimg";
         SelectOptionsComponent,
         LoadingAppComponent,
         NoResultsFoundComponent,
-        SimpleRoutingMapComponent
+        SimpleRoutingMapComponent,
+        LocalizationInfoComponent
     ]
 })
 export class SmComponentsModule { }

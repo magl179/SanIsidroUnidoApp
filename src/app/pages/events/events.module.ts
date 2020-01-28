@@ -23,7 +23,7 @@ const routes: Routes = [
                 loadChildren: "src/app/pages/shared/search-posts/search-posts.module#SearchPostsPageModule",
                 data: {
                     searchIdeas: [],
-                    searchPlaceholder: 'Buscar Eventos',
+                    searchPlaceholder: 'Busca Eventos por su título',
                     searchRouteDetail: '/events/detail',
                     searchSlug: CONFIG.EVENTS_SLUG
                 },

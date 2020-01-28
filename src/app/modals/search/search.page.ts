@@ -80,7 +80,7 @@ export class SearchPage implements OnInit {
                 setTimeout(async () => {
                     const items_found = await this.itemsSearchAvalaible.filter(item => {
                         let item_match = false;
-                        console.log('item filter', item)
+                        // console.log('item filter', item)
                         const search_term = new RegExp(value.toLowerCase(), 'g');
                         if (this.fieldsToSearch.length > 0) {
                             this.fieldsToSearch.forEach(field => {

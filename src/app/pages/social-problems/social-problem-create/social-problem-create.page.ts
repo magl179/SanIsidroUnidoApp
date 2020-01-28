@@ -13,6 +13,7 @@ import { CONFIG } from 'src/config/config';
 import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from 'src/app/services/messages.service';
 import { interval, from } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-social-problem-create',
@@ -44,7 +45,8 @@ export class SocialProblemCreatePage implements OnInit {
         public formBuilder: FormBuilder,
         private localizationService: LocalizationService,
         private localDataService: LocalDataService,
-        private postService: PostsService
+        private postService: PostsService,
+        private router: Router
     ) {
         this.createForm();
     }
@@ -53,6 +55,7 @@ export class SocialProblemCreatePage implements OnInit {
         this.postService.getSubcategoriesByCategory(CONFIG.SOCIAL_PROBLEMS_SLUG).subscribe(res => {
             this.subcategories = res.data;
             this.subcategoryName = res.data[0].name;
+            console.log('this.subcagories', this.subcategories)
         }, (err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error al cargar las categorias');
         });
@@ -119,15 +122,27 @@ export class SocialProblemCreatePage implements OnInit {
             finalize(() => {
                 loadingReportSocialProblem.dismiss()
             })
-        ).subscribe(async (res: IRespuestaApiSIU) => {
+        ).subscribe(async (res: any) => {
             this.messageService.showSuccess("El Reporte fue enviado correctamente");
             this.formSended = true;
             //Ejecutar la deteccion de cambios de Angular de forma manual
             this.cdRef.detectChanges();
+            // const social_problem_id_created = (res && res.id) ? res.id : null;
+            const social_problem_subcategory = this.getSubcategoryById(this.socialProblemForm.value.subcategory);
+            if(social_problem_subcategory && social_problem_subcategory.length > 0){
+                setTimeout(()=>{
+                    // this.router.navigateByUrl(`/social-problems/list/espacios_verdes/${social_problem_id_created}`);
+                    this.router.navigateByUrl(`/social-problems/list/${social_problem_subcategory[0]}`);
+                }, 1000);
+            }
 
         }, (err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error al enviar tu reporte, intentalo más tarde');
         });
+    }
+
+    getSubcategoryById(id: number){
+        return this.subcategories.filter(subcategory=> subcategory.id == id).map(subcategory=> subcategory.slug)
     }
 
 

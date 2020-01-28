@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavController } from "@ionic/angular";
 import { PublicService } from 'src/app/services/public.service';
 import { finalize } from 'rxjs/operators';
+import { LocalizationService } from '../../services/localization.service';
 
 @Component({
     selector: 'siu-public-services-app',
@@ -12,12 +13,15 @@ export class PublicServicesAppPage implements OnInit {
 
     publicServiceCategories: any[] = [];
     categoriesLoaded = false;
+    isGPSEnabled = false;
 
     constructor(private navCtrl: NavController,
-        private publicService: PublicService) { }
+        private publicService: PublicService,
+        private localizationService: LocalizationService) { }
 
-    ngOnInit() {
+    async ngOnInit() {
         this.loadCategories();
+        
     }
 
     goToList(category: string) {

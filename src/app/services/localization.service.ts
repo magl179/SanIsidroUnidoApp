@@ -33,6 +33,24 @@ export class LocalizationService {
         });
     }
 
+    async checkGPSEnabled(){
+        if(this.platform.is('cordova')){
+            return false;
+        }else{
+            return await this.checkGPSWebEnable();
+        }
+    }
+
+    async checkGPSWebEnable() {
+        return new Promise(function (resolve, reject) {
+            navigator.geolocation.getCurrentPosition((coords)=>{
+                resolve(true);
+            }, (err)=>{
+                resolve(false);
+            });
+        });
+    }
+
     getPositionNative() {
         return this.geolocation.getCurrentPosition({
             timeout: 5500

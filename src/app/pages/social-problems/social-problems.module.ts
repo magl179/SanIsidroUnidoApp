@@ -9,6 +9,7 @@ import { UserAuthenticatedGuard } from 'src/app/guards/user-authenticated.guard'
 import { UserHasRoleGuard } from 'src/app/guards/user-has-role.guard';
 import { CONFIG } from 'src/config/config';
 import { DirectivesModule } from 'src/app/directives/directives.module';
+import { NgFallimgModule } from 'ng-fallimg';
 
 const routes: Routes = [
     {
@@ -31,7 +32,7 @@ const routes: Routes = [
                 loadChildren: "src/app/pages/shared/search-posts/search-posts.module#SearchPostsPageModule",
                 data: {
                     searchIdeas: [],
-                    searchPlaceholder: 'Buscar Problemas',
+                    searchPlaceholder: 'Busca Problemas Sociales por su título',
                     searchRouteDetail: '/social-problems/list',
                     searchSlug: CONFIG.SOCIAL_PROBLEMS_SLUG,
                     redirectWith: 'subcategory+id'
@@ -58,7 +59,8 @@ const routes: Routes = [
         FormsModule,
         IonicModule,
         RouterModule.forChild(routes),
-        DirectivesModule
+        DirectivesModule,
+        NgFallimgModule
     ],
     declarations: [SocialProblemsPage]
 })

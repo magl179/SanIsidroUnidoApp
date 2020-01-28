@@ -21,7 +21,7 @@ const routes: Routes = [
                 loadChildren: "src/app/pages/shared/search-posts/search-posts.module#SearchPostsPageModule",
                 data: {
                     searchIdeas: [],
-                    searchPlaceholder: 'Buscar Informes',
+                    searchPlaceholder: 'Busca Informes por su tìtulo',
                     searchRouteDetail: '/reports/list',
                     searchSlug: CONFIG.REPORTS_SLUG
                 },

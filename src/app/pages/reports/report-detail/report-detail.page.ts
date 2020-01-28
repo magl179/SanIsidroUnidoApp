@@ -69,7 +69,9 @@ export class ReportDetailPage implements OnInit {
     }
 
     openReportPDF() {
-        this.manageDocsService.downloadAndOpenPDF(`${environment.APIBASEURL}/pdf/javascript.pdf`);
+        // const urlPDFApi = `${environment.APIBASEURL}/pdf/javascript.pdf`;
+        const urlPDFDrive = "https://drive.google.com/file/d/1P-_obHcrIOYauf-zuQ830E5EtuTPCxI9/view";
+        this.manageDocsService.downloadAndOpenPDF(urlPDFDrive);
     }
 
 }

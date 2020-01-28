@@ -42,7 +42,7 @@ const routes: Routes = [
                 loadChildren: "src/app/pages/shared/search-posts/search-posts.module#SearchPostsPageModule",
                 data: {
                     searchIdeas: [],
-                    searchPlaceholder: 'Buscar Mis Emergencias',
+                    searchPlaceholder: 'Busca Emergencias por su título',
                     searchRouteDetail: '/emergencies/detail',
                     searchSlug: CONFIG.EMERGENCIES_SLUG,
                     includeUserFilter: true

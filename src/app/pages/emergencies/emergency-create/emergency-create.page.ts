@@ -13,6 +13,7 @@ import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from 'src/app/services/messages.service';
 import { EventsService } from '../../../services/events.service';
 import { BehaviorSubject, interval, Observable, of, from } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-emergency-create',
@@ -36,7 +37,8 @@ export class EmergencyCreatePage implements OnInit {
 
     constructor(
         private utilsService: UtilsService,
-        private cdRef:ChangeDetectorRef,
+        private cdRef: ChangeDetectorRef,
+        private router: Router,
         private mapService: MapService,
         private messageService: MessagesService,
         private errorService: ErrorService,
@@ -137,12 +139,22 @@ export class EmergencyCreatePage implements OnInit {
             finalize(() => {
                 loadingEmergencyReport.dismiss()
             })
-        ).subscribe(async (res: IRespuestaApiSIU) => {
+        ).subscribe(async (res: any) => {
             this.messageService.showSuccess("El Reporte fue enviado correctamente");
             this.formSended = true;
             console.log('this.formsedn', this.formSended);
             this.events_app.resetEmergenciesEmitter();
             this.cdRef.detectChanges();
+            const emergency_id_created = (res && res.id) ? res.id : null;
+            // if (emergency_id_created) {
+            //     setTimeout(() => {
+            //         this.router.navigateByUrl(`emergencies/detail/${emergency_id_created}`);
+            //     }, 1000);
+            // }
+            setTimeout(() => {
+                this.router.navigateByUrl(`/emergencies/list`);
+            }, 1000);
+
 
         }, (err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error al enviar tu reporte');
