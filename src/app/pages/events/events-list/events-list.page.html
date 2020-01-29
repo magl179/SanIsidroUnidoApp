@@ -47,6 +47,9 @@
                     <ion-card-title class="main-section-header__title">
                         <span>{{event.title}}</span>
                     </ion-card-title>
+                    <div class="event_created_at">
+                        <span>{{event.fecha_creacion}}</span>
+                    </div>
                 </ion-card-header>
                 <ion-card-content class="main-section-info">
                     <ng-container *ngIf="event.hasRangeDate">

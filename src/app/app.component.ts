@@ -70,7 +70,7 @@ export class AppComponent implements OnInit {
             this.showAppsplash = false;
             timer(1000).subscribe(async () => {
                 await this.pushNotificationService.initialConfig();
-                 await this.localizationService.checkInitialGPSPermissions();
+                //  await this.localizationService.checkInitialGPSPermissions();
             });
             this.navigationService.keepHistoryTracking();
         });

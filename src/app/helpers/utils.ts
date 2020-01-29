@@ -20,8 +20,8 @@ const isJSON = (str: any) => {
     }
 }
 
-export const momentFormat = (stringdate: any, formatDate="LLL") => {
-    if(!stringdate){
+export const momentFormat = (stringdate: any, formatDate = "LLL") => {
+    if (!stringdate) {
         return '';
     }
     if (moment(stringdate).isValid()) {
@@ -87,20 +87,20 @@ export const setFilterKeys = (filters: object, type: string, value: any) => {
 }
 
 // Función para obtener la distancia en KM entre dos coordenadas
-export const getDistanceInKm = (lat1: number,lon1: number,lat2: number,lon2: number) => {
+export const getDistanceInKm = (lat1: number, lon1: number, lat2: number, lon2: number) => {
     let R = 6371;
-    let dLat = (lat2-lat1) * (Math.PI/180);
-    let dLon = (lon2-lon1) * (Math.PI/180);
+    let dLat = (lat2 - lat1) * (Math.PI / 180);
+    let dLon = (lon2 - lon1) * (Math.PI / 180);
     let a =
-      Math.sin(dLat/2) * Math.sin(dLat/2) +
-      Math.cos(lat1 * (Math.PI/180)) * Math.cos(lat2 * (Math.PI/180)) *
-      Math.sin(dLon/2) * Math.sin(dLon/2)
-      ;
-    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2)
+        ;
+    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     let d = R * c;
     return d;
 }
-  
+
 export const roundDecimal = (numero: number) => {
     return Math.round(numero * 100) / 100;
 }
@@ -229,14 +229,21 @@ export const mapEvent = (event: any) => {
     if (event.range_date) {
         event.fulldate = formatEventRangeDate(event.range_date.start_date, event.range_date.end_date);
         event.initial_date = momentFormat(event.range_date.start_date, 'LLL')
-        event.end_date = momentFormat(event.range_date.end_date , 'LLL')
+        event.end_date = momentFormat(event.range_date.end_date, 'LLL')
     }
 
     if (event.range_date && event.range_date.start_date && event.range_date.end_date) {
         event.hasRangeDate = true;
-    }else{
+    } else {
         event.hasRangeDate = false;
     }
+
+    const fecha_creacion = (event.created_at) ? event.created_at : moment(new Date()).add(-1, 'days');
+    event.fecha_creacion = formatAppBeatifulDate(fecha_creacion);
+
+    const fecha_actualizacion = (event.updated_at) ? event.updated_at : moment(new Date()).add(-1, 'days');
+    event.fecha_actualizacion = formatAppBeatifulDate(fecha_actualizacion);
+
     // console.log('evento retornado', event);
     return event;
 }
@@ -264,6 +271,12 @@ export const mapEmergency = (emergency: any) => {
         emergency.images = mapImagesApi(emergency.images);
         emergency.imagesArr = getValueKeyFromArrObj(emergency.images, 'url');
     }
+    const fecha_creacion = (emergency.created_at) ? emergency.created_at : moment(new Date()).add(-1, 'days');
+    emergency.fecha_creacion = formatAppBeatifulDate(fecha_creacion);
+
+    const fecha_actualizacion = (emergency.updated_at) ? emergency.updated_at : moment(new Date()).add(-1, 'days');
+    emergency.fecha_actualizacion = formatAppBeatifulDate(fecha_actualizacion);
+
     return emergency;
 }
 export const mapReport = (report: any) => {
@@ -273,6 +286,13 @@ export const mapReport = (report: any) => {
         report.images = mapImagesApi(report.images);
         report.imagesArr = getValueKeyFromArrObj(report.images, 'url');
     }
+
+    const fecha_creacion = (report.created_at) ? report.created_at : moment(new Date()).add(-1, 'days');
+    report.fecha_creacion = formatAppBeatifulDate(fecha_creacion);
+
+    const fecha_actualizacion = (report.updated_at) ? report.updated_at : moment(new Date()).add(-1, 'days');
+    report.fecha_actualizacion = formatAppBeatifulDate(fecha_actualizacion);
+
     return report;
 }
 export const mapSocialProblem = (social_problem: any) => {
@@ -288,6 +308,12 @@ export const mapSocialProblem = (social_problem: any) => {
     if (social_problem.user && social_problem.user.avatar) {
         social_problem.user.avatar = getImageURL(social_problem.user.avatar);
     }
+    const fecha_creacion = (social_problem.created_at) ? social_problem.created_at : moment(new Date()).add(-1, 'days');
+    social_problem.fecha_creacion = formatAppBeatifulDate(fecha_creacion);
+
+    const fecha_actualizacion = (social_problem.updated_at) ? social_problem.updated_at : moment(new Date()).add(-1, 'days');
+    social_problem.fecha_actualizacion = formatAppBeatifulDate(fecha_actualizacion);
+
     return social_problem;
 }
 
@@ -322,4 +348,31 @@ export const getImagesPost = ($imagesArray: any[]) => {
     } else {
         return '';
     }
+}
+
+export const randomInteger = (min: number, max: number) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+//Obtener la fecha formateada con MomentJS
+export const formatAppBeatifulDate = (stringDate: string) => {
+    let beatifulDate = null;
+    if (moment(stringDate).isValid()) {
+        // Fecha Pasada, Fecha Actual
+        const currentDate = moment(new Date());
+        const lastDate = moment(new Date(stringDate));
+        //Diferencia entre Fechas
+        const diffDays = currentDate.diff(lastDate, 'days');
+        // Formatear Fecha
+        if (diffDays <= 8) {
+            beatifulDate = lastDate.fromNow();
+        } else if (currentDate.year() === lastDate.year()) {
+            beatifulDate = lastDate.format('D MMMM');
+        } else {
+            beatifulDate = lastDate.format('LL');
+        }
+    } else {
+        // console.log('Invalid Date', stringDate);
+    }
+    return beatifulDate;
 }

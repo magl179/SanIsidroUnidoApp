@@ -5,6 +5,7 @@ import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { DocumentViewer } from '@ionic-native/document-viewer/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { UtilsService } from './utils.service';
+import { MessagesService } from './messages.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,11 +18,14 @@ export class ManageDocsService {
         private fileTransfer: FileTransfer,
         private fileOpener: FileOpener,
         private documentViewer: DocumentViewer,
+        private messagesService: MessagesService,
         private utilsService: UtilsService,
   ) { }
 
     downloadAndOpenPDF($url_path_file_pdf: string) {
         let path = this.file.dataDirectory;
+        this.messagesService.showInfo(`Descargando Documento por favor espere...`);
+        this.messagesService.showInfo(`URL PDF: ${$url_path_file_pdf}`);
         let filename = $url_path_file_pdf.replace(/^.*[\\\/]/, '');
         if (this.platform.is('cordova')) {
             const transfer = this.fileTransfer.create();

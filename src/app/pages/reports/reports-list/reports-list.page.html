@@ -35,6 +35,9 @@
         <ion-card class="report-container" *ngFor="let report of reportsList; let i = index;">
             <ion-card-header>
                 <ion-card-title>{{report.title}}</ion-card-title>
+                <div class="report_created_at">
+                    <span>{{report.fecha_creacion}}</span>
+                </div>
             </ion-card-header>
             <ion-card-content class="description-section">
                 <p class="description-section__content">

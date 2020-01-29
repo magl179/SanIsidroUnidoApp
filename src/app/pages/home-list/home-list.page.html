@@ -4,7 +4,7 @@
         <ion-row>
             <ion-button (click)="probarNotiLocal()" color="tertiary">Pruebas de Notificaciones Local</ion-button>
             <ion-button (click)="probarNotiExterna()" color="dark">Pruebas de Notificaciones Externa</ion-button>
-            <ion-button (click)="probarToggleSubscription()" color="secondary">Prueba Toggle Subscription</ion-button>
+            <!-- <ion-button (click)="probarToggleSubscription()" color="secondary">Prueba Toggle Subscription</ion-button> -->
         </ion-row>
         <ion-row class="ion-justify-content-center" *ngIf="servicesList !== null || servicesList.length > 0">
                 <ng-container *ngFor="let service of servicesList">

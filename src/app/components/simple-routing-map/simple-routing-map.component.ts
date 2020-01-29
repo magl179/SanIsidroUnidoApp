@@ -131,8 +131,10 @@ export class SimpleRoutingMapComponent implements OnInit {
         }
 
         //Fit Map
-        var group_markers = new L.featureGroup([currentPoint, markerIcon]);
-        this.map.fitBounds(group_markers.getBounds());
+        setTimeout(()=>{
+            var group_markers = new L.featureGroup([currentPoint, markerIcon]);
+            this.map.fitBounds(group_markers.getBounds());
+        },1000)
 
     }
 

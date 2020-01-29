@@ -44,6 +44,7 @@ import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { DocumentViewer } from '@ionic-native/document-viewer/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { ToastrModule } from 'ngx-toastr';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 
 @NgModule({
     declarations: [AppComponent],
@@ -95,6 +96,7 @@ import { ToastrModule } from 'ngx-toastr';
         Network,
         Device,
         InAppBrowser,
+        Diagnostic,
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptorService,

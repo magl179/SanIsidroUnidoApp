@@ -42,7 +42,8 @@
                     <div class="right-section" style="margin-left: 1rem">
                         <p style="color: var(--ion-color-dark);margin-bottom: .7em;">
                             {{socialProblem.user.firstname}} {{socialProblem.user.lastname }}</p>
-                        <span style="font-size: .9em;">{{socialProblem.fulldate}}</span>
+                        <!-- <span style="font-size: .9em;">{{socialProblem.fulldate}}</span> -->
+                        <span style="font-size: .9em;">{{socialProblem.fecha_creacion}}</span>
                     </div>
                 </div>
                 <ion-card-header class="post-header">
@@ -56,6 +57,9 @@
                         <span>
                         </span>
                     </ion-card-title>
+                    <div class="social_problem_created_at">
+                        <span>{{socialProblem.fecha_creacion}}</span>
+                    </div>
                 </ion-card-header>
                 <ion-card-content class="post-content">
                     <p class="post-description">

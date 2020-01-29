@@ -1,6 +1,8 @@
 <app-header-back title="Servicio" [backUrl]="backUrl" [showNoti]="false"></app-header-back>
 
 <ion-content class="ion-padding">
+     <!-- Mensaje si no esta el gps activado -->
+     <app-localization-info gpsTextInfo="Por favor activa el GPS para poder visualizar correctamente el mapa"></app-localization-info>
     <!-- Loader mientras cargan datos -->
     <div class="loading-app" *ngIf="!publicServiceLoaded">
         <loader-app class="flex-column-center"></loader-app>
