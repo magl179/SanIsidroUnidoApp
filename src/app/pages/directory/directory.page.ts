@@ -14,7 +14,7 @@ import { MessagesService } from 'src/app/services/messages.service';
 })
 export class DirectoryPage implements OnInit {
 
-    directivesList: IDirective[] = [];
+    directivesList: any[] = [];
     loadDirectives = false;
 
     constructor(
@@ -37,7 +37,7 @@ export class DirectoryPage implements OnInit {
             })
         ).subscribe((response: IRespuestaApiSIU) => {
             this.directivesList = response.data;
-            this.messageService.showSuccess('Datos traídos correctamente');
+            // this.messageService.showSuccess('Datos traídos correctamente');
         }, (err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error al traer el listado de directivos');
         });

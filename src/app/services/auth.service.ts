@@ -89,6 +89,14 @@ export class AuthService {
         this.events_appService.emitLogoutEvent();
         this.navCtrl.navigateRoot('/login');
     }
+    async redirectToLogin(message = ''){
+        this.cleanLocalStorage();
+        this.cleanAuthInfo();
+        // this.messageService.showInfo(message);
+        // this.notificationService.logoutOnesignal();
+        // this.events_appService.emitLogoutEvent();
+        this.navCtrl.navigateRoot('/home-screen');
+    }
     //VERIFICAR SI SE DEBE CHECKEAR VALIDEZ TOKEN
     async checkValidToken() {
         if (this.tokenExists()) {

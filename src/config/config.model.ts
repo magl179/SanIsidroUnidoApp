@@ -7,24 +7,6 @@ export interface IENVIRONMENT {
   production: boolean;
 }
 
-export interface ICONFIG {
-  ALLOWED_ROLES_SIGN_IN: string[];
-  ALLOWED_ROLES_REPORT: string[];
-  API_HEADERS: {};
-  AUTHORIZATION_NAME: string;
-  EMERGENCIES_SLUG: string;
-  EVENTS_SLUG: string;
-  HOME_ROUTE: string;
-  IMAGE_ASSETS: string;
-  MAPLAYERS: IMAPLAYERS;
-  REPORTS_SLUG: string;
-  SOCIAL_PROBLEMS_SLUG: string;
-  VERSION: string;
-  SHOW_BEATIFUL_ROUTES?: boolean;
-  MESSAGE_APP_INFO: string;
-  MESSAGE_APP_URL: string;
-}
-
 export interface IMAPLAYERS {
   GOOGLE: IGOOGLE;
   OPENSTREETMAP: IGOOGLE;

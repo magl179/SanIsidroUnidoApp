@@ -1,15 +1,20 @@
 
 import { environment } from 'src/environments/environment';
-import { Observable, interval, throwError, of } from 'rxjs';
+import { Observable, interval, throwError, of, Observer } from 'rxjs';
 import { retryWhen, flatMap } from 'rxjs/operators';
-import { checkLikePost } from './user-helper';
-import { HttpErrorResponse } from '@angular/common/http';
 import { ISubcategory } from '../interfaces/models';
 import { CONFIG } from 'src/config/config';
 
 declare var moment: any;
 moment.locale('es');
 const REGEX_URL = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
+
+export const GEOLOCATION_ERRORS = {
+    'errors.location.unsupportedBrowser': 'Browser does not support location services',
+    'errors.location.permissionDenied': 'You have rejected access to your location',
+    'errors.location.positionUnavailable': 'Unable to determine your location',
+    'errors.location.timeout': 'Service timeout has been reached'
+};
 
 //FUncion para verificar si una variable es un JSON
 const isJSON = (str: any) => {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IRespuestaApiSIUSingle } from 'src/app/interfaces/models';
 import { PublicService } from "src/app/services/public.service";
@@ -8,6 +8,7 @@ import { LocalizationService } from "src/app/services/localization.service";
 import { getDistanceInKm, roundDecimal } from 'src/app/helpers/utils';
 import { UtilsService } from '../../../services/utils.service';
 import { ErrorService } from '../../../services/error.service';
+import { GeolocationService } from 'src/app/services/geolocation.service';
 
 @Component({
     selector: 'siu-public-service-detail',
@@ -28,8 +29,10 @@ export class PublicServiceDetailPage implements OnInit {
     constructor(
         private activatedRoute: ActivatedRoute,
         private localizationService: LocalizationService,
+        private geolocationService: GeolocationService,
         private publicService: PublicService,
         private utilsService: UtilsService,
+        private cdRef: ChangeDetectorRef,
         private errorService: ErrorService
     ) {
     }
@@ -37,16 +40,30 @@ export class PublicServiceDetailPage implements OnInit {
     async ngOnInit() {
         this.id = this.activatedRoute.snapshot.paramMap.get('id');
         this.category = this.activatedRoute.snapshot.paramMap.get('category');
+       
+        // this.geolocationService.getLocationWeb().subscribe(res=>{
+        //     console.log('geolocationService res', res)
+        //     const position =  this.cdRef.detectChanges();
+        // }, err=>{
+        //     console.log('geolocationService err', err)
+        //     const position =  this.cdRef.detectChanges();
+        // }, ()=>{
+        //     console.log('geolocaiton service complete')
+        // });
+        // console.log('current position', this.currentPosition);
+
         this.getPublicServiceDetail();
         this.backUrl = `/public-services/list/${this.category}`;
-
-        await this.localizationService.getCoordinates().then(coordinates=>{
+        this.localizationService.getCoordinates().then(coordinates=>{
             this.currentPosition = coordinates;
+            console.log('current position', this.currentPosition);
+            return;
         }).catch(err=>{
             console.log('Error al obtener geolocalizacion', err);
+            return;
         });
 
-        console.log('current position', this.currentPosition);
+      
     }
 
     getPublicServiceDetail() {

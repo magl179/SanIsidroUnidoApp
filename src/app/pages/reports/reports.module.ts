@@ -14,7 +14,6 @@ const routes: Routes = [
         children: [
             {   path: 'list',
                 loadChildren: "./reports-list/reports-list.module#ReportsListPageModule",
-                canLoad: [UserAuthenticatedGuard]
             },
             {
                 path: 'search',
@@ -25,12 +24,10 @@ const routes: Routes = [
                     searchRouteDetail: '/reports/list',
                     searchSlug: CONFIG.REPORTS_SLUG
                 },
-                canLoad: [UserAuthenticatedGuard]
             },
             {
                 path: 'list/:id',
                 loadChildren: './report-detail/report-detail.module#ReportDetailPageModule',
-                canLoad: [UserAuthenticatedGuard]
             },
         ]
     }

@@ -1,6 +1,6 @@
 import { Directive, Input, TemplateRef, ViewContainerRef, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { hasRoles } from '../helpers/user-helper';
+import { hasRoles, getUserRoles } from '../helpers/user-helper';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -26,12 +26,16 @@ export class HasRoleDirective implements OnInit {
         this.authObservable$ = this.authService.sessionAuthUser.subscribe(token_decoded => {
             // If he doesn't have any roles, we clear the viewContainerRef
             // console.log('has role token decoded', token_decoded);
+            let userRoles = [];
             if (!token_decoded) {
-                this.viewContainer.clear();
+                // this.viewContainer.clear();
+                userRoles = ['invitado'];
+            }else{
+                userRoles = getUserRoles(token_decoded);
             }
             // If the user has the role needed to 
             // render this component we can add it
-            if (hasRoles(token_decoded, this.roles)) {
+            if (hasRoles(userRoles, this.roles)) {
                 if (!this.isVisible) {
                     this.isVisible = true;
                     // console.log('has roles directive', this.roles)

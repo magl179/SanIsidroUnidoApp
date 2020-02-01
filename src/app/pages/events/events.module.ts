@@ -15,8 +15,7 @@ const routes: Routes = [
         children: [
             {
                 path: 'list',
-                loadChildren: "./events-list/events-list.module#EventsListPageModule",
-                canLoad: [UserAuthenticatedGuard]
+                loadChildren: "./events-list/events-list.module#EventsListPageModule"
             },
             {
                 path: 'search',
@@ -27,13 +26,11 @@ const routes: Routes = [
                     searchRouteDetail: '/events/detail',
                     searchSlug: CONFIG.EVENTS_SLUG
                 },
-                canLoad: [UserAuthenticatedGuard]
 
             },
             {
                 path: 'detail/:id',
-                loadChildren: './event-detail/event-detail.module#EventDetailPageModule',
-                canLoad: [UserAuthenticatedGuard]
+                loadChildren: './event-detail/event-detail.module#EventDetailPageModule'
             },
         ]
     }

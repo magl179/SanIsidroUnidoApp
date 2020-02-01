@@ -13,6 +13,8 @@ import { mapEvent } from "src/app//helpers/utils";
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from 'src/app/services/events.service';
 import { ErrorService } from 'src/app/services/error.service';
+import { CONFIG } from 'src/config/config';
+import { MessagesService } from '../../../services/messages.service';
 
 
 @Component({
@@ -26,12 +28,14 @@ export class EventDetailPage implements OnInit {
     eventLoaded = false;
     appNetworkConnection = false;
     AuthUser = null;
+    eventButtonMessage = CONFIG.EVENT_BUTTON_MESSAGE;
     event: IEvent = null;
 
     constructor(
         private route: ActivatedRoute,
         private utilsService: UtilsService,
         private postService: PostsService,
+        private messagesService: MessagesService,
         private events_app: EventsService,
         private errorService: ErrorService,
         private modalCtrl: ModalController,
@@ -90,6 +94,10 @@ export class EventDetailPage implements OnInit {
     }
 
     toggleAssistance(assistance: boolean) {
+        if(!this.AuthUser){
+            this.messagesService.showInfo('Debes iniciar sesión para realizar esta acción');
+            return;
+        }
         if (assistance) {
             this.postService.sendDeleteDetailToPost(this.event.id).subscribe(res => {
                 this.event.postAssistance = false;

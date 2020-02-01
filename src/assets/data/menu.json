@@ -14,13 +14,6 @@
             "children": []
         },
         {
-            "icon": "ios-list-box",
-            "name": "Preguntas Frecuentes",
-            "redirectTo": "/frequent-questions",
-            "routeDirection": "root",
-            "children": []
-        },
-        {
             "icon": "ios-information-circle",
             "name": "Información",
             "redirectTo": "/about",
@@ -32,13 +25,6 @@
             "icon": "ios-home",
             "name": "Inicio",
             "redirectTo": "/home-list",
-            "routeDirection": "root",
-            "children": []
-        },
-        {
-            "icon": "ios-list-box",
-            "name": "Preguntas Frecuentes",
-            "redirectTo": "/frequent-questions",
             "routeDirection": "root",
             "children": []
         },

@@ -11,6 +11,8 @@ import { mapEvent, getImagesPost } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from "src/app/services/events.service";
 import { ErrorService } from 'src/app/services/error.service';
+import { MessagesService } from '../../../services/messages.service';
+import { CONFIG } from '../../../../config/config';
 
 @Component({
     selector: 'app-events-list',
@@ -23,11 +25,13 @@ export class EventsListPage implements OnInit, OnDestroy {
     showNotFound = false;
     eventsList: IEvent[] = [];
     AuthUser = null;
+    eventButtonMessage = CONFIG.EVENT_BUTTON_MESSAGE;
 
     constructor(
         private navCtrl: NavController,
         private events_app: EventsService,
         private utilsService: UtilsService,
+        private messagesService: MessagesService,
         private postsService: PostsService,
         private authService: AuthService,
         private errorService: ErrorService,
@@ -59,6 +63,10 @@ export class EventsListPage implements OnInit, OnDestroy {
     ionViewWillLeave() { this.postsService.resetEventsPage(); }
 
     toggleAssistance(assistance: boolean, id: number) {
+        if(!this.AuthUser){
+            this.messagesService.showInfo('Debes iniciar sesión para realizar esta acción');
+            return;
+        }
         if (assistance) {
             this.postsService.sendDeleteDetailToPost(id).subscribe(res => {
                 this.eventsList.forEach(event => {

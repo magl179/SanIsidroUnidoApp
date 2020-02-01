@@ -9,7 +9,7 @@
         "title": "Problemas Sociales",
         "icon": "assets/img/svg/protest.svg",
         "url": "/social-problems/categories",
-        "valid_roles": ["morador", "invitado", "policia"]
+        "valid_roles": ["morador", "policia"]
     },
     {
         "title": "Eventos",

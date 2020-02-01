@@ -1,4 +1,23 @@
-import { ICONFIG } from './config.model';
+import { IMAPLAYERS } from './config.model';
+
+interface ICONFIG {
+    ALLOWED_ROLES_SIGN_IN: string[];
+    ALLOWED_ROLES_REPORT: string[];
+    API_HEADERS: {};
+    AUTHORIZATION_NAME: string;
+    EMERGENCIES_SLUG: string;
+    EVENTS_SLUG: string;
+    HOME_ROUTE: string;
+    IMAGE_ASSETS: string;
+    MAPLAYERS: IMAPLAYERS;
+    REPORTS_SLUG: string;
+    SOCIAL_PROBLEMS_SLUG: string;
+    VERSION: string;
+    SHOW_BEATIFUL_ROUTES?: boolean;
+    MESSAGE_APP_INFO: string;
+    MESSAGE_APP_URL: string;
+    EVENT_BUTTON_MESSAGE: string;
+  }
 
 export const CONFIG: ICONFIG = {
     ALLOWED_ROLES_SIGN_IN: ['morador', 'invitado', 'policia'],
@@ -24,6 +43,7 @@ export const CONFIG: ICONFIG = {
     SOCIAL_PROBLEMS_SLUG: 'problemas_sociales',
     VERSION: '1.0.1',
     MESSAGE_APP_INFO: 'Por San Isidro Unido con ❤',
-    MESSAGE_APP_URL: 'https://www.facebook.com/stalinmaza97'
+    MESSAGE_APP_URL: 'https://www.facebook.com/stalinmaza97',
+    EVENT_BUTTON_MESSAGE: 'Asistir'
 }
 

@@ -26,10 +26,10 @@ export const getUserRoles = (sessionAuth: any) => {
 }
 
 // Verificar si un usuario tiene unos roles en especifico
-export const hasRoles = (sessionAuth: any, allowedRoles: string[]) => {
+export const hasRoles = (userRoles: any[], allowedRoles: string[]) => {
     let hasRole = false;
-    if (sessionAuth && sessionAuth.user) {
-        let userRoles = getUserRoles(sessionAuth);
+    // if (sessionAuth && sessionAuth.user) {
+        // let userRoles = getUserRoles(sessionAuth);
         // console.log('user roles', userRoles);
         // console.log('allowed roles', allowedRoles);
         for (const oneRole of allowedRoles) {
@@ -38,7 +38,7 @@ export const hasRoles = (sessionAuth: any, allowedRoles: string[]) => {
                 hasRole = true;
             }
         }
-    }
+    // }
     return hasRole;
 }
 

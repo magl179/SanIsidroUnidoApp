@@ -174,4 +174,8 @@ export class UserPage implements OnInit {
         });
     }
 
+    seeProfileImageDetail(url: string, title = 'Imagen de Perfil'){
+        this.utilsService.seeImageDetail(url, title);
+    }
+
 }

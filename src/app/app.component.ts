@@ -31,14 +31,11 @@ export class AppComponent implements OnInit {
 
     constructor(
         private platform: Platform,
-        private navCtrl: NavController,
         private splashScreen: SplashScreen,
         private localDataService: LocalDataService,
         private statusBar: StatusBar,
         private alertController: AlertController,
         private authService: AuthService,
-        private utilsService: UtilsService,
-        private localizationService: LocalizationService,
         private navigationService: NavigationService,
         private menuCtrl: MenuController,
         private pushNotificationService: NotificationsService,
@@ -69,8 +66,7 @@ export class AppComponent implements OnInit {
             await this.getMenuOptions();
             this.showAppsplash = false;
             timer(1000).subscribe(async () => {
-                await this.pushNotificationService.initialConfig();
-                //  await this.localizationService.checkInitialGPSPermissions();
+                await this.pushNotificationService.initialConfig();;
             });
             this.navigationService.keepHistoryTracking();
         });
@@ -99,7 +95,7 @@ export class AppComponent implements OnInit {
     }
 
     loginAppSesion() {
-        this.authService.logout();
+        this.authService.redirectToLogin();
     }
 
     closeMenu() {

@@ -38,6 +38,7 @@ export interface IPost {
     updated_at?: any;
     ubication?: IUbication;
     images?: I_ImagesApi[];
+    imagesArr: any[];
     details?: any[],
     category?: any;
     subcategory?: ISubcategory;
@@ -54,6 +55,11 @@ export interface ISocialProblem extends IPost {
 export interface IEvent extends IPost {
     postAssistance?: any;
     fulldate?: string;
+    responsible?: any;
+    end_date?: any;
+    initial_date?: any;
+    hasRangeDate?: any;
+    fecha_creacion?: any;
 }
 //Imagenes
 export interface I_ImagesApi {
