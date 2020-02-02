@@ -1,8 +1,23 @@
 <ion-header>
     <ion-toolbar color="blue-logo">
-        <ion-searchbar mode="ios" type="text" [placeholder]="searchPlaceholder" animated
-            (ionChange)="execSearchPosts($event)" [value]="valueToSearch.value">
+        <ion-searchbar mode="ios" type="text" [placeholder]="searchPlaceholder" [animated]="true"
+            (ionChange)="execSearchPosts($event)" [value]="valueToSearch.value" #searchPostBar>
         </ion-searchbar>
+        <!-- <ion-item>
+            <ion-label>Cancelar</ion-label>
+        </ion-item> -->
+        <!-- <ion-buttons slot="secondary">
+            <ion-button>
+              <ion-icon slot="icon-only" name="contact"></ion-icon>
+            </ion-button>
+            <ion-button>
+              <ion-icon slot="icon-only" name="search"></ion-icon>
+            </ion-button>
+          </ion-buttons> -->
+          <!-- <ion-buttons slot="start">
+            <ion-back-button defaultHref="/home-list"></ion-back-button>
+          </ion-buttons> -->
+        
     </ion-toolbar>
 </ion-header>
 <ion-content>

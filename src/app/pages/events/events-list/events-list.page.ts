@@ -58,6 +58,10 @@ export class EventsListPage implements OnInit, OnDestroy {
         // this.eventsList = [...newEvents];
     }
 
+    searchEvents(){
+        this.navCtrl.navigateRoot("/events/search");
+    }
+
     ngOnDestroy() { }
     ionViewWillEnter() { }
     ionViewWillLeave() { this.postsService.resetEventsPage(); }

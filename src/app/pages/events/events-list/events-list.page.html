@@ -1,5 +1,5 @@
 <!-- Cabecera -->
-<app-header-back title="Eventos">
+<app-header-back title="Eventos" [search]="true">
 </app-header-back>
 <!-- Contenido -->
 <ion-content padding>
@@ -9,6 +9,8 @@
             refreshingText="Cargando Publicaciones...">
         </ion-refresher-content>
     </ion-refresher>
+    <!-- Barra de Búsqueda -->
+    <ion-searchbar mode="ios" (click)="searchEvents()" placeholder="Buscar" [animated]="true"></ion-searchbar>
     <!-- Mensaje si datos no cargan o son tamaño 0 -->
     <app-no-results-found *ngIf="showNotFound && eventsList.length === 0"
         message="No existen eventos disponibles"></app-no-results-found>
@@ -39,6 +41,7 @@
             </ion-row>
         </ion-card>
     </div>
+    
     <!-- Tarjeta Datos Cargados y Disponibles -->
     <div *ngIf="!showLoading  && eventsList.length > 0">
         <ion-card class="event" *ngFor="let event of eventsList; let i = index;">

@@ -19,6 +19,7 @@ const routes: Routes = [
     FormsModule,
         IonicModule,
     SmComponentsModule,
+    IonicModule.forRoot(),
     RouterModule.forChild(routes)
   ],
   declarations: [SearchPostsPage]

@@ -23,7 +23,7 @@ export class HeaderBackComponent implements OnInit {
     notificationsIcon = 'notifications-outline';
     optionsHeaderIcon = 'more';
 
-    private optionsCtrl = [];
+    optionsCtrl = [];
     private options = {
         filter: {
             text: 'Filtrar',

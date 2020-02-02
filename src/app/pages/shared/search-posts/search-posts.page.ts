@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { PostsService } from 'src/app/services/posts.service';
-import { NavController } from '@ionic/angular';
+import { NavController, IonSearchbar } from '@ionic/angular';
 import { finalize, map, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from 'src/app/services/auth.service';
 import { ITokenDecoded } from 'src/app/interfaces/models';
 import { IPost } from 'src/app/interfaces/models';
 import { ErrorService } from '../../../services/error.service';
+import { setInputFocus } from '../../../helpers/utils';
 
 @Component({
     selector: 'app-search-posts',
@@ -17,13 +18,16 @@ import { ErrorService } from '../../../services/error.service';
 })
 export class SearchPostsPage implements OnInit {
 
+    @ViewChild('searchPostBar') searchPostBar: IonSearchbar;
     searchIdeas: string[] = [];
     searchPlaceholder = '';
     searchSlug = '';
     searchRouteDetail = '';
 
+
     itemsSearchFound: IPost[] = [];
     searchingPosts = false;
+    resultsNotFound = false;
     valueToSearch = new BehaviorSubject('');
     requestStatus = '';
     includeUserFilter = false;
@@ -57,7 +61,10 @@ export class SearchPostsPage implements OnInit {
     }
 
     setSuggessValue(idea: string) {
+        this.searchPostBar.setFocus();
         this.valueToSearch.next(idea);
+        console.log('this.searchPostBar', this.searchPostBar);
+        this.searchingPosts = true;
     }
 
     getValueObservable() {
@@ -76,6 +83,7 @@ export class SearchPostsPage implements OnInit {
         this.searchRouteDetail = (routeData.searchRouteDetail) ? routeData.searchRouteDetail : '';
         this.includeUserFilter = (routeData.includeUserFilter) ? (routeData.includeUserFilter) : false;
         this.redirectWith = (routeData.redirectWith) ? (routeData.redirectWith) : false;
+        this.searchIdeas = ['j'];
     }
 
     ngOnInit() {
@@ -101,6 +109,11 @@ export class SearchPostsPage implements OnInit {
                 this.itemsSearchFound = [];
                 return;
             }
+            //Agregar palabra a array sugerencias
+            if (this.searchIdeas.indexOf(value) === -1) {
+                // array.push(item)
+                this.searchIdeas.push(value);
+            };
 
             this.searchingPosts = true;
             this.requestStatus = '';
@@ -125,7 +138,9 @@ export class SearchPostsPage implements OnInit {
                 this.itemsSearchFound = res.data;
                 this.requestStatus = 'success';
                 if (res.data.length === 0) {
+                    this.resultsNotFound = true;
                 } else {
+                    this.resultsNotFound = false;
                 }
             }, (err: HttpErrorResponse) => {
                 this.itemsSearchFound = [];
