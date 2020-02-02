@@ -17,9 +17,12 @@ export class HeaderBackComponent implements OnInit {
     @Input() showNoti = true;
     @Input() showBackButton = true;
     @Input() search = false;
+    @Input() urlSearchRedirect = '';
     @Input() filter = false;
     @Input() report = false;
     @Output() optionSelected = new EventEmitter();
+    @Output() onSearch = new EventEmitter();
+
     notificationsIcon = 'notifications-outline';
     optionsHeaderIcon = 'more';
 
@@ -74,9 +77,9 @@ export class HeaderBackComponent implements OnInit {
 
     ngOnInit() {
         this.backUrl = this.backUrl || `/${CONFIG.HOME_ROUTE}`;
-        if (this.search) {
-            this.optionsCtrl.push(this.options.search);
-        }
+        // if (this.search) {
+        //     this.optionsCtrl.push(this.options.search);
+        // }
         if (this.filter) {
             this.optionsCtrl.push(this.options.filter);
         }
@@ -106,6 +109,12 @@ export class HeaderBackComponent implements OnInit {
             buttons: this.optionsCtrl
         });
         await actionSheet.present();
+    }
+
+    emitSearchEvent(){
+        this.onSearch.emit({
+            option: 'search'
+        })
     }
 
 }

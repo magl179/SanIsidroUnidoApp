@@ -13,6 +13,7 @@ import { EventsService } from "src/app/services/events.service";
 import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from '../../../services/messages.service';
 import { CONFIG } from '../../../../config/config';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-events-list',
@@ -34,6 +35,7 @@ export class EventsListPage implements OnInit, OnDestroy {
         private messagesService: MessagesService,
         private postsService: PostsService,
         private authService: AuthService,
+        private router: Router,
         private errorService: ErrorService,
     ) {
     }
@@ -58,8 +60,14 @@ export class EventsListPage implements OnInit, OnDestroy {
         // this.eventsList = [...newEvents];
     }
 
-    searchEvents(){
-        this.navCtrl.navigateRoot("/events/search");
+    // searchEvents(){
+    //     this.navCtrl.navigateRoot("/events/search");
+    // }
+
+    redirectToSearch(){
+        this.navCtrl.navigateRoot("/events/search", {
+            queryParams: { redirectUrl: this.router.url }
+        });
     }
 
     ngOnDestroy() { }

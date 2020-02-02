@@ -57,7 +57,7 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
     };
 
     constructor(
-        private navigationService: NavigationService,
+        private router: Router,
         private errorService: ErrorService,
         private activatedRoute: ActivatedRoute,
         private navCtrl: NavController,
@@ -87,6 +87,12 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
         this.loadSocialProblems(null, true);
         this.events_app.socialProblemEmitter.subscribe((event_app: any) => {
             this.toggleLikes(event_app.id);
+        });
+    }
+
+    redirectToSearch(){
+        this.navCtrl.navigateRoot("/social-problems/search", {
+            queryParams: { redirectUrl: this.router.url }
         });
     }
 

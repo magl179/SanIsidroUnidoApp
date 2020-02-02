@@ -6,6 +6,7 @@ import { IRespuestaApiSIUPaginada } from 'src/app/interfaces/models';
 import { mapReport } from "src/app/helpers/utils";
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/services/error.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reports-list',
@@ -21,12 +22,19 @@ export class ReportsListPage implements OnInit, OnDestroy {
     constructor(
         private postsService: PostsService,
         private navCtrl: NavController,
+        private router: Router,
         private errorService: ErrorService,
   ) { }
     
     ngOnInit() { 
         this.postsService.resetReportsPage();
         this.loadReports(null, true);
+    }
+
+    redirectToSearch(){
+        this.navCtrl.navigateRoot("/reports/search", {
+            queryParams: { redirectUrl: this.router.url }
+        });
     }
 
     postDetail(id: number) {

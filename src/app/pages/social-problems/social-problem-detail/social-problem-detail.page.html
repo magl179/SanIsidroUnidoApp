@@ -66,23 +66,24 @@
                         </span>
                         <span>{{(socialProblem.ubication && socialProblem.ubication.address) ? socialProblem.ubication.address: 'No existe ubicación'}}</span>
                     </p>
-                    <p class="item-info">
+                    <p class="item-info" *ngIf="socialProblem.details.length > 0">
                         <span class="icon-people">
                             <ion-icon name="people" class="social-problem-state"></ion-icon>
                         </span>
-                          <span *ngIf="socialProblem.postLiked">
+                          <!-- <span *ngIf="socialProblem.postLiked">
                             A ti y {{socialProblem.details.length}} persona(s) más les gusta
-                         </span>
-                        <span *ngIf="!socialProblem.postLiked">
-                                    A {{socialProblem.details.length}} 
-                                    {{(socialProblem.details.length === 1) ? 'persona le gusta' : 'personas les gusta'}}
+                         </span> -->
+                        <!-- <span *ngIf="!socialProblem.postLiked"> -->
+                        <span>
+                            {{socialProblem.details.length}} 
+                                    {{(socialProblem.details.length === 1) ? 'vecino apoya' : 'vecinos apoyando'}}
                         </span>
                     </p>
                     <p class="item-info">
                         <span class="icon-attendance">
                             <ion-icon name="clipboard" class="social-problem-state"></ion-icon>
                         </span>
-                        <span>{{(socialProblem.is_attended)?'Ya fue atendido':'Todavía no ha sido atendido'}}</span>
+                        <span>{{(socialProblem.is_attended)?'Ya fue atendido':'Pendiente de Atención'}}</span>
                     </p>
                     <!-- <p (click)="test()">test</p> -->
                 </div>
@@ -101,8 +102,8 @@
 <ion-footer class="footer-fixed-posts" *ngIf="socialProblem">
     <div class="social">
         <div class="social-options">
-            <div class="social-button dark ion-activatable" (click)="toggleLike(socialProblem.postLiked)" [class.active]="socialProblem.postLiked">
-                <ion-icon class="like" name="heart"></ion-icon>
+            <div class="social-button ion-activatable" (click)="toggleLike(socialProblem.postLiked)" [class.active]="socialProblem.postLiked">
+                <ion-icon class="like" name="thumbs-up"></ion-icon>
                 <span>Me gusta</span>
                 <ion-ripple-effect></ion-ripple-effect>
             </div>

@@ -1,4 +1,4 @@
-<app-header-back title="Problemas Sociales" backUrl="social-problems/categories" >
+<app-header-back title="Problemas Sociales" backUrl="social-problems/categories" [search]="true" (onSearch)="redirectToSearch()">
 </app-header-back>
 <ion-content padding style="position: relative;">
     <ion-segment value="" (ionChange)="segmentChanged($event)">
@@ -57,9 +57,9 @@
                         <span>
                         </span>
                     </ion-card-title>
-                    <div class="social_problem_created_at">
+                    <!-- <div class="social_problem_created_at">
                         <span>{{socialProblem.fecha_creacion}}</span>
-                    </div>
+                    </div> -->
                 </ion-card-header>
                 <ion-card-content class="post-content">
                     <p class="post-description">
@@ -68,18 +68,22 @@
                 </ion-card-content>
             </div>
             <div class="social">
-                <div class="social-content">
-                    <span *ngIf="socialProblem.postLiked">A ti y {{socialProblem.details.length}}
-                        persona(s) más les gusta</span>
-                    <span *ngIf="!socialProblem.postLiked">
-                        A {{socialProblem.details.length}}
-                        {{(socialProblem.details.length === 1) ? 'persona le gusta' : 'personas les gusta'}}
+                <div class="social-content" *ngIf="socialProblem.details.length > 0">
+                    <!-- <span>length {{socialProblem.details.length}}</span>
+                    <span *ngIf="socialProblem.postLiked && socialProblem.details.length <= 2">Tú y {{socialProblem.details.length - 1}}
+                        vecino más están apoyando</span>
+                    <span *ngIf="socialProblem.postLiked && socialProblem.details.length > 2">Tú y {{socialProblem.details.length - 1}}
+                        vecinos más están apoyando</span> -->
+                    <!-- <span *ngIf="!socialProblem.postLiked"> -->
+                    <span>
+                        {{socialProblem.details.length}}
+                        {{(socialProblem.details.length === 1) ? 'vecino apoya' : 'vecinos apoyando'}}
                     </span>
                 </div>
                 <div class="social-options"
                     (click)="toggleLike(socialProblem.postLiked, socialProblem.id)">
                     <div class="social-button ion-activatable" [class.active]="socialProblem.postLiked">
-                        <ion-icon class="like" name="heart"></ion-icon>
+                        <ion-icon class="like" name="thumbs-up"></ion-icon>
                         <span>Me gusta</span>
                         <ion-ripple-effect></ion-ripple-effect>
                     </div>

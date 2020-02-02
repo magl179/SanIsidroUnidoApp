@@ -51,6 +51,7 @@ export interface ISocialProblem extends IPost {
     likes: number;
     postLiked?: any;
     fulldate?: any;
+    fecha_creacion?:string;
 }
 export interface IEvent extends IPost {
     postAssistance?: any;

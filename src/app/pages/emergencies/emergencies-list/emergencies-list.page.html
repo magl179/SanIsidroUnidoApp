@@ -1,6 +1,6 @@
 
 <!-- Cabecera -->
-<app-header-back title="Mis Emergencias"></app-header-back>
+<app-header-back title="Mis Emergencias" [search]="true" (onSearch)="redirectToSearch()"></app-header-back>
 <!-- Contenido -->
 <ion-content padding>
     <!-- Filtro por Estado Atención -->

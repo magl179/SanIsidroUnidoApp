@@ -20,10 +20,11 @@ export class SearchPostsPage implements OnInit {
 
     @ViewChild('searchPostBar') searchPostBar: IonSearchbar;
     searchIdeas: string[] = [];
+    recentSearches: string[] = ['js'];
     searchPlaceholder = '';
     searchSlug = '';
     searchRouteDetail = '';
-
+    redirectUrl = null;
 
     itemsSearchFound: IPost[] = [];
     searchingPosts = false;
@@ -33,6 +34,7 @@ export class SearchPostsPage implements OnInit {
     includeUserFilter = false;
     redirectWith = 'id';
     AuthUser: ITokenDecoded = null;
+    
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -83,10 +85,18 @@ export class SearchPostsPage implements OnInit {
         this.searchRouteDetail = (routeData.searchRouteDetail) ? routeData.searchRouteDetail : '';
         this.includeUserFilter = (routeData.includeUserFilter) ? (routeData.includeUserFilter) : false;
         this.redirectWith = (routeData.redirectWith) ? (routeData.redirectWith) : false;
-        this.searchIdeas = ['j'];
+        // this.searchIdeas = ['j'];
     }
 
     ngOnInit() {
+
+        this.activatedRoute.queryParamMap.subscribe((params_map: any) => {
+            console.log('params', params_map)
+            if(params_map.params){
+                this.redirectUrl = (params_map.params.redirectUrl) ? params_map.params.redirectUrl: '/home-list';
+            }
+            // this.orderObj = {...params.keys, ...params};
+          });
 
         this.setInitialValues();
         this.authService.sessionAuthUser.subscribe(async (token_decoded: ITokenDecoded) => {
@@ -110,9 +120,9 @@ export class SearchPostsPage implements OnInit {
                 return;
             }
             //Agregar palabra a array sugerencias
-            if (this.searchIdeas.indexOf(value) === -1) {
+            if (this.recentSearches.indexOf(value) === -1) {
                 // array.push(item)
-                this.searchIdeas.push(value);
+                this.recentSearches.push(value);
             };
 
             this.searchingPosts = true;

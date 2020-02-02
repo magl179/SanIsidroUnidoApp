@@ -81,15 +81,15 @@
                             <span *ngIf="event.responsible">Responsable: {{ event.responsible}}</span>
                             <span *ngIf="!event.responsible">No hay un responsable designado</span>
                         </p>
-                        <p class="item-info">
+                        <p class="item-info" *ngIf="event.details.length > 0">
                             <span class="icon-people">
                                 <ion-icon name="people" class="social-problem-state"></ion-icon>
                             </span>
-                            <span *ngIf="event.postAssistance">A ti y {{event.details.length}}
-                                persona(s) más les interesa</span>
+                            <!-- <span *ngIf="event.postAssistance">A ti y {{event.details.length}}
+                                persona(s) más les interesa</span> -->
                             <span *ngIf="!event.postAssistance">
                                 A {{event.details.length}}
-                                {{(event.details.length === 1) ? 'persona le interesa' : 'personas les interesa'}}
+                                {{(event.details.length === 1) ? 'vecino le interesa asistir' : 'vecinos les interesa asistir'}}
                             </span>
 
                         </p>

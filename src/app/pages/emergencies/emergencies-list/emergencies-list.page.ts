@@ -10,6 +10,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from "src/app/services/events.service";
 import { ErrorService } from 'src/app/services/error.service';
 import { Subject } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-emergencies-list',
@@ -45,9 +46,15 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         private utilsService: UtilsService,
         private errorService: ErrorService,
         private postsService: PostsService,
+        private router: Router,
         private events_app: EventsService
     ) { }
 
+    redirectToSearch(){
+        this.navCtrl.navigateRoot("/emergencies/search", {
+            queryParams: { redirectUrl: this.router.url }
+        });
+    }
 
     ngOnInit() {
         this.postsService.resetEmergenciesPage();
