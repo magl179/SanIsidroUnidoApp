@@ -12,7 +12,11 @@
         <ion-grid>
             <ion-row>
                 <ion-col size="6" *ngFor="let publicService of publicServices">
-                    <ion-card class="ion-text-center">
+                    <ion-card class="ion-text-center service_list_card">
+                        <div class="picture_thumbnail">
+                            <img class="img-thumbnail circle" src="https://ui-avatars.com/api/?name=Servicio+Publico&size=255"
+                                fallimg="user_avatar">
+                        </div>
                         <ion-card-header>
                             <ion-card-title>{{publicService.name}}</ion-card-title>
                         </ion-card-header>

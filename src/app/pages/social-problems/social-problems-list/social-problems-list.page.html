@@ -33,6 +33,9 @@
         <!-- Posts Filtrados con Datos -->
         <ion-card style="position:relative" class="social-problem"
             *ngFor="let socialProblem of socialProblemsFilter">
+            <div class="post_cover" *ngIf="socialProblem.imagesArr && socialProblem.imagesArr.length > 0">
+                <img [src]="socialProblem.imagesArr[0]"/>
+            </div>
             <div (click)="postDetail(socialProblem.id)">
                 <div class="ion-padding" style="display: flex;align-items:Center;">
                     <div class="left-section">

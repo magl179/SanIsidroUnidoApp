@@ -45,6 +45,9 @@
     <div *ngIf="!showloading  && emergenciesList.length > 0">
         <!-- Posts Filtrados con Datos -->
         <ion-card class="emergency" *ngFor="let emergency of emergenciesFiltered; let i = index;">
+            <div class="post_cover" *ngIf="emergency.imagesArr && emergency.imagesArr.length > 0">
+                <img [src]="emergency.imagesArr[0]"/>
+            </div>
             <ion-card-header class="post-header">
                 <ion-card-subtitle class="post-status" [class.active]="(emergency.is_attended)">
                     {{(emergency.is_attended) ? 'Atendido': 'Pendiente'}}

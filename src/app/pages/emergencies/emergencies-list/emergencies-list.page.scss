@@ -2,6 +2,15 @@
     padding: .5em 0;
 }
 
+.post_cover{
+  background: #dfdfdf;
+  height: 200px;
+  img{
+    height: 200px;
+    width: 100%;
+  }
+}
+
 .emergency {
     margin-bottom: 1.7em;
     .post-subtitle {

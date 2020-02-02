@@ -137,6 +137,7 @@ export class EventsListPage implements OnInit, OnDestroy {
             let eventsApi = [];
             eventsApi = res.data;
             console.log('eventsApi',eventsApi)
+            console.log('eventd 1', eventsApi[0])
 
             if(first_loading && res.data.length === 0){
                 this.showNotFound = true;

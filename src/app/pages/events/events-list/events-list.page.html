@@ -45,6 +45,9 @@
     <!-- Tarjeta Datos Cargados y Disponibles -->
     <div *ngIf="!showLoading  && eventsList.length > 0">
         <ion-card class="event" *ngFor="let event of eventsList; let i = index;">
+            <div class="post_cover" *ngIf="event.imagesArr && event.imagesArr.length > 0">
+                <img [src]="event.imagesArr[0]"/>
+            </div>
             <div class="event__header" (click)="postDetail(event.id)">
                 <ion-card-header class="main-section-header">
                     <ion-card-title class="main-section-header__title">

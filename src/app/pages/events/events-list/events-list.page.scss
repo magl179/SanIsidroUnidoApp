@@ -5,6 +5,14 @@
 .event_created_at{
     padding: .5em 0;
 }
+.post_cover{
+  background: #dfdfdf;
+  height: 200px;
+  img{
+    height: 200px;
+    width: 100%;
+  }
+}
 .event {
     // display: flex;
     &__header{
