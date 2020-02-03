@@ -136,7 +136,7 @@ export class EventsListPage implements OnInit, OnDestroy {
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let eventsApi = [];
             eventsApi = res.data;
-            console.log('eventsApi',eventsApi)
+            console.dir('eventsApi', res.data)
             console.log('eventd 1', eventsApi[0])
 
             if(first_loading && res.data.length === 0){

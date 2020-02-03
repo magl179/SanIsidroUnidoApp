@@ -4,6 +4,7 @@ import { Observable, interval, throwError, of, Observer } from 'rxjs';
 import { retryWhen, flatMap } from 'rxjs/operators';
 import { ISubcategory } from '../interfaces/models';
 import { CONFIG } from 'src/config/config';
+import { Events } from '@ionic/angular';
 
 declare var moment: any;
 moment.locale('es');
@@ -235,6 +236,8 @@ export const mapEvent = (event: any) => {
         event.fulldate = formatEventRangeDate(event.range_date.start_date, event.range_date.end_date);
         event.initial_date = momentFormat(event.range_date.start_date, 'LLL')
         event.end_date = momentFormat(event.range_date.end_date, 'LLL')
+        event.range_short_date = formatRangeDate(event.range_date.start_date, event.range_date.end_date);
+        event.range_short_time = formatRangeTime(event.range_date.start_date, event.range_date.end_date);
     }
 
     if (event.range_date && event.range_date.start_date && event.range_date.end_date) {
@@ -380,4 +383,49 @@ export const formatAppBeatifulDate = (stringDate: string) => {
         // console.log('Invalid Date', stringDate);
     }
     return beatifulDate;
+}
+
+//Obtener la fecha formateada con MomentJS
+export const formatRangeDate = (initial_date: string, end_date: string) => {
+    let initialBeatifulDate = null;
+    let endBeatifulDate = null;
+    if (moment(initial_date).isValid() && moment(end_date).isValid()) {
+        // Fecha Pasada, Fecha Actual
+        const initialDate = moment(new Date(initial_date));
+        const endDate = moment(new Date(end_date));
+
+        console.log('a', initialDate.year(), 'b', endDate.year())
+        // Formatear Fecha
+        if (initialDate.year() === endDate.year()) {
+            initialBeatifulDate = initialDate.format('D MMMM');
+            endBeatifulDate = endDate.format('D MMMM');
+            return `${initialBeatifulDate} - ${endBeatifulDate} del ${endDate.year()}`;
+        } else {
+            initialBeatifulDate = initialDate.format('LL');
+            endBeatifulDate = endDate.format('LL');
+            return `${initialBeatifulDate} - ${endBeatifulDate}`;
+        }
+    } else {
+        return `${initial_date} - ${end_date}`;
+    }
+}
+
+export const formatRangeTime = (initial_date: string, end_date: string) => {
+    let initialBeatifulDate = null;
+    let endBeatifulDate = null;
+    if (moment(initial_date).isValid() && moment(end_date).isValid()) {
+        // Fecha Pasada, Fecha Actual
+        const initialTime = moment(new Date(initial_date)).format('HH:mm');
+        const endTime = moment(new Date(end_date)).format('HH:mm');
+        // moment(event.range_date.start_date).format('HH:mm') + ' - ' + moment(event.range_date.end_date).format('HH:mm')
+        // console.log('a', initialDate.year(), 'b', endDate.year())
+        // Formatear Fecha
+        if (initialTime == endTime) {
+            return `${initialTime}`;
+        } else {
+            return `${initialTime} - ${endTime}`;
+        }
+    } else {
+        return `${initial_date} - ${end_date}`;
+    }
 }

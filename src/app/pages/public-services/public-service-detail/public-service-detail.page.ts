@@ -96,4 +96,18 @@ export class PublicServiceDetailPage implements OnInit {
         }
     }
 
+    get publicServiceDistance(){
+        const currentLatitude = (this.publicServiceDetail.ubication && this.publicServiceDetail.ubication.latitude) ? this.publicServiceDetail.ubication.latitude: null;
+        const currentLongitude = (this.publicServiceDetail.ubication && this.publicServiceDetail.ubication.longitude) ? this.publicServiceDetail.ubication.longitude: null;
+        if(this.currentPosition && this.currentPosition.latitude && this.currentPosition.longitude){
+            return roundDecimal(
+                getDistanceInKm(
+                    this.currentPosition.latitude, 
+                    this.currentPosition.longitude, 
+                    currentLatitude, 
+                    currentLongitude));
+        }
+        return '';
+    }
+
 }

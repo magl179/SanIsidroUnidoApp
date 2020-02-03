@@ -66,7 +66,13 @@
                             <span class="icon-fulldate">
                                 <ion-icon name="calendar" class="social-problem-state"></ion-icon>
                             </span>
-                            <span>{{ event.fulldate  }}</span>
+                            <span>{{ event.range_short_date  }}</span>
+                        </p>
+                        <p class="item-info">
+                            <span class="icon-fulldate">
+                                <ion-icon name="alarm" class="social-problem-state"></ion-icon>
+                            </span>
+                            <span>{{ event.range_short_time  }}</span>
                         </p>
                         <p class="item-info">
                             <span class="icon-ubication">
@@ -87,7 +93,7 @@
                             </span>
                             <!-- <span *ngIf="event.postAssistance">A ti y {{event.details.length}}
                                 persona(s) más les interesa</span> -->
-                            <span *ngIf="!event.postAssistance">
+                            <span>
                                 A {{event.details.length}}
                                 {{(event.details.length === 1) ? 'vecino le interesa asistir' : 'vecinos les interesa asistir'}}
                             </span>

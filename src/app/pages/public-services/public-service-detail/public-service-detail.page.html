@@ -16,9 +16,14 @@
             <p>{{(publicServiceDetail.ubication && publicServiceDetail.ubication.address) ? publicServiceDetail.ubication.address: 'No existe una dirección registrada'}}
             </p>
         </div>
-        <div *ngIf="publicServiceDetail.distance">
+        <!-- <div *ngIf="publicServiceDetail.distance">
             <p style="display:block;font-weight: bold;">Distancia:</p>
             <p>El destino se encuentra a {{publicServiceDetail.distance}} km desde tu ubicación
+                actual</p>
+        </div> -->
+        <div *ngIf="publicServiceDistance">
+            <p style="display:block;font-weight: bold;">Distancia:</p>
+            <p>El destino se encuentra a {{publicServiceDistance}} km desde tu ubicación
                 actual</p>
         </div>
 

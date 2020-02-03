@@ -61,6 +61,7 @@ export interface IEvent extends IPost {
     initial_date?: any;
     hasRangeDate?: any;
     fecha_creacion?: any;
+    range_short_date?: string;
 }
 //Imagenes
 export interface I_ImagesApi {
