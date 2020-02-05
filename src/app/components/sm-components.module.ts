@@ -26,6 +26,7 @@ import { SimpleRoutingMapComponent } from "./simple-routing-map/simple-routing-m
 import { SlideshowImagesFullComponent } from './slideshow-images-full/slideshow-images-full.component';
 import { NgFallimgModule } from "ng-fallimg";
 import { LocalizationInfoComponent } from './localization-info/localization-info.component';
+import { DirectivesModule } from '../directives/directives.module';
 
 @NgModule({
     declarations: [
@@ -55,6 +56,7 @@ import { LocalizationInfoComponent } from './localization-info/localization-info
         CommonModule,
         IonicModule,
         MaterialAppModule,
+        DirectivesModule,
         NgFallimgModule
     ],
     exports: [

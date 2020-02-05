@@ -64,6 +64,12 @@
         &.assistance {
           color: #a29696;
         }
+        &.accept{
+            color: #26b999;
+        }
+        &.deny{
+            color: #df4d60;
+        }
       }
       span {
         display: inline-block;

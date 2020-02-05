@@ -22,7 +22,7 @@ export class UserAuthenticatedGuard implements CanLoad {
         if (tokenDecoded) {
             return true;
         } else {
-            this.router.navigate(['/login']);
+            this.router.navigate(['/home-list']);
             return false;
         }
     }

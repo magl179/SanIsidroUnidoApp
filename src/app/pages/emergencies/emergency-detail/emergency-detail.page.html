@@ -1,4 +1,4 @@
-<app-header-back title="Emergencia" backUrl="/emergencies/list"></app-header-back>
+<app-header-back title="Emergencia" [backUrl]="urlBackEmergency"></app-header-back>
 
 <ion-content>
     <!-- Mensaje no cargaron los datos desde la Api -->
@@ -75,7 +75,7 @@
                             <span class="icon-people">
                                 <ion-icon name="clipboard" class="social-problem-state"></ion-icon>
                             </span>
-                            <span>{{(emergency.is_attended)?'Su emergencia ya ha sido atendida':'Su emergencia esta pendiente de atención'}}</span>
+                            <span>{{(emergency.is_attended)?'La emergencia ya ha sido atendida':'La emergencia esta pendiente de atención'}}</span>
                         </p>
                     </div>
                 </div>
@@ -90,3 +90,21 @@
         </div>
     </div>
 </ion-content>
+<ion-footer class="footer-fixed-posts" *ngIf="isPoliciaRol">
+    <div class="social">
+        <div class="social-options">
+            <div class="social-button ion-activatable" (click)="onPoliciaAcceptEmergency()">
+                <ion-icon class="accept" name="checkbox"></ion-icon>
+                <span>
+                    Atender
+                </span>
+                <ion-ripple-effect></ion-ripple-effect>
+            </div>
+            <div class="social-button ion-activatable" (click)="onPoliciaDenyEmergency()">
+                <ion-icon class="deny" name="close-circle"></ion-icon>
+                <span><i class="fa fa-share"></i>No, Gracias</span>
+                <ion-ripple-effect></ion-ripple-effect>
+            </div>
+        </div>
+    </div>
+</ion-footer>

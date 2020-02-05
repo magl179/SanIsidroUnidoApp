@@ -22,6 +22,8 @@ export class EmergencyDetailPage implements OnInit {
     emergency = null;
     emergencyLoaded = false;
     AuthUser = null;
+    isPoliciaRol = false;
+    urlBackEmergency = '';
 
     constructor(private activatedRoute: ActivatedRoute,
         public utilsService: UtilsService,
@@ -39,6 +41,7 @@ export class EmergencyDetailPage implements OnInit {
             }
         });
         this.getEmergency();
+        this.checkPoliciaRol();
     }
 
     getEmergency(event?: any, resetEvents?: any) {
@@ -78,6 +81,24 @@ export class EmergencyDetailPage implements OnInit {
 
     seeImageDetail(image: string) {
         this.utilsService.seeImageDetail(image, 'Imagen Evento');
+    }
+
+    async checkPoliciaRol(){
+        const isPolicia = await this.authService.userHasRole(['Policia']);
+        this.isPoliciaRol = isPolicia;
+        this.urlBackEmergency = (isPolicia) ? '/home-list' : '/emergencies/list';
+        console.log('ROL IS POLICIA', isPolicia);
+    }
+
+    //POLICIA COMUNITARIO
+    onPoliciaAcceptEmergency(){
+        //cambiar estado evento a atendido
+        //guardar usuario que va a atender
+        //el back notificar al usuario que tal policia le va a atender
+    }
+
+    onPoliciaDenyEmergency(){
+        //Ocultar botones, en este caso seria cambiar ispolicia rol
     }
 
 }

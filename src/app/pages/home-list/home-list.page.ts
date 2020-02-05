@@ -47,6 +47,10 @@ export class HomeListPage implements OnInit {
         this.pruebasService.probarNotificationExternaConDatos();
     }
 
+    probarNotiEmergencia(){
+        this.navCtrl.navigateForward('/emergencies/detail/104');
+    }
+
     probarToggleSubscription(){
         this.pruebasService.switchSubscription();
     }

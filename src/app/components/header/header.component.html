@@ -4,10 +4,12 @@
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-title (click)="testiconNoti()" class="ion-text-center">{{title}}</ion-title>
-        <ion-buttons slot="end" *ngIf="showNoti">
-            <ion-button size="large" slot="icon-only" (click)="showNotiPopover($event)">
-                <ion-icon class="icon_noti" [name]="notificationsIcon"></ion-icon>
-            </ion-button>
-          </ion-buttons>
+        <ng-container *appHasRole="['morador', 'policia']">
+            <ion-buttons slot="end" *ngIf="showNoti">
+                <ion-button size="large" slot="icon-only" (click)="showNotiPopover($event)">
+                    <ion-icon class="icon_noti" [name]="notificationsIcon"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+        </ng-container>
     </ion-toolbar>
 </ion-header>

@@ -12,6 +12,7 @@ import { UtilsService } from './utils.service';
 import { CONFIG } from 'src/config/config';
 import { MessagesService } from './messages.service';
 import { EventsService } from './events.service';
+import { getUserRoles, hasRoles } from '../helpers/user-helper';
 
 const TOKEN_ITEM_NAME = "accessToken";
 const USER_ITEM_NAME = "currentUser";
@@ -170,5 +171,18 @@ export class AuthService {
         const tokenExists = !!itemToken;
         return tokenExists;
     }
+
+    async userHasRole(roles_verificar: string[]){
+        const tokenDecoded = await this.getTokenUserAuthenticated();
+        if(!tokenDecoded){
+            return false;
+        }
+        let userRoles = getUserRoles(tokenDecoded);
+        if (hasRoles(userRoles, roles_verificar)){
+            return true;
+        }else{
+            return false;
+        }       
+   }
 
 }
