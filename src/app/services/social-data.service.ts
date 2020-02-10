@@ -30,8 +30,8 @@ export class SocialDataService {
     // Funcion para parsear los datos del login de google
     getGoogleDataParsed(googleUser: any) {
         const appUser = {
-            firstname: googleUser.name.givenName,
-            lastname: googleUser.displayName,
+            first_name: googleUser.name.givenName,
+            last_name: googleUser.displayName,
             email: googleUser.emails[0].value,
             social_id: googleUser.id,
             provider: 'google',
@@ -43,8 +43,8 @@ export class SocialDataService {
     // Funcion para parsear los datos del login de facebook
     getFacebookDataParsed(fbUser: any) {
         const appUser = {
-            firstname: fbUser.first_name,
-            lastname: fbUser.last_name,
+            first_name: fbUser.first_name,
+            last_name: fbUser.last_name,
             email: fbUser.email,
             social_id: fbUser.id,
             provider: 'facebook',

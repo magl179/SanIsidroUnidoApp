@@ -80,12 +80,12 @@ export class RegisterPage implements OnInit {
         const loadingRegisterValidation = await this.utilsService.createBasicLoading('Registrando Usuario');
         loadingRegisterValidation.present();
         // Datos Formulario Registro
-        const firstname = this.registerForm.value.firstname;
-        const lastname = this.registerForm.value.lastname;
+        const first_name = this.registerForm.value.first_name;
+        const last_name = this.registerForm.value.last_name;
         const email = this.registerForm.value.email;
         const password = this.registerForm.value.password;
         const user = {
-            firstname, lastname, email, password, social_id: null, provider: 'formulario'
+            first_name, last_name, email, password, social_id: null, provider: 'formulario'
         };
         // Método para registrar al usuario
         this.authService.register(user).pipe(
@@ -136,14 +136,14 @@ export class RegisterPage implements OnInit {
         //Cargar Validaciones
         const validations = this.localDataService.getFormValidations();
         // Campo Email
-        const firstname = new FormControl('', Validators.compose([
+        const first_name = new FormControl('', Validators.compose([
             Validators.required,
-            Validators.minLength(validations.firstname.minlength)
+            Validators.minLength(validations.first_name.minlength)
         ]));
         // Campo Email
-        const lastname = new FormControl('', Validators.compose([
+        const last_name = new FormControl('', Validators.compose([
             Validators.required,
-            Validators.minLength(validations.lastname.minlength),
+            Validators.minLength(validations.last_name.minlength),
         ]));
         // Campo Email
         const email = new FormControl('', Validators.compose([
@@ -157,7 +157,7 @@ export class RegisterPage implements OnInit {
             // Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,20}$/)
         ]));
         // Añado Propiedades al Forms
-        this.registerForm = this.formBuilder.group({ firstname, lastname, email, password });
+        this.registerForm = this.formBuilder.group({ first_name, last_name, email, password });
         // Cargo Mensajes de Validaciones
         this.errorMessages = this.localDataService.getFormMessagesValidations(validations);
     }

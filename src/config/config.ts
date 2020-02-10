@@ -25,8 +25,8 @@ export const CONFIG: ICONFIG = {
     SHOW_BEATIFUL_ROUTES: false,
     ALLOWED_ROLES_REPORT: ['morador', 'policia'],
     AUTHORIZATION_NAME: 'Authorization',
-    EMERGENCIES_SLUG: 'emergencias',
-    EVENTS_SLUG: 'eventos',
+    EMERGENCIES_SLUG: 'emergencia',
+    EVENTS_SLUG: 'evento',
     HOME_ROUTE: 'home-list',    
     IMAGE_ASSETS: 'imagenes',
     MAPLAYERS: {
@@ -39,8 +39,8 @@ export const CONFIG: ICONFIG = {
             ATRIBUTION: '&copy; <a target=_blank" href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }
     },
-    REPORTS_SLUG: 'reportes',
-    SOCIAL_PROBLEMS_SLUG: 'problemas_sociales',
+    REPORTS_SLUG: 'informe',
+    SOCIAL_PROBLEMS_SLUG: 'problema_social',
     VERSION: '1.0.1',
     MESSAGE_APP_INFO: 'Por San Isidro Unido con ❤',
     MESSAGE_APP_URL: 'https://www.facebook.com/stalinmaza97',

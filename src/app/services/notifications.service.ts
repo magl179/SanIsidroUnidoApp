@@ -87,7 +87,7 @@ export class NotificationsService implements OnInit {
             // Obtener el ID De Subscriptor de este dispositivo
             this.getOneSignalIDSubscriptor();
             //Desactivar suscripcion
-            this.deactivateOnesignalSubscription();
+            //this.deactivateOnesignalSubscription();
         }
     }
     
@@ -173,13 +173,12 @@ export class NotificationsService implements OnInit {
     }
 
     async logoutOnesignal() {
-        this.messageService.showInfo('call logout onesignal');
         if (this.platform.is('cordova')) {
             const onesignalDevice = await this.oneSignal.getIds();
             const deviceID = onesignalDevice.userId;
-            this.messageService.showInfo('this.oneSignal.setSubscription(false)');
+            //this.messageService.showInfo('this.oneSignal.setSubscription(false)');
             this.messageService.showInfo(JSON.stringify(deviceID));
-            this.deactivateOnesignalSubscription();
+            //this.deactivateOnesignalSubscription();
             // this.logOutEmailOnesignal();
             console.log('logout onesignal device ID', onesignalDevice);
             if (deviceID) {

@@ -25,21 +25,21 @@
                                     <ion-label class="label-padding label-margin" position="stacked">Nombres
                                     </ion-label>
                                     <ion-input class="input-beatiful" placeholder="John" type="text"
-                                        formControlName="firstname"></ion-input>
+                                        formControlName="first_name"></ion-input>
                                 </ion-item>
                             </div>
                             <div class="form-errors padding-lateral">
                                 <p class="form-error"
-                                    *ngIf="registerForm.get('firstname').hasError('required') && registerForm.get('firstname').touched">
-                                    {{errorMessages.firstname.required.message}}
+                                    *ngIf="registerForm.get('first_name').hasError('required') && registerForm.get('first_name').touched">
+                                    {{errorMessages.first_name.required.message}}
                                 </p>
                                 <p class="form-error"
-                                    *ngIf="registerForm.get('firstname').hasError('minlength') && registerForm.get('firstname').touched">
-                                    {{errorMessages.firstname.minlength.message}}
+                                    *ngIf="registerForm.get('first_name').hasError('minlength') && registerForm.get('first_name').touched">
+                                    {{errorMessages.first_name.minlength.message}}
                                 </p>
                                 <p class="form-error"
-                                    *ngIf="registerForm.get('firstname').hasError('maxlength') && registerForm.get('firstname').touched">
-                                    {{errorMessages.firstname.maxlength.message}}
+                                    *ngIf="registerForm.get('first_name').hasError('maxlength') && registerForm.get('first_name').touched">
+                                    {{errorMessages.first_name.maxlength.message}}
                                 </p>
                             </div>
                             <div class="item-form full">
@@ -47,20 +47,20 @@
                                     <ion-label class="label-padding label-margin" position="stacked">Apellidos
                                     </ion-label>
                                     <ion-input class="input-beatiful" placeholder="Doe" type="text"
-                                        formControlName="lastname"></ion-input>
+                                        formControlName="last_name"></ion-input>
                                 </ion-item>
                             </div>
                             <div class="form-errors padding-lateral">
                                 <p class="form-error"
-                                    *ngIf="registerForm.get('lastname').hasError('required') && registerForm.get('lastname').touched">
-                                    {{errorMessages.lastname.required.message}}
+                                    *ngIf="registerForm.get('last_name').hasError('required') && registerForm.get('last_name').touched">
+                                    {{errorMessages.last_name.required.message}}
                                 </p>
                                 <p class="form-error"
-                                    *ngIf="registerForm.get('lastname').hasError('minlength') && registerForm.get('lastname').touched">
+                                    *ngIf="registerForm.get('last_name').hasError('minlength') && registerForm.get('last_name').touched">
                                     {{errorMessages.lastname.minlength.message}}
                                 </p>
                                 <p class="form-error"
-                                    *ngIf="registerForm.get('lastname').hasError('maxlength') && registerForm.get('lastname').touched">
+                                    *ngIf="registerForm.get('last_name').hasError('maxlength') && registerForm.get('last_name').touched">
                                     {{errorMessages.lastname.maxlength.message}}
                                 </p>
                             </div>

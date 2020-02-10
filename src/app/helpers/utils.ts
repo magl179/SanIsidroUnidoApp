@@ -225,9 +225,10 @@ export const mapEvent = (event: any) => {
     event.date = formatDate(dateFull);
     event.time = formatTime(dateFull);
     event.ubication = getJSON(event.ubication);
-    if (event.images && event.images.length > 0) {
-        event.images = mapImagesApi(event.images);
-        event.imagesArr = getValueKeyFromArrObj(event.images, 'url');
+    // if (event.images && event.images.length > 0) {
+    if (event.resources && event.resources.length > 0) {
+        event.images = mapImagesApi(event.resources);
+        event.imagesArr = getValueKeyFromArrObj(event.resources, 'url');
     }
     if (event.user && event.user.avatar) {
         event.user.avatar = getImageURL(event.user.avatar);
@@ -237,7 +238,7 @@ export const mapEvent = (event: any) => {
         event.initial_date = momentFormat(event.range_date.start_date, 'LLL')
         event.end_date = momentFormat(event.range_date.end_date, 'LLL')
         event.range_short_date = formatRangeDate(event.range_date.start_date, event.range_date.end_date);
-        event.range_short_time = formatRangeTime(event.range_date.start_date, event.range_date.end_date);
+        event.range_short_time = formatRangeTime(event.range_date.start_time, event.range_date.end_time);
     }
 
     if (event.range_date && event.range_date.start_date && event.range_date.end_date) {
@@ -275,9 +276,10 @@ export const mapEmergency = (emergency: any) => {
     emergency.date = formatDate(dateFull);
     emergency.time = formatTime(dateFull);
     emergency.ubication = getJSON(emergency.ubication);
-    if (emergency.images && emergency.images.length > 0) {
-        emergency.images = mapImagesApi(emergency.images);
-        emergency.imagesArr = getValueKeyFromArrObj(emergency.images, 'url');
+    // if (emergency.images && emergency.images.length > 0) {
+    if (emergency.resources && emergency.resources.length > 0) {
+        emergency.images = mapImagesApi(emergency.resources);
+        emergency.imagesArr = getValueKeyFromArrObj(emergency.resources, 'url');
     }
     const fecha_creacion = (emergency.created_at) ? emergency.created_at : moment(new Date()).add(-1, 'days');
     emergency.fecha_creacion = formatAppBeatifulDate(fecha_creacion);
@@ -290,9 +292,11 @@ export const mapEmergency = (emergency: any) => {
 export const mapReport = (report: any) => {
     report.fulldate = `${report.date} ${report.time}`;
     report.ubication = getJSON(report.ubication);
-    if (report.images && report.images.length > 0) {
-        report.images = mapImagesApi(report.images);
-        report.imagesArr = getValueKeyFromArrObj(report.images, 'url');
+    // if (report.images && report.images.length > 0) {
+    if (report.resources && report.resources.length > 0) {
+        const imagesResources = report.resources.filter(resource => resource.type === 'image');
+        report.images = mapImagesApi(imagesResources);
+        report.imagesArr = getValueKeyFromArrObj(report.resources, 'url');
     }
 
     const fecha_creacion = (report.created_at) ? report.created_at : moment(new Date()).add(-1, 'days');
@@ -309,9 +313,10 @@ export const mapSocialProblem = (social_problem: any) => {
     social_problem.date = formatDate(dateFull);
     social_problem.time = formatTime(dateFull);
     social_problem.ubication = getJSON(social_problem.ubication);
-    if (social_problem.images && social_problem.images.length > 0) {
-        social_problem.images = mapImagesApi(social_problem.images);
-        social_problem.imagesArr = getValueKeyFromArrObj(social_problem.images, 'url');
+    // if (social_problem.images && social_problem.images.length > 0) {
+    if (social_problem.resources && social_problem.resources.length > 0) {
+        social_problem.images = mapImagesApi(social_problem.resources);
+        social_problem.imagesArr = getValueKeyFromArrObj(social_problem.resources, 'url');
     }
     if (social_problem.user && social_problem.user.avatar) {
         social_problem.user.avatar = getImageURL(social_problem.user.avatar);

@@ -5,14 +5,14 @@ interface IBasicResponse {
     status: string;
     errors?: any[];
 }
-export interface IRespuestaApiSIU extends IBasicResponse{
+export interface IRespuestaApiSIU extends IBasicResponse {
     data: any[];
 }
-export interface IRespuestaApiSIUSingle extends IBasicResponse{
+export interface IRespuestaApiSIUSingle extends IBasicResponse {
     data: any;
 }
 
-export interface IRespuestaApiSIUPaginada extends IBasicResponse{
+export interface IRespuestaApiSIUPaginada extends IBasicResponse {
     current_page: number;
     data: any[];
     first_page_url: string;
@@ -51,7 +51,7 @@ export interface ISocialProblem extends IPost {
     likes: number;
     postLiked?: any;
     fulldate?: any;
-    fecha_creacion?:string;
+    fecha_creacion?: string;
 }
 export interface IEvent extends IPost {
     postAssistance?: any;
@@ -59,9 +59,11 @@ export interface IEvent extends IPost {
     responsible?: any;
     end_date?: any;
     initial_date?: any;
+    additional_data: any;
     hasRangeDate?: any;
     fecha_creacion?: any;
     range_short_date?: string;
+    range_short_time?: string;
 }
 //Imagenes
 export interface I_ImagesApi {
@@ -108,7 +110,7 @@ export interface IHomeOptions {
     valid_roles: string[];
 };
 
-export interface IMenuOptions{
+export interface IMenuOptions {
     authenticated: IMenuComponent[];
     not_authenticated: IMenuComponent[];
 }
@@ -160,6 +162,14 @@ interface IFilterFields {
     options: IFilterOptions[];
 }
 
+export interface NotiList {
+    id: number;
+    user: any;
+    notification_user: any;
+    post: any;
+    title: string; user_id: string; message: string; read_at: string; state: number; type: string, created_at: string, updated_at: string
+}
+
 export interface INotiPostOpen {
     subcategory?: string;
     category: string;
@@ -176,8 +186,8 @@ export interface ISlideTutorial {
 //Interfaz Usuario
 export interface IUser {
     id: number;
-    firstname: string;
-    lastname: string;
+    first_name: string;
+    last_name: string;
     email: string;
     email_verified_at?: any;
     avatar?: string;
@@ -185,7 +195,6 @@ export interface IUser {
     state: number;
     basic_service_image?: any;
     number_phone?: any;
-    phone?: any;
     position_id?: any;
     created_at?: string;
     updated_at?: string;
@@ -257,8 +266,8 @@ export interface ILoginUser {
 }
 
 export interface IRegisterUser {
-    firstname: string;
-    lastname: string;
+    first_name: string;
+    last_name: string;
     email: string;
     provider: string;
     social_id?: string;
@@ -266,8 +275,8 @@ export interface IRegisterUser {
 }
 
 export interface IEditProfile {
-    firstname: string;
-    lastname: string;
+    first_name: string;
+    last_name: string;
     email: string;
     number: string
 }
@@ -295,7 +304,7 @@ export interface ICreateDetail {
 }
 
 //Categoria
-export interface ICategory{
+export interface ICategory {
     id: number;
     name: string;
     slug: string;

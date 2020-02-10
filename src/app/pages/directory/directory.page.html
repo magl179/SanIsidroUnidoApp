@@ -39,15 +39,15 @@
                         <ion-card-subtitle>
                             {{(people.position && people.position.name) || 'Sin posicion'}}
                         </ion-card-subtitle>
-                        <ion-card-title class="directive-title">{{people.firstname}}
-                            {{people.lastname}}
+                        <ion-card-title class="directive-title">{{people.first_name}}
+                            {{people.last_name}}
                         </ion-card-title>
                     </ion-card-header>
                     <ion-card-content class="ion-text-center">
                         <p class="phone">
                             <ion-icon name="call"></ion-icon>
                             <span
-                                class="profile_detail">{{people.phone || 'Sin teléfono registrado'}}</span>
+                                class="profile_detail">{{people.number_phone || 'Sin teléfono registrado'}}</span>
                         </p>
                     </ion-card-content>
                 </ion-card>

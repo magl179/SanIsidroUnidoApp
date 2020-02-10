@@ -130,14 +130,14 @@ export class SearchPostsPage implements OnInit {
             let searchParams = {};
             if (this.includeUserFilter) {
                 searchParams = {
-                    'filter[category]': this.searchSlug,
-                    'filter[user]': this.AuthUser.user.id,
-                    'filter[title]': value
+                    'category': this.searchSlug,
+                    'user': this.AuthUser.user.id,
+                    'title': value
                 }
             } else {
                 searchParams = {
-                    'filter[category]': this.searchSlug,
-                    'filter[title]': value
+                    'category': this.searchSlug,
+                    'title': value
                 }
             }
             this.postsService.searchPosts(searchParams).pipe(

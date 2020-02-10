@@ -2,7 +2,9 @@
 
 <ion-content class="ion-padding">
      <!-- Mensaje si no esta el gps activado -->
-     <app-localization-info gpsTextInfo="Por favor activa el GPS para poder visualizar correctamente el mapa"></app-localization-info>
+     <ng-container *ngIf="!showSimpleMap">
+         <app-localization-info gpsTextInfo="Por favor activa el GPS para poder visualizar correctamente el mapa"></app-localization-info>
+     </ng-container>
     <!-- Loader mientras cargan datos -->
     <div class="loading-app" *ngIf="!publicServiceLoaded">
         <loader-app class="flex-column-center"></loader-app>
@@ -27,11 +29,10 @@
                 actual</p>
         </div>
 
-        <simple-routing-map [zoom]="11" className="public-service-map"
+        <simple-routing-map [zoom]="11" className="public-service-map" [simpleMap]="showSimpleMap"
             [targetUbicacionIcon]="(publicServiceDetail.category && publicServiceDetail.category.image)?publicServiceDetail.category.image: null"
             id="public-service-map-detail-{{id}}"
             [destinationCoords]="publicServiceDetail.ubication" [usePolyline]="false"
-            *ngIf="currentPosition"
             (mapEvent)="manageMapEvent($event)" [enableGesture]="true" [currentCoordinate]="currentPosition"></simple-routing-map>
     </div>
 </ion-content>

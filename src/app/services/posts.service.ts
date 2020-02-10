@@ -100,9 +100,7 @@ export class PostsService implements OnInit {
     //Función para obtener detalle publicaciones
     getPosts(slug: string, page: number) {
         const params = {
-            "filter[category]": slug,
-            "include": "user, category, subcategory, details, images",
-            "pagination": "true",
+            "category": slug,
             "page": page
         };
         return this.httpRequest.get(`${environment.APIBASEURL}/publicaciones`, params);
@@ -159,10 +157,8 @@ export class PostsService implements OnInit {
     getPostsBySubCategory(category: string, subcategory: string) {
         this.currentPage.socialProblemsBySubcategory++;
         const params = {
-            "filter[category]": category,
-            "filter[subcategory]": subcategory,
-            "include": "user, category, subcategory, details, images",
-            "pagination": "true",
+            "category": category,
+            "subcategory": subcategory,
             "page": this.currentPage.socialProblemsBySubcategory
         };
         const url = `${environment.APIBASEURL}/publicaciones`;

@@ -25,12 +25,12 @@ export class LocalDataService {
 
     getFormValidations(){
         return {
-            firstname: {
+            first_name: {
                 required: true,
                 minlength: 3,
                 maxlength: 20
             },
-            lastname: {
+            last_name: {
                 required: true,
                 minlength: 4,
                 maxlength: 20
@@ -54,7 +54,7 @@ export class LocalDataService {
                 required: true,
                 minlength: 8
             },
-            phone: {
+            number_phone: {
                 required: true,
                 minlength: 7,
                 maxlength: 10
@@ -74,29 +74,29 @@ export class LocalDataService {
 
     getFormMessagesValidations(validations){
         return {
-            firstname: {
+            first_name: {
                 required: {
                     message: 'El Nombre es Obligatorio'
                 },
                 minlength: {
-                    message: `El Nombre debe contener al menos ${validations.firstname.minlength} caracteres`
+                    message: `El Nombre debe contener al menos ${validations.first_name.minlength} caracteres`
                 },
                 maxlength: {
-                    message: `El Nombre debe contener máximo ${validations.firstname.maxlength} caracteres`
+                    message: `El Nombre debe contener máximo ${validations.first_name.maxlength} caracteres`
                 },
                 pattern: {
                     message: 'Ingrese un nombre válido'
                 }
             },
-            lastname: {
+            last_name: {
                 required: {
                     message: 'Los Apellidos son Obligatorios'
                 },
                 minlength: {
-                    message: `Los Apellidos deben contener al menos ${validations.lastname.minlength} caracteres`
+                    message: `Los Apellidos deben contener al menos ${validations.last_name.minlength} caracteres`
                 },
                 maxlength: {
-                    message: `Los Apellidos deben contener máximo ${validations.lastname.maxlength} caracteres`
+                    message: `Los Apellidos deben contener máximo ${validations.last_name.maxlength} caracteres`
                 },
                 pattern: {
                     message: 'Ingrese un apellido válido'
@@ -141,15 +141,15 @@ export class LocalDataService {
                     message: `Las contraseñas no coinciden`
                 }
             },
-            phone: {
+            number_phone: {
                 required: {
                     message: 'El Número de Télefono es Obligatorio'
                 },
                 minlength: {
-                    message: `El Número de Télefono debe contener al menos ${validations.phone.minlength} caracteres`
+                    message: `El Número de Télefono debe contener al menos ${validations.number_phone.minlength} caracteres`
                 },
                 maxlength: {
-                    message: `El Número de Télefono debe contener máximo ${validations.phone.maxlength} caracteres`
+                    message: `El Número de Télefono debe contener máximo ${validations.number_phone.maxlength} caracteres`
                 },
                 pattern: {
                     message: `Ingresa una contraseña segura`

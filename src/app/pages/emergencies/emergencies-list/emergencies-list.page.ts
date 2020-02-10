@@ -97,15 +97,14 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
                 if(first_loading){
                     this.showloading = false;
                 }
+                if(first_loading && this.emergenciesList.length === 0){
+                    this.showNotFound = true;
+                } 
             }),
             takeUntil(this.unsubscribe$) //Marcar como completada una suscripción
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let emergenciesApi = [];
             emergenciesApi = res.data;
-
-            if(first_loading && res.data.length === 0){
-                this.showNotFound = true;
-            }
 
             if (emergenciesApi.length === 0) {
                 if (event && event.data && event.data.target && event.data.target.complete) {

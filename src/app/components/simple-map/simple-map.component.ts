@@ -62,16 +62,18 @@ export class SimpleMapComponent implements AfterViewInit {
             reuseTiles: true
         }).addTo(this.map);
 
-        const icon = await this.mapService.getCustomIcon('red');
-        // const coordenadas: any[] = [this.coordsMap.latitude, this.coordsMap.longitude];
-        let markerPosition: any;
-        const leafletLat = L.latLng(this.coordsMap.latitude, this.coordsMap.longitude);
-        if (icon) {
-            markerPosition = new L.Marker(leafletLat, { icon: icon });
-        } else {
-            markerPosition = new L.Marker(leafletLat);
-        }
-        markerPosition.addTo(this.map).bindPopup('Ubicación del Punto');
+        
+            const icon = await this.mapService.getCustomIcon('red');
+            // const coordenadas: any[] = [this.coordsMap.latitude, this.coordsMap.longitude];
+            let markerPosition: any;
+            const leafletLat = L.latLng(this.coordsMap.latitude, this.coordsMap.longitude);
+            if (icon) {
+                markerPosition = new L.Marker(leafletLat, { icon: icon });
+            } else {
+                markerPosition = new L.Marker(leafletLat);
+            }
+            markerPosition.addTo(this.map).bindPopup('Ubicación del Punto');
+        
     }
 
     onTwoFingerDrag(e) {

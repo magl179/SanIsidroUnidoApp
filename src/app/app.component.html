@@ -12,8 +12,8 @@
                         </ion-avatar>
                         <ion-label>
                             <h1>
-                                {{sessionAuth.user.firstname }}
-                                {{ sessionAuth.user.lastname }}
+                                {{sessionAuth.user.first_name }}
+                                {{ sessionAuth.user.last_name }}
                             </h1>
                             <p class="ion-text-capitalize">
                                 {{ (sessionAuth.user.roles.length > 0) ? sessionAuth.user.roles[0].name : 'No tienes un rol registrado' }}

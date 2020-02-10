@@ -19,6 +19,7 @@ export class PublicServiceDetailPage implements OnInit {
 
     id: string;
     backUrl: string;
+    showSimpleMap = true;
     category: string;
     publicServiceLoaded = false;
     publicServiceDetail = null;
@@ -41,27 +42,18 @@ export class PublicServiceDetailPage implements OnInit {
         this.id = this.activatedRoute.snapshot.paramMap.get('id');
         this.category = this.activatedRoute.snapshot.paramMap.get('category');
        
-        // this.geolocationService.getLocationWeb().subscribe(res=>{
-        //     console.log('geolocationService res', res)
-        //     const position =  this.cdRef.detectChanges();
-        // }, err=>{
-        //     console.log('geolocationService err', err)
-        //     const position =  this.cdRef.detectChanges();
-        // }, ()=>{
-        //     console.log('geolocaiton service complete')
-        // });
-        // console.log('current position', this.currentPosition);
-
         this.getPublicServiceDetail();
         this.backUrl = `/public-services/list/${this.category}`;
-        this.localizationService.getCoordinates().then(coordinates=>{
-            this.currentPosition = coordinates;
-            console.log('current position', this.currentPosition);
-            return;
-        }).catch(err=>{
-            console.log('Error al obtener geolocalizacion', err);
-            return;
-        });
+        if(!this.showSimpleMap){
+            this.localizationService.getCoordinates().then(coordinates=>{
+                this.currentPosition = coordinates;
+                console.log('current position', this.currentPosition);
+                return;
+            }).catch(err=>{
+                console.log('Error al obtener geolocalizacion', err);
+                return;
+            });
+        }
 
       
     }
@@ -74,7 +66,11 @@ export class PublicServiceDetailPage implements OnInit {
                 if (res && res.data) {
                     // const currentPosition: any = await this.localizationService.getCoordinates();
                     if (res.data.ubication.latitude && res.data.ubication.longitude && this.currentPosition ) {
-                        res.data.distance = roundDecimal(getDistanceInKm(this.currentPosition.latitude, this.currentPosition.longitude, res.data.ubication.latitude, res.data.ubication.longitude));
+                        if(!this.showSimpleMap){
+                            res.data.distance = roundDecimal(getDistanceInKm(this.currentPosition.latitude, this.currentPosition.longitude, res.data.ubication.latitude, res.data.ubication.longitude));
+                        }else{
+                            res.data.distance = null; 
+                        }
                     }
                 }
                 return res;

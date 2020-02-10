@@ -70,23 +70,23 @@ export class EditProfilePage implements OnInit {
         await this.loadUserData();
         const validations = this.localDataService.getFormValidations();
         // Campo Email
-        const firstname = new FormControl(this.AuthUser.firstname || '', Validators.compose([
+        const first_name = new FormControl(this.AuthUser.first_name || '', Validators.compose([
             Validators.required
         ]));
-        const lastname = new FormControl(this.AuthUser.lastname || '', Validators.compose([
+        const last_name = new FormControl(this.AuthUser.last_name || '', Validators.compose([
             Validators.required
         ]));
         const email = new FormControl(this.AuthUser.email || '', Validators.compose([
             Validators.email
         ]));
         // Campo Contraseña
-        const phone = new FormControl(this.AuthUser.phone || '',
+        const number_phone = new FormControl(this.AuthUser.number_phone || '',
             Validators.compose([
-                Validators.minLength(validations.phone.minlength),
-                Validators.maxLength(validations.phone.maxlength)
+                Validators.minLength(validations.number_phone.minlength),
+                Validators.maxLength(validations.number_phone.maxlength)
             ]));
         // Añado Propiedades al Form
-        this.editProfileForm = this.formBuilder.group({firstname, lastname, email, phone});
+        this.editProfileForm = this.formBuilder.group({first_name, last_name, email, number_phone});
         this.errorMessages = this.localDataService.getFormMessagesValidations(validations);
     }
 

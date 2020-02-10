@@ -52,7 +52,6 @@ const routes: Routes = [
     {
         path: 'register', //Pantalla de Registro
         loadChildren: './pages/register/register.module#RegisterPageModule',
-        canLoad: [UserAuthenticatedGuard]
     },
     {
         path: 'reports', //Pantalla de Reportes

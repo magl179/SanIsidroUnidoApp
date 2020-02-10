@@ -59,14 +59,17 @@ export class ReportsListPage implements OnInit, OnDestroy {
                 if(first_loading){
                     this.showLoading = false;
                 }
+                if(first_loading && this.reportsList.length === 0){
+                    this.showNotFound = true;
+                }
             })
         ).subscribe((res: IRespuestaApiSIUPaginada) => {            
             let reportsList = [];
             reportsList = res.data;
 
-            if(first_loading && res.data.length === 0){
-                this.showNotFound = true;
-            }
+            // if(first_loading && res.data.length === 0){
+            //     this.showNotFound = true;
+            // }
 
             if (reportsList.length === 0) {
                 if (event && event.data && event.data.target && event.data.target.complete) {

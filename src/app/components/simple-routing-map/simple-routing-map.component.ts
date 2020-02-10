@@ -24,6 +24,7 @@ export class SimpleRoutingMapComponent implements OnInit {
     @Input() destinationCoords: IUbication;
     @Input() enableGesture = false;
     @Input() usePolyline = true;
+    @Input() simpleMap = false;
     @Input() targetUbicacionIcon = null;
 
     @Input() currentCoordinate: any = null;
@@ -50,7 +51,7 @@ export class SimpleRoutingMapComponent implements OnInit {
 
 
     async ngAfterViewInit() {
-        try {     
+        try {
             this.mapMarkers = await this.mapService.getMarkers().toPromise();
             // Obtener Coordenadas
             // this.currentCoordinate = await this.localizationService.getCoordinates();
@@ -68,7 +69,9 @@ export class SimpleRoutingMapComponent implements OnInit {
             L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
         }
         //Setear las Coordenadas de tipo LatLng
-        this.arrRoutesLatLng[0] = this.createLatLng(this.currentCoordinate.latitude, this.currentCoordinate.longitude);
+        this.arrRoutesLatLng[0] = this.createLatLng(
+            (this.currentCoordinate) ? this.currentCoordinate.latitude : null, 
+            (this.currentCoordinate) ? this.currentCoordinate.longitude : null);
         this.arrRoutesLatLng[1] = this.createLatLng(this.destinationCoords.latitude, this.destinationCoords.longitude);
         // Crear el Mapa
         this.map = L.map(this.id, {
@@ -83,7 +86,7 @@ export class SimpleRoutingMapComponent implements OnInit {
             // Invalidar Tamanio
             this.map.invalidateSize();
             this.mapEvent.emit({
-                loaded : true
+                loaded: true
             });
         });
         this.map.zoomControl.setPosition('topright');
@@ -97,13 +100,13 @@ export class SimpleRoutingMapComponent implements OnInit {
             reuseTiles: true
         }).addTo(this.map);
         //Añadir la Ruta en caso de ser necesario
-        if (CONFIG.SHOW_BEATIFUL_ROUTES) {
+        if (!this.simpleMap && CONFIG.SHOW_BEATIFUL_ROUTES) {
             this.setRoutingMachine(this.arrRoutesLatLng);
         }
         this.map.addLayer(this.markersLayer);
         // Si obtuve coordenadas añadir el marcador
         let currentPoint: any;
-        if (this.currentCoordinate) {
+        if (!this.simpleMap && this.currentCoordinate) {
             const iconCurrent = (this.targetUbicacionIcon) ? this.mapService.createExternalIcon(this.targetUbicacionIcon) : await this.mapService.getCustomIcon('red');
             this.arrRoutesLatLng[0] = this.createLatLng(this.currentCoordinate.latitude, this.currentCoordinate.longitude);
             if (iconCurrent) {
@@ -116,25 +119,29 @@ export class SimpleRoutingMapComponent implements OnInit {
         }
         //Añadir el destino final
         let punto = null;
-        const markerIcon = await this.mapService.getCustomIcon('red');
+        let markersGroupCoords = [];
+       
+            const markerIcon = await this.mapService.getCustomIcon('red');
 
-        if (markerIcon) {
-            punto = new L.Marker(this.arrRoutesLatLng[1], { icon: markerIcon });
-        } else {
-            punto = new L.Marker(this.arrRoutesLatLng[1]);
-        }
-        // Añadir el punto a la capa de marcadores
-        this.markersLayer.addLayer(punto);
+            if (markerIcon) {
+                punto = new L.Marker(this.arrRoutesLatLng[1], { icon: markerIcon });
+            } else {
+                punto = new L.Marker(this.arrRoutesLatLng[1]);
+            }
+            // Añadir el punto a la capa de marcadores
+            this.markersLayer.addLayer(punto);
+            markersGroupCoords.push(this.arrRoutesLatLng[1]);
+        
         //Añado la polilinea de ser necesario
-        if (!CONFIG.SHOW_BEATIFUL_ROUTES) {
+        if (!this.simpleMap && !CONFIG.SHOW_BEATIFUL_ROUTES) {
             this.addPolyline(this.arrRoutesLatLng);
         }
 
-        //Fit Map
-        setTimeout(()=>{
-            var group_markers = new L.featureGroup([currentPoint, markerIcon]);
-            this.map.fitBounds(group_markers.getBounds());
-        },1000)
+        setTimeout(() => {
+            console.log(markersGroupCoords);
+            this.map.fitBounds(markersGroupCoords);
+        }, 1000);
+
 
     }
 

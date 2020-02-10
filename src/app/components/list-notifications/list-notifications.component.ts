@@ -5,13 +5,9 @@ import { environment } from 'src/environments/environment';
 import { take, finalize, map } from 'rxjs/operators';
 import { MapNotification } from 'src/app/helpers/utils';
 import { PopoverController } from '@ionic/angular';
+import { NotiList } from 'src/app/interfaces/models';
 
 
-interface NotiList {
-    id: number;
-    user: any;
-    title: string; user_id: string; message: string; state: number; type: string, created_at: string, updated_at: string
-}
 const URL_PATTERN = new RegExp(/^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/);
 
 @Component({
@@ -46,12 +42,18 @@ export class ListNotificationsComponent implements OnInit {
     }
 
     getNotifications() {
-        this.usersService.getNotificationsUser().pipe(take(1), map((res: any) => {
+        this.usersService.getNotificationsUser().pipe(
+            take(1), 
+            map((res: any) => {
             res.data.forEach((noti: any) => {
                 noti = MapNotification(noti);
             });
             return res;
-        })).subscribe((res: any) => {
+            }),
+            finalize(()=>{
+                this.requestFinished = true;
+            })
+        ).subscribe((res: any) => {
             this.notificationsList = res.data;
             this.cargarNotificacionesSolicitadas();
         });
@@ -65,13 +67,15 @@ export class ListNotificationsComponent implements OnInit {
         }
         //Filtrar Notificaciones Leidas
         if(this.getUnreaded){
-            this.notificationsRequested = this.notificationsRequested.filter(noti => noti.state === 0);
+            this.notificationsRequested = this.notificationsRequested.filter(noti => noti.read_at == null);
         }
         console.log('Noti Requested', this.notificationsRequested);
-        this.requestFinished = true;
+        
     }
 
     async manageNoti(noti: any) {
+        alert('en construccion...');
+        return;
         if (noti && noti.additional_data) {
             await this.popoverCtrl.dismiss();
             this.notiService.manageAppNotification(noti.additional_data);

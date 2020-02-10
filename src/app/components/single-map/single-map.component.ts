@@ -80,13 +80,17 @@ export class SingleMapComponent implements OnInit, AfterViewInit {
 
         // this.currentCoordinate.longitude = this.longitude;
         const icon = await this.mapService.getCustomIcon('red');
-        const leafletLat = [this.currentCoordinate.latitude || -0.2188216, this.currentCoordinate.longitude || -78.5135489];
+
+        this.currentCoordinate.latitude = this.currentCoordinate.latitude || -0.2188216;
+        this.currentCoordinate.longitude = this.currentCoordinate.longitude || -78.5135489;
+
+        const leafletLatLng = [this.currentCoordinate.latitude, this.currentCoordinate.longitude];
         let mainMarker: any;
         if (icon) {
-            mainMarker = new L.Marker(leafletLat, { icon: icon, title: 'Mi Ubicación Actual',
+            mainMarker = new L.Marker(leafletLatLng, { icon: icon, title: 'Mi Ubicación Actual',
             draggable: true});
         } else {
-            mainMarker = new L.Marker(leafletLat, {title: 'Mi Ubicación Actual',
+            mainMarker = new L.Marker(leafletLatLng, {title: 'Mi Ubicación Actual',
             draggable: true});
         }
         // const mainMarker = L.marker([this.currentCoordinate.latitude || -0.2188216, this.currentCoordinate.longitude || -78.5135489], {
@@ -100,8 +104,16 @@ export class SingleMapComponent implements OnInit, AfterViewInit {
             this.sendMarkerCoordinate();
         });
         mainMarker.bindPopup('Mi Ubicación').openPopup();
-
         this.map.addLayer(mainMarker);
+
+        setTimeout(() => {
+            console.log([leafletLatLng]);
+            this.map.fitBounds([leafletLatLng]);
+        }, 1000);
+
+        if(this.currentCoordinate && this.currentCoordinate.latitude && this.currentCoordinate.longitude){
+            this.sendMarkerCoordinate();
+        }
     }
 
     // Cuando se lance el evento click en la plantilla llamaremos a este método

@@ -131,17 +131,15 @@ export class EventsListPage implements OnInit, OnDestroy {
             finalize(() => {
                 if(first_loading){
                     this.showLoading = false;
+                }
+                if(first_loading && this.eventsList.length === 0){
+                    this.showNotFound = true;
                 }                
             })
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let eventsApi = [];
             eventsApi = res.data;
             console.dir('eventsApi', res.data)
-            console.log('eventd 1', eventsApi[0])
-
-            if(first_loading && res.data.length === 0){
-                this.showNotFound = true;
-            }
 
             if (eventsApi.length === 0) {
                 if (event && event.data && event.data.target && event.data.target.complete) {

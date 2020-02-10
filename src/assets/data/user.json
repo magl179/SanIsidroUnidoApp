@@ -1,7 +1,7 @@
 {
     "id": 5,
-    "firstname": "Juan",
-    "lastname": "Caceres",
+    "first_name": "Juan",
+    "last_name": "Caceres",
     "email": "testmail.gmail.com",
     "password": "6464545545454czxczxcxzczxcxzcxc",
     "token_id": null,
@@ -10,7 +10,7 @@
     "avatar": "assets/img/default/img_avatar.png",
     "basic_service_image": "",
     "cargo": "Morador Afiliado",
-    "phone": "",
+    "number_phone": "",
     "roles": [
         "admin",
         "policia_comunitaria"

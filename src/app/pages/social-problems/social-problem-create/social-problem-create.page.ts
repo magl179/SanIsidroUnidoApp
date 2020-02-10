@@ -177,7 +177,6 @@ export class SocialProblemCreatePage implements OnInit {
     }
 
     changeSubcategoryName(event) {
-        console.log('event change', event)
         this.subcategoryName = this.subcategories.filter(subcategory => subcategory.id == event.detail.value).map(subcategory => subcategory.name);
     }
 
