@@ -23,24 +23,49 @@ export interface IRespuestaApiSIUPaginada extends IBasicResponse {
     prev_page_url?: any;
     to: number;
 }
+interface IRangeDate {
+    end_date: string;
+    end_time: string;
+    start_date: string;
+    start_time: string;
+  }
+
+  interface IAdditionalData {
+    log_event?: ILogEvent;
+    log_emergency?: ILogEmergency;
+    log_post: ILogPost;
+  }
+  
+  interface ILogEvent {
+    responsable: string;
+  }
+  interface ILogEmergency {
+    policia: string;
+  }
+  interface ILogPost {
+    moderador: string;
+  }
 //Interfaz Publicaciones
 export interface IPost {
     id: any;
     title: string;
     description: string;
+    state: number;
     date: string;
     time: string;
+    ubication?: IUbication;
+    range_date?: IRangeDate;
+    additional_data: IAdditionalData;
     is_attended: number;
     user_id: number;
     category_id: number;
     subcategory_id?: any;
     created_at?: any;
     updated_at?: any;
-    ubication?: IUbication;
     images?: I_ImagesApi[];
     imagesArr: any[];
     details?: any[],
-    category?: any;
+    category?: ICategory;
     subcategory?: ISubcategory;
     user?: any;
     category_name?: string;
@@ -162,12 +187,29 @@ interface IFilterFields {
     options: IFilterOptions[];
 }
 
-export interface NotiList {
-    id: number;
-    user: any;
-    notification_user: any;
-    post: any;
-    title: string; user_id: string; message: string; read_at: string; state: number; type: string, created_at: string, updated_at: string
+export interface INotificationApi {
+    id: string;
+    type: string;
+    notifiable_type: string;
+    notifiable_id: number;
+    data: INotiList;
+    read_at?: any;
+    created_at: string;
+    updated_at: string;
+  }
+
+export interface INotiList {
+    title: string;
+    message: string;
+    notification_user: INotificationUser;
+    post: INotificationPost;
+}
+
+export interface INotificationUser extends IUser{
+    pivot?: IRole[];
+}
+
+export interface INotificationPost extends IPost{
 }
 
 export interface INotiPostOpen {

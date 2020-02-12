@@ -24,6 +24,7 @@ export class EmergencyDetailPage implements OnInit {
     AuthUser = null;
     isPoliciaRol = false;
     urlBackEmergency = '';
+    showPoliciaOptions = false;
 
     constructor(private activatedRoute: ActivatedRoute,
         public utilsService: UtilsService,
@@ -86,6 +87,7 @@ export class EmergencyDetailPage implements OnInit {
     async checkPoliciaRol(){
         const isPolicia = await this.authService.userHasRole(['Policia']);
         this.isPoliciaRol = isPolicia;
+        this.showPoliciaOptions = isPolicia;
         this.urlBackEmergency = (isPolicia) ? '/home-list' : '/emergencies/list';
         console.log('ROL IS POLICIA', isPolicia);
     }
@@ -99,6 +101,7 @@ export class EmergencyDetailPage implements OnInit {
 
     onPoliciaDenyEmergency(){
         //Ocultar botones, en este caso seria cambiar ispolicia rol
+        this.showPoliciaOptions = false;
     }
 
 }

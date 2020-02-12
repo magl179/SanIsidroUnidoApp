@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 import { take, finalize, map } from 'rxjs/operators';
 import { MapNotification } from 'src/app/helpers/utils';
 import { PopoverController } from '@ionic/angular';
-import { NotiList } from 'src/app/interfaces/models';
+import { INotificationApi } from 'src/app/interfaces/models';
 
 
 const URL_PATTERN = new RegExp(/^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/);
@@ -23,8 +23,8 @@ export class ListNotificationsComponent implements OnInit {
 
     requestFinished = false;
 
-    notificationsRequested: NotiList[] = [];
-    notificationsList: NotiList[] = [];
+    notificationsRequested: INotificationApi[] = [];
+    notificationsList: INotificationApi[] = [];
 
     constructor(
         private notiService: NotificationsService,
@@ -73,12 +73,12 @@ export class ListNotificationsComponent implements OnInit {
         
     }
 
-    async manageNoti(noti: any) {
-        alert('en construccion...');
-        return;
-        if (noti && noti.additional_data) {
+    async manageNoti(noti: INotificationApi) {
+        //alert('en construccion...');
+        // return;
+        if (noti && noti.data) {
             await this.popoverCtrl.dismiss();
-            this.notiService.manageAppNotification(noti.additional_data);
+            this.notiService.manageAppNotification(noti.data);
         }
     }
 

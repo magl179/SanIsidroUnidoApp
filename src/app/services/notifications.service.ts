@@ -6,7 +6,7 @@ import { Platform, NavController } from '@ionic/angular';
 import { UserService } from './user.service';
 import { AuthService } from './auth.service';
 import { UtilsService } from './utils.service';
-import { IDeviceUser } from 'src/app/interfaces/models';
+import { IDeviceUser, NotiList } from 'src/app/interfaces/models';
 import { Device } from '@ionic-native/device/ngx';
 import { INotiPostOpen } from "src/app/interfaces/models";
 import { CONFIG } from 'src/config/config';
@@ -16,6 +16,7 @@ import { Storage } from '@ionic/storage'
 import { Router } from '@angular/router';
 import { EventsService } from './events.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { INotificationPost } from '../interfaces/models';
 
 const USER_DEVICE_ID_STORAGE = "siuDevice";
 
@@ -231,21 +232,21 @@ export class NotificationsService implements OnInit {
         await this.manageAppNotification(aditionalData);
     }
 
-    async manageAppNotification(aditionalData: any) {
+    async manageAppNotification(aditionalData: NotiList) {
         //Verificar si tengo dato posts
         if (aditionalData && aditionalData.post) {
             this.managePostNotification(aditionalData.post);
         }
     }
-    async managePostNotification(aditionalDataPost: INotiPostOpen) {
-        const post = aditionalDataPost;
+    async managePostNotification(aditionalDataPost: INotificationPost) {
+        const post: INotificationPost = aditionalDataPost;
         let urlNavigate = null;
 
-        if (post && post.category && post.id) {
+        if (post && post.id && post.category) {
             //Switch de Opciones segun el slug del posts
             console.warn('post catgory', post.category)
             console.warn('post aditiondal data', aditionalDataPost)
-            switch (post.category.toLowerCase()) {
+            switch (post.category.slug.toLowerCase()) {
                 case CONFIG.EMERGENCIES_SLUG: //caso posts emergencia creado
                     urlNavigate = `/emergencies/detail/${post.id}`;
                     break;
@@ -254,13 +255,12 @@ export class NotificationsService implements OnInit {
                     break;
                 case CONFIG.SOCIAL_PROBLEMS_SLUG: // caso posts problema social
                     if (post.subcategory) {
-                        urlNavigate = `/social-problems/list/${post.subcategory}/${post.id}`;
+                        urlNavigate = `/social-problems/list/${post.subcategory.slug}/${post.id}`;
                     } else {
                         urlNavigate = `/social-problems/categories`;
                     }
                     break;
                 case CONFIG.REPORTS_SLUG: //caso reporte o informe
-                    // urlNavigate = this.navCtrl.navigateForward(`/reports/list/${post.id}`);
                     urlNavigate = `/reports/list/${post.id}`;
                     break;
                 default:
@@ -271,7 +271,6 @@ export class NotificationsService implements OnInit {
             console.warn('URL NAVIGATE', urlNavigate)
             if (urlNavigate) {
                 setTimeout(() => {
-                    // this.navCtrl.navigateForward(urlNavigate);
                     this.router.navigateByUrl(urlNavigate);
                 }, 1000);
             }
