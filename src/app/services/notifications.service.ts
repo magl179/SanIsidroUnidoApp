@@ -6,7 +6,7 @@ import { Platform, NavController } from '@ionic/angular';
 import { UserService } from './user.service';
 import { AuthService } from './auth.service';
 import { UtilsService } from './utils.service';
-import { IDeviceUser, NotiList } from 'src/app/interfaces/models';
+import { IDeviceUser, INotiList } from 'src/app/interfaces/models';
 import { Device } from '@ionic-native/device/ngx';
 import { INotiPostOpen } from "src/app/interfaces/models";
 import { CONFIG } from 'src/config/config';
@@ -232,7 +232,7 @@ export class NotificationsService implements OnInit {
         await this.manageAppNotification(aditionalData);
     }
 
-    async manageAppNotification(aditionalData: NotiList) {
+    async manageAppNotification(aditionalData: INotiList) {
         //Verificar si tengo dato posts
         if (aditionalData && aditionalData.post) {
             this.managePostNotification(aditionalData.post);
