@@ -90,7 +90,7 @@
         </div>
     </div>
 </ion-content>
-<ion-footer class="footer-fixed-posts" *ngIf="isPoliciaRol && showPoliciaOptions">
+<ion-footer class="footer-fixed-posts" *ngIf="isPoliciaRol && showPoliciaOptions && !emergency.is_attended">
     <div class="social">
         <div class="social-options">
             <div class="social-button ion-activatable" (click)="onPoliciaAcceptEmergency()">

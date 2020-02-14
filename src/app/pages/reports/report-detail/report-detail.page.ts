@@ -10,6 +10,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ManageDocsService } from 'src/app/services/manage-docs.service';
 import { environment } from 'src/environments/environment';
 import { ErrorService } from 'src/app/services/error.service';
+import { IReport } from '../../../interfaces/models';
 
 @Component({
     selector: 'app-report-detail',
@@ -20,7 +21,7 @@ export class ReportDetailPage implements OnInit {
 
     id: string;
     AuthUser = null;
-    report = null;
+    report: IReport = null;
     reportLoaded = false;
 
     constructor(

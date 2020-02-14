@@ -5,12 +5,13 @@ import { PostsService } from "src/app/services/posts.service";
 import { NetworkService } from "src/app/services/network.service";
 import { AuthService } from "src/app/services/auth.service";
 import { finalize, map, take } from 'rxjs/operators';
-import { IRespuestaApiSIUSingle } from 'src/app/interfaces/models';
+import { IRespuestaApiSIUSingle, IEmergency } from 'src/app/interfaces/models';
 import { ModalController } from "@ionic/angular";
 import { ImageDetailPage } from 'src/app/modals/image_detail/image_detail.page';
 import { mapEmergency } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/services/error.service';
+import { MessagesService } from '../../../services/messages.service';
 
 @Component({
     selector: 'app-emergency-detail',
@@ -19,7 +20,7 @@ import { ErrorService } from 'src/app/services/error.service';
 })
 export class EmergencyDetailPage implements OnInit {
     id: string;
-    emergency = null;
+    emergency: IEmergency = null;
     emergencyLoaded = false;
     AuthUser = null;
     isPoliciaRol = false;
@@ -31,6 +32,7 @@ export class EmergencyDetailPage implements OnInit {
         private postsService: PostsService,
         private modalCtrl: ModalController,
         private errorService: ErrorService,
+        private messagesService: MessagesService,
         private authService: AuthService) { }
 
     ngOnInit() {
@@ -97,10 +99,15 @@ export class EmergencyDetailPage implements OnInit {
         //cambiar estado evento a atendido
         //guardar usuario que va a atender
         //el back notificar al usuario que tal policia le va a atender
+        //informar si se guardo o no el dato
+        this.messagesService.showInfo("Has declinado atender la emergencia");
+        this.showPoliciaOptions = false;
+        this.emergency.is_attended = 1;
     }
 
     onPoliciaDenyEmergency(){
         //Ocultar botones, en este caso seria cambiar ispolicia rol
+        this.messagesService.showInfo("Has declinado atender la emergencia");
         this.showPoliciaOptions = false;
     }
 

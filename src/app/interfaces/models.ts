@@ -72,6 +72,13 @@ export interface IPost {
     subcategory_name?: string;
 }
 
+export interface IEmergency extends IPost{   
+}
+
+export interface IReport extends IPost{
+    
+}
+
 export interface ISocialProblem extends IPost {
     likes: number;
     postLiked?: any;
