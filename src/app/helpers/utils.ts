@@ -434,3 +434,39 @@ export const formatRangeTime = (initial_date: string, end_date: string) => {
         return `${initial_date} - ${end_date}`;
     }
 }
+
+export const verificarCedula = (validarCedula) => {
+    let aux = 0,
+      par = 0,
+      impar = 0,
+      verifi;
+    for (let i = 0; i < 9; i += 2) {
+      aux = 2 * Number(validarCedula[i]);
+      if (aux > 9) {
+        aux -= 9;
+      }
+      par += aux;
+    }
+    for (let i = 1; i < 9; i += 2) {
+      impar += Number(validarCedula[i]);
+    }
+    aux = par + impar;
+    if (aux % 10 !== 0) {
+      verifi = 10 - (aux % 10);
+    } else {
+      verifi = 0;
+    }
+    if (verifi === Number(validarCedula[9])) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  export const verificarNumeroTelefono = (numero_verificar) =>{
+    if (/(^(09)[0-9]{8})+$|(^(02)[0-9]{7})+$/.test(numero_verificar)) {
+        return true;
+    } else {
+        return false;
+    }
+  }

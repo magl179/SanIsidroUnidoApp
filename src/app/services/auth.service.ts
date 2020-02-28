@@ -88,7 +88,7 @@ export class AuthService {
         this.messageService.showInfo(message);
         // this.notificationService.logoutOnesignal();
         this.events_appService.emitLogoutEvent();
-        this.navCtrl.navigateRoot('/login');
+        this.navCtrl.navigateForward('/login');
     }
     async redirectToLogin(message = ''){
         this.cleanLocalStorage();
@@ -141,10 +141,6 @@ export class AuthService {
     async saveLocalStorageInfo(token_encoded: any, token_decoded: any) {
         this.storage.set(TOKEN_ITEM_NAME, token_encoded);
         this.storage.set(USER_ITEM_NAME, token_decoded);
-        setTimeout(() => {
-            this.storage.get(USER_ITEM_NAME).then(token_decoded => {
-            });
-        }, 500);
     }
     //Verificar si el usuario esta autenticado, es decir tiene su datos en el local storage
     async isAuthenticated() {

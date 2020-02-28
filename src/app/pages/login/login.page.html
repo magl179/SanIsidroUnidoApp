@@ -10,11 +10,11 @@
     <!-- <div class="container-app"> -->
     <ion-grid class="grid-container-center padding-none">
         <!-- <ion-row  style="background: url('/assets/img/default/background_first.jpg');background-size:contain;"> -->
-        <ion-row>
+        <!-- <ion-row>
             <div style="display: flex;justify-content: center; width: 100%; margin: 1rem 0;">
-                <img src="assets/img/svg/sanIsidroIconTransparent.svg" alt="logo" style="height: 100px;width: 100dpx;">
+                <img class="logo" src="assets/img/svg/sanIsidroIconTransparent.svg" alt="logo">
             </div>
-        </ion-row>
+        </ion-row> -->
         <ion-row class="main-row-center" class="social_login">
             <ion-grid class="padding-none">
                 <ion-row class="login-form-container">
@@ -24,9 +24,11 @@
                                 <ion-item class="input_item" lines="none">
                                     <ion-label class="label-padding label-margin" position="stacked">Email
                                     </ion-label>
-                                    <ion-input class="input-beatiful" placeholder="john@gmail.com"
-                                        formControlName="email" type="email">
-                                    </ion-input>
+                                    <div class="input-general-container">     
+                                        <ion-input class="input-beatiful input-general" placeholder="john@gmail.com"
+                                            formControlName="email" type="email" #first_field>
+                                        </ion-input>
+                                    </div>
                                 </ion-item>
                             </div>
                             <div class="form-errors padding-lateral-small">
@@ -119,3 +121,11 @@
     </ion-grid>
     <!-- </div> -->
 </ion-content>
+<ion-footer class="ion-no-border">
+   <div class="footer_not_account">
+       <p>
+           <span>No tienes una cuenta?</span>
+           <a (click)="goToRegister()">Registrate aquí</a>
+       </p>
+   </div>
+  </ion-footer>

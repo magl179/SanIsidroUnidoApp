@@ -9,6 +9,7 @@ import { decodeToken } from 'src/app/helpers/auth-helper';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from 'src/app/services/messages.service';
+import { TelefonoValidator } from 'src/app/helpers/numero_telefono.validator';
 
 @Component({
     selector: 'modal-edit-profile',
@@ -76,14 +77,16 @@ export class EditProfilePage implements OnInit {
         const last_name = new FormControl(this.AuthUser.last_name || '', Validators.compose([
             Validators.required
         ]));
-        const email = new FormControl(this.AuthUser.email || '', Validators.compose([
+        const email = new FormControl(
+            {value: this.AuthUser.email || '', disabled: true}, Validators.compose([
             Validators.email
         ]));
         // Campo Contraseña
         const number_phone = new FormControl(this.AuthUser.number_phone || '',
             Validators.compose([
                 Validators.minLength(validations.number_phone.minlength),
-                Validators.maxLength(validations.number_phone.maxlength)
+                Validators.maxLength(validations.number_phone.maxlength),
+                TelefonoValidator
             ]));
         // Añado Propiedades al Form
         this.editProfileForm = this.formBuilder.group({first_name, last_name, email, number_phone});

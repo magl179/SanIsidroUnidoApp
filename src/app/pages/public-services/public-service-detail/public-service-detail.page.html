@@ -30,7 +30,7 @@
         </div>
 
         <simple-routing-map [zoom]="11" className="public-service-map" [simpleMap]="showSimpleMap"
-            [targetUbicacionIcon]="(publicServiceDetail.category && publicServiceDetail.category.image)?publicServiceDetail.category.image: null"
+            [targetUbicacionIcon]="(publicServiceDetail.subcategory && publicServiceDetail.subcategory.image)?publicServiceDetail.subcategory.image: null"
             id="public-service-map-detail-{{id}}"
             [destinationCoords]="publicServiceDetail.ubication" [usePolyline]="false"
             (mapEvent)="manageMapEvent($event)" [enableGesture]="true" [currentCoordinate]="currentPosition"></simple-routing-map>

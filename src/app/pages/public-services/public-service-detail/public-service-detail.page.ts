@@ -80,6 +80,7 @@ export class PublicServiceDetailPage implements OnInit {
             })
         ).subscribe((res: IRespuestaApiSIUSingle) => {
             this.publicServiceDetail = res.data;
+            console.log('public s detail', this.publicServiceDetail)
         }, (err: HttpErrorResponse) => {
                 
             this.errorService.manageHttpError(err, 'Ocurrio un error al cargar el detalle del servicio')

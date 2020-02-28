@@ -6,13 +6,14 @@ ion-slide.tutorial_slide {
     background-repeat: no-repeat !important;
     text-align: center;
 }
-.slide-content{
+
+.slide-content {
     display: flex;
     align-items: center;
     flex-direction: column;
     padding-left: 1.2rem;
     padding-right: 1.2rem;
-    color:white;
+    color: white;
 }
 
 img {
@@ -27,3 +28,37 @@ ion-slides {
     height: 100%;
 }
 
+.footer-container {
+    position: fixed;
+    bottom: 2.5em;
+    width: 100%;
+    display: flex;
+    z-index: 1000;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.footer-row {
+    width: 100%;
+
+    .footer-col {
+        width: 50%;
+        display: flex;
+        justify-content: center;
+
+        &.center {
+            background-color: red;
+        }
+    }
+}
+
+.flex {
+    display: flex;
+}
+.center-flex {
+    justify-content: center;
+}
+
+.moveToHome{
+    color: white;
+}

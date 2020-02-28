@@ -32,7 +32,9 @@ export class HomeScreenPage implements OnInit {
                 this.errorService.manageHttpError(err, 'No se pudieron cargar las opciones del tutorial');
             }
         );
+        // await this.utilsService.enableMenu();
         await this.utilsService.disabledMenu();
+        // await this.utilsService.closeMenu();
     }
     //Función cuando cambia el Slide para prevenir ir a la slide -1 y slide n+1
      slideChange(event: any) {
@@ -63,6 +65,9 @@ export class HomeScreenPage implements OnInit {
     goToRegister() {
         this.navCtrl.navigateForward('/register', {animated: true});
     }
+    goToHome(){
+        this.navCtrl.navigateRoot('/home-list')
+    }     
     //Obtener el Background
     getBackgroundApp(image_url: string) {
         return `linear-gradient(rgba(2, 2, 2, 0.58), rgba(2, 2, 2, 0.58)), url(${image_url})`;

@@ -14,7 +14,7 @@
         <form [formGroup]="editProfileForm">
             <div class="item-form full">
                 <ion-item class="input_item" lines="none">
-                    <ion-label class="label-padding label-margin" position="stacked">Nombres</ion-label>
+                    <ion-label class="label-padding label-margin" position="stacked">Nombres *</ion-label>
                     <ion-input class="input-beatiful" formControlName="first_name" placeholder="Ingresa tus nombres">
                     </ion-input>
                 </ion-item>
@@ -27,7 +27,7 @@
             </div>
             <div class="item-form full">
                 <ion-item class="input_item" lines="none">
-                    <ion-label class="label-padding label-margin" position="stacked">Apellidos</ion-label>
+                    <ion-label class="label-padding label-margin" position="stacked">Apellidos *</ion-label>
                     <ion-input class="input-beatiful text-area" formControlName="last_name"
                         placeholder="Ingresa tus apellidos"></ion-input>
                 </ion-item>
@@ -40,9 +40,9 @@
             </div>
             <div class="item-form full">
                 <ion-item class="input_item" lines="none">
-                    <ion-label class="label-padding label-margin" position="stacked">Email</ion-label>
+                    <ion-label class="label-padding label-margin" position="stacked">Email *</ion-label>
                     <ion-input class="input-beatiful" formControlName="email"
-                        placeholder="Ingresa tu dirección de corre electrónico" disabled></ion-input>
+                        placeholder="Ingresa tu dirección de corre electrónico"></ion-input>
                 </ion-item>
             </div>
             <div class="form-errors padding-lateral-small">
@@ -75,6 +75,10 @@
                     *ngIf="editProfileForm.get('number_phone').hasError('maxlength') && editProfileForm.get('number_phone').touched">
                     {{errorMessages.number_phone.maxlength.message}}
                 </p>
+                <p class="form-error"
+                *ngIf="editProfileForm.get('number_phone').errors?.telefonoValido && editProfileForm.get('number_phone').touched">
+                {{errorMessages.number_phone.telefonoValido.message}}
+            </p>
             </div>
             <ion-button class="btn_edit_profile" expand="block" [disabled]="!editProfileForm.valid || formSended"
                 (click)="editUserProfileData()">Guardar</ion-button>

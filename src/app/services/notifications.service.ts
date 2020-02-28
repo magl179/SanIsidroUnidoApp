@@ -178,18 +178,22 @@ export class NotificationsService implements OnInit {
             const onesignalDevice = await this.oneSignal.getIds();
             const deviceID = onesignalDevice.userId;
             //this.messageService.showInfo('this.oneSignal.setSubscription(false)');
-            this.messageService.showInfo(JSON.stringify(deviceID));
+            // this.messageService.showInfo(JSON.stringify(deviceID));
             //this.deactivateOnesignalSubscription();
             // this.logOutEmailOnesignal();
             console.log('logout onesignal device ID', onesignalDevice);
-            if (deviceID) {
-                this.userService.sendRequestDeleteUserPhoneDevice(deviceID).subscribe(async (res: any) => {
-                    this.messageService.showSuccess('Dispositivo Desuscrito Correctamente');
-                    console.log('res', res);
-                }, (err: HttpErrorResponse) => {
-                    this.errorService.manageHttpError(err, 'Ocurrio un error al desuscribir el dispositivo');
-                });;
-            }
+            // this.logoutDeviceApi(deviceID);
+        }
+    }
+
+    logoutDeviceApi(deviceID){
+        if (deviceID) {
+            this.userService.sendRequestDeleteUserPhoneDevice(deviceID).subscribe(async (res: any) => {
+                this.messageService.showSuccess('Dispositivo Desuscrito Correctamente');
+                console.log('res', res);
+            }, (err: HttpErrorResponse) => {
+                this.errorService.manageHttpError(err, 'Ocurrio un error al desuscribir el dispositivo');
+            });
         }
     }
 

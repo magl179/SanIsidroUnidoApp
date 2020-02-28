@@ -23,6 +23,7 @@ import { ErrorService } from 'src/app/services/error.service';
 export class RegisterPage implements OnInit {
 
     @ViewChild('passwordEyeRegister', { read: ElementRef }) passwordEye: ElementRef;
+    @ViewChild('first_field', { read: ElementRef }) first_field: ElementRef;
     backUrl: string;
     passwordTypeInput = 'password';
     registerForm: FormGroup;
@@ -42,6 +43,12 @@ export class RegisterPage implements OnInit {
     ) {
         this.createForm();
     }
+
+    // ionViewDidEnter() {
+    //     setTimeout(() => {
+    //       this.first_field.nativeElement.setFocus();
+    //     },150);    
+    //  }
 
     async ngOnInit() {
         this.backUrl = `/home-screen`;
@@ -160,6 +167,11 @@ export class RegisterPage implements OnInit {
         this.registerForm = this.formBuilder.group({ first_name, last_name, email, password });
         // Cargo Mensajes de Validaciones
         this.errorMessages = this.localDataService.getFormMessagesValidations(validations);
+    }
+
+    //Funcion para navegar a pagina de login
+    goToLogin() {
+        this.navCtrl.navigateForward('/login', {animated: true});
     }
 
 }

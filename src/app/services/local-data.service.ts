@@ -25,6 +25,11 @@ export class LocalDataService {
 
     getFormValidations(){
         return {
+            cedula: {
+                required: true,
+                minlength: 10,
+                maxlength: 10
+            },
             first_name: {
                 required: true,
                 minlength: 3,
@@ -57,7 +62,8 @@ export class LocalDataService {
             number_phone: {
                 required: true,
                 minlength: 7,
-                maxlength: 10
+                maxlength: 10,
+                pattern: /(^(09)[0-9]{8})+$|(^(02)[0-9]{7})+$/
             },
             title: {
                 required: true,
@@ -74,6 +80,20 @@ export class LocalDataService {
 
     getFormMessagesValidations(validations){
         return {
+            cedula: {
+                required: {
+                    message: 'El Número de Cédula es Obligatorio'
+                },
+                minlength: {
+                    message: `El Número de Cédula debe contener al menos ${validations.cedula.minlength} caracteres`
+                },
+                maxlength: {
+                    message: `El Número de Cédula debe contener máximo ${validations.cedula.maxlength} caracteres`
+                },
+                cedulaValida: {
+                    message: 'La cédula ingresada no es válida'
+                }
+            },
             first_name: {
                 required: {
                     message: 'El Nombre es Obligatorio'
@@ -152,7 +172,10 @@ export class LocalDataService {
                     message: `El Número de Télefono debe contener máximo ${validations.number_phone.maxlength} caracteres`
                 },
                 pattern: {
-                    message: `Ingresa una contraseña segura`
+                    message: `Ingresa un número de teléfono válido`
+                },
+                telefonoValido: {
+                    message: `Ingresa un número de teléfono válido`
                 }
             },
             title: {

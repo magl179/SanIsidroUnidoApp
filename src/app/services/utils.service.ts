@@ -152,6 +152,16 @@ export class UtilsService implements OnInit {
         await this.menuCtrl.getMenus();
         this.menuCtrl.enable(false, 'main_app_menu');
     }
+    //Cerrar Menu
+    async closeMenu() {
+        await this.menuCtrl.getMenus();
+        this.menuCtrl.close();
+    }
+    //Abrir Menu
+    async openMenu() {
+        await this.menuCtrl.getMenus();
+        this.menuCtrl.open();
+    }
     // Limpiar Storage IONIC
     clearBDD() {
         this.storage.clear();

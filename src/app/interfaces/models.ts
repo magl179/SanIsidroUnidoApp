@@ -112,6 +112,7 @@ export interface IPublicService {
     description: string;
     ubication: IUbication;
     phones?: IPhones[];
+    subcategory?: ISubcategory;
     created_at?: string;
     updated_at?: string;
 }
@@ -371,6 +372,7 @@ export interface ISubcategory {
     created_at?: any;
     updated_at?: any;
     icon?: string;
+    image?: string;
 }
 //Ubicacion
 export interface IUbication {

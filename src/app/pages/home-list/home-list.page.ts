@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { IHomeOptions } from 'src/app/interfaces/models';
 import { NavController } from '@ionic/angular';
 import { PruebasService } from 'src/app/services/pruebas.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'app-home-list',
@@ -15,6 +16,7 @@ export class HomeListPage implements OnInit {
 
     servicesList: IHomeOptions[] = [];
     sessionAuth = null;
+    production = environment.production;
 
     constructor(
         private utilsService: UtilsService,
@@ -48,7 +50,7 @@ export class HomeListPage implements OnInit {
     }
 
     probarNotiEmergencia(){
-        this.navCtrl.navigateForward('/emergencies/detail/104');
+        this.navCtrl.navigateForward('/emergencies/detail/8');
     }
 
     probarToggleSubscription(){

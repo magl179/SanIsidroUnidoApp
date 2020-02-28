@@ -68,11 +68,9 @@ export class UserService implements OnInit {
         return this.httpRequest.patch(`${environment.APIBASEURL}/usuarios/editar`, profile, headers);
     }
     // Enviar solicitud de afiliacion al barrio
-    sendRequestUserMembership(image: string) {
+    sendRequestUserMembership(requestObj: {}) {
         const headers = setHeaders(CONFIG.AUTHORIZATION_NAME, this.AuthToken);
-        return this.httpRequest.patch(`${environment.APIBASEURL}/usuarios/solicitar-afiliacion`, {
-            basic_service_image: image
-        }, headers );
+        return this.httpRequest.patch(`${environment.APIBASEURL}/usuarios/solicitar-afiliacion`,requestObj, headers );
     }
     // Enviar solicitud par agregar dispositivo asociado a un usuario
     sendRequestAddUserDevice(device: IDeviceUser) {

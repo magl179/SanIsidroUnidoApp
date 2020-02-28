@@ -106,6 +106,7 @@ export class SimpleRoutingMapComponent implements OnInit {
         this.map.addLayer(this.markersLayer);
         // Si obtuve coordenadas añadir el marcador
         let currentPoint: any;
+        console.warn('target ubicationIcon', this.targetUbicacionIcon);
         if (!this.simpleMap && this.currentCoordinate) {
             const iconCurrent = (this.targetUbicacionIcon) ? this.mapService.createExternalIcon(this.targetUbicacionIcon) : await this.mapService.getCustomIcon('red');
             this.arrRoutesLatLng[0] = this.createLatLng(this.currentCoordinate.latitude, this.currentCoordinate.longitude);
@@ -121,7 +122,8 @@ export class SimpleRoutingMapComponent implements OnInit {
         let punto = null;
         let markersGroupCoords = [];
        
-            const markerIcon = await this.mapService.getCustomIcon('red');
+            const markerIcon = (this.targetUbicacionIcon) ? this.mapService.createExternalIcon(this.targetUbicacionIcon) : await this.mapService.getCustomIcon('red');
+            // const markerIcon = await this.mapService.getCustomIcon('red');
 
             if (markerIcon) {
                 punto = new L.Marker(this.arrRoutesLatLng[1], { icon: markerIcon });

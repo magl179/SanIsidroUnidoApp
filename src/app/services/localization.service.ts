@@ -62,9 +62,7 @@ export class LocalizationService {
     }
 
     async checkGPSNativeEnable() {
-        console.log('diagnostic', this.diagnostic)
         return new Promise(async(resolve, reject) => {
-            console.log('diagnostic in promise', this.diagnostic)
             await this.diagnostic.isLocationEnabled()
             .then((enabled)=>resolve(enabled))
             .catch(err=>resolve(false));
@@ -79,20 +77,12 @@ export class LocalizationService {
     }
 
     async getCoordinates() {
-        // try {
-        //     return await this.getLocationCoordinates();
-        // } catch (err) {
-        //     console.log('err', err)
-        //     this.messageService.showInfo("No pudimos obtener tus coordenadas :(");
-        //     return null;
-        // }
-        console.log('get coordinates called')
         return await new Promise(async (resolve, reject) => {
             this.getLocationCoordinates().then(res=>{
-                this.messageService.showInfo("pudimos obtener tus coordenadas :) GC");
+                // this.messageService.showInfo("pudimos obtener tus coordenadas :) GC");
                 resolve(res);
             }).catch(err=>{
-                this.messageService.showInfo("No pudimos obtener tus coordenadas :(");
+                // this.messageService.showInfo("No pudimos obtener tus coordenadas :(");
                 reject(err);                
             });
         });
@@ -102,32 +92,24 @@ export class LocalizationService {
 
     async getLocationCoordinates() {
         return new Promise(async (resolve, reject) => {
-            console.log(' getLocationCoordinates called');
             if (this.platform.is('cordova')) {
-                console.log('is cordova getLocationCoordinates')
-                // await this.checkGPSPermissions().catch(err=>{
-                //     this.messageService.showInfo("Por favor habilita el acceso de la aplicación a tu ubicación");
-                //     console.log('err checkGPSPermissions', err)
-                // });
                 return await this.getPositionNative().then((currentCoords: any) => {
-                    console.log('native current coords', currentCoords);
+                    // console.log('native current coords', currentCoords);
                     this.misCoordenadas.latitude = currentCoords.coords.latitude;
                     this.misCoordenadas.longitude = currentCoords.coords.longitude;
                     resolve(this.misCoordenadas);
                 }).catch(err => reject(err));
             } else {
-                console.log('is web getLocationCoordinates')
                 if (navigator.geolocation) {
-                    console.log('is navigation geolocation disponibles')
                     return await this.getPositionWeb().then((currentCoords: any) => {
                         this.misCoordenadas.latitude = currentCoords.coords.latitude;
                         this.misCoordenadas.longitude = currentCoords.coords.longitude;
                         console.log('getPositionWeb then')
-                        this.messageService.showInfo(" pudimos obtener tus coordenadas web :)");
+                        // this.messageService.showInfo(" pudimos obtener tus coordenadas web :)");
                         resolve(this.misCoordenadas);
                     }).catch(err => {
                         console.log('getPositionWeb catch')
-                        this.messageService.showInfo("No pudimos obtener tus coordenada webs :(");
+                        // this.messageService.showInfo("No pudimos obtener tus coordenada webs :(");
                         reject(err);
                     });
                 }else{

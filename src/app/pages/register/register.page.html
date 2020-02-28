@@ -10,11 +10,11 @@
 <ion-content>
     <ion-grid class="grid-container-center">
         <!-- <ion-row style="background: url('/assets/img/default/background_first.jpg');background-size:contain;"> -->
-        <ion-row>
+        <!-- <ion-row>
             <div style="display: flex;justify-content: center; width: 100%; margin: 1rem 0;">
-                <img src="assets/img/svg/sanIsidroIconTransparent.svg" alt="logo" style="height: 100px;width: 100px;">
+                <img src="assets/img/svg/sanIsidroIconTransparent.svg" alt="logo" class="logo">
             </div>
-        </ion-row>
+        </ion-row> -->
         <ion-row class="main-row-center">
             <ion-grid>
                 <ion-row class="form-register-container">
@@ -25,7 +25,7 @@
                                     <ion-label class="label-padding label-margin" position="stacked">Nombres
                                     </ion-label>
                                     <ion-input class="input-beatiful" placeholder="John" type="text"
-                                        formControlName="first_name"></ion-input>
+                                        formControlName="first_name" #first_field></ion-input>
                                 </ion-item>
                             </div>
                             <div class="form-errors padding-lateral">
@@ -156,3 +156,11 @@
         </ion-row>
     </ion-grid>
 </ion-content>
+<ion-footer class="ion-no-border">
+    <div class="footer_not_account">
+        <p>
+            <span>Ya tienes una cuenta?</span>
+            <a (click)="goToLogin()">Inicia sesión aquí</a>
+        </p>
+    </div>
+   </ion-footer>

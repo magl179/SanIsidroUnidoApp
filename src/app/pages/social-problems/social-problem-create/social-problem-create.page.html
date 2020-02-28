@@ -8,7 +8,7 @@
             <form [formGroup]="socialProblemForm">
                 <div class="item-form full">
                     <ion-item class="input_item" lines="none">
-                        <ion-label class="label-padding" position="stacked">Titulo</ion-label>
+                        <ion-label class="label-padding" position="stacked">Titulo *</ion-label>
                         <ion-input placeholder="Ingresa el título" class="input-beatiful" formControlName="title"
                             type="email">
                         </ion-input>
@@ -22,7 +22,7 @@
                 </div>
                 <div class="item-form full">
                     <ion-item class="input_item" lines="none">
-                        <ion-label class="label-padding" position="stacked">Descripción
+                        <ion-label class="label-padding" position="stacked">Descripción *
                         </ion-label>
                         <ion-textarea placeholder="Ingresa una descripción" class="input-beatiful text-area"
                             formControlName="description" auto-grow="true"></ion-textarea>
@@ -37,7 +37,7 @@
 
                 <div class="item-form padding-top" *ngIf="subcategories.length > 0">
                     <ion-item lines="none" class="small-font">
-                        <ion-label class="label-padding">Categoria</ion-label>
+                        <ion-label class="label-padding">Categoria *</ion-label>
                         <ion-select formControlName="subcategory" placeholder="Escoge una categoría" (ionChange)="changeSubcategoryName($event)">
                             <ion-select-option [selected]="(i===0) ? true: false"
                                 *ngFor="let subcategory of subcategories; let i = index" [value]="subcategory.id">
@@ -71,9 +71,11 @@
             <form class="form-ubication" [formGroup]="ubicationForm">
                 <div class="item-form full">
                     <ion-item class="input_item padding-lateral-none" lines="none">
-                        <ion-label class="label-padding" position="stacked">Descripcion de la
-                            Ubicación</ion-label>
-                        <ion-textarea placeholder="Ingresa una breve descripción sobre la ubicación de tu reporte"
+                        <ion-label class="label-padding" position="stacked">
+                            Referencia sobre la
+                            Ubicación *
+                        </ion-label>
+                        <ion-textarea placeholder="Ingresa una breve descripción para referenciar la ubicación de tu reporte"
                             class="input-beatiful text-area" formControlName="description_ubication" auto-grow="true">
                         </ion-textarea>
                     </ion-item>

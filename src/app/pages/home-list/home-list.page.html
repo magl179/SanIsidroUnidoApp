@@ -2,9 +2,9 @@
 <ion-content>
     <ion-grid class="ion-padding-top">
         <ion-row>
-            <ion-button (click)="probarNotiLocal()" color="tertiary">Pruebas de Notificaciones Local</ion-button>
-            <ion-button (click)="probarNotiExterna()" color="dark">Pruebas de Notificaciones Externa</ion-button>
-            <ion-button (click)="probarNotiEmergencia()" color="dark">Pruebas de Notificaciones emergencia</ion-button>
+            <ion-button *ngIf="!production" (click)="probarNotiLocal()" color="tertiary">Pruebas de Notificaciones Local</ion-button>
+            <ion-button *ngIf="!production" (click)="probarNotiExterna()" color="dark">Pruebas de Notificaciones Externa</ion-button>
+            <ion-button *ngIf="!production" (click)="probarNotiEmergencia()" color="dark">Pruebas de Notificaciones emergencia</ion-button>
             <!-- <ion-button (click)="probarToggleSubscription()" color="secondary">Prueba Toggle Subscription</ion-button> -->
         </ion-row>
         <ion-row class="ion-justify-content-center" *ngIf="servicesList !== null || servicesList.length > 0">

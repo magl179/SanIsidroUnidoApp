@@ -10,6 +10,41 @@
 </ion-header>
 
 <ion-content padding>
+    <div>
+        <h5 class="info-dialog">Para solicitar la afiliación debes ingresar tu número de cédula y adjuntar una imágen de algún servicio básico que nos permita verificar tus datos</h5>
+    </div>
+    <form [formGroup]="membershipForm">
+        <!-- Campo -->
+        <ion-item class="input_item" lines="none">
+            <ion-label class="label-padding label-margin" position="stacked">Nº Cédula *
+            </ion-label>
+            <div class="input-general-container">
+                <ion-input class="input-beatiful input-general" maxlength="10" placeholder="" formControlName="cedula"
+                    type="text">
+                </ion-input>
+            </div>
+        </ion-item>
+        <!-- Validaciones -->
+        <div class="form-errors padding-lateral-small">
+            <p class="form-error"
+                *ngIf="membershipForm.get('cedula').hasError('required') && membershipForm.get('cedula').touched">
+                {{errorMessages.cedula.required.message}}
+            </p>
+            <p class="form-error"
+                *ngIf="membershipForm.get('cedula').hasError('minlength') && membershipForm.get('cedula').touched">
+                {{errorMessages.cedula.minlength.message}}
+            </p>
+            <p class="form-error"
+                *ngIf="membershipForm.get('cedula').hasError('maxlength') && membershipForm.get('cedula').touched">
+                {{errorMessages.cedula.maxlength.message}}
+            </p>            
+            <p class="form-error"
+                *ngIf="membershipForm.get('cedula').errors?.cedulaValida && membershipForm.get('cedula').touched">
+                {{errorMessages.cedula.cedulaValida.message}}
+            </p>
+        </div>
+    </form>
+    <p class="item-info-header">Imagen *</p>
     <ion-grid *ngIf="publicServiceImg.length > 0">
         <ion-row class="ion-justify-content-center">
             <ion-col size="6" *ngFor="let image of publicServiceImg; let i = index;">
@@ -30,6 +65,17 @@
     </ion-grid>
     <app-upload-image [uploadedImages]="publicServiceImg" [maxImages]="1"
         (returnUploadedImages)="getUploadedImages($event)"></app-upload-image>
-    <ion-button class="btn_send_request_membership" expand="block" (click)="sendRequestMembership()"
-        [disabled]="publicServiceImg.length === 0 || formSended">Enviar</ion-button>
+    <!-- <ion-button 
+        class="btn_send_request_membership" 
+        expand="block" 
+        (click)="sendRequestMembership()">
+        Enviar
+    </ion-button> -->
+    <ion-button 
+        class="btn_send_request_membership" 
+        expand="block" 
+        (click)="sendRequestMembership()"
+        [disabled]="publicServiceImg.length === 0 || formSended ||!membershipForm.valid">
+        Enviar
+    </ion-button>
 </ion-content>

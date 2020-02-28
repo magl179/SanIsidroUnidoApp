@@ -1,31 +1,47 @@
 <!-- <app-header title="Tutorial" [showNoti]="false"></app-header> -->
 <ion-content>
-            <ion-slides pager="true" style="display: flex;" (ionSlidesDidLoad)="slidesLoaded($event)" (ionSlideDidChange)="slideChange($event)">
-                <ion-slide class="tutorial_slide" *ngFor="let slide of slides" [ngStyle]="{'background':  getBackgroundApp(slide.img)}">
-                    <div class="slide-content">
-                        <!-- <img [src]="slide.img" class="slide-img"> -->
-                        <h1>{{slide.title}}</h1>
-                        <p>{{slide.description}}</p>
-                    </div>
-                </ion-slide>
-            </ion-slides>
-            <div style="position: fixed;bottom: 2.5em;
-            width: 100%;display:flex;z-index: 1000;">
-                <div style="width: 50%;display: flex;
-                justify-content: center;">
-                   <div>
-                        <ion-button class="ion-text-capitalize" color="light" expand="block" (click)="goToLogin()">
-                            Iniciar Sesión
-                        </ion-button>
-                   </div>
-                </div>
-                <div style="width: 50%;display: flex;
-                justify-content: center;">
-                    <div>
-                        <ion-button class="ion-text-capitalize" color="light" fill="outline" expand="block" (click)="goToRegister()">
-                            Registrarme
-                        </ion-button>
-                    </div>
+    <ion-slides pager="true" style="display: flex;" (ionSlidesDidLoad)="slidesLoaded($event)"
+        (ionSlideDidChange)="slideChange($event)">
+        <ion-slide class="tutorial_slide" *ngFor="let slide of slides"
+            [ngStyle]="{'background':  getBackgroundApp(slide.img)}">
+            <div class="slide-content">
+                <!-- <img [src]="slide.img" class="slide-img"> -->
+                <h1>{{slide.title}}</h1>
+                <p>{{slide.description}}</p>
+            </div>
+        </ion-slide>
+    </ion-slides>
+    <div class="footer-container">
+        <div class="footer-row flex">
+            <div class="footer-col">
+                <div>
+                    <ion-button class="ion-text-capitalize" color="light" expand="block" (click)="goToLogin()">
+                        Iniciar Sesión
+                    </ion-button>
                 </div>
             </div>
+            <div class="footer-col">
+                <div>
+                    <ion-button class="ion-text-capitalize" color="light" fill="outline" expand="block"
+                        (click)="goToHome()">
+                        Ir al Inicio
+                    </ion-button>
+                    <!-- <ion-button class="ion-text-capitalize" color="light" fill="outline" expand="block"
+                        (click)="goToRegister()">
+                        Registrarme
+                    </ion-button> -->
+                </div>
+            </div>
+        </div>
+        <!-- <div class="footer-row flex center-flex">
+            <div class="footer-col">
+                <a (click)="goToHome()" class="moveToHome">Ir al Inicio</a>
+                <ion-button class="ion-text-capitalize" color="medium" fill="outline" expand="block"
+                    (click)="goToRegister()">
+                    Ir al Inicio
+                </ion-button>
+            </div>
+
+        </div> -->
+    </div>
 </ion-content>
