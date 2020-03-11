@@ -14,6 +14,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { CONFIG } from 'src/config/config';
 import { ErrorService } from 'src/app/services/error.service';
+import { MessagesService } from '../../services/messages.service';
 
 @Component({
     selector: 'app-register',
@@ -32,6 +33,7 @@ export class RegisterPage implements OnInit {
 
     constructor(
         private navCtrl: NavController,
+        private messagesService: MessagesService,
         private errorService: ErrorService,
         public formBuilder: FormBuilder,
         private utilsService: UtilsService,
@@ -65,22 +67,25 @@ export class RegisterPage implements OnInit {
 
     async manageRegister(loginData, res) {
         //Obtener Token y Usuario
-        const loadingManageRegister = await this.utilsService.createBasicLoading('Obteniendo Respuesta');
+        const loadingManageRegister = await this.utilsService.createBasicLoading('Obteniendo Respuesta...');
         loadingManageRegister.present();
         const token = res.data;
         const token_decoded = decodeToken(token);
         //Guardar Datos Token
         this.authService.saveUserInfo(token, token_decoded);
         this.authService.saveLocalStorageInfo(token, token_decoded);
+        this.messagesService.showSuccess('Usuario Registrado Correctamente');
         //Registrar Dispositivo
-        this.notificationsService.registerUserDevice(token_decoded.user);
+        // this.notificationsService.registerUserDevice(token_decoded.user);
         //Activar notificaciones onesignal
-        this.notificationsService.activateOnesignalSubscription();
+        // this.notificationsService.activateOnesignalSubscription();
         // this.notificationsService.setEmailOnesignal(loginData.email);
         //Redirigir Usuario
         loadingManageRegister.dismiss();
         //Redigirir a la ruta HOME
-        this.navCtrl.navigateRoot(`/${CONFIG.HOME_ROUTE}`);
+        setTimeout(()=>{
+            this.navCtrl.navigateRoot(`/${CONFIG.HOME_ROUTE}`);
+        }, 500);
     }
     //Function registrar al usuario por formulario
     async registerUser() {
@@ -92,8 +97,11 @@ export class RegisterPage implements OnInit {
         const email = this.registerForm.value.email;
         const password = this.registerForm.value.password;
         const user = {
-            first_name, last_name, email, password, social_id: null, provider: 'formulario'
+            first_name, last_name, email, password, social_id: null, provider: 'formulario', device: null
         };
+        //Añadir informacion dispositivo
+        const device = await this.notificationsService.getOneSignalIDSubscriptor();
+        user.device = device;
         // Método para registrar al usuario
         this.authService.register(user).pipe(
             finalize(() => {
@@ -111,6 +119,10 @@ export class RegisterPage implements OnInit {
         this.socialDataService.fbLoginData.subscribe(async fbData => {
             if (fbData) {
                 const user = this.socialDataService.getFacebookDataParsed(fbData);
+                //Añadir informacion dispositivo
+                const device = await this.notificationsService.getOneSignalIDSubscriptor();
+                user.device = device;
+                //Funcion Registro
                 this.authService.register(user).subscribe(async res => {
                     await this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'facebook' }, res);
                 }, (err: HttpErrorResponse) => {
@@ -127,6 +139,10 @@ export class RegisterPage implements OnInit {
         this.socialDataService.googleLoginData.subscribe(async googleData => {
             if (googleData) {
                 const user = await this.socialDataService.getGoogleDataParsed(googleData);
+                //Añadir informacion dispositivo
+                const device = await this.notificationsService.getOneSignalIDSubscriptor();
+                user.device = device;
+                //Funcion Registro
                 this.authService.register(user).subscribe(async res => {
                     await this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'google' }, res);
                 }, (err: HttpErrorResponse) => {
@@ -171,7 +187,7 @@ export class RegisterPage implements OnInit {
 
     //Funcion para navegar a pagina de login
     goToLogin() {
-        this.navCtrl.navigateForward('/login', {animated: true});
+        this.navCtrl.navigateForward('/login', { animated: true });
     }
 
 }

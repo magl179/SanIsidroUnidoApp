@@ -1,3 +1,10 @@
+.services-empty{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.2em;
+}
+
 .service_item{
     a{
         text-decoration: none;

@@ -70,7 +70,7 @@ export class EventDetailPage implements OnInit {
             if (res.data) {
                 this.event = res.data;
                 if (this.event) {
-                    this.event.postAssistance = checkLikePost(this.event.details, this.AuthUser);
+                    this.event.postAssistance = checkLikePost(this.event.reactions, this.AuthUser);
                 }
             }
         },(err: HttpErrorResponse) => {

@@ -148,8 +148,8 @@ export class EventsListPage implements OnInit, OnDestroy {
                 }
                 return;
             } else {
-                eventsApi.forEach((event: any) => {
-                    const postAssistance = checkLikePost(event.details, this.AuthUser) || false;
+                eventsApi.forEach((event: IEvent) => {
+                    const postAssistance = checkLikePost(event.reactions, this.AuthUser) || false;
                     event.postAssistance = postAssistance;
                 });
 

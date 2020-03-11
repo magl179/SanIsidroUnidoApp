@@ -64,7 +64,7 @@ export interface IPost {
     updated_at?: any;
     images?: I_ImagesApi[];
     imagesArr: any[];
-    details?: any[],
+    reactions?: any[],
     category?: ICategory;
     subcategory?: ISubcategory;
     user?: any;

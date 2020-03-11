@@ -54,7 +54,10 @@ export class EditProfilePage implements OnInit {
     }
 
     editUserProfileData() {
-        this.userService.sendEditProfileRequest(this.editProfileForm.value).subscribe(async res => {
+        // console.log('this.editProfileForm.value', this.editProfileForm.getRawValue())
+        // return;
+        //Obtener valor incluido campos disabled
+        this.userService.sendEditProfileRequest(this.editProfileForm.getRawValue()).subscribe(async res => {
             const token = res.data.token;
             const token_decoded = decodeToken(token);
             this.authService.saveUserInfo(token, token_decoded);

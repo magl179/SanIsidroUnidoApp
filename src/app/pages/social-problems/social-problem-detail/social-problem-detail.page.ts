@@ -74,7 +74,7 @@ export class SocialProblemDetailPage implements OnInit {
         ).subscribe((res: IRespuestaApiSIUSingle) => {
             if (res.data) {
                 this.socialProblem = res.data;
-                this.socialProblem.postLiked = checkLikePost(this.socialProblem.details, this.AuthUser);
+                this.socialProblem.postLiked = checkLikePost(this.socialProblem.reactions, this.AuthUser);
             }
         }, (err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error al traer el detalle del problema social ');

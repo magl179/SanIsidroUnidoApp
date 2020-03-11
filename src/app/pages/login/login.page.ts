@@ -44,12 +44,6 @@ export class LoginPage implements OnInit {
         this.createForm();
     }
 
-    // ionViewDidEnter() {
-    //     setTimeout(() => {
-    //       this.first_field.nativeElement.setFocus();
-    //     },150);    
-    //  }
-
     async ngOnInit() {
         this.backUrl = `/home-screen`;
         this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
@@ -73,14 +67,15 @@ export class LoginPage implements OnInit {
         this.authService.saveUserInfo(token, token_decoded);
         this.authService.saveLocalStorageInfo(token, token_decoded);
         //Registrar Dispositivo
-        this.notificationsService.registerUserDevice(token_decoded.user);
+        // this.notificationsService.registerUserDevice(token_decoded.user);
         //Activar notificaciones Onesignal
-        this.notificationsService.activateOnesignalSubscription();
-        // this.notificationsService.setEmailOnesignal(loginData.email);
+        // this.notificationsService.activateOnesignalSubscription();
         this.loginForm.reset();
         //Redirigir Usuario
         loadingManageLogin.dismiss();
-        this.navCtrl.navigateRoot(`/${CONFIG.HOME_ROUTE}`);
+        setTimeout(()=>{
+            this.navCtrl.navigateRoot(`/${CONFIG.HOME_ROUTE}`);
+        }, 500);
     }
 
     async loginUser() {
@@ -88,7 +83,11 @@ export class LoginPage implements OnInit {
         loadingLoginValidation.present();
         const email = this.loginForm.value.email;
         const password = this.loginForm.value.password;
-        const loginData = { email, password, provider: 'formulario' };
+        const loginData = { email, password, provider: 'formulario', device: null };
+        //Añadir informacion dispositivo
+        const device = await this.notificationsService.getOneSignalIDSubscriptor();
+        loginData.device = device;
+        //Funcion Login
         this.authService.login(loginData).pipe(
             finalize(() => {
                 loadingLoginValidation.dismiss()
@@ -97,7 +96,7 @@ export class LoginPage implements OnInit {
             this.manageLogin(loginData, res);
         }, (err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error, intentalo más tarde')
-        });               
+        });
     }
 
     async loginUserByFB() {
@@ -106,12 +105,11 @@ export class LoginPage implements OnInit {
             if (fbData) {
                 const user = this.socialDataService.getFacebookDataParsed(fbData);
                 const { social_id, email } = user;
-                const loginData = {
-                    email: user.email,
-                    provider: user.provider,
-                    social_id: user.social_id
-                };
-                this.authService.login(loginData).subscribe(res => {
+                //Añadir informacion dispositivo
+                const device = await this.notificationsService.getOneSignalIDSubscriptor();
+                user.device = device;
+                //Funcion Login
+                this.authService.login(user).subscribe(res => {
                     this.manageLogin({ provider: 'facebook', social_id, email }, res);
                 }, (err: HttpErrorResponse) => {
                     this.errorService.manageHttpError(err, 'Fallo la conexión con Facebook');
@@ -128,12 +126,11 @@ export class LoginPage implements OnInit {
             if (googleData) {
                 const user = this.socialDataService.getGoogleDataParsed(googleData);
                 const { social_id, email } = user;
-                const loginData = {
-                    email: user.email,
-                    provider: user.provider,
-                    social_id: user.social_id
-                };
-                this.authService.login(loginData).subscribe(async res => {
+                //Añadir informacion dispositivo
+                const device = await this.notificationsService.getOneSignalIDSubscriptor();
+                user.device = device;
+                //Funcion Login
+                this.authService.login(user).subscribe(async res => {
                     await this.manageLogin({ social_id, email, provider: 'google' }, res);
                 }, (err: HttpErrorResponse) => {
                     this.errorService.manageHttpError(err, 'Ocurrio un error al conectar con Google');
@@ -165,7 +162,7 @@ export class LoginPage implements OnInit {
 
     //Funcion para navegar a pagina de registro
     goToRegister() {
-        this.navCtrl.navigateForward('/register', {animated: true});
+        this.navCtrl.navigateForward('/register', { animated: true });
     }
 
 

@@ -25,19 +25,22 @@ export class ManageDocsService {
     downloadAndOpenPDF($url_path_file_pdf: string) {
         let path = this.file.dataDirectory;
         this.messagesService.showInfo(`Descargando Documento por favor espere...`);
-        this.messagesService.showInfo(`URL PDF: ${$url_path_file_pdf}`);
         let filename = $url_path_file_pdf.replace(/^.*[\\\/]/, '');
         if (this.platform.is('cordova')) {
             const transfer = this.fileTransfer.create();
             transfer.download($url_path_file_pdf, path + filename).then(entry => {
                 let url = entry.toURL();
+                
                 if (this.platform.is('ios')) {
+                    this.messagesService.showInfo(`Archivo descargado correctamente.`);
                     this.documentViewer.viewDocument(url, 'application/pdf', {});
                 } else {
+                    this.messagesService.showInfo(`Archivo descargado correctamente.`);
                     this.fileOpener.open(url, 'application/pdf');
                 }
             }).catch(err => {
                 console.error('Ocurrio un error al descargar el archivo');
+                this.messagesService.showError(`No pudimos descargar el archivo, intentalo más tarde.`);
             })
         } else {
             this.utilsService.openInBrowser($url_path_file_pdf);

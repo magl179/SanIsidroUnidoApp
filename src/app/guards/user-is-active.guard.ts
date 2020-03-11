@@ -27,7 +27,7 @@ export class UserIsActiveGuard implements CanLoad {
                     }
                     return false;
                 } else {
-                    this.router.navigate(['/login']);
+                    this.router.navigate(['/home-screen']);
                     return false;
                 }
             })

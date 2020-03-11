@@ -7,6 +7,10 @@
             <ion-button *ngIf="!production" (click)="probarNotiEmergencia()" color="dark">Pruebas de Notificaciones emergencia</ion-button>
             <!-- <ion-button (click)="probarToggleSubscription()" color="secondary">Prueba Toggle Subscription</ion-button> -->
         </ion-row>
+        <!-- <ion-row *ngIf="servicesList == null || servicesList.length == 0"> -->
+        <ion-row class="services-empty" *ngIf="servicesList == null || servicesList.length == 0">
+            No hay opciones disponibles
+        </ion-row>
         <ion-row class="ion-justify-content-center" *ngIf="servicesList !== null || servicesList.length > 0">
                 <ng-container *ngFor="let service of servicesList">
                     <ion-col size="6" class="service_item" *appHasRole="service.valid_roles">

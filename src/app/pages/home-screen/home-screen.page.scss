@@ -1,5 +1,6 @@
 ion-slide.tutorial_slide {
     display: flex;
+    position: relative;
     align-items: center;
     background-position: center !important;
     background-size: cover !important;
@@ -8,6 +9,7 @@ ion-slide.tutorial_slide {
 }
 
 .slide-content {
+    // background-color: pink;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -30,12 +32,19 @@ ion-slides {
 
 .footer-container {
     position: fixed;
-    bottom: 2.5em;
+    // background:lime;color:white;
+    bottom: 1em;
     width: 100%;
     display: flex;
     z-index: 1000;
     flex-direction: row;
     flex-wrap: wrap;
+    padding-left: 1.6em;
+    padding-right: 1.6em;
+}
+
+.btn-action-container{
+    margin: 9px 0;
 }
 
 .footer-row {

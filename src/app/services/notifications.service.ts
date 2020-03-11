@@ -131,10 +131,11 @@ export class NotificationsService implements OnInit {
             };
             this.userService.sendRequestAddUserDevice(data)
                 .subscribe(async (res: any) => {
-                    this.messageService.showSuccess('Dispositivo Añadido Correctamente');
+                    // this.messageService.showSuccess('Dispositivo Añadido Correctamente');
                     this.saveDeviceInfo(this.userDevice.value.phone_id);
                 }, (err: any) => {
-                    this.errorService.manageHttpError(err, 'Ocurrio un error al añadir el dispositivo');
+                    // this.errorService.manageHttpError(err, 'Ocurrio un error al añadir el dispositivo');
+                    console.log('err', err);
                 });
         }
     }
@@ -201,17 +202,22 @@ export class NotificationsService implements OnInit {
     // Función para Obtener ID de Suscriptor de Onesignal
     async getOneSignalIDSubscriptor() {
         //Pedir acceso a notificaciones, en caso de no tenerlas
-        this.oneSignal.provideUserConsent(true);
-        const deviceID = await this.oneSignal.getIds();
-        const userDevice: IDeviceUser = {
-            user_id: null,
-            id: null,
-            phone_id: deviceID.userId,
-            phone_model: this.device.model || 'Modelo Generico',
-            phone_platform: this.device.platform || 'Sistema Generico',
-            description: `${this.device.platform} ${this.device.model}`
-        };
-        this.userDevice.next(userDevice);
+        if(this.platform.is('cordova')){
+            this.oneSignal.provideUserConsent(true);
+            const deviceID = await this.oneSignal.getIds();
+            const userDevice: IDeviceUser = {
+                user_id: null,
+                id: null,
+                phone_id: deviceID.userId,
+                phone_model: this.device.model || 'Modelo Generico',
+                phone_platform: this.device.platform || 'Sistema Generico',
+                description: `${this.device.platform} ${this.device.model}`
+            };
+            this.userDevice.next(userDevice);
+            return userDevice;
+        }else{
+            return null;
+        }
     }
 
     // Función a Ejecutar cuando se recibe una notificación

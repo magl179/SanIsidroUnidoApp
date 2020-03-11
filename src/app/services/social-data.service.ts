@@ -36,7 +36,8 @@ export class SocialDataService {
             social_id: googleUser.id,
             provider: 'google',
             avatar: googleUser.avatar,
-            password: null
+            password: null,
+            device: null
         };
         return appUser;
     }
@@ -49,7 +50,8 @@ export class SocialDataService {
             social_id: fbUser.id,
             provider: 'facebook',
             avatar: fbUser.image,
-            password: null
+            password: null,
+            device: null
         };
         return appUser;
     }

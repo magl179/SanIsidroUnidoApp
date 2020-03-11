@@ -66,17 +66,17 @@
                         </span>
                         <span>{{(socialProblem.ubication && socialProblem.ubication.address) ? socialProblem.ubication.address: 'No existe ubicación'}}</span>
                     </p>
-                    <p class="item-info" *ngIf="socialProblem.details.length > 0">
+                    <p class="item-info" *ngIf="socialProblem.reactions.length > 0">
                         <span class="icon-people">
                             <ion-icon name="people" class="social-problem-state"></ion-icon>
                         </span>
                           <!-- <span *ngIf="socialProblem.postLiked">
-                            A ti y {{socialProblem.details.length}} persona(s) más les gusta
+                            A ti y {{socialProblem.reactions.length}} persona(s) más les gusta
                          </span> -->
                         <!-- <span *ngIf="!socialProblem.postLiked"> -->
                         <span>
-                            {{socialProblem.details.length}} 
-                                    {{(socialProblem.details.length === 1) ? 'vecino apoya' : 'vecinos apoyando'}}
+                            {{socialProblem.reactions.length}} 
+                                    {{(socialProblem.reactions.length === 1) ? 'vecino apoya' : 'vecinos apoyando'}}
                         </span>
                     </p>
                     <p class="item-info">

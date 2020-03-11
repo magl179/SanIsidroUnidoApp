@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { Observable, BehaviorSubject, throwError } from 'rxjs';
+import { Observable, BehaviorSubject, throwError, from } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IRegisterUser } from 'src/app/interfaces/models';
 import { HttpRequestService } from "./http-request.service";
@@ -13,6 +13,7 @@ import { CONFIG } from 'src/config/config';
 import { MessagesService } from './messages.service';
 import { EventsService } from './events.service';
 import { getUserRoles, hasRoles } from '../helpers/user-helper';
+import { switchMap, map } from 'rxjs/operators';
 
 const TOKEN_ITEM_NAME = "accessToken";
 const USER_ITEM_NAME = "currentUser";
@@ -64,7 +65,8 @@ export class AuthService {
     }
 
     // Iniciar Sesion del Usuario
-    login(loginData: { email: string, password?: string, social_id?: string, provider: string }): Observable<any> {
+    //$requestData['provider'] = 'formulario'
+    login(loginData: any): Observable<any> {
         const headers = CONFIG.API_HEADERS;
         const urlApi = `${environment.APIBASEURL}/login`;
         return this.httpRequest.post(urlApi, loginData, headers);
@@ -85,11 +87,16 @@ export class AuthService {
     async logout(message = 'Tu sesión expiro, inicia sesión por favor') {
         this.cleanLocalStorage();
         this.cleanAuthInfo();
-        this.messageService.showInfo(message);
+        if(message !== ''){
+            this.messageService.showInfo(message);
+        }
         // this.notificationService.logoutOnesignal();
         this.events_appService.emitLogoutEvent();
-        this.navCtrl.navigateForward('/login');
+        setTimeout(()=>{
+            this.navCtrl.navigateRoot('/home-screen', { replaceUrl: true });
+        }, 700);
     }
+
     async redirectToLogin(message = ''){
         this.cleanLocalStorage();
         this.cleanAuthInfo();
@@ -159,6 +166,23 @@ export class AuthService {
             });
         });
         return await getTokenDecodedLS;
+    }
+
+    getUserAuthRxjs():Observable<any> {
+        // return from(this.getTokenUserAuthenticated());
+        return from(this.getTokenUserAuthenticated()).pipe(
+            // now switch to a http-get request
+            // switchMap(authtoken => {
+            //   // make a HttpHeaders from it
+            //   const headers = new HttpHeaders({ 'authorization': authtoken });
+            //   return this.http.get(url, { headers });
+            // })
+            // here you'll have your request results
+            map((resp: Response) => {
+            //   let response = this.extractData(resp);
+              return resp;
+            })
+        )
     }
 
     // Verificar si el token esta guardado en el local storage

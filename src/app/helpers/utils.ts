@@ -233,15 +233,16 @@ export const mapEvent = (event: any) => {
     if (event.user && event.user.avatar) {
         event.user.avatar = getImageURL(event.user.avatar);
     }
-    if (event.range_date) {
-        event.fulldate = formatEventRangeDate(event.range_date.start_date, event.range_date.end_date);
-        event.initial_date = momentFormat(event.range_date.start_date, 'LLL')
-        event.end_date = momentFormat(event.range_date.end_date, 'LLL')
-        event.range_short_date = formatRangeDate(event.range_date.start_date, event.range_date.end_date);
-        event.range_short_time = formatRangeTime(event.range_date.start_time, event.range_date.end_time);
+    const range_date = (event.additional_data.event&& event.additional_data.event.range_date) ? event.additional_data.event.range_date: null;
+    if (range_date) {
+        event.fulldate = formatEventRangeDate(range_date.start_date, range_date.end_date);
+        event.initial_date = momentFormat(range_date.start_date, 'LLL')
+        event.end_date = momentFormat(range_date.end_date, 'LLL')
+        event.range_short_date = formatRangeDate(range_date.start_date, range_date.end_date);
+        event.range_short_time = formatRangeTime(range_date.start_time, range_date.end_time);
     }
 
-    if (event.range_date && event.range_date.start_date && event.range_date.end_date) {
+    if (range_date && range_date.start_date && range_date.end_date) {
         event.hasRangeDate = true;
     } else {
         event.hasRangeDate = false;

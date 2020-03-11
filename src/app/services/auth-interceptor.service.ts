@@ -25,7 +25,7 @@ import { ErrorService } from "src/app/services/error.service";
 export class AuthInterceptorService implements HttpInterceptor {
 
     private statusCodeAvoid = [401];
-    private numIntentos = 2;
+    private numIntentos = 1;
 
     constructor(
         private authService: AuthService,

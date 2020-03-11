@@ -97,13 +97,13 @@
                 </ion-card-content>
             </div>
             <div class="event__footer social">
-                <div class="social-content" *ngIf="event.details.length > 0">
-                    <!-- <span *ngIf="event.postAssistance">A ti y {{event.details.length}} personas
+                <div class="social-content" *ngIf="event.reactions.length > 0">
+                    <!-- <span *ngIf="event.postAssistance">A ti y {{event.reactions.length}} personas
                         más les interesa</span> -->
                     <!-- <span *ngIf="!event.postAssistance"> -->
                     <span>
-                        A {{event.details.length}}
-                        {{(event.details.length === 1) ? 'vecino le interesa asistir' : 'vecinos les interesa asistir'}}
+                        A {{event.reactions.length}}
+                        {{(event.reactions.length === 1) ? 'vecino le interesa asistir' : 'vecinos les interesa asistir'}}
                     </span>
                 </div>
                 <div class="social-options">

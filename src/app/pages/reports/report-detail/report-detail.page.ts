@@ -69,7 +69,7 @@ export class ReportDetailPage implements OnInit {
         this.utilsService.seeImageDetail(image, 'Imagen Evento');
     }
 
-    openReportPDF(indice=1) {
+    openReportPDF() {
         // const urlPDFApi = `${environment.APIBASEURL}/pdf/javascript.pdf`;
         const pdfs = [
             "https://drive.google.com/file/d/1P-_obHcrIOYauf-zuQ830E5EtuTPCxI9/view", //error
@@ -78,10 +78,10 @@ export class ReportDetailPage implements OnInit {
             "https://libros.metabiblioteca.org/bitstream/001/353/5/978-84-693-0146-3.pdf", //funciona
             `${environment.APIBASEURL}/pdf/javascript.pdf` //error
         ];
-        const pdfs_new = [
-            "http://www.cursogis.com.ar/BasesP/Zip/Base_Clase1.pdf",  //demora cargar
-            "http://bibliotecadigital.univalle.edu.co/bitstream/10893/10313/3/Fundamentos%20de%20Bases%20de%20Datos.pdf", //demora cargar
-        ];
+        // const pdfs_new = [
+        //     "http://www.cursogis.com.ar/BasesP/Zip/Base_Clase1.pdf",  //demora cargar
+        //     "http://bibliotecadigital.univalle.edu.co/bitstream/10893/10313/3/Fundamentos%20de%20Bases%20de%20Datos.pdf", //demora cargar
+        // ];
         // const urlPDFDrive = "https://drive.google.com/file/d/1P-_obHcrIOYauf-zuQ830E5EtuTPCxI9/view";
         const position = this.randomInteger(0, (pdfs.length -1));
         this.manageDocsService.downloadAndOpenPDF(pdfs[position]);

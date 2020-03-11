@@ -66,7 +66,7 @@ export class AppComponent implements OnInit {
             await this.getMenuOptions();
             this.showAppsplash = false;
             timer(1000).subscribe(async () => {
-                await this.pushNotificationService.initialConfig();;
+                await this.pushNotificationService.initialConfig();
             });
             this.navigationService.keepHistoryTracking();
         });
@@ -81,8 +81,8 @@ export class AppComponent implements OnInit {
                 return token_decoded;
             })
         ).subscribe(token_decoded => {
+            this.sessionAuth = token_decoded;
             if (token_decoded) {
-                this.sessionAuth = token_decoded;
                 this.authService.checkValidToken();
             }
         }, (err: any) => {
@@ -118,7 +118,7 @@ export class AppComponent implements OnInit {
                     text: 'Cerrar Sesión',
                     cssClass: 'confirm_button',
                     handler: async () => {
-                        await this.authService.logout('Has cerrado sesión correctamente');
+                        await this.authService.logout('');
                         await this.menuCtrl.close();
                     }
                 }
