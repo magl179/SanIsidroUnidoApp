@@ -91,7 +91,7 @@ export class EmergencyDetailPage implements OnInit {
         this.isPoliciaRol = isPolicia;
         this.showPoliciaOptions = isPolicia;
         this.urlBackEmergency = (isPolicia) ? '/home-list' : '/emergencies/list';
-        console.log('ROL IS POLICIA', isPolicia);
+        // console.log('ROL IS POLICIA', isPolicia);
     }
 
     //POLICIA COMUNITARIO
@@ -100,9 +100,13 @@ export class EmergencyDetailPage implements OnInit {
         //guardar usuario que va a atender
         //el back notificar al usuario que tal policia le va a atender
         //informar si se guardo o no el dato
-        this.messagesService.showInfo("Has declinado atender la emergencia");
-        this.showPoliciaOptions = false;
-        this.emergency.is_attended = 1;
+        this.postsService.sendPoliciaAtenderEmergencia({emergencia_id: this.emergency.id}).subscribe((res:any)=> {
+            this.messagesService.showInfo("Has aceptado atender la emergencia");
+            this.showPoliciaOptions = false;
+            this.emergency.is_attended = 1;
+        },(err: HttpErrorResponse) => {
+            this.errorService.manageHttpError(err, 'Ocurrio un error al registrar la solicitud de atención de emergencia');
+        })
     }
 
     onPoliciaDenyEmergency(){

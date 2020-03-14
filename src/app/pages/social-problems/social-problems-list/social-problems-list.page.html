@@ -71,16 +71,10 @@
                 </ion-card-content>
             </div>
             <div class="social">
-                <div class="social-content" *ngIf="socialProblem.details.length > 0">
-                    <!-- <span>length {{socialProblem.details.length}}</span>
-                    <span *ngIf="socialProblem.postLiked && socialProblem.details.length <= 2">Tú y {{socialProblem.details.length - 1}}
-                        vecino más están apoyando</span>
-                    <span *ngIf="socialProblem.postLiked && socialProblem.details.length > 2">Tú y {{socialProblem.details.length - 1}}
-                        vecinos más están apoyando</span> -->
-                    <!-- <span *ngIf="!socialProblem.postLiked"> -->
+                <div class="social-content" *ngIf="socialProblem.reactions.length > 0">
                     <span>
-                        {{socialProblem.details.length}}
-                        {{(socialProblem.details.length === 1) ? 'vecino apoya' : 'vecinos apoyando'}}
+                        {{socialProblem.reactions.length}}
+                        {{(socialProblem.reactions.length === 1) ? 'vecino apoya' : 'vecinos apoyando'}}
                     </span>
                 </div>
                 <div class="social-options"

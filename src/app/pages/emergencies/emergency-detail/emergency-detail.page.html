@@ -28,13 +28,13 @@
             <ion-row>
                 <ion-col>
                     <ion-item lines="none" detail="false" button="true"
-                        class="container_events detail" [ngClass]="{'active': (i % 2) === 0}">
+                        class="container_events detail">
                         <ion-skeleton-text width="50%"></ion-skeleton-text>
                     </ion-item>
                 </ion-col>
                 <ion-col>
                     <ion-item lines="none" detail="false" button="true"
-                        class="container_events detail" [ngClass]="{'active': (i % 2) !== 0}">
+                        class="container_events detail">
                         <ion-skeleton-text width="50%"></ion-skeleton-text>
                     </ion-item>
                 </ion-col>
@@ -90,7 +90,7 @@
         </div>
     </div>
 </ion-content>
-<ion-footer class="footer-fixed-posts" *ngIf="isPoliciaRol && showPoliciaOptions && !emergency.is_attended">
+<ion-footer class="footer-fixed-posts" *ngIf="emergency && isPoliciaRol && showPoliciaOptions && !emergency.is_attended">
     <div class="social">
         <div class="social-options">
             <div class="social-button ion-activatable" (click)="onPoliciaAcceptEmergency()">

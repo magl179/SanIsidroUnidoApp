@@ -1,6 +1,6 @@
 // Function obtener los detalles de un usuario
-export const getUsersFromDetails = ($details: any) => {
-    return $details.map((detail: any) => detail.user_id);
+export const getUsersFromDetails = ($reactions: any) => {
+    return $reactions.map((reaction: any) => reaction.user_id);
 }
 
 // Funcion para verificar si un usuario ha dado like o asistencia en un detalle de un post
@@ -9,9 +9,9 @@ export const checkUserInDetails = (user_id: number, users_id: number[]) => {
 }
 
 //Funcion verifica like en un posts
-export const checkLikePost = (details: any, user_authenticated: any) => {
-    if (user_authenticated && details && details.length > 0) {
-        const likes_user = getUsersFromDetails(details);
+export const checkLikePost = (reactions: any, user_authenticated: any) => {
+    if (user_authenticated && reactions && reactions.length > 0) {
+        const likes_user = getUsersFromDetails(reactions);
         const user_made_like = checkUserInDetails(user_authenticated.id, likes_user);
         return user_made_like;
     }

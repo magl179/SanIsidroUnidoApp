@@ -82,17 +82,6 @@ export class EventDetailPage implements OnInit {
         });
     }
 
-    checkLikePost($details: any) {
-        if ($details && $details.length > 0) {
-            const likes_user = getUsersFromDetails($details);
-            const user_made_like = checkUserInDetails(this.AuthUser.id, likes_user);
-            return user_made_like;
-        }
-        else {
-            return false;
-        }
-    }
-
     toggleAssistance(assistance: boolean) {
         if(!this.AuthUser){
             this.messagesService.showInfo('Debes iniciar sesión para realizar esta acción');
@@ -100,8 +89,10 @@ export class EventDetailPage implements OnInit {
         }
         if (assistance) {
             this.postService.sendDeleteDetailToPost(this.event.id).subscribe(res => {
-                this.event.postAssistance = false;
-                this.emitAssistanceEvent(this.event.id);
+                if(res.data.reactions){
+                    this.event.postAssistance = false;
+                    this.emitAssistanceEvent(this.event.id, res.data.reactions);
+                }
             }, err => {
                 this.errorService.manageHttpError(err,'No se pudo borrar su asistencia' );
             });
@@ -112,16 +103,19 @@ export class EventDetailPage implements OnInit {
                 post_id: this.event.id
             }
             this.postService.sendCreateDetailToPost(detailInfo).subscribe(res => {
-                this.event.postAssistance = true;
-                this.emitAssistanceEvent(this.event.id);
+                if(res.data.reactions){
+                    this.event.postAssistance = true;
+                    this.emitAssistanceEvent(this.event.id, res.data.reactions);
+                }
             }, err => {
                 this.errorService.manageHttpError(err,'No se pudo guardar su asistencia' );
             });
         }
     }
 
-    emitAssistanceEvent(id: number) {
-        this.events_app.resetEventsEmitter(id);
+    emitAssistanceEvent(id: number, reactions = []) {
+        // this.events_app.resetEventsEmitter(id);
+        this.events_app.resetEventsLikesEmitter(id, reactions);
     }
 
     async sharePost(post: IEvent) {
@@ -160,4 +154,8 @@ export class EventDetailPage implements OnInit {
     seeImageDetail(image: string) {
         this.utilsService.seeImageDetail(image, 'Imagen Evento');
     }
+
+    // emitAssistanceEvent(id: number, reactions: any = []) {
+        // this.events_app.resetSocialProblemLikesEmmiter(id, reactions);
+    // }
 }

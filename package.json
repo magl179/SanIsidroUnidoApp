@@ -1,8 +1,8 @@
 {
     "name": "san-isidro-unido",
-    "version": "0.0.1",
+    "version": "1.0.2",
     "author": "Stalin Maza",
-    "homepage": "https://ionicframework.com/",
+    "homepage": "https://stalinmaza97.hashnode.dev",
     "scripts": {
         "ng": "ng",
         "start": "ng serve",

@@ -97,9 +97,12 @@ export class SocialProblemDetailPage implements OnInit {
 
     toggleLike(like: boolean) {
         if (like) {
-            this.postService.sendDeleteDetailToPost(this.socialProblem.id).subscribe((res: IRespuestaApiSIU) => {
-                this.socialProblem.postLiked = false;
-                this.emitLikeEvent(this.socialProblem.id);
+            this.postService.sendDeleteDetailToPost(this.socialProblem.id).subscribe((res: any) => {
+                if(res.data.reactions){
+                    this.socialProblem.postLiked = false;
+                    this.socialProblem.reactions = res.data.reactions;
+                    this.emitLikeEvent(this.socialProblem.id, res.data.reactions);
+                }
             }, err => {
                 this.errorService.manageHttpError(err, 'El me gusta no pudo ser borrado');
             });
@@ -109,9 +112,12 @@ export class SocialProblemDetailPage implements OnInit {
                 user_id: this.AuthUser.id,
                 post_id: this.socialProblem.id
             }
-            this.postService.sendCreateDetailToPost(detailInfo).subscribe((res: IRespuestaApiSIU) => {
-                this.socialProblem.postLiked = true;
-                this.emitLikeEvent(this.socialProblem.id);
+            this.postService.sendCreateDetailToPost(detailInfo).subscribe((res: any) => {
+                if(res.data.reactions){
+                    this.socialProblem.postLiked = true;
+                    this.socialProblem.reactions = res.data.reactions;
+                    this.emitLikeEvent(this.socialProblem.id, res.data.reactions);
+                }
             }, err => {
                 this.errorService.manageHttpError(err, 'El me gusta no pudo ser guardado');
             });
@@ -140,8 +146,8 @@ export class SocialProblemDetailPage implements OnInit {
         this.utilsService.seeImageDetail(image, 'Imagen Evento');
     }
 
-    emitLikeEvent(id: number) {
-        this.events_app.resetSocialProblemEmmiter(id);
+    emitLikeEvent(id: number, reactions: any = []) {
+        this.events_app.resetSocialProblemLikesEmmiter(id, reactions);
     }
 
 }

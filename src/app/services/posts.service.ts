@@ -73,6 +73,11 @@ export class PostsService implements OnInit {
         const headers = setHeaders(CONFIG.AUTHORIZATION_NAME, this.AuthToken);
         return this.httpRequest.post(`${environment.APIBASEURL}/emergencias`, emergencyPost, headers);
     }
+    // Función para enviar una accion atender emergencia
+    sendPoliciaAtenderEmergencia(emergency_attended_data: any): Observable<any> {
+        const headers = setHeaders(CONFIG.AUTHORIZATION_NAME, this.AuthToken);
+        return this.httpRequest.post(`${environment.APIBASEURL}/emergencias/atender`, emergency_attended_data, headers);
+    }
     // Función para enviar un Reporte de Problema Social
     sendSocialProblemReport(socialProblemPost: ISocialProblemReported): Observable<any> {
         const headers = setHeaders(CONFIG.AUTHORIZATION_NAME, this.AuthToken);

@@ -49,20 +49,28 @@ export class EventsListPage implements OnInit, OnDestroy {
             }
         });
         this.loadEvents(null,true);
-        this.events_app.eventsEmitter.subscribe((event_app: any) => {
-            if (this.eventsList.length > 0) {
-                // console.log('tengo datos cargados resetear a 0');
-                this.eventsList = [];
-                this.postsService.resetEventsPage();
-            }
-            return event;
+        this.events_app.eventsLikesEmitter.subscribe((event_app: any) => {
+            // if (this.eventsList.length > 0) {
+            //     // console.log('tengo datos cargados resetear a 0');
+            //     this.eventsList = [];
+            //     this.postsService.resetEventsPage();
+            // }
+            // return event;
+            this.toggleLikes(event_app.id, event_app.reactions);
         });
-        // this.eventsList = [...newEvents];
     }
 
-    // searchEvents(){
-    //     this.navCtrl.navigateRoot("/events/search");
-    // }
+    toggleLikes(id: number, reactions = []) {
+        const newEventsList = this.eventsList.map((event: any) => {
+            event.postAssistance = checkLikePost(reactions, this.AuthUser) || false;
+            return event;
+        });
+        // socialProblems = socialProblems.map((social_problem: any) => {
+        //     social_problem.postLiked = checkLikePost(social_problem.reactions, this.AuthUser) || false;
+        //     return social_problem;
+        // });
+        this.eventsList = [...newEventsList];
+    }
 
     redirectToSearch(){
         this.navCtrl.navigateRoot("/events/search", {
@@ -80,10 +88,13 @@ export class EventsListPage implements OnInit, OnDestroy {
             return;
         }
         if (assistance) {
-            this.postsService.sendDeleteDetailToPost(id).subscribe(res => {
+            this.postsService.sendDeleteDetailToPost(id).subscribe((res: any) => {
                 this.eventsList.forEach(event => {
                     if (event.id == id) {
-                        event.postAssistance = false;
+                        if(res.data.reactions){
+                            event.postAssistance = false;
+                            event.reactions = res.data.reactions;
+                        }
                     }
                 });
             }, err => {
@@ -98,7 +109,10 @@ export class EventsListPage implements OnInit, OnDestroy {
             this.postsService.sendCreateDetailToPost(detailInfo).subscribe((res: any) => {
                 this.eventsList.forEach(event => {
                     if (event.id == id) {
-                        event.postAssistance = true;
+                        if(res.data.reactions){
+                            event.postAssistance = true;
+                            event.reactions = res.data.reactions;
+                        }
                     }
                 });
             }, err => {
@@ -139,7 +153,7 @@ export class EventsListPage implements OnInit, OnDestroy {
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let eventsApi = [];
             eventsApi = res.data;
-            console.dir('eventsApi', res.data)
+            // console.dir('eventsApi', res.data)
 
             if (eventsApi.length === 0) {
                 if (event && event.data && event.data.target && event.data.target.complete) {

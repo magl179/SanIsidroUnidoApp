@@ -85,8 +85,9 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
             this.errorService.manageHttpError(err, 'No se pudo cargar la información del usuario');
         });
         this.loadSocialProblems(null, true);
-        this.events_app.socialProblemEmitter.subscribe((event_app: any) => {
-            this.toggleLikes(event_app.id);
+        this.events_app.socialProblemLikesEmitter.subscribe((event_app: any) => {
+            console.warn('RESET LIKES ID', event_app.id);
+            this.toggleLikes(event_app.id, event_app.reactions);
         });
     }
 
@@ -96,13 +97,15 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
         });
     }
 
-    toggleLikes(id: number) {
+    toggleLikes(id: number, reactions = []) {
         const newSocialProblems = this.socialProblemsList.map((social_problem: any) => {
-            if (social_problem.id === id) {
-                social_problem.postLiked = !social_problem.postLiked;
-            }
+            social_problem.postLiked = checkLikePost(reactions, this.AuthUser) || false;
             return social_problem;
         });
+        // socialProblems = socialProblems.map((social_problem: any) => {
+        //     social_problem.postLiked = checkLikePost(social_problem.reactions, this.AuthUser) || false;
+        //     return social_problem;
+        // });
         this.socialProblemsList = [...newSocialProblems];
         this.socialProblemsFilter = [...this.socialProblemsList];
     }
@@ -113,10 +116,13 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
     //Eliminar o agregar like a una publicacion
     toggleLike(like: boolean, id: number) {
         if (like) {
-            this.postsService.sendDeleteDetailToPost(id).subscribe((res: IRespuestaApiSIU) => {
-                this.socialProblemsList.forEach(social_problem => {
+            this.postsService.sendDeleteDetailToPost(id).subscribe((res: any) => {
+                this.socialProblemsList.forEach(social_problem => {                   
                     if (social_problem.id === id) {
-                        social_problem.postLiked = false;
+                        if(res.data.reactions){
+                            social_problem.postLiked = false;
+                            social_problem.reactions = res.data.reactions;
+                        }
                     }
                 });
             }, (err: any) => {
@@ -128,10 +134,13 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
                 user_id: this.AuthUser.id,
                 post_id: id
             }
-            this.postsService.sendCreateDetailToPost(detailInfo).subscribe((res: IRespuestaApiSIU) => {
+            this.postsService.sendCreateDetailToPost(detailInfo).subscribe((res: any) => {
                 this.socialProblemsList.forEach(social_problem => {
                     if (social_problem.id === id) {
-                        social_problem.postLiked = true;
+                        if(res.data.reactions){
+                            social_problem.postLiked = true;
+                            social_problem.reactions = res.data.reactions;
+                        }
                     }
                 });
             }, (err: any) => {
@@ -171,7 +180,7 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
                 return;
             } else {
                 socialProblems = socialProblems.map((social_problem: any) => {
-                    social_problem.postLiked = checkLikePost(social_problem.details, this.AuthUser) || false;
+                    social_problem.postLiked = checkLikePost(social_problem.reactions, this.AuthUser) || false;
                     return social_problem;
                 });
             }
