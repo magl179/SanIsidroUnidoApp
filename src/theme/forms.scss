@@ -128,6 +128,13 @@
         color: var(--ion-color-darkblue);
     }
 }
+.item-info{
+    color: gray;
+    p{
+        font-size: .7em;
+        margin: 10px 16px 5px;
+    }
+}
 
 .social-networks{
     margin-top: 1em;
@@ -136,7 +143,7 @@
     margin-bottom: 2rem;
 }
 .padding-lateral{
-    padding: 0 1.4em;
+    padding: 0 16px;
 }
 .padding-lateral-small{
     padding: 0 1rem

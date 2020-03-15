@@ -10,9 +10,9 @@ interface ICONFIG {
     HOME_ROUTE: string;
     IMAGE_ASSETS: string;
     MAPLAYERS: IMAPLAYERS;
+    VERSION: string;
     REPORTS_SLUG: string;
     SOCIAL_PROBLEMS_SLUG: string;
-    VERSION: string;
     SHOW_BEATIFUL_ROUTES?: boolean;
     MESSAGE_APP_INFO: string;
     MESSAGE_APP_URL: string;
@@ -41,7 +41,7 @@ export const CONFIG: ICONFIG = {
     },
     REPORTS_SLUG: 'informe',
     SOCIAL_PROBLEMS_SLUG: 'problema_social',
-    VERSION: '1.0.1',
+    VERSION: '1.0.3',
     MESSAGE_APP_INFO: 'Por San Isidro Unido con ❤',
     MESSAGE_APP_URL: 'https://www.facebook.com/stalinmaza97',
     EVENT_BUTTON_MESSAGE: 'Asistir'

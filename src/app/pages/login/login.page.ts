@@ -141,6 +141,10 @@ export class LoginPage implements OnInit {
         });
     }
 
+    forgotPassword(){
+        
+    }
+
     // Función Crea el Formulario
     createForm() {
         //Cargar Validaciones

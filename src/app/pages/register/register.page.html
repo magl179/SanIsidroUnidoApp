@@ -3,7 +3,10 @@
         <ion-buttons slot="start">
             <ion-back-button [defaultHref]="backUrl"></ion-back-button>
         </ion-buttons>
-        <ion-title>Registrarme</ion-title>
+        <ion-title>Registro</ion-title>
+        <ion-item slot="end" lines="none" detail="false" style="--background: transparent;margin-top: 10px;">
+            <img src="assets/img/svg/sanIsidroIconOnlyTransparent.svg" alt="Logo" style="height:50px;width:40px;">
+        </ion-item>
     </ion-toolbar>
 </ion-header>
 
@@ -41,7 +44,16 @@
                                     *ngIf="registerForm.get('first_name').hasError('maxlength') && registerForm.get('first_name').touched">
                                     {{errorMessages.first_name.maxlength.message}}
                                 </p>
+                                <p class="form-error"
+                                    *ngIf="registerForm.get('first_name').hasError('pattern') && registerForm.get('first_name').touched">
+                                    {{errorMessages.first_name.pattern.message}}
+                                </p>
                             </div>
+                            <div class="item-info">
+                                <p>
+                                   No se permite símbolos o caracteres especiales
+                                </p>
+                            </div>                            
                             <div class="item-form full">
                                 <ion-item class="input_item" lines="none">
                                     <ion-label class="label-padding label-margin" position="stacked">Apellidos
@@ -63,10 +75,19 @@
                                     *ngIf="registerForm.get('last_name').hasError('maxlength') && registerForm.get('last_name').touched">
                                     {{errorMessages.lastname.maxlength.message}}
                                 </p>
+                                <p class="form-error"
+                                    *ngIf="registerForm.get('last_name').hasError('pattern') && registerForm.get('last_name').touched">
+                                    {{errorMessages.lastname.pattern.message}}
+                                </p>
                             </div>
+                            <div class="item-info">
+                                <p>
+                                   No se permite símbolos o caracteres especiales
+                                </p>
+                            </div> 
                             <div class="item-formcfull">
                                 <ion-item class="input_item" lines="none">
-                                    <ion-label class="label-padding label-margin" position="stacked">Email
+                                    <ion-label class="label-padding label-margin" position="stacked">Correo Electrónico
                                     </ion-label>
                                     <ion-input class="input-beatiful" placeholder="john@gmail.com" type="text"
                                         formControlName="email"></ion-input>
@@ -124,6 +145,12 @@
                                     {{errorMessages.password.pattern.message}}
                                 </p>
                             </div>
+                            <div class="item-info">
+                                <p>
+                                    La contraseña debe contener entre 8-20 caracteres, al menos 1 letra mayúscula, 1
+                                    letra minuscula, 1 número y un caracter no alfanumérico.
+                                </p>
+                            </div>
                             <div padding>
                                 <ion-button (click)="registerUser()" [disabled]="!registerForm.valid" color="red-logo"
                                     type="submit" expand="block" class="ion-text-capitalize">
@@ -163,4 +190,4 @@
             <a (click)="goToLogin()">Inicia sesión aquí</a>
         </p>
     </div>
-   </ion-footer>
+</ion-footer>

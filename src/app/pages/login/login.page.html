@@ -3,7 +3,10 @@
         <ion-buttons slot="start">
             <ion-back-button [defaultHref]="backUrl"></ion-back-button>
         </ion-buttons>
-        <ion-title>Iniciar Sesión</ion-title>
+        <ion-title>Inicio de Sesión</ion-title>
+        <ion-item slot="end" lines="none" detail="false" style="--background: transparent;margin-top: 10px;">
+            <img src="assets/img/svg/sanIsidroIconOnlyTransparent.svg" alt="Logo" style="height:50px;width:40px;">
+        </ion-item>
     </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -86,6 +89,9 @@
                                     *ngIf="loginForm.get('password').hasError('pattern') && loginForm.get('password').touched">
                                     {{errorMessages.password.email.message}}
                                 </p>
+                            </div>
+                            <div class="section-password-forgot">
+                                <p (click)="forgotPassword()">¿Olvidaste tu contraseña?</p>
                             </div>
                             <div padding>
                                 <ion-button (click)="loginUser()" color="red-logo" type="submit"

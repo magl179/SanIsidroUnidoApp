@@ -32,7 +32,6 @@
               }
             ],
             "styles": [
-                "./node_modules/leaflet/dist/leaflet.css",
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "node_modules/ngx-toastr/toastr.css",
               {
@@ -45,7 +44,10 @@
                 "input": "src/app/app.scss"
               }
             ],
-            "scripts": [],
+            "scripts": [
+              "src/assets/js/leaflet-geometryutil.js",
+              "src/assets/js/leaflet-distance-marker.js"
+            ],
             "es5BrowserSupport": true
           },
           "configurations": {

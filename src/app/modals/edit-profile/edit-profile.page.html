@@ -25,6 +25,11 @@
                     {{errorMessages.first_name.required.message}}
                 </p>
             </div>
+            <div class="item-info">
+                <p>
+                    No se permite símbolos o caracteres especiales
+                </p>
+            </div>
             <div class="item-form full">
                 <ion-item class="input_item" lines="none">
                     <ion-label class="label-padding label-margin" position="stacked">Apellidos *</ion-label>
@@ -36,6 +41,11 @@
                 <p class="form-error"
                     *ngIf="editProfileForm.get('last_name').hasError('required') && editProfileForm.get('last_name').touched">
                     {{errorMessages.last_name.required.message}}
+                </p>
+            </div>
+            <div class="item-info">
+                <p>
+                    No se permite símbolos o caracteres especiales
                 </p>
             </div>
             <div class="item-form full">
@@ -76,10 +86,15 @@
                     {{errorMessages.number_phone.maxlength.message}}
                 </p>
                 <p class="form-error"
-                *ngIf="editProfileForm.get('number_phone').errors?.telefonoValido && editProfileForm.get('number_phone').touched">
-                {{errorMessages.number_phone.telefonoValido.message}}
-            </p>
+                    *ngIf="editProfileForm.get('number_phone').errors?.telefonoValido && editProfileForm.get('number_phone').touched">
+                    {{errorMessages.number_phone.telefonoValido.message}}
+                </p>
             </div>
+            <div class="item-info">
+                <p>
+                   Debes ingresar un número de teléfono celular o fijo anteponiendo el prefijo respectivo
+                </p>
+            </div> 
             <ion-button class="btn_edit_profile" expand="block" [disabled]="!editProfileForm.valid || formSended"
                 (click)="editUserProfileData()">Guardar</ion-button>
         </form>

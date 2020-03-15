@@ -161,12 +161,14 @@ export class RegisterPage implements OnInit {
         // Campo Email
         const first_name = new FormControl('', Validators.compose([
             Validators.required,
-            Validators.minLength(validations.first_name.minlength)
+            Validators.minLength(validations.first_name.minlength),
+            Validators.pattern(validations.first_name.pattern)
         ]));
         // Campo Email
         const last_name = new FormControl('', Validators.compose([
             Validators.required,
             Validators.minLength(validations.last_name.minlength),
+            Validators.pattern(validations.last_name.pattern)
         ]));
         // Campo Email
         const email = new FormControl('', Validators.compose([
@@ -176,8 +178,8 @@ export class RegisterPage implements OnInit {
         // Campo Contraseña
         const password = new FormControl('', Validators.compose([
             Validators.required,
-            Validators.minLength(validations.password.minlength)
-            // Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,20}$/)
+            Validators.minLength(validations.password.minlength),
+            Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,20}$/)
         ]));
         // Añado Propiedades al Forms
         this.registerForm = this.formBuilder.group({ first_name, last_name, email, password });

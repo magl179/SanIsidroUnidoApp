@@ -33,12 +33,14 @@ export class LocalDataService {
             first_name: {
                 required: true,
                 minlength: 3,
-                maxlength: 20
+                maxlength: 20,
+                pattern: /^[a-zA-ZáéñÑíóúÁÉÍÓÚ ]+[a-zA-ZáéíñÑóúÁÉÍÓÚ ]+$/
             },
             last_name: {
                 required: true,
                 minlength: 4,
-                maxlength: 20
+                maxlength: 20,
+                pattern: /^[a-zA-ZáéñÑíóúÁÉÍÓÚ ]+[a-zA-ZáéíñÑóúÁÉÍÓÚ ]+$/
             },
             email: {
                 required: true,
@@ -105,7 +107,7 @@ export class LocalDataService {
                     message: `El Nombre debe contener máximo ${validations.first_name.maxlength} caracteres`
                 },
                 pattern: {
-                    message: 'Ingrese un nombre válido'
+                    message: 'El Nombre no puede contener símbolos o caracteres especiales'
                 }
             },
             last_name: {
@@ -119,7 +121,7 @@ export class LocalDataService {
                     message: `Los Apellidos deben contener máximo ${validations.last_name.maxlength} caracteres`
                 },
                 pattern: {
-                    message: 'Ingrese un apellido válido'
+                    message: 'El Nombre no puede contener símbolos o caracteres especiales'
                 }
             },
             email: {

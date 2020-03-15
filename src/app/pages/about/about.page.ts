@@ -3,6 +3,7 @@ import { NotificationsService } from 'src/app/services/notifications.service';
 import { NetworkService } from 'src/app/services/network.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { IDeviceUser } from 'src/app/interfaces/models';
+import { CONFIG } from 'src/config/config';
 
 @Component({
     selector: 'app-about',
@@ -16,6 +17,7 @@ export class AboutPage implements OnInit {
         phone_id: null,
         user_id: null
     };
+    config = CONFIG;
     constructor(
         private notiService: NotificationsService,
         private networkService: NetworkService,

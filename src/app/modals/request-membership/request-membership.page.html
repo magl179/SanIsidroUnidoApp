@@ -11,7 +11,8 @@
 
 <ion-content padding>
     <div>
-        <h5 class="info-dialog">Para solicitar la afiliación debes ingresar tu número de cédula y adjuntar una imágen de algún servicio básico que nos permita verificar tus datos</h5>
+        <h5 class="info-dialog">Para solicitar la afiliación debes ingresar tu número de cédula y adjuntar una imágen de
+            algún servicio básico que nos permita verificar tus datos</h5>
     </div>
     <form [formGroup]="membershipForm">
         <!-- Campo -->
@@ -37,12 +38,18 @@
             <p class="form-error"
                 *ngIf="membershipForm.get('cedula').hasError('maxlength') && membershipForm.get('cedula').touched">
                 {{errorMessages.cedula.maxlength.message}}
-            </p>            
+            </p>
             <p class="form-error"
                 *ngIf="membershipForm.get('cedula').errors?.cedulaValida && membershipForm.get('cedula').touched">
                 {{errorMessages.cedula.cedulaValida.message}}
             </p>
         </div>
+        <!-- Mensaje -->
+        <div class="item-info">
+            <p>
+               Debes ingresar un número de cédula válido
+            </p>
+        </div> 
     </form>
     <p class="item-info-header">Imagen *</p>
     <ion-grid *ngIf="publicServiceImg.length > 0">
@@ -71,10 +78,7 @@
         (click)="sendRequestMembership()">
         Enviar
     </ion-button> -->
-    <ion-button 
-        class="btn_send_request_membership" 
-        expand="block" 
-        (click)="sendRequestMembership()"
+    <ion-button class="btn_send_request_membership" expand="block" (click)="sendRequestMembership()"
         [disabled]="publicServiceImg.length === 0 || formSended ||!membershipForm.valid">
         Enviar
     </ion-button>

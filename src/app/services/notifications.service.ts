@@ -59,9 +59,7 @@ export class NotificationsService implements OnInit {
     }
 
     async initialConfig() {
-        console.log('on innit notifications service')
         this.events_appService.logoutAppEmitter.subscribe((event: any) => {
-            console.log('logout onesignal event', event);
             this.logoutOnesignal();
         });
         //Configurar Onesignal en un Dispositivo
@@ -182,7 +180,6 @@ export class NotificationsService implements OnInit {
             // this.messageService.showInfo(JSON.stringify(deviceID));
             //this.deactivateOnesignalSubscription();
             // this.logOutEmailOnesignal();
-            console.log('logout onesignal device ID', onesignalDevice);
             // this.logoutDeviceApi(deviceID);
         }
     }
@@ -191,7 +188,7 @@ export class NotificationsService implements OnInit {
         if (deviceID) {
             this.userService.sendRequestDeleteUserPhoneDevice(deviceID).subscribe(async (res: any) => {
                 this.messageService.showSuccess('Dispositivo Desuscrito Correctamente');
-                console.log('res', res);
+                // console.log('res', res);
             }, (err: HttpErrorResponse) => {
                 this.errorService.manageHttpError(err, 'Ocurrio un error al desuscribir el dispositivo');
             });
@@ -274,7 +271,6 @@ export class NotificationsService implements OnInit {
                     urlNavigate = `/reports/list/${post.id}`;
                     break;
                 default:
-                    console.log('No match any noti')
                     urlNavigate = null;
                     break;
             }
