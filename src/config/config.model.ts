@@ -1,5 +1,6 @@
 export interface IENVIRONMENT {
   APIBASEURL: string;
+  BASEURL: string;
   FIREBASE_APP_ID: string;
   GOOGLE_CLIENT_ID: string;
   MAPBOX_APIKEY: string;

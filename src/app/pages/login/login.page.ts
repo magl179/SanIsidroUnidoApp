@@ -14,6 +14,7 @@ import { setInputFocus } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CONFIG } from 'src/config/config';
 import { ErrorService } from 'src/app/services/error.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-login',
@@ -142,7 +143,7 @@ export class LoginPage implements OnInit {
     }
 
     forgotPassword(){
-        
+        this.utilsService.openInBrowser(`${environment.BASEURL}/password/reset`)
     }
 
     // Función Crea el Formulario
