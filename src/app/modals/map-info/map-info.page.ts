@@ -25,10 +25,7 @@ export class MapInfoPage implements OnInit {
   }
 
     ngOnInit() { 
-        console.log('map_point_info', this.mapPoint);
-        console.log('currentUbication', this.currentLocation);
         const mapUbication = this.mapPoint.ubication;
-        // const distancia = const distancia2Round = Math.round(distancia2 * 100) / 100;
         this.distancia = (this.mapPoint && this.currentLocation) ? roundDecimal(getDistanceInKm(mapUbication.latitude, mapUbication.longitude, this.currentLocation.latitude, this.currentLocation.longitude)) : null;
     }
     

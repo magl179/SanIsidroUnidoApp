@@ -33,7 +33,6 @@ export class ChangeProfileImagePage implements OnInit {
     }
 
     getUploadedImages(event: any) {
-        console.log(event);
         this.profileUserImg = event.total_img;
     }
 

@@ -56,7 +56,6 @@ export class PublicServicesListPage implements OnInit {
             this.publicServicesLoaded = true;
         })).subscribe((response: IRespuestaApiSIU) => {
             this.publicServices = response.data;
-            console.log('res', response.data[0])
         }, (err: any) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error al cargar el listado de serviciós públicos')
         });

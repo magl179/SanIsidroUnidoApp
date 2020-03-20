@@ -94,7 +94,6 @@ export class LocalizationService {
         return new Promise(async (resolve, reject) => {
             if (this.platform.is('cordova')) {
                 return await this.getPositionNative().then((currentCoords: any) => {
-                    // console.log('native current coords', currentCoords);
                     this.misCoordenadas.latitude = currentCoords.coords.latitude;
                     this.misCoordenadas.longitude = currentCoords.coords.longitude;
                     resolve(this.misCoordenadas);
@@ -104,12 +103,8 @@ export class LocalizationService {
                     return await this.getPositionWeb().then((currentCoords: any) => {
                         this.misCoordenadas.latitude = currentCoords.coords.latitude;
                         this.misCoordenadas.longitude = currentCoords.coords.longitude;
-                        console.log('getPositionWeb then')
-                        // this.messageService.showInfo(" pudimos obtener tus coordenadas web :)");
                         resolve(this.misCoordenadas);
                     }).catch(err => {
-                        console.log('getPositionWeb catch')
-                        // this.messageService.showInfo("No pudimos obtener tus coordenada webs :(");
                         reject(err);
                     });
                 }else{
@@ -124,13 +119,10 @@ export class LocalizationService {
         return new Promise(async (resolve, reject) => {
             await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
                 async (result: any) => {
-                    console.log('check permission', result)
                     if (result.hasPermission) {
-                        // console.log('pedir encender gps en verificar permisos gps')
                         // return await this.askTurnOnGPS();
                         resolve(this.askTurnOnGPS());
                     } else {
-                        // console.log('solicitar permisos gps en verificar permisos gps')
                         // return await this.requestGPSPermission();
                         resolve(this.requestGPSPermission());
                     }
@@ -145,12 +137,8 @@ export class LocalizationService {
 
     async requestGPSPermission() {
         return new Promise(async (resolve, reject) => {
-            // console.log('solicitar permisos gps');
             await this.locationAccuracy.canRequest().then(async (canRequest: any) => {
-                console.log('can nrequets', canRequest)
                 if (canRequest) {
-                    // console.log('pedir encender gps  en solicitar permisos gps');
-                    // return await this.askTurnOnGPS();
                     resolve(this.askTurnOnGPS());
                 } else {
                     this.messageService.showInfo("Por favor habilita el acceso de la aplicación a la geolocalización");
@@ -165,11 +153,9 @@ export class LocalizationService {
 
     //Solicitar al usuario que encienda el GPS
     async askTurnOnGPS() {
-        // console.log('pedir encender gps')
         return new Promise(async (resolve, reject) => {
             await this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
                 (resp) => {
-                    console.log('location accuracy', resp)
                     resolve(true);
                 }
             ).catch((err) => reject(err));

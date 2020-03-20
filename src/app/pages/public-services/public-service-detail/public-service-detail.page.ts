@@ -47,7 +47,6 @@ export class PublicServiceDetailPage implements OnInit {
         if(!this.showSimpleMap){
             this.localizationService.getCoordinates().then(coordinates=>{
                 this.currentPosition = coordinates;
-                console.log('current position', this.currentPosition);
                 return;
             }).catch(err=>{
                 console.log('Error al obtener geolocalizacion', err);
@@ -80,7 +79,6 @@ export class PublicServiceDetailPage implements OnInit {
             })
         ).subscribe((res: IRespuestaApiSIUSingle) => {
             this.publicServiceDetail = res.data;
-            console.log('public s detail', this.publicServiceDetail)
         }, (err: HttpErrorResponse) => {
                 
             this.errorService.manageHttpError(err, 'Ocurrio un error al cargar el detalle del servicio')

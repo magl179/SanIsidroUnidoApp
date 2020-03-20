@@ -45,22 +45,23 @@ export class UtilsService implements OnInit {
     getBeatifulDate(stringDate: string) {
         moment.locale('es');
         let beatifulDate = null;
+        let lastDate: any;
         if (moment(stringDate).isValid()) {
-            // Fecha Pasada, Fecha Actual
-            const currentDate = moment(new Date());
-            const lastDate = moment(new Date(stringDate));
-            //Diferencia entre Fechas
-            const diffDays = currentDate.diff(lastDate, 'days');
-            // Formatear Fecha
-            if (diffDays <= 8) {
-                beatifulDate = lastDate.fromNow();
-            } else if (currentDate.year() === lastDate.year()) {
-                beatifulDate = lastDate.format('D MMMM');
-            } else {
-                beatifulDate = lastDate.format('LL');
-            }
+            lastDate = moment(new Date(stringDate));
         } else {
-            // console.log('Invalid Date', stringDate);
+            lastDate = moment(new Date());
+        }
+        // Fecha Pasada, Fecha Actual
+        const currentDate = moment(new Date());
+        //Diferencia entre Fechas
+        const diffDays = currentDate.diff(lastDate, 'days');
+        // Formatear Fecha
+        if (diffDays <= 8) {
+            beatifulDate = lastDate.fromNow();
+        } else if (currentDate.year() === lastDate.year()) {
+            beatifulDate = lastDate.format('D MMMM');
+        } else {
+            beatifulDate = lastDate.format('LL');
         }
         return beatifulDate;
     }
@@ -82,23 +83,13 @@ export class UtilsService implements OnInit {
                 // appPackageName: 'com.apple.social.facebook', // Android only, you can provide id of the App you want to share with
                 // iPadCoordinates: '0,0,0,0' //IOS only iPadCoordinates for where the popover should be point.  Format with x,y,width,height
               };
-               
-            // return await this.socialSharing.share(
-            //     publicacion.description, // message
-            //     publicacion.title, // subject
-            //     (publicacion.image) ? publicacion.image : '', // file image or [] images
-            //     publicacion.url || '' // url to share
-            // )
             return await this.socialSharing.shareWithOptions(share_options)
             .then(async(result) => {
-                console.log(result);
                 if(result.completed){
-                    console.log('Compartido Correctamente', result);
                     await this.showToast({message: 'Compartido Correctamente'});
                 }
             }).catch(async(err) => {
-                console.log('Error al compartir');
-                console.log(err);
+                console.log('Error al compartir', err);
                this.showToast({message: 'No se pudo compartir'});
             });
         } else {
@@ -108,15 +99,12 @@ export class UtilsService implements OnInit {
                     title: publicacion.title,
                     url: publicacion.url || ''
                 }).then(async() => {
-                    console.log('Compartido Correctamente');
                     await this.showToast({message: 'Compartido Correctamente'});
                 }).catch(async(err) => {
-                    console.log('Error al compartir');
-                    console.log(err);
+                    console.log('Error al compartir', err);
                    this.showToast({message: 'No se pudo compartir'});
                 });
             } else {
-                // console.log('Tu dispositivo no soporta la función de compartir');
                 await this.showToast({message: 'Tu dispositivo no soporta la función de compartir'});
             }
         }

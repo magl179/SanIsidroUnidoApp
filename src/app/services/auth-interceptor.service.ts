@@ -42,7 +42,6 @@ export class AuthInterceptorService implements HttpInterceptor {
         return next.handle(request).pipe(
             this.http_retry(this.numIntentos),
             map(data => {
-                // console.log('response success', data);
                 return data;
             }),
             catchError((httpError: HttpErrorResponse) => {
@@ -68,7 +67,6 @@ export class AuthInterceptorService implements HttpInterceptor {
                             const includesCodeAvoid = this.statusCodeAvoid.includes(
                                 statusError
                             );
-                            //console.log('retry count', retryCount);
                             if (retryCount >= maxRetry || includesCodeAvoid) {
                                 return throwError(error);
                             }

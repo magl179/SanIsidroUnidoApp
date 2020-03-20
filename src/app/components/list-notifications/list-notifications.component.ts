@@ -68,9 +68,7 @@ export class ListNotificationsComponent implements OnInit {
         //Filtrar Notificaciones Leidas
         if(this.getUnreaded){
             this.notificationsRequested = this.notificationsRequested.filter(noti => noti.read_at == null);
-        }
-        console.log('Noti Requested', this.notificationsRequested);
-        
+        }        
     }
 
     async manageNoti(noti: INotificationApi) {

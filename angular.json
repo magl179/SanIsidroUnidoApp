@@ -45,8 +45,8 @@
               }
             ],
             "scripts": [
-              "src/assets/js/leaflet-geometryutil.js",
-              "src/assets/js/leaflet-distance-marker.js"
+              "src/assets/js/leaflet-distance-marker.js",
+              "src/assets/js/leaflet-geometryutil.js"
             ],
             "es5BrowserSupport": true
           },

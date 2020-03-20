@@ -25,7 +25,6 @@ export class HasRoleDirective implements OnInit {
         //  We subscribe to the roles$ to know the roles the user has
         this.authObservable$ = this.authService.sessionAuthUser.subscribe(token_decoded => {
             // If he doesn't have any roles, we clear the viewContainerRef
-            // console.log('has role token decoded', token_decoded);
             let userRoles = [];
             if (!token_decoded) {
                 // this.viewContainer.clear();
@@ -38,7 +37,6 @@ export class HasRoleDirective implements OnInit {
             if (hasRoles(userRoles, this.roles)) {
                 if (!this.isVisible) {
                     this.isVisible = true;
-                    // console.log('has roles directive', this.roles)
                     this.viewContainer.createEmbeddedView(this.templateRef);
                 }
                 // }

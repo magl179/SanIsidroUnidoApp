@@ -45,7 +45,6 @@ export class EditProfilePage implements OnInit {
         const response_auth: any =  await this.authService.getTokenUserAuthenticated().catch(err=>console.log('err', err))
         if (response_auth) {
             this.AuthUser = response_auth.user;
-            // console.log('auth user', response_auth.user)
         }
     }
 
@@ -54,8 +53,6 @@ export class EditProfilePage implements OnInit {
     }
 
     editUserProfileData() {
-        // console.log('this.editProfileForm.value', this.editProfileForm.getRawValue())
-        // return;
         //Obtener valor incluido campos disabled
         this.userService.sendEditProfileRequest(this.editProfileForm.getRawValue()).subscribe(async res => {
             const token = res.data.token;

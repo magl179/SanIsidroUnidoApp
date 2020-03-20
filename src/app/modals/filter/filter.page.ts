@@ -101,7 +101,6 @@ export class FilterPage implements OnInit {
                     this.filteringPosts = false;
                 })
             ).subscribe((res: any) => {
-                console.log('events search', res);
                 itemsFiltered = [...res.data];
                 if (res.data.length === 0) {
                     console.log('No hay coincidencias');
@@ -112,7 +111,6 @@ export class FilterPage implements OnInit {
                 this.errorService.manageHttpError(err, 'Ocurrio un error al filtrar los datos');
             });
         }
-        console.log('items was filtered', itemsFiltered);
         return itemsFiltered;
     }
 

@@ -55,7 +55,6 @@ export class SocialProblemCreatePage implements OnInit {
         this.postService.getSubcategoriesByCategory(CONFIG.SOCIAL_PROBLEMS_SLUG).subscribe(res => {
             this.subcategories = res.data;
             this.subcategoryName = res.data[0].name;
-            console.log('this.subcagories', this.subcategories)
         }, (err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error al cargar las categorias');
         });
@@ -151,7 +150,6 @@ export class SocialProblemCreatePage implements OnInit {
     }
 
     getUploadedImages(event) {
-        console.log('images uploades event', event)
         this.socialProblemImages = event.total_img;
     }
 

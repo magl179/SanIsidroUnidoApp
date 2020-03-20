@@ -176,19 +176,19 @@ export const getImageURL = (image_name: string) => {
 }
 
 export const mapImagesApi = (images: any[]) => {
-    // console.log('imagesapi', images)
     return images.map((image: any) => {
-        image.url = getImageURL(image.url);
-        return image;
+        // image.url = getImageURL(image.url);
+        // return image;
+        return image.url_link;
     });
 }
 
 export const mapUser = (user: any) => {
-    if (user && user.avatar) {
-        user.avatar = getImageURL(user.avatar);
-    } else {
-        user.avatar = 'assets/img/default/img_avatar.png';
-    }
+    // if (user && user.avatar) {
+    //     user.avatar = getImageURL(user.avatar);
+    // } else {
+    //     user.avatar = 'assets/img/default/img_avatar.png';
+    // }
     return user;
 }
 
@@ -230,10 +230,10 @@ export const mapEvent = (event: any) => {
         event.images = mapImagesApi(event.resources);
         event.imagesArr = getValueKeyFromArrObj(event.resources, 'url');
     }
-    if (event.user && event.user.avatar) {
-        event.user.avatar = getImageURL(event.user.avatar);
-    }
-    const range_date = (event.additional_data.event&& event.additional_data.event.range_date) ? event.additional_data.event.range_date: null;
+    // if (event.user && event.user.avatar) {
+    //     event.user.avatar = getImageURL(event.user.avatar);
+    // }
+    const range_date = (event.additional_data.event && event.additional_data.event.range_date) ? event.additional_data.event.range_date : null;
     if (range_date) {
         event.fulldate = formatEventRangeDate(range_date.start_date, range_date.end_date);
         event.initial_date = momentFormat(range_date.start_date, 'LLL')
@@ -253,8 +253,6 @@ export const mapEvent = (event: any) => {
 
     const fecha_actualizacion = (event.updated_at) ? event.updated_at : moment(new Date()).add(-1, 'days');
     event.fecha_actualizacion = formatAppBeatifulDate(fecha_actualizacion);
-
-    // console.log('evento retornado', event);
     return event;
 }
 
@@ -280,7 +278,7 @@ export const mapEmergency = (emergency: any) => {
     // if (emergency.images && emergency.images.length > 0) {
     if (emergency.resources && emergency.resources.length > 0) {
         emergency.images = mapImagesApi(emergency.resources);
-        emergency.imagesArr = getValueKeyFromArrObj(emergency.resources, 'url');
+        emergency.imagesArr = getValueKeyFromArrObj(emergency.resources, 'url_link');
     }
     const fecha_creacion = (emergency.created_at) ? emergency.created_at : moment(new Date()).add(-1, 'days');
     emergency.fecha_creacion = formatAppBeatifulDate(fecha_creacion);
@@ -297,7 +295,7 @@ export const mapReport = (report: any) => {
     if (report.resources && report.resources.length > 0) {
         const imagesResources = report.resources.filter(resource => resource.type === 'image');
         report.images = mapImagesApi(imagesResources);
-        report.imagesArr = getValueKeyFromArrObj(report.resources, 'url');
+        report.imagesArr = getValueKeyFromArrObj(report.resources, 'url_link');
     }
 
     const fecha_creacion = (report.created_at) ? report.created_at : moment(new Date()).add(-1, 'days');
@@ -317,11 +315,11 @@ export const mapSocialProblem = (social_problem: any) => {
     // if (social_problem.images && social_problem.images.length > 0) {
     if (social_problem.resources && social_problem.resources.length > 0) {
         social_problem.images = mapImagesApi(social_problem.resources);
-        social_problem.imagesArr = getValueKeyFromArrObj(social_problem.resources, 'url');
+        social_problem.imagesArr = getValueKeyFromArrObj(social_problem.resources, 'url_link');
     }
-    if (social_problem.user && social_problem.user.avatar) {
-        social_problem.user.avatar = getImageURL(social_problem.user.avatar);
-    }
+    // if (social_problem.user && social_problem.user.avatar) {
+    //     social_problem.user.avatar = getImageURL(social_problem.user.avatar);
+    // }
     const fecha_creacion = (social_problem.created_at) ? social_problem.created_at : moment(new Date()).add(-1, 'days');
     social_problem.fecha_creacion = formatAppBeatifulDate(fecha_creacion);
 
@@ -371,23 +369,27 @@ export const randomInteger = (min: number, max: number) => {
 //Obtener la fecha formateada con MomentJS
 export const formatAppBeatifulDate = (stringDate: string) => {
     let beatifulDate = null;
+    let lastDate;
     if (moment(stringDate).isValid()) {
-        // Fecha Pasada, Fecha Actual
-        const currentDate = moment(new Date());
-        const lastDate = moment(new Date(stringDate));
-        //Diferencia entre Fechas
-        const diffDays = currentDate.diff(lastDate, 'days');
-        // Formatear Fecha
-        if (diffDays <= 8) {
-            beatifulDate = lastDate.fromNow();
-        } else if (currentDate.year() === lastDate.year()) {
-            beatifulDate = lastDate.format('D MMMM');
-        } else {
-            beatifulDate = lastDate.format('LL');
-        }
+        //Fecha Parametro
+        lastDate = moment(new Date(stringDate));
     } else {
-        // console.log('Invalid Date', stringDate);
+        lastDate = moment(new Date());
     }
+
+    // Fecha Pasada, Fecha Actual
+    const currentDate = moment(new Date());
+    //Diferencia entre Fechas
+    const diffDays = currentDate.diff(lastDate, 'days');
+    // Formatear Fecha
+    if (diffDays <= 8) {
+        beatifulDate = lastDate.fromNow();
+    } else if (currentDate.year() === lastDate.year()) {
+        beatifulDate = lastDate.format('D MMMM');
+    } else {
+        beatifulDate = lastDate.format('LL');
+    }
+
     return beatifulDate;
 }
 
@@ -399,8 +401,6 @@ export const formatRangeDate = (initial_date: string, end_date: string) => {
         // Fecha Pasada, Fecha Actual
         const initialDate = moment(new Date(initial_date));
         const endDate = moment(new Date(end_date));
-
-        console.log('a', initialDate.year(), 'b', endDate.year())
         // Formatear Fecha
         if (initialDate.year() === endDate.year()) {
             initialBeatifulDate = initialDate.format('D MMMM');
@@ -423,8 +423,6 @@ export const formatRangeTime = (initial_date: string, end_date: string) => {
         // Fecha Pasada, Fecha Actual
         const initialTime = moment(new Date(initial_date)).format('HH:mm');
         const endTime = moment(new Date(end_date)).format('HH:mm');
-        // moment(event.range_date.start_date).format('HH:mm') + ' - ' + moment(event.range_date.end_date).format('HH:mm')
-        // console.log('a', initialDate.year(), 'b', endDate.year())
         // Formatear Fecha
         if (initialTime == endTime) {
             return `${initialTime}`;
@@ -438,36 +436,36 @@ export const formatRangeTime = (initial_date: string, end_date: string) => {
 
 export const verificarCedula = (validarCedula) => {
     let aux = 0,
-      par = 0,
-      impar = 0,
-      verifi;
+        par = 0,
+        impar = 0,
+        verifi;
     for (let i = 0; i < 9; i += 2) {
-      aux = 2 * Number(validarCedula[i]);
-      if (aux > 9) {
-        aux -= 9;
-      }
-      par += aux;
+        aux = 2 * Number(validarCedula[i]);
+        if (aux > 9) {
+            aux -= 9;
+        }
+        par += aux;
     }
     for (let i = 1; i < 9; i += 2) {
-      impar += Number(validarCedula[i]);
+        impar += Number(validarCedula[i]);
     }
     aux = par + impar;
     if (aux % 10 !== 0) {
-      verifi = 10 - (aux % 10);
+        verifi = 10 - (aux % 10);
     } else {
-      verifi = 0;
+        verifi = 0;
     }
     if (verifi === Number(validarCedula[9])) {
-      return true;
+        return true;
     } else {
-      return false;
+        return false;
     }
-  }
+}
 
-  export const verificarNumeroTelefono = (numero_verificar) =>{
+export const verificarNumeroTelefono = (numero_verificar) => {
     if (/(^(09)[0-9]{8})+$|(^(02)[0-9]{7})+$/.test(numero_verificar)) {
         return true;
     } else {
         return false;
     }
-  }
+}

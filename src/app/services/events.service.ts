@@ -24,7 +24,6 @@ export class EventsService {
     }
 
     resetSocialProblemLikesEmmiter(id: number, reactions = []) {
-        console.log('post service emit social problem', id);
         this.socialProblemLikesEmitter.emit({
             type: 'reset-social-problems-likes',
             id,
@@ -33,19 +32,12 @@ export class EventsService {
     }
 
     resetEventsLikesEmitter(id: number, reactions = []) {
-        console.log('post service emit event', id);
         this.eventsLikesEmitter.emit({
             type: 'reset-events-likes',
             id,
             reactions
         });
     }
-
-
-    // resetEventsEmitter(id: number) {
-    //     // console.log('post service emit event');
-    //     this.eventsEmitter.emit({type: 'reset-events', id});
-    // }
 
     resetEmergenciesEmitter() {
         this.emergenciesEmitter.emit('reset-emergencies');

@@ -57,11 +57,9 @@ export class PruebasService {
   probarNotificationExternaConDatos() {
     const peticion = this.httpRequest.get(`${environment.APIBASEURL}/guzzle-noti`);
     peticion.subscribe(res => {
-      console.log('res test', res)
       alert('peticion realizada correctamente')
     }, err => {
       alert('peticion realizada incorrectamente')
-      console.log('res err', err)
     });
   }
 

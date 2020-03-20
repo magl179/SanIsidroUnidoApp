@@ -68,6 +68,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         this.loadEmergencies(null,true);
         //Simular Un Refresh cuando se crea nuevas emergencias
         this.events_app.emergenciesEmitter.subscribe((event_app: any) => {
+            this.postsService.resetEmergenciesPage();
             this.loadEmergencies({
                 type: 'refresher',
                 data: event

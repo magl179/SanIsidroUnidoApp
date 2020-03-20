@@ -74,7 +74,6 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
         this.subcategory = this.activatedRoute.snapshot.paramMap.get('subcategory');
         this.postsService.resetSocialProblemsPage();
         this.utilsService.enableMenu();
-        // console.log('ng on init',  this.subcategory);
         this.authService.sessionAuthUser.pipe(
             finalize(() => { })
         ).subscribe(token_decoded => {

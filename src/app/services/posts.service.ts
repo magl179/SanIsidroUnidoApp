@@ -52,20 +52,20 @@ export class PostsService implements OnInit {
     ngOnInit() { }
 
     //MÉTODOS PARA RESETEAR LOS CONTADORES DE PAGINACION
-    resetSocialProblemsPage() {
-        this.currentPage.socialProblems = 0;
+    resetSocialProblemsPage(page=0) {
+        this.currentPage.socialProblems = page;
     }
-    resetSocialProblemsBySubcategoryPage() {
-        this.currentPage.socialProblemsBySubcategory = 0;
+    resetSocialProblemsBySubcategoryPage(page=0) {
+        this.currentPage.socialProblemsBySubcategory = page;
     }
-    resetEventsPage() {
-        this.currentPage.events = 0;
+    resetEventsPage(page=0) {
+        this.currentPage.events = page;
     }
-    resetEmergenciesPage() {
-        this.currentPage.emergencies = 0;
+    resetEmergenciesPage(page = 0) {
+        this.currentPage.emergencies = page;
     }
-    resetReportsPage() {
-        this.currentPage.reports = 0;
+    resetReportsPage(page = 0) {
+        this.currentPage.reports = page;
     }
     //METODOS POST
     // Función para enviar un Reporte de Emergencia

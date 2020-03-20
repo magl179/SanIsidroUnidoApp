@@ -65,7 +65,6 @@ export class SearchPostsPage implements OnInit {
     setSuggessValue(idea: string) {
         this.searchPostBar.setFocus();
         this.valueToSearch.next(idea);
-        console.log('this.searchPostBar', this.searchPostBar);
         this.searchingPosts = true;
     }
 
@@ -89,9 +88,7 @@ export class SearchPostsPage implements OnInit {
     }
 
     ngOnInit() {
-
         this.activatedRoute.queryParamMap.subscribe((params_map: any) => {
-            console.log('params', params_map)
             if(params_map.params){
                 this.redirectUrl = (params_map.params.redirectUrl) ? params_map.params.redirectUrl: '/home-list';
             }

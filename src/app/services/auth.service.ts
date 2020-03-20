@@ -38,9 +38,6 @@ export class AuthService {
     ) {
 
         this.storage.ready().then(async () => {
-            //this.storage.keys().then(keys => console.log('keys', keys));
-            //this.storage.length().then(length => console.log('length', length));
-            // console.log('driver', this.storage.driver);
             await this.getTokenandUserLS();
         });
     }

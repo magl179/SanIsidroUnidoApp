@@ -36,7 +36,6 @@ export class SearchPage implements OnInit {
         this.searchInApi = (this.navParams.data.searchInApi) ? this.navParams.data.searchInApi : false;
         this.postTypeSlug = (this.navParams.data.postTypeSlug) ? this.navParams.data.postTypeSlug : null;
         this.fieldsToSearch = ['title', 'description'];
-        console.log('original search data', this.itemsSearchAvalaible);
     }
 
     seeDetailItemFound(id: any) {
@@ -56,7 +55,6 @@ export class SearchPage implements OnInit {
     }
 
     execSearchPosts(event: any) {
-        console.log('event search', event);
         this.valueToSearch.next(event.detail.value);
     }
     ngOnInit() {
@@ -68,11 +66,9 @@ export class SearchPage implements OnInit {
                 this.searchingPosts = false;
             }),
         ).subscribe(async value => {
-            console.log('value', value);
             this.searchingPosts = true;
             if (value.length === 0) {
                 this.searchingPosts = false;
-                console.log('No buscar valor vacio');
                 this.itemsSearchFound = null;
                 return;
             }
@@ -80,20 +76,12 @@ export class SearchPage implements OnInit {
                 setTimeout(async () => {
                     const items_found = await this.itemsSearchAvalaible.filter(item => {
                         let item_match = false;
-                        // console.log('item filter', item)
                         const search_term = new RegExp(value.toLowerCase(), 'g');
                         if (this.fieldsToSearch.length > 0) {
                             this.fieldsToSearch.forEach(field => {
-                                // console.log('field filter', field);
-                                // console.log('item filter', item[field]);
-                                // console.log('item keys', Object.keys(item));
                                 if (item[field].toLowerCase().search(search_term) != -1) {
-                                    console.log('Item', item);
-                                    console.log('valor parecido a: ', search_term);
-                                    // return true;
                                     item_match = true;
                                 }
-                                // return user.first_name.toLowerCase().search(search_term) != -1;
                             });
                             return item_match;
                         } else {
@@ -102,7 +90,6 @@ export class SearchPage implements OnInit {
 
                     });
                     this.itemsSearchFound = items_found;
-                    console.log('Valor encontrado', items_found);
                     if (this.itemsSearchFound.length === 0) {
                         console.log('No hay coincidencias');
                     } else {
@@ -117,7 +104,6 @@ export class SearchPage implements OnInit {
                         this.searchingPosts = false;
                     })
                 ).subscribe((res: any) => {
-                    console.log('events search', res);
                     this.itemsSearchFound = res.data;
                     if (res.data.length === 0) {
                         console.log('No hay coincidencias');

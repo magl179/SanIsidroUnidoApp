@@ -43,7 +43,6 @@ export class UploadImageComponent implements OnInit {
     }
 
     async getUploadedImages() {
-        // console.log('send upload images', this.uploadedImages)
         this.returnUploadedImages.emit({
             total_img: [...this.uploadedImages]
         });
@@ -104,7 +103,6 @@ export class UploadImageComponent implements OnInit {
         // this.web_upload_image.addEventListener("change", async (event_upload: any) => {
         input.addEventListener("change", async (event_upload: any) => {
             if (event_upload.target.files && event_upload.target.files.length > 0) {
-                // console.log('dentro del if event tartget');
                 // Referencia a los archivos y convertirlos a un array
                 const eventFiles = event_upload.target.files;
                 let files_selected = Array.prototype.slice.call(eventFiles);
@@ -122,8 +120,6 @@ export class UploadImageComponent implements OnInit {
                         reader.readAsDataURL(file);
                     });
                 }));
-                // console.log('acabo leer imagenes promesa', event_upload);
-                // console.log('acabo leer imagenes promesas', this.uploadedImages);
                 if(event_upload.target){
                     event_upload.target.value = "";
                 }

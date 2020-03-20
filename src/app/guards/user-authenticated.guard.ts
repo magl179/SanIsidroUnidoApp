@@ -18,7 +18,6 @@ export class UserAuthenticatedGuard implements CanLoad {
 
     async canLoad(): Promise<boolean> {
         const tokenDecoded = await this.authService.isAuthenticated();
-        // console.log('token decoded user authenticated guard', tokenDecoded);
         if (tokenDecoded) {
             return true;
         } else {

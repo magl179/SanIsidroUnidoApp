@@ -63,7 +63,6 @@ export class RequestMembershipPage implements OnInit {
     }
 
     getUploadedImages(event: any) {
-        // console.log(event);
         this.publicServiceImg = event.total_img;
     }
 
@@ -72,18 +71,12 @@ export class RequestMembershipPage implements OnInit {
     }
 
     sendRequestMembership() {
-
-        //console.log('form all', this.membershipForm);
         const formValue = this.membershipForm.value;
         const imagen = this.publicServiceImg[0];
         const requestObj = {
             cedula: formValue.cedula,
             basic_service_image: imagen
         }
-        
-        //console.log('formValue', formValue);
-        // console.log('requestObj', requestObj);
-        // return;
         this.userService.sendRequestUserMembership(requestObj).subscribe(async (res: IRespuestaApiSIUSingle) => {
             const token = res.data.token;
             const token_decoded = decodeToken(token);

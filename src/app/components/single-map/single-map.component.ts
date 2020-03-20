@@ -107,7 +107,6 @@ export class SingleMapComponent implements OnInit, AfterViewInit {
         this.map.addLayer(mainMarker);
 
         setTimeout(() => {
-            console.log([leafletLatLng]);
             this.map.fitBounds([leafletLatLng]);
         }, 1000);
 

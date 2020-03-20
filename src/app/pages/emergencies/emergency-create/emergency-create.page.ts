@@ -78,7 +78,6 @@ export class EmergencyCreatePage implements OnInit {
     }
 
     getUploadedImages(event: any) {
-        console.log('images uploades event', event)
         this.emergencyImages = event.total_img;
 
     }
@@ -142,15 +141,8 @@ export class EmergencyCreatePage implements OnInit {
         ).subscribe(async (res: any) => {
             this.messageService.showSuccess("El Reporte fue enviado correctamente");
             this.formSended = true;
-            console.log('this.formsedn', this.formSended);
             this.events_app.resetEmergenciesEmitter();
             this.cdRef.detectChanges();
-            const emergency_id_created = (res && res.id) ? res.id : null;
-            // if (emergency_id_created) {
-            //     setTimeout(() => {
-            //         this.router.navigateByUrl(`emergencies/detail/${emergency_id_created}`);
-            //     }, 1000);
-            // }
             setTimeout(() => {
                 this.router.navigateByUrl(`/emergencies/list`);
             }, 1000);

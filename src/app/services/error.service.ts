@@ -35,8 +35,6 @@ export class ErrorService {
 
   async manageHttpError(httpError: HttpErrorResponse, defaultMessage: string){
     const online = navigator.onLine;
-    console.log('Error HTTP: ', httpError);
-
     if (!online) {
       // No Internet connection
       console.log("No hay conexión a Internet");

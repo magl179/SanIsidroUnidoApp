@@ -11,7 +11,7 @@
         <ion-item [lines]="getLinesState(i)" *ngFor="let noti of notificationsRequested; let i = index;"
             (click)="manageNoti(noti)">
             <ion-avatar slot="start" *ngIf="noti.data && noti.data.notification_user">
-                <img [src]="noti.data.notification_user.avatar" fallimg="user_avatar">
+                <img [src]="noti.data.notification_user.avatar_link" fallimg="user_avatar">
             </ion-avatar>
             <ion-label class="notifications_description">
                 <h2 class="title">

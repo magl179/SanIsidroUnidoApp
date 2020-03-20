@@ -50,12 +50,6 @@ export class EventsListPage implements OnInit, OnDestroy {
         });
         this.loadEvents(null,true);
         this.events_app.eventsLikesEmitter.subscribe((event_app: any) => {
-            // if (this.eventsList.length > 0) {
-            //     // console.log('tengo datos cargados resetear a 0');
-            //     this.eventsList = [];
-            //     this.postsService.resetEventsPage();
-            // }
-            // return event;
             this.toggleLikes(event_app.id, event_app.reactions);
         });
     }
@@ -186,9 +180,6 @@ export class EventsListPage implements OnInit, OnDestroy {
                 } else {
                     console.log("Server-side error", err);
                 }
-                // if(first_loading && res.data.length === 0){
-                //     this.showNotFound = true;
-                // }
             });
     }
 

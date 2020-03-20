@@ -26,9 +26,7 @@ export class ErrorsHandler implements ErrorHandler {
       // Client Error Happend
       // Send the error to the server and then
       // redirect the user to the page with all the info
-      console.log('Ocurrio un error en el servidor', error);
-
-     
+      console.log('Ocurrio un error en el servidor', error);     
       return this.utilsService.showToast({message: 'Ocurrio un error en el servidor'});
     }
   }

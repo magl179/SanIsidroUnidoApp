@@ -188,7 +188,6 @@ export class NotificationsService implements OnInit {
         if (deviceID) {
             this.userService.sendRequestDeleteUserPhoneDevice(deviceID).subscribe(async (res: any) => {
                 this.messageService.showSuccess('Dispositivo Desuscrito Correctamente');
-                // console.log('res', res);
             }, (err: HttpErrorResponse) => {
                 this.errorService.manageHttpError(err, 'Ocurrio un error al desuscribir el dispositivo');
             });

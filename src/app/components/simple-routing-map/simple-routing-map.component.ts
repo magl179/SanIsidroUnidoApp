@@ -54,8 +54,6 @@ export class SimpleRoutingMapComponent implements OnInit {
         try {
             this.mapMarkers = await this.mapService.getMarkers().toPromise();
             // Obtener Coordenadas
-            // this.currentCoordinate = await this.localizationService.getCoordinates();
-            console.log('current coordinate simple routing map', this.currentCoordinate)
             // Inicializar el Mapa
             await this.initializeMap();
         } catch (err) {
@@ -140,7 +138,6 @@ export class SimpleRoutingMapComponent implements OnInit {
         }
 
         setTimeout(() => {
-            console.log(markersGroupCoords);
             this.map.fitBounds(markersGroupCoords);
         }, 1000);
 

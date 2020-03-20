@@ -91,7 +91,6 @@ export class EmergencyDetailPage implements OnInit {
         this.isPoliciaRol = isPolicia;
         this.showPoliciaOptions = isPolicia;
         this.urlBackEmergency = (isPolicia) ? '/home-list' : '/emergencies/list';
-        // console.log('ROL IS POLICIA', isPolicia);
     }
 
     //POLICIA COMUNITARIO

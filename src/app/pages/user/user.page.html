@@ -5,7 +5,7 @@
         <!-- AVATAR USUARIO -->
         <div class="img-profile ion-padding-top">
             <div class="item_img" *ngIf="AuthUser">
-                <img [src]="AuthUser.avatar" fallimg="user_avatar" (click)="seeProfileImageDetail(AuthUser.avatar)" />
+                <img [src]="AuthUser.avatar_link" fallimg="user_avatar" (click)="seeProfileImageDetail(AuthUser.avatar_link)" />
                 <div class="upload_image" (click)="showChangeUserImageProfileModal()">
                     <ion-icon name="camera"></ion-icon>
                 </div>
