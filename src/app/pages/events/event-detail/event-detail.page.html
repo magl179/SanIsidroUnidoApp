@@ -26,14 +26,14 @@
             <ion-row>
                 <ion-col>
                     <ion-item lines="none" detail="false" button="true"
-                        class="container_events detail" [ngClass]="{'active': (i % 2) === 0}">
+                        class="container_events detail">
                         <!-- <ion-icon slot="start" name="star" (click)="test()"></ion-icon> -->
                         <ion-skeleton-text width="50%"></ion-skeleton-text>
                     </ion-item>
                 </ion-col>
                 <ion-col>
                     <ion-item lines="none" detail="false" button="true"
-                        class="container_events detail" [ngClass]="{'active': (i % 2) !== 0}">
+                        class="container_events detail">
                         <ion-skeleton-text width="50%"></ion-skeleton-text>
                     </ion-item>
                 </ion-col>
@@ -51,9 +51,6 @@
 
             <div class="post-info-container">
                 <div class="post-description-info">
-                    <!--<span class="post-category">
-                        <span>General</span>
-                    </span>-->
                     <h2 class="post-title">
                         <span>{{event.title}}</span>
                     </h2>

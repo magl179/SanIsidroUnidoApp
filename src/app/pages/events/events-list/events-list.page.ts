@@ -7,7 +7,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { finalize, map, take } from 'rxjs/operators';
 import { IEvent, IRespuestaApiSIUPaginada } from "src/app/interfaces/models";
 import { checkLikePost } from 'src/app/helpers/user-helper';
-import { mapEvent, getImagesPost } from 'src/app/helpers/utils';
+import { mapEvent, getImagesPost, cortarTextoConPuntos, getFirstPostImage } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from "src/app/services/events.service";
 import { ErrorService } from 'src/app/services/error.service';
@@ -118,8 +118,8 @@ export class EventsListPage implements OnInit, OnDestroy {
     async sharePost(post: IEvent) {
         const sharePost: IPostShare = {
             title: post.title,
-            description: post.description,
-            image: getImagesPost(post.images)
+            description: cortarTextoConPuntos(post.description),
+            image: getFirstPostImage(post)
         };
         await this.utilsService.shareSocial(sharePost);
     }

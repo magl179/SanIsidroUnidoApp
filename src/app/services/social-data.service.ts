@@ -8,6 +8,19 @@ import { UtilsService } from './utils.service';
 import { HttpRequestService } from "./http-request.service";
 import { ErrorService } from './error.service';
 import { MessagesService } from './messages.service';
+import { environment } from 'src/environments/environment';
+import { HttpHeaders } from '@angular/common/http';
+
+interface GoogleUser {
+    sub: string;
+    name: string;
+    given_name: string;
+    family_name: string;
+    picture: string;
+    email: string;
+    email_verified: boolean;
+    locale: string;
+}
 
 @Injectable({
     providedIn: 'root'
@@ -28,17 +41,29 @@ export class SocialDataService {
     ) { }
 
     // Funcion para parsear los datos del login de google
-    getGoogleDataParsed(googleUser: any) {
+    getGoogleDataParsed(googleUser: GoogleUser) {
+        //Old Method
+        // const appUser = {
+        //     first_name: googleUser.name.givenName,
+        //     last_name: googleUser.displayName,
+        //     email: googleUser.emails[0].value,
+        //     social_id: googleUser.id,
+        //     provider: 'google',
+        //     avatar: googleUser.avatar,
+        //     password: null,
+        //     device: null
+        // };
+        //New Method
         const appUser = {
-            first_name: googleUser.name.givenName,
-            last_name: googleUser.displayName,
-            email: googleUser.emails[0].value,
-            social_id: googleUser.id,
+            first_name: googleUser.given_name,
+            last_name: googleUser.family_name,
+            email: googleUser.email,
+            social_id: googleUser.sub,
             provider: 'google',
-            avatar: googleUser.avatar,
+            avatar: googleUser.picture,
             password: null,
             device: null
-        };
+        }
         return appUser;
     }
     // Funcion para parsear los datos del login de facebook
@@ -61,6 +86,10 @@ export class SocialDataService {
         if (this.platform.is('cordova')) {
             try {
                 const loginGoogle = await this.google.login({});
+                // const loginGoogle = await this.google.login({
+                //     'webClientId': environment.GOOGLE_CLIENT_ID,
+                //     'offline': true
+                // });
                 this.getGoogleData(loginGoogle);
             } catch (error) {
                 this.errorService.manageHttpError(error, 'Error con la conexion a Google');
@@ -104,18 +133,23 @@ export class SocialDataService {
     // Function para llamar a la api de Google y obtener los datos del perfil del usuario logueado
     getGoogleData(googleLogin: any) {
         try {
-            const url = `https://www.googleapis.com/plus/v1/people/me?access_token=${googleLogin.accessToken}`;
-            this.httpRequest.get(url).subscribe(
+            // const url = `https://www.googleapis.com/plus/v1/people/me?access_token=${googleLogin.accessToken}`;
+            console.log('googleLogin.accessToken', googleLogin)
+            const url = `https://www.googleapis.com/oauth2/v3/userinfo?alt=json`;         
+            this.httpRequest.get(url, {}, { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${googleLogin.accessToken}`
+             }).subscribe(
                 async (profile: any) => {
-                    profile.avatar = googleLogin.imageUrl;
+                    // profile.avatar = googleLogin.imageUrl;
                     this.googleLoginData.next(profile);
-                    await this.closeGoogleSession();                    
+                    await this.closeGoogleSession();
                 },
                 (err: any) => {
-                    this.errorService.manageHttpError(err, 'No se pudieron obtener los datos de Google'); 
+                    this.errorService.manageHttpError(err, 'No se pudieron obtener los datos de Google');
                 });
         } catch (err) {
-            this.errorService.manageHttpError(err, 'No se pudieron obtener los datos de Google');            
+            this.errorService.manageHttpError(err, 'No se pudieron obtener los datos de Google');
         }
     }
 
@@ -124,15 +158,15 @@ export class SocialDataService {
         try {
             await this.google.logout();
         } catch (err) {
-            this.errorService.manageHttpError(err, 'No se pudo cerrar la sesion de Google');  
+            this.errorService.manageHttpError(err, 'No se pudo cerrar la sesion de Google');
         }
     }
-     // Función para cerrar la sesión de facebook una vez obtenidos los datos
+    // Función para cerrar la sesión de facebook una vez obtenidos los datos
     async closeFacebookSession() {
         try {
             await this.facebook.logout();
         } catch (err) {
-            this.errorService.manageHttpError(err, 'No se pudo cerrar la sesion de Facebook');  
+            this.errorService.manageHttpError(err, 'No se pudo cerrar la sesion de Facebook');
         }
     }
 

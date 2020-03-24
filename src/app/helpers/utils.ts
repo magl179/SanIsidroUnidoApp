@@ -279,6 +279,8 @@ export const mapEmergency = (emergency: any) => {
     if (emergency.resources && emergency.resources.length > 0) {
         emergency.images = mapImagesApi(emergency.resources);
         emergency.imagesArr = getValueKeyFromArrObj(emergency.resources, 'url_link');
+    } else {
+        emergency.imagesArr = [];
     }
     const fecha_creacion = (emergency.created_at) ? emergency.created_at : moment(new Date()).add(-1, 'days');
     emergency.fecha_creacion = formatAppBeatifulDate(fecha_creacion);
@@ -296,6 +298,8 @@ export const mapReport = (report: any) => {
         const imagesResources = report.resources.filter(resource => resource.type === 'image');
         report.images = mapImagesApi(imagesResources);
         report.imagesArr = getValueKeyFromArrObj(report.resources, 'url_link');
+    } else {
+        report.imagesArr = [];
     }
 
     const fecha_creacion = (report.created_at) ? report.created_at : moment(new Date()).add(-1, 'days');
@@ -316,6 +320,8 @@ export const mapSocialProblem = (social_problem: any) => {
     if (social_problem.resources && social_problem.resources.length > 0) {
         social_problem.images = mapImagesApi(social_problem.resources);
         social_problem.imagesArr = getValueKeyFromArrObj(social_problem.resources, 'url_link');
+    } else {
+        social_problem.imagesArr = [];
     }
     // if (social_problem.user && social_problem.user.avatar) {
     //     social_problem.user.avatar = getImageURL(social_problem.user.avatar);
@@ -327,6 +333,15 @@ export const mapSocialProblem = (social_problem: any) => {
     social_problem.fecha_actualizacion = formatAppBeatifulDate(fecha_actualizacion);
 
     return social_problem;
+}
+
+export const getFirstPostImage = (post: any) => {
+    if (!post.imagesArr) { return null; }
+    if (post.imagesArr.length == 0) {
+        return null
+    } else {
+        return post.imagesArr[0];
+    }
 }
 
 export const mapCategory = (category: ISubcategory) => {
@@ -468,4 +483,12 @@ export const verificarNumeroTelefono = (numero_verificar) => {
     } else {
         return false;
     }
+}
+
+export const cortarTextoConPuntos = (texto: string, limite: number = 30) => {
+    const puntosSuspensivos = "...";
+    if (texto.length > limite) {
+        texto = texto.substring(0, limite) + puntosSuspensivos;
+    }
+    return texto;
 }

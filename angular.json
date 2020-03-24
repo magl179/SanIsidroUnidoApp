@@ -44,10 +44,7 @@
                 "input": "src/app/app.scss"
               }
             ],
-            "scripts": [
-              "src/assets/js/leaflet-distance-marker.js",
-              "src/assets/js/leaflet-geometryutil.js"
-            ],
+            "scripts": [],
             "es5BrowserSupport": true
           },
           "configurations": {
@@ -71,7 +68,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumError": "6mb"
                 }
               ]
             },

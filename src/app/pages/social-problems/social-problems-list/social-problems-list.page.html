@@ -77,9 +77,9 @@
                         {{(socialProblem.reactions.length === 1) ? 'vecino apoya' : 'vecinos apoyando'}}
                     </span>
                 </div>
-                <div class="social-options"
+                <div class="social-options">
+                    <div class="social-button ion-activatable" [class.active]="socialProblem.postLiked" 
                     (click)="toggleLike(socialProblem.postLiked, socialProblem.id)">
-                    <div class="social-button ion-activatable" [class.active]="socialProblem.postLiked">
                         <ion-icon class="like" name="thumbs-up"></ion-icon>
                         <span>Me gusta</span>
                         <ion-ripple-effect></ion-ripple-effect>

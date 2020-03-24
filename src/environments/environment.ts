@@ -2,7 +2,7 @@ import { IENVIRONMENT } from 'src/config/config.model';
 
 export const environment: IENVIRONMENT = {
     production: false,
-    GOOGLE_CLIENT_ID: '1051963029462-mht230ntj5grq6k0ng3get34kfq3ldvu.apps.googleusercontent.com',
+    GOOGLE_CLIENT_ID: '729197860050-v6mllin6omfp4n7hd2048v9n1uahqgja.apps.googleusercontent.comm',
     ONESIGNAL_ID : '2ffbdcc2-223e-4527-9164-9583ea47d0b4',
     FIREBASE_APP_ID: '522134390512',
     // APIBASEURL: 'http://192.168.1.5:8000/api/v1',

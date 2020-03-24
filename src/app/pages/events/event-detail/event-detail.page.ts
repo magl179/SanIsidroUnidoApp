@@ -9,7 +9,7 @@ import { ImageDetailPage } from "src/app/modals/image_detail/image_detail.page";
 import { finalize, map, take } from 'rxjs/operators';
 import { getUsersFromDetails, checkUserInDetails } from "src/app/helpers/user-helper";
 import { checkLikePost } from "src/app/helpers/user-helper";
-import { mapEvent } from "src/app//helpers/utils";
+import { mapEvent, cortarTextoConPuntos, getFirstPostImage } from "src/app//helpers/utils";
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from 'src/app/services/events.service';
 import { ErrorService } from 'src/app/services/error.service';
@@ -121,8 +121,8 @@ export class EventDetailPage implements OnInit {
     async sharePost(post: IEvent) {
         const sharePost: IPostShare = {
             title: post.title,
-            description: post.description,
-            image: this.getImages(post.images),
+            description: cortarTextoConPuntos(post.description, 90),
+            image: getFirstPostImage(post),
             url: ''
         };
         await this.utilsService.shareSocial(sharePost);

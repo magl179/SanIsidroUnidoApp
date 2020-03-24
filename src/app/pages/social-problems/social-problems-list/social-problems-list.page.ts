@@ -8,7 +8,7 @@ import { finalize, map } from "rxjs/operators";
 import { ISocialProblem, IPostShare } from 'src/app/interfaces/models';
 import { environment } from 'src/environments/environment';
 import { checkLikePost } from 'src/app/helpers/user-helper';
-import { mapSocialProblem, setFilterKeys, filterDataInObject } from "src/app/helpers/utils";
+import { mapSocialProblem, setFilterKeys, filterDataInObject, cortarTextoConPuntos, getFirstPostImage } from "src/app/helpers/utils";
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from "src/app/services/events.service";
 import { ActivatedRoute, Router, NavigationExtras } from "@angular/router";
@@ -170,7 +170,6 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let socialProblems = [];
             socialProblems = res.data;
-
             if (socialProblems.length === 0) {
                 if (event && event.data && event.data.target && event.data.target.complete) {
                     event.data.target.disabled = true;
@@ -223,8 +222,8 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
     async sharePost(post: ISocialProblem) {
         const sharePost: IPostShare = {
             title: post.title,
-            description: post.description,
-            image: this.getImages(post.images),
+            description: cortarTextoConPuntos(post.description, 90),
+            image: getFirstPostImage(post),
             url: ''
 
         };

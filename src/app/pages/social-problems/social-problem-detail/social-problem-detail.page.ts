@@ -8,7 +8,7 @@ import { ModalController } from "@ionic/angular";
 import { ImageDetailPage } from 'src/app/modals/image_detail/image_detail.page';
 import { finalize, map, take } from 'rxjs/operators';;
 import { checkLikePost } from 'src/app/helpers/user-helper';
-import { mapSocialProblem } from "src/app/helpers/utils";
+import { mapSocialProblem, cortarTextoConPuntos, getFirstPostImage } from "src/app/helpers/utils";
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from "src/app/services/events.service";
 import { MessagesService } from 'src/app/services/messages.service';
@@ -127,8 +127,8 @@ export class SocialProblemDetailPage implements OnInit {
     async sharePost(post: ISocialProblem) {
         const sharePost: IPostShare = {
             title: post.title,
-            description: post.description,
-            image: this.getImages(post.images),
+            description: cortarTextoConPuntos(post.description, 80),
+            image: getFirstPostImage(post),
             url: ''
         };
         await this.utilsService.shareSocial(sharePost);
