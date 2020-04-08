@@ -42,7 +42,7 @@ export class EditProfilePage implements OnInit {
 
     async loadUserData() {
         //OBTENER INFORMACIÓN USUARIO AUTENTICADO, FORMA CORRECTA
-        const response_auth: any =  await this.authService.getTokenUserAuthenticated().catch(err=>console.log('err', err))
+        const response_auth: any =  await this.authService.getTokenUserAuthenticated().catch(err=>console.error('err', err))
         if (response_auth) {
             this.AuthUser = response_auth.user;
         }

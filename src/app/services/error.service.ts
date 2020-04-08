@@ -13,9 +13,9 @@ export class ErrorService {
   async handleError(httpError: HttpErrorResponse) {
     // Verificar que el error HTTP ocurrio en el cliente
     if (httpError.error instanceof Error) {
-      // console.log("Ocurrio un error en el cliente", httpError.error);
+      // console.error("Ocurrio un error en el cliente", httpError.error);
     } else {
-      // console.log("Ocurrio un error en el servidor, intentalo más tarde", httpError)
+      // console.error("Ocurrio un error en el servidor, intentalo más tarde", httpError)
     }
     return;
   }
@@ -38,7 +38,6 @@ export class ErrorService {
     console.error('SIU LOG ERROR', httpError);
     if (!online) {
       // No Internet connection
-      console.log("No hay conexión a Internet");
       return await this.showHttpError("Por favor activa tu conexión a internet");
     }
     if (httpError && httpError.error instanceof Error) {

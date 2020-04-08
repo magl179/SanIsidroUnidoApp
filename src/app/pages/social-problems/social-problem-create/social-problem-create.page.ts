@@ -67,7 +67,7 @@ export class SocialProblemCreatePage implements OnInit {
             this.socialProblemCoordinate.latitude = coordinates.latitude;
             this.socialProblemCoordinate.longitude = coordinates.longitude;
         }).catch(err => {
-            console.log('Error al obtener geolocalizacion', err);
+            console.error('Error al obtener geolocalizacion', err);
         });
     }
 

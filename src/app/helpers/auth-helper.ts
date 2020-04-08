@@ -12,7 +12,7 @@ export const decodeToken = (token: any) => {
         const helper = new JwtHelperService();
         decodedToken = helper.decodeToken(token);
     } catch (err) {
-        console.log(err);
+        console.error(err);
     }
     return decodedToken;
 }

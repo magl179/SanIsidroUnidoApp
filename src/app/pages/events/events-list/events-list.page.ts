@@ -176,9 +176,9 @@ export class EventsListPage implements OnInit, OnDestroy {
         },
             (err: HttpErrorResponse) => {
                 if (err.error instanceof Error) {
-                    console.log("Client-side error", err);
+                    console.error("Client-side error", err);
                 } else {
-                    console.log("Server-side error", err);
+                    console.error("Server-side error", err);
                 }
             });
     }

@@ -20,13 +20,13 @@ export class ErrorsHandler implements ErrorHandler {
       // Http Error
       // Show notification to the user
       //return notificationService.notify(`${error.status} - ${error.message}`);
-      console.log('Ocurrio un error en el cliente', error);
+      console.error('Ocurrio un error en el cliente', error);
       return this.utilsService.showToast({message: 'Ocurrio un error, por favor intentalo más tarde'});
     } else {
       // Client Error Happend
       // Send the error to the server and then
       // redirect the user to the page with all the info
-      console.log('Ocurrio un error en el servidor', error);     
+      console.error('Ocurrio un error en el servidor', error);     
       return this.utilsService.showToast({message: 'Ocurrio un error en el servidor'});
     }
   }

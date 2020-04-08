@@ -58,6 +58,7 @@ export class SearchPostsPage implements OnInit {
                 urlRedirect = `${this.searchRouteDetail}/${id}`;//id
                 break;
         }
+        console.warn('url redirect: ', urlRedirect)
         this.navCtrl.navigateForward(urlRedirect);
 
     }
@@ -103,8 +104,8 @@ export class SearchPostsPage implements OnInit {
         });
 
         this.getValueObservable().pipe(
-            map(search_term => search_term),
             debounceTime(1000),
+            map(search_term => search_term),
             distinctUntilChanged(),
             finalize(() => {
                 this.searchingPosts = false;

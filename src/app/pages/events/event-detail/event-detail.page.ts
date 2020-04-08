@@ -75,9 +75,9 @@ export class EventDetailPage implements OnInit {
             }
         },(err: HttpErrorResponse) => {
             if (err.error instanceof Error) {
-                console.log("Client-side error", err);
+                console.error("Client-side error", err);
             } else {
-                console.log("Server-side error", err);
+                console.error("Server-side error", err);
             }
         });
     }
@@ -91,6 +91,7 @@ export class EventDetailPage implements OnInit {
             this.postService.sendDeleteDetailToPost(this.event.id).subscribe(res => {
                 if(res.data.reactions){
                     this.event.postAssistance = false;
+                    this.event.reactions = res.data.reactions;
                     this.emitAssistanceEvent(this.event.id, res.data.reactions);
                 }
             }, err => {
@@ -105,6 +106,7 @@ export class EventDetailPage implements OnInit {
             this.postService.sendCreateDetailToPost(detailInfo).subscribe(res => {
                 if(res.data.reactions){
                     this.event.postAssistance = true;
+                    this.event.reactions = res.data.reactions;
                     this.emitAssistanceEvent(this.event.id, res.data.reactions);
                 }
             }, err => {

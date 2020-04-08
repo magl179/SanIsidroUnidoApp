@@ -84,7 +84,7 @@ export class UploadImageComponent implements OnInit {
                         this.uploadedImages.push(this.imagenB64);
                         this.getUploadedImages();
                     }, err => {
-                        console.log({ errorCapturarImagen: err });
+                        console.error({ errorCapturarImagen: err });
                         this.messageService.showError('Ocurrio un error al capturar la imagen');
                     });           
         } else {

@@ -49,7 +49,7 @@
             <ion-label>Resultados Encontrados</ion-label>
         </ion-list-header>
         <ion-item detail="true" *ngFor="let item of itemsSearchFound; let i = index;" lines="none"
-            (click)="seeDetailItemFound(item.category_name, item.subcategory_name, item.id)" class="item-{{item.id}}">
+            (click)="seeDetailItemFound(item.category?.slug, item.subcategory?.slug, item.id)" class="item-{{item.id}}">
             <ion-label>
                 <h3>{{item.title}}</h3>
             </ion-label>

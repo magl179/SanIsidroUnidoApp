@@ -49,7 +49,7 @@ export class PublicServiceDetailPage implements OnInit {
                 this.currentPosition = coordinates;
                 return;
             }).catch(err=>{
-                console.log('Error al obtener geolocalizacion', err);
+                console.error('Error al obtener geolocalizacion', err);
                 return;
             });
         }

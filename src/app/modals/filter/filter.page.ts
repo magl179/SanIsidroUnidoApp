@@ -102,11 +102,6 @@ export class FilterPage implements OnInit {
                 })
             ).subscribe((res: any) => {
                 itemsFiltered = [...res.data];
-                if (res.data.length === 0) {
-                    console.log('No hay coincidencias');
-                } else {
-                    console.log(`Hay ${this.dataFiltered.length} coincidencias`);
-                }
             }, (err: HttpErrorResponse) => {
                 this.errorService.manageHttpError(err, 'Ocurrio un error al filtrar los datos');
             });

@@ -19,7 +19,7 @@ export const getBeatifulDate = (stringDate: string) => {
             beatifulDate = lastDate.format('LL');
         }
     } else {
-        console.log('Invalid Date', stringDate);
+        throw new Error(`Fecha Inválida-${stringDate}`);
     }
     return beatifulDate;
 }

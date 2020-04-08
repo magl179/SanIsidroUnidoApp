@@ -86,7 +86,7 @@ export class AppComponent implements OnInit {
                 this.authService.checkValidToken();
             }
         }, (err: any) => {
-            console.log('Error', err);
+            console.error('Error', err);
         });
     }
 

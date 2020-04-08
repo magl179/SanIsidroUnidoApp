@@ -38,7 +38,11 @@ export class UtilsService implements OnInit {
     
     //Abrir el navegador
     openInBrowser(url: string) {
-        this.iab.create(url, '_system');
+        if (this.platform.is('cordova')) { 
+            this.iab.create(url, '_system');
+        }else{
+            window.open(url, '_blank');
+        }
     }
 
     //Obtener la fecha formateada con MomentJS
@@ -89,7 +93,8 @@ export class UtilsService implements OnInit {
                     await this.showToast({message: 'Compartido Correctamente'});
                 }
             }).catch(async(err) => {
-                console.log('Error al compartir', err);
+                console.error('Error al compartir', err);
+                //throw new Error('Ocurrio un error al compartir')
                this.showToast({message: 'No se pudo compartir'});
             });
         } else {
@@ -101,7 +106,7 @@ export class UtilsService implements OnInit {
                 }).then(async() => {
                     await this.showToast({message: 'Compartido Correctamente'});
                 }).catch(async(err) => {
-                    console.log('Error al compartir', err);
+                    console.error('Error al compartir', err);
                    this.showToast({message: 'No se pudo compartir'});
                 });
             } else {

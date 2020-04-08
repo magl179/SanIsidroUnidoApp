@@ -90,11 +90,6 @@ export class SearchPage implements OnInit {
 
                     });
                     this.itemsSearchFound = items_found;
-                    if (this.itemsSearchFound.length === 0) {
-                        console.log('No hay coincidencias');
-                    } else {
-                        console.log(`Hay ${this.itemsSearchFound.length} coincidencias`);
-                    }
                     this.searchingPosts = false;
                 }, 2000);
             } else if (this.searchInApi && this.postTypeSlug) {
@@ -105,16 +100,11 @@ export class SearchPage implements OnInit {
                     })
                 ).subscribe((res: any) => {
                     this.itemsSearchFound = res.data;
-                    if (res.data.length === 0) {
-                        console.log('No hay coincidencias');
-                    } else {
-                        console.log(`Hay ${this.itemsSearchFound.length} coincidencias`);
-                    }
                 },(err: HttpErrorResponse) => {
                     if (err.error instanceof Error) {
-                        console.log("Client-side error", err);
+                        console.error("Client-side error", err);
                     } else {
-                        console.log("Server-side error", err);
+                        console.error("Server-side error", err);
                     }
                 });
             }

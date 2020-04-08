@@ -73,12 +73,10 @@ export class NotificationsService implements OnInit {
             this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.Notification);
             //Funcion hacer algo cuando se recibe una notificación
             this.oneSignal.handleNotificationReceived().subscribe((myNotification) => {
-                //console.log('Una notificación fue recibida', myNotification);
                 this.manageNotificationReceived(myNotification);
             });
             //Funcion para hacer algo cuando una notificacion es recibida
             this.oneSignal.handleNotificationOpened().subscribe(async (myNotification) => {
-                //console.log('Una notificación fue recibida y abierta', myNotification);
                 await this.manageNotificationOpened(myNotification.notification);
             });           
             //Función acabar la configuración de Onesignal
@@ -132,8 +130,7 @@ export class NotificationsService implements OnInit {
                     // this.messageService.showSuccess('Dispositivo Añadido Correctamente');
                     this.saveDeviceInfo(this.userDevice.value.phone_id);
                 }, (err: any) => {
-                    // this.errorService.manageHttpError(err, 'Ocurrio un error al añadir el dispositivo');
-                    console.log('err', err);
+                    console.error('err', err);
                 });
         }
     }

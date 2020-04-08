@@ -56,7 +56,7 @@ export class EmergencyCreatePage implements OnInit {
             this.emergencyPostCoordinate.latitude = coordinates.latitude;
             this.emergencyPostCoordinate.longitude = coordinates.longitude;
         }).catch(err => {
-            console.log('Error al obtener geolocalizacion', err);
+            console.error('Error al obtener geolocalizacion', err);
         });
     }
 

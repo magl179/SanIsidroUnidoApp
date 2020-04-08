@@ -57,7 +57,7 @@ export class SimpleRoutingMapComponent implements OnInit {
             // Inicializar el Mapa
             await this.initializeMap();
         } catch (err) {
-            console.log('Error al cargar mapa', err)
+            console.error('Error al cargar mapa', err)
         }
         // Obtener marcadores
     }
