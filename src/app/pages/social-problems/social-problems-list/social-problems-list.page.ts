@@ -150,10 +150,13 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
 
     //Cargar los problemas sociales
     loadSocialProblems(event: any = null, first_loading=false) {
-        this.postsService.getPostsBySubCategory(CONFIG.SOCIAL_PROBLEMS_SLUG, this.subcategory).pipe(
+        this.postsService.getPostsBySubCategory(CONFIG.SOCIAL_PROBLEMS_SLUG, this.subcategory)
+        .pipe(
             map((res: IRespuestaApiSIUPaginada) => {
                 if (res && res.data) {
                     res.data.forEach((social_problem: any) => {
+                        const postLiked = checkLikePost(social_problem.reactions, this.AuthUser) || false;
+                        console.log('post liked', postLiked)
                         social_problem = mapSocialProblem(social_problem);
                     });
                 }

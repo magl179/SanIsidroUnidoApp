@@ -1,6 +1,6 @@
 .public-service-category {
-  width: 80px;
-  height: 80px;;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   background-size: auto;
   background-position: center;
@@ -11,13 +11,23 @@
   background-repeat: no-repeat;
 }
 
-.alert-gps{
-    text-align: center;
+.alert-gps {
+  text-align: center;
 }
 
-.category-title{
-  font-size: 1em;
-  text-align:center;
+.category-title {
+  font-size: .8em;
+  text-align: center;
   text-transform: uppercase;
   width: 100%;
+  -ms-word-break: break-all;
+  word-break: break-all;
+  word-break: break-word;
+  /* Sólo WebKit -NO DOCUMENTADO */
+  -ms-hyphens: auto;
+  /* Guiones para separar en sílabas */
+  -moz-hyphens: auto;
+  /*  depende de lang en <html>      */
+  -webkit-hyphens: auto;
+  hyphens: auto;
 }

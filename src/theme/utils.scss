@@ -103,8 +103,9 @@
 // Botones para la subida de Imagenes
 .section-buttons-load-image {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
+    padding: 20px;
     .button-title{
         margin-top: .8rem;
     }

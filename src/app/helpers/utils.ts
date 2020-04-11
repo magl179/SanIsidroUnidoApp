@@ -249,10 +249,10 @@ export const mapEvent = (event: any) => {
     }
 
     const fecha_creacion = (event.created_at) ? event.created_at : moment(new Date()).add(-1, 'days');
-    event.fecha_creacion = formatAppBeatifulDate(fecha_creacion);
+    event.fecha_creacion = fechaFull(fecha_creacion);
 
     const fecha_actualizacion = (event.updated_at) ? event.updated_at : moment(new Date()).add(-1, 'days');
-    event.fecha_actualizacion = formatAppBeatifulDate(fecha_actualizacion);
+    event.fecha_actualizacion = fechaFull(fecha_actualizacion);
     return event;
 }
 
@@ -283,10 +283,10 @@ export const mapEmergency = (emergency: any) => {
         emergency.imagesArr = [];
     }
     const fecha_creacion = (emergency.created_at) ? emergency.created_at : moment(new Date()).add(-1, 'days');
-    emergency.fecha_creacion = formatAppBeatifulDate(fecha_creacion);
+    emergency.fecha_creacion = fechaFull(fecha_creacion);
 
     const fecha_actualizacion = (emergency.updated_at) ? emergency.updated_at : moment(new Date()).add(-1, 'days');
-    emergency.fecha_actualizacion = formatAppBeatifulDate(fecha_actualizacion);
+    emergency.fecha_actualizacion = fechaFull(fecha_actualizacion);
 
     return emergency;
 }
@@ -302,14 +302,19 @@ export const mapReport = (report: any) => {
         report.imagesArr = [];
     }
 
-    const fecha_creacion = (report.created_at) ? report.created_at : moment(new Date()).add(-1, 'days');
-    report.fecha_creacion = formatAppBeatifulDate(fecha_creacion);
+    const fecha_creacion = (report.created_at) ? fechaFull(report.created_at) : fechaFull(new Date());
+    report.fecha_creacion = fecha_creacion;
 
     const fecha_actualizacion = (report.updated_at) ? report.updated_at : moment(new Date()).add(-1, 'days');
-    report.fecha_actualizacion = formatAppBeatifulDate(fecha_actualizacion);
+    report.fecha_actualizacion = fechaFull(fecha_actualizacion);
 
     return report;
 }
+
+const fechaFull = (date: string | Date) => {
+    return moment(date).format('LLLL');
+}
+
 export const mapSocialProblem = (social_problem: any) => {
     const dateFull = `${social_problem.date} ${social_problem.time}`;
     social_problem.fulldate = formatFulldate(dateFull);
@@ -327,10 +332,10 @@ export const mapSocialProblem = (social_problem: any) => {
     //     social_problem.user.avatar = getImageURL(social_problem.user.avatar);
     // }
     const fecha_creacion = (social_problem.created_at) ? social_problem.created_at : moment(new Date()).add(-1, 'days');
-    social_problem.fecha_creacion = formatAppBeatifulDate(fecha_creacion);
+    social_problem.fecha_creacion = fechaFull(fecha_creacion);
 
     const fecha_actualizacion = (social_problem.updated_at) ? social_problem.updated_at : moment(new Date()).add(-1, 'days');
-    social_problem.fecha_actualizacion = formatAppBeatifulDate(fecha_actualizacion);
+    social_problem.fecha_actualizacion = fechaFull(fecha_actualizacion);
 
     return social_problem;
 }

@@ -1,24 +1,70 @@
-.name-ubication-pt{
-    padding-top: 1rem;
-}
-.preview-text{
-    font-size: .9em !important;
-}
-.mat-horizontal-stepper-header {
-    &[ng-reflect-selected="true"].mat-step-header {
-      background-color: green;
-    }
-  &[ng-reflect-selected="false"].mat-step-header {
-      background-color: pink;
-    }
-  }
-  //rgba(0,0,0,.54)
-  .container_image_actions{
-    display: flex;
-    justify-content: center;
+.name-ubication-pt {
+  padding-top: 1rem;
 }
 
-.image_col{
-    display: flex;
-    align-items: center;
+.preview-text {
+  font-size: .9em !important;
+}
+
+// .mat-horizontal-stepper-header {
+//   &[ng-reflect-selected="true"].mat-step-header {
+//     background-color: green;
+//   }
+
+//   &[ng-reflect-selected="false"].mat-step-header {
+//     background-color: pink;
+//   }
+// }
+
+.grid-imagenes {
+  margin-bottom: 1em;
+  padding: 16px;
+}
+
+//rgba(0,0,0,.54)
+.container_image_actions {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  ion-button {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    border-radius: 0;
+    --border-radius: 0;
+  }
+}
+
+.image_col {
+  display: flex;
+  align-items: center;
+}
+
+.card-image-uploaded {
+  width: 100px;
+  height: 100px;
+  padding: 0px;
+  border: 0px;
+  margin: 0px;
+  border-radius: 0;
+
+  img {
+    height: 100%;
+    width: 100%;
+  }
+}
+
+.container-item {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.item-img-grid {
+  padding: 0;
+  margin: 0;
+  --padding-end: 0;
+  --padding-start: 0;
 }

@@ -30,7 +30,7 @@
         "valid_roles": ["morador", "invitado", "policia"]
     },
     {
-        "title": "Informes",
+        "title": "Actividades Barriales",
         "icon": "assets/img/svg/analytics.svg",
         "url": "/reports/list",
         "valid_roles": ["morador", "invitado", "policia"]

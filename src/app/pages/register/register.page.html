@@ -122,7 +122,8 @@
                                     <div class="input-container">
                                         <ion-input class="input-beatiful input_relative" #passwordEyeRegister
                                             [type]="passwordTypeInput" placeholder="********" formControlName="password"
-                                            clearOnEdit="false">
+                                            clearOnEdit="false"
+                                            maxlength="100">
                                         </ion-input>
                                         <button item-end class="btn_eye_icon" (click)="togglePasswordMode()">
                                             <ion-icon [name]="(passwordTypeInput === 'text')?'eye-off':'eye'">
@@ -147,8 +148,7 @@
                             </div>
                             <div class="item-info">
                                 <p>
-                                    La contraseña debe contener entre 8-20 caracteres, al menos 1 letra mayúscula, 1
-                                    letra minuscula, 1 número y un caracter no alfanumérico.
+                                    La contraseña debe contener como mínimo 8 caracteres, al menos un dígito, una minúscula y una mayúscula
                                 </p>
                             </div>
                             <div padding>

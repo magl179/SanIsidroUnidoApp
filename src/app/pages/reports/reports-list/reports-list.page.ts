@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PostsService } from "src/app/services/posts.service";
 import { finalize, map } from 'rxjs/operators';
 import { NavController } from '@ionic/angular';
-import { IRespuestaApiSIUPaginada } from 'src/app/interfaces/models';
+import { IRespuestaApiSIUPaginada, IReport } from 'src/app/interfaces/models';
 import { mapReport } from "src/app/helpers/utils";
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/services/error.service';
@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
 })
 export class ReportsListPage implements OnInit, OnDestroy {
 
-    reportsList: any = [];
+    reportsList: IReport[] = [];
     showLoading = true;
     showNotFound = false;
 

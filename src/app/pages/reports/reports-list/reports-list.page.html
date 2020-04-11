@@ -1,4 +1,4 @@
-<app-header-back title="Informes" [search]="true" (onSearch)="redirectToSearch()"></app-header-back>
+<app-header-back title="Actividades Barriales" [search]="true" (onSearch)="redirectToSearch()"></app-header-back>
 
 <ion-content padding>
     <!-- Componente Refresher Data -->
@@ -13,6 +13,7 @@
     <!-- Animación al cargar los datos -->
     <div *ngIf="showLoading">
         <ion-card class="report animated flash slow infinite" *ngFor="let item of [1,1,1,1]">
+            
             <ion-card-header>
                 <ion-card-title>
                     <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
@@ -33,11 +34,22 @@
     <!-- Tarjetas con Información de los Reportes -->
     <div *ngIf="!showLoading && reportsList.length > 0">
         <ion-card class="report-container" *ngFor="let report of reportsList; let i = index;">
+            <div class="ion-padding" style="display: flex;align-items:Center;">
+                <div class="left-section">
+                    <img style="width: 50px;height:50px;border-radius:50%;"
+                        [src]="report.user.avatar_link" fallimg="user_avatar">
+                </div>
+                <div class="right-section" style="margin-left: 1rem">
+                    <p style="color: var(--ion-color-dark);margin-bottom: .7em;">
+                        {{report.user.first_name}} {{report.user.last_name }}</p>
+                    <span style="font-size: .9em;">{{report.fecha_creacion}}</span>
+                </div>
+            </div>
             <ion-card-header>
                 <ion-card-title>{{report.title}}</ion-card-title>
-                <div class="report_created_at">
+                <!-- <div class="report_created_at">
                     <span>{{report.fecha_creacion}}</span>
-                </div>
+                </div> -->
             </ion-card-header>
             <ion-card-content class="description-section">
                 <p class="description-section__content">

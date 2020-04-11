@@ -38,7 +38,8 @@
                 <div class="item-form padding-top" *ngIf="subcategories.length > 0">
                     <ion-item lines="none" class="small-font">
                         <ion-label class="label-padding">Categoria *</ion-label>
-                        <ion-select formControlName="subcategory" placeholder="Escoge una categoría" (ionChange)="changeSubcategoryName($event)">
+                        <ion-select formControlName="subcategory" placeholder="Escoge una categoría"
+                            (ionChange)="changeSubcategoryName($event)">
                             <ion-select-option [selected]="(i===0) ? true: false"
                                 *ngFor="let subcategory of subcategories; let i = index" [value]="subcategory.id">
                                 {{subcategory.name}}</ion-select-option>
@@ -75,7 +76,8 @@
                             Referencia sobre la
                             Ubicación *
                         </ion-label>
-                        <ion-textarea placeholder="Ingresa una breve descripción para referenciar la ubicación de tu reporte"
+                        <ion-textarea
+                            placeholder="Ingresa una breve descripción para referenciar la ubicación de tu reporte"
                             class="input-beatiful text-area" formControlName="description_ubication" auto-grow="true">
                         </ion-textarea>
                     </ion-item>
@@ -97,18 +99,20 @@
         <!-- Paso 3 -->
         <mat-step>
             <h5 class="ion-padding ion-text-center">Carga hasta 2 fotos para tu reporte</h5>
-            <ion-grid *ngIf="socialProblemImages.length > 0">
+            <ion-grid class="grid-imagenes" *ngIf="socialProblemImages.length > 0">
                 <ion-row>
                     <ion-col size="6" class="image_col" *ngFor="let image of socialProblemImages; let i = index;">
-                        <ion-item lines="none">
-                            <ion-card>
-                                <img [src]="image | imageSanitizer">
+                        <ion-item lines="none" class="item-img-grid">
+                            <div class="container-item">
+                                <ion-card class="card-image-uploaded">
+                                    <img [src]="image | imageSanitizer">
+                                </ion-card>
                                 <div class="container_image_actions">
-                                    <ion-button size="small" color="danger" (click)="deleteImage(i)">
+                                    <ion-button size="small" color="danger" expand="full" (click)="deleteImage(i)">
                                         <ion-icon name="trash"></ion-icon>
                                     </ion-button>
                                 </div>
-                            </ion-card>
+                            </div>
                         </ion-item>
                     </ion-col>
                 </ion-row>
@@ -146,7 +150,8 @@
                 </ion-thumbnail>
             </div>
             <div>
-                <ion-button expand="full" color="blue-logo" (click)="sendSocialProblem()" [disabled]="formSended">Reportar</ion-button>
+                <ion-button expand="full" color="blue-logo" (click)="sendSocialProblem()" [disabled]="formSended">
+                    Reportar</ion-button>
             </div>
         </mat-step>
     </mat-horizontal-stepper>

@@ -76,7 +76,7 @@ export interface IEmergency extends IPost{
 }
 
 export interface IReport extends IPost{
-    
+    fecha_creacion: string;
 }
 
 export interface ISocialProblem extends IPost {

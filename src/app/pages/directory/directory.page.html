@@ -35,8 +35,8 @@
                         <img class="img-thumbnail circle" [src]="people.avatar_link"
                             fallimg="user_avatar">
                     </div>
-                    <ion-card-header class="ion-text-center">
-                        <ion-card-subtitle>
+                    <ion-card-header class="ion-text-center directive-card-header">
+                        <ion-card-subtitle class="directive-position">
                             {{(people.position && people.position.name) || 'Sin posicion'}}
                         </ion-card-subtitle>
                         <ion-card-title class="directive-title">{{people.first_name}}
@@ -44,10 +44,10 @@
                         </ion-card-title>
                     </ion-card-header>
                     <ion-card-content class="ion-text-center">
-                        <p class="phone">
-                            <ion-icon name="call"></ion-icon>
+                        <p class="email">
+                            <!-- <ion-icon name="mail-outline"></ion-icon> -->
                             <span
-                                class="profile_detail">{{people.number_phone || 'Sin teléfono registrado'}}</span>
+                                class="profile_detail">{{people.email || 'Sin Correo registrado'}}</span>
                         </p>
                     </ion-card-content>
                 </ion-card>

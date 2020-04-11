@@ -45,6 +45,8 @@ import { DocumentViewer } from '@ionic-native/document-viewer/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { ToastrModule } from 'ngx-toastr';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { GlobalService } from './global.service';
+import { AuthService } from './services/auth.service';
 
 @NgModule({
     declarations: [AppComponent],
@@ -101,7 +103,8 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptorService,
             multi: true
-        }
+        },
+        AuthService
     ],
     bootstrap: [AppComponent]
 })

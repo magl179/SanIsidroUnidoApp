@@ -7,9 +7,9 @@
 }
 .post_cover{
   background: #dfdfdf;
-  height: 200px;
+  height: 150px;
   img{
-    height: 200px;
+    height: 100%;
     width: 100%;
     object-fit: cover;
   }
@@ -20,6 +20,7 @@
         .main-section-header{
             &__title{
                 position: relative;
+                font-size: 1.2em;
             }
         }
         .main-section-info {
@@ -31,7 +32,7 @@
                 font-size: 1rem;
               }
               .description {
-                line-height: 1.7rem;
+                line-height: 1.5rem;
               }
               .icon-fulldate {
                 color: var(--ion-color-primary);
@@ -42,6 +43,9 @@
               .icon-people {
                 color: var(--ion-color-primary);
               }
+            }
+            p{
+              font-size: .92em;
             }
           }
     }

@@ -98,9 +98,6 @@
             </div>
             <div class="event__footer social">
                 <div class="social-content" *ngIf="event.reactions.length > 0">
-                    <!-- <span *ngIf="event.postAssistance">A ti y {{event.reactions.length}} personas
-                        más les interesa</span> -->
-                    <!-- <span *ngIf="!event.postAssistance"> -->
                     <span>
                         A {{event.reactions.length}}
                         {{(event.reactions.length === 1) ? 'vecino le interesa asistir' : 'vecinos les interesa asistir'}}

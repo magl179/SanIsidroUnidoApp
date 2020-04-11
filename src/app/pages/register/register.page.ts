@@ -156,6 +156,8 @@ export class RegisterPage implements OnInit {
 
     // Función Crea el Formulario
     createForm() {
+        const patronContraseñaSinCaracterEspecial = /^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,100}$/;
+        // const patronContraseñaConCaracterEspecial = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,100}$/;
         //Cargar Validaciones
         const validations = this.localDataService.getFormValidations();
         // Campo Email
@@ -179,7 +181,7 @@ export class RegisterPage implements OnInit {
         const password = new FormControl('', Validators.compose([
             Validators.required,
             Validators.minLength(validations.password.minlength),
-            Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,20}$/)
+            Validators.pattern(patronContraseñaSinCaracterEspecial)
         ]));
         // Añado Propiedades al Forms
         this.registerForm = this.formBuilder.group({ first_name, last_name, email, password });
