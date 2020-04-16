@@ -1,2 +1,7 @@
-<app-list-notifications [maxNotifications]="3" [getUnreaded]="getUnreadedNotifications"></app-list-notifications>
-<ion-button class="see_all_notifications" color="primary" expand="full" (click)="showAllNotifications()">Ver todas</ion-button>
+
+<ion-content>
+    <app-list-notifications [maxNotifications]="3" [getUnreaded]="getUnreadedNotifications"></app-list-notifications>
+</ion-content>
+<ion-footer class="notifications-footer">
+    <ion-button class="see_all_notifications" color="primary" expand="full" (click)="showAllNotifications()">Ver todas</ion-button>
+</ion-footer>

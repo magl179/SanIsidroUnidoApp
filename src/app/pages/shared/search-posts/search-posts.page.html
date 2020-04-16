@@ -3,21 +3,10 @@
         <ion-searchbar mode="ios" type="text" [placeholder]="searchPlaceholder" [animated]="true"
             (ionChange)="execSearchPosts($event)" [value]="valueToSearch.value" #searchPostBar>
         </ion-searchbar>
-        <!-- <ion-item>
-            <ion-label>Cancelar</ion-label>
-        </ion-item> -->
-        <!-- <ion-buttons slot="secondary">
-            <ion-button>
-              <ion-icon slot="icon-only" name="contact"></ion-icon>
-            </ion-button>
-            <ion-button>
-              <ion-icon slot="icon-only" name="search"></ion-icon>
-            </ion-button>
-          </ion-buttons> -->
-          <ion-buttons slot="start">
+        <ion-buttons slot="start">
             <ion-back-button [defaultHref]="redirectUrl"></ion-back-button>
-          </ion-buttons>
-        
+        </ion-buttons>
+
     </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -26,23 +15,23 @@
         <loader-app class="flex-column-center" message="Buscando..."></loader-app>
     </div>
     <!-- Listado Sugerencias -->
-    <ion-list *ngIf="!valueToSearch.value && searchIdeas.length > 0">
+    <!-- <ion-list *ngIf="!valueToSearch.value && searchIdeas.length > 0">
         <ion-list-header>
             <ion-label>Sugerencias</ion-label>
         </ion-list-header>
         <ion-item *ngFor="let idea of searchIdeas; let i = index;" (click)="setSuggessValue(idea)" lines="none">
             <ion-label color="dark">{{idea}}</ion-label>
         </ion-item>
-    </ion-list>
+    </ion-list> -->
     <!-- Listado Busquedas Recientes -->
-    <ion-list *ngIf="!valueToSearch.value && recentSearches.length > 0">
+    <!-- <ion-list *ngIf="!valueToSearch.value && recentSearches.length > 0">
         <ion-list-header>
             <ion-label>Busquedas Recientes</ion-label>
         </ion-list-header>
         <ion-item *ngFor="let search_item of recentSearches; let i = index;" (click)="setSuggessValue(search_item)" lines="none">
             <ion-label color="dark">{{search_item}}</ion-label>
         </ion-item>
-    </ion-list>
+    </ion-list> -->
     <!-- Mostrar si se encontro resultado -->
     <ion-list *ngIf="valueToSearch.value && requestStatus === 'success' && itemsSearchFound.length > 0">
         <ion-list-header>
@@ -57,12 +46,11 @@
     </ion-list>
     <!-- Mostrar si hay un valor de busqueda y no se encontraron resultados -->
     <ion-list *ngIf="valueToSearch.value && requestStatus === 'success' && itemsSearchFound.length === 0">
-        <app-no-results-found class="ion-padding"
-        message="No existen resultados que coincidan con la busqueda"></app-no-results-found>
+        <app-no-results-found class="ion-padding" message="No existen resultados que coincidan con la busqueda">
+        </app-no-results-found>
     </ion-list>
     <!-- Mostrar si hay un valor de busqueda y fallo la petición -->
     <ion-list *ngIf="valueToSearch.value && requestStatus === 'fails' && itemsSearchFound.length === 0">
-        <app-no-results-found class="ion-padding"
-        message="No existen resultados disponibles"></app-no-results-found>
+        <app-no-results-found class="ion-padding" message="No existen resultados disponibles"></app-no-results-found>
     </ion-list>
 </ion-content>

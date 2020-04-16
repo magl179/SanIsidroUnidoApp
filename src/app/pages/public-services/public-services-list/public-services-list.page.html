@@ -1,20 +1,32 @@
 <app-header-back title="Servicios" backUrl="public-services" [search]="true" [showNoti]="false">
 </app-header-back>
 <ion-content>
+    <!-- Public Services Searchbar -->
+    <ion-searchbar mode="ios" type="text" placeholder="Buscar Servicios Públicos" [animated]="true"
+        [formControl]="publicServiceSearchControl"></ion-searchbar>
+    <!-- Loading mientras se realiza la busqueda -->
+    <!-- <div class="loading-app" *ngIf="searchingPublicServices">
+        <loader-app class="flex-column-center" message="Buscando..."></loader-app>
+    </div> -->
     <!-- Mensaje si datos no cargan o son tamaño 0 -->
-   <app-no-results-found *ngIf="publicServicesLoaded && publicServices.length === 0" message="No existen servicios públicos disponibles"></app-no-results-found>
+    <app-no-results-found *ngIf="publicServicesLoaded && publicServices.length === 0"
+        message="No existen servicios públicos disponibles"></app-no-results-found>
+        <!-- Mensaje busqueda sin resultados -->
+    <app-no-results-found *ngIf="publicServices.length > 0 && publicServicesFilter.length === 0"
+        message="No hay resultados coincidentes con la búsqueda"></app-no-results-found>
     <!-- Componente Carga mientras se traen los datos -->
     <div class="loading-app" *ngIf="!publicServicesLoaded">
         <loader-app class="flex-column-center"></loader-app>
     </div>
     <!-- Tarjetas Datos Servicios Publicos -->
-    <div *ngIf="publicServicesLoaded && publicServices.length > 0">
+    <div *ngIf="publicServicesLoaded && publicServicesFilter.length > 0">
         <ion-grid>
             <ion-row>
-                <ion-col size="6" *ngFor="let publicService of publicServices">
+                <ion-col size="6" *ngFor="let publicService of publicServicesFilter">
                     <ion-card class="ion-text-center service_list_card">
                         <div class="picture_thumbnail">
-                            <img class="img-thumbnail circle img_image_border" [src]="(publicService.subcategory && publicService.subcategory.image_link)? publicService.subcategory.image_link:'https://ui-avatars.com/api/?name=Servicio+Publico&size=255'"
+                            <img class="img-thumbnail circle img_image_border"
+                                [src]="(publicService.subcategory && publicService.subcategory.image_link)? publicService.subcategory.image_link:'https://ui-avatars.com/api/?name=Servicio+Publico&size=255'"
                                 fallimg="user_avatar">
                         </div>
                         <ion-card-header>
@@ -29,7 +41,8 @@
                             </div>
                         </ion-card-content>
                         <div style="padding: 14px;padding-top: 0;">
-                            <ion-button color="blue-logo" expand="full" (click)="goToDetail(publicService.id)">Ver más</ion-button>
+                            <ion-button color="blue-logo" expand="full" (click)="goToDetail(publicService.id)">Ver más
+                            </ion-button>
                         </div>
                     </ion-card>
                 </ion-col>

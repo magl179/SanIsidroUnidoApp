@@ -3,12 +3,14 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { IPublicService } from 'src/app/interfaces/models';
 import { ModalController, NavController } from "@ionic/angular";
 import { MapInfoPage } from "src/app/modals/map-info/map-info.page";
-import { finalize, take, map } from 'rxjs/operators';
+import { finalize, take, map, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { IRespuestaApiSIU } from "src/app/interfaces/models";
 import { getRandomColor } from 'src/app/helpers/utils';
 import { PublicService } from 'src/app/services/public.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ErrorService } from 'src/app/services/error.service';
+import { FormControl } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'siu-public-services-list',
@@ -25,6 +27,9 @@ export class PublicServicesListPage implements OnInit {
     markerSelected = false;
     publicServicesLoaded = false;
     category: string;
+    publicServicesFilter: any[] = [];
+    publicServiceSearchControl: FormControl;
+    searchingPublicServices = false;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -34,12 +39,27 @@ export class PublicServicesListPage implements OnInit {
         private errorService: ErrorService,
         private modalCtrl: ModalController
     ) { 
-     
+        this.publicServiceSearchControl = new FormControl();
     }
 
     async ngOnInit() {
         this.category = this.activatedRoute.snapshot.paramMap.get('category'); 
         this.loadPublicServices();
+        this.publicServiceSearchControl.valueChanges
+        .pipe(
+            tap(() => {
+                this.searchingPublicServices = true;
+            }),
+            distinctUntilChanged(),
+        )
+        .subscribe(search => {
+            if(search == ''){
+                this.publicServicesFilter = [... this.publicServices]
+            }else{
+                this.publicServicesFilter = [...this.publicServices].filter(public_service => public_service.name.toLowerCase().indexOf(search) > -1)
+            }
+            this.searchingPublicServices = false;
+        });
     }
 
     loadPublicServices() {
@@ -55,8 +75,9 @@ export class PublicServicesListPage implements OnInit {
             finalize(() => {
             this.publicServicesLoaded = true;
         })).subscribe((response: IRespuestaApiSIU) => {
-            this.publicServices = response.data;
-        }, (err: any) => {
+            this.publicServices = [...response.data];
+            this.publicServicesFilter = [...response.data];
+        }, (err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error al cargar el listado de serviciós públicos')
         });
     }

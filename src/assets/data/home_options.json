@@ -3,7 +3,7 @@
         "title": "Mis Emergencias",
         "icon": "assets/img/svg/alarm.svg",
         "url": "/emergencies/list",
-        "valid_roles": ["morador"]
+        "valid_roles": ["morador", "policia"]
     },
     {
         "title": "Problemas Sociales",

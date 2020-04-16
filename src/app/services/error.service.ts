@@ -21,22 +21,16 @@ export class ErrorService {
   }
 
   async showHttpError(message: string, color = "dark") {
-    // const toastDefault: ToastOptions = {
-    //   animated: true,
-    //   message,
-    //   position: 'top',
-    //   duration: 2000,
-    //   color: "dark"
-    // };
-    // const toastItem = await this.toastCtrl.create(toastDefault);
-    // return await toastItem.present();
     return this.messageService.showError(message);
   }
 
-  async manageHttpError(httpError: HttpErrorResponse, defaultMessage: string){
+  async manageHttpError(httpError: HttpErrorResponse, defaultMessage: string, showMessage=true){
     const online = navigator.onLine;
     console.error('SIU LOG ERROR', httpError);
-    if (!online) {
+    if(!showMessage){
+      return;
+    }
+    if(!online) {
       // No Internet connection
       return await this.showHttpError("Por favor activa tu conexión a internet");
     }

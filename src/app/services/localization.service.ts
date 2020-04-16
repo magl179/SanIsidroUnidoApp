@@ -120,10 +120,8 @@ export class LocalizationService {
             await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
                 async (result: any) => {
                     if (result.hasPermission) {
-                        // return await this.askTurnOnGPS();
                         resolve(this.askTurnOnGPS());
                     } else {
-                        // return await this.requestGPSPermission();
                         resolve(this.requestGPSPermission());
                     }
 

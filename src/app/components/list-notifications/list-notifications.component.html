@@ -1,12 +1,18 @@
+<div class="header-list">
+    <h2 class="title_list_app">Notificaciones</h2>
+</div>
+<div class="loading-app" *ngIf="!requestFinished">
+    <loader-app class="flex-column-center"></loader-app>
+</div>
 <ion-list class="list-notifications">
-    <ion-list-header *ngIf="showListHeader">
+    <!-- <ion-list-header *ngIf="showListHeader">
         <ion-label>
             <h2 class="title_list">Notificaciones</h2>
         </ion-label>
-    </ion-list-header>
-    <div class="loading-app" *ngIf="!requestFinished">
+    </ion-list-header> -->
+    <!-- <div class="loading-app" *ngIf="!requestFinished">
         <loader-app class="flex-column-center"></loader-app>
-    </div>
+    </div> -->
     <ng-container *ngIf="requestFinished && notificationsRequested && notificationsRequested.length > 0">
         <ion-item [lines]="getLinesState(i)" *ngFor="let noti of notificationsRequested; let i = index;"
             (click)="manageNoti(noti)">
@@ -18,7 +24,7 @@
                     {{(noti.data && noti.data.title) ? noti.data.title:  'sin title'}}
                 </h2>
                 <h3 class="author" *ngIf="noti.data.notification_user">
-                    {{ noti.data.notification_user.first_name}} {{noti.data.notification_user.last_name}} 
+                    {{ noti.data.notification_user.first_name}} {{noti.data.notification_user.last_name}}
                 </h3>
                 <p class="description ion-text-wrap">
                     {{ (noti.data.message) ? noti.data.message : 'sin message'}}
@@ -29,7 +35,12 @@
             </div>
         </ion-item>
     </ng-container>
-    <ion-item lines="none" *ngIf="requestFinished && notificationsRequested && notificationsRequested.length === 0">
+    <!-- <ion-item lines="none" *ngIf="requestFinished && notificationsRequested && notificationsRequested.length === 0">
         <ion-label class="ion-text-wrap ion-text-center">No existen notificaciones disponibles</ion-label>
-    </ion-item>
+    </ion-item> -->
 </ion-list>
+<div *ngIf="requestFinished && notificationsRequested && notificationsRequested.length === 0">
+    <p class="ion-text-wrap ion-text-center">
+        No existen notificaciones disponibles
+    </p>
+</div>

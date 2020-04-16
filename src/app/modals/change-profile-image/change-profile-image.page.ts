@@ -14,7 +14,7 @@ import { MessagesService } from 'src/app/services/messages.service';
 })
 export class ChangeProfileImagePage implements OnInit {
     
-    profileUserImg = [];
+    profileUserImg: any[] = [];
     formSended = false;
 
     constructor(
@@ -34,6 +34,7 @@ export class ChangeProfileImagePage implements OnInit {
 
     getUploadedImages(event: any) {
         this.profileUserImg = event.total_img;
+        console.log(this.profileUserImg)
     }
 
     sendRequestChangeUserProfile() {

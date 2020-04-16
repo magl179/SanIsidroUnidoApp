@@ -4,7 +4,7 @@ import { DirectoryPage } from './directory.page';
 import { Routes, RouterModule } from '@angular/router';
 import { SmComponentsModule } from '../../components/sm-components.module';
 import { IonicModule } from '@ionic/angular';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgFallimgModule } from "ng-fallimg";
 
 const routes: Routes = [
@@ -21,6 +21,7 @@ const routes: Routes = [
         IonicModule,
         RouterModule.forChild(routes),
         FormsModule,
+        ReactiveFormsModule,
         SmComponentsModule,
         NgFallimgModule
     ]

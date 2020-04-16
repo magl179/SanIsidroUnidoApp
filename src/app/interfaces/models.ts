@@ -114,7 +114,7 @@ export interface IPublicService {
     phones?: IPhones[];
     subcategory?: ISubcategory;
     created_at?: string;
-    updated_at?: string;
+    updated_at?: string;    
 }
 //Telefonos Servicio Publico
 interface IPhones {
@@ -251,6 +251,7 @@ export interface IUser {
     devices?: IDeviceUser[];
     social_profiles?: ISocialProfile[];
     roles?: IRole[];
+    avatar_link?: string;
 }
 export interface IDirective extends IUser {
     position: IPosition[];
@@ -373,6 +374,7 @@ export interface ISubcategory {
     updated_at?: any;
     icon?: string;
     image?: string;
+    image_link?: string;
 }
 //Ubicacion
 export interface IUbication {

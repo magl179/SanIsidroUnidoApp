@@ -3,6 +3,7 @@ import { NotificationsService } from './notifications.service';
 import { INotiList } from '../interfaces/models';
 import { HttpRequestService } from './http-request.service';
 import { environment } from 'src/environments/environment';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -58,7 +59,7 @@ export class PruebasService {
     const peticion = this.httpRequest.get(`${environment.APIBASEURL}/guzzle-noti`);
     peticion.subscribe(res => {
       alert('peticion realizada correctamente')
-    }, err => {
+    }, (err: HttpErrorResponse) => {
       alert('peticion realizada incorrectamente')
     });
   }

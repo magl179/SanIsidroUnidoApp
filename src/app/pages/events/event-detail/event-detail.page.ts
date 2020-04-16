@@ -74,11 +74,7 @@ export class EventDetailPage implements OnInit {
                 }
             }
         },(err: HttpErrorResponse) => {
-            if (err.error instanceof Error) {
-                console.error("Client-side error", err);
-            } else {
-                console.error("Server-side error", err);
-            }
+            this.errorService.manageHttpError(err,'No se pudo guardar su asistencia');
         });
     }
 
@@ -94,7 +90,7 @@ export class EventDetailPage implements OnInit {
                     this.event.reactions = res.data.reactions;
                     this.emitAssistanceEvent(this.event.id, res.data.reactions);
                 }
-            }, err => {
+            }, (err: HttpErrorResponse) => {
                 this.errorService.manageHttpError(err,'No se pudo borrar su asistencia' );
             });
         } else {
@@ -109,7 +105,7 @@ export class EventDetailPage implements OnInit {
                     this.event.reactions = res.data.reactions;
                     this.emitAssistanceEvent(this.event.id, res.data.reactions);
                 }
-            }, err => {
+            }, (err: HttpErrorResponse) => {
                 this.errorService.manageHttpError(err,'No se pudo guardar su asistencia' );
             });
         }

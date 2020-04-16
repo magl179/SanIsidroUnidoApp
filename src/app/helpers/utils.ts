@@ -233,7 +233,7 @@ export const mapEvent = (event: any) => {
     // if (event.user && event.user.avatar) {
     //     event.user.avatar = getImageURL(event.user.avatar);
     // }
-    const range_date = (event.additional_data.event && event.additional_data.event.range_date) ? event.additional_data.event.range_date : null;
+    const range_date = (event.additional_data && event.additional_data.event && event.additional_data.event.range_date) ? event.additional_data.event.range_date : null;
     if (range_date) {
         event.fulldate = formatEventRangeDate(range_date.start_date, range_date.end_date);
         event.initial_date = momentFormat(range_date.start_date, 'LLL')

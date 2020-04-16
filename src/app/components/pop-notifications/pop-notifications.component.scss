@@ -1,3 +1,10 @@
 .see_all_notifications{
     margin: 0 !important;
 }
+.notifications-footer{
+    position: fixed;
+    bottom: 0;
+}
+ion-content{
+    min-height: 250px;
+}

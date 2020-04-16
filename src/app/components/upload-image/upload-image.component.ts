@@ -1,15 +1,14 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
-import { UtilsService } from 'src/app/services/utils.service';
 import { Platform } from '@ionic/angular';
 import { MessagesService } from 'src/app/services/messages.service';
 
-const cameraOptions: CameraOptions = {
-    quality: 75,
+let cameraOptions: CameraOptions = {
+    quality: 85,
     correctOrientation: true,
     saveToPhotoAlbum: false,
-    targetWidth: 400,
-    targetHeight: 200
+    targetWidth: 300,
+    targetHeight: 300
 };
 
 @Component({
@@ -21,7 +20,6 @@ export class UploadImageComponent implements OnInit {
 
     @Input() maxImages = 3;
     @Input() uploadedImages = [];
-    // uploadedImages = [];
     @Output() returnUploadedImages = new EventEmitter();
     imagenB64: string;
     imagejpg: string;
@@ -31,8 +29,7 @@ export class UploadImageComponent implements OnInit {
     constructor(
         private camera: Camera,
         private messageService: MessagesService,
-        private utilsService: UtilsService,
-        private platform: Platform,
+        private platform: Platform
     ) { }
 
     ngOnInit() {
@@ -51,7 +48,7 @@ export class UploadImageComponent implements OnInit {
     loadImageFromGallery() {
         cameraOptions.sourceType = this.camera.PictureSourceType.PHOTOLIBRARY;
         if (this.uploadedImages.length < this.maxImages) {
-            this.uploadImage('gallery');
+            this.uploadImage();
         } else {
             this.messageService.showInfo('Ya no puedes subir más imágenes');
         }
@@ -64,29 +61,52 @@ export class UploadImageComponent implements OnInit {
     loadImageFromCamera() {
         cameraOptions.sourceType = this.camera.PictureSourceType.CAMERA;
         if (this.uploadedImages.length < this.maxImages) {
-            this.uploadImage('camera');
+            this.uploadImage();
         } else {
             this.messageService.showInfo('Ya no puedes subir más imágenes');
         }
     }
 
+    dataURItoBlob(b64Data, contentType = 'image.jpg', sliceSize = 512) {
+        contentType = contentType || '';      
+        var byteCharacters = atob(b64Data);
+        var byteArrays = [];
+      
+        for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+          var slice = byteCharacters.slice(offset, offset + sliceSize);
+      
+          var byteNumbers = new Array(slice.length);
+          for (var i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+          }
+      
+          var byteArray = new Uint8Array(byteNumbers);
+      
+          byteArrays.push(byteArray);
+        }
+      
+        var blob = new Blob(byteArrays, {type: contentType});
+        return blob;
+      }
+
     deleteImage(pos: any) {
         this.uploadedImages.splice(pos, 1);
     }
 
-    async uploadImage(type = 'camera') {
+    async uploadImage() {
         if (this.platform.is('cordova')) {
             await this.camera.getPicture(cameraOptions)
                 .then(
                     (datosImagen) => {
-                        // DatoImagen es un string codificado en base64 - BASE URI
-                        this.imagenB64 = `data:image/jpeg;base64,${datosImagen}`;
-                        this.uploadedImages.push(this.imagenB64);
+                        const imagenB64 = 'data:image/jpg;base64,'+ datosImagen;
+                        console.log(datosImagen);
+                        console.log(imagenB64);
+                        this.uploadedImages.push(imagenB64);
                         this.getUploadedImages();
                     }, err => {
                         console.error({ errorCapturarImagen: err });
                         this.messageService.showError('Ocurrio un error al capturar la imagen');
-                    });           
+                    });
         } else {
             this.uploadImageWeb();
         }
@@ -120,7 +140,7 @@ export class UploadImageComponent implements OnInit {
                         reader.readAsDataURL(file);
                     });
                 }));
-                if(event_upload.target){
+                if (event_upload.target) {
                     event_upload.target.value = "";
                 }
                 this.getUploadedImages();

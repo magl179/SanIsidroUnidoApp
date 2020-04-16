@@ -103,7 +103,7 @@ export class SocialProblemDetailPage implements OnInit {
                     this.socialProblem.reactions = res.data.reactions;
                     this.emitLikeEvent(this.socialProblem.id, res.data.reactions);
                 }
-            }, err => {
+            }, (err: HttpErrorResponse) => {
                 this.errorService.manageHttpError(err, 'El me gusta no pudo ser borrado');
             });
         } else {
@@ -118,7 +118,7 @@ export class SocialProblemDetailPage implements OnInit {
                     this.socialProblem.reactions = res.data.reactions;
                     this.emitLikeEvent(this.socialProblem.id, res.data.reactions);
                 }
-            }, err => {
+            }, (err: HttpErrorResponse) => {
                 this.errorService.manageHttpError(err, 'El me gusta no pudo ser guardado');
             });
         }

@@ -4,7 +4,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { PostsService } from 'src/app/services/posts.service';
 import { IBasicFilter, IRespuestaApiSIU, IRespuestaApiSIUPaginada } from 'src/app/interfaces/models';
-import { finalize, map } from "rxjs/operators";
+import { finalize, map, catchError } from "rxjs/operators";
 import { ISocialProblem, IPostShare } from 'src/app/interfaces/models';
 import { environment } from 'src/environments/environment';
 import { checkLikePost } from 'src/app/helpers/user-helper';
@@ -16,6 +16,7 @@ import { NavigationService } from 'src/app/services/navigation.service';
 import { CONFIG } from 'src/config/config';
 import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from 'src/app/services/messages.service';
+import { of } from 'rxjs';
 
 
 @Component({
@@ -30,7 +31,7 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
     subcategory: string;
     AuthUser = null;
     slugSubcategory: string = '';
-    filtersToApply: any = { is_attended: ""};
+    filtersToApply: any = { is_attended: "" };
     socialProblemsList: ISocialProblem[] = [];
     socialProblemsFilter: ISocialProblem[] = [];
     filters: IBasicFilter = {
@@ -67,7 +68,7 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
         private authService: AuthService,
         private events_app: EventsService,
     ) {
-        
+
     }
 
     ngOnInit() {
@@ -80,7 +81,8 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
             if (token_decoded && token_decoded.user) {
                 this.AuthUser = token_decoded.user;
             }
-        },(err: any) => {;
+        }, (err: any) => {
+            ;
             this.errorService.manageHttpError(err, 'No se pudo cargar la información del usuario');
         });
         this.loadSocialProblems(null, true);
@@ -90,7 +92,7 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
         });
     }
 
-    redirectToSearch(){
+    redirectToSearch() {
         this.navCtrl.navigateRoot("/social-problems/search", {
             queryParams: { redirectUrl: this.router.url }
         });
@@ -109,16 +111,16 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
         this.socialProblemsFilter = [...this.socialProblemsList];
     }
 
-    ngOnDestroy() {}
+    ngOnDestroy() { }
     ionViewWillEnter() { }
     ionViewWillLeave() { this.postsService.resetSocialProblemsBySubcategoryPage(); }
     //Eliminar o agregar like a una publicacion
     toggleLike(like: boolean, id: number) {
         if (like) {
             this.postsService.sendDeleteDetailToPost(id).subscribe((res: any) => {
-                this.socialProblemsList.forEach(social_problem => {                   
+                this.socialProblemsList.forEach(social_problem => {
                     if (social_problem.id === id) {
-                        if(res.data.reactions){
+                        if (res.data.reactions) {
                             social_problem.postLiked = false;
                             social_problem.reactions = res.data.reactions;
                         }
@@ -136,72 +138,74 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
             this.postsService.sendCreateDetailToPost(detailInfo).subscribe((res: any) => {
                 this.socialProblemsList.forEach(social_problem => {
                     if (social_problem.id === id) {
-                        if(res.data.reactions){
+                        if (res.data.reactions) {
                             social_problem.postLiked = true;
                             social_problem.reactions = res.data.reactions;
                         }
                     }
                 });
-            }, (err: any) => {
+            }, (err: HttpErrorResponse) => {
                 this.errorService.manageHttpError(err, 'El me gusta no pudo ser guardado');
             });
         }
     }
 
     //Cargar los problemas sociales
-    loadSocialProblems(event: any = null, first_loading=false) {
+    loadSocialProblems(event: any = null, first_loading = false) {
         this.postsService.getPostsBySubCategory(CONFIG.SOCIAL_PROBLEMS_SLUG, this.subcategory)
-        .pipe(
-            map((res: IRespuestaApiSIUPaginada) => {
-                if (res && res.data) {
-                    res.data.forEach((social_problem: any) => {
-                        const postLiked = checkLikePost(social_problem.reactions, this.AuthUser) || false;
-                        console.log('post liked', postLiked)
-                        social_problem = mapSocialProblem(social_problem);
-                    });
-                }
-                return res;
-            }),
-            finalize(() => {
-                if(first_loading){
-                    this.showLoading = false;
-                }
-                if(first_loading && this.socialProblemsList.length === 0){
-                    this.showNotFound = true;
-                } 
-            })
-        ).subscribe((res: IRespuestaApiSIUPaginada) => {
-            let socialProblems = [];
-            socialProblems = res.data;
-            if (socialProblems.length === 0) {
+            .pipe(
+                map((res: IRespuestaApiSIUPaginada) => {
+                    if (res && res.data) {
+                        res.data.forEach((social_problem: any) => {
+                            social_problem = mapSocialProblem(social_problem);
+                            const postLiked = checkLikePost(social_problem.reactions, this.AuthUser) || false;
+                            social_problem.postLiked = postLiked;
+                            console.log('post liked', postLiked)
+                        });
+                    }
+                    if (res && res.data && res.data.length == 0) {
+                        this.postsService.resetPaginationEmpty(this.postsService.PaginationKeys.SOCIAL_PROBLEMS_BY_SUBCATEGORY)
+                    }
+                    return res;
+                }),
+                catchError((err: HttpErrorResponse) => {
+                    console.log('catchErr', err);
+                    this.errorService.manageHttpError(err, 'Ocurrio un error al traer el listado de problemas sociales', false);
+                    this.postsService.resetPaginationEmpty(this.postsService.PaginationKeys.SOCIAL_PROBLEMS_BY_SUBCATEGORY);
+                    return of({ data: [] })
+                }),
+                finalize(() => {
+                    if (first_loading) {
+                        this.showLoading = false;
+                    }
+                    if (first_loading && this.socialProblemsList.length === 0) {
+                        this.showNotFound = true;
+                    }
+                })
+            ).subscribe((res: IRespuestaApiSIUPaginada) => {
+                let socialProblems = [];
+                socialProblems = res.data;
+
+                //Evento Completar
                 if (event && event.data && event.data.target && event.data.target.complete) {
-                    event.data.target.disabled = true;
                     event.data.target.complete();
                 }
-                return;
-            } else {
-                socialProblems = socialProblems.map((social_problem: any) => {
-                    social_problem.postLiked = checkLikePost(social_problem.reactions, this.AuthUser) || false;
-                    return social_problem;
-                });
-            }
-            if (event && event.data && event.data.target && event.data.target.complete) {
-                event.data.target.complete();
-            }
-            if (event && event.type === 'refresher') {
-                this.socialProblemsList.unshift(...socialProblems);
-                this.socialProblemsFilter.unshift(...socialProblems);
-                return;
-            }else if(event && event.type == 'infinite_scroll'){
-                this.socialProblemsList.push(...socialProblems);
-                this.socialProblemsFilter.push(...socialProblems);
-            }else{
-                this.socialProblemsList.push(...socialProblems);
-                this.socialProblemsFilter.push(...socialProblems);
-            }
-        }, (err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'Ocurrio un error al cargar el listado de problemas sociales');
-        });
+                if (event && event.data && event.data.target && event.data.target.complete && socialProblems.length == 0) {
+                    event.data.target.disabled = true;
+                }
+                //Acciones segun el tipo de evento
+                if (event && event.type === 'refresher') {
+                    this.socialProblemsList.unshift(...socialProblems);
+                    this.socialProblemsFilter.unshift(...socialProblems);
+                    return;
+                } else if (event && event.type == 'infinite_scroll') {
+                    this.socialProblemsList.push(...socialProblems);
+                    this.socialProblemsFilter.push(...socialProblems);
+                } else {
+                    this.socialProblemsList.push(...socialProblems);
+                    this.socialProblemsFilter.push(...socialProblems);
+                }
+            });
     }
     //Obtener datos con el Infinite Scroll
     doInfiniteScroll(event: any) {
@@ -245,9 +249,9 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
         const value = (event.detail.value !== "") ? Number(event.detail.value) : "";
         const type = 'is_attended';
         if (value !== "") {
-            const filterApplied = setFilterKeys({...this.filtersToApply}, type, value);
+            const filterApplied = setFilterKeys({ ...this.filtersToApply }, type, value);
             this.filtersToApply = filterApplied;
-            this.socialProblemsFilter = filterDataInObject([...this.socialProblemsList], {...this.filtersToApply});
+            this.socialProblemsFilter = filterDataInObject([...this.socialProblemsList], { ...this.filtersToApply });
         } else {
             this.socialProblemsFilter = this.socialProblemsList;
         }

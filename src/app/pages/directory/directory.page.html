@@ -1,5 +1,14 @@
 <app-header-back title="Directorio Barrial" [showNoti]="false"></app-header-back>
 <ion-content>
+    <!-- Directives Searchbar -->
+    <ion-searchbar mode="ios" type="text" placeholder="Buscar Directivos por sus nombres"
+    [animated]="true" [formControl]="directorySearchControl"
+    ></ion-searchbar>
+      <!-- Loading mientras se realiza la busqueda -->
+    <div class="loading-app" *ngIf="searchingDirectives">
+        <loader-app class="flex-column-center" message="Buscando..."></loader-app>
+    </div>
+
     <ion-grid *ngIf="!loadDirectives">
         <ion-row>
             <ion-col size="6" *ngFor="let skeleton of [1,1,1,1]">
@@ -27,9 +36,9 @@
             </ion-col>
         </ion-row>
     </ion-grid>
-    <ion-grid *ngIf="loadDirectives && directivesList.length > 0">
+    <ion-grid *ngIf="loadDirectives && directivesFilter.length > 0">
         <ion-row>
-            <ion-col size="6" *ngFor="let people of directivesList">
+            <ion-col size="6" *ngFor="let people of directivesFilter">
                 <ion-card class="directive">
                     <div class="picture_thumbnail">
                         <img class="img-thumbnail circle" [src]="people.avatar_link"
@@ -57,4 +66,7 @@
     <!-- Mensaje si falla traer datos o datos son 0 -->
     <app-no-results-found *ngIf="loadDirectives && directivesList.length === 0"
         message="No existen directivos disponibles" class="ion-padding"></app-no-results-found>
+        <!-- Mensaje si filtro traer datos o datos son 0 -->
+    <!-- <app-no-results-found *ngIf="directivesList.length > 0 && directivesFilter.length === 0"
+        message="No hay coincidencias con la búsqueda" class="ion-padding"></app-no-results-found> -->
 </ion-content>

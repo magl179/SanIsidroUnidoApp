@@ -43,14 +43,14 @@ export class ListNotificationsComponent implements OnInit {
 
     getNotifications() {
         this.usersService.getNotificationsUser().pipe(
-            take(1), 
+            take(1),
             map((res: any) => {
-            res.data.forEach((noti: any) => {
-                noti = MapNotification(noti);
-            });
-            return res;
+                res.data.forEach((noti: any) => {
+                    noti = MapNotification(noti);
+                });
+                return res;
             }),
-            finalize(()=>{
+            finalize(() => {
                 this.requestFinished = true;
             })
         ).subscribe((res: any) => {
@@ -59,16 +59,17 @@ export class ListNotificationsComponent implements OnInit {
         });
     }
 
-    async cargarNotificacionesSolicitadas() {;
+    async cargarNotificacionesSolicitadas() {
+        ;
         if (this.maxNotifications === 0) {
             this.notificationsRequested = this.notificationsList;
         } else {
             this.notificationsRequested = this.notificationsList.slice(0, (this.maxNotifications));
         }
         //Filtrar Notificaciones Leidas
-        if(this.getUnreaded){
+        if (this.getUnreaded) {
             this.notificationsRequested = this.notificationsRequested.filter(noti => noti.read_at == null);
-        }        
+        }
     }
 
     async manageNoti(noti: INotificationApi) {

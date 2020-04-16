@@ -1,12 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PostsService } from "src/app/services/posts.service";
-import { finalize, map } from 'rxjs/operators';
+import { finalize, map, catchError } from 'rxjs/operators';
 import { NavController } from '@ionic/angular';
 import { IRespuestaApiSIUPaginada, IReport } from 'src/app/interfaces/models';
 import { mapReport } from "src/app/helpers/utils";
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/services/error.service';
 import { Router } from '@angular/router';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-reports-list',
@@ -41,8 +42,10 @@ export class ReportsListPage implements OnInit, OnDestroy {
         this.navCtrl.navigateForward(`/reports/list/${id}`);
     }
 
-    ngOnDestroy() { }
-    ionViewWillLeave() { this.postsService.resetReportsPage(); }
+    ngOnDestroy() { 
+        console.warn('ng on destroy reports list')
+        this.postsService.resetPagination(this.postsService.PaginationKeys.REPORTS);
+    }
     
     loadReports(event: any = null, first_loading=false) {
         this.postsService.getReports().pipe(
@@ -53,7 +56,15 @@ export class ReportsListPage implements OnInit, OnDestroy {
                         report = mapReport(report);
                     });
                 }
+                if(res && res.data && res.data.length == 0){
+                    this.postsService.resetPaginationEmpty(this.postsService.PaginationKeys.REPORTS)
+                }
                 return res;
+            }),
+            catchError((err: HttpErrorResponse)=>{
+                this.errorService.manageHttpError(err, 'Ocurrio un error al traer el listado de actividades barriales', false);
+                this.postsService.resetPaginationEmpty(this.postsService.PaginationKeys.REPORTS);
+                return of({data: []})
             }),
             finalize(() => {
                 if(first_loading){
@@ -66,31 +77,21 @@ export class ReportsListPage implements OnInit, OnDestroy {
         ).subscribe((res: IRespuestaApiSIUPaginada) => {            
             let reportsList = [];
             reportsList = res.data;
-
-            // if(first_loading && res.data.length === 0){
-            //     this.showNotFound = true;
-            // }
-
-            if (reportsList.length === 0) {
-                if (event && event.data && event.data.target && event.data.target.complete) {
-                    event.data.target.disabled = true;
-                    event.data.target.complete();
-                }
-                return;
-            } 
-            if (event && event.data && event.data.target && event.data.target.complete) {
+             //Evento Completar
+             if(event && event.data && event.data.target && event.data.target.complete){
                 event.data.target.complete();
-            }
+            }         
+            if(event && event.data && event.data.target && event.data.target.complete && reportsList.length == 0){
+                event.data.target.disabled = true;
+            }  
+
             if (event && event.type === 'refresher') {
-                this.reportsList.unshift(...reportsList);
-                return;
+                return this.reportsList.unshift(...reportsList);
             }else if(event && event.type == 'infinite_scroll'){
-                this.reportsList.push(...reportsList);
+                return this.reportsList.push(...reportsList);
             }else{
-                this.reportsList.push(...reportsList);
+                return this.reportsList.push(...reportsList);
             }
-        },(err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'Ocurrio un error al traer el listado de informes');
         });
     }
 

@@ -12,6 +12,8 @@ import { mapEmergency } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from '../../../services/messages.service';
+import { FormAttendEmergencyModal } from 'src/app/modals/form-attend-emergency/form-attend-emergency.page';
+
 
 @Component({
     selector: 'app-emergency-detail',
@@ -108,9 +110,17 @@ export class EmergencyDetailPage implements OnInit {
         })
     }
 
-    onPoliciaDenyEmergency(){
+    async onPoliciaDenyEmergency(){
         //Ocultar botones, en este caso seria cambiar ispolicia rol
         this.messagesService.showInfo("Has declinado atender la emergencia");
+        const modal = await this.modalCtrl.create({
+            component: FormAttendEmergencyModal,
+            componentProps: {
+                nombre: 'Stalin',
+                pais: 'Ecuador'
+            }
+        });
+        await modal.present();
         this.showPoliciaOptions = false;
     }
 

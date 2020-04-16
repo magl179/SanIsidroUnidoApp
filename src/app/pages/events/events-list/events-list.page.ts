@@ -4,7 +4,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { IPostShare } from 'src/app/interfaces/models';
 import { PostsService } from 'src/app/services/posts.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { finalize, map, take } from 'rxjs/operators';
+import { finalize, map, take, catchError } from 'rxjs/operators';
 import { IEvent, IRespuestaApiSIUPaginada } from "src/app/interfaces/models";
 import { checkLikePost } from 'src/app/helpers/user-helper';
 import { mapEvent, getImagesPost, cortarTextoConPuntos, getFirstPostImage } from 'src/app/helpers/utils';
@@ -14,6 +14,7 @@ import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from '../../../services/messages.service';
 import { CONFIG } from '../../../../config/config';
 import { Router } from '@angular/router';
+import { of } from 'rxjs';
 
 @Component({
     selector: 'app-events-list',
@@ -41,43 +42,39 @@ export class EventsListPage implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.postsService.resetEventsPage();
         this.utilsService.enableMenu();
         this.authService.sessionAuthUser.subscribe(token_decoded => {
             if (token_decoded && token_decoded.user) {
                 this.AuthUser = token_decoded.user;
             }
         });
-        this.loadEvents(null,true);
+        this.loadEvents(null, true);
         this.events_app.eventsLikesEmitter.subscribe((event_app: any) => {
-            this.toggleLikes(event_app.id, event_app.reactions);
+            this.toggleLikes(event_app.reactions);
         });
     }
 
-    toggleLikes(id: number, reactions = []) {
+    toggleLikes(reactions = []) {
         const newEventsList = this.eventsList.map((event: any) => {
             event.postAssistance = checkLikePost(reactions, this.AuthUser) || false;
             return event;
         });
-        // socialProblems = socialProblems.map((social_problem: any) => {
-        //     social_problem.postLiked = checkLikePost(social_problem.reactions, this.AuthUser) || false;
-        //     return social_problem;
-        // });
         this.eventsList = [...newEventsList];
     }
 
-    redirectToSearch(){
+    redirectToSearch() {
         this.navCtrl.navigateRoot("/events/search", {
             queryParams: { redirectUrl: this.router.url }
         });
     }
 
-    ngOnDestroy() { }
-    ionViewWillEnter() { }
-    ionViewWillLeave() { this.postsService.resetEventsPage(); }
+    ngOnDestroy() { 
+        console.warn('ng on destroy events list')
+        this.postsService.resetPagination(this.postsService.PaginationKeys.EVENTS);
+    }
 
     toggleAssistance(assistance: boolean, id: number) {
-        if(!this.AuthUser){
+        if (!this.AuthUser) {
             this.messagesService.showInfo('Debes iniciar sesión para realizar esta acción');
             return;
         }
@@ -85,14 +82,14 @@ export class EventsListPage implements OnInit, OnDestroy {
             this.postsService.sendDeleteDetailToPost(id).subscribe((res: any) => {
                 this.eventsList.forEach(event => {
                     if (event.id == id) {
-                        if(res.data.reactions){
+                        if (res.data.reactions) {
                             event.postAssistance = false;
                             event.reactions = res.data.reactions;
                         }
                     }
                 });
-            }, err => {
-                this.errorService.manageHttpError(err,'No se pudo borrar su asistencia' );
+            }, (err: HttpErrorResponse) => {
+                this.errorService.manageHttpError(err, 'No se pudo borrar su asistencia');
             });
         } else {
             const detailInfo = {
@@ -103,14 +100,14 @@ export class EventsListPage implements OnInit, OnDestroy {
             this.postsService.sendCreateDetailToPost(detailInfo).subscribe((res: any) => {
                 this.eventsList.forEach(event => {
                     if (event.id == id) {
-                        if(res.data.reactions){
+                        if (res.data.reactions) {
                             event.postAssistance = true;
                             event.reactions = res.data.reactions;
                         }
                     }
                 });
-            }, err => {
-                this.errorService.manageHttpError(err,'No se pudo guardar su asistencia' );
+            }, (err: HttpErrorResponse) => {
+                this.errorService.manageHttpError(err, 'No se pudo guardar su asistencia');
             });
         }
     }
@@ -124,63 +121,55 @@ export class EventsListPage implements OnInit, OnDestroy {
         await this.utilsService.shareSocial(sharePost);
     }
 
-    loadEvents(event: any = null, first_loading=false) {
-        
+    loadEvents(event: any = null, first_loading = false) {
         this.postsService.getEvents().pipe(
-            take(1),
             map((res: IRespuestaApiSIUPaginada) => {
-                if (res && res.data && res.data) {
+                console.warn('this.AuthUser', this.AuthUser)
+                if (res && res.data) {
                     res.data.forEach((event: any) => {
                         event = mapEvent(event);
+                        const postAssistance = checkLikePost(event.reactions, this.AuthUser) || false;
+                        event.postAssistance = postAssistance;
                     });
+                }
+                if(res && res.data && res.data.length == 0){
+                    this.postsService.resetPaginationEmpty(this.postsService.PaginationKeys.EVENTS)
                 }
                 return res;
             }),
+            catchError((err: HttpErrorResponse) => {
+                console.log('catchErr', err);
+                this.errorService.manageHttpError(err, 'Ocurrio un error al traer el listado de eventos', false);
+                this.postsService.resetPaginationEmpty(this.postsService.PaginationKeys.EVENTS);
+                return of({ data: [] })
+            }),
             finalize(() => {
-                if(first_loading){
+                if (first_loading) {
                     this.showLoading = false;
                 }
-                if(first_loading && this.eventsList.length === 0){
+                if (first_loading && this.eventsList.length === 0) {
                     this.showNotFound = true;
-                }                
+                }
             })
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let eventsApi = [];
             eventsApi = res.data;
-            // console.dir('eventsApi', res.data)
-
-            if (eventsApi.length === 0) {
-                if (event && event.data && event.data.target && event.data.target.complete) {
-                    event.data.target.disabled = true;
-                    event.data.target.complete();
-                }
-                return;
-            } else {
-                eventsApi.forEach((event: IEvent) => {
-                    const postAssistance = checkLikePost(event.reactions, this.AuthUser) || false;
-                    event.postAssistance = postAssistance;
-                });
-
-            }
+            //Evento Completar
             if (event && event.data && event.data.target && event.data.target.complete) {
                 event.data.target.complete();
             }
+            if (event && event.data && event.data.target && event.data.target.complete && eventsApi.length == 0) {
+                event.data.target.disabled = true;
+            }
+            //Asignar datos dependiendo del evento
             if (event && event.type === 'refresher') {
-                this.eventsList.unshift(...eventsApi);
-                return;
-            }else if(event && event.type == 'infinite_scroll'){
-                this.eventsList.push(...eventsApi);
-            }else{
-                this.eventsList.push(...eventsApi);
-            }         
-        },
-            (err: HttpErrorResponse) => {
-                if (err.error instanceof Error) {
-                    console.error("Client-side error", err);
-                } else {
-                    console.error("Server-side error", err);
-                }
-            });
+                return this.eventsList.unshift(...eventsApi);
+            } else if (event && event.type == 'infinite_scroll') {
+                return this.eventsList.push(...eventsApi);
+            } else {
+                return this.eventsList.push(...eventsApi);
+            }
+        });
     }
 
     postDetail(id: number) {

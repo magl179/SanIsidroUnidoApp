@@ -129,7 +129,7 @@ export class NotificationsService implements OnInit {
                 .subscribe(async (res: any) => {
                     // this.messageService.showSuccess('Dispositivo Añadido Correctamente');
                     this.saveDeviceInfo(this.userDevice.value.phone_id);
-                }, (err: any) => {
+                }, (err: HttpErrorResponse) => {
                     console.error('err', err);
                 });
         }

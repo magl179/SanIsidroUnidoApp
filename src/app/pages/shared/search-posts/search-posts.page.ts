@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { BehaviorSubject, of, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { PostsService } from 'src/app/services/posts.service';
 import { NavController, IonSearchbar } from '@ionic/angular';
-import { finalize, map, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { finalize, map, debounceTime, distinctUntilChanged, tap, filter, catchError, switchMap, exhaustMap, take } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from 'src/app/services/auth.service';
 import { ITokenDecoded } from 'src/app/interfaces/models';
@@ -16,7 +16,7 @@ import { setInputFocus } from '../../../helpers/utils';
     templateUrl: './search-posts.page.html',
     styleUrls: ['./search-posts.page.scss'],
 })
-export class SearchPostsPage implements OnInit {
+export class SearchPostsPage implements OnInit, OnDestroy {
 
     @ViewChild('searchPostBar') searchPostBar: IonSearchbar;
     searchIdeas: string[] = [];
@@ -34,14 +34,13 @@ export class SearchPostsPage implements OnInit {
     includeUserFilter = false;
     redirectWith = 'id';
     AuthUser: ITokenDecoded = null;
-    
+    private searchSubscription: Subscription;
 
     constructor(
         private activatedRoute: ActivatedRoute,
         private authService: AuthService,
         private postsService: PostsService,
-        private navCtrl: NavController,
-        private errorService: ErrorService,
+        private navCtrl: NavController
     ) {
     }
 
@@ -58,19 +57,8 @@ export class SearchPostsPage implements OnInit {
                 urlRedirect = `${this.searchRouteDetail}/${id}`;//id
                 break;
         }
-        console.warn('url redirect: ', urlRedirect)
         this.navCtrl.navigateForward(urlRedirect);
 
-    }
-
-    setSuggessValue(idea: string) {
-        this.searchPostBar.setFocus();
-        this.valueToSearch.next(idea);
-        this.searchingPosts = true;
-    }
-
-    getValueObservable() {
-        return this.valueToSearch.asObservable();
     }
 
     execSearchPosts(event: any) {
@@ -90,11 +78,10 @@ export class SearchPostsPage implements OnInit {
 
     ngOnInit() {
         this.activatedRoute.queryParamMap.subscribe((params_map: any) => {
-            if(params_map.params){
-                this.redirectUrl = (params_map.params.redirectUrl) ? params_map.params.redirectUrl: '/home-list';
+            if (params_map.params) {
+                this.redirectUrl = (params_map.params.redirectUrl) ? params_map.params.redirectUrl : '/home-list';
             }
-            // this.orderObj = {...params.keys, ...params};
-          });
+        });
 
         this.setInitialValues();
         this.authService.sessionAuthUser.subscribe(async (token_decoded: ITokenDecoded) => {
@@ -103,60 +90,58 @@ export class SearchPostsPage implements OnInit {
             }
         });
 
-        this.getValueObservable().pipe(
-            debounceTime(1000),
-            map(search_term => search_term),
-            distinctUntilChanged(),
-            finalize(() => {
-                this.searchingPosts = false;
+        this.searchSubscription = this.valueToSearch.asObservable().pipe(
+            filter(value => {
+                this.requestStatus = ''
+                if (value == '') {
+                    this.itemsSearchFound = [];
+                }
+                return value !== '';
             }),
-        ).subscribe(async (value: any) => {
-            this.searchingPosts = true;
-            if (value.length === 0) {
-                this.searchingPosts = false;
-                this.itemsSearchFound = [];
-                return;
-            }
-            //Agregar palabra a array sugerencias
-            if (this.recentSearches.indexOf(value) === -1) {
-                // array.push(item)
-                this.recentSearches.push(value);
-            };
-
-            this.searchingPosts = true;
-            this.requestStatus = '';
-            let searchParams = {};
-            if (this.includeUserFilter) {
-                searchParams = {
-                    'category': this.searchSlug,
-                    'user': this.AuthUser.user.id,
-                    'title': value
-                }
-            } else {
-                searchParams = {
-                    'category': this.searchSlug,
-                    'title': value
-                }
-            }
-            this.postsService.searchPosts(searchParams).pipe(
-                finalize(() => {
-                    this.searchingPosts = false;
-                })
-            ).subscribe((res: any) => {
-                this.itemsSearchFound = res.data;
-                this.requestStatus = 'success';
-                if (res.data.length === 0) {
-                    this.resultsNotFound = true;
+            distinctUntilChanged(),
+            tap(() => this.searchingPosts = true),
+            // debounceTime(100),
+            switchMap(search_term => {
+                this.requestStatus = '';
+                let searchParams = {};
+                if (this.includeUserFilter) {
+                    searchParams = {
+                        'category': this.searchSlug,
+                        'user': this.AuthUser.user.id,
+                        'title': search_term
+                    }
                 } else {
-                    this.resultsNotFound = false;
+                    searchParams = {
+                        'category': this.searchSlug,
+                        'title': search_term
+                    }
                 }
-            }, (err: HttpErrorResponse) => {
+                return this.postsService.searchPosts(searchParams);
+            }),
+            catchError((err: HttpErrorResponse) => {
                 this.itemsSearchFound = [];
                 this.requestStatus = 'fails';
-                this.errorService.manageHttpError(err, 'Ocurrio un error al realizar la búsqueda');
+                this.searchingPosts = false;
+                return of({ data: [] })
+            })
+        ).subscribe(
+            {
+                next: async (response: any) => {
+                    this.itemsSearchFound = response.data;
+                    this.requestStatus = 'success';
+                    if (response.data.length === 0) {
+                        this.resultsNotFound = true;
+                    } else {
+                        this.resultsNotFound = false;
+                    }
+                    this.searchingPosts = false;
+                }
             });
+    }
 
-        });
+
+    ngOnDestroy() {
+        this.searchSubscription.unsubscribe();
     }
 
 }
