@@ -2,16 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { UserService } from 'src/app/services/user.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { UtilsService } from 'src/app/services/utils.service';
 import { IRespuestaApiSIUSingle } from "src/app/interfaces/models";
 import { decodeToken } from 'src/app/helpers/auth-helper';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from 'src/app/services/messages.service';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { LocalDataService } from '../../services/local-data.service';
-// Valid
-import {CedulaValidator} from 'src/app/helpers/cedula.validator';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
     selector: 'app-request-membership',
@@ -21,7 +17,6 @@ import {CedulaValidator} from 'src/app/helpers/cedula.validator';
 export class RequestMembershipPage implements OnInit {
 
     publicServiceImg = [];
-    membershipForm: FormGroup;
     formSended = false;
     errorMessages = null;
 
@@ -29,33 +24,13 @@ export class RequestMembershipPage implements OnInit {
         private modalCtrl: ModalController,
         private userService: UserService,
         private authService: AuthService,
-        private localDataService: LocalDataService,
-        private utilsService: UtilsService,
         private errorService: ErrorService,
         private messageService: MessagesService,
         public formBuilder: FormBuilder
     ) {
-        this.createForm();
      }
 
     ngOnInit() {
-        // this.membershipForm.
-    }
-
-    createForm(){
-        //Cargar Validaciones
-        const validations = this.localDataService.getFormValidations();
-        // Campo Número de Cédula
-        const cedula = new FormControl('', Validators.compose([
-            Validators.required,
-            Validators.minLength(10),
-            Validators.maxLength(10),
-            CedulaValidator
-        ]));
-        // Añado Propiedades al Form
-        this.membershipForm = this.formBuilder.group({ cedula});
-        // Cargo Mensajes de Validaciones
-        this.errorMessages = this.localDataService.getFormMessagesValidations(validations);
     }
 
     closeModal():void {
@@ -71,10 +46,8 @@ export class RequestMembershipPage implements OnInit {
     }
 
     sendRequestMembership() {
-        const formValue = this.membershipForm.value;
         const imagen = this.publicServiceImg[0];
         const requestObj = {
-            cedula: formValue.cedula,
             basic_service_image: imagen
         }
         this.userService.sendRequestUserMembership(requestObj).subscribe(async (res: IRespuestaApiSIUSingle) => {

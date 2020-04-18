@@ -1,17 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { NavController, ModalController } from "@ionic/angular";
+import { NavController } from "@ionic/angular";
 import { UtilsService } from "src/app/services/utils.service";
 import { PostsService } from "src/app/services/posts.service";
 import { IBasicFilter, IRespuestaApiSIUPaginada, ITokenDecoded } from "src/app/interfaces/models";
-import { finalize, map, takeUntil, catchError } from 'rxjs/operators';
+import { finalize, map, catchError } from 'rxjs/operators';
 import { mapEmergency, setFilterKeys, filterDataInObject } from "src/app/helpers/utils";
 import { AuthService } from 'src/app/services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from "src/app/services/events.service";
 import { ErrorService } from 'src/app/services/error.service';
-import { Subject, Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
-import { CONFIG } from 'src/config/config';
+import { of } from 'rxjs';
 
 @Component({
     selector: 'app-emergencies-list',
@@ -93,8 +92,10 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         }
     }
 
-    async loadEmergencies(event: any = null, first_loading=false) {       
-        this.getEmergenciesFunction({}).pipe(
+    async loadEmergencies(event: any = null, first_loading=false) { 
+        const params = (this.isPolicia) ? {police_id: this.AuthUser.id}: {}
+        
+        this.getEmergenciesFunction(params).pipe(
             map((res: IRespuestaApiSIUPaginada) => {
                 if (res && res.data) {
                     res.data.forEach((emergency: any) => {

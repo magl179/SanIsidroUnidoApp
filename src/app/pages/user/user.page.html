@@ -48,14 +48,13 @@
                     </div>
                     <p class="title_option">Cambiar Contraseña</p>
                 </ion-col>
-                <!-- <ng-container *ngIf="AuthUser && AuthUser.user"> -->
-                    <ion-col class="user_profile_options" *appHasRole="['invitado']">
+                    <ion-col class="user_profile_options">
+                    <!-- <ion-col class="user_profile_options" *appHasRole="['invitado']"> -->
                         <div class="icon_option" (click)="showRequestMembershipModal()">
                             <ion-icon name="document"></ion-icon>
                         </div>
                         <p class="title_option">Solicitar Afiliación</p>
                     </ion-col>
-                <!-- </ng-container> -->
                 <ion-col class="user_profile_options" *appHasDevice="UserDevices">
                     <div class="icon_option" (click)="addDeviceToUser()">
                         <ion-icon name="notifications"></ion-icon>

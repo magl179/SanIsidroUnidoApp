@@ -92,7 +92,8 @@ export class EmergencyDetailPage implements OnInit {
         const isPolicia = await this.authService.userHasRole(['Policia']);
         this.isPoliciaRol = isPolicia;
         this.showPoliciaOptions = isPolicia;
-        this.urlBackEmergency = (isPolicia) ? '/home-list' : '/emergencies/list';
+        this.urlBackEmergency = '/emergencies/list';
+        // this.urlBackEmergency = (isPolicia) ? '/home-list' : '/emergencies/list';
     }
 
     //POLICIA COMUNITARIO
@@ -112,16 +113,26 @@ export class EmergencyDetailPage implements OnInit {
 
     async onPoliciaDenyEmergency(){
         //Ocultar botones, en este caso seria cambiar ispolicia rol
-        this.messagesService.showInfo("Has declinado atender la emergencia");
+       
         const modal = await this.modalCtrl.create({
             component: FormAttendEmergencyModal,
             componentProps: {
-                nombre: 'Stalin',
-                pais: 'Ecuador'
-            }
+                AuthUser: this.AuthUser,
+                Emergency: this.emergency
+            },
+            backdropDismiss: false
         });
         await modal.present();
-        this.showPoliciaOptions = false;
+        const { data } : any = await modal.onWillDismiss();
+        console.log({
+            dataModal: data
+        });
+        if(data.formulario_enviado){
+            this.showPoliciaOptions = false;
+            this.messagesService.showInfo("El Formulario se envio");
+        }else{
+            this.messagesService.showInfo("El Formulario no se envio");
+        }
     }
 
 }

@@ -1,0 +1,27 @@
+.section-header {
+    text-align: center;
+    padding: 1em;
+}
+
+.container-textarea {
+    display: block;
+    width: 100%;
+}
+
+ion-textarea {
+    border: 1px solid var(--ion-color-input-border);
+    border-radius: .25rem;
+    padding: .375rem .75rem !important;
+    overflow: unset;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    -moz-user-select: text;
+    -webkit-user-select: text;
+    -ms-user-select: text;
+}
+
+textarea {
+    overflow: hidden;
+}
+.info-padding{
+    margin-top: 1em;
+}

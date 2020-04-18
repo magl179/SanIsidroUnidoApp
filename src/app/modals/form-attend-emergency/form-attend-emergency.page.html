@@ -1,20 +1,38 @@
 
 <ion-header>
-    <ion-toolbar color="dark">
-      <ion-buttons slot="start" class="buttons-start">
+    <ion-toolbar color="primary">
+      <!-- <ion-buttons slot="start" class="buttons-start">
         <ion-icon name="close" slot="icon-only"></ion-icon>
-      </ion-buttons>
+      </ion-buttons> -->
+      <ion-title class="ion-text-center">Rechazar Atención Emergencia</ion-title>
       <ion-buttons slot="end" class="buttons-end">
-        <ion-icon name="share" slot="icon-only"></ion-icon>
+        <ion-icon name="close" slot="icon-only" (click)="closeModal()">          
+        </ion-icon>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
   <ion-content>
     <div class="section-header">
-      <h2>Formulario Rechazar Atención Emergencia</h2>
-      <p>Nos gustaría saber la razón por la cual has escogido rechazar atender la emergencia</p>
+      <!-- <h2>Rechazar Atención de Emergencia</h2> -->
+      <p>{{userName}} explica el mótivo por el cual no puedes atender la emergencia</p>
     </div>
-    <form>
-      <p>Lola</p>
+    <form [formGroup]="attendEmergencyForm">
+      <ion-item class="input_item" lines="none">
+        <ion-label class="label-padding label-margin" position="stacked">Mótivo *</ion-label>
+        <div class="container-textarea">   
+          <ion-textarea formControlName="reason" rows="5" autocomplete="on" autosize
+            type="text" clearOnEdit="false"></ion-textarea >
+        </div>
+      </ion-item>
+      <div class="item-info info-padding">
+        <p>
+           Solo puedes ingresar máximo 300 caracteres
+        </p>
+    </div>     
+      <div padding>
+        <ion-button color="primary" type="submit" expand="block" [disabled]="!attendEmergencyForm.valid" class="ion-text-capitalize" (click)="onSubmit()">
+          Enviar
+        </ion-button>
+      </div>
     </form>
   </ion-content>

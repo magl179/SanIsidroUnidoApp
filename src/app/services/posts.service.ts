@@ -125,6 +125,10 @@ export class PostsService implements OnInit {
         const headers = setHeaders(CONFIG.AUTHORIZATION_NAME, this.AuthToken);
         return this.httpRequest.post(`${environment.APIBASEURL}/emergencias/atender`, emergency_attended_data, headers);
     }
+    sendPoliciaRechazarEmergencia(emergency_rechazed_data: any){
+        const headers = setHeaders(CONFIG.AUTHORIZATION_NAME, this.AuthToken);
+        return this.httpRequest.post(`${environment.APIBASEURL}/emergencias/rechazar`, emergency_rechazed_data, headers);
+    }
     // Función para enviar un Reporte de Problema Social
     sendSocialProblemReport(socialProblemPost: ISocialProblemReported): Observable<any> {
         const headers = setHeaders(CONFIG.AUTHORIZATION_NAME, this.AuthToken);
@@ -197,11 +201,9 @@ export class PostsService implements OnInit {
     // Función para obtener el listado de emergencias publicadas
     getEmergencies(params = {}): Observable<IRespuestaApiSIUPaginada> {
         this.increasePagination(this.PaginationKeys.EMERGENCIES);
-        const user_id = this.AuthUser.id;
         const tempParams = {
             category: CONFIG.EMERGENCIES_SLUG,
-            page: this.getPagination(this.PaginationKeys.EMERGENCIES),
-            user_id
+            page: this.getPagination(this.PaginationKeys.EMERGENCIES)            
         }
         // this.currentPagination.emergencies++;
         console.log('GET EMERGENCIES BY USER CALLED SERVICE', this.getPagination(this.PaginationKeys.EMERGENCIES))

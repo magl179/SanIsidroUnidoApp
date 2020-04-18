@@ -67,7 +67,7 @@ export interface IPost {
     reactions?: any[],
     category?: ICategory;
     subcategory?: ISubcategory;
-    user?: any;
+    user?: IUser;
     category_name?: string;
     subcategory_name?: string;
 }
