@@ -56,7 +56,11 @@ export class PublicServicesListPage implements OnInit {
             if(search == ''){
                 this.publicServicesFilter = [... this.publicServices]
             }else{
-                this.publicServicesFilter = [...this.publicServices].filter(public_service => public_service.name.toLowerCase().indexOf(search) > -1)
+                const searchValue = search.toLowerCase();
+                this.publicServicesFilter = [...this.publicServices].filter(public_service => {
+                    const name = public_service.name.toLowerCase();
+                    return name.indexOf(searchValue) > -1;
+                })
             }
             this.searchingPublicServices = false;
         });

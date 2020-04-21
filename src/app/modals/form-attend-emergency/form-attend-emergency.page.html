@@ -30,7 +30,7 @@
         </p>
     </div>     
       <div padding>
-        <ion-button color="primary" type="submit" expand="block" [disabled]="!attendEmergencyForm.valid" class="ion-text-capitalize" (click)="onSubmit()">
+        <ion-button color="primary" type="submit" expand="block" [disabled]="!attendEmergencyForm.valid || formWasSended" class="ion-text-capitalize" (click)="onSubmit()">
           Enviar
         </ion-button>
       </div>

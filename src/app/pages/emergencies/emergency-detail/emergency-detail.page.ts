@@ -128,8 +128,9 @@ export class EmergencyDetailPage implements OnInit {
             dataModal: data
         });
         if(data.formulario_enviado){
-            this.showPoliciaOptions = false;
+            // this.showPoliciaOptions = false;
             this.messagesService.showInfo("El Formulario se envio");
+            this.getEmergency();
         }else{
             this.messagesService.showInfo("El Formulario no se envio");
         }

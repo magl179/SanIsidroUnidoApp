@@ -58,7 +58,7 @@ export class FormAttendEmergencyModal implements OnInit {
             this.formWasSended = true;
         },(err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error al registrar el motivo de rechazo');
-            this.formWasSended = false;
+            // this.formWasSended = false;
         })
     }
 }

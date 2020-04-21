@@ -93,7 +93,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
     }
 
     async loadEmergencies(event: any = null, first_loading=false) { 
-        const params = (this.isPolicia) ? {police_id: this.AuthUser.id}: {}
+        const params = (this.isPolicia) ? {police: this.AuthUser.id}: {}
         
         this.getEmergenciesFunction(params).pipe(
             map((res: IRespuestaApiSIUPaginada) => {
@@ -125,6 +125,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let emergenciesApi = [];
             emergenciesApi = res.data;
+            console.log('emergenciesApi', emergenciesApi)
             //Evento Completar
             if(event && event.data && event.data.target && event.data.target.complete){
                 event.data.target.complete();
@@ -133,12 +134,12 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
                 event.data.target.disabled = true;
             }         
             if (event && event.type == 'refresher') {
-                this.emergenciesList.unshift(...emergenciesApi);;
+                this.emergenciesList.unshift(...emergenciesApi);
                 this.emergenciesFiltered.unshift(...emergenciesApi);
                 return;
             }else if(event && event.type == 'infinite_scroll'){
                 this.emergenciesList.push(...emergenciesApi);
-                this.emergenciesFiltered.push(...this.emergenciesList);
+                this.emergenciesFiltered.push(...emergenciesApi);
                 return;
             }else{
                 this.emergenciesList.push(...emergenciesApi);

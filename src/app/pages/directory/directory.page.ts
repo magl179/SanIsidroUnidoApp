@@ -37,15 +37,25 @@ export class DirectoryPage implements OnInit {
             tap(() => {
                 this.searchingDirectives = true;
             }),
-            // debounceTime(300),
             distinctUntilChanged(),
         )
         .subscribe(search => {
+            console.log('search', search)
             if(search == ''){
                 this.directivesFilter = [... this.directivesList]
             }else{
-                this.directivesFilter = [...this.directivesList].filter(directive => (directive.first_name.toLowerCase().indexOf(search) > -1) || (directive.last_name.toLowerCase().indexOf(search) > -1 ))
+                const searchValue = search.toLowerCase();
+                this.directivesFilter = [...this.directivesList].filter(directive => {
+                    console.log('directive', directive)
+                    const firstname = directive.first_name.toLowerCase();
+                    const lastname = directive.last_name.toLowerCase();
+                    console.log('searchValue', searchValue)
+                    console.log('firstname', firstname)
+                    console.log('lastname', lastname)
+                    return (firstname.indexOf(searchValue) > -1) || (lastname.indexOf(searchValue) > -1 );
+                });
             }
+            console.log('this.directivesFilter', this.directivesFilter)
             this.searchingDirectives = false;
         });
     }
