@@ -7,6 +7,7 @@ import { TruncatePipe } from './truncate.pipe';
 import { JsonValidatePipe } from './json-validate.pipe';
 import { ImageSanitizerPipe } from './image-sanitizer.pipe';
 import { BackgroundUrlPipe } from './background-url.pipe';
+import { MomentPipe } from './moment.pipe';
 
 @NgModule({
     declarations: [
@@ -16,7 +17,8 @@ import { BackgroundUrlPipe } from './background-url.pipe';
         TruncatePipe,
         JsonValidatePipe,
         ImageSanitizerPipe,
-        BackgroundUrlPipe
+        BackgroundUrlPipe,
+        MomentPipe
     ],
     imports: [
         CommonModule
@@ -28,7 +30,8 @@ import { BackgroundUrlPipe } from './background-url.pipe';
         TruncatePipe,
         JsonValidatePipe,
         ImageSanitizerPipe,
-        BackgroundUrlPipe
+        BackgroundUrlPipe,
+        MomentPipe
     ]
 })
 export class PipesModule { }

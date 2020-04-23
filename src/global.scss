@@ -39,3 +39,7 @@ body {
         }
     }
 }
+
+.popover-app-notifications .popover-content {
+    --min-width: 350px !important;
+}

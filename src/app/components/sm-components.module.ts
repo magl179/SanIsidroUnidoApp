@@ -27,6 +27,7 @@ import { SlideshowImagesFullComponent } from './slideshow-images-full/slideshow-
 import { NgFallimgModule } from "ng-fallimg";
 import { LocalizationInfoComponent } from './localization-info/localization-info.component';
 import { DirectivesModule } from '../directives/directives.module';
+import { PipesModule } from '../pipes/pipes.module';
 
 @NgModule({
     declarations: [
@@ -57,7 +58,8 @@ import { DirectivesModule } from '../directives/directives.module';
         IonicModule,
         MaterialAppModule,
         DirectivesModule,
-        NgFallimgModule
+        NgFallimgModule,
+        PipesModule
     ],
     exports: [
         HeaderComponent,

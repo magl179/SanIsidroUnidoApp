@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
-import { PopoverController, ActionSheetController } from "@ionic/angular";
+import { PopoverController, ActionSheetController, ModalController } from "@ionic/angular";
 import { PopNotificationsComponent } from '../pop-notifications/pop-notifications.component';
-
+import { ShowListNotificationsPage } from '../../modals/show-list-notifications/show-list-notifications.page';
 
 @Component({
     selector: 'app-header',
@@ -21,7 +21,8 @@ export class HeaderComponent implements OnInit {
 
     constructor(
         public popoverCtrl: PopoverController,
-        private actionCtrl: ActionSheetController
+        private actionCtrl: ActionSheetController,
+        private modalCtrl: ModalController
     ) { }
 
     ngOnInit() { }
@@ -33,6 +34,10 @@ export class HeaderComponent implements OnInit {
     // showOptionsHeader() {
 
     // }
+    showNotifications(event){
+        // this.showListNotificationsModal();
+        this.showNotiPopover(event)
+    }
 
     async showOptionsHeader() {
         const filterOption = {
@@ -61,21 +66,28 @@ export class HeaderComponent implements OnInit {
         await actionSheet.present();
     }
 
-
-    // lanzar(event) {
-    //     this.optionsSelected.emit({ nombre: this.nombre });
-    // }
-
-
     async showNotiPopover(evento) {
         const popover = await this.popoverCtrl.create({
             component: PopNotificationsComponent,
             event: evento,
             backdropDismiss: true,
-            showBackdrop: false
+            showBackdrop: false,
+            cssClass: 'popover-app-notifications'
         });
-
+        // popover.style.cssText = '--min-width: 270px;';
         await popover.present();
+    }
+
+    async showListNotificationsModal() {
+        // await this.popoverCtrl.dismiss();
+        const modal = await this.modalCtrl.create({
+            component: ShowListNotificationsPage,
+            componentProps: {
+                nombre: 'Stalin',
+                pais: 'Ecuador'
+            }
+        });
+        await modal.present();
     }
 
 }

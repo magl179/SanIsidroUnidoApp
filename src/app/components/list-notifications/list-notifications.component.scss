@@ -8,12 +8,39 @@
     text-align: center;
     font-size: 1.1em;
 }
+
+.notification-avatar{
+    width: 60px;
+    height: 60px;
+}
+
 .notifications_description{
     .title{
         text-transform: capitalize;
+        font-size: 16px;
+        color: rgb(52, 58, 64);
     }
     .author{
-        color: #28a745!important;
+        color: rgb(52, 58, 64);
+        font-size: 16px;
+        margin: 8px 0;
+    }
+    .description{
+        font-size: 16px;
+        margin: 8px 0;
+        color: rgb(52, 58, 64);
+    }
+    .date{
+        display: block;
+        font-size: 16px;
+        display: flex;
+        // justify-content: center;
+        align-items: center;
+        color: var(--ion-color-step-600,#666);
+        margin: 8px 0;
+        .icon{
+            margin-right: 5px;
+        }
     }
 }
 .icon-noti-readed{

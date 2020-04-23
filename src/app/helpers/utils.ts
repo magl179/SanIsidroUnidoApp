@@ -266,8 +266,16 @@ const formatEventRangeDate = (start_date: string, end_date: string) => {
 export const getRandomColor = () => {
     const avalaibleColors = ['primary', 'secondary', 'tertiary', 'success', 'light', 'medium', 'dark'];
     return ramdomItem(avalaibleColors);
-
 }
+
+export const getIosDateParsed = (date: any) => {
+    const parsed = Date.parse(date);
+    if (!isNaN(parsed)) {
+        return parsed;
+    }
+    return Date.parse(date.replace(/-/g, '/').replace(/[a-z]+/gi, ' '));
+}
+
 
 export const mapEmergency = (emergency: any) => {
     const dateFull = `${emergency.date} ${emergency.time}`;
