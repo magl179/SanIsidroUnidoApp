@@ -1,25 +1,39 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { NavController, ModalController } from "@ionic/angular";
+import { NavController } from "@ionic/angular";
 import { UtilsService } from 'src/app/services/utils.service';
 import { IPostShare } from 'src/app/interfaces/models';
 import { PostsService } from 'src/app/services/posts.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { finalize, map, take, catchError } from 'rxjs/operators';
+import { finalize, map, catchError } from 'rxjs/operators';
 import { IEvent, IRespuestaApiSIUPaginada } from "src/app/interfaces/models";
 import { checkLikePost } from 'src/app/helpers/user-helper';
-import { mapEvent, getImagesPost, cortarTextoConPuntos, getFirstPostImage } from 'src/app/helpers/utils';
+import { mapEvent, cortarTextoConPuntos, getFirstPostImage } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from "src/app/services/events.service";
 import { ErrorService } from 'src/app/services/error.service';
-import { MessagesService } from '../../../services/messages.service';
-import { CONFIG } from '../../../../config/config';
+import { MessagesService } from 'src/app/services/messages.service';
+import { CONFIG } from 'src/config/config';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
+import { trigger,style,transition,animate,keyframes,query,stagger } from '@angular/animations';
 
 @Component({
     selector: 'app-events-list',
     templateUrl: './events-list.page.html',
     styleUrls: ['./events-list.page.scss'],
+    animations: [
+        trigger('listAnimation', [
+          transition('* => *', [
+            query(':enter', style({ opacity: 0 }), {optional: true}),
+            query(':enter', stagger('300ms', [
+              animate('1s ease-in', keyframes([
+                style({opacity: 0, transform: 'translateY(-75%)', offset: 0}),
+                style({opacity: .5, transform: 'translateY(35px)',  offset: 0.3}),
+                style({opacity: 1, transform: 'translateY(0)',     offset: 1.0}),
+              ]))]), {optional: true}),
+          ])
+        ])
+      ]
 })
 export class EventsListPage implements OnInit, OnDestroy {
 
@@ -68,8 +82,7 @@ export class EventsListPage implements OnInit, OnDestroy {
         });
     }
 
-    ngOnDestroy() { 
-        console.warn('ng on destroy events list')
+    ngOnDestroy() {
         this.postsService.resetPagination(this.postsService.PaginationKeys.EVENTS);
     }
 
@@ -124,7 +137,6 @@ export class EventsListPage implements OnInit, OnDestroy {
     loadEvents(event: any = null, first_loading = false) {
         this.postsService.getEvents().pipe(
             map((res: IRespuestaApiSIUPaginada) => {
-                console.warn('this.AuthUser', this.AuthUser)
                 if (res && res.data) {
                     res.data.forEach((event: any) => {
                         event = mapEvent(event);
@@ -138,7 +150,6 @@ export class EventsListPage implements OnInit, OnDestroy {
                 return res;
             }),
             catchError((err: HttpErrorResponse) => {
-                console.log('catchErr', err);
                 this.errorService.manageHttpError(err, 'Ocurrio un error al traer el listado de eventos', false);
                 this.postsService.resetPaginationEmpty(this.postsService.PaginationKeys.EVENTS);
                 return of({ data: [] })

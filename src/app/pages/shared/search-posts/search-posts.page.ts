@@ -1,15 +1,13 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { BehaviorSubject, of, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { PostsService } from 'src/app/services/posts.service';
 import { NavController, IonSearchbar } from '@ionic/angular';
-import { finalize, map, debounceTime, distinctUntilChanged, tap, filter, catchError, switchMap, exhaustMap, take } from 'rxjs/operators';
+import { distinctUntilChanged, tap, filter, catchError, switchMap } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from 'src/app/services/auth.service';
 import { ITokenDecoded } from 'src/app/interfaces/models';
 import { IPost } from 'src/app/interfaces/models';
-import { ErrorService } from '../../../services/error.service';
-import { setInputFocus } from '../../../helpers/utils';
 
 @Component({
     selector: 'app-search-posts',

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { UtilsService } from 'src/app/services/utils.service';
 import { UserService } from 'src/app/services/user.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { decodeToken } from 'src/app/helpers/auth-helper';
@@ -30,8 +29,7 @@ export class EditProfilePage implements OnInit {
         private localDataService: LocalDataService,
         private userService: UserService,
         private errorService: ErrorService,
-        private messageService: MessagesService,
-        private utilsService: UtilsService) {
+        private messageService: MessagesService,) {
         
     }
 
@@ -42,7 +40,7 @@ export class EditProfilePage implements OnInit {
 
     async loadUserData() {
         //OBTENER INFORMACIÓN USUARIO AUTENTICADO, FORMA CORRECTA
-        const response_auth: any =  await this.authService.getTokenUserAuthenticated().catch(err=>console.error('err', err))
+        const response_auth: any =  await this.authService.getTokenUserAuthenticated().catch(err=> null)
         if (response_auth) {
             this.AuthUser = response_auth.user;
         }

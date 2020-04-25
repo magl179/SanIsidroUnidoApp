@@ -1,9 +1,7 @@
 <ion-app>
-    <!-- <splash-sm *ngIf="showAppsplash"></splash-sm> -->
     <ion-split-pane contentId="main_router_outlet">
         <ion-menu side="start" menuId="main_app_menu" contentId="main_router_outlet">
             <ion-content class="menu_content_app">
-                <!-- <div> -->
                 <!-- Header Menu -->
                 <div class="header-menu">
                     <ion-item lines="none" color="blue-logo" *ngIf="sessionAuth">
@@ -25,7 +23,6 @@
                             <h1 class="ion-text-capitalize ion-text-center">Invitado</h1>
                         </ion-label>
                     </ion-item>
-                    <!-- <p>{{(sessionAuth) ? 'existe token': 'no existe token'}}</p> -->
                 </div>
                 <div class="body-menu">
                     <ng-container *ngIf="sessionAuth && menuComponents">
@@ -129,18 +126,6 @@
                         <ion-label>Ingresar</ion-label>
                     </ion-item>
                 </ion-list>
-                <!-- <hr class="gray">
-                    <ion-item class="item-sm" tapable lines="none" (click)="closeAppSession()">
-                        <ion-icon slot="start" name="log-out"></ion-icon>
-                        <ion-label>Cerrar Sesión</ion-label>
-                    </ion-item> -->
-                <!-- </div> -->
-                <!-- <div class="footer-menu">
-                    <ion-item class="item-sm" tapable lines="none" (click)="closeAppSession()">
-                        <ion-icon slot="start" name="ios-log-out"></ion-icon>
-                        <ion-label>Cerrar Sesión</ion-label>
-                    </ion-item>
-                </div> -->
             </ion-content>
         </ion-menu>
         <ion-router-outlet id="main_router_outlet"></ion-router-outlet>

@@ -9,13 +9,14 @@
             refreshingText="Cargando Publicaciones...">
         </ion-refresher-content>
     </ion-refresher>
-    <!-- Barra de Búsqueda
-    <ion-searchbar mode="ios" (click)="searchEvents()" placeholder="Buscar" [animated]="true"></ion-searchbar> -->
     <!-- Mensaje si datos no cargan o son tamaño 0 -->
     <app-no-results-found *ngIf="showNotFound && eventsList.length === 0"
         message="No existen eventos disponibles"></app-no-results-found>
     <!-- Tarjetas Animacion hasta cargar datos-->
-    <div *ngIf="showLoading">
+     <div class="loading-app" *ngIf="showLoading">
+        <loader-app class="flex-column-center"></loader-app>
+    </div>
+    <!-- <div *ngIf="showLoading">
         <ion-card *ngFor="let event of [1,1,1,1]" class="event animated flash slow infinite">
             <ion-card-header class="event-header">
                 <ion-card-title class="event-title">
@@ -40,10 +41,10 @@
                 </ion-col>
             </ion-row>
         </ion-card>
-    </div>
+    </div> -->
     
     <!-- Tarjeta Datos Cargados y Disponibles -->
-    <div *ngIf="!showLoading  && eventsList.length > 0">
+    <div *ngIf="!showLoading  && eventsList.length > 0" [@listAnimation]>
         <ion-card class="event" *ngFor="let event of eventsList; let i = index;">
             <div class="post_cover" *ngIf="event.imagesArr && event.imagesArr.length > 0">
                 <img [src]="event.imagesArr[0]"/>
@@ -53,9 +54,6 @@
                     <ion-card-title class="main-section-header__title">
                         <span>{{event.title}}</span>
                     </ion-card-title>
-                    <!-- <div class="event_created_at">
-                        <span>{{event.fecha_creacion}}</span>
-                    </div> -->
                 </ion-card-header>
                 <ion-card-content class="main-section-info">
                     <ng-container *ngIf="event.hasRangeDate">
@@ -67,14 +65,6 @@
                                 {{ event.range_short_date }} 
                             </span>
                         </p>
-                        <!-- <p class="main-section-info__item">
-                            <span class="icon-fulldate">
-                                <ion-icon name="calendar"></ion-icon>
-                            </span>
-                            <span class="main-section-info__description" *ngIf="event.range_short_time">
-                                {{ event.range_short_time }} 
-                            </span>
-                        </p> -->
                     </ng-container>
                     <ng-container *ngIf="!event.hasRangeDate">
                         <p class="main-section-info__item">

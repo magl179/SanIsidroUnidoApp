@@ -23,8 +23,6 @@ export class UploadImageComponent implements OnInit {
     @Output() returnUploadedImages = new EventEmitter();
     imagenB64: string;
     imagejpg: string;
-    // @ViewChild('web_upload_image') web_upload_image: ElementRef;
-
 
     constructor(
         private camera: Camera,
@@ -99,12 +97,9 @@ export class UploadImageComponent implements OnInit {
                 .then(
                     (datosImagen) => {
                         const imagenB64 = 'data:image/jpg;base64,'+ datosImagen;
-                        console.log(datosImagen);
-                        console.log(imagenB64);
                         this.uploadedImages.push(imagenB64);
                         this.getUploadedImages();
                     }, err => {
-                        console.error({ errorCapturarImagen: err });
                         this.messageService.showError('Ocurrio un error al capturar la imagen');
                     });
         } else {
@@ -120,7 +115,6 @@ export class UploadImageComponent implements OnInit {
         input.value = '';
         input.accept = "image/png,image/jpg,image/jpeg";
         input.multiple = true;
-        // this.web_upload_image.addEventListener("change", async (event_upload: any) => {
         input.addEventListener("change", async (event_upload: any) => {
             if (event_upload.target.files && event_upload.target.files.length > 0) {
                 // Referencia a los archivos y convertirlos a un array

@@ -10,7 +10,7 @@
     <!-- Datos cuando cargan las categorias -->
     <ion-grid *ngIf="categoriesLoaded && categories.length > 0">
         <ion-row style="justify-content: center;">
-            <ion-col size="4" *ngFor="let category of categories; let i = index;">
+            <ion-col *ngFor="let category of categories; let i = index;">
                 <ion-card style="box-shadow:none !important;" (click)="goToList(category.slug)">
                     <div
                         style="padding: .5em;display: flex;align-items: center;flex-direction: column;">

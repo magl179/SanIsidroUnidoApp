@@ -4,10 +4,6 @@
     <!-- Public Services Searchbar -->
     <ion-searchbar mode="ios" type="text" placeholder="Buscar Servicios Públicos" [animated]="true"
         [formControl]="publicServiceSearchControl"></ion-searchbar>
-    <!-- Loading mientras se realiza la busqueda -->
-    <!-- <div class="loading-app" *ngIf="searchingPublicServices">
-        <loader-app class="flex-column-center" message="Buscando..."></loader-app>
-    </div> -->
     <!-- Mensaje si datos no cargan o son tamaño 0 -->
     <app-no-results-found *ngIf="publicServicesLoaded && publicServices.length === 0"
         message="No existen servicios públicos disponibles"></app-no-results-found>
@@ -21,7 +17,7 @@
     <!-- Tarjetas Datos Servicios Publicos -->
     <div *ngIf="publicServicesLoaded && publicServicesFilter.length > 0">
         <ion-grid>
-            <ion-row>
+            <ion-row [@listAnimation]>
                 <ion-col size="6" *ngFor="let publicService of publicServicesFilter">
                     <ion-card class="ion-text-center service_list_card">
                         <div class="picture_thumbnail">
@@ -32,12 +28,16 @@
                         <ion-card-header>
                             <ion-card-title>{{publicService.name}}</ion-card-title>
                         </ion-card-header>
-                        <ion-card-content>
-                            <div style="padding-bottom: 14px;">
-                                <p style="font-weight: bold;">Direccion: </p>
-                                <p class="ion-text">
-                                    {{(publicService.ubication.address) ? publicService.ubication.address: 'Direccion no encontrada'}}
+                        <ion-card-content class="public-service-content">
+                            <div>
+                                <p class="ion-text content-text" *ngIf="publicService.ubication.address; else direccionDefecto">
+                                    {{ publicService.ubication.address | truncate: 50}}
                                 </p>
+                                <ng-template #direccionDefecto>
+                                    <p class="ion-text content-text">
+                                        Direccion no encontrada
+                                    </p>
+                                </ng-template>
                             </div>
                         </ion-card-content>
                         <div style="padding: 14px;padding-top: 0;">

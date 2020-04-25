@@ -16,11 +16,8 @@
   -ms-word-break: break-all;
   word-break: break-all;
   word-break: break-word;
-  /* Sólo WebKit -NO DOCUMENTADO */
   -ms-hyphens: auto;
-  /* Guiones para separar en sílabas */
   -moz-hyphens: auto;
-  /*  depende de lang en <html>      */
   -webkit-hyphens: auto;
   hyphens: auto;
   font-size: .8em;

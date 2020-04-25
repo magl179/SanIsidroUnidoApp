@@ -1,14 +1,12 @@
-import { Injectable, ErrorHandler, Injector } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { HttpErrorResponse } from "@angular/common/http";
-import { ToastController } from "@ionic/angular";
 import { MessagesService } from './messages.service';
-import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: "root"
 })
 export class ErrorService {
-  constructor(private toastCtrl: ToastController, private messageService: MessagesService) {}
+  constructor(private messageService: MessagesService) {}
 
   async handleError(httpError: HttpErrorResponse) {
     // Verificar que el error HTTP ocurrio en el cliente

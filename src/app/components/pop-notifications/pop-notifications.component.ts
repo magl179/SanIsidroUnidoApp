@@ -21,7 +21,6 @@ export class PopNotificationsComponent implements OnInit {
     ngOnInit() { }
 
     showAllNotifications() {
-        // alert('Show all notifications');
         this.getUnreadedNotifications = false;
         this.showListNotificationsModal();
     }

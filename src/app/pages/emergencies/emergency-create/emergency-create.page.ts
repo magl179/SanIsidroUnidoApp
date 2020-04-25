@@ -6,13 +6,11 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { IEmergencyReported, IUbication } from 'src/app/interfaces/models';
 import { PostsService } from 'src/app/services/posts.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
-import { finalize, timeout, delay, take } from 'rxjs/operators';
-import { IRespuestaApiSIU } from "src/app/interfaces/models";
+import { finalize } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from 'src/app/services/messages.service';
-import { EventsService } from '../../../services/events.service';
-import { BehaviorSubject, interval, Observable, of, from } from 'rxjs';
+import { EventsService } from 'src/app/services/events.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -32,7 +30,6 @@ export class EmergencyCreatePage implements OnInit {
     emergencyForm: FormGroup;
     ubicationForm: FormGroup;
     formSended = false;
-    // formSended = new BehaviorSubject(false);
     errorMessages = null;
 
     constructor(
@@ -56,7 +53,8 @@ export class EmergencyCreatePage implements OnInit {
             this.emergencyPostCoordinate.latitude = coordinates.latitude;
             this.emergencyPostCoordinate.longitude = coordinates.longitude;
         }).catch(err => {
-            console.error('Error al obtener geolocalizacion', err);
+            this.emergencyPostCoordinate.latitude = -0.096076;
+            this.emergencyPostCoordinate.longitude =  -78.503606;
         });
     }
 

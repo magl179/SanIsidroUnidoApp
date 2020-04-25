@@ -1,13 +1,12 @@
-import { Injectable, OnInit, OnDestroy } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { CONFIG } from 'src/config/config';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IEmergencyReported, ISocialProblemReported, ICreateDetail } from 'src/app/interfaces/models';
 import { AuthService } from './auth.service';
 import { HttpRequestService } from "./http-request.service";
 import { IRespuestaApiSIUPaginada } from "src/app/interfaces/models";
 import { setHeaders } from 'src/app/helpers/utils';
-import { tap } from 'rxjs/operators';
 
 
 
@@ -26,13 +25,6 @@ export class PostsService implements OnInit {
         REPORTS: 'reports',
         SOCIAL_PROBLEMS_BY_SUBCATEGORY: 'socialProblemsBySubcategory'
     }
-    // currentPageSubject = new BehaviorSubject({
-    //     events: 0,
-    //     socialProblems: 0,
-    //     emergencies: 0,
-    //     reports: 0,
-    //     socialProblemsBySubcategory: 0
-    // });
     //Paginas Actuales
     private currentPagination = {
         events: 0,
@@ -41,8 +33,6 @@ export class PostsService implements OnInit {
         reports: 0,
         socialProblemsBySubcategory: 0
     }
-    // socialProblemsCurrentSubcategory = '';
-    // socialProblemsSubcategoriesPage = 0;
 
     constructor(
         private authService: AuthService,
@@ -63,23 +53,6 @@ export class PostsService implements OnInit {
     }
 
     ngOnInit() { }
-
-    //MÉTODOS PARA RESETEAR LOS CONTADORES DE PAGINACION
-    resetSocialProblemsPage(page = 0) {
-        this.currentPagination.socialProblems = page;
-    }
-    resetSocialProblemsBySubcategoryPage(page = 0) {
-        this.currentPagination.socialProblemsBySubcategory = page;
-    }
-    resetEventsPage(page = 0) {
-        this.currentPagination.events = page;
-    }
-    resetEmergenciesPage(page = 0) {
-        this.currentPagination.emergencies = page;
-    }
-    resetReportsPage(page = 0) {
-        this.currentPagination.reports = page;
-    }
     //Metodos Increase Pagination
     resetPagination(type: string, page = 0) {
         this.currentPagination[type] = page;
@@ -97,15 +70,11 @@ export class PostsService implements OnInit {
 
     increasePagination(type: string) {
         let oldPage = this.currentPagination[type];
-        console.error('increasePagination oldpage', oldPage)
         this.currentPagination[type] = oldPage + 1;
-        console.error('increasePagination newpage', this.currentPagination)
     }
     decrementPagination(type: string) {
         let oldPage = this.currentPagination[type];
-        console.error('decrementPagination oldpage', oldPage)
         this.currentPagination[type] = oldPage - 1;
-        console.error('decrementPagination newpage', this.currentPagination)
     }
     getPagination(type: string) {
         const temp = { ...this.currentPagination };
@@ -161,16 +130,7 @@ export class PostsService implements OnInit {
         return this.httpRequest.get(`${environment.APIBASEURL}/publicaciones`, {
             "category": slug,
             "page": this.getPagination[key]
-        })
-            .pipe(
-                tap(() => {
-                    // this.currentPaginationSubject.next({...tempCurrentPage});
-                    // let tempCurrentPage = this.currentPaginationSubject.value;
-                    // tempCurrentPage[key]++;
-                    // this.currentPaginationSubject.next({...tempCurrentPage});
-                    console.warn('get posts page', this.currentPagination);
-                })
-            );
+        });
     }
     // Función para obtener los problemas sociales de la API
     getSocialProblems(params = {}): Observable<any> {
@@ -183,7 +143,6 @@ export class PostsService implements OnInit {
         this.increasePagination(this.PaginationKeys.EMERGENCIES);
         const user_id = this.AuthUser.id;
         const mergeParams = { user_id, ...params };
-        console.log('GET EMERGENCIES BY USER CALLED SERVICE', this.getPagination(this.PaginationKeys.EMERGENCIES))
         return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${user_id}/emergencias?page=${this.getPagination(this.PaginationKeys.EMERGENCIES)}`, mergeParams);
     }
     // Función para obtener el listado de eventos publicados
@@ -192,9 +151,7 @@ export class PostsService implements OnInit {
         const tempParams = {
             category: CONFIG.EVENTS_SLUG,
             page: this.getPagination(this.PaginationKeys.EVENTS),
-            // user_id
         }
-        console.log('GET EMERGENCIES BY USER CALLED SERVICE', this.getPagination(this.PaginationKeys.EVENTS))
         const requestParams = { ...params, ...tempParams };
         return this.httpRequest.get(`${environment.APIBASEURL}/publicaciones`,requestParams)
     }
@@ -205,8 +162,6 @@ export class PostsService implements OnInit {
             category: CONFIG.EMERGENCIES_SLUG,
             page: this.getPagination(this.PaginationKeys.EMERGENCIES)            
         }
-        // this.currentPagination.emergencies++;
-        console.log('GET EMERGENCIES BY USER CALLED SERVICE', this.getPagination(this.PaginationKeys.EMERGENCIES))
         const requestParams = { ...params, ...tempParams };
         return this.httpRequest.get(`${environment.APIBASEURL}/publicaciones`,requestParams)
     }
@@ -215,10 +170,8 @@ export class PostsService implements OnInit {
         this.increasePagination(this.PaginationKeys.REPORTS);
         const tempParams = {
             category: CONFIG.REPORTS_SLUG,
-            page: this.getPagination(this.PaginationKeys.REPORTS),
-            // user_id
+            page: this.getPagination(this.PaginationKeys.REPORTS)
         }
-        console.log('GET REPORTS BY USER CALLED SERVICE', this.getPagination(this.PaginationKeys.REPORTS))
         const requestParams = { ...params, ...tempParams };
         return this.httpRequest.get(`${environment.APIBASEURL}/publicaciones`,requestParams)
     }
@@ -254,7 +207,6 @@ export class PostsService implements OnInit {
             "subcategory": subcategory,
             "page": this.getPagination(this.PaginationKeys.SOCIAL_PROBLEMS_BY_SUBCATEGORY),
         };
-        console.log('GET posts by subcategory CALLED SERVICE', this.getPagination(this.PaginationKeys.SOCIAL_PROBLEMS_BY_SUBCATEGORY))
         const requestParams = { ...params, ...tempParams };
         const url = `${environment.APIBASEURL}/publicaciones`;
         return this.httpRequest.get(url, requestParams);

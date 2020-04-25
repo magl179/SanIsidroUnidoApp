@@ -3,19 +3,34 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { IPublicService } from 'src/app/interfaces/models';
 import { ModalController, NavController } from "@ionic/angular";
 import { MapInfoPage } from "src/app/modals/map-info/map-info.page";
-import { finalize, take, map, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { finalize, take, map, tap, distinctUntilChanged } from 'rxjs/operators';
 import { IRespuestaApiSIU } from "src/app/interfaces/models";
 import { getRandomColor } from 'src/app/helpers/utils';
 import { PublicService } from 'src/app/services/public.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ErrorService } from 'src/app/services/error.service';
 import { FormControl } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
+
+import { trigger,style,transition,animate,keyframes,query,stagger } from '@angular/animations';
 
 @Component({
     selector: 'siu-public-services-list',
     templateUrl: './public-services-list.page.html',
     styleUrls: ['./public-services-list.page.scss'],
+    animations: [
+        trigger('listAnimation', [
+          transition('* => *', [
+            query(':enter', style({ opacity: 0 }), {optional: true}),
+            query(':enter', stagger('300ms', [
+              animate('1s ease-in', keyframes([
+                style({opacity: 0, transform: 'translateY(-75%)', offset: 0}),
+                style({opacity: .5, transform: 'translateY(35px)',  offset: 0.3}),
+                style({opacity: 1, transform: 'translateY(0)',     offset: 1.0}),
+              ]))]), {optional: true}),
+          ])
+        ])
+      ]
 })
 export class PublicServicesListPage implements OnInit {
 
@@ -33,7 +48,6 @@ export class PublicServicesListPage implements OnInit {
 
     constructor(
         private activatedRoute: ActivatedRoute,
-        private utilsService: UtilsService,
         private publicService: PublicService,
         private navCtrl: NavController,
         private errorService: ErrorService,

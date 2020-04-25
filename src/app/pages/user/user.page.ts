@@ -14,7 +14,7 @@ import { finalize, map } from 'rxjs/operators';
 import { getImageURL, mapUser } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/services/error.service';
-import { MessagesService } from '../../services/messages.service';
+import { MessagesService } from 'src/app/services/messages.service';
 
 @Component({
     selector: 'app-user',

@@ -1,14 +1,12 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { IRespuestaApiSIUSingle } from 'src/app/interfaces/models';
 import { PublicService } from "src/app/services/public.service";
 import { take, finalize, flatMap } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LocalizationService } from "src/app/services/localization.service";
 import { getDistanceInKm, roundDecimal } from 'src/app/helpers/utils';
-import { UtilsService } from '../../../services/utils.service';
-import { ErrorService } from '../../../services/error.service';
-import { GeolocationService } from 'src/app/services/geolocation.service';
+import { ErrorService } from 'src/app/services/error.service';
 
 @Component({
     selector: 'siu-public-service-detail',
@@ -30,10 +28,7 @@ export class PublicServiceDetailPage implements OnInit {
     constructor(
         private activatedRoute: ActivatedRoute,
         private localizationService: LocalizationService,
-        private geolocationService: GeolocationService,
         private publicService: PublicService,
-        private utilsService: UtilsService,
-        private cdRef: ChangeDetectorRef,
         private errorService: ErrorService
     ) {
     }
@@ -49,8 +44,7 @@ export class PublicServiceDetailPage implements OnInit {
                 this.currentPosition = coordinates;
                 return;
             }).catch(err=>{
-                console.error('Error al obtener geolocalizacion', err);
-                return;
+                return null;
             });
         }
 

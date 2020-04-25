@@ -1,5 +1,0 @@
-<ul class="sm-stepbar">
-    <li *ngFor="let item of progressSteps;let pos = index" (click)="changeCurrentStep(pos)">
-        <span [ngClass]="{'active': (pos+1) === currentStep}">{{item.title}}</span>
-    </li>
-</ul>

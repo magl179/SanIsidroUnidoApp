@@ -14,24 +14,6 @@
     <div class="loading-app" *ngIf="searchingPosts">
         <loader-app class="flex-column-center" message="Buscando..."></loader-app>
     </div>
-    <!-- Listado Sugerencias -->
-    <!-- <ion-list *ngIf="!valueToSearch.value && searchIdeas.length > 0">
-        <ion-list-header>
-            <ion-label>Sugerencias</ion-label>
-        </ion-list-header>
-        <ion-item *ngFor="let idea of searchIdeas; let i = index;" (click)="setSuggessValue(idea)" lines="none">
-            <ion-label color="dark">{{idea}}</ion-label>
-        </ion-item>
-    </ion-list> -->
-    <!-- Listado Busquedas Recientes -->
-    <!-- <ion-list *ngIf="!valueToSearch.value && recentSearches.length > 0">
-        <ion-list-header>
-            <ion-label>Busquedas Recientes</ion-label>
-        </ion-list-header>
-        <ion-item *ngFor="let search_item of recentSearches; let i = index;" (click)="setSuggessValue(search_item)" lines="none">
-            <ion-label color="dark">{{search_item}}</ion-label>
-        </ion-item>
-    </ion-list> -->
     <!-- Mostrar si se encontro resultado -->
     <ion-list *ngIf="valueToSearch.value && requestStatus === 'success' && itemsSearchFound.length > 0">
         <ion-list-header>

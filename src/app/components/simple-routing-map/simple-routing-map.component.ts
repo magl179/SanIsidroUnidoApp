@@ -4,10 +4,10 @@ declare let L: any;
 import { GestureHandling } from "leaflet-gesture-handling";
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MapService } from "src/app/services/map.service";
-import { LocalizationService } from "src/app/services/localization.service";
 import { environment } from 'src/environments/environment';
 import { IUbication } from "src/app/interfaces/models";
 import { CONFIG } from 'src/config/config';
+import { MessagesService } from 'src/app/services/messages.service';
 
 
 @Component({
@@ -42,7 +42,7 @@ export class SimpleRoutingMapComponent implements OnInit {
 
     constructor(
         private mapService: MapService,
-        private localizationService: LocalizationService
+        private messageService: MessagesService,
     ) {
 
     }
@@ -53,13 +53,11 @@ export class SimpleRoutingMapComponent implements OnInit {
     async ngAfterViewInit() {
         try {
             this.mapMarkers = await this.mapService.getMarkers().toPromise();
-            // Obtener Coordenadas
             // Inicializar el Mapa
             await this.initializeMap();
         } catch (err) {
-            console.error('Error al cargar mapa', err)
+            this.messageService.showInfo('No se pudo cargar el mapa, intentalo más tarde');
         }
-        // Obtener marcadores
     }
 
     async initializeMap() {
@@ -104,7 +102,6 @@ export class SimpleRoutingMapComponent implements OnInit {
         this.map.addLayer(this.markersLayer);
         // Si obtuve coordenadas añadir el marcador
         let currentPoint: any;
-        console.warn('target ubicationIcon', this.targetUbicacionIcon);
         if (!this.simpleMap && this.currentCoordinate) {
             const iconCurrent = (this.targetUbicacionIcon) ? this.mapService.createExternalIcon(this.targetUbicacionIcon) : await this.mapService.getCustomIcon('red');
             this.arrRoutesLatLng[0] = this.createLatLng(this.currentCoordinate.latitude, this.currentCoordinate.longitude);
@@ -121,7 +118,6 @@ export class SimpleRoutingMapComponent implements OnInit {
         let markersGroupCoords = [];
        
             const markerIcon = (this.targetUbicacionIcon) ? this.mapService.createExternalIcon(this.targetUbicacionIcon) : await this.mapService.getCustomIcon('red');
-            // const markerIcon = await this.mapService.getCustomIcon('red');
 
             if (markerIcon) {
                 punto = new L.Marker(this.arrRoutesLatLng[1], { icon: markerIcon });

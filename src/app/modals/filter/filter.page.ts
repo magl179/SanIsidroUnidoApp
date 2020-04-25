@@ -1,9 +1,8 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ModalController, NavParams } from '@ionic/angular';
 import { PostsService } from "src/app/services/posts.service";
 import { finalize } from 'rxjs/operators';
 import { HttpErrorResponse } from "@angular/common/http";
-import { UtilsService } from "../../services/utils.service";
 import { ErrorService } from 'src/app/services/error.service';
 
 @Component({
@@ -26,7 +25,6 @@ export class FilterPage implements OnInit {
         private modalCtrl: ModalController,
         private navParams: NavParams,
         private errorService: ErrorService,
-        private utilsService: UtilsService,
         private postsService: PostsService
     ) {
         this.defaulText = (this.navParams.data.defaulText) ? this.navParams.data.defaulText : 'Todas';

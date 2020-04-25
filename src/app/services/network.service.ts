@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Network } from '@ionic-native/network/ngx';
 import { Platform } from '@ionic/angular';
-import { Observable, fromEvent, merge, of, BehaviorSubject, from } from 'rxjs';
+import { Observable, fromEvent, merge, of, BehaviorSubject } from 'rxjs';
 import { mapTo } from "rxjs/operators";
 import { HttpClient } from '@angular/common/http';
 

@@ -40,7 +40,6 @@
     padding-top: 2.5rem;
   }
   
-  // ion-card.sc-ion-card-md-h.sc-ion-card-md-s.md.hydrated:before {
   .directive:before {
     content: "";
     width: 100%;
@@ -51,7 +50,6 @@
     bottom: 165%;
     right: 0;
     left: 0;
-    /* z-index: 1; */
     opacity: 0.9;
     transform: scale(3);
     transition: all 0.3s linear 0s;

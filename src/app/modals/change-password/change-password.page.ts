@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { UtilsService } from 'src/app/services/utils.service';
 import { MustMatch } from 'src/app/helpers/must-match.validator';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
@@ -11,7 +10,7 @@ import { decodeToken } from 'src/app/helpers/auth-helper';
 import { setInputFocus } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MessagesService } from 'src/app/services/messages.service';
-import { ErrorService } from '../../services/error.service';
+import { ErrorService } from 'src/app/services/error.service';
 
 @Component({
     selector: 'app-change-password',

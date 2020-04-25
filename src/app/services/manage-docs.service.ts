@@ -39,7 +39,6 @@ export class ManageDocsService {
                     this.fileOpener.open(url, 'application/pdf');
                 }
             }).catch(err => {
-                console.error('Ocurrio un error al descargar el archivo');
                 this.messagesService.showError(`No pudimos descargar el archivo, intentalo más tarde.`);
             })
         } else {

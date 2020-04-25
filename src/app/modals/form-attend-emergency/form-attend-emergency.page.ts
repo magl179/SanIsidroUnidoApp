@@ -36,7 +36,6 @@ export class FormAttendEmergencyModal implements OnInit {
     }
 
     ngOnInit(){
-        console.log('authUser', this.AuthUser)
         this.userName = this.AuthUser.first_name;
     }
 

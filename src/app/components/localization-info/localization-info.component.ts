@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { LocalizationService } from '../../services/localization.service';
+import { LocalizationService } from 'src/app/services/localization.service';
 import { Platform } from '@ionic/angular';
 
 @Component({
@@ -23,14 +23,12 @@ export class LocalizationInfoComponent implements OnInit {
     async checkGPSEnable() {
         const coords = await this.localizationService.checkGPSEnabled();
         this.isGPSEnabled = (coords) ? true : false;
-        // this.isGPSEnabled = false;        
     }
 
     openSwitchLocation(){
         if(this.platform.is('cordova')){
             this.localizationService.openLocalizationSettings();
             setTimeout(async()=>{
-                // await this.checkGPSEnable();
                 this.isGPSEnabled = true;
             }, 1000);
         }

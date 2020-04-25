@@ -14,16 +14,13 @@
         <!-- INFORMACION DEL USUARIO -->
         <div class="ion-text-center" *ngIf="AuthUser">
             <h3 class="user_data">
-                <!-- <ion-icon name="person" class="icon"></ion-icon> -->
                 <span>{{AuthUser.first_name || 'Sin Nombre'}}
                     {{AuthUser.last_name || 'Sin Apellidos'}}</span>
             </h3>
             <p class="user_data">
-                <!-- <ion-icon name="mail" class="icon"></ion-icon> -->
                 <span>{{AuthUser.email || 'sin email'}}</span>
             </p>
             <p class="user_data">
-                <!-- <ion-icon name="briefcase" class="icon"></ion-icon> -->
                 <span class="ion-text-capitalize">
                     {{(AuthUser && AuthUser.roles && AuthUser.roles.length > 0) ? AuthUser.roles[0].name : 'No tienes un rol registrado'}}
                 </span>
@@ -48,8 +45,8 @@
                     </div>
                     <p class="title_option">Cambiar Contraseña</p>
                 </ion-col>
-                    <ion-col class="user_profile_options">
-                    <!-- <ion-col class="user_profile_options" *appHasRole="['invitado']"> -->
+                    <!-- <ion-col class="user_profile_options"> -->
+                    <ion-col class="user_profile_options" *appHasRole="['invitado']">
                         <div class="icon_option" (click)="showRequestMembershipModal()">
                             <ion-icon name="document"></ion-icon>
                         </div>
@@ -118,13 +115,5 @@
             *ngIf="userDevicesLoaded && UserDevices.length === 0">
             <p>No tienes dispositivos asociados</p>
         </div>
-        <!-- INFO DISPOSITIVO -->
-        <!-- <div *ngIf="CurrentUserDevice" style="padding-left: 1rem;">
-            <p>DeviceUser PhoneID: {{CurrentUserDevice.phone_id}}</p>
-            <p>DeviceUser PhoneModel: {{CurrentUserDevice.phone_model}}</p>
-        </div>
-        <div *ngIf="!CurrentUserDevice" style="padding-left: 1rem;">
-            No se pudo obtener info device user
-        </div> -->
     </div>
 </ion-content>

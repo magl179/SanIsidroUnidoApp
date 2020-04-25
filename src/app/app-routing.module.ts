@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { UserAuthenticatedGuard } from './guards/user-authenticated.guard';
-// import { UserHasRoleGuard } from "./guards/user-has-role.guard";
 
 const routes: Routes = [
     {
@@ -16,8 +15,6 @@ const routes: Routes = [
     {
         path: 'directory', //Pantalla de Pàgina de Directorio Barrial
         loadChildren: './pages/directory/directory.module#DirectoryPageModule',
-        // path: 'directory',
-        // loadChildren: './pages/directory/directory.module#DirectoryPageModule'
     },
     {
         path: 'emergencies', //Pantalla de Pagina de Emergencias

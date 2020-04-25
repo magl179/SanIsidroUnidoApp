@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { ShowListNotificationsPage } from './show-list-notifications.page';
-import { SmComponentsModule } from '../../components/sm-components.module';
+import { SmComponentsModule } from 'src/app/components/sm-components.module';
 
 @NgModule({
   imports: [

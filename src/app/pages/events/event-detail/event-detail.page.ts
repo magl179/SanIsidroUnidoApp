@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UtilsService } from 'src/app/services/utils.service';
 import { PostsService } from 'src/app/services/posts.service';
@@ -7,14 +7,13 @@ import { IEvent, IPostShare, IRespuestaApiSIUSingle } from "src/app/interfaces/m
 import { ModalController } from "@ionic/angular";
 import { ImageDetailPage } from "src/app/modals/image_detail/image_detail.page";
 import { finalize, map, take } from 'rxjs/operators';
-import { getUsersFromDetails, checkUserInDetails } from "src/app/helpers/user-helper";
 import { checkLikePost } from "src/app/helpers/user-helper";
 import { mapEvent, cortarTextoConPuntos, getFirstPostImage } from "src/app//helpers/utils";
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from 'src/app/services/events.service';
 import { ErrorService } from 'src/app/services/error.service';
 import { CONFIG } from 'src/config/config';
-import { MessagesService } from '../../../services/messages.service';
+import { MessagesService } from 'src/app/services/messages.service';
 
 
 @Component({

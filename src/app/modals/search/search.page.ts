@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { map, debounceTime, distinctUntilChanged, finalize } from 'rxjs/operators';
 import { PostsService } from "src/app/services/posts.service";
 import { HttpErrorResponse } from '@angular/common/http';
+import { ErrorService } from 'src/app/services/error.service';
 
 @Component({
     selector: 'modal-search',
@@ -27,7 +28,8 @@ export class SearchPage implements OnInit {
         private modalCtrl: ModalController,
         private navParams: NavParams,
         private postsService: PostsService,
-        private navCtrl: NavController
+        private navCtrl: NavController,
+        private errorService: ErrorService
     ) {
         this.searchPlaceholder = this.navParams.data.searchPlaceholder;
         this.searchIdeas = this.navParams.data.searchIdeas;
@@ -101,11 +103,7 @@ export class SearchPage implements OnInit {
                 ).subscribe((res: any) => {
                     this.itemsSearchFound = res.data;
                 },(err: HttpErrorResponse) => {
-                    if (err.error instanceof Error) {
-                        console.error("Client-side error", err);
-                    } else {
-                        console.error("Server-side error", err);
-                    }
+                    this.errorService.manageHttpError(err, 'Ocurrio un error al realizar la busqueda');
                 });
             }
         });

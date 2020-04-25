@@ -1,9 +1,6 @@
 
 <ion-header>
     <ion-toolbar color="primary">
-      <!-- <ion-buttons slot="start" class="buttons-start">
-        <ion-icon name="close" slot="icon-only"></ion-icon>
-      </ion-buttons> -->
       <ion-title class="ion-text-center">Rechazar Atención Emergencia</ion-title>
       <ion-buttons slot="end" class="buttons-end">
         <ion-icon name="close" slot="icon-only" (click)="closeModal()">          
@@ -13,7 +10,6 @@
   </ion-header>
   <ion-content>
     <div class="section-header">
-      <!-- <h2>Rechazar Atención de Emergencia</h2> -->
       <p>{{userName}} explica el mótivo por el cual no puedes atender la emergencia</p>
     </div>
     <form [formGroup]="attendEmergencyForm">

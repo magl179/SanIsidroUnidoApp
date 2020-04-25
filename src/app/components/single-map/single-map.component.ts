@@ -5,7 +5,6 @@ import { GestureHandling } from "leaflet-gesture-handling";
 import { Component, OnInit, EventEmitter, Input, Output, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { LocalizationService } from "src/app/services/localization.service";
 import { MapService } from "src/app/services/map.service";
-// import { environment } from "src/environments/environment";
 import { manageTwoFingerDrag } from 'src/app/helpers/utils';
 import { CONFIG } from 'src/config/config';
 
@@ -41,7 +40,6 @@ export class SingleMapComponent implements OnInit, AfterViewInit {
     async ngOnInit() { }
 
     async ngAfterViewInit() {
-        // this.currentCoordinate = await this.localizationService.getCoordinates();
         this.currentCoordinate.latitude = this.latitude;
         this.currentCoordinate.longitude = this.longitude;
         if (this.latitude && this.longitude) {
@@ -77,8 +75,6 @@ export class SingleMapComponent implements OnInit, AfterViewInit {
             updateWhenIdle: true,
             reuseTiles: true
         }).addTo(this.map);
-
-        // this.currentCoordinate.longitude = this.longitude;
         const icon = await this.mapService.getCustomIcon('red');
 
         this.currentCoordinate.latitude = this.currentCoordinate.latitude || -0.2188216;
@@ -93,10 +89,6 @@ export class SingleMapComponent implements OnInit, AfterViewInit {
             mainMarker = new L.Marker(leafletLatLng, {title: 'Mi Ubicación Actual',
             draggable: true});
         }
-        // const mainMarker = L.marker([this.currentCoordinate.latitude || -0.2188216, this.currentCoordinate.longitude || -78.5135489], {
-        //     title: 'Mi Ubicación Actual',
-        //     draggable: true
-        // });
         mainMarker.on('dragend', async (e: any) => {
             const position = await e.target.getLatLng();
             this.currentCoordinate.latitude = position.lat;

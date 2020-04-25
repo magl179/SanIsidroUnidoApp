@@ -29,7 +29,7 @@
     </div>
     
     <!-- Tarjeta con Datos Cargados -->
-    <div *ngIf="!showLoading  && socialProblemsList.length > 0">
+    <div *ngIf="!showLoading  && socialProblemsList.length > 0" [@listAnimation]>
         <!-- Posts Filtrados con Datos -->
         <ion-card style="position:relative" class="social-problem"
             *ngFor="let socialProblem of socialProblemsFilter">

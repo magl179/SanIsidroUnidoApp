@@ -11,21 +11,35 @@ import { EventsService } from "src/app/services/events.service";
 import { ErrorService } from 'src/app/services/error.service';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
+import { trigger, style, transition, animate, keyframes, query, stagger } from '@angular/animations';
 
 @Component({
     selector: 'app-emergencies-list',
     templateUrl: './emergencies-list.page.html',
     styleUrls: ['./emergencies-list.page.scss'],
+    animations: [
+        trigger('listAnimation', [
+            transition('* => *', [
+                query(':enter', style({ opacity: 0 }), { optional: true }),
+                query(':enter', stagger('300ms', [
+                    animate('1s ease-in', keyframes([
+                        style({ opacity: 0, transform: 'translateY(-75%)', offset: 0 }),
+                        style({ opacity: .5, transform: 'translateY(35px)', offset: 0.3 }),
+                        style({ opacity: 1, transform: 'translateY(0)', offset: 1.0 }),
+                    ]))]), { optional: true }),
+            ])
+        ])
+    ]
 })
 export class EmergenciesListPage implements OnInit, OnDestroy {
 
     AuthUser = null;
-    showloading = true;   
-    showNotFound = false; 
+    showloading = true;
+    showNotFound = false;
     emergenciesList = [];
     emergenciesFiltered = [];
     //Request
-    filtersToApply: any = { is_attended: ""};
+    filtersToApply: any = { is_attended: "" };
     filters: IBasicFilter = {
         is_attended: {
             name: 'Estado',
@@ -49,17 +63,15 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         private events_app: EventsService
     ) { }
 
-    redirectToSearch(){
+    redirectToSearch() {
         this.navCtrl.navigateRoot("/emergencies/search", {
             queryParams: { redirectUrl: this.router.url }
         });
     }
 
-    async ngOnInit() {       
+    async ngOnInit() {
         //Verificar si es policia
         this.isPolicia = await this.authService.userHasRole(['Policia']);
-
-        //this.postsService.resetEmergenciesPage();
         this.utilsService.enableMenu();
         this.authService.sessionAuthUser.subscribe(async (token_decoded: ITokenDecoded) => {
             if (token_decoded) {
@@ -67,7 +79,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
             }
         });
         //Primera Carga
-        this.loadEmergencies(null,true);
+        this.loadEmergencies(null, true);
         //Simular Un Refresh cuando se crea nuevas emergencias
         this.events_app.emergenciesEmitter.subscribe((event_app: any) => {
             this.postsService.resetPagination(this.postsService.PaginationKeys.EMERGENCIES);
@@ -80,21 +92,20 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         //Desuscribirnos de los Observables al destruir el componente
-        console.warn('ng on destroy emergencies')
         this.postsService.resetPagination(this.postsService.PaginationKeys.EMERGENCIES);
     }
 
-    getEmergenciesFunction(params={}){
-        if(this.isPolicia){
+    getEmergenciesFunction(params = {}) {
+        if (this.isPolicia) {
             return this.postsService.getEmergencies(params);
-        }else{
+        } else {
             return this.postsService.getEmergenciesByUser(params);
         }
     }
 
-    async loadEmergencies(event: any = null, first_loading=false) { 
-        const params = (this.isPolicia) ? {police: this.AuthUser.id}: {}
-        
+    async loadEmergencies(event: any = null, first_loading = false) {
+        const params = (this.isPolicia) ? { police: this.AuthUser.id } : {}
+
         this.getEmergenciesFunction(params).pipe(
             map((res: IRespuestaApiSIUPaginada) => {
                 if (res && res.data) {
@@ -102,46 +113,44 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
                         emergency = mapEmergency(emergency);
                     });
                 }
-                if(res && res.data && res.data.length == 0){
+                if (res && res.data && res.data.length == 0) {
                     this.postsService.resetPaginationEmpty(this.postsService.PaginationKeys.EMERGENCIES)
                 }
                 return res;
             }),
-            catchError((err: HttpErrorResponse)=>{
+            catchError((err: HttpErrorResponse) => {
                 this.errorService.manageHttpError(err, 'Ocurrio un error al traer el listado de emergencias', false);
                 this.postsService.resetPaginationEmpty(this.postsService.PaginationKeys.EMERGENCIES);
-                return of({data: []})
+                return of({ data: [] })
             }),
             finalize(() => {
-                console.warn('finalize', this.postsService.getAllPagination())
-                if(first_loading){
+                if (first_loading) {
                     this.showloading = false;
                 }
-                if(first_loading && this.emergenciesList.length === 0){
+                if (first_loading && this.emergenciesList.length === 0) {
                     this.showNotFound = true;
-                } 
-                               
+                }
+
             }),
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let emergenciesApi = [];
             emergenciesApi = res.data;
-            console.log('emergenciesApi', emergenciesApi)
             //Evento Completar
-            if(event && event.data && event.data.target && event.data.target.complete){
+            if (event && event.data && event.data.target && event.data.target.complete) {
                 event.data.target.complete();
-            }         
-            if(event && event.data && event.data.target && event.data.target.complete && emergenciesApi.length == 0){
+            }
+            if (event && event.data && event.data.target && event.data.target.complete && emergenciesApi.length == 0) {
                 event.data.target.disabled = true;
-            }         
+            }
             if (event && event.type == 'refresher') {
                 this.emergenciesList.unshift(...emergenciesApi);
                 this.emergenciesFiltered.unshift(...emergenciesApi);
                 return;
-            }else if(event && event.type == 'infinite_scroll'){
+            } else if (event && event.type == 'infinite_scroll') {
                 this.emergenciesList.push(...emergenciesApi);
                 this.emergenciesFiltered.push(...emergenciesApi);
                 return;
-            }else{
+            } else {
                 this.emergenciesList.push(...emergenciesApi);
                 this.emergenciesFiltered.push(...this.emergenciesList);
                 return;
@@ -164,7 +173,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
     postDetail(id: number) {
         this.navCtrl.navigateForward(`/emergencies/detail/${id}`);
     }
-    
+
     getInfiniteScrollData(event: any) {
         this.loadEmergencies({
             type: 'infinite_scroll',
@@ -183,15 +192,15 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         const value = (event.detail.value !== "") ? Number(event.detail.value) : "";
         const type = 'is_attended';
         if (value !== "") {
-            const filterApplied = setFilterKeys({...this.filtersToApply}, type, value);
+            const filterApplied = setFilterKeys({ ...this.filtersToApply }, type, value);
             this.filtersToApply = filterApplied;
-            this.emergenciesFiltered = filterDataInObject([...this.emergenciesList], {...this.filtersToApply});
+            this.emergenciesFiltered = filterDataInObject([...this.emergenciesList], { ...this.filtersToApply });
         } else {
             this.emergenciesFiltered = this.emergenciesList;
         }
     }
 
-    
+
 
 
 }

@@ -11,10 +11,9 @@ import { NotificationsService } from 'src/app/services/notifications.service';
 import { decodeToken } from 'src/app/helpers/auth-helper';
 import { setInputFocus } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
 import { CONFIG } from 'src/config/config';
 import { ErrorService } from 'src/app/services/error.service';
-import { MessagesService } from '../../services/messages.service';
+import { MessagesService } from 'src/app/services/messages.service';
 
 @Component({
     selector: 'app-register',
@@ -45,12 +44,6 @@ export class RegisterPage implements OnInit {
     ) {
         this.createForm();
     }
-
-    // ionViewDidEnter() {
-    //     setTimeout(() => {
-    //       this.first_field.nativeElement.setFocus();
-    //     },150);    
-    //  }
 
     async ngOnInit() {
         this.backUrl = `/home-screen`;

@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { UserService } from 'src/app/services/user.service';
-import { environment } from 'src/environments/environment';
 import { take, finalize, map } from 'rxjs/operators';
 import { MapNotification } from 'src/app/helpers/utils';
 import { PopoverController } from '@ionic/angular';
@@ -73,8 +72,6 @@ export class ListNotificationsComponent implements OnInit {
     }
 
     async manageNoti(noti: INotificationApi) {
-        //alert('en construccion...');
-        // return;
         if (noti && noti.data) {
             await this.popoverCtrl.dismiss();
             this.notiService.manageAppNotification(noti.data);

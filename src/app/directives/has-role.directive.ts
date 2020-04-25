@@ -1,8 +1,7 @@
 import { Directive, Input, TemplateRef, ViewContainerRef, OnInit } from '@angular/core';
-import { AuthService } from '../services/auth.service';
-import { hasRoles, getUserRoles } from '../helpers/user-helper';
-import { Subject, Subscription } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { AuthService } from 'src/app/services/auth.service';
+import { hasRoles, getUserRoles } from 'src/app/helpers/user-helper';
+import { Subscription } from 'rxjs';
 
 @Directive({
     selector: '[appHasRole]'
@@ -13,8 +12,6 @@ export class HasRoleDirective implements OnInit {
     authObservable$: Subscription;
     isVisible = false;
 
-    // isVisible = false;
-
     constructor(
         private authService: AuthService,
         private templateRef: TemplateRef<any>,
@@ -22,24 +19,20 @@ export class HasRoleDirective implements OnInit {
     ) { }
 
     ngOnInit() {
-        //  We subscribe to the roles$ to know the roles the user has
         this.authObservable$ = this.authService.sessionAuthUser.subscribe(token_decoded => {
             // If he doesn't have any roles, we clear the viewContainerRef
             let userRoles = [];
             if (!token_decoded) {
-                // this.viewContainer.clear();
                 userRoles = ['invitado'];
             }else{
                 userRoles = getUserRoles(token_decoded);
             }
-            // If the user has the role needed to 
-            // render this component we can add it
+            // If the user has the role needed to render this component we can add it
             if (hasRoles(userRoles, this.roles)) {
                 if (!this.isVisible) {
                     this.isVisible = true;
                     this.viewContainer.createEmbeddedView(this.templateRef);
                 }
-                // }
             } else {
                 this.isVisible = false;
                 // If the user does not have the role

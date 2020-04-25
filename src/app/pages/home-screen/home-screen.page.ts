@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { ISlideTutorial } from 'src/app/interfaces/models';
@@ -17,6 +17,7 @@ export class HomeScreenPage implements OnInit {
         loop: true
     };
     slides: ISlideTutorial[] = [];
+    isPolicia = false;
 
     constructor(
         private navCtrl: NavController,
@@ -32,9 +33,7 @@ export class HomeScreenPage implements OnInit {
                 this.errorService.manageHttpError(err, 'No se pudieron cargar las opciones del tutorial');
             }
         );
-        // await this.utilsService.enableMenu();
         await this.utilsService.disabledMenu();
-        // await this.utilsService.closeMenu();
     }
     //Función cuando cambia el Slide para prevenir ir a la slide -1 y slide n+1
      slideChange(event: any) {

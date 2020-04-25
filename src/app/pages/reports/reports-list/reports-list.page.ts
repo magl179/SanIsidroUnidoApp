@@ -8,11 +8,25 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/services/error.service';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
+import { trigger,style,transition,animate,keyframes,query,stagger } from '@angular/animations';
 
 @Component({
   selector: 'app-reports-list',
   templateUrl: './reports-list.page.html',
   styleUrls: ['./reports-list.page.scss'],
+  animations: [
+    trigger('listAnimation', [
+      transition('* => *', [
+        query(':enter', style({ opacity: 0 }), {optional: true}),
+        query(':enter', stagger('300ms', [
+          animate('1s ease-in', keyframes([
+            style({opacity: 0, transform: 'translateY(-75%)', offset: 0}),
+            style({opacity: .5, transform: 'translateY(35px)',  offset: 0.3}),
+            style({opacity: 1, transform: 'translateY(0)',     offset: 1.0}),
+          ]))]), {optional: true}),
+      ])
+    ])
+  ]
 })
 export class ReportsListPage implements OnInit, OnDestroy {
 
@@ -28,7 +42,7 @@ export class ReportsListPage implements OnInit, OnDestroy {
   ) { }
     
     ngOnInit() { 
-        this.postsService.resetReportsPage();
+        this.postsService.resetPagination(this.postsService.PaginationKeys.REPORTS);
         this.loadReports(null, true);
     }
 
@@ -43,7 +57,6 @@ export class ReportsListPage implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() { 
-        console.warn('ng on destroy reports list')
         this.postsService.resetPagination(this.postsService.PaginationKeys.REPORTS);
     }
     

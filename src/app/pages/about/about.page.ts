@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { NetworkService } from 'src/app/services/network.service';
-import { UtilsService } from 'src/app/services/utils.service';
 import { IDeviceUser } from 'src/app/interfaces/models';
 import { CONFIG } from 'src/config/config';
 
@@ -21,7 +20,6 @@ export class AboutPage implements OnInit {
     constructor(
         private notiService: NotificationsService,
         private networkService: NetworkService,
-        private utilsService: UtilsService
     ) {
 
     }

@@ -14,7 +14,7 @@
 	margin-left: 10px;
 	margin-top: 10px;
 }
-.leaflet-control-search.search-exp {/*expanded*/
+.leaflet-control-search.search-exp {
 	background: #fff;
 	border: 2px solid rgba(0,0,0,0.2);
 	background-clip: padding-box;	
@@ -52,7 +52,7 @@
 	opacity: 1;
 }
 .leaflet-control-search .search-cancel span {
-	display:none;/* comment for cancel button imageless */
+	display:none;
 	font-size:18px;
 	line-height:20px;
 	color:#ccc;

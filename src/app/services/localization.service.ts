@@ -3,7 +3,6 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { Platform } from '@ionic/angular';
-import { UtilsService } from './utils.service';
 import { ISimpleCoordinates } from 'src/app/interfaces/models';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { MessagesService } from './messages.service';
@@ -24,7 +23,6 @@ export class LocalizationService {
         private diagnostic: Diagnostic,
         private androidPermissions: AndroidPermissions,
         private locationAccuracy: LocationAccuracy,
-        private utilsService: UtilsService,
         private platform: Platform,
         private messageService: MessagesService,
     ) { }

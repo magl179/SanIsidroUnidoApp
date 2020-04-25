@@ -1,11 +1,11 @@
 import { Injectable, OnInit } from '@angular/core';
-import { ToastController, LoadingController, MenuController, Platform, NavController } from '@ionic/angular';
+import { ToastController, LoadingController, MenuController, Platform } from '@ionic/angular';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Storage } from '@ionic/storage';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { ToastOptions } from "@ionic/core";
 import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
-import { CONFIG } from '../../config/config';
+import { CONFIG } from 'src/config/config';
 
 declare var moment: any;
 

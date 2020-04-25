@@ -13,18 +13,16 @@
     <ion-grid *ngIf="profileUserImg.length > 0">
         <ion-row class="ion-justify-content-center">
             <ion-col size="6" *ngFor="let image of profileUserImg; let i = index;">
-                <ion-item-sliding>
-                    <ion-item>
-                        <ion-card>
-                            <img [src]="image">
-                        </ion-card>
-                    </ion-item>
-                    <ion-item-options side="end">
-                        <ion-item-option (click)="deleteImage(i)" color="danger" expandable="true">
-                            <ion-icon slot="icon-only" name="trash"></ion-icon>
-                        </ion-item-option>
-                    </ion-item-options>
-                </ion-item-sliding>
+                <div class="item-container">
+                        <div class="user-avatar-container">
+                            <img  class="user-avatar" [src]="image | imageSanitizer">
+                        </div>
+                    <div class="container_image_actions">
+                        <ion-button size="small" color="danger" expand="full" (click)="deleteImage(i)">
+                            <ion-icon name="trash"></ion-icon>
+                        </ion-button>
+                    </div>
+                </div>
             </ion-col>
         </ion-row>
     </ion-grid>

@@ -34,7 +34,6 @@
         display: block;
         font-size: 16px;
         display: flex;
-        // justify-content: center;
         align-items: center;
         color: var(--ion-color-step-600,#666);
         margin: 8px 0;
@@ -44,16 +43,19 @@
     }
 }
 .icon-noti-readed{
-    // content: "";
     background: #f95353;
-    // position: absolute;
     height: 10px;
     width: 10px;
     display: block;
-    // bottom: -39%;
-    // right: 35%;
     border-radius: 50%;
     &.active{
         background: #8BC34A;
     }
+}
+
+.not-data{
+    min-height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

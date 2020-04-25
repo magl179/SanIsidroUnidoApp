@@ -5,6 +5,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { PublicServicesListPage } from './public-services-list.page';
 import { SmComponentsModule } from 'src/app/components/sm-components.module';
+import { PipesModule } from 'src/app/pipes/pipes.module';
 
 const routes: Routes = [
     {
@@ -21,6 +22,7 @@ const routes: Routes = [
         FormsModule,
         IonicModule,
         ReactiveFormsModule,
+        PipesModule,
         RouterModule.forChild(routes),
         SmComponentsModule
     ]

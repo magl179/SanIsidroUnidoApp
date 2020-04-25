@@ -8,9 +8,8 @@ import { UtilsService } from "src/app/services/utils.service";
 import { mapReport } from "src/app/helpers/utils";
 import { HttpErrorResponse } from '@angular/common/http';
 import { ManageDocsService } from 'src/app/services/manage-docs.service';
-import { environment } from 'src/environments/environment';
 import { ErrorService } from 'src/app/services/error.service';
-import { IReport } from '../../../interfaces/models';
+import { IReport } from 'src/app/interfaces/models';
 
 @Component({
     selector: 'app-report-detail',

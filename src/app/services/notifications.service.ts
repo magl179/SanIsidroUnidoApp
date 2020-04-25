@@ -2,13 +2,11 @@ import { Injectable, EventEmitter, OnInit } from '@angular/core';
 import { OneSignal, OSNotification, OSNotificationPayload } from '@ionic-native/onesignal/ngx';
 import { environment } from 'src/environments/environment';
 import { BehaviorSubject } from 'rxjs';
-import { Platform, NavController } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 import { UserService } from './user.service';
 import { AuthService } from './auth.service';
-import { UtilsService } from './utils.service';
 import { IDeviceUser, INotiList } from 'src/app/interfaces/models';
 import { Device } from '@ionic-native/device/ngx';
-import { INotiPostOpen } from "src/app/interfaces/models";
 import { CONFIG } from 'src/config/config';
 import { MessagesService } from './messages.service';
 import { ErrorService } from './error.service';
@@ -16,7 +14,7 @@ import { Storage } from '@ionic/storage'
 import { Router } from '@angular/router';
 import { EventsService } from './events.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { INotificationPost } from '../interfaces/models';
+import { INotificationPost } from 'src/app/interfaces/models';
 
 const USER_DEVICE_ID_STORAGE = "siuDevice";
 
@@ -44,7 +42,6 @@ export class NotificationsService implements OnInit {
         private oneSignal: OneSignal,
         private platform: Platform,
         private errorService: ErrorService,
-        private navCtrl: NavController,
         private messageService: MessagesService,
         private userService: UserService,
         private authService: AuthService,
@@ -247,8 +244,6 @@ export class NotificationsService implements OnInit {
 
         if (post && post.id && post.category) {
             //Switch de Opciones segun el slug del posts
-            console.warn('post catgory', post.category)
-            console.warn('post aditiondal data', aditionalDataPost)
             switch (post.category.slug.toLowerCase()) {
                 case CONFIG.EMERGENCIES_SLUG: //caso posts emergencia creado
                     urlNavigate = `/emergencies/detail/${post.id}`;
@@ -270,7 +265,6 @@ export class NotificationsService implements OnInit {
                     urlNavigate = null;
                     break;
             }
-            console.warn('URL NAVIGATE', urlNavigate)
             if (urlNavigate) {
                 setTimeout(() => {
                     this.router.navigateByUrl(urlNavigate);

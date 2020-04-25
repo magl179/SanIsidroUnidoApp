@@ -1,6 +1,3 @@
-<!-- <div class="header-list">
-    <h2 class="title_list_app">Notificaciones</h2>
-</div> -->
 <div class="loading-app" *ngIf="!requestFinished">
     <loader-app class="flex-column-center"></loader-app>
 </div>
@@ -12,9 +9,6 @@
                 <img [src]="noti.data.notification_user.avatar_link" fallimg="user_avatar">
             </ion-avatar>
             <ion-label class="notifications_description">
-                <!-- <h2 class="title">
-                    {{(noti.data && noti.data.title) ? noti.data.title:  'sin title'}}
-                </h2> -->
                 <h3 class="author" *ngIf="noti.data.notification_user">
                     {{ noti.data.notification_user.first_name}} {{noti.data.notification_user.last_name}}
                 </h3>
@@ -33,7 +27,9 @@
     </ng-container>
 </ion-list>
 <div *ngIf="requestFinished && notificationsRequested && notificationsRequested.length === 0">
-    <p class="ion-text-wrap ion-text-center">
-        No existen notificaciones disponibles
-    </p>
+    <div class="not-data">
+        <p class="ion-text-wrap ion-text-center">
+            No existen notificaciones disponibles
+        </p>
+    </div>
 </div>

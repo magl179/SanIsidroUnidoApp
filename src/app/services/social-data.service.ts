@@ -1,15 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
 import { GooglePlus as Google } from '@ionic-native/google-plus/ngx';
 import { Platform } from '@ionic/angular';
-import { UtilsService } from './utils.service';
 import { HttpRequestService } from "./http-request.service";
 import { ErrorService } from './error.service';
 import { MessagesService } from './messages.service';
-import { environment } from 'src/environments/environment';
-import { HttpHeaders } from '@angular/common/http';
 
 interface GoogleUser {
     sub: string;
@@ -36,8 +32,7 @@ export class SocialDataService {
         private messageService: MessagesService,
         private facebook: Facebook,
         private google: Google,
-        private platform: Platform,
-        private utilsService: UtilsService
+        private platform: Platform
     ) { }
 
     // Funcion para parsear los datos del login de google

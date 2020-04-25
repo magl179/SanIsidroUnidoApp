@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UtilsService } from "src/app/services/utils.service";
 import { PostsService } from "src/app/services/posts.service";
-import { NetworkService } from "src/app/services/network.service";
 import { AuthService } from "src/app/services/auth.service";
 import { finalize, map, take } from 'rxjs/operators';
 import { IRespuestaApiSIUSingle, IEmergency } from 'src/app/interfaces/models';
@@ -11,7 +10,7 @@ import { ImageDetailPage } from 'src/app/modals/image_detail/image_detail.page';
 import { mapEmergency } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/services/error.service';
-import { MessagesService } from '../../../services/messages.service';
+import { MessagesService } from 'src/app/services/messages.service';
 import { FormAttendEmergencyModal } from 'src/app/modals/form-attend-emergency/form-attend-emergency.page';
 
 
@@ -124,9 +123,6 @@ export class EmergencyDetailPage implements OnInit {
         });
         await modal.present();
         const { data } : any = await modal.onWillDismiss();
-        console.log({
-            dataModal: data
-        });
         if(data.formulario_enviado){
             // this.showPoliciaOptions = false;
             this.messagesService.showInfo("El Formulario se envio");

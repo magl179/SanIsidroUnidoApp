@@ -11,28 +11,11 @@
     <app-no-results-found *ngIf="showNotFound && reportsList.length === 0"
         message="No existen reportes disponibles" class="ion-padding"></app-no-results-found>
     <!-- Animación al cargar los datos -->
-    <div *ngIf="showLoading">
-        <ion-card class="report animated flash slow infinite" *ngFor="let item of [1,1,1,1]">
-            
-            <ion-card-header>
-                <ion-card-title>
-                    <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-                </ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-                <p>
-                    <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
-                    <ion-skeleton-text animated style="width: 90%"></ion-skeleton-text>
-                    <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-                </p>
-                <p>
-                    <ion-skeleton-text animated style="width: 10%"></ion-skeleton-text>
-                </p>
-            </ion-card-content>
-        </ion-card>
+    <div class="loading-app" *ngIf="showLoading">
+        <loader-app class="flex-column-center"></loader-app>
     </div>
     <!-- Tarjetas con Información de los Reportes -->
-    <div *ngIf="!showLoading && reportsList.length > 0">
+    <div *ngIf="!showLoading && reportsList.length > 0" [@listAnimation]>
         <ion-card class="report-container" *ngFor="let report of reportsList; let i = index;">
             <div class="ion-padding" style="display: flex;align-items:Center;">
                 <div class="left-section">
@@ -47,9 +30,6 @@
             </div>
             <ion-card-header>
                 <ion-card-title>{{report.title}}</ion-card-title>
-                <!-- <div class="report_created_at">
-                    <span>{{report.fecha_creacion}}</span>
-                </div> -->
             </ion-card-header>
             <ion-card-content class="description-section">
                 <p class="description-section__content">

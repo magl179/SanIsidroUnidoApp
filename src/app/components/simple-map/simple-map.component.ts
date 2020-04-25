@@ -3,7 +3,6 @@ import 'leaflet-routing-machine';
 import { GestureHandling } from "leaflet-gesture-handling";
 declare let L: any;
 import { Component, Input, AfterViewInit, ElementRef, ViewChild } from "@angular/core";
-import { environment } from 'src/environments/environment';
 import { IUbication } from "src/app/interfaces/models";
 import { getJSON } from "src/app/helpers/utils";
 import { MapService } from 'src/app/services/map.service';
@@ -64,7 +63,6 @@ export class SimpleMapComponent implements AfterViewInit {
 
         
             const icon = await this.mapService.getCustomIcon('red');
-            // const coordenadas: any[] = [this.coordsMap.latitude, this.coordsMap.longitude];
             let markerPosition: any;
             const leafletLat = L.latLng(this.coordsMap.latitude, this.coordsMap.longitude);
             if (icon) {

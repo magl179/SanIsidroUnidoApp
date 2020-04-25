@@ -3,26 +3,36 @@ import { NavController } from "@ionic/angular";
 import { UtilsService } from 'src/app/services/utils.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { PostsService } from 'src/app/services/posts.service';
-import { IBasicFilter, IRespuestaApiSIU, IRespuestaApiSIUPaginada } from 'src/app/interfaces/models';
+import { IBasicFilter, IRespuestaApiSIUPaginada } from 'src/app/interfaces/models';
 import { finalize, map, catchError } from "rxjs/operators";
 import { ISocialProblem, IPostShare } from 'src/app/interfaces/models';
-import { environment } from 'src/environments/environment';
 import { checkLikePost } from 'src/app/helpers/user-helper';
 import { mapSocialProblem, setFilterKeys, filterDataInObject, cortarTextoConPuntos, getFirstPostImage } from "src/app/helpers/utils";
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from "src/app/services/events.service";
-import { ActivatedRoute, Router, NavigationExtras } from "@angular/router";
-import { NavigationService } from 'src/app/services/navigation.service';
+import { ActivatedRoute, Router } from "@angular/router";
 import { CONFIG } from 'src/config/config';
 import { ErrorService } from 'src/app/services/error.service';
-import { MessagesService } from 'src/app/services/messages.service';
 import { of } from 'rxjs';
-
+import { trigger,style,transition,animate,keyframes,query,stagger } from '@angular/animations';
 
 @Component({
     selector: 'app-social-problems',
     templateUrl: './social-problems-list.page.html',
     styleUrls: ['./social-problems-list.page.scss'],
+    animations: [
+        trigger('listAnimation', [
+          transition('* => *', [
+            query(':enter', style({ opacity: 0 }), {optional: true}),
+            query(':enter', stagger('300ms', [
+              animate('1s ease-in', keyframes([
+                style({opacity: 0, transform: 'translateY(-75%)', offset: 0}),
+                style({opacity: .5, transform: 'translateY(35px)',  offset: 0.3}),
+                style({opacity: 1, transform: 'translateY(0)',     offset: 1.0}),
+              ]))]), {optional: true}),
+          ])
+        ])
+      ]
 })
 export class SocialProblemsListPage implements OnInit, OnDestroy {
 
@@ -63,7 +73,6 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private navCtrl: NavController,
         private utilsService: UtilsService,
-        private messageService: MessagesService,
         private postsService: PostsService,
         private authService: AuthService,
         private events_app: EventsService,
@@ -73,7 +82,7 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.subcategory = this.activatedRoute.snapshot.paramMap.get('subcategory');
-        this.postsService.resetSocialProblemsPage();
+        this.postsService.resetPagination(this.postsService.PaginationKeys.SOCIAL_PROBLEMS);
         this.utilsService.enableMenu();
         this.authService.sessionAuthUser.pipe(
             finalize(() => { })
@@ -87,7 +96,6 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
         });
         this.loadSocialProblems(null, true);
         this.events_app.socialProblemLikesEmitter.subscribe((event_app: any) => {
-            console.warn('RESET LIKES ID', event_app.id);
             this.toggleLikes(event_app.id, event_app.reactions);
         });
     }
@@ -113,7 +121,7 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
 
     ngOnDestroy() { }
     ionViewWillEnter() { }
-    ionViewWillLeave() { this.postsService.resetSocialProblemsBySubcategoryPage(); }
+    ionViewWillLeave() { this.postsService.resetPagination(this.postsService.PaginationKeys.SOCIAL_PROBLEMS_BY_SUBCATEGORY); }
     //Eliminar o agregar like a una publicacion
     toggleLike(like: boolean, id: number) {
         if (like) {
@@ -160,7 +168,6 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
                             social_problem = mapSocialProblem(social_problem);
                             const postLiked = checkLikePost(social_problem.reactions, this.AuthUser) || false;
                             social_problem.postLiked = postLiked;
-                            console.log('post liked', postLiked)
                         });
                     }
                     if (res && res.data && res.data.length == 0) {
@@ -169,7 +176,6 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
                     return res;
                 }),
                 catchError((err: HttpErrorResponse) => {
-                    console.log('catchErr', err);
                     this.errorService.manageHttpError(err, 'Ocurrio un error al traer el listado de problemas sociales', false);
                     this.postsService.resetPaginationEmpty(this.postsService.PaginationKeys.SOCIAL_PROBLEMS_BY_SUBCATEGORY);
                     return of({ data: [] })

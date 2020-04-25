@@ -1,19 +1,18 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { Observable, BehaviorSubject, throwError, from } from 'rxjs';
+import { Observable, BehaviorSubject, from } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IRegisterUser } from 'src/app/interfaces/models';
 import { HttpRequestService } from "./http-request.service";
 import { setHeaders } from "src/app/helpers/utils";
-import { NavController, Platform } from "@ionic/angular";
+import { NavController } from "@ionic/angular";
 import { tokenIsExpired } from 'src/app/helpers/auth-helper';
-import { IRespuestaApiSIUSingle } from "../interfaces/models";
-import { UtilsService } from './utils.service';
+import { IRespuestaApiSIUSingle } from "src/app/interfaces/models";
 import { CONFIG } from 'src/config/config';
 import { MessagesService } from './messages.service';
 import { EventsService } from './events.service';
-import { getUserRoles, hasRoles } from '../helpers/user-helper';
-import { switchMap, map } from 'rxjs/operators';
+import { getUserRoles, hasRoles } from 'src/app/helpers/user-helper';
+import { map } from 'rxjs/operators';
 
 const TOKEN_ITEM_NAME = "accessToken";
 const USER_ITEM_NAME = "currentUser";
@@ -33,7 +32,6 @@ export class AuthService {
         private navCtrl: NavController,
         private httpRequest: HttpRequestService,
         private messageService: MessagesService,
-        private utilsService: UtilsService,
         private events_appService: EventsService
     ) {
 

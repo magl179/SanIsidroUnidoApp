@@ -1,10 +1,9 @@
 
 import { environment } from 'src/environments/environment';
-import { Observable, interval, throwError, of, Observer } from 'rxjs';
+import { Observable, interval, throwError, of } from 'rxjs';
 import { retryWhen, flatMap } from 'rxjs/operators';
-import { ISubcategory } from '../interfaces/models';
+import { ISubcategory } from 'src/app/interfaces/models';
 import { CONFIG } from 'src/config/config';
-import { Events } from '@ionic/angular';
 
 declare var moment: any;
 moment.locale('es');
@@ -184,17 +183,10 @@ export const mapImagesApi = (images: any[]) => {
 }
 
 export const mapUser = (user: any) => {
-    // if (user && user.avatar) {
-    //     user.avatar = getImageURL(user.avatar);
-    // } else {
-    //     user.avatar = 'assets/img/default/img_avatar.png';
-    // }
     return user;
 }
 
 export const manageTwoFingerDrag = (event: any) => {
-    // console.warn('event map target', event);
-    // console.dir('current target map', event.currentTarget);
     if (event.type === 'touchstart' && event.touches.length === 1) {
         event.currentTarget.classList.add('swiping')
     } else {

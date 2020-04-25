@@ -1,4 +1,3 @@
-// http://ionicframework.com/docs/theming/
 @import '~@ionic/angular/css/core.css';
 @import '~@ionic/angular/css/normalize.css';
 @import '~@ionic/angular/css/structure.css';
@@ -24,17 +23,14 @@ body {
 .mat-step-header .mat-step-icon-selected, .mat-step-header .mat-step-icon-state-done, 
 .mat-step-header .mat-step-icon-state-edit {
     background-color: var(--ion-color-danger) !important;
-    // background-color: var(--ion-color-red-logo) !important;
     color: white !important;
 }
 
 .tab-bar-app{
     border-top: 1px solid #ced6d8;
     .tab-button-blue{
-        // --background-focused: #95999a;
         --color-selected: #95999a;
         &.tab-selected{
-            // --background-focused: #01a8de;
             --color-selected: #01a8de;
         }
     }

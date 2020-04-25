@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot} from '@angular/router';
-import { CanActivate, CanLoad } from '@angular/router';
+import { CanLoad } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
 import { hasRoles } from "src/app/helpers/user-helper";
-import { environment } from "src/environments/environment";
 import { CONFIG } from 'src/config/config';
-import { getUserRoles } from '../helpers/user-helper';
+import { getUserRoles } from 'src/app/helpers/user-helper';
 
 @Injectable({
     providedIn: 'root'

@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { LoginPage } from './login.page';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SmComponentsModule } from '../../components/sm-components.module';
+import { SmComponentsModule } from 'src/app/components/sm-components.module';
 const routes: Routes = [
   {
     path: '',

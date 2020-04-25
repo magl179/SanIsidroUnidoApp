@@ -1,13 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from "@ionic/angular";
 import { PostsService } from "src/app/services/posts.service";
-import { environment } from "src/environments/environment";
 import { map, finalize } from 'rxjs/operators';
 import { mapCategory } from 'src/app/helpers/utils';
 import { ISubcategory, IRespuestaApiSIUSingle } from "src/app/interfaces/models";
-import { NavigationExtras } from '@angular/router';
-import { LocalDataService } from 'src/app/services/local-data.service';
-import { NavigationService } from 'src/app/services/navigation.service';
 import { CONFIG } from 'src/config/config';
 
 @Component({
@@ -21,8 +17,7 @@ export class SocialProblemsCategoriesPage implements OnInit {
     categories = [];
     
     constructor(private navCtrl: NavController,
-        private postsService: PostsService,
-    private navigationService: NavigationService) { }
+        private postsService: PostsService) { }
 
     ngOnInit() {
         this.loadCategories()

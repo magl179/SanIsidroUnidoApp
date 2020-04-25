@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Platform, NavController, MenuController } from '@ionic/angular';
+import { Platform, MenuController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { timer } from 'rxjs';
 import { IMenuOptions } from './interfaces/models';
 import { AlertController } from '@ionic/angular';
 import { AuthService } from './services/auth.service';
-import { UtilsService } from './services/utils.service';
 import { NotificationsService } from './services/notifications.service';
 import { NetworkService } from 'src/app/services/network.service';
 import { LocalDataService } from './services/local-data.service';
@@ -14,7 +13,6 @@ import { mapUser } from "./helpers/utils";
 import { map} from 'rxjs/operators';
 import { NavigationService } from './services/navigation.service';
 import { MessagesService } from './services/messages.service';
-import { LocalizationService } from './services/localization.service';
 
 @Component({
     selector: 'app-root',
@@ -54,7 +52,6 @@ export class AppComponent implements OnInit {
     }
 
     initializeApp() {
-        //Execute all Code Here
         this.platform.ready().then(async () => {
             await this.checkInitialStateNetwork();
             if (this.platform.is('cordova')) {
@@ -85,8 +82,6 @@ export class AppComponent implements OnInit {
             if (token_decoded) {
                 this.authService.checkValidToken();
             }
-        }, (err: any) => {
-            console.error('Error', err);
         });
     }
 

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpRequestService } from "src/app/services/http-request.service";
-import { CONFIG } from 'src/config/config';
 import { environment } from 'src/environments/environment';
 
 @Injectable({

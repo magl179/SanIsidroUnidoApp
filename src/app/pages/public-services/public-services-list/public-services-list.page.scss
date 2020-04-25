@@ -22,7 +22,7 @@
     background-color: var(--ion-color-blue-logo);
     position: absolute;
     // bottom: 165%;
-    bottom: 170%;
+    bottom: 178%;
     right: 0;
     left: 0;
     opacity: 0.9;
@@ -33,12 +33,12 @@
   }
 
   .picture_thumbnail {
-    width: 65px;
-    height: 65px;
+    width: 40px;
+    height: 40px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 2rem;
-    margin-bottom: 1.5rem;
+    margin-top: .7rem;
+    margin-bottom: 1rem;
     .img-thumbnail {
       width: 100%;
       height: 100%;
@@ -47,4 +47,19 @@
         border-radius: 50%;
       }
     }
+  }
+
+  .public-service-content{
+    .content-text{
+      font-size: 12px;
+      margin-top: .5em;
+      margin-bottom: 2px;
+    }
+  }
+
+
+
+  ion-card-header{
+    padding-bottom: .5em;
+    padding-top: .5em;
   }

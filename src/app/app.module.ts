@@ -1,4 +1,4 @@
-import { NgModule, ErrorHandler  } from '@angular/core';
+import { NgModule  } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -45,7 +45,6 @@ import { DocumentViewer } from '@ionic-native/document-viewer/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { ToastrModule } from 'ngx-toastr';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { GlobalService } from './global.service';
 import { AuthService } from './services/auth.service';
 
 @NgModule({

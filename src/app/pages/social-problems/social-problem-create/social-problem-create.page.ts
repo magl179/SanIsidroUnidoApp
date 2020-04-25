@@ -6,13 +6,11 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { PostsService } from 'src/app/services/posts.service';
 import { ISocialProblemReported, IUbication } from 'src/app/interfaces/models';
-import { finalize, timeout, delay } from 'rxjs/operators';
+import { finalize} from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
-import { IRespuestaApiSIU } from "src/app/interfaces/models";
 import { CONFIG } from 'src/config/config';
 import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from 'src/app/services/messages.service';
-import { interval, from } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({
@@ -31,7 +29,6 @@ export class SocialProblemCreatePage implements OnInit {
         longitude: null,
         address: null
     };
-    // coordinates = n
     subcategories = [];
     formSended = false;
     subcategoryName = null;
@@ -67,7 +64,8 @@ export class SocialProblemCreatePage implements OnInit {
             this.socialProblemCoordinate.latitude = coordinates.latitude;
             this.socialProblemCoordinate.longitude = coordinates.longitude;
         }).catch(err => {
-            console.error('Error al obtener geolocalizacion', err);
+            this.socialProblemCoordinate.latitude = -0.096076;
+            this.socialProblemCoordinate.longitude = -78.503606;
         });
     }
 

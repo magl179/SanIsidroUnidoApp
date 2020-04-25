@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { PopoverController, ActionSheetController, ModalController } from "@ionic/angular";
-import { PopNotificationsComponent } from '../pop-notifications/pop-notifications.component';
-import { ShowListNotificationsPage } from '../../modals/show-list-notifications/show-list-notifications.page';
+import { PopNotificationsComponent } from 'src/app/components/pop-notifications/pop-notifications.component';
+import { ShowListNotificationsPage } from 'src/app/modals/show-list-notifications/show-list-notifications.page';
 
 @Component({
     selector: 'app-header',
@@ -30,10 +30,6 @@ export class HeaderComponent implements OnInit {
     testiconNoti() {
         this.notificationsIcon = (this.notificationsIcon === 'notifications-outline' ? 'notifications' : 'notifications-outline');
     }
-
-    // showOptionsHeader() {
-
-    // }
     showNotifications(event){
         // this.showListNotificationsModal();
         this.showNotiPopover(event)
@@ -74,7 +70,6 @@ export class HeaderComponent implements OnInit {
             showBackdrop: false,
             cssClass: 'popover-app-notifications'
         });
-        // popover.style.cssText = '--min-width: 270px;';
         await popover.present();
     }
 

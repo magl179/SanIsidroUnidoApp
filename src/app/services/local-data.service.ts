@@ -7,7 +7,6 @@ import { HttpRequestService } from "./http-request.service";
 export class LocalDataService {
 
     constructor(
-        // private http: HttpClient,
         private httpRequest: HttpRequestService
     ) { }
 

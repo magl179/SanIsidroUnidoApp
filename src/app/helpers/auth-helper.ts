@@ -1,9 +1,4 @@
-// import { Storage } from '@ionic/storage';
 import { JwtHelperService } from "@auth0/angular-jwt";
-// import { StorageService } from '../services/storage.service';
-
-// const storage = StorageService;
-
 
 // Decodificar el Token
 export const decodeToken = (token: any) => {
@@ -12,7 +7,7 @@ export const decodeToken = (token: any) => {
         const helper = new JwtHelperService();
         decodedToken = helper.decodeToken(token);
     } catch (err) {
-        console.error(err);
+       return null;
     }
     return decodedToken;
 }

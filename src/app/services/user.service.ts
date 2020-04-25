@@ -16,6 +16,10 @@ export class UserService implements OnInit {
     AuthUser = null;
     AuthToken = null;
 
+    private currentPagination = {
+        notifications: 0
+    }
+
     constructor(
         private httpRequest: HttpRequestService,
         private authService: AuthService
@@ -29,6 +33,36 @@ export class UserService implements OnInit {
     }
 
     ngOnInit() { }
+     //Metodos Increase Pagination
+     resetPagination(type: string, page = 0) {
+        this.currentPagination[type] = page;
+    }
+    resetPaginationEmpty(type: string){
+        let oldValue = this.currentPagination[type];
+        if(oldValue <= 1) {
+            oldValue = 0;
+        }else{
+            oldValue = oldValue-1;
+        }
+        this.currentPagination[type] = oldValue;
+        return;
+    }
+
+    increasePagination(type: string) {
+        let oldPage = this.currentPagination[type];
+        this.currentPagination[type] = oldPage + 1;
+    }
+    decrementPagination(type: string) {
+        let oldPage = this.currentPagination[type];
+        this.currentPagination[type] = oldPage - 1;
+    }
+    getPagination(type: string) {
+        const temp = { ...this.currentPagination };
+        return temp[type];
+    }
+    getAllPagination() {
+        return { ...this.currentPagination };
+    }
     //Obtener la información de un usuario
     getUserInfo(id: number): Observable<any> {
         return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${id}`);
@@ -58,7 +92,7 @@ export class UserService implements OnInit {
     // Enviar una solicitud para cambiar el avatar de un usuario
     sendChangeUserImageRequest(image: string): Observable<any> {
         const headers = setHeaders(CONFIG.AUTHORIZATION_NAME, this.AuthToken);
-        return this.httpRequest.patch(`${environment.APIBASEURL}/usuarios/cambiar-avatar`, {
+        return this.httpRequest.post(`${environment.APIBASEURL}/usuarios/cambiar-avatar`, {
             avatar: image
         }, headers);
     }
@@ -70,7 +104,7 @@ export class UserService implements OnInit {
     // Enviar solicitud de afiliacion al barrio
     sendRequestUserMembership(requestObj: {}) {
         const headers = setHeaders(CONFIG.AUTHORIZATION_NAME, this.AuthToken);
-        return this.httpRequest.patch(`${environment.APIBASEURL}/usuarios/solicitar-afiliacion`,requestObj, headers );
+        return this.httpRequest.post(`${environment.APIBASEURL}/usuarios/solicitar-afiliacion`,requestObj, headers );
     }
     // Enviar solicitud par agregar dispositivo asociado a un usuario
     sendRequestAddUserDevice(device: IDeviceUser) {

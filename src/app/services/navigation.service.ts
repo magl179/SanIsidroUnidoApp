@@ -1,6 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { NavigationExtras, Router, Event, NavigationStart, NavigationEnd } from '@angular/router';
+import { Router, Event, NavigationEnd } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { filter } from 'rxjs/operators';
 

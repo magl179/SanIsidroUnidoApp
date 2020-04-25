@@ -1,7 +1,6 @@
 import { Component, OnInit, Input} from '@angular/core';
 import { IPublicService } from "src/app/interfaces/models";
 import { ModalController } from '@ionic/angular';
-import { MapService } from "src/app/services/map.service";
 import { getDistanceInKm, roundDecimal } from 'src/app/helpers/utils';
 
 @Component({
@@ -18,8 +17,7 @@ export class MapInfoPage implements OnInit {
     distancia = null;
 
     constructor(
-        private modalCtrl: ModalController,
-        private mapService: MapService
+        private modalCtrl: ModalController
     ) { 
         
   }
