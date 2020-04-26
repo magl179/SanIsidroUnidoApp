@@ -206,25 +206,19 @@ export const getBackgroundApp = (image_url: string) => {
     return `linear-gradient(rgba(2, 2, 2, 0.58), rgba(2, 2, 2, 0.58)), url(${image_url})`;
 }
 
-//isType('object', variable);
 export const isType = (type: any, val: any) => {
     return !!(val.constructor && val.constructor.name.toLowerCase() === type.toLowerCase());
 }
 
 export const mapEvent = (event: any) => {
     const dateFull = `${event.date} ${event.time}`;
-    // event.fulldate = momentFormat(dateFull, 'll');
     event.date = formatDate(dateFull);
     event.time = formatTime(dateFull);
     event.ubication = getJSON(event.ubication);
-    // if (event.images && event.images.length > 0) {
     if (event.resources && event.resources.length > 0) {
         event.images = mapImagesApi(event.resources);
         event.imagesArr = getValueKeyFromArrObj(event.resources, 'url');
     }
-    // if (event.user && event.user.avatar) {
-    //     event.user.avatar = getImageURL(event.user.avatar);
-    // }
     const range_date = (event.additional_data && event.additional_data.event && event.additional_data.event.range_date) ? event.additional_data.event.range_date : null;
     if (range_date) {
         event.fulldate = formatEventRangeDate(range_date.start_date, range_date.end_date);

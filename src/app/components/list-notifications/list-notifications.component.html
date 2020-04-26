@@ -1,3 +1,9 @@
+ <!-- Refresher de los Datos -->
+ <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" refreshingSpinner="circles"
+        refreshingText="Cargando Notificaciones...">
+    </ion-refresher-content>
+</ion-refresher>
 <div class="loading-app" *ngIf="!requestFinished">
     <loader-app class="flex-column-center"></loader-app>
 </div>
@@ -33,3 +39,10 @@
         </p>
     </div>
 </div>
+<!-- Scroll Infinito -->
+ <ion-infinite-scroll threshold="120px" (ionInfinite)="getInfiniteScrollData($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="crescent"
+      loadingText="Cargando notificaciones...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>

@@ -16,6 +16,10 @@ export class UserService implements OnInit {
     AuthUser = null;
     AuthToken = null;
 
+    public PaginationKeys = {
+        NOTIFICATIONS: 'notifications',
+    }
+
     private currentPagination = {
         notifications: 0
     }
@@ -70,7 +74,8 @@ export class UserService implements OnInit {
     // Obtener las notificaciones de un usuario
     getNotificationsUser() {
         const user_id = this.AuthUser.id;
-        return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${user_id}/notificaciones`);
+        this.increasePagination(this.PaginationKeys.NOTIFICATIONS);
+        return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${user_id}/notificaciones?page=${this.getPagination(this.PaginationKeys.NOTIFICATIONS)}`);
     }
     // Obtener los dispositivos de un usuario
     getSocialProfilesUser() {

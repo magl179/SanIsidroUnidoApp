@@ -6,7 +6,6 @@ import { MapNotification } from 'src/app/helpers/utils';
 import { PopoverController } from '@ionic/angular';
 import { INotificationApi } from 'src/app/interfaces/models';
 
-
 const URL_PATTERN = new RegExp(/^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/);
 
 @Component({
@@ -33,6 +32,7 @@ export class ListNotificationsComponent implements OnInit {
 
     ngOnInit() {
         this.notificationsList.reverse();
+        this.usersService.resetPagination(this.usersService.PaginationKeys.NOTIFICATIONS);
         this.getNotifications();
     }
 
@@ -40,7 +40,7 @@ export class ListNotificationsComponent implements OnInit {
         return ((indice + 1) !== this.notificationsRequested.length) ? 'full' : 'none';
     }
 
-    getNotifications() {
+    getNotifications(event: any = null, first_loading = false) {
         this.usersService.getNotificationsUser().pipe(
             take(1),
             map((res: any) => {
@@ -53,8 +53,30 @@ export class ListNotificationsComponent implements OnInit {
                 this.requestFinished = true;
             })
         ).subscribe((res: any) => {
-            this.notificationsList = res.data;
-            this.cargarNotificacionesSolicitadas();
+            let data = [];
+            data = res.data;
+            //Evento Completar
+            if (event && event.data && event.data.target && event.data.target.complete) {
+                event.data.target.complete();
+            }
+            if (event && event.data && event.data.target && event.data.target.complete && data.length == 0) {
+                event.data.target.disabled = true;
+            }
+            if (event && event.type == 'refresher') {
+                this.notificationsList.unshift(...data);
+                this.cargarNotificacionesSolicitadas();
+                return;
+            } else if (event && event.type == 'infinite_scroll') {
+                this.notificationsList.push(...data);
+                this.cargarNotificacionesSolicitadas();
+                return;
+            } else {
+                this.notificationsList.push(...data);
+                // this.emergenciesFiltered.push(...this.emergenciesList);
+                this.cargarNotificacionesSolicitadas();
+                return;
+            }
+            // this.notificationsList = data;
         });
     }
 
@@ -76,6 +98,20 @@ export class ListNotificationsComponent implements OnInit {
             await this.popoverCtrl.dismiss();
             this.notiService.manageAppNotification(noti.data);
         }
+    }
+
+    doRefresh(event) {
+        this.getNotifications({
+            type: 'infinite_scroll',
+            data: event
+        });
+    }
+
+    getInfiniteScrollData() {
+        this.getNotifications({
+            type: 'refresher',
+            data: event
+        });
     }
 
 }
