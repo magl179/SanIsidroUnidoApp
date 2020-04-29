@@ -44,6 +44,9 @@ export class ChangeProfileImagePage implements OnInit {
             this.authService.saveLocalStorageInfo(token, token_decoded);
             this.messageService.showSuccess('Imagen Actualizada Correctamente');
             this.formSended = true;
+            setTimeout(()=>{
+                this.closeModal();
+            }, 500);
         },(err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Imagen no ha podido ser actualizada');
         });

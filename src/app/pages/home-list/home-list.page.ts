@@ -3,9 +3,10 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { IHomeOptions } from 'src/app/interfaces/models';
-import { NavController } from '@ionic/angular';
+import { NavController, ModalController } from '@ionic/angular';
 import { PruebasService } from 'src/app/services/pruebas.service';
 import { environment } from 'src/environments/environment';
+import { RequestMembershipPage } from 'src/app/modals/request-membership/request-membership.page';
 
 @Component({
     selector: 'app-home-list',
@@ -23,8 +24,10 @@ export class HomeListPage implements OnInit {
         private navCtrl: NavController,
         private localDataService: LocalDataService,
         private authService: AuthService,
-        private pruebasService: PruebasService
-    ) { }
+        private pruebasService: PruebasService,
+        private modalCtrl: ModalController
+    ) {
+     }
 
     async ngOnInit() {
         this.authService.sessionAuthUser.subscribe((token_decoded: any) => {
@@ -32,14 +35,16 @@ export class HomeListPage implements OnInit {
                 this.sessionAuth = token_decoded;
             }
         });
-        this.localDataService.getHomeOptions().subscribe((data: any) => {
+        this.localDataService.getHomeOptions()
+        .subscribe((data: any) => {
             this.servicesList = data;
         });
         await this.utilsService.enableMenu();
     }
     
-    navigate(url: string) {
-        this.navCtrl.navigateForward(url);
+    navigate(urlOrFuncionName: string) {
+        return this.navCtrl.navigateForward(urlOrFuncionName);
+
     }
 
     probarNotiLocal(){
@@ -55,6 +60,17 @@ export class HomeListPage implements OnInit {
 
     probarToggleSubscription(){
         this.pruebasService.switchSubscription();
+    }
+
+    async openRequestAfiliationModal(){
+        const modal = await this.modalCtrl.create({
+            component: RequestMembershipPage,
+            componentProps: {
+                nombre: 'Stalin',
+                pais: 'Ecuador'
+            }
+        });
+        await modal.present();
     }
     
 

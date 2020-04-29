@@ -107,7 +107,7 @@ export class ListNotificationsComponent implements OnInit {
         });
     }
 
-    getInfiniteScrollData() {
+    getInfiniteScrollData(event) {
         this.getNotifications({
             type: 'refresher',
             data: event

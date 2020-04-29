@@ -1,6 +1,10 @@
-<app-header-back title="Problemas Sociales" backUrl="social-problems/categories" [search]="true" (onSearch)="redirectToSearch()">
+<app-header-back title="Problemas Sociales" backUrl="social-problems/categories" [search]="false">
 </app-header-back>
 <ion-content padding style="position: relative;">
+     <!-- Problemas Sociales Searchbar -->
+     <ion-searchbar mode="ios" type="text" placeholder="Buscar Problemas Sociales por su título" [animated]="true"
+     [formControl]="socialProblemControl"></ion-searchbar>
+     <!-- Segmento Filtro -->
     <ion-segment value="" (ionChange)="segmentChanged($event)">
         <ion-segment-button value="">
             <ion-icon color="blue-logo" name="document"></ion-icon>
@@ -20,27 +24,30 @@
             refreshingText="Cargando Publicaciones...">
         </ion-refresher-content>
     </ion-refresher>
-     <!-- Mensaje si datos no cargan o son tamaño 0 -->
-     <app-no-results-found *ngIf="showNotFound && socialProblemsList.length === 0"
-     message="No hay problemas sociales disponibles"></app-no-results-found>
+    <!-- Loading mientras se realiza la busqueda -->
+    <div class="loading-app" *ngIf="searchingSocialProblems">
+        <loader-app class="flex-column-center" message="Buscando..."></loader-app>
+    </div>
+    <!-- Mensaje si datos no cargan o son tamaño 0 -->
+    <app-no-results-found *ngIf="showNotFound && socialProblemsList.length === 0"
+        message="No hay problemas sociales disponibles"></app-no-results-found>
     <!-- Animacion Tarjeta hasta tener los Datos Cargados -->
     <div class="loading-app" *ngIf="showLoading">
         <loader-app class="flex-column-center"></loader-app>
     </div>
-    
+
     <!-- Tarjeta con Datos Cargados -->
     <div *ngIf="!showLoading  && socialProblemsList.length > 0" [@listAnimation]>
         <!-- Posts Filtrados con Datos -->
-        <ion-card style="position:relative" class="social-problem"
-            *ngFor="let socialProblem of socialProblemsFilter">
+        <ion-card style="position:relative" class="social-problem" *ngFor="let socialProblem of socialProblemsFilter">
             <div class="post_cover" *ngIf="socialProblem.imagesArr && socialProblem.imagesArr.length > 0">
-                <img [src]="socialProblem.imagesArr[0]"/>
+                <img [src]="socialProblem.imagesArr[0]" />
             </div>
             <div (click)="postDetail(socialProblem.id)">
                 <div class="ion-padding" style="display: flex;align-items:Center;">
                     <div class="left-section">
-                        <img style="width: 50px;height:50px;border-radius:50%;"
-                            [src]="socialProblem.user.avatar_link" fallimg="user_avatar">
+                        <img style="width: 50px;height:50px;border-radius:50%;" [src]="socialProblem.user.avatar_link"
+                            fallimg="user_avatar">
                     </div>
                     <div class="right-section" style="margin-left: 1rem">
                         <p style="color: var(--ion-color-dark);margin-bottom: .7em;">
@@ -74,8 +81,8 @@
                     </span>
                 </div>
                 <div class="social-options">
-                    <div class="social-button ion-activatable" [class.active]="socialProblem.postLiked" 
-                    (click)="toggleLike(socialProblem.postLiked, socialProblem.id)">
+                    <div class="social-button ion-activatable" [class.active]="socialProblem.postLiked"
+                        (click)="toggleLike(socialProblem.postLiked, socialProblem.id)">
                         <ion-icon class="like" name="thumbs-up"></ion-icon>
                         <span>Me gusta</span>
                         <ion-ripple-effect></ion-ripple-effect>
@@ -94,8 +101,7 @@
     </div>
     <!-- Scroll Infinito -->
     <ion-infinite-scroll threshold="100px" (ionInfinite)="doInfiniteScroll($event)">
-        <ion-infinite-scroll-content loadingSpinner="crescent"
-            loadingText="Cargando Publicaciones...">
+        <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando Publicaciones...">
         </ion-infinite-scroll-content>
     </ion-infinite-scroll>
 </ion-content>

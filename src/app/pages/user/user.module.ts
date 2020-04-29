@@ -28,7 +28,6 @@ const routes: Routes = [
     entryComponents: [
         EditProfilePage,
         ChangePasswordPage,
-        RequestMembershipPage,
         ChangeProfileImagePage
     ],
     imports: [
@@ -39,7 +38,6 @@ const routes: Routes = [
         SmComponentsModule,
         EditProfilePageModule,
         ChangePasswordPageModule,
-        RequestMembershipPageModule,
         ChangeProfileImagePageModule,
         DirectivesModule,
         NgFallimgModule,

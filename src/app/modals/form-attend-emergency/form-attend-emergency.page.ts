@@ -55,6 +55,9 @@ export class FormAttendEmergencyModal implements OnInit {
         this.postsService.sendPoliciaRechazarEmergencia(body).subscribe((res:any)=> {
             this.messagesService.showInfo("Se envio correctamente tu motivo");
             this.formWasSended = true;
+            setTimeout(()=>{
+                this.closeModal();
+            }, 500);
         },(err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error al registrar el motivo de rechazo');
             // this.formWasSended = false;

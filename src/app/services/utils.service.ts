@@ -81,11 +81,8 @@ export class UtilsService implements OnInit {
             const share_options = {
                 message: message_publication, // not supported on some apps (Facebook, Instagram)
                 subject: publicacion.title, // fi. for email
-                files: (publicacion.image) ? publicacion.image : '', // an array of filenames either locally or remotely
+                files: (publicacion.image) ? publicacion.image : '',
                 url: CONFIG.MESSAGE_APP_URL,
-                // chooserTitle: 'Pick an app', // Android only, you can override the default share sheet title
-                // appPackageName: 'com.apple.social.facebook', // Android only, you can provide id of the App you want to share with
-                // iPadCoordinates: '0,0,0,0' //IOS only iPadCoordinates for where the popover should be point.  Format with x,y,width,height
               };
             return await this.socialSharing.shareWithOptions(share_options)
             .then(async(result) => {
@@ -94,7 +91,6 @@ export class UtilsService implements OnInit {
                 }
             }).catch(async(err) => {
                 console.error('Error al compartir', err);
-                //throw new Error('Ocurrio un error al compartir')
                this.showToast({message: 'No se pudo compartir'});
             });
         } else {

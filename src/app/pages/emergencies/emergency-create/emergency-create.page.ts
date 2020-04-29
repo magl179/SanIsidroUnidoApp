@@ -96,7 +96,7 @@ export class EmergencyCreatePage implements OnInit {
         this.mapService.getAddress({
             lat: latitud,
             lng: longitud,
-            zoom: 14
+            zoom: 17
         }).subscribe(direccion => {
             this.emergencyPostCoordinate.address = direccion.display_name;
             //Ejecutar la deteccion de cambios de Angular de forma manual

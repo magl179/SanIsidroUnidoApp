@@ -7,7 +7,7 @@
             No hay opciones disponibles
         </ion-row>
         <ion-row class="ion-justify-content-center" *ngIf="servicesList !== null || servicesList.length > 0">
-                <ng-container *ngFor="let service of servicesList">
+                <ng-container *ngFor="let service of servicesList;let last = last">
                     <ion-col size="6" class="service_item" *appHasRole="service.valid_roles">
                         <a (click)="navigate(service.url)"> 
                             <ion-card>
@@ -17,6 +17,16 @@
                                 </div>
                             </ion-card>
                         </a>
+                    </ion-col>
+                </ng-container>
+                <ng-container>
+                    <ion-col size="6" class="service_item" *appHasRole="['invitado']">
+                        <ion-card (click)="openRequestAfiliationModal()">
+                            <div class="icon">
+                                    <h2 class="title">Solicitar Afiliación</h2>
+                                    <img class="img" src="assets/img/svg/afiliation.svg">
+                            </div>
+                        </ion-card>
                     </ion-col>
                 </ng-container>
         </ion-row>

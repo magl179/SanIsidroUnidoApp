@@ -45,9 +45,14 @@
                         </ion-label>
                         <ion-button (click)="openReportPDF()" slot="end">Abrir</ion-button>
                     </ion-item>
-                  
+                    <ion-item *ngFor="let document of report.documentsArr">
+                        <ion-label class="item_document">
+                            <img [src]="assets/img/svg/pdf.svg" />
+                        </ion-label>
+                        <ion-button (click)="openReportPDF(document)" slot="end">Abrir</ion-button>
+                    </ion-item>
                 </ion-list>
-            </section>
+            </section>          
         </div>
     </div>
 </ion-content>

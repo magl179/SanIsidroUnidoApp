@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { SocialProblemsListPage } from './social-problems-list.page';
@@ -38,6 +38,7 @@ const routes: Routes = [
         ImageDetailPageModule,
         FilterPageModule,
         SearchPageModule,
+        ReactiveFormsModule,
         NgFallimgModule
     ],
     declarations: [SocialProblemsListPage]

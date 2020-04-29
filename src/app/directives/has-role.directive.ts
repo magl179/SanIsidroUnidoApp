@@ -23,12 +23,13 @@ export class HasRoleDirective implements OnInit {
             // If he doesn't have any roles, we clear the viewContainerRef
             let userRoles = [];
             if (!token_decoded) {
-                userRoles = ['invitado'];
+                userRoles = ['no_autenticado'];
             }else{
                 userRoles = getUserRoles(token_decoded);
             }
             // If the user has the role needed to render this component we can add it
-            if (hasRoles(userRoles, this.roles)) {
+            const userhasRoles = hasRoles(userRoles, this.roles);
+            if (userhasRoles) {
                 if (!this.isVisible) {
                     this.isVisible = true;
                     this.viewContainer.createEmbeddedView(this.templateRef);

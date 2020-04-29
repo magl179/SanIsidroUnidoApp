@@ -129,7 +129,6 @@ export class SocialDataService {
     getGoogleData(googleLogin: any) {
         try {
             // // const url = `https://www.googleapis.com/plus/v1/people/me?access_token=${googleLogin.accessToken}`;
-            // console.warn('googleLogin.accessToken', googleLogin)
             const url = `https://www.googleapis.com/oauth2/v3/userinfo?alt=json`;         
             this.httpRequest.get(url, {}, { 
                 'Content-Type': 'application/json',

@@ -16,17 +16,6 @@ const routes: Routes = [
                 loadChildren: "./events-list/events-list.module#EventsListPageModule"
             },
             {
-                path: 'search',
-                loadChildren: "src/app/pages/shared/search-posts/search-posts.module#SearchPostsPageModule",
-                data: {
-                    searchIdeas: [],
-                    searchPlaceholder: 'Busca Eventos por su título',
-                    searchRouteDetail: '/events/detail',
-                    searchSlug: CONFIG.EVENTS_SLUG
-                },
-
-            },
-            {
                 path: 'detail/:id',
                 loadChildren: './event-detail/event-detail.module#EventDetailPageModule'
             },

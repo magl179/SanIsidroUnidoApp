@@ -1,8 +1,11 @@
 
 <!-- Cabecera -->
-<app-header-back title="Mis Emergencias" [search]="true" (onSearch)="redirectToSearch()"></app-header-back>
+<app-header-back title="Mis Emergencias" [search]="false"></app-header-back>
 <!-- Contenido -->
 <ion-content padding>
+     <!-- Problemas Sociales Searchbar -->
+     <ion-searchbar mode="ios" type="text" placeholder="Buscar Emergencias por su título" [animated]="true"
+     [formControl]="emergencyControl"></ion-searchbar>
     <!-- Filtro por Estado Atención -->
     <ion-segment value="" (ionChange)="segmentChanged($event)">
         <ion-segment-button value="">
@@ -24,6 +27,9 @@
             refreshingText="Cargando Publicaciones...">
         </ion-refresher-content>
     </ion-refresher>
+    <div class="loading-app" *ngIf="searchingEmergencies">
+        <loader-app class="flex-column-center" message="Buscando..."></loader-app>
+    </div>
     <!-- Mensaje cuando no hay datos disponibles-->
     <app-no-results-found class="ion-padding" *ngIf="showNotFound && emergenciesList.length === 0"
         message="No existen emergencias disponibles"></app-no-results-found>

@@ -68,15 +68,16 @@ export class ReportDetailPage implements OnInit {
         this.utilsService.seeImageDetail(image, 'Imagen Evento');
     }
 
-    openReportPDF() {
+    openReportPDF(document=null) {
         const pdfs = [
-            // "https://rua.ua.es/dspace/bitstream/10045/2990/1/ApuntesBD1.pdf", //sin_probar
-            "http://artemisa.unicauca.edu.co/~cardila/Libro_Silberschatz.pdf", //sin_probar
-            "https://libros.metabiblioteca.org/bitstream/001/353/5/978-84-693-0146-3.pdf", //funciona
+            "https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/CursoPugDesdeCero.pdf", //funciona
         ];
+        if(!document){
+            const position = this.randomInteger(0, (pdfs.length -1));
+            return this.manageDocsService.downloadAndOpenPDF(pdfs[position]);
+        }
+        this.manageDocsService.downloadAndOpenPDF(document);
         // const urlPDFDrive = "https://drive.google.com/file/d/1P-_obHcrIOYauf-zuQ830E5EtuTPCxI9/view";
-        const position = this.randomInteger(0, (pdfs.length -1));
-        this.manageDocsService.downloadAndOpenPDF(pdfs[position]);
     }
 
     randomInteger(min, max) {

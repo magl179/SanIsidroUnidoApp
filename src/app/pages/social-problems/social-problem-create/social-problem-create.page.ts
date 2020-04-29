@@ -163,7 +163,7 @@ export class SocialProblemCreatePage implements OnInit {
         this.mapService.getAddress({
             lat: latitud,
             lng: longitud,
-            zoom: 14
+            zoom: 17
         }).subscribe(direccion => {
             this.socialProblemCoordinate.address = direccion.display_name;
             this.cdRef.detectChanges();

@@ -27,19 +27,6 @@ const routes: Routes = [
                 data: { roles: ['morador_afiliado'] }
             },
             {
-                path: 'search',
-                loadChildren: "src/app/pages/shared/search-posts/search-posts.module#SearchPostsPageModule",
-                data: {
-                    searchIdeas: [],
-                    searchPlaceholder: 'Busca Problemas Sociales por su título',
-                    searchRouteDetail: '/social-problems/list',
-                    searchSlug: CONFIG.SOCIAL_PROBLEMS_SLUG,
-                    redirectWith: 'subcategory+id'
-                },
-                canLoad: [UserAuthenticatedGuard]
-
-            },
-            {
                 path: 'list/:subcategory',
                 loadChildren: './social-problems-list/social-problems-list.module#SocialProblemsListPageModule', canLoad: [UserAuthenticatedGuard]
             },

@@ -290,10 +290,16 @@ export const mapReport = (report: any) => {
     // if (report.images && report.images.length > 0) {
     if (report.resources && report.resources.length > 0) {
         const imagesResources = report.resources.filter(resource => resource.type === 'image');
-        report.images = mapImagesApi(imagesResources);
-        report.imagesArr = getValueKeyFromArrObj(report.resources, 'url_link');
+        const documentsResources = report.resources.filter(resource => resource.type === 'document');
+        report.images = imagesResources;
+        report.documents = documentsResources;
+        report.imagesArr = getValueKeyFromArrObj(imagesResources, 'url_link');
+        report.documentsArr = getValueKeyFromArrObj(documentsResources, 'url_link');
     } else {
+        report.images = [];
+        report.documents = [];
         report.imagesArr = [];
+        report.documentsArr = [];
     }
 
     const fecha_creacion = (report.created_at) ? fechaFull(report.created_at) : fechaFull(new Date());

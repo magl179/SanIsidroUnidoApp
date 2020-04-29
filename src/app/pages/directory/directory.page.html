@@ -4,11 +4,11 @@
     <ion-searchbar mode="ios" type="text" placeholder="Buscar Directivos por sus nombres"
     [animated]="true" [formControl]="directorySearchControl"
     ></ion-searchbar>
-      <!-- Loading mientras se realiza la busqueda -->
+    <!-- Loading mientras se realiza la busqueda -->
     <div class="loading-app" *ngIf="searchingDirectives">
         <loader-app class="flex-column-center" message="Buscando..."></loader-app>
     </div>
-
+    <!-- Animacion Directorio -->
     <ion-grid *ngIf="!loadDirectives">
         <ion-row>
             <ion-col size="6" *ngFor="let skeleton of [1,1,1,1]">

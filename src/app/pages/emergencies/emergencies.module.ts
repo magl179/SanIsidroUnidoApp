@@ -29,19 +29,7 @@ const routes: Routes = [
                 path: 'list',
                 loadChildren: "./emergencies-list/emergencies-list.module#EmergenciesListPageModule",
                 canLoad: [UserAuthenticatedGuard]
-            },
-            {
-                path: 'search',
-                loadChildren: "src/app/pages/shared/search-posts/search-posts.module#SearchPostsPageModule",
-                data: {
-                    searchIdeas: [],
-                    searchPlaceholder: 'Busca Emergencias por su título',
-                    searchRouteDetail: '/emergencies/detail',
-                    searchSlug: CONFIG.EMERGENCIES_SLUG,
-                    includeUserFilter: true
-                },
-                canLoad: [UserAuthenticatedGuard]
-            }           
+            }     
         ]
     }
 ];

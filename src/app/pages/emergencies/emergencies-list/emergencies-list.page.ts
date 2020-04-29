@@ -3,15 +3,17 @@ import { NavController } from "@ionic/angular";
 import { UtilsService } from "src/app/services/utils.service";
 import { PostsService } from "src/app/services/posts.service";
 import { IBasicFilter, IRespuestaApiSIUPaginada, ITokenDecoded } from "src/app/interfaces/models";
-import { finalize, map, catchError } from 'rxjs/operators';
-import { mapEmergency, setFilterKeys, filterDataInObject } from "src/app/helpers/utils";
+import { finalize, map, catchError, pluck, distinctUntilChanged, tap, exhaustMap, share, startWith, skip, switchMap } from 'rxjs/operators';
+import { mapEmergency } from "src/app/helpers/utils";
 import { AuthService } from 'src/app/services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from "src/app/services/events.service";
 import { ErrorService } from 'src/app/services/error.service';
 import { Router } from '@angular/router';
-import { of } from 'rxjs';
+import { of, BehaviorSubject, combineLatest, Subject } from 'rxjs';
 import { trigger, style, transition, animate, keyframes, query, stagger } from '@angular/animations';
+import { FormControl } from '@angular/forms';
+import { CONFIG } from 'src/config/config';
 
 @Component({
     selector: 'app-emergencies-list',
@@ -52,6 +54,13 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         }
     };
     isPolicia = false;
+    searchingEmergencies = false;
+    emergencyControl: FormControl;
+    segmentFilter$ = new BehaviorSubject(null);
+    extraData = {
+        police: '',
+        user: ''
+    };
 
     constructor(
         private navCtrl: NavController,
@@ -61,7 +70,9 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         private postsService: PostsService,
         private router: Router,
         private events_app: EventsService
-    ) { }
+    ) {
+        this.emergencyControl = new FormControl();
+    }
 
     redirectToSearch() {
         this.navCtrl.navigateRoot("/emergencies/search", {
@@ -70,6 +81,21 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
     }
 
     async ngOnInit() {
+        //Peticion
+        const peticionHttpBusqueda = (body: any) => {
+            return this.postsService.searchPosts(body)
+                .pipe(
+                    pluck('data'),
+                    map(data => {
+                        const emergencies_to_map = data
+                        emergencies_to_map.forEach((emergency: any) => {
+                            emergency = mapEmergency(emergency);
+                        });
+                        return emergencies_to_map;
+                    }),
+                    catchError(err => of([]))
+                )
+        };
         //Verificar si es policia
         this.isPolicia = await this.authService.userHasRole(['Policia']);
         this.utilsService.enableMenu();
@@ -78,6 +104,12 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
                 this.AuthUser = token_decoded.user;
             }
         });
+        //Si es Policia
+        if(this.isPolicia){
+            this.extraData.police = this.AuthUser.id;
+        }else{
+            this.extraData.user = this.AuthUser.id;
+        }
         //Primera Carga
         this.loadEmergencies(null, true);
         //Simular Un Refresh cuando se crea nuevas emergencias
@@ -88,6 +120,30 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
                 data: event
             });
         })
+        //Buscador       
+        combineLatest(
+            this.emergencyControl.valueChanges.pipe(startWith('')),
+            this.segmentFilter$.asObservable(),
+        )
+            .pipe(
+                distinctUntilChanged(),
+                skip(1),
+                tap((val) => {
+                    this.searchingEmergencies = true;
+                }),
+                map(combineValues => ({
+                    category: CONFIG.EMERGENCIES_SLUG,
+                    title: combineValues[0],
+                    is_attended: combineValues[1],
+                    ... this.extraData
+                })),
+                switchMap(peticionHttpBusqueda),
+            )
+            .subscribe((data: any[]) => {
+                this.showNotFound = (data.length == 0) ? true : false;
+                this.emergenciesFiltered = [...data];
+                this.searchingEmergencies = false;
+            });
     }
 
     ngOnDestroy() {
@@ -190,14 +246,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
 
     segmentChanged(event: any) {
         const value = (event.detail.value !== "") ? Number(event.detail.value) : "";
-        const type = 'is_attended';
-        if (value !== "") {
-            const filterApplied = setFilterKeys({ ...this.filtersToApply }, type, value);
-            this.filtersToApply = filterApplied;
-            this.emergenciesFiltered = filterDataInObject([...this.emergenciesList], { ...this.filtersToApply });
-        } else {
-            this.emergenciesFiltered = this.emergenciesList;
-        }
+        this.segmentFilter$.next(value);
     }
 
 

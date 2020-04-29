@@ -4,7 +4,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { IPostShare } from 'src/app/interfaces/models';
 import { PostsService } from 'src/app/services/posts.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { finalize, map, catchError } from 'rxjs/operators';
+import { finalize, map, catchError, pluck, distinctUntilChanged, tap, exhaustMap } from 'rxjs/operators';
 import { IEvent, IRespuestaApiSIUPaginada } from "src/app/interfaces/models";
 import { checkLikePost } from 'src/app/helpers/user-helper';
 import { mapEvent, cortarTextoConPuntos, getFirstPostImage } from 'src/app/helpers/utils';
@@ -16,6 +16,7 @@ import { CONFIG } from 'src/config/config';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
 import { trigger,style,transition,animate,keyframes,query,stagger } from '@angular/animations';
+import { FormControl } from '@angular/forms';
 
 @Component({
     selector: 'app-events-list',
@@ -40,8 +41,11 @@ export class EventsListPage implements OnInit, OnDestroy {
     showLoading = true;
     showNotFound = false;
     eventsList: IEvent[] = [];
+    eventsFiltered: IEvent[] = [];
     AuthUser = null;
     eventButtonMessage = CONFIG.EVENT_BUTTON_MESSAGE;
+    eventControl: FormControl;
+    searchingEvents= false;
 
     constructor(
         private navCtrl: NavController,
@@ -53,9 +57,34 @@ export class EventsListPage implements OnInit, OnDestroy {
         private router: Router,
         private errorService: ErrorService,
     ) {
+        this.eventControl = new FormControl();
     }
 
     ngOnInit() {
+        const peticionHttpBusqueda = (body: any) => {
+            if(body.title == ''){
+                return of([...this.eventsList])
+            }
+            return this.postsService.searchPosts(body)
+            .pipe(
+                pluck('data'),
+                map(data =>{
+                    const events_to_map = data
+                    events_to_map.forEach((event: any) => {
+                        event = mapEvent(event);
+                        const postAssistance = checkLikePost(event.reactions, this.AuthUser) || false;
+                        event.postAssistance = postAssistance;
+                    });
+                    // res.data.forEach((event: any) => {
+                    //     event = mapEvent(event);
+                    //     const postAssistance = checkLikePost(event.reactions, this.AuthUser) || false;
+                    //     event.postAssistance = postAssistance;
+                    // });
+                    return events_to_map;
+                }),
+                catchError(err => of([]))
+            )
+        }
         this.utilsService.enableMenu();
         this.authService.sessionAuthUser.subscribe(token_decoded => {
             if (token_decoded && token_decoded.user) {
@@ -66,6 +95,23 @@ export class EventsListPage implements OnInit, OnDestroy {
         this.events_app.eventsLikesEmitter.subscribe((event_app: any) => {
             this.toggleLikes(event_app.reactions);
         });
+        this.eventControl.valueChanges
+        .pipe(
+            distinctUntilChanged(),
+            tap(() => {
+                this.searchingEvents = true;
+            }),
+            map(search => ({
+                category: CONFIG.EVENTS_SLUG,
+                title: search
+            })),
+            exhaustMap(peticionHttpBusqueda),
+        )
+        .subscribe((data: any[]) => {
+            this.showNotFound = (data.length == 0) ? true: false;
+            this.eventsFiltered = [...data];
+            this.searchingEvents = false;
+        });
     }
 
     toggleLikes(reactions = []) {
@@ -74,6 +120,7 @@ export class EventsListPage implements OnInit, OnDestroy {
             return event;
         });
         this.eventsList = [...newEventsList];
+        this.eventsFiltered = [...this.eventsList];
     }
 
     redirectToSearch() {
@@ -101,6 +148,7 @@ export class EventsListPage implements OnInit, OnDestroy {
                         }
                     }
                 });
+                this.eventsFiltered = [...this.eventsList];
             }, (err: HttpErrorResponse) => {
                 this.errorService.manageHttpError(err, 'No se pudo borrar su asistencia');
             });
@@ -119,6 +167,7 @@ export class EventsListPage implements OnInit, OnDestroy {
                         }
                     }
                 });
+                this.eventsFiltered = [...this.eventsList];
             }, (err: HttpErrorResponse) => {
                 this.errorService.manageHttpError(err, 'No se pudo guardar su asistencia');
             });
@@ -174,11 +223,17 @@ export class EventsListPage implements OnInit, OnDestroy {
             }
             //Asignar datos dependiendo del evento
             if (event && event.type === 'refresher') {
-                return this.eventsList.unshift(...eventsApi);
+                this.eventsList.unshift(...eventsApi);
+                this.eventsFiltered.unshift(...eventsApi);
+                return;
             } else if (event && event.type == 'infinite_scroll') {
-                return this.eventsList.push(...eventsApi);
+                this.eventsList.push(...eventsApi);
+                this.eventsFiltered.push(...eventsApi);
+                return;
             } else {
-                return this.eventsList.push(...eventsApi);
+                this.eventsList.push(...eventsApi);
+                this.eventsFiltered.push(...eventsApi);
+                return;
             }
         });
     }

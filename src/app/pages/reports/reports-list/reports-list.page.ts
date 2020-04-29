@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PostsService } from "src/app/services/posts.service";
-import { finalize, map, catchError } from 'rxjs/operators';
+import { finalize, map, catchError, tap, distinctUntilChanged, exhaustMap, pluck } from 'rxjs/operators';
 import { NavController } from '@ionic/angular';
 import { IRespuestaApiSIUPaginada, IReport } from 'src/app/interfaces/models';
 import { mapReport } from "src/app/helpers/utils";
@@ -9,6 +9,8 @@ import { ErrorService } from 'src/app/services/error.service';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
 import { trigger,style,transition,animate,keyframes,query,stagger } from '@angular/animations';
+import { FormControl } from '@angular/forms';
+import { CONFIG } from 'src/config/config';
 
 @Component({
   selector: 'app-reports-list',
@@ -31,19 +33,61 @@ import { trigger,style,transition,animate,keyframes,query,stagger } from '@angul
 export class ReportsListPage implements OnInit, OnDestroy {
 
     reportsList: IReport[] = [];
+    reportsFiltered: IReport[] = [];
     showLoading = true;
     showNotFound = false;
+    socialActivityControl: FormControl;
+    searchingActivities = false;
 
     constructor(
         private postsService: PostsService,
         private navCtrl: NavController,
         private router: Router,
         private errorService: ErrorService,
-  ) { }
+  ) {
+        this.socialActivityControl = new FormControl();
+   }
     
     ngOnInit() { 
+
+        const peticionHttpBusqueda = (body: any) => {
+            if(body.title == ''){
+                return of([...this.reportsList])
+            }
+            return this.postsService.searchPosts(body)
+            .pipe(
+                pluck('data'),
+                map(data =>{
+                    const reports_to_map = data
+                    reports_to_map.forEach((report: any) => {
+                        report = mapReport(report);
+                    });
+                    return reports_to_map;
+                }),
+                catchError(err => of([]))
+            )
+        }
+
         this.postsService.resetPagination(this.postsService.PaginationKeys.REPORTS);
         this.loadReports(null, true);
+        
+        this.socialActivityControl.valueChanges
+        .pipe(
+            distinctUntilChanged(),
+            tap(() => {
+                this.searchingActivities = true;
+            }),
+            map(search => ({
+                category: CONFIG.REPORTS_SLUG,
+                title: search
+            })),
+            exhaustMap(peticionHttpBusqueda),
+        )
+        .subscribe((data: any[]) => {
+            this.showNotFound = (data.length == 0) ? true: false;
+            this.reportsFiltered = [...data];
+            this.searchingActivities = false;
+        });
     }
 
     redirectToSearch(){
@@ -97,13 +141,19 @@ export class ReportsListPage implements OnInit, OnDestroy {
             if(event && event.data && event.data.target && event.data.target.complete && reportsList.length == 0){
                 event.data.target.disabled = true;
             }  
-
+            //Cargar Datos
             if (event && event.type === 'refresher') {
-                return this.reportsList.unshift(...reportsList);
+                this.reportsList.unshift(...reportsList);
+                this.reportsFiltered.unshift(...reportsList);
+                return;
             }else if(event && event.type == 'infinite_scroll'){
-                return this.reportsList.push(...reportsList);
+                this.reportsList.push(...reportsList);
+                this.reportsFiltered.push(...reportsList);
+                return;
             }else{
-                return this.reportsList.push(...reportsList);
+                this.reportsList.push(...reportsList);
+                this.reportsFiltered.unshift(...reportsList);
+                return;
             }
         });
     }

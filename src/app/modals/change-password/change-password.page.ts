@@ -95,6 +95,9 @@ export class ChangePasswordPage implements OnInit {
             this.changePassForm.reset();
             this.messageService.showSuccess('Contraseña actualizado correctamente');
             this.formSended = true;
+            setTimeout(()=>{
+                this.closeModal();
+            }, 500);
         },(err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'La Contraseña no se ha podido actualizar')
         });

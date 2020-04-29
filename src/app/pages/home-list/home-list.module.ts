@@ -6,9 +6,14 @@ import { RouterModule } from '@angular/router';
 import { HomeListPage } from './home-list.page';
 import { SmComponentsModule } from 'src/app/components/sm-components.module';
 import { DirectivesModule } from 'src/app/directives/directives.module';
+import { RequestMembershipPageModule } from 'src/app/modals/request-membership/request-membership.module';
+import { RequestMembershipPage } from 'src/app/modals/request-membership/request-membership.page';
 
 
 @NgModule({
+  entryComponents: [
+    RequestMembershipPage
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -20,7 +25,8 @@ import { DirectivesModule } from 'src/app/directives/directives.module';
       }
     ]),
     DirectivesModule,
-    SmComponentsModule
+    SmComponentsModule,
+    RequestMembershipPageModule
   ],
   declarations: [HomeListPage]
 })

@@ -4,8 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { ReportsPage } from './reports.page';
-import { CONFIG } from 'src/config/config';
-import { UserAuthenticatedGuard } from 'src/app/guards/user-authenticated.guard';
 
 const routes: Routes = [
     {
@@ -14,16 +12,6 @@ const routes: Routes = [
         children: [
             {   path: 'list',
                 loadChildren: "./reports-list/reports-list.module#ReportsListPageModule",
-            },
-            {
-                path: 'search',
-                loadChildren: "src/app/pages/shared/search-posts/search-posts.module#SearchPostsPageModule",
-                data: {
-                    searchIdeas: [],
-                    searchPlaceholder: 'Busca Informes por su tìtulo',
-                    searchRouteDetail: '/reports/list',
-                    searchSlug: CONFIG.REPORTS_SLUG
-                },
             },
             {
                 path: 'list/:id',
