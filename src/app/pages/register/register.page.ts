@@ -69,11 +69,6 @@ export class RegisterPage implements OnInit {
         this.authService.saveLocalStorageInfo(token, token_decoded);
         this.messagesService.showSuccess('Usuario Registrado Correctamente');
         //Registrar Dispositivo
-        // this.notificationsService.registerUserDevice(token_decoded.user);
-        //Activar notificaciones onesignal
-        // this.notificationsService.activateOnesignalSubscription();
-        // this.notificationsService.setEmailOnesignal(loginData.email);
-        //Redirigir Usuario
         loadingManageRegister.dismiss();
         //Redigirir a la ruta HOME
         setTimeout(()=>{
@@ -150,27 +145,26 @@ export class RegisterPage implements OnInit {
     // Función Crea el Formulario
     createForm() {
         const patronContraseñaSinCaracterEspecial = /^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,100}$/;
-        // const patronContraseñaConCaracterEspecial = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,100}$/;
         //Cargar Validaciones
         const validations = this.localDataService.getFormValidations();
-        // Campo Email
+        
         const first_name = new FormControl('', Validators.compose([
             Validators.required,
             Validators.minLength(validations.first_name.minlength),
             Validators.pattern(validations.first_name.pattern)
         ]));
-        // Campo Email
+       
         const last_name = new FormControl('', Validators.compose([
             Validators.required,
             Validators.minLength(validations.last_name.minlength),
             Validators.pattern(validations.last_name.pattern)
         ]));
-        // Campo Email
+        
         const email = new FormControl('', Validators.compose([
             Validators.required,
             Validators.email
         ]));
-        // Campo Contraseña
+      
         const password = new FormControl('', Validators.compose([
             Validators.required,
             Validators.minLength(validations.password.minlength),

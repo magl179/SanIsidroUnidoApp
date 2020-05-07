@@ -24,14 +24,12 @@
     width: 100% !important;
 }
 .input-beatiful{
-    // background-color: pink !important;
     background-color: var(--ion-color-input-bg);
     color: var(--ion-color-dark-tint);
     display: block;
     border: none !important;
     padding: .375rem .75rem !important;
     font-size: 1rem;
-    // line-height: 1.5;
     width: 100%;
     border: 1px solid var(--ion-color-input-border) !important;
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
@@ -102,8 +100,7 @@
 }
 
 .form-errors {
-    p {
-        // margin-left: 1rem;
+    p {;
         color: var(--ion-color-danger);
         font-size: .8rem;
     }

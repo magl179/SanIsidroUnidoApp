@@ -80,8 +80,6 @@ export class NotificationsService implements OnInit {
             this.oneSignal.endInit();
             // Obtener el ID De Subscriptor de este dispositivo
             this.getOneSignalIDSubscriptor();
-            //Desactivar suscripcion
-            //this.deactivateOnesignalSubscription();
         }
     }
     
@@ -124,7 +122,6 @@ export class NotificationsService implements OnInit {
             };
             this.userService.sendRequestAddUserDevice(data)
                 .subscribe(async (res: any) => {
-                    // this.messageService.showSuccess('Dispositivo Añadido Correctamente');
                     this.saveDeviceInfo(this.userDevice.value.phone_id);
                 }, (err: HttpErrorResponse) => {
                     console.error('err', err);
@@ -170,11 +167,6 @@ export class NotificationsService implements OnInit {
         if (this.platform.is('cordova')) {
             const onesignalDevice = await this.oneSignal.getIds();
             const deviceID = onesignalDevice.userId;
-            //this.messageService.showInfo('this.oneSignal.setSubscription(false)');
-            // this.messageService.showInfo(JSON.stringify(deviceID));
-            //this.deactivateOnesignalSubscription();
-            // this.logOutEmailOnesignal();
-            // this.logoutDeviceApi(deviceID);
         }
     }
 
@@ -212,17 +204,6 @@ export class NotificationsService implements OnInit {
 
     // Función a Ejecutar cuando se recibe una notificación
     async manageNotificationReceived(appNotification: OSNotification) {
-        // await this.loadMessages();
-        // const notificationPayload = appNotification.payload;
-        // const pushNotificationExist = this.messagesList.find((message) => {
-        //     return message.notificationID === notificationPayload.notificationID;
-        // });
-        // if (pushNotificationExist) {
-        //     return;
-        // }
-        // this.messagesList.unshift(notificationPayload);
-        // await this.saveMessages();
-        // this.pushListener.emit(notificationPayload);
     }
 
     async manageNotificationOpened(appNotification: OSNotification) {

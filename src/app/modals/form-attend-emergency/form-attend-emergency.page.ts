@@ -40,7 +40,6 @@ export class FormAttendEmergencyModal implements OnInit {
     }
 
     closeModal() {
-        // this.
         this.modalCtrl.dismiss({
             formulario_enviado: this.formWasSended
         });
@@ -60,7 +59,6 @@ export class FormAttendEmergencyModal implements OnInit {
             }, 500);
         },(err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error al registrar el motivo de rechazo');
-            // this.formWasSended = false;
         })
     }
 }

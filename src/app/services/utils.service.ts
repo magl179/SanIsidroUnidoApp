@@ -79,8 +79,8 @@ export class UtilsService implements OnInit {
         // Verificar Si Existe Cordova
         if (this.platform.is('cordova')) {
             const share_options = {
-                message: message_publication, // not supported on some apps (Facebook, Instagram)
-                subject: publicacion.title, // fi. for email
+                message: message_publication, 
+                subject: publicacion.title,
                 files: (publicacion.image) ? publicacion.image : '',
                 url: CONFIG.MESSAGE_APP_URL,
               };

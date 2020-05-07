@@ -105,10 +105,8 @@ export class PostsService implements OnInit {
     }
     // Función para Enviar un like o asistencia a registrarse de un post
     sendCreateDetailToPost(detailInfo: ICreateDetail) {
-        // const headers = this.headersApp.set(environment.AUTHORIZATION_NAME, this.AuthToken);
         const headers = setHeaders(CONFIG.AUTHORIZATION_NAME, this.AuthToken);
         const url = `${environment.APIBASEURL}/detalles`;
-        // const url = `http://localhost:3000/`;
         return this.httpRequest.post(url, detailInfo, headers);
     }
     // Función para Enviar un like o asistencia a eliminarse de un post

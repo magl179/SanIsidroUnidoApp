@@ -20,8 +20,7 @@ export class NetworkService {
         private httpClient: HttpClient) {
 
         if (this.platform.is('cordova')) {
-            //Función si estamos en un dispositivo para subscribirnos a los 
-            // eventos on connect y disconnect de la red de internet
+            //Función si estamos en un dispositivo para subscribirnos a los eventos on connect y disconnect de la red de internet
             this.network.onConnect().subscribe(() => {
                 this.hasConnection.next(true);
                 return;
@@ -31,8 +30,7 @@ export class NetworkService {
                 return;
             });
         } else {
-            //Función si estamos en un navegador para subscribirnos a los 
-            // eventos on connect y disconnect de la red de internet
+            //Función si estamos en un navegador para subscribirnos a los eventos onconnect y disconnect de la red de internet
             this.online = merge(
                 of(navigator.onLine),
                 fromEvent(window, 'online').pipe(mapTo(true)),
@@ -46,8 +44,6 @@ export class NetworkService {
                 }
             });
         }
-        //Realizar una prueba de conección
-        //this.testNetworkConnection();
     }
     //Función obtener el tipo de red a la que estamos conectados
     public getNetworkType(): string {

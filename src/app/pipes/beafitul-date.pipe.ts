@@ -16,7 +16,6 @@ export class BeafitulDatePipe implements PipeTransform {
             lastDate = moment(new Date());
         }
         const currentDate = moment(new Date());
-        // Fecha Pasada, Fecha Actual
         const diffDays = Math.abs(currentDate.diff(lastDate, 'days'));
         if (diffDays <= 8) {
             beatifulDate = lastDate.fromNow();

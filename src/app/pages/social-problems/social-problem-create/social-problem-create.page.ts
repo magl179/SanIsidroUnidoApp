@@ -124,11 +124,9 @@ export class SocialProblemCreatePage implements OnInit {
             this.formSended = true;
             //Ejecutar la deteccion de cambios de Angular de forma manual
             this.cdRef.detectChanges();
-            // const social_problem_id_created = (res && res.id) ? res.id : null;
             const social_problem_subcategory = this.getSubcategoryById(this.socialProblemForm.value.subcategory);
             if(social_problem_subcategory && social_problem_subcategory.length > 0){
                 setTimeout(()=>{
-                    // this.router.navigateByUrl(`/social-problems/list/espacios_verdes/${social_problem_id_created}`);
                     this.router.navigateByUrl(`/social-problems/list/${social_problem_subcategory[0]}`);
                 }, 1000);
             }

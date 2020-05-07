@@ -75,11 +75,6 @@ export class EventsListPage implements OnInit, OnDestroy {
                         const postAssistance = checkLikePost(event.reactions, this.AuthUser) || false;
                         event.postAssistance = postAssistance;
                     });
-                    // res.data.forEach((event: any) => {
-                    //     event = mapEvent(event);
-                    //     const postAssistance = checkLikePost(event.reactions, this.AuthUser) || false;
-                    //     event.postAssistance = postAssistance;
-                    // });
                     return events_to_map;
                 }),
                 catchError(err => of([]))
@@ -93,7 +88,7 @@ export class EventsListPage implements OnInit, OnDestroy {
         });
         this.loadEvents(null, true);
         this.events_app.eventsLikesEmitter.subscribe((event_app: any) => {
-            this.toggleLikes(event_app.reactions);
+            this.toggleLikes(event_app.reactions, event_app.id);
         });
         this.eventControl.valueChanges
         .pipe(
@@ -114,9 +109,12 @@ export class EventsListPage implements OnInit, OnDestroy {
         });
     }
 
-    toggleLikes(reactions = []) {
-        const newEventsList = this.eventsList.map((event: any) => {
-            event.postAssistance = checkLikePost(reactions, this.AuthUser) || false;
+    toggleLikes(reactions = [], event_id: number) {
+        const newEventsList = this.eventsList.map((event) => {
+            if(event.id == event_id){
+                event.reactions = reactions;
+            }
+            event.postAssistance = checkLikePost(event.reactions, this.AuthUser) || false;
             return event;
         });
         this.eventsList = [...newEventsList];
@@ -133,7 +131,8 @@ export class EventsListPage implements OnInit, OnDestroy {
         this.postsService.resetPagination(this.postsService.PaginationKeys.EVENTS);
     }
 
-    toggleAssistance(assistance: boolean, id: number) {
+    toggleAssistance(event: IEvent, id: number) {
+        const assistance = event.postAssistance;
         if (!this.AuthUser) {
             this.messagesService.showInfo('Debes iniciar sesión para realizar esta acción');
             return;

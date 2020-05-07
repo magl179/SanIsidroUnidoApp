@@ -35,7 +35,7 @@ export class HomeScreenPage implements OnInit {
         );
         await this.utilsService.disabledMenu();
     }
-    //Función cuando cambia el Slide para prevenir ir a la slide -1 y slide n+1
+    
      slideChange(event: any) {
         event.target.isBeginning().then(is_first_slide => {
             if (is_first_slide) {

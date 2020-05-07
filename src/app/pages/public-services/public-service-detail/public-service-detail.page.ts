@@ -57,7 +57,6 @@ export class PublicServiceDetailPage implements OnInit {
             take(1),
             flatMap(async (res: IRespuestaApiSIUSingle) => {
                 if (res && res.data) {
-                    // const currentPosition: any = await this.localizationService.getCoordinates();
                     if (res.data.ubication.latitude && res.data.ubication.longitude && this.currentPosition ) {
                         if(!this.showSimpleMap){
                             res.data.distance = roundDecimal(getDistanceInKm(this.currentPosition.latitude, this.currentPosition.longitude, res.data.ubication.latitude, res.data.ubication.longitude));

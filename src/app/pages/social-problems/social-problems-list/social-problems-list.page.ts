@@ -94,8 +94,8 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
             this.errorService.manageHttpError(err, 'No se pudo cargar la información del usuario');
         });
         this.loadSocialProblems(null, true);
-        this.events_app.socialProblemLikesEmitter.subscribe((event_app: any) => {
-            this.toggleLikes(event_app.id, event_app.reactions);
+        this.events_app.socialProblemLikesEmitter.subscribe((social_problema_event: any) => {
+            this.toggleLikes(social_problema_event.id, social_problema_event.reactions);
         });
 
         combineLatest(
@@ -129,9 +129,12 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
         });
     }
 
-    toggleLikes(id: number, reactions = []) {
-        const newSocialProblems = this.socialProblemsList.map((social_problem: any) => {
-            social_problem.postLiked = checkLikePost(reactions, this.AuthUser) || false;
+    toggleLikes(social_problem_id: number, reactions = []) {
+        const newSocialProblems = this.socialProblemsList.map((social_problem) => {
+            if(social_problem.id == social_problem_id){
+                social_problem.reactions = reactions;
+            }
+            social_problem.postLiked = checkLikePost(social_problem.reactions, this.AuthUser) || false;
             return social_problem;
         });
         this.socialProblemsList = [...newSocialProblems];
@@ -153,7 +156,6 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
                         }
                     }
                 });
-                // this.socialProblemsList = [...newSocialProblems];
                 this.socialProblemsFilter = [...this.socialProblemsList];
             }, (err: any) => {
                 this.errorService.manageHttpError(err, 'El me gusta no pudo ser borrado');

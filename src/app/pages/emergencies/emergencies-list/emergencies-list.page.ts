@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavController } from "@ionic/angular";
 import { UtilsService } from "src/app/services/utils.service";
 import { PostsService } from "src/app/services/posts.service";
-import { IBasicFilter, IRespuestaApiSIUPaginada, ITokenDecoded } from "src/app/interfaces/models";
+import { IRespuestaApiSIUPaginada, ITokenDecoded } from "src/app/interfaces/models";
 import { finalize, map, catchError, pluck, distinctUntilChanged, tap, exhaustMap, share, startWith, skip, switchMap } from 'rxjs/operators';
 import { mapEmergency } from "src/app/helpers/utils";
 import { AuthService } from 'src/app/services/auth.service';
@@ -40,19 +40,6 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
     showNotFound = false;
     emergenciesList = [];
     emergenciesFiltered = [];
-    //Request
-    filtersToApply: any = { is_attended: "" };
-    filters: IBasicFilter = {
-        is_attended: {
-            name: 'Estado',
-            value: "",
-            type: 'segment', //select //radio
-            options: [
-                { id: 1, name: 'Atendidos' },
-                { id: 0, name: 'Pendientes' }
-            ]
-        }
-    };
     isPolicia = false;
     searchingEmergencies = false;
     emergencyControl: FormControl;

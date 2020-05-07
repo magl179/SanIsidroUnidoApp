@@ -31,7 +31,6 @@ export class HeaderComponent implements OnInit {
         this.notificationsIcon = (this.notificationsIcon === 'notifications-outline' ? 'notifications' : 'notifications-outline');
     }
     showNotifications(event){
-        // this.showListNotificationsModal();
         this.showNotiPopover(event)
     }
 
@@ -74,7 +73,6 @@ export class HeaderComponent implements OnInit {
     }
 
     async showListNotificationsModal() {
-        // await this.popoverCtrl.dismiss();
         const modal = await this.modalCtrl.create({
             component: ShowListNotificationsPage,
             componentProps: {

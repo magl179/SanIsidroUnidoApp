@@ -8,7 +8,7 @@ import { ModalController } from "@ionic/angular";
 import { ImageDetailPage } from "src/app/modals/image_detail/image_detail.page";
 import { finalize, map, take } from 'rxjs/operators';
 import { checkLikePost } from "src/app/helpers/user-helper";
-import { mapEvent, cortarTextoConPuntos, getFirstPostImage } from "src/app//helpers/utils";
+import { mapEvent, cortarTextoConPuntos, getFirstPostImage } from "src/app/helpers/utils";
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from 'src/app/services/events.service';
 import { ErrorService } from 'src/app/services/error.service';
@@ -111,7 +111,6 @@ export class EventDetailPage implements OnInit {
     }
 
     emitAssistanceEvent(id: number, reactions = []) {
-        // this.events_app.resetEventsEmitter(id);
         this.events_app.resetEventsLikesEmitter(id, reactions);
     }
 
@@ -151,8 +150,4 @@ export class EventDetailPage implements OnInit {
     seeImageDetail(image: string) {
         this.utilsService.seeImageDetail(image, 'Imagen Evento');
     }
-
-    // emitAssistanceEvent(id: number, reactions: any = []) {
-        // this.events_app.resetSocialProblemLikesEmmiter(id, reactions);
-    // }
 }

@@ -33,7 +33,6 @@ export const hasRoles = (userRoles: any[], allowedRoles: string[]) => {
             hasRole = true;
         }
     }
-    // }
     return hasRole;
 }
 

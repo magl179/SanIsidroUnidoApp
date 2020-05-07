@@ -92,7 +92,6 @@ export class EmergencyDetailPage implements OnInit {
         this.isPoliciaRol = isPolicia;
         this.showPoliciaOptions = isPolicia;
         this.urlBackEmergency = '/emergencies/list';
-        // this.urlBackEmergency = (isPolicia) ? '/home-list' : '/emergencies/list';
     }
 
     //POLICIA COMUNITARIO
@@ -124,7 +123,6 @@ export class EmergencyDetailPage implements OnInit {
         await modal.present();
         const { data } : any = await modal.onWillDismiss();
         if(data.formulario_enviado){
-            // this.showPoliciaOptions = false;
             this.messagesService.showInfo("El Formulario se envio");
             this.getEmergency();
         }else{

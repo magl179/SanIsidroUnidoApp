@@ -72,11 +72,9 @@ export class ListNotificationsComponent implements OnInit {
                 return;
             } else {
                 this.notificationsList.push(...data);
-                // this.emergenciesFiltered.push(...this.emergenciesList);
                 this.cargarNotificacionesSolicitadas();
                 return;
             }
-            // this.notificationsList = data;
         });
     }
 

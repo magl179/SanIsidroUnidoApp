@@ -27,7 +27,7 @@ export class NavigationService implements OnInit {
         )
         .subscribe(
             ( event: NavigationEnd ) => {
-                // console.warn("route:", event.url);
+                console.warn("route:", event.url);
             }
         )
     ;

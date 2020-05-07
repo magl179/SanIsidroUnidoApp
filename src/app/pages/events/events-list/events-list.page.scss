@@ -15,7 +15,6 @@
   }
 }
 .event {
-    // display: flex;
     &__header{
         .main-section-header{
             &__title{
@@ -49,7 +48,6 @@
             }
           }
     }
-    //&__footer{}
     margin-bottom: 1.5em;
     .event-title {
       position: relative;

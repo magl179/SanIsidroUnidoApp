@@ -37,18 +37,6 @@ export class SocialDataService {
 
     // Funcion para parsear los datos del login de google
     getGoogleDataParsed(googleUser: GoogleUser) {
-        //Old Method
-        // const appUser = {
-        //     first_name: googleUser.name.givenName,
-        //     last_name: googleUser.displayName,
-        //     email: googleUser.emails[0].value,
-        //     social_id: googleUser.id,
-        //     provider: 'google',
-        //     avatar: googleUser.avatar,
-        //     password: null,
-        //     device: null
-        // };
-        //New Method
         const appUser = {
             first_name: googleUser.given_name,
             last_name: googleUser.family_name,
@@ -81,10 +69,6 @@ export class SocialDataService {
         if (this.platform.is('cordova')) {
             try {
                 const loginGoogle = await this.google.login({});
-                // const loginGoogle = await this.google.login({
-                //     'webClientId': environment.GOOGLE_CLIENT_ID,
-                //     'offline': true
-                // });
                 this.getGoogleData(loginGoogle);
             } catch (error) {
                 this.errorService.manageHttpError(error, 'Error con la conexion a Google');
@@ -128,14 +112,12 @@ export class SocialDataService {
     // Function para llamar a la api de Google y obtener los datos del perfil del usuario logueado
     getGoogleData(googleLogin: any) {
         try {
-            // // const url = `https://www.googleapis.com/plus/v1/people/me?access_token=${googleLogin.accessToken}`;
             const url = `https://www.googleapis.com/oauth2/v3/userinfo?alt=json`;         
             this.httpRequest.get(url, {}, { 
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${googleLogin.accessToken}`
              }).subscribe(
                 async (profile: any) => {
-                    // profile.avatar = googleLogin.imageUrl;
                     this.googleLoginData.next(profile);
                     await this.closeGoogleSession();
                 },

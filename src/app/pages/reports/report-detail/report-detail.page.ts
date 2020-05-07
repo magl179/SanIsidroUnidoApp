@@ -70,14 +70,13 @@ export class ReportDetailPage implements OnInit {
 
     openReportPDF(document=null) {
         const pdfs = [
-            "https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/CursoPugDesdeCero.pdf", //funciona
+            "https://siu-dev97-sd.s3-sa-east-1.amazonaws.com/CursoPugDesdeCero.pdf"
         ];
         if(!document){
             const position = this.randomInteger(0, (pdfs.length -1));
             return this.manageDocsService.downloadAndOpenPDF(pdfs[position]);
         }
         this.manageDocsService.downloadAndOpenPDF(document);
-        // const urlPDFDrive = "https://drive.google.com/file/d/1P-_obHcrIOYauf-zuQ830E5EtuTPCxI9/view";
     }
 
     randomInteger(min, max) {

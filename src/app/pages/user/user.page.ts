@@ -5,7 +5,7 @@ import { EditProfilePage } from 'src/app/modals/edit-profile/edit-profile.page';
 import { ChangePasswordPage } from 'src/app/modals/change-password/change-password.page';
 import { ChangeProfileImagePage } from 'src/app/modals/change-profile-image/change-profile-image.page';
 import { NotificationsService } from 'src/app/services/notifications.service';
-import { IRespuestaApiSIU, ITokenDecoded, IRespuestaApiSIUSingle, IDeviceUser } from "src/app//interfaces/models";
+import { IRespuestaApiSIU, ITokenDecoded, IRespuestaApiSIUSingle, IDeviceUser } from "src/app/interfaces/models";
 import { UserService } from 'src/app/services/user.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { getUserDevice } from 'src/app/helpers/user-helper';

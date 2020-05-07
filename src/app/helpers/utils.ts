@@ -16,7 +16,7 @@ export const GEOLOCATION_ERRORS = {
     'errors.location.timeout': 'Service timeout has been reached'
 };
 
-//FUncion para verificar si una variable es un JSON
+//Funcion para verificar si una variable es un JSON
 const isJSON = (str: any) => {
     try {
         return JSON.parse(str) && !!str;
@@ -83,7 +83,6 @@ const getValueKeyFromArrObj = (arr: object[], key: string) => {
     return arrFilter;
 }
 
-//
 export const setFilterKeys = (filters: object, type: string, value: any) => {
     for (const prop in filters) {
         filters[prop] = value;
@@ -122,7 +121,6 @@ export const filterDataInObject = (data: any[], filter: {}) => {
 }
 
 //Recibe array objetos y un objeto con el valor a buscar y devuelve true/false si existe ese valor
-// Ejemplo [{id: 1, name: 'lola}, {id: 2, name: 'bebe'}], {name: 'bebe}
 export const searchInArrayObj = (items: any[], filter: { [key: string]: any }) => {
     let match = false;
     //Recorrer los Filtros a Aplicar
@@ -176,8 +174,6 @@ export const getImageURL = (image_name: string) => {
 
 export const mapImagesApi = (images: any[]) => {
     return images.map((image: any) => {
-        // image.url = getImageURL(image.url);
-        // return image;
         return image.url_link;
     });
 }
@@ -269,7 +265,6 @@ export const mapEmergency = (emergency: any) => {
     emergency.date = formatDate(dateFull);
     emergency.time = formatTime(dateFull);
     emergency.ubication = getJSON(emergency.ubication);
-    // if (emergency.images && emergency.images.length > 0) {
     if (emergency.resources && emergency.resources.length > 0) {
         emergency.images = mapImagesApi(emergency.resources);
         emergency.imagesArr = getValueKeyFromArrObj(emergency.resources, 'url_link');
@@ -287,7 +282,6 @@ export const mapEmergency = (emergency: any) => {
 export const mapReport = (report: any) => {
     report.fulldate = `${report.date} ${report.time}`;
     report.ubication = getJSON(report.ubication);
-    // if (report.images && report.images.length > 0) {
     if (report.resources && report.resources.length > 0) {
         const imagesResources = report.resources.filter(resource => resource.type === 'image');
         const documentsResources = report.resources.filter(resource => resource.type === 'document');
@@ -321,16 +315,12 @@ export const mapSocialProblem = (social_problem: any) => {
     social_problem.date = formatDate(dateFull);
     social_problem.time = formatTime(dateFull);
     social_problem.ubication = getJSON(social_problem.ubication);
-    // if (social_problem.images && social_problem.images.length > 0) {
     if (social_problem.resources && social_problem.resources.length > 0) {
         social_problem.images = mapImagesApi(social_problem.resources);
         social_problem.imagesArr = getValueKeyFromArrObj(social_problem.resources, 'url_link');
     } else {
         social_problem.imagesArr = [];
     }
-    // if (social_problem.user && social_problem.user.avatar) {
-    //     social_problem.user.avatar = getImageURL(social_problem.user.avatar);
-    // }
     const fecha_creacion = (social_problem.created_at) ? social_problem.created_at : moment(new Date()).add(-1, 'days');
     social_problem.fecha_creacion = fechaFull(fecha_creacion);
 

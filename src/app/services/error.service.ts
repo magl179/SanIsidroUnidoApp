@@ -36,7 +36,6 @@ export class ErrorService {
       // Verificar que el error HTTP ocurrio en el cliente
       return await this.showHttpError(defaultMessage || "Ocurrio un error, intentalo más tarde");
     } else {
-      //Server Error Occurs
       if (httpError && httpError.error && httpError.error.message) {
         return await this.showHttpError( httpError.error.message );
       } else {

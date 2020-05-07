@@ -58,14 +58,13 @@ export class AppComponent implements OnInit {
                 this.statusBar.styleDefault();
                 this.splashScreen.hide();
             }
-            //verificar token en el backend
             await this.checkUserLoggedIn();
             await this.getMenuOptions();
             this.showAppsplash = false;
             timer(1000).subscribe(async () => {
                 await this.pushNotificationService.initialConfig();
             });
-            this.navigationService.keepHistoryTracking();
+            // this.navigationService.keepHistoryTracking();
         });
     }
     

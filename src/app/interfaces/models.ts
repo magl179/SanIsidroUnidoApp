@@ -20,7 +20,7 @@ export interface IRespuestaApiSIUPaginada extends IBasicResponse {
     next_page_url: string;
     path: string;
     per_page: number;
-    prev_page_url?: any;
+    prev_page_url?: string;
     to: number;
 }
 interface IRangeDate {
@@ -28,72 +28,91 @@ interface IRangeDate {
     end_time: string;
     start_date: string;
     start_time: string;
-  }
+}
 
-  interface IAdditionalData {
+interface IAdditionalData {
     log_event?: ILogEvent;
     log_emergency?: ILogEmergency;
     log_post: ILogPost;
-  }
-  
-  interface ILogEvent {
+}
+
+interface ILogEvent {
     responsable: string;
-  }
-  interface ILogEmergency {
+}
+interface ILogEmergency {
     policia: string;
-  }
-  interface ILogPost {
+}
+interface ILogPost {
     moderador: string;
-  }
+}
+
+export interface IReaction {
+    id: number;
+    url: string;
+    type: string;
+    post_id: number;
+    created_at: string;
+    updated_at: string;
+    url_link: string;
+}
+
+export interface IResource {
+    id: number;
+  url: string;
+  type: string;
+  post_id: number;
+  created_at: string;
+  updated_at: string;
+  url_link: string;
+}
+
 //Interfaz Publicaciones
 export interface IPost {
-    id: any;
+    id: number;
     title: string;
     description: string;
     state: number;
     date: string;
     time: string;
     ubication?: IUbication;
-    range_date?: IRangeDate;
     additional_data: IAdditionalData;
     is_attended: number;
     user_id: number;
+    created_at?: string;
+    updated_at?: string;
     category_id: number;
-    subcategory_id?: any;
-    created_at?: any;
-    updated_at?: any;
-    images?: I_ImagesApi[];
-    imagesArr: any[];
-    reactions?: any[],
+    subcategory_id?: number;
+    resources: IResource[];
     category?: ICategory;
+    user: IUser;
     subcategory?: ISubcategory;
-    user?: IUser;
-    category_name?: string;
-    subcategory_name?: string;
+    reactions?: IReaction[],
+    images?: I_ImagesApi[];
+    imagesArr: string[];
 }
 
-export interface IEmergency extends IPost{   
+export interface IEmergency extends IPost {
 }
 
-export interface IReport extends IPost{
+export interface IReport extends IPost {
     fecha_creacion: string;
 }
 
 export interface ISocialProblem extends IPost {
     likes: number;
-    postLiked?: any;
-    fulldate?: any;
+    postLiked?: boolean;
+    fulldate?: string;
     fecha_creacion?: string;
 }
 export interface IEvent extends IPost {
-    postAssistance?: any;
+    postAssistance?: boolean;
     fulldate?: string;
     responsible?: any;
-    end_date?: any;
-    initial_date?: any;
+    end_date?: string;
+    initial_date?: string;
     additional_data: any;
-    hasRangeDate?: any;
-    fecha_creacion?: any;
+    hasRangeDate?: boolean;
+    fecha_creacion?: string;
     range_short_date?: string;
     range_short_time?: string;
 }
@@ -114,7 +133,7 @@ export interface IPublicService {
     phones?: IPhones[];
     subcategory?: ISubcategory;
     created_at?: string;
-    updated_at?: string;    
+    updated_at?: string;
 }
 //Telefonos Servicio Publico
 interface IPhones {
@@ -140,6 +159,7 @@ export interface IHomeOptions {
     title: string;
     icon: string;
     url: string;
+    isFunction: boolean;
     valid_roles: string[];
 };
 
@@ -154,8 +174,9 @@ interface IMenuComponent {
     redirectTo: string;
     routeDirection: string;
     children: any[];
-    open?: any;
+    open?: boolean;
 }
+
 
 export interface IReverseGeocodeResponse {
     readonly place_id: string;
@@ -180,31 +201,16 @@ export interface ISimpleCoordinates {
     longitude: number;
 }
 
-interface IFilterOptions {
-    id: any;
-    name: string;
-}
-
-export interface IBasicFilter {
-    [key: string]: IFilterFields;
-}
-interface IFilterFields {
-    name: string;
-    value: any;
-    type?: string;
-    options: IFilterOptions[];
-}
-
 export interface INotificationApi {
     id: string;
     type: string;
     notifiable_type: string;
     notifiable_id: number;
     data: INotiList;
-    read_at?: any;
+    read_at?: string;
     created_at: string;
     updated_at: string;
-  }
+}
 
 export interface INotiList {
     title: string;
@@ -213,11 +219,11 @@ export interface INotiList {
     post: INotificationPost;
 }
 
-export interface INotificationUser extends IUser{
+export interface INotificationUser extends IUser {
     pivot?: IRole[];
 }
 
-export interface INotificationPost extends IPost{
+export interface INotificationPost extends IPost {
 }
 
 export interface INotiPostOpen {
@@ -239,13 +245,13 @@ export interface IUser {
     first_name: string;
     last_name: string;
     email: string;
-    email_verified_at?: any;
+    email_verified_at?: string;
     avatar?: string;
-    password?: any;
+    password?: string;
     state: number;
-    basic_service_image?: any;
-    number_phone?: any;
-    position_id?: any;
+    basic_service_image?: string;
+    number_phone?: string;
+    position_id?: number;
     created_at?: string;
     updated_at?: string;
     devices?: IDeviceUser[];
@@ -360,8 +366,8 @@ export interface ICategory {
     name: string;
     slug: string;
     description: string;
-    created_at?: any;
-    updated_at?: any;
+    created_at?: string;
+    updated_at?: string;
 }
 //SubCategoria
 export interface ISubcategory {
@@ -370,8 +376,8 @@ export interface ISubcategory {
     slug: string;
     description: string;
     category_id: number;
-    created_at?: any;
-    updated_at?: any;
+    created_at?: string;
+    updated_at?: string;
     icon?: string;
     image?: string;
     image_link?: string;

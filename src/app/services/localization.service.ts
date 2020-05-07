@@ -68,19 +68,14 @@ export class LocalizationService {
     }
 
     getPositionNative() {
-        return this.geolocation.getCurrentPosition({
-            // timeout: 15000,
-            // maximumAge:60000
-        });
+        return this.geolocation.getCurrentPosition({});
     }
 
     async getCoordinates() {
         return await new Promise(async (resolve, reject) => {
             this.getLocationCoordinates().then(res=>{
-                // this.messageService.showInfo("pudimos obtener tus coordenadas :) GC");
                 resolve(res);
             }).catch(err=>{
-                // this.messageService.showInfo("No pudimos obtener tus coordenadas :(");
                 reject(err);                
             });
         });
@@ -125,7 +120,6 @@ export class LocalizationService {
 
                 }
             ).catch(err => {
-                // throw (err);
                 reject(err);
             });
         });
@@ -138,7 +132,6 @@ export class LocalizationService {
                     resolve(this.askTurnOnGPS());
                 } else {
                     this.messageService.showInfo("Por favor habilita el acceso de la aplicación a la geolocalización");
-                    // throwError('Por favor habilita el acceso de la aplicación a la geolocalización');
                     reject('Por favor habilita el acceso de la aplicación a la geolocalización');
                 }
             }).catch(err => {

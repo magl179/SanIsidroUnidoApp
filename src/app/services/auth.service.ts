@@ -60,7 +60,6 @@ export class AuthService {
     }
 
     // Iniciar Sesion del Usuario
-    //$requestData['provider'] = 'formulario'
     login(loginData: any): Observable<any> {
         const headers = CONFIG.API_HEADERS;
         const urlApi = `${environment.APIBASEURL}/login`;
@@ -85,7 +84,6 @@ export class AuthService {
         if(message !== ''){
             this.messageService.showInfo(message);
         }
-        // this.notificationService.logoutOnesignal();
         this.events_appService.emitLogoutEvent();
         setTimeout(()=>{
             this.navCtrl.navigateRoot('/home-screen', { replaceUrl: true });
@@ -95,9 +93,6 @@ export class AuthService {
     async redirectToLogin(message = ''){
         this.cleanLocalStorage();
         this.cleanAuthInfo();
-        // this.messageService.showInfo(message);
-        // this.notificationService.logoutOnesignal();
-        // this.events_appService.emitLogoutEvent();
         this.navCtrl.navigateRoot('/home-screen');
     }
     //VERIFICAR SI SE DEBE CHECKEAR VALIDEZ TOKEN
@@ -164,17 +159,8 @@ export class AuthService {
     }
 
     getUserAuthRxjs():Observable<any> {
-        // return from(this.getTokenUserAuthenticated());
         return from(this.getTokenUserAuthenticated()).pipe(
-            // now switch to a http-get request
-            // switchMap(authtoken => {
-            //   // make a HttpHeaders from it
-            //   const headers = new HttpHeaders({ 'authorization': authtoken });
-            //   return this.http.get(url, { headers });
-            // })
-            // here you'll have your request results
             map((resp: Response) => {
-            //   let response = this.extractData(resp);
               return resp;
             })
         )
