@@ -12,7 +12,6 @@ export class PopNotificationsComponent implements OnInit {
 
     getUnreadedNotifications = true;
 
-
     constructor(
         private modalCtrl: ModalController,
         private popoverCtrl: PopoverController

@@ -6,7 +6,7 @@
                 <div class="header-menu">
                     <ion-item lines="none" color="blue-logo" *ngIf="sessionAuth">
                         <ion-avatar slot="start" (click)="closeMenu()">
-                            <img [src]="sessionAuth.user.avatar_link" fallimg="user_avatar" />
+                            <ion-img [src]="sessionAuth.user.avatar_link" fallimg="user_avatar"></ion-img> 
                         </ion-avatar>
                         <ion-label>
                             <h1>

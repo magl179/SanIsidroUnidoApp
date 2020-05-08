@@ -46,6 +46,7 @@ import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { ToastrModule } from 'ngx-toastr';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { AuthService } from './services/auth.service';
+import { WebView } from '@ionic-native/ionic-webview/ngx';
 
 @NgModule({
     declarations: [AppComponent],
@@ -96,6 +97,7 @@ import { AuthService } from './services/auth.service';
         SocialSharing,
         Network,
         Device,
+        WebView,
         InAppBrowser,
         Diagnostic,
         {

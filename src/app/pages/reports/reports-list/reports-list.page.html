@@ -27,8 +27,8 @@
         <ion-card class="report-container" *ngFor="let report of reportsFiltered; let i = index;">
             <div class="ion-padding" style="display: flex;align-items:Center;">
                 <div class="left-section">
-                    <img style="width: 50px;height:50px;border-radius:50%;" [src]="report.user.avatar_link"
-                        fallimg="user_avatar">
+                    <ion-img class="img-avatar" [src]="report.user.avatar_link"
+                        fallimg="user_avatar"></ion-img>
                 </div>
                 <div class="right-section" style="margin-left: 1rem">
                     <p style="color: var(--ion-color-dark);margin-bottom: .7em;">

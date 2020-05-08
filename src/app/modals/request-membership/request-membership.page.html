@@ -19,7 +19,7 @@
             <ion-col size="6" *ngFor="let image of publicServiceImg; let i = index;">
                     <div class="item-container">
                         <ion-card>
-                            <img  class="basic-service-img" [src]="image | imageSanitizer">
+                            <img  class="basic-service-img" [src]="image | imageSanitizer"/>
                         </ion-card>
                         <div class="container_image_actions">
                             <ion-button size="small" color="danger" expand="full" (click)="deleteImage(i)">

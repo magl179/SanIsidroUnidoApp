@@ -1,17 +1,26 @@
-.report-container{
-    .description-section{
-        &__see-more{
+.report-container {
+    .description-section {
+        &__see-more {
             padding-top: 1rem;
         }
     }
 }
 
-.report_created_at{
+.report_created_at {
     padding: .5em 0;
 }
-ion-card{
+
+ion-card {
     margin-bottom: 2em;
-    .btn-see-more{
+
+    .btn-see-more {
         margin: 0;
     }
+}
+
+.img-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50% !important;
+    overflow: hidden;
 }

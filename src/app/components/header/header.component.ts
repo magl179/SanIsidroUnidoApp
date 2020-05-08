@@ -67,6 +67,7 @@ export class HeaderComponent implements OnInit {
             event: evento,
             backdropDismiss: true,
             showBackdrop: false,
+            animated: true,
             cssClass: 'popover-app-notifications'
         });
         await popover.present();

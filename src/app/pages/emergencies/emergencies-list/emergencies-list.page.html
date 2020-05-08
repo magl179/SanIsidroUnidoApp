@@ -55,12 +55,12 @@
         <!-- Posts Filtrados con Datos -->
         <ion-card class="emergency" *ngFor="let emergency of emergenciesFiltered; let i = index;">
             <div class="post_cover" *ngIf="emergency.imagesArr && emergency.imagesArr.length > 0">
-                <img [src]="emergency.imagesArr[0]"/>
+                <ion-img class="img" [src]="emergency.imagesArr[0]"></ion-img>
             </div>
             <div class="ion-padding" style="display: flex;align-items:center;" *ngIf="isPolicia">
                 <div class="left-section">
-                    <img style="width: 50px;height:50px;border-radius:50%;"
-                        [src]="emergency.user.avatar_link" fallimg="user_avatar">
+                    <ion-img style="width: 50px;height:50px;border-radius:50%;"
+                        [src]="emergency.user.avatar_link" fallimg="user_avatar"></ion-img>
                 </div>
                 <div class="right-section" style="margin-left: 1rem">
                     <p style="color: var(--ion-color-dark);margin-bottom: .7em;">

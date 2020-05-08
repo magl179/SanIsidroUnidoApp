@@ -41,13 +41,13 @@
         <!-- Posts Filtrados con Datos -->
         <ion-card style="position:relative" class="social-problem" *ngFor="let socialProblem of socialProblemsFilter">
             <div class="post_cover" *ngIf="socialProblem.imagesArr && socialProblem.imagesArr.length > 0">
-                <img [src]="socialProblem.imagesArr[0]" />
+                <ion-img class="img" [src]="socialProblem.imagesArr[0]"></ion-img>
             </div>
             <div (click)="postDetail(socialProblem.id)">
                 <div class="ion-padding" style="display: flex;align-items:Center;">
                     <div class="left-section">
-                        <img style="width: 50px;height:50px;border-radius:50%;" [src]="socialProblem.user.avatar_link"
-                            fallimg="user_avatar">
+                        <ion-img class="img-avatar" [src]="socialProblem.user.avatar_link"
+                            fallimg="user_avatar"></ion-img>
                     </div>
                     <div class="right-section" style="margin-left: 1rem">
                         <p style="color: var(--ion-color-dark);margin-bottom: .7em;">

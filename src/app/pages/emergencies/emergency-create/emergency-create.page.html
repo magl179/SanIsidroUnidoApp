@@ -85,7 +85,7 @@
                         <ion-item lines="none" class="item-img-grid">
                             <div class="container-item">
                                 <ion-card class="card-image-uploaded">
-                                    <img [src]="image | imageSanitizer">
+                                    <img [src]="image | imageSanitizer"/>
                                 </ion-card>
                                 <div class="container_image_actions">
                                     <ion-button size="small" color="danger" expand="full" (click)="deleteImage(i)">
@@ -124,7 +124,7 @@
             </p>
             <div class="section-img-thumb" *ngIf="emergencyImages.length > 0">
                 <ion-thumbnail *ngFor="let image of emergencyImages">
-                    <img [src]="image | imageSanitizer">
+                    <img [src]="image | imageSanitizer"/>
                 </ion-thumbnail>
             </div>
 

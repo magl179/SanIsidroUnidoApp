@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { Platform } from '@ionic/angular';
 import { MessagesService } from 'src/app/services/messages.service';
+import { WebView } from '@ionic-native/ionic-webview/ngx';
 
 let cameraOptions: CameraOptions = {
     quality: 85,
@@ -25,6 +26,7 @@ export class UploadImageComponent implements OnInit {
     imagejpg: string;
 
     constructor(
+        private webview: WebView,
         private camera: Camera,
         private messageService: MessagesService,
         private platform: Platform
@@ -125,7 +127,8 @@ export class UploadImageComponent implements OnInit {
                     return new Promise((resolve, reject) => {
                         var reader = new FileReader();
                         reader.onload = (readerEvent: any) => {
-                            var content = readerEvent.target.result;
+                            const content = readerEvent.target.result;
+                            // const localSrc = this.webview.convertFileSrc(content);                           
                             if (this.uploadedImages.length < this.maxImages) {
                                 this.uploadedImages.push(content);
                             }

@@ -15,7 +15,7 @@
             <ion-col size="6" *ngFor="let image of profileUserImg; let i = index;">
                 <div class="item-container">
                         <div class="user-avatar-container">
-                            <img  class="user-avatar" [src]="image | imageSanitizer">
+                            <img  class="user-avatar" [src]="image | imageSanitizer"/>
                         </div>
                     <div class="container_image_actions">
                         <ion-button size="small" color="danger" expand="full" (click)="deleteImage(i)">
