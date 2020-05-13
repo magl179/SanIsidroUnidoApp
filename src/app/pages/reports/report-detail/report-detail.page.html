@@ -39,15 +39,15 @@
             <section class="report-detail_attached">
                 <p class="report-detail_attached__title section-title">Adjuntos</p>
                 <ion-list>
-                    <ion-item>
+                    <!-- <ion-item>
                         <ion-label class="item_document">
                             <ion-img class="img" src="assets/img/svg/pdf.svg"></ion-img>
                         </ion-label>
                         <ion-button (click)="openReportPDF()" slot="end">Abrir</ion-button>
-                    </ion-item>
+                    </ion-item> -->
                     <ion-item *ngFor="let document of report.documentsArr">
                         <ion-label class="item_document">
-                            <ion-img class="img" [src]="assets/img/svg/pdf.svg"></ion-img>
+                            <ion-img class="img" src="assets/img/svg/pdf.svg"></ion-img>
                         </ion-label>
                         <ion-button (click)="openReportPDF(document)" slot="end">Abrir</ion-button>
                     </ion-item>

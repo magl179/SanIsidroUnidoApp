@@ -6,6 +6,7 @@ interface ICONFIG {
     API_HEADERS: {};
     AUTHORIZATION_NAME: string;
     EMERGENCIES_SLUG: string;
+    PUBLIC_SERVICE_SLUG: string;
     EVENTS_SLUG: string;
     HOME_ROUTE: string;
     IMAGE_ASSETS: string;
@@ -29,6 +30,7 @@ export const CONFIG: ICONFIG = {
     EVENTS_SLUG: 'evento',
     HOME_ROUTE: 'home-list',    
     IMAGE_ASSETS: 'imagenes',
+    PUBLIC_SERVICE_SLUG: 'servicio-publico',
     MAPLAYERS: {
         GOOGLE: {
             URL: "https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}",
@@ -40,7 +42,7 @@ export const CONFIG: ICONFIG = {
         }
     },
     REPORTS_SLUG: 'informe',
-    SOCIAL_PROBLEMS_SLUG: 'problema_social',
+    SOCIAL_PROBLEMS_SLUG: 'problema',
     VERSION: '1.0.3',
     MESSAGE_APP_INFO: 'Por San Isidro Unido con ❤',
     MESSAGE_APP_URL: 'https://www.facebook.com/stalinmaza97',

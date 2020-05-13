@@ -31,13 +31,15 @@ interface IRangeDate {
 }
 
 interface IAdditionalData {
-    log_event?: ILogEvent;
-    log_emergency?: ILogEmergency;
-    log_post: ILogPost;
+    event?: ILogEvent;
+    emergency?: ILogEmergency;
+    post?: ILogPost;
+    problem?: any;
+    activity?: any;
 }
 
 interface ILogEvent {
-    responsable: string;
+    responsible: string;
 }
 interface ILogEmergency {
     policia: string;
@@ -107,7 +109,6 @@ export interface ISocialProblem extends IPost {
 export interface IEvent extends IPost {
     postAssistance?: boolean;
     fulldate?: string;
-    responsible?: any;
     end_date?: string;
     initial_date?: string;
     additional_data: any;
@@ -215,16 +216,19 @@ export interface INotificationApi {
 export interface INotiList {
     title: string;
     message: string;
-    notification_user: INotificationUser;
-    post: INotificationPost;
+    notification_user?: INotificationUser;
+    post?: IPost;
 }
 
 export interface INotificationUser extends IUser {
     pivot?: IRole[];
 }
 
-export interface INotificationPost extends IPost {
-}
+// export interface INotificationPost {
+//     title: string;
+//     message: string;
+//     post?: IPost;
+// }
 
 export interface INotiPostOpen {
     subcategory?: string;

@@ -14,7 +14,6 @@ import { Storage } from '@ionic/storage'
 import { Router } from '@angular/router';
 import { EventsService } from './events.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { INotificationPost } from 'src/app/interfaces/models';
 
 const USER_DEVICE_ID_STORAGE = "siuDevice";
 
@@ -214,13 +213,12 @@ export class NotificationsService implements OnInit {
     }
 
     async manageAppNotification(aditionalData: INotiList) {
-        //Verificar si tengo dato posts
-        if (aditionalData && aditionalData.post) {
-            this.managePostNotification(aditionalData.post);
-        }
+        //Verificar si tengo dato posts        
+        this.managePostNotification(aditionalData);
+        
     }
-    async managePostNotification(aditionalDataPost: INotificationPost) {
-        const post: INotificationPost = aditionalDataPost;
+    async managePostNotification(aditionalDataPost: INotiList) {
+        const post = aditionalDataPost.post;
         let urlNavigate = null;
 
         if (post && post.id && post.category) {

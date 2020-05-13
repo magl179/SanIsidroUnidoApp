@@ -444,7 +444,7 @@ export const formatRangeTime = (initial_date: string, end_date: string) => {
     }
 }
 
-export const verificarCedula = (validarCedula) => {
+export const verificarCedula = (validarCedula: string): boolean => {
     let aux = 0,
         par = 0,
         impar = 0,
