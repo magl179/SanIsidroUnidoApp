@@ -61,10 +61,9 @@ export class AppComponent implements OnInit {
             await this.checkUserLoggedIn();
             await this.getMenuOptions();
             this.showAppsplash = false;
-            timer(1000).subscribe(async () => {
+            timer(1500).subscribe(async () => {
                 await this.pushNotificationService.initialConfig();
             });
-            // this.navigationService.keepHistoryTracking();
         });
     }
     

@@ -42,8 +42,7 @@
     <!-- Datos ya cargados -->
     <div class="social-problem-detail" *ngIf="socialProblemLoaded && socialProblem">
         <div *ngIf="socialProblem.images && socialProblem.images.length > 0">
-                <slideshow-images-full ionSlideClass="slideImageFull" [listImages]="socialProblem.imagesArr"
-                    [title]="socialProblem.title" [slideAutoPlay]="true">
+                <slideshow-images-full ionSlideClass="slideImageFull" [listImages]="socialProblem.imagesArr" title="" [slideAutoPlay]="true">
                 </slideshow-images-full>
             </div>
         <div class="post-info-container">

@@ -214,8 +214,8 @@ export interface INotificationApi {
 }
 
 export interface INotiList {
-    title: string;
-    message: string;
+    title?: string;
+    message?: string;
     notification_user?: INotificationUser;
     post?: IPost;
 }
