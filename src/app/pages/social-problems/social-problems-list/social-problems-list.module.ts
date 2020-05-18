@@ -12,7 +12,6 @@ import { FilterPage } from "src/app/modals/filter/filter.page";
 import { SearchPage } from 'src/app/modals/search/search.page';
 import { FilterPageModule } from "src/app/modals/filter/filter.module";
 import { SearchPageModule } from "src/app/modals/search/search.module";
-import { NgFallimgModule } from 'ng-fallimg';
 
 const routes: Routes = [
     {
@@ -38,8 +37,7 @@ const routes: Routes = [
         ImageDetailPageModule,
         FilterPageModule,
         SearchPageModule,
-        ReactiveFormsModule,
-        NgFallimgModule
+        ReactiveFormsModule
     ],
     declarations: [SocialProblemsListPage]
 })

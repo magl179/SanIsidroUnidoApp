@@ -5,7 +5,7 @@
         <!-- AVATAR USUARIO -->
         <div class="img-profile ion-padding-top">
             <div class="item_img" *ngIf="AuthUser">
-                <ion-img class="img circle-img"[src]="AuthUser.avatar_link" fallimg="user_avatar" (click)="seeProfileImageDetail(AuthUser.avatar_link)"></ion-img>
+                <img class="img circle-img"[src]="AuthUser.avatar_link" (onerror)="event.target.src='assets/img/default/img_avatar.png'" (click)="seeProfileImageDetail(AuthUser.avatar_link)"/>
                 <div class="upload_image" (click)="showChangeUserImageProfileModal()">
                     <ion-icon name="camera"></ion-icon>
                 </div>
@@ -61,10 +61,10 @@
                 <div class="list-item"
                     *ngFor="let user_social_profile of UserSocialProfiles; let i = index">
                     <div class="item-left">
-                        <ion-img class="icon" src="/assets/img/svg/google.svg"
-                            *ngIf="(user_social_profile.provider | lowercase) === 'google'"></ion-img>
-                        <ion-img class="icon" src="/assets/img/svg/facebook.svg"
-                            *ngIf="(user_social_profile.provider | lowercase) === 'facebook'"></ion-img>
+                        <img class="icon" src="/assets/img/svg/google.svg"
+                            *ngIf="(user_social_profile.provider | lowercase) === 'google'"/>
+                        <img class="icon" src="/assets/img/svg/facebook.svg"
+                            *ngIf="(user_social_profile.provider | lowercase) === 'facebook'"/>
                         <span class="label">Stalin Maza</span>
                     </div>
                     <div class="item-right">
@@ -87,7 +87,7 @@
             <div class="list-items">
                 <div class="list-item" *ngFor="let user_device of UserDevices; let i = index">
                     <div class="item-left">
-                        <ion-img class="icon" src="/assets/img/svg/smartphone.svg"></ion-img>
+                        <img class="icon" src="/assets/img/svg/smartphone.svg"/>
                         <div class="label">
                             <p>{{user_device.phone_model}}</p>
                             <p class="device_last_conexion">

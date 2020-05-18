@@ -1,5 +1,5 @@
 <ion-slides pager="false" [options]="slideOpts" [class]="ionSlidesClass" [pager]="slidePager" >
     <ion-slide [class]="ionSlideClass"  style="background: #cccccc;" *ngFor="let image of listImages">
-        <ion-img (click)="seeImageDetail(image)" class="imgClass" [src]="image" fallimg="gallery_default"></ion-img>
+        <img (click)="seeImageDetail(image)" class="imgClass" [src]="image" (onerror)="event.target.src='assets/img/default/image_full.png'"/>
     </ion-slide>
 </ion-slides>

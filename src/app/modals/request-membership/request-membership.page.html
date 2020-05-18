@@ -13,6 +13,75 @@
     <div>
         <h5 class="info-dialog">Para solicitar la afiliación debes adjuntar una imágen de algún servicio básico que nos permita verificar tus datos</h5>
     </div>
+
+    <form [formGroup]="requestMembershipForm">
+        <div class="item-form full">
+            <ion-item class="input_item" lines="none">
+                <ion-label class="label-padding label-margin" position="stacked">Nombres</ion-label>
+                <div class="input-general-container">     
+                    <ion-input class="input-beatiful input-general"
+                        formControlName="nombres" type="text">
+                    </ion-input>
+                </div>
+            </ion-item>
+        </div>
+        <div class="form-errors padding-lateral-small">
+            <p class="form-error"
+                *ngIf="requestMembershipForm.get('nombres').hasError('required') && requestMembershipForm.get('nombres').touched">
+               Los nombres son requeridos
+            </p>
+        </div>
+        <div class="item-form full">
+            <ion-item class="input_item" lines="none">
+                <ion-label class="label-padding label-margin" position="stacked">Teléfono
+                </ion-label>
+                <div class="input-general-container">     
+                    <ion-input class="input-beatiful input-general"
+                        formControlName="telefono" type="phone">
+                    </ion-input>
+                </div>
+            </ion-item>
+        </div>
+        <div class="form-errors padding-lateral-small">
+            <p class="form-error"
+                *ngIf="requestMembershipForm.get('telefono').hasError('required') && requestMembershipForm.get('telefono').touched">
+               El télefono es requerido
+            </p>
+        </div>
+        <div class="form-errors padding-lateral-small">
+            <p class="form-error"
+                *ngIf="requestMembershipForm.get('telefono').hasError('minlength') && requestMembershipForm.get('telefono').touched">
+               El télefono debe contener minimo 7 caracteres
+            </p>
+            <p class="form-error"
+                *ngIf="requestMembershipForm.get('telefono').hasError('maxlength') && requestMembershipForm.get('telefono').touched">
+                El télefono debe contener máximo 10 caracteres
+            </p>
+        </div>
+       
+        <div class="item-form full">
+            <ion-item class="input_item" lines="none">
+                <ion-label class="label-padding label-margin" position="stacked">Nº Cédula
+                </ion-label>
+                <div class="input-general-container">     
+                    <ion-input class="input-beatiful input-general"
+                        formControlName="cedula" type="text">
+                    </ion-input>
+                </div>
+            </ion-item>
+        </div>
+        <div class="form-errors padding-lateral-small">
+            <p class="form-error"
+                *ngIf="requestMembershipForm.get('cedula').hasError('requied') && requestMembershipForm.get('cedula').touched">
+                La cedula es requerida
+            </p>
+            <p class="form-error"
+                *ngIf="requestMembershipForm.get('cedula').hasError('cedulaValida') && requestMembershipForm.get('cedula').touched">
+                La cedula no es válida
+            </p>
+        </div>
+    </form>
+
     <p class="item-info-header">Imagen *</p>
     <ion-grid *ngIf="publicServiceImg.length > 0">
         <ion-row class="ion-justify-content-center">
@@ -30,10 +99,11 @@
             </ion-col>
         </ion-row>
     </ion-grid>
+    
     <app-upload-image [uploadedImages]="publicServiceImg" [maxImages]="1"
         (returnUploadedImages)="getUploadedImages($event)"></app-upload-image>
     <ion-button class="btn_send_request_membership" expand="block" (click)="sendRequestMembership()"
-        [disabled]="publicServiceImg.length === 0 || formSended">
+        [disabled]="publicServiceImg.length === 0 || formSended || !requestMembershipForm.valid">
         Enviar
     </ion-button>
 </ion-content>

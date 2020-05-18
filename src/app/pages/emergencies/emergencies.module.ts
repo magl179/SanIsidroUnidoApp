@@ -15,7 +15,7 @@ const routes: Routes = [
         component: EmergenciesPage,
         children: [
             {
-                path: 'detail/:id',
+                path: 'list/:id',
                 loadChildren: './emergency-detail/emergency-detail.module#EmergencyDetailPageModule',
                 canLoad: [UserAuthenticatedGuard]
             },

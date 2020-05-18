@@ -1,6 +1,6 @@
 [ 
     {
-        "title": "Mis Emergencias",
+        "title": "Emergencias",
         "icon": "assets/img/svg/alarm.svg",
         "url": "/emergencies/list",
         "isFunction": false,
@@ -16,7 +16,7 @@
     {
         "title": "Eventos",
         "icon": "assets/img/svg/calendar.svg",
-        "url": "/events/list",
+        "url": "/events/categories",
         "isFunction": false,
         "valid_roles": ["morador", "invitado", "policia"]
     },

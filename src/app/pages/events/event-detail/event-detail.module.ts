@@ -6,7 +6,6 @@ import { IonicModule } from '@ionic/angular';
 import { EventDetailPage } from './event-detail.page';
 import { SmComponentsModule } from 'src/app/components/sm-components.module';
 import { PipesModule } from 'src/app/pipes/pipes.module';
-import { NgFallimgModule } from 'ng-fallimg';
 
 const routes: Routes = [
   {
@@ -23,9 +22,8 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-        SmComponentsModule,
-      PipesModule,
-      NgFallimgModule
+    SmComponentsModule,
+    PipesModule
   ],
   declarations: [EventDetailPage]
 })

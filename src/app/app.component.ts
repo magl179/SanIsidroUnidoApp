@@ -64,7 +64,12 @@ export class AppComponent implements OnInit {
             timer(1500).subscribe(async () => {
                 await this.pushNotificationService.initialConfig();
             });
+            // this.navigationService.keepHistoryTracking();
         });
+    }
+
+    onImageError(event: any){
+        event.target.src = 'assets/img/default/img_avatar.png';
     }
     
     async checkUserLoggedIn() {

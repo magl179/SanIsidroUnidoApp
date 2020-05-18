@@ -8,8 +8,6 @@ import { IonicModule } from '@ionic/angular';
 import { ReportsListPage } from './reports-list.page';
 import { SmComponentsModule } from "src/app/components/sm-components.module";
 import { PipesModule } from "src/app/pipes/pipes.module";
-import { NgFallimgModule } from 'ng-fallimg';
-
 
 const routes: Routes = [
     {
@@ -26,8 +24,7 @@ const routes: Routes = [
         RouterModule.forChild(routes),
         SmComponentsModule,
         PipesModule,
-        ReactiveFormsModule,
-        NgFallimgModule
+        ReactiveFormsModule
     ],
     declarations: [ReportsListPage]
 })

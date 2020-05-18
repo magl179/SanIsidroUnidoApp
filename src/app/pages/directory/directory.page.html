@@ -41,8 +41,8 @@
             <ion-col size="6" *ngFor="let people of directivesFilter">
                 <ion-card class="directive">
                     <div class="picture_thumbnail">
-                        <ion-img class="img-thumbnail circle" [src]="people.avatar_link"
-                            fallimg="user_avatar"></ion-img>
+                        <img class="img-thumbnail circle" [src]="people.avatar_link"
+                        (onerror)="event.target.src='assets/img/default/img_avatar.png'"/>
                     </div>
                     <ion-card-header class="ion-text-center directive-card-header">
                         <ion-card-subtitle class="directive-position">

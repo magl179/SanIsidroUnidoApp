@@ -18,7 +18,7 @@ export class PublicService {
     }
     //Obtener el listado de servicios públicos por categoria
     getPublicServicesByCategory(category: string): Observable<any>{
-        return this.httpRequest.get(`${environment.APIBASEURL}/servicios-publicos/categoria/${category}`)
+        return this.httpRequest.get(`${environment.APIBASEURL}/servicios-publicos/categorias/${category}`)
     }
     //Obtener el detalle de un servicio público
     getPublicService(id: number): Observable<any> {

@@ -18,6 +18,18 @@
             <p>{{(publicServiceDetail.ubication && publicServiceDetail.ubication.address) ? publicServiceDetail.ubication.address: 'No existe una dirección registrada'}}
             </p>
         </div>
+        <div>
+            <p style="display:block;font-weight: bold;">Correo de Contacto:</p>
+            <p>{{(publicServiceDetail.email) ? publicServiceDetail.email: 'Ningún correo registrado'}}
+            </p>
+        </div>
+        <div>
+            <p style="display:block;font-weight: bold;">Horario Atención:</p>
+            <p>{{
+                (publicServiceDetail.public_opening && publicServiceDetail.public_opening["open-time"]) ? publicServiceDetail.public_opening["open-time"]: ''}} - {{
+                    (publicServiceDetail.public_opening && publicServiceDetail.public_opening["close-time"]) ? publicServiceDetail.public_opening["close-time"]: ''}}
+            </p>
+        </div>
         <div *ngIf="publicServiceDistance">
             <p style="display:block;font-weight: bold;">Distancia:</p>
             <p>El destino se encuentra a {{publicServiceDistance}} km desde tu ubicación

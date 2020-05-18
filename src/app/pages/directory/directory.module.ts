@@ -5,7 +5,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { SmComponentsModule } from 'src/app/components/sm-components.module';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgFallimgModule } from "ng-fallimg";
 
 const routes: Routes = [
     {
@@ -22,8 +21,7 @@ const routes: Routes = [
         RouterModule.forChild(routes),
         FormsModule,
         ReactiveFormsModule,
-        SmComponentsModule,
-        NgFallimgModule
+        SmComponentsModule
     ]
 })
 export class DirectoryPageModule { }

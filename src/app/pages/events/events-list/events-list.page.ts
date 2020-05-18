@@ -13,7 +13,7 @@ import { EventsService } from "src/app/services/events.service";
 import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from 'src/app/services/messages.service';
 import { CONFIG } from 'src/config/config';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { trigger,style,transition,animate,keyframes,query,stagger } from '@angular/animations';
 import { FormControl } from '@angular/forms';
@@ -46,6 +46,7 @@ export class EventsListPage implements OnInit, OnDestroy {
     eventButtonMessage = CONFIG.EVENT_BUTTON_MESSAGE;
     eventControl: FormControl;
     searchingEvents= false;
+    subcategory: string;
 
     constructor(
         private navCtrl: NavController,
@@ -53,6 +54,7 @@ export class EventsListPage implements OnInit, OnDestroy {
         private utilsService: UtilsService,
         private messagesService: MessagesService,
         private postsService: PostsService,
+        private activatedRoute: ActivatedRoute,
         private authService: AuthService,
         private router: Router,
         private errorService: ErrorService,
@@ -80,6 +82,8 @@ export class EventsListPage implements OnInit, OnDestroy {
                 catchError(err => of([]))
             )
         }
+        this.subcategory = this.activatedRoute.snapshot.paramMap.get('subcategory');
+        this.postsService.resetPagination(this.postsService.PaginationKeys.EVENTS);
         this.utilsService.enableMenu();
         this.authService.sessionAuthUser.subscribe(token_decoded => {
             if (token_decoded && token_decoded.user) {
@@ -95,10 +99,12 @@ export class EventsListPage implements OnInit, OnDestroy {
             distinctUntilChanged(),
             tap(() => {
                 this.searchingEvents = true;
+                console.log('subcategory', this.subcategory)
             }),
             map(search => ({
                 category: CONFIG.EVENTS_SLUG,
-                title: search
+                title: search,
+                subcategory: this.subcategory,
             })),
             exhaustMap(peticionHttpBusqueda),
         )
@@ -108,6 +114,8 @@ export class EventsListPage implements OnInit, OnDestroy {
             this.searchingEvents = false;
         });
     }
+
+    ionViewWillLeave() { this.postsService.resetPagination(this.postsService.PaginationKeys.EVENTS_BY_SUBCATEGORY); }
 
     toggleLikes(reactions = [], event_id: number) {
         const newEventsList = this.eventsList.map((event) => {
@@ -182,8 +190,12 @@ export class EventsListPage implements OnInit, OnDestroy {
         await this.utilsService.shareSocial(sharePost);
     }
 
+    onImageError(event: any){
+        event.target.src = 'https://via.placeholder.com/600x300?text=SanIsidroImage';
+    }
+
     loadEvents(event: any = null, first_loading = false) {
-        this.postsService.getEvents().pipe(
+        this.postsService.getPostsBySubCategory(CONFIG.EVENTS_SLUG, this.subcategory,{}, this.postsService.PaginationKeys.EVENTS_BY_SUBCATEGORY).pipe(
             map((res: IRespuestaApiSIUPaginada) => {
                 if (res && res.data) {
                     res.data.forEach((event: any) => {
@@ -193,7 +205,7 @@ export class EventsListPage implements OnInit, OnDestroy {
                     });
                 }
                 if(res && res.data && res.data.length == 0){
-                    this.postsService.resetPaginationEmpty(this.postsService.PaginationKeys.EVENTS)
+                    this.postsService.resetPaginationEmpty(this.postsService.PaginationKeys.EVENTS_BY_SUBCATEGORY)
                 }
                 return res;
             }),
@@ -238,7 +250,7 @@ export class EventsListPage implements OnInit, OnDestroy {
     }
 
     postDetail(id: number) {
-        this.navCtrl.navigateForward(`/events/detail/${id}`);
+        this.navCtrl.navigateForward(`/events/list/${this.subcategory}/${id}`);
     }
     //Obtener datos con el Infinite Scroll
     getInfiniteScrollData(event: any) {

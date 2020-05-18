@@ -212,7 +212,8 @@ export class NotificationsService implements OnInit {
     }
 
     async manageAppNotification(aditionalData: INotiList) {
-        //Verificar si tengo dato posts        
+        //Verificar si tengo dato posts   
+        console.log('manage app notification', aditionalData)     
         this.managePostNotification(aditionalData);
         
     }
@@ -224,10 +225,16 @@ export class NotificationsService implements OnInit {
             //Switch de Opciones segun el slug del posts
             switch (post.category.slug.toLowerCase()) {
                 case CONFIG.EMERGENCIES_SLUG: //caso posts emergencia creado
-                    urlNavigate = `/emergencies/detail/${post.id}`;
+                    urlNavigate = `/emergencies/list/${post.id}`;
                     break;
                 case CONFIG.EVENTS_SLUG: //caso posts evento creado
-                    urlNavigate = `/events/detail/${post.id}`;
+                    // urlNavigate = `/events/detail/${post.id}`;
+                    // break;
+                    if (post.subcategory) {
+                        urlNavigate = `/events/list/${post.subcategory.slug}/${post.id}`;
+                    } else {
+                        urlNavigate = `events/categories`;
+                    }
                     break;
                 case CONFIG.SOCIAL_PROBLEMS_SLUG: // caso posts problema social
                     if (post.subcategory) {

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpRequestService } from "./http-request.service";
+import { CedulaValidator } from '../helpers/cedula.validator';
 
 @Injectable({
     providedIn: 'root'
@@ -27,7 +28,8 @@ export class LocalDataService {
             cedula: {
                 required: true,
                 minlength: 10,
-                maxlength: 10
+                maxlength: 10,
+                pattern: CedulaValidator
             },
             first_name: {
                 required: true,

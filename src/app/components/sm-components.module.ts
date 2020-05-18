@@ -14,7 +14,6 @@ import { LoadingAppComponent } from "./loading-app/loading-app.component";
 import { NoResultsFoundComponent } from "./no-results-found/no-results-found.component";
 import { SimpleRoutingMapComponent } from "./simple-routing-map/simple-routing-map.component";
 import { SlideshowImagesFullComponent } from './slideshow-images-full/slideshow-images-full.component';
-import { NgFallimgModule } from "ng-fallimg";
 import { LocalizationInfoComponent } from './localization-info/localization-info.component';
 import { DirectivesModule } from 'src/app/directives/directives.module';
 import { PipesModule } from 'src/app/pipes/pipes.module';
@@ -39,7 +38,6 @@ import { PipesModule } from 'src/app/pipes/pipes.module';
         IonicModule,
         MaterialAppModule,
         DirectivesModule,
-        NgFallimgModule,
         PipesModule
     ],
     exports: [

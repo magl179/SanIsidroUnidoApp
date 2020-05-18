@@ -444,6 +444,19 @@ export const formatRangeTime = (initial_date: string, end_date: string) => {
     }
 }
 
+export const getPostState = (state: number) => {
+    switch (state) {
+        case 1:
+          return 'Atendida'
+        case 0:
+          return 'Rechazada';
+        case 2:
+          return 'Pendiente';
+        default:
+         return 'Pendiente de Atención';
+      }
+}
+
 export const verificarCedula = (validarCedula: string): boolean => {
     let aux = 0,
         par = 0,

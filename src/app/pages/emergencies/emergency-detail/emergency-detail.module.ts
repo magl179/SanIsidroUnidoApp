@@ -8,7 +8,6 @@ import { SmComponentsModule } from "src/app/components/sm-components.module";
 import { PipesModule } from "src/app/pipes/pipes.module";
 import { ImageDetailPageModule } from "src/app/modals/image_detail/image_detail.module";
 import { ImageDetailPage } from "src/app/modals/image_detail/image_detail.page";
-import { NgFallimgModule } from 'ng-fallimg';
 import { FormAttendEmergencyModalModule } from 'src/app/modals/form-attend-emergency/form-attend-emergency.module';
 import { FormAttendEmergencyModal } from 'src/app/modals/form-attend-emergency/form-attend-emergency.page';
 
@@ -32,7 +31,6 @@ const routes: Routes = [
         SmComponentsModule,
         PipesModule,
         ImageDetailPageModule,
-        NgFallimgModule,
         FormAttendEmergencyModalModule
     ],
     declarations: [EmergencyDetailPage]

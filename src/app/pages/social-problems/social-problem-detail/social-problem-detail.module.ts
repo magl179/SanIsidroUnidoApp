@@ -8,7 +8,6 @@ import { SmComponentsModule } from 'src/app/components/sm-components.module';
 import { PipesModule } from 'src/app/pipes/pipes.module';
 import { ImageDetailPage } from 'src/app/modals/image_detail/image_detail.page';
 import { ImageDetailPageModule } from "src/app/modals/image_detail/image_detail.module";
-import { NgFallimgModule } from 'ng-fallimg';
 
 const routes: Routes = [
   {
@@ -28,8 +27,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
         SmComponentsModule,
       PipesModule,
-      ImageDetailPageModule,
-    NgFallimgModule
+      ImageDetailPageModule
   ],
   declarations: [SocialProblemDetailPage]
 })

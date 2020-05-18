@@ -1,6 +1,6 @@
 
 <!-- Cabecera -->
-<app-header-back title="Mis Emergencias" [search]="false"></app-header-back>
+<app-header-back [title]="(isPolicia) ? 'Emergencias': 'Mis Emergencias'" [search]="false"></app-header-back>
 <!-- Contenido -->
 <ion-content padding>
      <!-- Problemas Sociales Searchbar -->
@@ -17,8 +17,12 @@
             <ion-label>Atendidos</ion-label>
         </ion-segment-button>
         <ion-segment-button value="0">
-            <ion-icon color="red-logo" name="clock"></ion-icon>
+            <ion-icon color="yellow-logo" name="clock"></ion-icon>
             <ion-label>Pendientes</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="2">
+            <ion-icon color="red-logo" name="close-circle-outline"></ion-icon>
+            <ion-label>Rechazadas</ion-label>
         </ion-segment-button>
     </ion-segment>
     <!-- Refresher de los Datos -->
@@ -55,12 +59,12 @@
         <!-- Posts Filtrados con Datos -->
         <ion-card class="emergency" *ngFor="let emergency of emergenciesFiltered; let i = index;">
             <div class="post_cover" *ngIf="emergency.imagesArr && emergency.imagesArr.length > 0">
-                <ion-img class="img" [src]="emergency.imagesArr[0]"></ion-img>
+                <img class="img" [src]="emergency.imagesArr[0]" (onerror)="event.target.src='assets/img/default/image_full.png'"/>
             </div>
             <div class="ion-padding" style="display: flex;align-items:center;" *ngIf="isPolicia">
                 <div class="left-section">
-                    <ion-img style="width: 50px;height:50px;border-radius:50%;"
-                        [src]="emergency.user.avatar_link" fallimg="user_avatar"></ion-img>
+                    <img style="width: 50px;height:50px;border-radius:50%;"
+                        [src]="emergency.user.avatar_link" (onerror)="event.target.src='assets/img/default/img_avatar.png'"/>
                 </div>
                 <div class="right-section" style="margin-left: 1rem">
                     <p style="color: var(--ion-color-dark);margin-bottom: .7em;">

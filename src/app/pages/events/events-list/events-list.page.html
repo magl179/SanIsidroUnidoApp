@@ -1,5 +1,5 @@
 <!-- Cabecera -->
-<app-header-back title="Eventos" [search]="false">
+<app-header-back title="Eventos" [search]="false" backUrl="events/categories">
 </app-header-back>
 <!-- Contenido -->
 <ion-content padding>
@@ -54,7 +54,7 @@
     <div *ngIf="!showLoading  && eventsFiltered.length > 0" [@listAnimation]>
         <ion-card class="event" *ngFor="let event of eventsFiltered; let i = index;">
             <div class="post_cover" *ngIf="event.imagesArr && event.imagesArr.length > 0">
-                <ion-img class="img" [src]="event.imagesArr[0]"></ion-img>
+                <img class="img" [src]="event.imagesArr[0]" (onerror)="event.target.src='assets/img/default/image_full.png'"/>
             </div>
             <div class="event__header" (click)="postDetail(event.id)">
                 <ion-card-header class="main-section-header">

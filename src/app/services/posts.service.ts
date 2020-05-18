@@ -23,7 +23,8 @@ export class PostsService implements OnInit {
         SOCIAL_PROBLEMS: 'socialProblems',
         EMERGENCIES: 'emergencies',
         REPORTS: 'reports',
-        SOCIAL_PROBLEMS_BY_SUBCATEGORY: 'socialProblemsBySubcategory'
+        SOCIAL_PROBLEMS_BY_SUBCATEGORY: 'socialProblemsBySubcategory',
+        EVENTS_BY_SUBCATEGORY: 'socialProblemsBySubcategory'
     }
     //Paginas Actuales
     private currentPagination = {
@@ -31,7 +32,8 @@ export class PostsService implements OnInit {
         socialProblems: 0,
         emergencies: 0,
         reports: 0,
-        socialProblemsBySubcategory: 0
+        socialProblemsBySubcategory: 0,
+        eventsBySubcategory: 0
     }
 
     constructor(
@@ -198,12 +200,12 @@ export class PostsService implements OnInit {
         const url = `${environment.APIBASEURL}/categorias/${category}/subcategorias`;
         return this.httpRequest.get(url);
     }
-    getPostsBySubCategory(category: string, subcategory: string, params={}) {
+    getPostsBySubCategory(category: string, subcategory: string, params={}, pageKey=this.PaginationKeys.SOCIAL_PROBLEMS_BY_SUBCATEGORY) {
         this.increasePagination(this.PaginationKeys.SOCIAL_PROBLEMS_BY_SUBCATEGORY);
         const tempParams = {
             "category": category,
             "subcategory": subcategory,
-            "page": this.getPagination(this.PaginationKeys.SOCIAL_PROBLEMS_BY_SUBCATEGORY),
+            "page": this.getPagination(pageKey),
         };
         const requestParams = { ...params, ...tempParams };
         const url = `${environment.APIBASEURL}/publicaciones`;

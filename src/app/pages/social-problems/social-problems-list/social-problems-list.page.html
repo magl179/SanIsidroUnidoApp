@@ -15,8 +15,12 @@
             <ion-label>Atendidos</ion-label>
         </ion-segment-button>
         <ion-segment-button value="0">
-            <ion-icon color="red-logo" name="clock"></ion-icon>
+            <ion-icon color="yellow-logo" name="clock"></ion-icon>
             <ion-label>Pendientes</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="2">
+            <ion-icon color="red-logo" name="close-circle-outline"></ion-icon>
+            <ion-label>Rechazadas</ion-label>
         </ion-segment-button>
     </ion-segment>
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
@@ -41,13 +45,13 @@
         <!-- Posts Filtrados con Datos -->
         <ion-card style="position:relative" class="social-problem" *ngFor="let socialProblem of socialProblemsFilter">
             <div class="post_cover" *ngIf="socialProblem.imagesArr && socialProblem.imagesArr.length > 0">
-                <ion-img class="img" [src]="socialProblem.imagesArr[0]"></ion-img>
+                <img class="img" [src]="socialProblem.imagesArr[0]" (onerror)="event.target.src='assets/img/default/image_full.png'"/>
             </div>
             <div (click)="postDetail(socialProblem.id)">
                 <div class="ion-padding" style="display: flex;align-items:Center;">
                     <div class="left-section">
-                        <ion-img class="img-avatar" [src]="socialProblem.user.avatar_link"
-                            fallimg="user_avatar"></ion-img>
+                        <img class="img-avatar" [src]="socialProblem.user.avatar_link"
+                        (onerror)="event.target.src='assets/img/default/img_avatar.png'"/>
                     </div>
                     <div class="right-section" style="margin-left: 1rem">
                         <p style="color: var(--ion-color-dark);margin-bottom: .7em;">

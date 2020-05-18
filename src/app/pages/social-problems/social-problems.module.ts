@@ -6,13 +6,13 @@ import { IonicModule } from '@ionic/angular';
 import { SocialProblemsPage } from './social-problems.page';
 import { UserAuthenticatedGuard } from 'src/app/guards/user-authenticated.guard';
 import { UserHasRoleGuard } from 'src/app/guards/user-has-role.guard';
-import { CONFIG } from 'src/config/config';
+// import { CONFIG } from 'src/config/config';
 import { DirectivesModule } from 'src/app/directives/directives.module';
-import { NgFallimgModule } from 'ng-fallimg';
 
 const routes: Routes = [
     {
         path: '',
+        // redirectTo: '/social-problems/categories',
         component: SocialProblemsPage,
         children: [
             {
@@ -45,8 +45,7 @@ const routes: Routes = [
         FormsModule,
         IonicModule,
         RouterModule.forChild(routes),
-        DirectivesModule,
-        NgFallimgModule
+        DirectivesModule
     ],
     declarations: [SocialProblemsPage]
 })

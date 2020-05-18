@@ -93,7 +93,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         });
         //Si es Policia
         if(this.isPolicia){
-            this.extraData.police = this.AuthUser.id;
+            // this.extraData.police = this.AuthUser.id;
         }else{
             this.extraData.user = this.AuthUser.id;
         }
@@ -147,7 +147,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
     }
 
     async loadEmergencies(event: any = null, first_loading = false) {
-        const params = (this.isPolicia) ? { police: this.AuthUser.id } : {}
+        const params = (this.isPolicia) ? { } : {}
 
         this.getEmergenciesFunction(params).pipe(
             map((res: IRespuestaApiSIUPaginada) => {
@@ -214,7 +214,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
     }
 
     postDetail(id: number) {
-        this.navCtrl.navigateForward(`/emergencies/detail/${id}`);
+        this.navCtrl.navigateForward(`/emergencies/list/${id}`);
     }
 
     getInfiniteScrollData(event: any) {

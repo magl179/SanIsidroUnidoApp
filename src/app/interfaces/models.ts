@@ -39,13 +39,14 @@ interface IAdditionalData {
 }
 
 interface ILogEvent {
+    range_date: IRangeDate;
     responsible: string;
 }
 interface ILogEmergency {
-    policia: string;
+    attended_by: any, rechazed_by: any, rechazed_reason: string
 }
 interface ILogPost {
-    moderador: string;
+    approved_by: string;
 }
 
 export interface IReaction {

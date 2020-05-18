@@ -34,8 +34,6 @@ import { PipesModule } from './pipes/pipes.module';
 import { DirectivesModule } from './directives/directives.module';
 // Interceptores
 import { AuthInterceptorService } from 'src/app/services/auth-interceptor.service';
-// Imagenes por Defecto
-import { NgFallimgModule } from 'ng-fallimg';
 import { ImageDetailPage } from "./modals/image_detail/image_detail.page";
 import { ImageDetailPageModule } from './modals/image_detail/image_detail.module';
 
@@ -65,14 +63,6 @@ import { WebView } from '@ionic-native/ionic-webview/ngx';
         SmComponentsModule,
         ReactiveFormsModule,
         IonicStorageModule.forRoot(),
-        NgFallimgModule.forRoot({
-            default: 'https://via.placeholder.com/600?text=SanIsidroImage',
-            user_avatar:  'assets/img/default/img_avatar.png',
-            image_full: 'assets/img/default/image_full.png',
-            cover_image: 'https://via.placeholder.com/600x300?text=SanIsidroImage',
-            no_result_image: 'assets/img/svg/robot_sad.svg',
-            'gallery_default': "assets/img/default/image_full.png"
-        }),
         ShowListNotificationsPageModule,
         PipesModule,
         DirectivesModule,

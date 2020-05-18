@@ -1,0 +1,24 @@
+.social-problem-category {
+    width: 80px;
+    height: 80px;
+    ;
+    border-radius: 50%;
+    background-position: center;
+    background-color: #f7f4f4;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+  }
+  
+  .category-title {
+    -ms-word-break: break-all;
+    word-break: break-all;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+    font-size: .8em;
+    text-align: center;
+    text-transform: uppercase;
+  }

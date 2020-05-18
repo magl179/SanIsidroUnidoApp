@@ -94,6 +94,7 @@ export class ListNotificationsComponent implements OnInit {
     async manageNoti(noti: INotificationApi) {
         if (noti && noti.data) {
             await this.popoverCtrl.dismiss();
+            // if(noti.data && noti.data.post)
             this.notiService.manageAppNotification(noti.data);
         }
     }

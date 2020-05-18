@@ -14,7 +14,6 @@ import { RequestMembershipPageModule } from 'src/app/modals/request-membership/r
 import { ChangeProfileImagePage } from 'src/app/modals/change-profile-image/change-profile-image.page';
 import { ChangeProfileImagePageModule } from 'src/app/modals/change-profile-image/change-profile-image.module';
 import { DirectivesModule } from 'src/app/directives/directives.module';
-import { NgFallimgModule } from 'ng-fallimg';
 import { PipesModule } from "src/app/pipes/pipes.module";
 
 const routes: Routes = [
@@ -40,7 +39,6 @@ const routes: Routes = [
         ChangePasswordPageModule,
         ChangeProfileImagePageModule,
         DirectivesModule,
-        NgFallimgModule,
         PipesModule
     ],
     declarations: [UserPage]

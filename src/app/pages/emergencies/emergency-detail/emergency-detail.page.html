@@ -27,14 +27,12 @@
             </div>
             <ion-row>
                 <ion-col>
-                    <ion-item lines="none" detail="false" button="true"
-                        class="container_events detail">
+                    <ion-item lines="none" detail="false" button="true" class="container_events detail">
                         <ion-skeleton-text width="50%"></ion-skeleton-text>
                     </ion-item>
                 </ion-col>
                 <ion-col>
-                    <ion-item lines="none" detail="false" button="true"
-                        class="container_events detail">
+                    <ion-item lines="none" detail="false" button="true" class="container_events detail">
                         <ion-skeleton-text width="50%"></ion-skeleton-text>
                     </ion-item>
                 </ion-col>
@@ -45,7 +43,8 @@
     <div *ngIf="emergencyLoaded && emergency">
         <div class="emergency-detail">
             <div *ngIf="emergency.imagesArr && emergency.imagesArr.length > 0">
-                <slideshow-images-full ionSlideClass="slideImageFull" [listImages]="emergency.imagesArr" title="" [slideAutoPlay]="true"></slideshow-images-full>
+                <slideshow-images-full ionSlideClass="slideImageFull" [listImages]="emergency.imagesArr" title=""
+                    [slideAutoPlay]="true"></slideshow-images-full>
             </div>
             <div class="post-info-container">
                 <div class="post-description-info">
@@ -73,10 +72,33 @@
                         </p>
                         <p class="item-info">
                             <span class="icon-people">
-                                <ion-icon name="clipboard" class="social-problem-state"></ion-icon>
+                                <ion-icon name="pricetag" class="social-problem-state"></ion-icon>
                             </span>
                             <span>{{(emergency.is_attended)?'La emergencia ya ha sido atendida':'La emergencia esta pendiente de atención'}}</span>
                         </p>
+                        <p class="item-info"
+                            *ngIf="emergency.additional_data && emergency.additional_data.emergency && emergency.additional_data.emergency.rechazed_reason">
+                            <span class="icon-people">
+                                <ion-icon name="list-box" class="social-problem-state"></ion-icon>
+                            </span>
+                            <span>Motivo del Rechazo: {{emergency.additional_data.emergency.rechazed_reason}}</span>
+                        </p>
+                        <p class="item-info"
+                            *ngIf="emergency.additional_data && emergency.additional_data.emergency && emergency.additional_data.emergency.rechazed_by">
+                            <span class="icon-people">
+                                <ion-icon name="list-box" class="social-problem-state"></ion-icon>
+                            </span>
+                            <span>Rechazado por: {{emergency.additional_data.emergency.rechazed_by.fullname}}</span>
+                        </p>
+                        <p class="item-info"
+                            *ngIf="emergency.additional_data && emergency.additional_data.emergency && emergency.additional_data.emergency.attended_by">
+                            <span class="icon-people">
+                                <ion-icon name="list-box" class="social-problem-state"></ion-icon>
+                            </span>
+                            <span>Atendido por: {{emergency.additional_data.emergency.attended_by.first_name}}
+                                {{emergency.additional_data.emergency.attended_by.last_name}}</span>
+                        </p>
+
                     </div>
                 </div>
 
@@ -90,7 +112,8 @@
         </div>
     </div>
 </ion-content>
-<ion-footer class="footer-fixed-posts" *ngIf="emergency && isPoliciaRol && showPoliciaOptions && !emergency.is_attended">
+<ion-footer class="footer-fixed-posts"
+    *ngIf="emergency && isPoliciaRol && showPoliciaOptions && !emergency.is_attended">
     <div class="social">
         <div class="social-options">
             <div class="social-button ion-activatable" (click)="onPoliciaAcceptEmergency()">

@@ -7,7 +7,8 @@ import { decodeToken } from 'src/app/helpers/auth-helper';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from 'src/app/services/messages.service';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl, Validators, FormGroup } from '@angular/forms';
+import { LocalDataService } from 'src/app/services/local-data.service';
 
 @Component({
     selector: 'app-request-membership',
@@ -19,6 +20,7 @@ export class RequestMembershipPage implements OnInit {
     publicServiceImg = [];
     formSended = false;
     errorMessages = null;
+    requestMembershipForm: FormGroup;
 
     constructor(
         private modalCtrl: ModalController,
@@ -26,11 +28,38 @@ export class RequestMembershipPage implements OnInit {
         private authService: AuthService,
         private errorService: ErrorService,
         private messageService: MessagesService,
+        private localDataService: LocalDataService,
         public formBuilder: FormBuilder
     ) {
      }
 
     ngOnInit() {
+        this.createForm();
+    }
+
+    createForm() {
+         //Cargar Validaciones
+         const validations = this.localDataService.getFormValidations();
+        
+         const nombres = new FormControl('', Validators.compose([
+             Validators.required,
+             Validators.maxLength(250)
+         ]));
+         
+         const cedula = new FormControl('', Validators.compose([
+             Validators.required,
+             validations.cedula.pattern
+         ]));
+
+         const telefono = new FormControl('', Validators.compose([
+            Validators.required,
+            Validators.minLength(7),
+            Validators.maxLength(10)
+        ]));
+         // Añado Propiedades al Form
+         this.requestMembershipForm = this.formBuilder.group({ nombres, cedula, telefono });
+         // Cargo Mensajes de Validaciones
+         this.errorMessages = this.localDataService.getFormMessagesValidations(validations);
     }
 
     closeModal():void {
@@ -48,8 +77,11 @@ export class RequestMembershipPage implements OnInit {
     sendRequestMembership() {
         const imagen = this.publicServiceImg[0];
         const requestObj = {
-            basic_service_image: imagen
+            basic_service_image: imagen,
+            ...this.requestMembershipForm.value
         }
+        console.warn('membersgip body', requestObj)
+        return;
         this.userService.sendRequestUserMembership(requestObj).subscribe(async (res: IRespuestaApiSIUSingle) => {
             const token = res.data.token;
             const token_decoded = decodeToken(token);
