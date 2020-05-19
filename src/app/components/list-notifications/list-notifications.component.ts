@@ -1,10 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { UserService } from 'src/app/services/user.service';
-import { take, finalize, map } from 'rxjs/operators';
-import { MapNotification } from 'src/app/helpers/utils';
+import { take, map, distinctUntilChanged, tap, pluck, catchError, exhaustMap, startWith, skip } from 'rxjs/operators';
+import { MapNotification, getCurrentDate } from 'src/app/helpers/utils';
 import { PopoverController } from '@ionic/angular';
 import { INotificationApi } from 'src/app/interfaces/models';
+import { FormControl } from '@angular/forms';
+import { of, BehaviorSubject, combineLatest } from 'rxjs';
 
 const URL_PATTERN = new RegExp(/^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/);
 
@@ -17,22 +19,65 @@ export class ListNotificationsComponent implements OnInit {
 
     @Input() showListHeader = true;
     @Input() maxNotifications = 0;
-    @Input() getUnreaded = false;
-
+    notificationControl: FormControl;
     requestFinished = false;
-
+    // searchingNotifications = false;
     notificationsRequested: INotificationApi[] = [];
     notificationsList: INotificationApi[] = [];
+    // notificationsFilter: INotificationApi[] = [];
+    segmentFilter$ = new BehaviorSubject(null);
 
     constructor(
         private notiService: NotificationsService,
         private usersService: UserService,
         private popoverCtrl: PopoverController
-    ) { }
+    ) {
+        this.notificationControl = new FormControl();
+    }
 
     ngOnInit() {
         this.notificationsList.reverse();
         this.usersService.resetPagination(this.usersService.PaginationKeys.NOTIFICATIONS);
+
+
+        const peticionHttpBusqueda = (body: any) => {
+            return this.usersService.getNotificationsUser(body)
+                .pipe(
+                    pluck('data'),
+                    map((data) => {
+                        data.forEach((noti: any) => {
+                            noti = MapNotification(noti);
+                        });
+                        return data;
+                    }),
+                    catchError(() => of([])),
+                )
+        }
+
+        // this.notificationControl.valueChanges
+        combineLatest(
+            this.notificationControl.valueChanges.pipe(startWith('')),
+            this.segmentFilter$.asObservable(),
+        )
+            .pipe(
+                distinctUntilChanged(),
+                skip(1),
+                tap((val) => {
+                    this.requestFinished = false;
+                }),
+                map(combineValues => ({
+                    title: combineValues[0],
+                    unreaded: combineValues[1],
+                    page: 1
+                })),
+                exhaustMap(peticionHttpBusqueda),
+            )
+            .subscribe((data: any[]) => {
+                this.notificationsList = [...data];
+                this.requestFinished = true;
+                return this.cargarNotificacionesSolicitadas();
+            });
+
         this.getNotifications();
     }
 
@@ -43,25 +88,22 @@ export class ListNotificationsComponent implements OnInit {
     getNotifications(event: any = null, first_loading = false) {
         this.usersService.getNotificationsUser().pipe(
             take(1),
-            map((res: any) => {
-                res.data.forEach((noti: any) => {
+            pluck('data'),
+            map((data) => {
+                data.forEach((noti: any) => {
                     noti = MapNotification(noti);
                 });
-                return res;
+                return data;
             }),
-            finalize(() => {
-                this.requestFinished = true;
-            })
-        ).subscribe((res: any) => {
-            let data = [];
-            data = res.data;
-            //Evento Completar
+            catchError(() => of([])),
+        ).subscribe((data: any[]) => {
             if (event && event.data && event.data.target && event.data.target.complete) {
                 event.data.target.complete();
             }
             if (event && event.data && event.data.target && event.data.target.complete && data.length == 0) {
                 event.data.target.disabled = true;
             }
+            this.requestFinished = true;
             if (event && event.type == 'refresher') {
                 this.notificationsList.unshift(...data);
                 this.cargarNotificacionesSolicitadas();
@@ -78,25 +120,29 @@ export class ListNotificationsComponent implements OnInit {
         });
     }
 
-    async cargarNotificacionesSolicitadas() {
-        ;
-        if (this.maxNotifications === 0) {
-            this.notificationsRequested = this.notificationsList;
-        } else {
-            this.notificationsRequested = this.notificationsList.slice(0, (this.maxNotifications));
+    async cargarNotificacionesSolicitadas() {     
+        this.notificationsRequested = [...this.notificationsList];
+    }
+
+    async manageNoti(noti: INotificationApi): Promise<void> {
+        if(noti.read_at == null || noti.read_at == ''){
+            this.markNotificationAsReaded(noti.id);
         }
-        //Filtrar Notificaciones Leidas
-        if (this.getUnreaded) {
-            this.notificationsRequested = this.notificationsRequested.filter(noti => noti.read_at == null);
+        if (noti && noti.data) {
+            return this.notiService.manageAppNotification(noti.data);
         }
     }
 
-    async manageNoti(noti: INotificationApi) {
-        if (noti && noti.data) {
-            await this.popoverCtrl.dismiss();
-            // if(noti.data && noti.data.post)
-            this.notiService.manageAppNotification(noti.data);
-        }
+    markNotificationAsReaded(id: number){
+        this.usersService.readNotification(id)
+        .subscribe(res=>{
+            this.notificationsRequested = this.notificationsRequested.map((noti: INotificationApi)=>{
+                if(noti.id === id){
+                    noti.read_at = getCurrentDate();
+                }
+                return noti;
+            })
+        });
     }
 
     doRefresh(event) {
@@ -111,6 +157,11 @@ export class ListNotificationsComponent implements OnInit {
             type: 'refresher',
             data: event
         });
+    }
+
+    segmentChanged(event){
+        const value = (event.detail.value !== "") ? Number(event.detail.value) : "";
+        this.segmentFilter$.next(value);
     }
 
 }

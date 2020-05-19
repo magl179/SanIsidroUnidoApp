@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PopoverController, ActionSheetController } from "@ionic/angular";
+import { PopoverController, ActionSheetController, ModalController } from "@ionic/angular";
 import { PopNotificationsComponent } from 'src/app/components/pop-notifications/pop-notifications.component';
 import { CONFIG } from 'src/config/config';
+import { ShowListNotificationsPage } from 'src/app/modals/show-list-notifications/show-list-notifications.page';
 
 @Component({
     selector: 'app-header-back',
@@ -67,6 +68,7 @@ export class HeaderBackComponent implements OnInit {
 
     constructor(
         private actionCtrl: ActionSheetController,
+        private modalCtrl: ModalController,
         private popoverCtrl: PopoverController,
     ) { }
 
@@ -81,8 +83,9 @@ export class HeaderBackComponent implements OnInit {
         this.optionsCtrl.push(this.options.cancel);
     }
 
-    testiconNoti() {
-        this.notificationsIcon = (this.notificationsIcon === 'notifications-outline' ? 'notifications' : 'notifications-outline');
+    async showNotifications(event): Promise<void>{
+        return await this.showListNotificationsModal();
+        // this.showNotiPopover(event);
     }
 
     async showNotiPopover(evento: any) {
@@ -93,6 +96,13 @@ export class HeaderBackComponent implements OnInit {
             showBackdrop: false
         });
         await popover.present();
+    }
+
+    async showListNotificationsModal() {
+        const modal = await this.modalCtrl.create({
+            component: ShowListNotificationsPage
+        });
+        await modal.present();
     }
 
     async showOptionsHeader() {

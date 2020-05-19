@@ -1,48 +1,65 @@
  <!-- Refresher de los Datos -->
  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="arrow-dropdown" refreshingSpinner="circles"
-        refreshingText="Cargando Notificaciones...">
-    </ion-refresher-content>
-</ion-refresher>
-<div class="loading-app" *ngIf="!requestFinished">
-    <loader-app class="flex-column-center"></loader-app>
-</div>
-<ion-list class="list-notifications">
-    <ng-container *ngIf="requestFinished && notificationsRequested && notificationsRequested.length > 0">
-        <ion-item [lines]="getLinesState(i)" *ngFor="let noti of notificationsRequested; let i = index;"
-            (click)="manageNoti(noti)">
-            <ion-avatar class="notification-avatar" slot="start" *ngIf="noti.data && noti.data.notification_user">
-                <img [src]="noti.data.notification_user.avatar_link" (onerror)="event.target.src='assets/img/default/img_avatar.png'"/>
-            </ion-avatar>
-            <ion-label class="notifications_description">
-                <h3 class="author" *ngIf="noti.data.notification_user">
-                    {{ noti.data.notification_user.first_name}} {{noti.data.notification_user.last_name}}
-                </h3>
-                <p class="description ion-text-wrap">
-                    {{ (noti.data.message) ? noti.data.message : 'sin message'}}
-                </p>
-                <p class="date ion-text-wrap">
-                    <ion-icon class="icon" name="time"></ion-icon> 
-                    <span>{{noti.created_at | moment_pipe: 'fromNow'}}</span>
-                </p>
-            </ion-label>
-            <div slot="end">
-                <span class="icon-noti-readed" [class.active]="(noti.read_at != null)"></span>
-            </div>
-        </ion-item>
-    </ng-container>
-</ion-list>
-<div *ngIf="requestFinished && notificationsRequested && notificationsRequested.length === 0">
-    <div class="not-data">
-        <p class="ion-text-wrap ion-text-center">
-            No existen notificaciones disponibles
-        </p>
-    </div>
-</div>
-<!-- Scroll Infinito -->
+     <ion-refresher-content pullingIcon="arrow-dropdown" refreshingSpinner="circles"
+         refreshingText="Cargando Notificaciones...">
+     </ion-refresher-content>
+ </ion-refresher>
+ <!-- Filtro por Estado Atención -->
+ <ion-segment value="" (ionChange)="segmentChanged($event)">
+    <ion-segment-button value="">
+        <ion-icon color="blue-logo" name="document"></ion-icon>
+        <ion-label>Todos</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="1">
+        <ion-icon color="green-logo" name="checkbox"></ion-icon>
+        <ion-label>Leidas</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="0">
+        <ion-icon color="red-logo" name="clock"></ion-icon>
+        <ion-label>NoLeidas</ion-label>
+    </ion-segment-button>
+</ion-segment>
+ <!-- Notificaciones Searchbar -->
+ <ion-searchbar mode="ios" type="text" placeholder="Buscar" [animated]="true" [formControl]="notificationControl">
+ </ion-searchbar>
+ <div class="loading-app" *ngIf="!requestFinished">
+     <loader-app class="flex-column-center"></loader-app>
+ </div>
+ <!-- Listado Notificaciones -->
+ <ion-list class="list-notifications">
+     <ng-container *ngIf="requestFinished && notificationsRequested && notificationsRequested.length > 0">
+         <ion-item [lines]="getLinesState(i)" *ngFor="let noti of notificationsRequested; let i = index;" (click)="manageNoti(noti)" [attr.data-noti_id]="noti.id">
+             <ion-avatar class="notification-avatar" slot="start" *ngIf="noti.data && noti.data.notification_user">
+                 <img [src]="noti.data.notification_user.avatar_link"
+                     (onerror)="event.target.src='assets/img/default/img_avatar.png'" />
+             </ion-avatar>
+             <ion-label class="notifications_description">
+                 <h3 class="author" *ngIf="noti.data.notification_user">
+                     {{ noti.data.notification_user.first_name}} {{noti.data.notification_user.last_name}}
+                 </h3>
+                 <p class="description ion-text-wrap">
+                     {{ (noti.data.message) ? noti.data.message : 'sin message'}}
+                 </p>
+                 <p class="date ion-text-wrap">
+                     <ion-icon class="icon" name="time"></ion-icon>
+                     <span>{{noti.created_at | moment_pipe: 'fromNow'}}</span>
+                 </p>
+             </ion-label>
+             <div slot="end">
+                 <span class="icon-noti-readed" [class.active]="(noti.read_at != null)"></span>
+             </div>
+         </ion-item>
+     </ng-container>
+ </ion-list>
+ <div *ngIf="requestFinished && notificationsRequested && notificationsRequested.length === 0">
+     <div class="not-data">
+         <p class="ion-text-wrap ion-text-center">
+             No existen notificaciones disponibles
+         </p>
+     </div>
+ </div>
+ <!-- Scroll Infinito -->
  <ion-infinite-scroll threshold="120px" (ionInfinite)="getInfiniteScrollData($event)">
-    <ion-infinite-scroll-content
-      loadingSpinner="crescent"
-      loadingText="Cargando notificaciones...">
-    </ion-infinite-scroll-content>
-  </ion-infinite-scroll>
+     <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando notificaciones...">
+     </ion-infinite-scroll-content>
+ </ion-infinite-scroll>

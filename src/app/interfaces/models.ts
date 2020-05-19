@@ -204,7 +204,7 @@ export interface ISimpleCoordinates {
 }
 
 export interface INotificationApi {
-    id: string;
+    id: number;
     type: string;
     notifiable_type: string;
     notifiable_id: number;

@@ -17,6 +17,7 @@ import { SlideshowImagesFullComponent } from './slideshow-images-full/slideshow-
 import { LocalizationInfoComponent } from './localization-info/localization-info.component';
 import { DirectivesModule } from 'src/app/directives/directives.module';
 import { PipesModule } from 'src/app/pipes/pipes.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [
@@ -38,6 +39,7 @@ import { PipesModule } from 'src/app/pipes/pipes.module';
         IonicModule,
         MaterialAppModule,
         DirectivesModule,
+        ReactiveFormsModule,
         PipesModule
     ],
     exports: [

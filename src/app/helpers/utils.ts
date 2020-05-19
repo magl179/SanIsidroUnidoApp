@@ -16,6 +16,8 @@ export const GEOLOCATION_ERRORS = {
     'errors.location.timeout': 'Service timeout has been reached'
 };
 
+export const getCurrentDate = () => moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
+
 //Funcion para verificar si una variable es un JSON
 const isJSON = (str: any) => {
     try {

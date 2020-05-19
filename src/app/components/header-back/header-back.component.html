@@ -11,7 +11,7 @@
             </ion-button>
             <!-- Icono de Notificacion -->
             <ng-container *appHasRole="['morador', 'policia']">
-                <ion-button size="large" slot="icon-only" (click)="showNotiPopover($event)">
+                <ion-button size="large" slot="icon-only" (click)="showNotifications($event)">
                     <ion-icon class="icon-noti" [name]="notificationsIcon"></ion-icon>
                 </ion-button>
             </ng-container>

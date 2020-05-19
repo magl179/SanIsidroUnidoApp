@@ -72,10 +72,13 @@ export class UserService implements OnInit {
         return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${id}`);
     }
     // Obtener las notificaciones de un usuario
-    getNotificationsUser() {
+    getNotificationsUser(params = {}) {
         const user_id = this.AuthUser.id;
         this.increasePagination(this.PaginationKeys.NOTIFICATIONS);
-        return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${user_id}/notificaciones?page=${this.getPagination(this.PaginationKeys.NOTIFICATIONS)}`);
+        return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${user_id}/notificaciones`, {
+            page: this.getPagination(this.PaginationKeys.NOTIFICATIONS),
+            ...params
+        });
     }
     // Obtener los dispositivos de un usuario
     getSocialProfilesUser() {
@@ -130,6 +133,14 @@ export class UserService implements OnInit {
     sendRequestDeleteUserPhoneDevice(phone_id: any) {
         const headers = setHeaders(CONFIG.AUTHORIZATION_NAME, this.AuthToken);
         return this.httpRequest.delete(`${environment.APIBASEURL}/dispositivos/logout/${phone_id}`, {}, headers );
+    }
+
+    readNotification(id: number){
+        const user_id = this.AuthUser.id;
+        const headers = setHeaders(CONFIG.AUTHORIZATION_NAME, this.AuthToken);
+        return this.httpRequest.delete(`${environment.APIBASEURL}/usuarios/${user_id}/notificaciones`, {
+            notification_id: id
+        }, headers);
     }
 
     

@@ -27,11 +27,9 @@ export class HeaderComponent implements OnInit {
 
     ngOnInit() { }
 
-    testiconNoti() {
-        this.notificationsIcon = (this.notificationsIcon === 'notifications-outline' ? 'notifications' : 'notifications-outline');
-    }
     showNotifications(event){
-        this.showNotiPopover(event)
+        // this.showNotiPopover(event)
+        return this.showListNotificationsModal();
     }
 
     async showOptionsHeader() {
@@ -75,13 +73,21 @@ export class HeaderComponent implements OnInit {
 
     async showListNotificationsModal() {
         const modal = await this.modalCtrl.create({
-            component: ShowListNotificationsPage,
-            componentProps: {
-                nombre: 'Stalin',
-                pais: 'Ecuador'
-            }
+            component: ShowListNotificationsPage
         });
         await modal.present();
     }
+
+    // async showListNotificationsModal() {
+    //     await this.popoverCtrl.dismiss();
+    //     const modal = await this.modalCtrl.create({
+    //         component: ShowListNotificationsPage,
+    //         componentProps: {
+    //             nombre: 'Stalin',
+    //             pais: 'Ecuador'
+    //         }
+    //     });
+    //     await modal.present();
+    // }
 
 }

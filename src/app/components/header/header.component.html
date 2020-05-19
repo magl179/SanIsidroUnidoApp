@@ -3,7 +3,7 @@
         <ion-buttons menu-id="menu_principal_app" slot="start" *ngIf="showBackButton">
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
-        <ion-title (click)="testiconNoti()" class="ion-text-center">{{title}}</ion-title>
+        <ion-title class="ion-text-center">{{title}}</ion-title>
         <ng-container *appHasRole="['morador', 'policia']">
             <ion-buttons slot="end" *ngIf="showNoti">
                 <ion-button size="large" slot="icon-only" (click)="showNotifications($event)">
