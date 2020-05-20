@@ -31,6 +31,16 @@ body {
     color: white !important;
 }
 
+.post-status{
+    color: var(--ion-color-yellow-logo);
+    &.atendido{
+        color: var(--ion-color-green-logo) !important;
+    }
+    &.rechazado{
+        color: var(--ion-color-red-logo) !important;
+    }
+}
+
 .tab-bar-app{
     border-top: 1px solid #ced6d8;
     .tab-button-blue{

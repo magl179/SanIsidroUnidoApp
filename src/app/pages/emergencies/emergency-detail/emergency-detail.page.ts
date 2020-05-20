@@ -103,7 +103,7 @@ export class EmergencyDetailPage implements OnInit {
         this.postsService.sendPoliciaAtenderEmergencia({emergencia_id: this.emergency.id}).subscribe((res:any)=> {
             this.messagesService.showInfo("Has aceptado atender la emergencia");
             this.showPoliciaOptions = false;
-            this.emergency.is_attended = 1;
+            this.emergency.additional_data.post.status_attendance = 'atendido';
         },(err: HttpErrorResponse) => {
             this.errorService.manageHttpError(err, 'Ocurrio un error al registrar la solicitud de atención de emergencia');
         })

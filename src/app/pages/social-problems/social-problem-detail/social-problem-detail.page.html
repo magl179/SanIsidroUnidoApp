@@ -78,7 +78,9 @@
                         <span class="icon-attendance">
                             <ion-icon name="clipboard" class="social-problem-state"></ion-icon>
                         </span>
-                        <span>{{(socialProblem.is_attended)?'Ya fue atendido':'Pendiente de Atención'}}</span>
+                        <span>
+                            Estado Atención:  {{ socialProblem.additional_data.post.status_attendance | titlecase }}
+                        </span>
                     </p>
                     <!-- <p (click)="test()">test</p> -->
                 </div>

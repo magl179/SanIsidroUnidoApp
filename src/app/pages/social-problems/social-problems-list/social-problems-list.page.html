@@ -10,15 +10,15 @@
             <ion-icon color="blue-logo" name="document"></ion-icon>
             <ion-label>Todos</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="1">
+        <ion-segment-button value="atendido">
             <ion-icon color="green-logo" name="checkbox"></ion-icon>
             <ion-label>Atendidos</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="0">
+        <ion-segment-button value="pendiente">
             <ion-icon color="yellow-logo" name="clock"></ion-icon>
             <ion-label>Pendientes</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="2">
+        <ion-segment-button value="rechazado">
             <ion-icon color="red-logo" name="close-circle-outline"></ion-icon>
             <ion-label>Rechazadas</ion-label>
         </ion-segment-button>
@@ -60,8 +60,12 @@
                     </div>
                 </div>
                 <ion-card-header class="post-header">
-                    <ion-card-subtitle class="post-status" [class.active]="(socialProblem.is_attended)">
-                        {{(socialProblem.is_attended) ? 'Atendido': 'Pendiente'}}
+                    <ion-card-subtitle class="post-status" [ngClass]="{
+                        'atendido': socialProblem.additional_data.post.status_attendance == 'atendido',
+                        'rechazado': socialProblem.additional_data.post.status_attendance == 'rechazado',
+                        '': socialProblem.additional_data.post.status_attendance == 'pendiente'
+                      }">
+                        {{ socialProblem.additional_data.post.status_attendance | titlecase }}
                     </ion-card-subtitle>
                     <ion-card-title class="post-title">
                         <span>

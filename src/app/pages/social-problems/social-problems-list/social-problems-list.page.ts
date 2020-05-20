@@ -112,7 +112,7 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
                     category: CONFIG.SOCIAL_PROBLEMS_SLUG,
                     subcategory: this.subcategory,
                     title: combineValues[0],
-                    is_attended: combineValues[1]
+                    status_attendance: combineValues[1]
                 })),
                 switchMap(peticionHttpBusqueda),
             )
@@ -276,7 +276,7 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
     }
     //Filtrar por Estado Atención
     segmentChanged(event: any) {
-        const value = (event.detail.value !== "") ? Number(event.detail.value) : "";
+        const value = (event.detail.value !== "") ? event.detail.value : "";
         this.segmentFilter$.next(value);
     }
 

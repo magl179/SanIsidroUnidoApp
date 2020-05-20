@@ -21,12 +21,6 @@
     .post-header{
         padding-bottom: 0;
         padding-top: 0;
-        .post-status{
-            color: var(--ion-color-red-logo);
-            &.active{
-                color: var(--ion-color-green-logo) !important;
-            }
-        }
     }
     .post-subtitle{
         position:relative;margin-bottom: .7rem;

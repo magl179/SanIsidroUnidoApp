@@ -121,7 +121,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
                 map(combineValues => ({
                     category: CONFIG.EMERGENCIES_SLUG,
                     title: combineValues[0],
-                    is_attended: combineValues[1],
+                    status_attendance: combineValues[1],
                     ... this.extraData
                 })),
                 switchMap(peticionHttpBusqueda),
@@ -232,7 +232,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
     }
 
     segmentChanged(event: any) {
-        const value = (event.detail.value !== "") ? Number(event.detail.value) : "";
+        const value = (event.detail.value !== "") ? event.detail.value : "";
         this.segmentFilter$.next(value);
     }
 

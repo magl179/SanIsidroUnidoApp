@@ -74,7 +74,7 @@
                             <span class="icon-people">
                                 <ion-icon name="pricetag" class="social-problem-state"></ion-icon>
                             </span>
-                            <span>{{(emergency.is_attended)?'La emergencia ya ha sido atendida':'La emergencia esta pendiente de atención'}}</span>
+                            <span>Estado Atención:  {{ emergency.additional_data.post.status_attendance | titlecase }}</span>
                         </p>
                         <p class="item-info"
                             *ngIf="emergency.additional_data && emergency.additional_data.emergency && emergency.additional_data.emergency.rechazed_reason">
@@ -113,7 +113,7 @@
     </div>
 </ion-content>
 <ion-footer class="footer-fixed-posts"
-    *ngIf="emergency && isPoliciaRol && showPoliciaOptions && !emergency.is_attended">
+    *ngIf="emergency && isPoliciaRol && showPoliciaOptions && emergency.additional_data.post.status_attendance != 'atendido'">
     <div class="social">
         <div class="social-options">
             <div class="social-button ion-activatable" (click)="onPoliciaAcceptEmergency()">

@@ -47,6 +47,7 @@ interface ILogEmergency {
 }
 interface ILogPost {
     approved_by: string;
+    status_attendance: string;
 }
 
 export interface IReaction {
@@ -75,11 +76,10 @@ export interface IPost {
     title: string;
     description: string;
     state: number;
-    date: string;
-    time: string;
+    date?: string;
+    time?: string;
     ubication?: IUbication;
     additional_data: IAdditionalData;
-    is_attended: number;
     user_id: number;
     created_at?: string;
     updated_at?: string;
@@ -104,12 +104,10 @@ export interface IReport extends IPost {
 export interface ISocialProblem extends IPost {
     likes: number;
     postLiked?: boolean;
-    fulldate?: string;
     fecha_creacion?: string;
 }
 export interface IEvent extends IPost {
     postAssistance?: boolean;
-    fulldate?: string;
     end_date?: string;
     initial_date?: string;
     additional_data: any;
@@ -117,6 +115,7 @@ export interface IEvent extends IPost {
     fecha_creacion?: string;
     range_short_date?: string;
     range_short_time?: string;
+    fulldate?: string;
 }
 //Imagenes
 export interface I_ImagesApi {

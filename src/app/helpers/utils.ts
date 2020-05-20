@@ -209,9 +209,6 @@ export const isType = (type: any, val: any) => {
 }
 
 export const mapEvent = (event: any) => {
-    const dateFull = `${event.date} ${event.time}`;
-    event.date = formatDate(dateFull);
-    event.time = formatTime(dateFull);
     event.ubication = getJSON(event.ubication);
     if (event.resources && event.resources.length > 0) {
         event.images = mapImagesApi(event.resources);
@@ -262,10 +259,6 @@ export const getIosDateParsed = (date: any) => {
 
 
 export const mapEmergency = (emergency: any) => {
-    const dateFull = `${emergency.date} ${emergency.time}`;
-    emergency.fulldate = formatFulldate(dateFull);
-    emergency.date = formatDate(dateFull);
-    emergency.time = formatTime(dateFull);
     emergency.ubication = getJSON(emergency.ubication);
     if (emergency.resources && emergency.resources.length > 0) {
         emergency.images = mapImagesApi(emergency.resources);
@@ -282,7 +275,6 @@ export const mapEmergency = (emergency: any) => {
     return emergency;
 }
 export const mapReport = (report: any) => {
-    report.fulldate = `${report.date} ${report.time}`;
     report.ubication = getJSON(report.ubication);
     if (report.resources && report.resources.length > 0) {
         const imagesResources = report.resources.filter(resource => resource.type === 'image');
@@ -312,10 +304,6 @@ const fechaFull = (date: string | Date) => {
 }
 
 export const mapSocialProblem = (social_problem: any) => {
-    const dateFull = `${social_problem.date} ${social_problem.time}`;
-    social_problem.fulldate = formatFulldate(dateFull);
-    social_problem.date = formatDate(dateFull);
-    social_problem.time = formatTime(dateFull);
     social_problem.ubication = getJSON(social_problem.ubication);
     if (social_problem.resources && social_problem.resources.length > 0) {
         social_problem.images = mapImagesApi(social_problem.resources);
