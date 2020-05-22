@@ -25,6 +25,7 @@
         "@angular/router": "^7.2.2",
         "@auth0/angular-jwt": "^3.0.0",
         "@ionic-native/android-permissions": "^5.9.0",
+        "@ionic-native/background-mode": "^5.26.0",
         "@ionic-native/camera": "^5.9.0",
         "@ionic-native/core": "^5.0.0",
         "@ionic-native/device": "^5.12.0",
@@ -51,6 +52,7 @@
         "cordova-android": "^8.1.0",
         "cordova-android-support-gradle-release": "^3.0.1",
         "cordova-plugin-android-permissions": "^1.0.0",
+        "cordova-plugin-background-mode": "0.7.3",
         "cordova-plugin-camera": "^4.0.3",
         "cordova-plugin-document-viewer": "^0.9.13",
         "cordova-plugin-facebook4": "5.0.0",
@@ -158,7 +160,8 @@
             },
             "cordova.plugins.diagnostic": {
                 "ANDROID_SUPPORT_VERSION": "28.+"
-            }
+            },
+            "cordova-plugin-background-mode": {}
         },
         "platforms": [
             "android"

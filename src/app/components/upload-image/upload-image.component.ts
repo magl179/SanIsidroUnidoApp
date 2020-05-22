@@ -7,7 +7,6 @@ let cameraOptions: CameraOptions = {
     quality: 90,
     correctOrientation: true,
     saveToPhotoAlbum: false,
-    allowEdit: false,
     // targetWidth: 300,
     // targetHeight: 300
 };

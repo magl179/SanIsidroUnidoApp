@@ -13,6 +13,8 @@ import { mapUser } from "./helpers/utils";
 import { map} from 'rxjs/operators';
 import { NavigationService } from './services/navigation.service';
 import { MessagesService } from './services/messages.service';
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
+
 
 @Component({
     selector: 'app-root',
@@ -35,6 +37,7 @@ export class AppComponent implements OnInit {
         private alertController: AlertController,
         private authService: AuthService,
         private navigationService: NavigationService,
+        private backgroundMode: BackgroundMode,
         private menuCtrl: MenuController,
         private pushNotificationService: NotificationsService,
         private networkService: NetworkService,
@@ -64,6 +67,7 @@ export class AppComponent implements OnInit {
             timer(1500).subscribe(async () => {
                 await this.pushNotificationService.initialConfig();
             });
+            this.backgroundMode.enable();
             // this.navigationService.keepHistoryTracking();
         });
     }
