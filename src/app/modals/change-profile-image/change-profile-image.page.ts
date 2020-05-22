@@ -47,8 +47,8 @@ export class ChangeProfileImagePage implements OnInit {
             setTimeout(()=>{
                 this.closeModal();
             }, 500);
-        },(err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'Imagen no ha podido ser actualizada');
+        },(error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'Imagen no ha podido ser actualizada');
         });
     }
 

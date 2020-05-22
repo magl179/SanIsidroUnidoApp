@@ -6,6 +6,7 @@ import { DocumentViewer } from '@ionic-native/document-viewer/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { UtilsService } from './utils.service';
 import { MessagesService } from './messages.service';
+import { ErrorService } from './error.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,7 @@ export class ManageDocsService {
         private platform: Platform,
         private file: File,
         private fileTransfer: FileTransfer,
+        private errorService: ErrorService,
         private fileOpener: FileOpener,
         private documentViewer: DocumentViewer,
         private messagesService: MessagesService,
@@ -38,8 +40,8 @@ export class ManageDocsService {
                     this.messagesService.showInfo(`Archivo descargado correctamente.`);
                     this.fileOpener.open(url, 'application/pdf');
                 }
-            }).catch(err => {
-                this.messagesService.showError(`No pudimos descargar el archivo, intentalo más tarde.`);
+            }).catch(error_http => {
+                this.errorService.manageHttpError(error_http, 'No pudimos descargar el archivo, intentalo más tarde.', false);
             })
         } else {
             this.utilsService.openInBrowser($url_path_file_pdf);

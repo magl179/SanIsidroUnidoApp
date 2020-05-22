@@ -93,12 +93,12 @@ export class RegisterPage implements OnInit {
         // Método para registrar al usuario
         this.authService.register(user).pipe(
             finalize(() => {
-                loadingRegisterValidation.dismiss()
+                loadingRegisterValidation.dismiss();
             })
         ).subscribe(async res => {
             await this.manageRegister({ provider: 'formulario', email, password }, res);
-        }, (err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'Ocurrio un error al completar el registro');
+        }, (error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'Ocurrio un error al completar el registro');
         });
     }
     //Function para registrar usuario con Facebook
@@ -113,12 +113,12 @@ export class RegisterPage implements OnInit {
                 //Funcion Registro
                 this.authService.register(user).subscribe(async res => {
                     await this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'facebook' }, res);
-                }, (err: HttpErrorResponse) => {
-                    this.errorService.manageHttpError(err, 'Ocurrio un error en el registro, intentalo más tarde');
+                }, (error_http: HttpErrorResponse) => {
+                    this.errorService.manageHttpError(error_http, 'Ocurrio un error en el registro, intentalo más tarde');
                 });
             }
-        }, (err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'Fallo la conexión con Facebook');
+        }, (error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'Fallo la conexión con Facebook');
         });
     }
     // Función para registrar al usuario con Google
@@ -133,12 +133,12 @@ export class RegisterPage implements OnInit {
                 //Funcion Registro
                 this.authService.register(user).subscribe(async res => {
                     await this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'google' }, res);
-                }, (err: HttpErrorResponse) => {
-                    this.errorService.manageHttpError(err, 'No se pudo completar el registro, intentalo mas tarde');
+                }, (error_http: HttpErrorResponse) => {
+                    this.errorService.manageHttpError(error_http, 'No se pudo completar el registro, intentalo mas tarde');
                 });
             }
-        }, (err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'Fallo la conexión con Google');
+        }, (error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'Fallo la conexión con Google');
         });
     }
 

@@ -122,8 +122,8 @@ export class NotificationsService implements OnInit {
             this.userService.sendRequestAddUserDevice(data)
                 .subscribe(async (res: any) => {
                     this.saveDeviceInfo(this.userDevice.value.phone_id);
-                }, (err: HttpErrorResponse) => {
-                    console.error('err', err);
+                }, (error_http: HttpErrorResponse) => {
+                    this.errorService.manageHttpError(error_http, 'No pudimos agregar el dispositivo', false);
                 });
         }
     }
@@ -173,8 +173,8 @@ export class NotificationsService implements OnInit {
         if (deviceID) {
             this.userService.sendRequestDeleteUserPhoneDevice(deviceID).subscribe(async (res: any) => {
                 this.messageService.showSuccess('Dispositivo Desuscrito Correctamente');
-            }, (err: HttpErrorResponse) => {
-                this.errorService.manageHttpError(err, 'Ocurrio un error al desuscribir el dispositivo');
+            }, (error_http: HttpErrorResponse) => {
+                this.errorService.manageHttpError(error_http, 'Ocurrio un error al desuscribir el dispositivo');
             });
         }
     }

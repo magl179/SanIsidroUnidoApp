@@ -64,8 +64,8 @@ export class EmergencyDetailPage implements OnInit {
             })
         ).subscribe((res: IRespuestaApiSIUSingle) => {
             this.emergency = res.data;
-        },(err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'Ocurrio un error al traer el detalle de la emergencia');
+        },(error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'Ocurrio un error al traer el detalle de la emergencia');
         });
     }
 
@@ -104,8 +104,8 @@ export class EmergencyDetailPage implements OnInit {
             this.messagesService.showInfo("Has aceptado atender la emergencia");
             this.showPoliciaOptions = false;
             this.emergency.additional_data.post.status_attendance = 'atendido';
-        },(err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'Ocurrio un error al registrar la solicitud de atención de emergencia');
+        },(error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'Ocurrio un error al registrar la solicitud de atención de emergencia');
         })
     }
 

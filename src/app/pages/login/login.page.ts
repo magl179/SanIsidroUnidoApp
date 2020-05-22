@@ -92,8 +92,8 @@ export class LoginPage implements OnInit {
             })
         ).subscribe((res: IRespuestaApiSIU) => {
             this.manageLogin(loginData, res);
-        }, (err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'Ocurrio un error, intentalo más tarde')
+        }, (error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'Ocurrio un error, intentalo más tarde')
         });
     }
 
@@ -109,12 +109,12 @@ export class LoginPage implements OnInit {
                 //Funcion Login
                 this.authService.login(user).subscribe(res => {
                     this.manageLogin({ provider: 'facebook', social_id, email }, res);
-                }, (err: HttpErrorResponse) => {
-                    this.errorService.manageHttpError(err, 'Fallo la conexión con Facebook');
+                }, (error_http: HttpErrorResponse) => {
+                    this.errorService.manageHttpError(error_http, 'Fallo la conexión con Facebook');
                 });
             }
-        }, (err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'Fallo la conexión con Facebook');
+        }, (error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'Fallo la conexión con Facebook');
         });
     }
 
@@ -130,12 +130,12 @@ export class LoginPage implements OnInit {
                 //Funcion Login
                 this.authService.login(user).subscribe(async res => {
                     await this.manageLogin({ social_id, email, provider: 'google' }, res);
-                }, (err: HttpErrorResponse) => {
-                    this.errorService.manageHttpError(err, 'Ocurrio un error al conectar con Google');
+                }, (error_http: HttpErrorResponse) => {
+                    this.errorService.manageHttpError(error_http, 'Ocurrio un error al conectar con Google');
                 });
             }
-        }, (err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'Fallo la conexión con Google');
+        }, (error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'Fallo la conexión con Google');
         });
     }
 

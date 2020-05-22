@@ -52,8 +52,8 @@ export class SocialProblemCreatePage implements OnInit {
         this.postService.getSubcategoriesByCategory(CONFIG.SOCIAL_PROBLEMS_SLUG).subscribe(res => {
             this.subcategories = res.data;
             this.subcategoryName = res.data[0].name;
-        }, (err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'Ocurrio un error al cargar las categorias');
+        }, (error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'Ocurrio un error al cargar las categorias');
         });
     }
 
@@ -63,9 +63,9 @@ export class SocialProblemCreatePage implements OnInit {
         await this.localizationService.getCoordinates().then((coordinates: any) => {
             this.socialProblemCoordinate.latitude = coordinates.latitude;
             this.socialProblemCoordinate.longitude = coordinates.longitude;
-        }).catch(err => {
-            this.socialProblemCoordinate.latitude = -0.096076;
-            this.socialProblemCoordinate.longitude = -78.503606;
+        }).catch(coordinates_error => {
+            this.socialProblemCoordinate.latitude = -0.24320783421726888;
+            this.socialProblemCoordinate.longitude = -78.49732162261353;
         });
     }
 
@@ -131,8 +131,8 @@ export class SocialProblemCreatePage implements OnInit {
                 }, 1000);
             }
 
-        }, (err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'Ocurrio un error al enviar tu reporte, intentalo más tarde');
+        }, (error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'Ocurrio un error al enviar tu reporte, intentalo más tarde');
         });
     }
 
@@ -165,8 +165,8 @@ export class SocialProblemCreatePage implements OnInit {
         }).subscribe(direccion => {
             this.socialProblemCoordinate.address = direccion.display_name;
             this.cdRef.detectChanges();
-        }, (err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'Ocurrio un error al obtener tu dirección, intentalo más tarde');
+        }, (error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'Ocurrio un error al obtener tu dirección, intentalo más tarde');
         });
     }
 

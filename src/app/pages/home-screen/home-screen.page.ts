@@ -29,8 +29,8 @@ export class HomeScreenPage implements OnInit {
         this.localDataService.getTutoSlides().subscribe(
             (res: any) => {
                 this.slides = res;
-            }, (err: HttpErrorResponse) => {
-                this.errorService.manageHttpError(err, 'No se pudieron cargar las opciones del tutorial');
+            }, (error_http: HttpErrorResponse) => {
+                this.errorService.manageHttpError(error_http, 'No se pudieron cargar las opciones del tutorial');
             }
         );
         await this.utilsService.disabledMenu();

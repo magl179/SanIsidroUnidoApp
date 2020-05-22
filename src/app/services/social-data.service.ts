@@ -70,8 +70,8 @@ export class SocialDataService {
             try {
                 const loginGoogle = await this.google.login({});
                 this.getGoogleData(loginGoogle);
-            } catch (error) {
-                this.errorService.manageHttpError(error, 'Error con la conexion a Google');
+            } catch (error_http) {
+                this.errorService.manageHttpError(error_http, 'Error con la conexion a Google');
             }
         } else {
             this.messageService.showError('Error con la conexion a Google');
@@ -86,8 +86,8 @@ export class SocialDataService {
                 const userId = respuestaLogin.authResponse.userID;
                 const accessToken = respuestaLogin.authResponse.accessToken;
                 await this.getFacebookData(accessToken, userId, permisos);
-            } catch (err) {
-                this.errorService.manageHttpError(err, 'Ocurrio un error al conectarse con facebook');
+            } catch (error_http) {
+                this.errorService.manageHttpError(error_http, 'Ocurrio un error al conectarse con facebook');
             }
         } else {
             this.messageService.showError('La aplicación de facebook no esta disponible');
@@ -105,8 +105,8 @@ export class SocialDataService {
             } else {
                 this.messageService.showError('No se pudo obtener los datos por medio de Facebook');
             }
-        } catch (err) {
-            this.errorService.manageHttpError(err, 'No se pudieron obtener los datos de facebook');
+        } catch (error_http) {
+            this.errorService.manageHttpError(error_http, 'No se pudieron obtener los datos de facebook');
         }
     }
     // Function para llamar a la api de Google y obtener los datos del perfil del usuario logueado
@@ -121,11 +121,11 @@ export class SocialDataService {
                     this.googleLoginData.next(profile);
                     await this.closeGoogleSession();
                 },
-                (err: any) => {
-                    this.errorService.manageHttpError(err, 'No se pudieron obtener los datos de Google');
+                (error_http: any) => {
+                    this.errorService.manageHttpError(error_http, 'No se pudieron obtener los datos de Google');
                 });
-        } catch (err) {
-            this.errorService.manageHttpError(err, 'No se pudieron obtener los datos de Google');
+        } catch (error_http) {
+            this.errorService.manageHttpError(error_http, 'No se pudieron obtener los datos de Google');
         }
     }
 
@@ -133,16 +133,16 @@ export class SocialDataService {
     async closeGoogleSession() {
         try {
             await this.google.logout();
-        } catch (err) {
-            this.errorService.manageHttpError(err, 'No se pudo cerrar la sesion de Google');
+        } catch (error_http) {
+            this.errorService.manageHttpError(error_http, 'No se pudo cerrar la sesion de Google');
         }
     }
     // Función para cerrar la sesión de facebook una vez obtenidos los datos
     async closeFacebookSession() {
         try {
             await this.facebook.logout();
-        } catch (err) {
-            this.errorService.manageHttpError(err, 'No se pudo cerrar la sesion de Facebook');
+        } catch (error_http) {
+            this.errorService.manageHttpError(error_http, 'No se pudo cerrar la sesion de Facebook');
         }
     }
 

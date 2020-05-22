@@ -19,6 +19,9 @@ export class ErrorService {
   }
 
   async showHttpError(message: string, color = "dark") {
+    if(message == ''){
+      return;
+    }
     return this.messageService.showError(message);
   }
 

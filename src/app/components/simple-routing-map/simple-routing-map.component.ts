@@ -55,7 +55,7 @@ export class SimpleRoutingMapComponent implements OnInit {
             this.mapMarkers = await this.mapService.getMarkers().toPromise();
             // Inicializar el Mapa
             await this.initializeMap();
-        } catch (err) {
+        } catch (map_error) {
             this.messageService.showInfo('No se pudo cargar el mapa, intentalo más tarde');
         }
     }

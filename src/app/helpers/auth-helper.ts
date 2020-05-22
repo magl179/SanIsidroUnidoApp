@@ -6,7 +6,7 @@ export const decodeToken = (token: any) => {
     try {
         const helper = new JwtHelperService();
         decodedToken = helper.decodeToken(token);
-    } catch (err) {
+    } catch (token_error) {
        return null;
     }
     return decodedToken;

@@ -40,7 +40,7 @@ export class EditProfilePage implements OnInit {
 
     async loadUserData() {
         //OBTENER INFORMACIÓN USUARIO AUTENTICADO, FORMA CORRECTA
-        const response_auth: any =  await this.authService.getTokenUserAuthenticated().catch(err=> null)
+        const response_auth: any =  await this.authService.getTokenUserAuthenticated().catch(()=> null)
         if (response_auth) {
             this.AuthUser = response_auth.user;
         }
@@ -62,8 +62,8 @@ export class EditProfilePage implements OnInit {
             setTimeout(()=>{
                 this.closeModal();
             }, 500);
-        },(err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'Tus datos no se pudieron actualizar');
+        },(error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'Tus datos no se pudieron actualizar');
         });
     }
 

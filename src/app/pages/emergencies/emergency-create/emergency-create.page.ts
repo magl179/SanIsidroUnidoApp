@@ -52,7 +52,7 @@ export class EmergencyCreatePage implements OnInit {
         await this.localizationService.getCoordinates().then((coordinates: any) => {
             this.emergencyPostCoordinate.latitude = coordinates.latitude;
             this.emergencyPostCoordinate.longitude = coordinates.longitude;
-        }).catch(err => {
+        }).catch(() => {
             this.emergencyPostCoordinate.latitude = -0.096076;
             this.emergencyPostCoordinate.longitude =  -78.503606;
         });
@@ -101,8 +101,8 @@ export class EmergencyCreatePage implements OnInit {
             this.emergencyPostCoordinate.address = direccion.display_name;
             //Ejecutar la deteccion de cambios de Angular de forma manual
             this.cdRef.detectChanges();
-        }, (err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'Ocurrio un error al obtener la dirección de tu ubicación');
+        }, (error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'Ocurrio un error al obtener la dirección de tu ubicación');
         });
     }
 
@@ -146,8 +146,8 @@ export class EmergencyCreatePage implements OnInit {
             }, 1000);
 
 
-        }, (err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'Ocurrio un error al enviar tu reporte');
+        }, (error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'Ocurrio un error al enviar tu reporte');
         });
     }
 

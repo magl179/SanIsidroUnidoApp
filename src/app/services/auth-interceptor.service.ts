@@ -61,16 +61,16 @@ export class AuthInterceptorService implements HttpInterceptor {
                     let retryCount = 0;
                     return errors.pipe(
                         delay(delayMs),
-                        mergeMap(error => {
-                            const statusError = error.status;
+                        mergeMap(request_error => {
+                            const statusError = request_error.status;
                             const includesCodeAvoid = this.statusCodeAvoid.includes(
                                 statusError
                             );
                             if (retryCount >= maxRetry || includesCodeAvoid) {
-                                return throwError(error);
+                                return throwError(request_error);
                             }
                             retryCount++;
-                            return of(error);
+                            return of(request_error);
                         })
                     );
                 })

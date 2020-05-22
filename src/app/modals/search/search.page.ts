@@ -102,8 +102,8 @@ export class SearchPage implements OnInit {
                     })
                 ).subscribe((res: any) => {
                     this.itemsSearchFound = res.data;
-                },(err: HttpErrorResponse) => {
-                    this.errorService.manageHttpError(err, 'Ocurrio un error al realizar la busqueda');
+                },(error_http: HttpErrorResponse) => {
+                    this.errorService.manageHttpError(error_http, 'Ocurrio un error al realizar la busqueda');
                 });
             }
         });

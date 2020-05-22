@@ -95,8 +95,8 @@ export class PublicServicesListPage implements OnInit {
         })).subscribe((response: IRespuestaApiSIU) => {
             this.publicServices = [...response.data];
             this.publicServicesFilter = [...response.data];
-        }, (err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'Ocurrio un error al cargar el listado de serviciós públicos')
+        }, (error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'Ocurrio un error al cargar el listado de serviciós públicos')
         });
     }
 

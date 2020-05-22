@@ -98,8 +98,8 @@ export class ChangePasswordPage implements OnInit {
             setTimeout(()=>{
                 this.closeModal();
             }, 500);
-        },(err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'La Contraseña no se ha podido actualizar')
+        },(error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'La Contraseña no se ha podido actualizar')
         });
     }
 

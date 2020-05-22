@@ -79,7 +79,10 @@ export class EventsListPage implements OnInit, OnDestroy {
                     });
                     return events_to_map;
                 }),
-                catchError(err => of([]))
+                catchError((error_http: HttpErrorResponse) => {
+                    this.errorService.manageHttpError(error_http, '');
+                    return of([])
+                })
             )
         }
         this.subcategory = this.activatedRoute.snapshot.paramMap.get('subcategory');
@@ -156,8 +159,8 @@ export class EventsListPage implements OnInit, OnDestroy {
                     }
                 });
                 this.eventsFiltered = [...this.eventsList];
-            }, (err: HttpErrorResponse) => {
-                this.errorService.manageHttpError(err, 'No se pudo borrar su asistencia');
+            }, (error_http: HttpErrorResponse) => {
+                this.errorService.manageHttpError(error_http, 'No se pudo borrar su asistencia');
             });
         } else {
             const detailInfo = {
@@ -175,8 +178,8 @@ export class EventsListPage implements OnInit, OnDestroy {
                     }
                 });
                 this.eventsFiltered = [...this.eventsList];
-            }, (err: HttpErrorResponse) => {
-                this.errorService.manageHttpError(err, 'No se pudo guardar su asistencia');
+            }, (error_http: HttpErrorResponse) => {
+                this.errorService.manageHttpError(error_http, 'No se pudo guardar su asistencia');
             });
         }
     }
@@ -209,8 +212,8 @@ export class EventsListPage implements OnInit, OnDestroy {
                 }
                 return res;
             }),
-            catchError((err: HttpErrorResponse) => {
-                this.errorService.manageHttpError(err, 'Ocurrio un error al traer el listado de eventos', false);
+            catchError((error_http: HttpErrorResponse) => {
+                this.errorService.manageHttpError(error_http, 'Ocurrio un error al traer el listado de eventos', false);
                 this.postsService.resetPaginationEmpty(this.postsService.PaginationKeys.EVENTS);
                 return of({ data: [] })
             }),

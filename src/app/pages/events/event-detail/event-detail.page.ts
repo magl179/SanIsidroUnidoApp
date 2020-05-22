@@ -72,8 +72,8 @@ export class EventDetailPage implements OnInit {
                     this.event.postAssistance = checkLikePost(this.event.reactions, this.AuthUser);
                 }
             }
-        },(err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err,'No se pudo guardar su asistencia');
+        },(error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http,'No se pudo guardar su asistencia');
         });
     }
 
@@ -89,8 +89,8 @@ export class EventDetailPage implements OnInit {
                     this.event.reactions = res.data.reactions;
                     this.emitAssistanceEvent(this.event.id, res.data.reactions);
                 }
-            }, (err: HttpErrorResponse) => {
-                this.errorService.manageHttpError(err,'No se pudo borrar su asistencia' );
+            }, (error_http: HttpErrorResponse) => {
+                this.errorService.manageHttpError(error_http,'No se pudo borrar su asistencia' );
             });
         } else {
             const detailInfo = {
@@ -104,8 +104,8 @@ export class EventDetailPage implements OnInit {
                     this.event.reactions = res.data.reactions;
                     this.emitAssistanceEvent(this.event.id, res.data.reactions);
                 }
-            }, (err: HttpErrorResponse) => {
-                this.errorService.manageHttpError(err,'No se pudo guardar su asistencia' );
+            }, (error_http: HttpErrorResponse) => {
+                this.errorService.manageHttpError(error_http,'No se pudo guardar su asistencia' );
             });
         }
     }

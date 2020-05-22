@@ -59,8 +59,8 @@ export class ReportDetailPage implements OnInit {
             })
         ).subscribe((res: IRespuestaApiSIUSingle) => {
             this.report = res.data;
-        },(err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'Ocurrio un error al traer el detalle del reporte');
+        },(error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'Ocurrio un error al traer el detalle del reporte');
         });
     }
 

@@ -50,20 +50,20 @@ export class LocalizationService {
     }
 
     async checkGPSWebEnable() {
-        return new Promise((resolve, reject) => {
-            navigator.geolocation.getCurrentPosition((coords: any) => {
+        return new Promise((resolve) => {
+            navigator.geolocation.getCurrentPosition(() => {
                 resolve(true);
-            }, (err) => {
+            }, () => {
                 resolve(false);
             });
         });
     }
 
     async checkGPSNativeEnable() {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async(resolve) => {
             await this.diagnostic.isLocationEnabled()
             .then((enabled)=>resolve(enabled))
-            .catch(err=>resolve(false));
+            .catch(()=>resolve(false));
         });
     }
 
@@ -73,10 +73,10 @@ export class LocalizationService {
 
     async getCoordinates() {
         return await new Promise(async (resolve, reject) => {
-            this.getLocationCoordinates().then(res=>{
-                resolve(res);
-            }).catch(err=>{
-                reject(err);                
+            this.getLocationCoordinates().then(response_coords=>{
+                resolve(response_coords);
+            }).catch((error_coordinate)=>{
+                reject(error_coordinate);                
             });
         });
     }
@@ -90,15 +90,15 @@ export class LocalizationService {
                     this.misCoordenadas.latitude = currentCoords.coords.latitude;
                     this.misCoordenadas.longitude = currentCoords.coords.longitude;
                     resolve(this.misCoordenadas);
-                }).catch(err => reject(err));
+                }).catch((error_coords) => reject(error_coords));
             } else {
                 if (navigator.geolocation) {
                     return await this.getPositionWeb().then((currentCoords: any) => {
                         this.misCoordenadas.latitude = currentCoords.coords.latitude;
                         this.misCoordenadas.longitude = currentCoords.coords.longitude;
                         resolve(this.misCoordenadas);
-                    }).catch(err => {
-                        reject(err);
+                    }).catch(error_coords => {
+                        reject(error_coords);
                     });
                 }else{
                     this.messageService.showInfo("No hay navigator geolocation");
@@ -119,8 +119,8 @@ export class LocalizationService {
                     }
 
                 }
-            ).catch(err => {
-                reject(err);
+            ).catch(error_permissions => {
+                reject(error_permissions);
             });
         });
     }
@@ -134,8 +134,8 @@ export class LocalizationService {
                     this.messageService.showInfo("Por favor habilita el acceso de la aplicación a la geolocalización");
                     reject('Por favor habilita el acceso de la aplicación a la geolocalización');
                 }
-            }).catch(err => {
-                reject(err);
+            }).catch(error_location => {
+                reject(error_location);
             });
         });
     }
@@ -144,10 +144,10 @@ export class LocalizationService {
     async askTurnOnGPS() {
         return new Promise(async (resolve, reject) => {
             await this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
-                (resp) => {
+                () => {
                     resolve(true);
                 }
-            ).catch((err) => reject(err));
+            ).catch((error_gps) => reject(error_gps));
         });
     }
 

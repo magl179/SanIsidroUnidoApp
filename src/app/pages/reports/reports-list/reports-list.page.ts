@@ -64,7 +64,10 @@ export class ReportsListPage implements OnInit, OnDestroy {
                     });
                     return reports_to_map;
                 }),
-                catchError(err => of([]))
+                catchError((error_http) => {
+                    this.errorService.manageHttpError(error_http, '');
+                    return of([])
+                })
             )
         }
 
@@ -118,8 +121,8 @@ export class ReportsListPage implements OnInit, OnDestroy {
                 }
                 return res;
             }),
-            catchError((err: HttpErrorResponse)=>{
-                this.errorService.manageHttpError(err, 'Ocurrio un error al traer el listado de actividades barriales', false);
+            catchError((error_http: HttpErrorResponse)=>{
+                this.errorService.manageHttpError(error_http, 'Ocurrio un error al traer el listado de actividades barriales', false);
                 this.postsService.resetPaginationEmpty(this.postsService.PaginationKeys.REPORTS);
                 return of({data: []})
             }),

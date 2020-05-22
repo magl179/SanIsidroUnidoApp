@@ -49,7 +49,7 @@ export class SocialProblemDetailPage implements OnInit {
             if (token_decoded && token_decoded.user) {
                 this.AuthUser = token_decoded.user;
             }
-        }, (err: HttpErrorResponse) => {
+        }, () => {
             this.messagesService.showError("Ocurrio un error al traer los datos del usuario autenticado'");
         });
         this.getSocialProblem();
@@ -76,8 +76,8 @@ export class SocialProblemDetailPage implements OnInit {
                 this.socialProblem = res.data;
                 this.socialProblem.postLiked = checkLikePost(this.socialProblem.reactions, this.AuthUser);
             }
-        }, (err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'Ocurrio un error al traer el detalle del problema social ');
+        }, (error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'Ocurrio un error al traer el detalle del problema social ');
         });
     }
 
@@ -103,8 +103,8 @@ export class SocialProblemDetailPage implements OnInit {
                     this.socialProblem.reactions = res.data.reactions;
                     this.emitLikeEvent(this.socialProblem.id, res.data.reactions);
                 }
-            }, (err: HttpErrorResponse) => {
-                this.errorService.manageHttpError(err, 'El me gusta no pudo ser borrado');
+            }, (error_http: HttpErrorResponse) => {
+                this.errorService.manageHttpError(error_http, 'El me gusta no pudo ser borrado');
             });
         } else {
             const detailInfo = {
@@ -118,8 +118,8 @@ export class SocialProblemDetailPage implements OnInit {
                     this.socialProblem.reactions = res.data.reactions;
                     this.emitLikeEvent(this.socialProblem.id, res.data.reactions);
                 }
-            }, (err: HttpErrorResponse) => {
-                this.errorService.manageHttpError(err, 'El me gusta no pudo ser guardado');
+            }, (error_http: HttpErrorResponse) => {
+                this.errorService.manageHttpError(error_http, 'El me gusta no pudo ser guardado');
             });
         }
     }

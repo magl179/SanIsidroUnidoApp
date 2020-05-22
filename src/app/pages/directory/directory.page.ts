@@ -60,8 +60,8 @@ export class DirectoryPage implements OnInit {
         ).subscribe((response: IRespuestaApiSIU) => {
             this.directivesList = response.data;
             this.directivesFilter = response.data;
-        }, (err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'Ocurrio un error al traer el listado de directivos', false);
+        }, (error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'Ocurrio un error al traer el listado de directivos', false);
         });
     }
     

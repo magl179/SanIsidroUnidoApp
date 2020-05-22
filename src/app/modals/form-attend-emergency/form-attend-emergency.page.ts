@@ -57,8 +57,8 @@ export class FormAttendEmergencyModal implements OnInit {
             setTimeout(()=>{
                 this.closeModal();
             }, 500);
-        },(err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'Ocurrio un error al registrar el motivo de rechazo');
+        },(error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'Ocurrio un error al registrar el motivo de rechazo');
         })
     }
 }

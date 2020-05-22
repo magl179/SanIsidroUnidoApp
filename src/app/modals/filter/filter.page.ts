@@ -100,8 +100,8 @@ export class FilterPage implements OnInit {
                 })
             ).subscribe((res: any) => {
                 itemsFiltered = [...res.data];
-            }, (err: HttpErrorResponse) => {
-                this.errorService.manageHttpError(err, 'Ocurrio un error al filtrar los datos');
+            }, (error_http: HttpErrorResponse) => {
+                this.errorService.manageHttpError(error_http, 'Ocurrio un error al filtrar los datos');
             });
         }
         return itemsFiltered;

@@ -89,9 +89,9 @@ export class UtilsService implements OnInit {
                 if(result.completed){
                     await this.showToast({message: 'Compartido Correctamente'});
                 }
-            }).catch(async(err) => {
-                console.error('Error al compartir', err);
-               this.showToast({message: 'No se pudo compartir'});
+            }).catch(async(error_share) => {
+                console.error('Error al compartir', error_share);
+            //    this.showToast({message: 'No se pudo compartir'});
             });
         } else {
             if (navigator['share']) {
@@ -101,9 +101,9 @@ export class UtilsService implements OnInit {
                     url: publicacion.url || ''
                 }).then(async() => {
                     await this.showToast({message: 'Compartido Correctamente'});
-                }).catch(async(err) => {
-                    console.error('Error al compartir', err);
-                   this.showToast({message: 'No se pudo compartir'});
+                }).catch(async(error_share) => {
+                    console.error('Error al compartir', error_share);
+                //    this.showToast({message: 'No se pudo compartir'});
                 });
             } else {
                 await this.showToast({message: 'Tu dispositivo no soporta la función de compartir'});

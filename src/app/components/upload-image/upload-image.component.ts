@@ -2,14 +2,14 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { Platform } from '@ionic/angular';
 import { MessagesService } from 'src/app/services/messages.service';
-import { WebView } from '@ionic-native/ionic-webview/ngx';
 
 let cameraOptions: CameraOptions = {
-    quality: 85,
+    quality: 90,
     correctOrientation: true,
     saveToPhotoAlbum: false,
-    targetWidth: 300,
-    targetHeight: 300
+    allowEdit: false,
+    // targetWidth: 300,
+    // targetHeight: 300
 };
 
 @Component({
@@ -26,7 +26,6 @@ export class UploadImageComponent implements OnInit {
     imagejpg: string;
 
     constructor(
-        private webview: WebView,
         private camera: Camera,
         private messageService: MessagesService,
         private platform: Platform
@@ -128,7 +127,6 @@ export class UploadImageComponent implements OnInit {
                         var reader = new FileReader();
                         reader.onload = (readerEvent: any) => {
                             const content = readerEvent.target.result;
-                            // const localSrc = this.webview.convertFileSrc(content);                           
                             if (this.uploadedImages.length < this.maxImages) {
                                 this.uploadedImages.push(content);
                             }

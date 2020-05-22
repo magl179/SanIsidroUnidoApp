@@ -81,7 +81,7 @@ export class RequestMembershipPage implements OnInit {
             ...this.requestMembershipForm.value
         }
         console.warn('membersgip body', requestObj)
-        return;
+        // return;
         this.userService.sendRequestUserMembership(requestObj).subscribe(async (res: IRespuestaApiSIUSingle) => {
             const token = res.data.token;
             const token_decoded = decodeToken(token);
@@ -92,8 +92,8 @@ export class RequestMembershipPage implements OnInit {
             setTimeout(()=>{
                 this.closeModal();
             }, 500);
-        },(err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'La solicitud no ha podido ser enviada');
+        },(error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'La solicitud no ha podido ser enviada');
         });
     }
 

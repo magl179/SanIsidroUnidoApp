@@ -3,9 +3,7 @@
 <app-header-back [title]="(isPolicia) ? 'Emergencias': 'Mis Emergencias'" [search]="false"></app-header-back>
 <!-- Contenido -->
 <ion-content padding>
-     <!-- Problemas Sociales Searchbar -->
-     <ion-searchbar mode="ios" type="text" placeholder="Buscar Emergencias" [animated]="true"
-     [formControl]="emergencyControl"></ion-searchbar>
+    
     <!-- Filtro por Estado Atención -->
     <ion-segment value="" scrollable (ionChange)="segmentChanged($event)">
         <ion-segment-button value="">
@@ -25,24 +23,28 @@
             <ion-label>Rechazadas</ion-label>
         </ion-segment-button>
     </ion-segment>
+    
     <!-- Refresher de los Datos -->
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content pullingIcon="arrow-dropdown" refreshingSpinner="circles"
             refreshingText="Cargando Publicaciones...">
         </ion-refresher-content>
     </ion-refresher>
+     <!-- Problemas Sociales Searchbar -->
+     <ion-searchbar mode="ios" type="text" placeholder="Buscar Emergencias" [animated]="true"
+     [formControl]="emergencyControl"></ion-searchbar>
     <div class="loading-app" *ngIf="searchingEmergencies">
         <loader-app class="flex-column-center" message="Buscando..."></loader-app>
     </div>
     <!-- Mensaje cuando no hay datos disponibles-->
-    <app-no-results-found class="ion-padding" *ngIf="showNotFound && emergenciesList.length === 0"
+    <app-no-results-found class="ion-padding" *ngIf="showNotFound && emergenciesFiltered.length === 0"
         message="No existen emergencias disponibles"></app-no-results-found>
     <!-- Tarjetas de Animacion mientras se cargan los datos-->
     <div class="loading-app" *ngIf="showloading">
         <loader-app class="flex-column-center"></loader-app>
     </div>
     <!-- Posts con Datos -->
-    <div *ngIf="!showloading  && emergenciesList.length > 0" [@listAnimation]>
+    <div *ngIf="!showloading  && emergenciesFiltered.length > 0" [@listAnimation]>
         <!-- Posts Filtrados con Datos -->
         <ion-card class="emergency" *ngFor="let emergency of emergenciesFiltered; let i = index;">
             <div class="post_cover" *ngIf="emergency.imagesArr && emergency.imagesArr.length > 0">

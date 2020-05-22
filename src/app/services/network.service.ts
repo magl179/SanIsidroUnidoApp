@@ -54,7 +54,7 @@ export class NetworkService {
         return this.hasConnection.asObservable();
     }
     // Funcion obtener subject de la red
-    public getNetworkValue(){
+    public getNetworkValue() {
         return this.hasConnection.value;
     }
     // Función para hacer una petición a JSON Placeholder
@@ -63,18 +63,14 @@ export class NetworkService {
     }
     // Función para hace una peticion a una url y comprobar si fue exitosa o no
     public async testNetworkConnection() {
-        try {
-            this.getNetworkTestRequest().subscribe(
-                success => {
-                    this.hasConnection.next(true);
-                    return;
-                }, error => {
-                    this.hasConnection.next(false);
-                    return;
-                });            
-        } catch (err) {
-            this.hasConnection.next(false);
-            return;
-        }
+        this.getNetworkTestRequest().subscribe(
+            () => {
+                this.hasConnection.next(true);
+                return;
+            }, () => {
+                this.hasConnection.next(false);
+                return;
+            });
+
     }
 }

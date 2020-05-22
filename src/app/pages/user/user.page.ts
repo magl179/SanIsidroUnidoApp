@@ -70,8 +70,8 @@ export class UserPage implements OnInit {
                     if(userdevice){
                         this.CurrentUserDevice = getUserDevice(this.UserDevices, userdevice);
                     }
-                }, (err: HttpErrorResponse) => {
-                    this.errorService.manageHttpError(err, 'Ocurrio un error al obtener tus dispositivos asociados');
+                }, (error_http: HttpErrorResponse) => {
+                    this.errorService.manageHttpError(error_http, 'Ocurrio un error al obtener tus dispositivos asociados');
                 });
             }
         });
@@ -87,8 +87,8 @@ export class UserPage implements OnInit {
                 this.UserSocialProfiles = res.data;
                 
             }
-        }, (err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'Ocurrio un error al obtener tus perfiles sociales');
+        }, (error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'Ocurrio un error al obtener tus perfiles sociales');
         });
     }
 
@@ -102,8 +102,8 @@ export class UserPage implements OnInit {
                 this.UserDevices = res.data;
                 
             }
-        }, (err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'Ocurrio un error al obtener la información de tus dispositivos');
+        }, (error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'Ocurrio un error al obtener la información de tus dispositivos');
         });
     }
 
@@ -147,8 +147,8 @@ export class UserPage implements OnInit {
         this.userService.sendRequestDeleteUserDevice(device_id).subscribe(async (res: IRespuestaApiSIUSingle) => {
             this.getUserDevices();
             this.messageService.showSuccess("Dispositivo eliminado Correctamente");
-        }, (err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'Ocurrio un error al desconectar el dispositivo');
+        }, (error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'Ocurrio un error al desconectar el dispositivo');
         });
     }
 
@@ -156,8 +156,8 @@ export class UserPage implements OnInit {
         this.userService.sendRequestDeleteSocialProfile(social_profile_id).subscribe(async (res: IRespuestaApiSIUSingle) => {
             this.getUserSocialProfiles();
             this.messageService.showSuccess("El Perfil Social fue desconectado correctamente");
-        },(err: HttpErrorResponse) => {
-            this.errorService.manageHttpError(err, 'El Perfil Social no se pudo desconectar');
+        },(error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'El Perfil Social no se pudo desconectar');
         });
     }
 

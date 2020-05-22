@@ -75,7 +75,10 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
                         });
                         return social_problems_to_map;
                     }),
-                    catchError(err => of([]))
+                    catchError((error_http) => {
+                        this.errorService.manageHttpError(error_http, '');
+                        return of([])
+                    })
                 )
         };
 
@@ -89,9 +92,9 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
             if (token_decoded && token_decoded.user) {
                 this.AuthUser = token_decoded.user;
             }
-        }, (err: any) => {
+        }, (error_http: any) => {
             ;
-            this.errorService.manageHttpError(err, 'No se pudo cargar la información del usuario');
+            this.errorService.manageHttpError(error_http, 'No se pudo cargar la información del usuario');
         });
         this.loadSocialProblems(null, true);
         this.events_app.socialProblemLikesEmitter.subscribe((social_problema_event: any) => {
@@ -99,7 +102,7 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
         });
 
         combineLatest(
-            this.socialProblemControl.valueChanges.pipe(startWith('')), 
+            this.socialProblemControl.valueChanges.pipe(startWith('')),
             this.segmentFilter$.asObservable()
         )
             .pipe(
@@ -131,7 +134,7 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
 
     toggleLikes(social_problem_id: number, reactions = []) {
         const newSocialProblems = this.socialProblemsList.map((social_problem) => {
-            if(social_problem.id == social_problem_id){
+            if (social_problem.id == social_problem_id) {
                 social_problem.reactions = reactions;
             }
             social_problem.postLiked = checkLikePost(social_problem.reactions, this.AuthUser) || false;
@@ -157,8 +160,8 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
                     }
                 });
                 this.socialProblemsFilter = [...this.socialProblemsList];
-            }, (err: any) => {
-                this.errorService.manageHttpError(err, 'El me gusta no pudo ser borrado');
+            }, (error_http: any) => {
+                this.errorService.manageHttpError(error_http, 'El me gusta no pudo ser borrado');
             });
         } else {
             const detailInfo = {
@@ -176,8 +179,8 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
                     }
                 });
                 this.socialProblemsFilter = [...this.socialProblemsList];
-            }, (err: HttpErrorResponse) => {
-                this.errorService.manageHttpError(err, 'El me gusta no pudo ser guardado');
+            }, (error_http: HttpErrorResponse) => {
+                this.errorService.manageHttpError(error_http, 'El me gusta no pudo ser guardado');
             });
         }
     }
@@ -199,8 +202,8 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
                     }
                     return res;
                 }),
-                catchError((err: HttpErrorResponse) => {
-                    this.errorService.manageHttpError(err, 'Ocurrio un error al traer el listado de problemas sociales', false);
+                catchError((error_http: HttpErrorResponse) => {
+                    this.errorService.manageHttpError(error_http, 'Ocurrio un error al traer el listado de problemas sociales', false);
                     this.postsService.resetPaginationEmpty(this.postsService.PaginationKeys.SOCIAL_PROBLEMS_BY_SUBCATEGORY);
                     return of({ data: [] })
                 }),

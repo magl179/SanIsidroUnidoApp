@@ -80,7 +80,10 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
                         });
                         return emergencies_to_map;
                     }),
-                    catchError(err => of([]))
+                    catchError((error_http: HttpErrorResponse) => {
+                        this.errorService.manageHttpError(error_http, '');
+                        return of([])
+                    })
                 )
         };
         //Verificar si es policia
@@ -161,8 +164,8 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
                 }
                 return res;
             }),
-            catchError((err: HttpErrorResponse) => {
-                this.errorService.manageHttpError(err, 'Ocurrio un error al traer el listado de emergencias', false);
+            catchError((error_http: HttpErrorResponse) => {
+                this.errorService.manageHttpError(error_http, 'Ocurrio un error al traer el listado de emergencias', false);
                 this.postsService.resetPaginationEmpty(this.postsService.PaginationKeys.EMERGENCIES);
                 return of({ data: [] })
             }),

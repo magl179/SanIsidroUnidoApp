@@ -43,7 +43,7 @@ export class PublicServiceDetailPage implements OnInit {
             this.localizationService.getCoordinates().then(coordinates=>{
                 this.currentPosition = coordinates;
                 return;
-            }).catch(err=>{
+            }).catch(()=>{
                 return null;
             });
         }
@@ -72,9 +72,8 @@ export class PublicServiceDetailPage implements OnInit {
             })
         ).subscribe((res: IRespuestaApiSIUSingle) => {
             this.publicServiceDetail = res.data;
-        }, (err: HttpErrorResponse) => {
-                
-            this.errorService.manageHttpError(err, 'Ocurrio un error al cargar el detalle del servicio')
+        }, (error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'Ocurrio un error al cargar el detalle del servicio')
         });
     }
 
