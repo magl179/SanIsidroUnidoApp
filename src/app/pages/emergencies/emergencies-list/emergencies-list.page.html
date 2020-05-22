@@ -7,7 +7,7 @@
      <ion-searchbar mode="ios" type="text" placeholder="Buscar Emergencias" [animated]="true"
      [formControl]="emergencyControl"></ion-searchbar>
     <!-- Filtro por Estado Atención -->
-    <ion-segment value="" (ionChange)="segmentChanged($event)">
+    <ion-segment value="" scrollable (ionChange)="segmentChanged($event)">
         <ion-segment-button value="">
             <ion-icon color="blue-logo" name="document"></ion-icon>
             <ion-label>Todos</ion-label>
@@ -38,19 +38,6 @@
     <app-no-results-found class="ion-padding" *ngIf="showNotFound && emergenciesList.length === 0"
         message="No existen emergencias disponibles"></app-no-results-found>
     <!-- Tarjetas de Animacion mientras se cargan los datos-->
-    <!-- <div *ngIf="showloading">
-        <ion-card *ngFor="let animations of [1,1,1,1,1,1,1];" class="emergency animated flash slow infinite">
-            <ion-card-header class="post-header">
-                <ion-card-title class="post-title">
-                    <ion-skeleton-text width="80%"></ion-skeleton-text>
-                </ion-card-title>
-            </ion-card-header>
-            <ion-card-content class="post-content">
-                <ion-skeleton-text width="80%" class="post-description"></ion-skeleton-text>
-                <ion-skeleton-text class="see-more" width="20%"></ion-skeleton-text>
-            </ion-card-content>
-        </ion-card>
-    </div> -->
     <div class="loading-app" *ngIf="showloading">
         <loader-app class="flex-column-center"></loader-app>
     </div>

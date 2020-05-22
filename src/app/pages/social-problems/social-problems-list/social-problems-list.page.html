@@ -5,7 +5,7 @@
      <ion-searchbar mode="ios" type="text" placeholder="Buscar Problemas Sociales" [animated]="true"
      [formControl]="socialProblemControl"></ion-searchbar>
      <!-- Segmento Filtro -->
-    <ion-segment value="" (ionChange)="segmentChanged($event)">
+    <ion-segment value="" scrollable  (ionChange)="segmentChanged($event)">
         <ion-segment-button value="">
             <ion-icon color="blue-logo" name="document"></ion-icon>
             <ion-label>Todos</ion-label>
