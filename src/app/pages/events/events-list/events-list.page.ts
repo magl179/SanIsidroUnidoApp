@@ -102,7 +102,6 @@ export class EventsListPage implements OnInit, OnDestroy {
             distinctUntilChanged(),
             tap(() => {
                 this.searchingEvents = true;
-                console.log('subcategory', this.subcategory)
             }),
             map(search => ({
                 category: CONFIG.EVENTS_SLUG,

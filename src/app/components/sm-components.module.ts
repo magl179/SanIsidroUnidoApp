@@ -18,6 +18,7 @@ import { LocalizationInfoComponent } from './localization-info/localization-info
 import { DirectivesModule } from 'src/app/directives/directives.module';
 import { PipesModule } from 'src/app/pipes/pipes.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LoadingEllipsisComponent } from './loading-ellipsis/loading-ellipsis.component';
 
 @NgModule({
     declarations: [
@@ -32,7 +33,8 @@ import { ReactiveFormsModule } from '@angular/forms';
         LoadingAppComponent,
         NoResultsFoundComponent,
         SimpleRoutingMapComponent,
-        LocalizationInfoComponent
+        LocalizationInfoComponent,
+        LoadingEllipsisComponent
     ],
     imports: [
         CommonModule,
@@ -54,7 +56,8 @@ import { ReactiveFormsModule } from '@angular/forms';
         LoadingAppComponent,
         NoResultsFoundComponent,
         SimpleRoutingMapComponent,
-        LocalizationInfoComponent
+        LocalizationInfoComponent,
+        LoadingEllipsisComponent
     ]
 })
 export class SmComponentsModule { }

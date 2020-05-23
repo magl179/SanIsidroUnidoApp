@@ -2,13 +2,15 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { Platform } from '@ionic/angular';
 import { MessagesService } from 'src/app/services/messages.service';
+import { Observable, Observer } from 'rxjs';
+import { CONFIG } from 'src/config/config';
 
 let cameraOptions: CameraOptions = {
-    quality: 90,
+    quality: 75,
     correctOrientation: true,
     saveToPhotoAlbum: false,
-    // targetWidth: 300,
-    // targetHeight: 300
+    targetWidth: 300,
+    targetHeight: 300
 };
 
 @Component({
@@ -31,7 +33,8 @@ export class UploadImageComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        cameraOptions.destinationType = this.camera.DestinationType.DATA_URL;
+        cameraOptions.destinationType = (CONFIG.USE_FILE_URL) ? this.camera.DestinationType.FILE_URI: this.camera.DestinationType.DATA_URL;
+        // cameraOptions.destinationType = this.camera.DestinationType.DATA_URL;
         cameraOptions.encodingType = this.camera.EncodingType.JPEG;
         cameraOptions.mediaType = this.camera.MediaType.PICTURE;
         this.uploadedImages = [... this.uploadedImages];
@@ -66,26 +69,26 @@ export class UploadImageComponent implements OnInit {
     }
 
     dataURItoBlob(b64Data, contentType = 'image.jpg', sliceSize = 512) {
-        contentType = contentType || '';      
+        contentType = contentType || '';
         var byteCharacters = atob(b64Data);
         var byteArrays = [];
-      
+
         for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-          var slice = byteCharacters.slice(offset, offset + sliceSize);
-      
-          var byteNumbers = new Array(slice.length);
-          for (var i = 0; i < slice.length; i++) {
-            byteNumbers[i] = slice.charCodeAt(i);
-          }
-      
-          var byteArray = new Uint8Array(byteNumbers);
-      
-          byteArrays.push(byteArray);
+            var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+            var byteNumbers = new Array(slice.length);
+            for (var i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+
+            var byteArray = new Uint8Array(byteNumbers);
+
+            byteArrays.push(byteArray);
         }
-      
-        var blob = new Blob(byteArrays, {type: contentType});
+
+        var blob = new Blob(byteArrays, { type: contentType });
         return blob;
-      }
+    }
 
     deleteImage(pos: any) {
         this.uploadedImages.splice(pos, 1);
@@ -93,15 +96,35 @@ export class UploadImageComponent implements OnInit {
 
     async uploadImage() {
         if (this.platform.is('cordova')) {
-            await this.camera.getPicture(cameraOptions)
-                .then(
-                    (datosImagen) => {
-                        const imagenB64 = 'data:image/jpg;base64,'+ datosImagen;
-                        this.uploadedImages.push(imagenB64);
-                        this.getUploadedImages();
-                    }, err => {
-                        this.messageService.showError('Ocurrio un error al capturar la imagen');
-                    });
+            if (CONFIG.USE_FILE_URL) {
+                await this.camera.getPicture(cameraOptions)
+                    .then(
+                        (imgFileUri) => {
+                            const imgURL = (<any>window).Ionic.WebView.convertFileSrc(imgFileUri);
+                            this.messageService.showInfo('Procesando imagen, por favor espere')
+                            this.getBase64ImageFromURL(imgURL).subscribe(base64data => {
+                                const imagenB64 = 'data:image/jpg;base64,' + base64data;
+                                this.uploadedImages.push(imagenB64);
+                                this.getUploadedImages()
+                            }, () => {
+                                this.messageService.showError('Ocurrio un error al capturar la imagen');
+                            });
+                        }, () => {
+                            this.messageService.showError('Ocurrio un error al capturar la imagen');
+                        });
+            } else {
+
+                await this.camera.getPicture(cameraOptions)
+                    .then(
+                        (datosImagen) => {
+                            const imagenB64 = 'data:image/jpg;base64,' + datosImagen;
+                            this.uploadedImages.push(imagenB64);
+                            this.getUploadedImages();
+                        }, err => {
+                            this.messageService.showError('Ocurrio un error al capturar la imagen');
+                        });
+            }
+
         } else {
             this.uploadImageWeb();
         }
@@ -141,5 +164,36 @@ export class UploadImageComponent implements OnInit {
             }
         });
         input.click();
+    }
+
+
+    getBase64ImageFromURL(url: string) {
+        return Observable.create((observer: Observer<string>) => {
+            let img = new Image();
+            img.crossOrigin = 'Anonymous';
+            img.src = url;
+            if (!img.complete) {
+                img.onload = () => {
+                    observer.next(this.getBase64Image(img));
+                    observer.complete();
+                };
+                img.onerror = (err) => {
+                    observer.error(err);
+                };
+            } else {
+                observer.next(this.getBase64Image(img));
+                observer.complete();
+            }
+        });
+    }
+
+    getBase64Image(img: HTMLImageElement) {
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        var dataURL = canvas.toDataURL("image/png");
+        return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
     }
 }

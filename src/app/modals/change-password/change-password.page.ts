@@ -11,6 +11,7 @@ import { setInputFocus } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MessagesService } from 'src/app/services/messages.service';
 import { ErrorService } from 'src/app/services/error.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
     selector: 'app-change-password',
@@ -27,7 +28,7 @@ export class ChangePasswordPage implements OnInit {
     errorMessages = null;
     AuthUser = null;
 
-    formSended = false;
+    sending = false;
 
     constructor(
         private modalCtrl: ModalController,
@@ -87,14 +88,17 @@ export class ChangePasswordPage implements OnInit {
     }
 
     sendRequestChangePass() {
-        this.userService.sendChangeUserPassRequest(this.changePassForm.value.password).subscribe(async (res: IRespuestaApiSIUSingle) => {
+        this.messageService.showInfo('Enviando...')
+        this.sending = true;
+        this.userService.sendChangeUserPassRequest(this.changePassForm.value.password)
+        .pipe(finalize(() => this.sending = false))
+        .subscribe(async (res: IRespuestaApiSIUSingle) => {
             const token = res.data.token;
             const token_decoded = decodeToken(token);
             this.authService.saveUserInfo(token, token_decoded);
             this.authService.saveLocalStorageInfo(token, token_decoded);
             this.changePassForm.reset();
             this.messageService.showSuccess('Contraseña actualizado correctamente');
-            this.formSended = true;
             setTimeout(()=>{
                 this.closeModal();
             }, 500);

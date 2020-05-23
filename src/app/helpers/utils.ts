@@ -160,7 +160,7 @@ const ramdomValue = (tamanio: number) => {
     return Math.floor(Math.random() * tamanio);
 }
 
-const imagenIsURL = (image_name: string) => {
+export const imagenIsURL = (image_name: string) => {
     return REGEX_URL.test(image_name);
 }
 

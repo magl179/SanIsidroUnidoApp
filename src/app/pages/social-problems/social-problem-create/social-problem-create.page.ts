@@ -57,6 +57,10 @@ export class SocialProblemCreatePage implements OnInit {
         });
     }
 
+    seeImageDetail(url: string) {
+        this.utilsService.seeImageDetail(url, '');
+    }
+
     async ngOnInit() {
         this.loadSubcategories();
 

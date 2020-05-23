@@ -18,6 +18,7 @@ interface ICONFIG {
     MESSAGE_APP_INFO: string;
     MESSAGE_APP_URL: string;
     EVENT_BUTTON_MESSAGE: string;
+    USE_FILE_URL: boolean;
   }
 
 export const CONFIG: ICONFIG = {
@@ -46,6 +47,7 @@ export const CONFIG: ICONFIG = {
     VERSION: '1.0.3',
     MESSAGE_APP_INFO: 'Por San Isidro Unido con ❤',
     MESSAGE_APP_URL: 'https://www.facebook.com/stalinmaza97',
-    EVENT_BUTTON_MESSAGE: 'Asistir'
+    EVENT_BUTTON_MESSAGE: 'Asistir',
+    USE_FILE_URL: true
 }
 

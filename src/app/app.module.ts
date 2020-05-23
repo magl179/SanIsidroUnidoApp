@@ -45,7 +45,6 @@ import { ToastrModule } from 'ngx-toastr';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { AuthService } from './services/auth.service';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
-import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 
 @NgModule({
     declarations: [AppComponent],
@@ -55,7 +54,7 @@ import { BackgroundMode } from '@ionic-native/background-mode/ngx';
         ToastrModule.forRoot({
             positionClass: 'toast-bottom-right',
             preventDuplicates: true,
-            timeOut: 2500,
+            timeOut: 1500,
         }),
         BrowserAnimationsModule,
         IonicModule.forRoot(),
@@ -74,7 +73,6 @@ import { BackgroundMode } from '@ionic-native/background-mode/ngx';
         SplashScreen,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
         AndroidPermissions,
-        BackgroundMode,
         Geolocation,
         Camera,
         LocationAccuracy,

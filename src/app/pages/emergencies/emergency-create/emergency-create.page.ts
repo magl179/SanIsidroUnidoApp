@@ -106,6 +106,10 @@ export class EmergencyCreatePage implements OnInit {
         });
     }
 
+    seeImageDetail(url: string) {
+        this.utilsService.seeImageDetail(url, '');
+    }
+
     async sendEmergencyReport() {
 
         if (this.emergencyForm.valid !== true) {

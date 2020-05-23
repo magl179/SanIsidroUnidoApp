@@ -6,6 +6,8 @@ import { decodeToken } from 'src/app/helpers/auth-helper';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from 'src/app/services/messages.service';
+import { finalize } from 'rxjs/operators';
+import { UtilsService } from 'src/app/services/utils.service';
 
 @Component({
     selector: 'app-change-profile-image',
@@ -15,11 +17,12 @@ import { MessagesService } from 'src/app/services/messages.service';
 export class ChangeProfileImagePage implements OnInit {
     
     profileUserImg: any[] = [];
-    formSended = false;
+    sending = false;
 
     constructor(
         private modalCtrl: ModalController,
         private userService: UserService,
+        private utilsService: UtilsService,
         private authService: AuthService,
         private errorService: ErrorService,
         private messageService: MessagesService,
@@ -36,14 +39,24 @@ export class ChangeProfileImagePage implements OnInit {
         this.profileUserImg = event.total_img;
     }
 
+    seeImageDetail(url: string) {
+        this.utilsService.seeImageDetail(url, '');
+    }
+
     sendRequestChangeUserProfile() {
-        this.userService.sendChangeUserImageRequest(this.profileUserImg[0]).subscribe(async res => {
+        this.sending = true;
+        this.messageService.showInfo('Enviando...');
+        this.userService.sendChangeUserImageRequest(this.profileUserImg[0])
+        .pipe(
+            finalize(() => this.sending = false)
+        )
+        .subscribe(async res => {
             const token = res.data.token;
             const token_decoded = decodeToken(token);
             this.authService.saveUserInfo(token, token_decoded);
             this.authService.saveLocalStorageInfo(token, token_decoded);
             this.messageService.showSuccess('Imagen Actualizada Correctamente');
-            this.formSended = true;
+            // this.formSended = true;
             setTimeout(()=>{
                 this.closeModal();
             }, 500);

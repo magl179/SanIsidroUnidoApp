@@ -95,7 +95,7 @@
                    Debes ingresar un número de teléfono celular o fijo anteponiendo el prefijo respectivo
                 </p>
             </div> 
-            <ion-button class="btn_edit_profile" expand="block" [disabled]="!editProfileForm.valid || formSended"
+            <ion-button class="btn_edit_profile" expand="block" [disabled]="!editProfileForm.valid || sending"
                 (click)="editUserProfileData()">Guardar</ion-button>
         </form>
     </div>

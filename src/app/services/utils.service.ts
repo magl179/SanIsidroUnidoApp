@@ -6,6 +6,7 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { ToastOptions } from "@ionic/core";
 import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
 import { CONFIG } from 'src/config/config';
+import {imagenIsURL} from 'src/app/helpers/utils'
 
 declare var moment: any;
 
@@ -41,8 +42,20 @@ export class UtilsService implements OnInit {
         if (this.platform.is('cordova')) { 
             this.iab.create(url, '_system');
         }else{
-            window.open(url, '_blank');
+            console.warn('is url', url)
+            if(imagenIsURL(url)){
+                console.warn('is url')
+                window.open(url, '_blank');
+            }else{
+                console.warn('is not url')
+                this.openBase64InNewTab(url);
+            }
         }
+    }
+
+    openBase64InNewTab (data: string) {
+        var newTab = window.open();
+        newTab.document.body.innerHTML = `<img src="${data}" width="100px" height="100px">`;
     }
 
     //Obtener la fecha formateada con MomentJS
