@@ -4,9 +4,9 @@ import { Observable, interval, throwError, of } from 'rxjs';
 import { retryWhen, flatMap } from 'rxjs/operators';
 import { ISubcategory } from 'src/app/interfaces/models';
 import { CONFIG } from 'src/config/config';
+import { es } from 'date-fns/locale'
+import { parseISO, format as dateFormat } from 'date-fns';
 
-declare var moment: any;
-moment.locale('es');
 const REGEX_URL = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
 
 export const GEOLOCATION_ERRORS = {
@@ -16,7 +16,7 @@ export const GEOLOCATION_ERRORS = {
     'errors.location.timeout': 'Service timeout has been reached'
 };
 
-export const getCurrentDate = () => moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
+export const getCurrentDate = () => dateFormat(new Date(), 'yyyy-MM-dd HH:mm:s');
 
 //Funcion para verificar si una variable es un JSON
 const isJSON = (str: any) => {
@@ -24,41 +24,6 @@ const isJSON = (str: any) => {
         return JSON.parse(str) && !!str;
     } catch (e) {
         return false;
-    }
-}
-
-export const momentFormat = (stringdate: any, formatDate = "LLL") => {
-    if (!stringdate) {
-        return '';
-    }
-    if (moment(stringdate).isValid()) {
-        return moment(new Date(stringdate)).format(formatDate);
-    } else {
-        return stringdate;
-    }
-}
-
-export const formatFulldate = (stringdate: any) => {
-    if (moment(stringdate).isValid()) {
-        return moment(new Date(stringdate)).format('LLL');
-    } else {
-        return stringdate;
-    }
-}
-
-export const formatDate = (stringdate: any) => {
-    if (moment(stringdate).isValid()) {
-        return moment(new Date(stringdate)).format('LL');
-    } else {
-        return stringdate;
-    }
-}
-
-export const formatTime = (stringdate: any) => {
-    if (moment(stringdate).isValid()) {
-        return moment(new Date(stringdate)).format('LTS');
-    } else {
-        return stringdate;
     }
 }
 
@@ -216,32 +181,20 @@ export const mapEvent = (event: any) => {
     }
     const range_date = (event.additional_data && event.additional_data.event && event.additional_data.event.range_date) ? event.additional_data.event.range_date : null;
     if (range_date) {
-        event.fulldate = formatEventRangeDate(range_date.start_date, range_date.end_date);
-        event.initial_date = momentFormat(range_date.start_date, 'LLL')
-        event.end_date = momentFormat(range_date.end_date, 'LLL')
-        event.range_short_date = formatRangeDate(range_date.start_date, range_date.end_date);
-        event.range_short_time = formatRangeTime(range_date.start_time, range_date.end_time);
+        const my_start_date = (range_date.start_date) ? formatString(range_date.start_date, 'dd MMM yyyy'): '';
+        const my_end_date = (range_date.end_date) ? formatString(range_date.end_date, 'dd MMM yyyy'): '';
+        const my_start_time= (range_date.start_date && range_date.start_time) ? formatString(`${range_date.start_date} ${range_date.start_time}`, 'HH:mm'): '';
+        const my_end_time= (range_date.end_date && range_date.end_time) ? formatString(`${range_date.end_date} ${range_date.end_time}`, 'HH:mm'): '';
+        event.range_short_date = `${my_start_date} al ${my_end_date}`;
+        event.range_short_time = `${my_start_time} - ${my_end_time}`;
     }
-
     if (range_date && range_date.start_date && range_date.end_date) {
         event.hasRangeDate = true;
     } else {
         event.hasRangeDate = false;
     }
 
-    const fecha_creacion = (event.created_at) ? event.created_at : moment(new Date()).add(-1, 'days');
-    event.fecha_creacion = fechaFull(fecha_creacion);
-
-    const fecha_actualizacion = (event.updated_at) ? event.updated_at : moment(new Date()).add(-1, 'days');
-    event.fecha_actualizacion = fechaFull(fecha_actualizacion);
     return event;
-}
-
-const formatEventRangeDate = (start_date: string, end_date: string) => {
-    if (start_date && end_date) {
-        return `${momentFormat(start_date, 'LLL')} - ${momentFormat(end_date, 'LLL')}`
-    }
-    return `${momentFormat(start_date, 'LLL')}`
 }
 
 export const getRandomColor = () => {
@@ -266,11 +219,6 @@ export const mapEmergency = (emergency: any) => {
     } else {
         emergency.imagesArr = [];
     }
-    const fecha_creacion = (emergency.created_at) ? emergency.created_at : moment(new Date()).add(-1, 'days');
-    emergency.fecha_creacion = fechaFull(fecha_creacion);
-
-    const fecha_actualizacion = (emergency.updated_at) ? emergency.updated_at : moment(new Date()).add(-1, 'days');
-    emergency.fecha_actualizacion = fechaFull(fecha_actualizacion);
 
     return emergency;
 }
@@ -290,17 +238,7 @@ export const mapReport = (report: any) => {
         report.documentsArr = [];
     }
 
-    const fecha_creacion = (report.created_at) ? fechaFull(report.created_at) : fechaFull(new Date());
-    report.fecha_creacion = fecha_creacion;
-
-    const fecha_actualizacion = (report.updated_at) ? report.updated_at : moment(new Date()).add(-1, 'days');
-    report.fecha_actualizacion = fechaFull(fecha_actualizacion);
-
     return report;
-}
-
-const fechaFull = (date: string | Date) => {
-    return moment(date).format('LLLL');
 }
 
 export const mapSocialProblem = (social_problem: any) => {
@@ -311,11 +249,6 @@ export const mapSocialProblem = (social_problem: any) => {
     } else {
         social_problem.imagesArr = [];
     }
-    const fecha_creacion = (social_problem.created_at) ? social_problem.created_at : moment(new Date()).add(-1, 'days');
-    social_problem.fecha_creacion = fechaFull(fecha_creacion);
-
-    const fecha_actualizacion = (social_problem.updated_at) ? social_problem.updated_at : moment(new Date()).add(-1, 'days');
-    social_problem.fecha_actualizacion = fechaFull(fecha_actualizacion);
 
     return social_problem;
 }
@@ -366,85 +299,55 @@ export const randomInteger = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-//Obtener la fecha formateada con MomentJS
-export const formatAppBeatifulDate = (stringDate: string) => {
-    let beatifulDate = null;
-    let lastDate;
-    if (moment(stringDate).isValid()) {
-        //Fecha Parametro
-        lastDate = moment(new Date(stringDate));
-    } else {
-        lastDate = moment(new Date());
-    }
+export const formatString = (value_date: string, format="HH:mm") => {
+    return dateFormat(parseISO(value_date), format, { locale: es })
+}
 
+export const formatRange = (initial_date: string, end_date: string, format="HH:mm"): string => {
     // Fecha Pasada, Fecha Actual
-    const currentDate = moment(new Date());
-    //Diferencia entre Fechas
-    const diffDays = currentDate.diff(lastDate, 'days');
+    initial_date = initial_date || new Date().toString();
+    end_date = end_date || new Date().toString();
+    console.log(initial_date, end_date)
+    console.warn({initial_date, end_date});
+    console.log(parseISO(initial_date), parseISO(end_date))
+    const initialTime = dateFormat(parseISO(initial_date), format, { locale: es });
+    const endTime = dateFormat(parseISO(end_date), format, { locale: es });
     // Formatear Fecha
-    if (diffDays <= 8) {
-        beatifulDate = lastDate.fromNow();
-    } else if (currentDate.year() === lastDate.year()) {
-        beatifulDate = lastDate.format('D MMMM');
+    if (initialTime == endTime) {
+        return `${initialTime}`;
     } else {
-        beatifulDate = lastDate.format('LL');
-    }
-
-    return beatifulDate;
-}
-
-//Obtener la fecha formateada con MomentJS
-export const formatRangeDate = (initial_date: string, end_date: string) => {
-    let initialBeatifulDate = null;
-    let endBeatifulDate = null;
-    if (moment(initial_date).isValid() && moment(end_date).isValid()) {
-        // Fecha Pasada, Fecha Actual
-        const initialDate = moment(new Date(initial_date));
-        const endDate = moment(new Date(end_date));
-        // Formatear Fecha
-        if (initialDate.year() === endDate.year()) {
-            initialBeatifulDate = initialDate.format('D MMMM');
-            endBeatifulDate = endDate.format('D MMMM');
-            return `${initialBeatifulDate} - ${endBeatifulDate} del ${endDate.year()}`;
-        } else {
-            initialBeatifulDate = initialDate.format('LL');
-            endBeatifulDate = endDate.format('LL');
-            return `${initialBeatifulDate} - ${endBeatifulDate}`;
-        }
-    } else {
-        return `${initial_date} - ${end_date}`;
+        return `${initialTime} - ${endTime}`;
     }
 }
 
-export const formatRangeTime = (initial_date: string, end_date: string) => {
-    let initialBeatifulDate = null;
-    let endBeatifulDate = null;
-    if (moment(initial_date).isValid() && moment(end_date).isValid()) {
-        // Fecha Pasada, Fecha Actual
-        const initialTime = moment(new Date(initial_date)).format('HH:mm');
-        const endTime = moment(new Date(end_date)).format('HH:mm');
-        // Formatear Fecha
-        if (initialTime == endTime) {
-            return `${initialTime}`;
-        } else {
-            return `${initialTime} - ${endTime}`;
-        }
+export const formatTimeRange = (initial_date: string, end_date: string, format="HH:mm"): string => {
+    // Fecha Pasada, Fecha Actual
+    initial_date = initial_date || new Date().toString();
+    end_date = end_date || new Date().toString();
+    console.log(initial_date, end_date)
+    console.warn({initial_date, end_date});
+    console.log(parseISO(initial_date), parseISO(end_date))
+    const initialTime = dateFormat(parseISO(initial_date), format, { locale: es });
+    const endTime = dateFormat(parseISO(end_date), format, { locale: es });
+    // Formatear Fecha
+    if (initialTime == endTime) {
+        return `${initialTime}`;
     } else {
-        return `${initial_date} - ${end_date}`;
+        return `${initialTime} - ${endTime}`;
     }
 }
 
 export const getPostState = (state: number) => {
     switch (state) {
         case 1:
-          return 'Atendida'
+            return 'Atendida'
         case 0:
-          return 'Rechazada';
+            return 'Rechazada';
         case 2:
-          return 'Pendiente';
+            return 'Pendiente';
         default:
-         return 'Pendiente de Atención';
-      }
+            return 'Pendiente de Atención';
+    }
 }
 
 export const verificarCedula = (validarCedula: string): boolean => {

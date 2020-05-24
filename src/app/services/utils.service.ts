@@ -8,8 +8,6 @@ import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
 import { CONFIG } from 'src/config/config';
 import {imagenIsURL} from 'src/app/helpers/utils'
 
-declare var moment: any;
-
 @Injectable({
     providedIn: 'root'
 })
@@ -57,32 +55,6 @@ export class UtilsService implements OnInit {
         var newTab = window.open();
         newTab.document.body.innerHTML = `<img src="${data}" width="100px" height="100px">`;
     }
-
-    //Obtener la fecha formateada con MomentJS
-    getBeatifulDate(stringDate: string) {
-        moment.locale('es');
-        let beatifulDate = null;
-        let lastDate: any;
-        if (moment(stringDate).isValid()) {
-            lastDate = moment(new Date(stringDate));
-        } else {
-            lastDate = moment(new Date());
-        }
-        // Fecha Pasada, Fecha Actual
-        const currentDate = moment(new Date());
-        //Diferencia entre Fechas
-        const diffDays = currentDate.diff(lastDate, 'days');
-        // Formatear Fecha
-        if (diffDays <= 8) {
-            beatifulDate = lastDate.fromNow();
-        } else if (currentDate.year() === lastDate.year()) {
-            beatifulDate = lastDate.format('D MMMM');
-        } else {
-            beatifulDate = lastDate.format('LL');
-        }
-        return beatifulDate;
-    }
-
 
     async shareSocial(publicacion: any) {
 

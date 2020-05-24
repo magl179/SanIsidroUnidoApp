@@ -62,18 +62,20 @@
                 </div>
             </div>
             <ion-card-header class="post-header">
-                <ion-card-subtitle class="post-status" [ngClass]="{
-                    'atendido': emergency.additional_data.post.status_attendance == 'atendido',
-                    'rechazado': emergency.additional_data.post.status_attendance == 'rechazado',
-                    '': emergency.additional_data.post.status_attendance == 'pendiente'
-                  }">
-                    {{ emergency.additional_data.post.status_attendance | titlecase }}
-                </ion-card-subtitle>
+                <ng-container *ngIf="emergency.additional_data && emergency.additional_data.post">
+                    <ion-card-subtitle class="post-status" [ngClass]="{
+                        'atendido': emergency.additional_data.post.status_attendance == 'atendido',
+                        'rechazado': emergency.additional_data.post.status_attendance == 'rechazado',
+                        '': emergency.additional_data.post.status_attendance == 'pendiente'
+                      }">
+                        {{ emergency.additional_data.post.status_attendance | titlecase }}
+                    </ion-card-subtitle>
+                </ng-container>
                 <ion-card-title class="post-title">
                     {{emergency.title}}
                 </ion-card-title>
                             <div class="emergency_created_at">
-                                <span>{{emergency.fecha_creacion}}</span>
+                                <span>{{emergency.created_at}}</span>
                             </div>
             </ion-card-header>
 
