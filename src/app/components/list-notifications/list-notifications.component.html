@@ -42,7 +42,7 @@
                  </p>
                  <p class="date ion-text-wrap">
                      <ion-icon class="icon" name="time"></ion-icon>
-                     <span>{{noti.created_at | datefns_pipe: 'fromNow'}}</span>
+                     <span>{{noti.created_at | datefns: 'fromNow'}}</span>
                  </p>
              </ion-label>
              <div slot="end">

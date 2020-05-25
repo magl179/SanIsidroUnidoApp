@@ -4,11 +4,14 @@ import { formatDistanceToNow, parseISO, formatRelative, format as dateFormat} fr
 import { es } from 'date-fns/locale'
 
 @Pipe({
-  name: 'datefns_pipe'
+  name: 'datefns'
 })
 export class DateFnsPipe implements PipeTransform {
 
     transform(value: Date | number | string, format: string): any {
+        if(!value){
+            return '';
+        }
         if(typeof value == 'string'){
             value = parseISO(value);
         }

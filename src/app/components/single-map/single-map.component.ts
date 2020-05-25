@@ -1,5 +1,4 @@
 import 'leaflet';
-import 'leaflet-routing-machine';
 declare let L: any;
 import { GestureHandling } from "leaflet-gesture-handling";
 import { Component, OnInit, EventEmitter, Input, Output, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
