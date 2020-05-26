@@ -27,7 +27,9 @@
                 <div class="right-section" style="margin-left: 1rem">
                     <p style="color: var(--ion-color-dark);margin-bottom: .7em;">
                         {{report.user.first_name}} {{report.user.last_name }}</p>
-                    <span style="font-size: .9em;">{{report.fecha_creacion}}</span>
+                    <span style="font-size: .9em;">
+                        {{report.created_at | datefns:"iii dd MMM yyyy HH:mm:ss"}}
+                    </span>
                 </div>
             </div>
             <section class="report-detail__content">
