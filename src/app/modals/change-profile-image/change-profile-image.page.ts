@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { UserService } from 'src/app/services/user.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -8,6 +8,7 @@ import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from 'src/app/services/messages.service';
 import { finalize } from 'rxjs/operators';
 import { UtilsService } from 'src/app/services/utils.service';
+import { UploadImageComponent } from 'src/app/components/upload-image/upload-image.component';
 
 @Component({
     selector: 'app-change-profile-image',
@@ -16,6 +17,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 })
 export class ChangeProfileImagePage implements OnInit {
     
+    @ViewChild(UploadImageComponent) uploadImageComponent: UploadImageComponent;
     profileUserImg: any[] = [];
     sending = false;
 
@@ -36,7 +38,8 @@ export class ChangeProfileImagePage implements OnInit {
     }
 
     getUploadedImages(event: any) {
-        this.profileUserImg = event.total_img;
+        this.profileUserImg = event.uploaded_images;
+       
     }
 
     seeImageDetail(url: string) {
@@ -65,8 +68,9 @@ export class ChangeProfileImagePage implements OnInit {
         });
     }
 
-    deleteImage(pos: number) {
-        this.profileUserImg.splice(pos, 1);
+    deleteImage(index: number) {
+        this.profileUserImg.splice(index, 1);
+        this.uploadImageComponent.deleteImage(index);
     }
 
 }

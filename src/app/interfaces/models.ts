@@ -394,3 +394,49 @@ export interface IUbication {
     address: string;
     description?: string;
 }
+
+//Facebook
+export interface IFacebookApiUser {
+    id: string;
+    name: string;
+    first_name: string;
+    last_name: string;
+    email?: string;
+    picture: Picture;
+    image?: string;
+  }
+  
+  interface Picture {
+    data: Data;
+  }
+  
+  interface Data {
+    height: number;
+    is_silhouette: boolean;
+    url: string;
+    width: number;
+  }
+
+  /*Google */
+  export interface IGoogleLoginResponse {
+    accessToken: string;
+    expires: number;
+    expires_in: number;
+    email: string;
+    userId: string;
+    displayName: string;
+    familyName: string;
+    givenName: string;
+    imageUrl: string;
+  }
+
+  export interface IGoogleApiUser {
+    email?: string;
+    email_verified: boolean;
+    family_name: string;
+    given_name: string;
+    locale: string;
+    name: string;
+    picture: string;
+    sub: string;
+  }

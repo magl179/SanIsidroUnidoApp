@@ -8,13 +8,14 @@ import { LocalDataService } from 'src/app/services/local-data.service';
 import { finalize } from 'rxjs/operators';
 import { NetworkService } from 'src/app/services/network.service';
 import { NotificationsService } from 'src/app/services/notifications.service';
-import { IRespuestaApiSIU } from "src/app/interfaces/models";
+import { IRespuestaApiSIU, IFacebookApiUser } from "src/app/interfaces/models";
 import { decodeToken } from 'src/app/helpers/auth-helper';
 import { setInputFocus } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CONFIG } from 'src/config/config';
 import { ErrorService } from 'src/app/services/error.service';
 import { environment } from 'src/environments/environment';
+import { MessagesService } from 'src/app/services/messages.service';
 
 @Component({
     selector: 'app-login',
@@ -39,6 +40,7 @@ export class LoginPage implements OnInit {
         private authService: AuthService,
         private socialDataService: SocialDataService,
         private localDataService: LocalDataService,
+        private messageService: MessagesService,
         private networkService: NetworkService,
         private notificationsService: NotificationsService
     ) {
@@ -71,7 +73,7 @@ export class LoginPage implements OnInit {
         this.loginForm.reset();
         //Redirigir Usuario
         loadingManageLogin.dismiss();
-        setTimeout(()=>{
+        setTimeout(() => {
             this.navCtrl.navigateRoot(`/${CONFIG.HOME_ROUTE}`);
         }, 500);
     }
@@ -98,48 +100,47 @@ export class LoginPage implements OnInit {
     }
 
     async loginUserByFB() {
-        await this.socialDataService.loginByFacebook();
-        this.socialDataService.fbLoginData.subscribe(async fbData => {
-            if (fbData) {
-                const user = this.socialDataService.getFacebookDataParsed(fbData);
-                const { social_id, email } = user;
-                //Añadir informacion dispositivo
-                const device = await this.notificationsService.getOneSignalIDSubscriptor();
-                user.device = device;
-                //Funcion Login
-                this.authService.login(user).subscribe(res => {
-                    this.manageLogin({ provider: 'facebook', social_id, email }, res);
-                }, (error_http: HttpErrorResponse) => {
-                    this.errorService.manageHttpError(error_http, 'Fallo la conexión con Facebook');
-                });
-            }
-        }, (error_http: HttpErrorResponse) => {
-            this.errorService.manageHttpError(error_http, 'Fallo la conexión con Facebook');
-        });
+        const fbData = await this.socialDataService.loginByFacebook();
+        if (fbData) {
+            const user = this.socialDataService.getFacebookDataMapped(fbData);
+            const { social_id, email } = user;
+            console.log({ fbData, user })
+            //Añadir informacion dispositivo
+            const device = await this.notificationsService.getOneSignalIDSubscriptor();
+            user.device = device;
+            //Funcion Login
+            this.authService.login(user).subscribe(res => {
+                this.manageLogin({ provider: 'facebook', social_id, email }, res);
+            }, (error_http: HttpErrorResponse) => {
+                this.errorService.manageHttpError(error_http, 'Fallo la conexión con Facebook');
+            });
+        } else {
+            this.messageService.showError('No se pudo obtener los datos por medio de Facebook');
+        }
     }
 
     async loginUserByGoogle() {
-        await this.socialDataService.loginByGoogle();
-        this.socialDataService.googleLoginData.subscribe(async googleData => {
-            if (googleData) {
-                const user = this.socialDataService.getGoogleDataParsed(googleData);
-                const { social_id, email } = user;
-                //Añadir informacion dispositivo
-                const device = await this.notificationsService.getOneSignalIDSubscriptor();
-                user.device = device;
-                //Funcion Login
-                this.authService.login(user).subscribe(async res => {
-                    await this.manageLogin({ social_id, email, provider: 'google' }, res);
-                }, (error_http: HttpErrorResponse) => {
-                    this.errorService.manageHttpError(error_http, 'Ocurrio un error al conectar con Google');
-                });
-            }
-        }, (error_http: HttpErrorResponse) => {
-            this.errorService.manageHttpError(error_http, 'Fallo la conexión con Google');
-        });
+        const googleData = await this.socialDataService.loginByGoogle();
+        if (googleData) {
+            const user = this.socialDataService.getGoogleDataMapped(googleData);
+            const { social_id, email } = user;
+            console.log({ googleData, user })
+            //Añadir informacion dispositivo
+            const device = await this.notificationsService.getOneSignalIDSubscriptor();
+            user.device = device;
+            //Funcion Login
+            this.authService.login(user).subscribe(async res => {
+                await this.manageLogin({ social_id, email, provider: 'google' }, res);
+            }, (error_http: HttpErrorResponse) => {
+                this.errorService.manageHttpError(error_http, 'Ocurrio un error al conectar con Google');
+            });
+        } else {
+            this.messageService.showError('No se pudo obtener los datos por medio de Google');
+        }
+
     }
 
-    forgotPassword(){
+    forgotPassword() {
         this.utilsService.openInBrowser(`${environment.BASEURL}/password/reset`)
     }
 

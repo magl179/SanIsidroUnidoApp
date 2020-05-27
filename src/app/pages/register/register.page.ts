@@ -14,6 +14,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CONFIG } from 'src/config/config';
 import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from 'src/app/services/messages.service';
+import { IFacebookApiUser } from 'src/app/interfaces/models';
 
 @Component({
     selector: 'app-register',
@@ -71,7 +72,7 @@ export class RegisterPage implements OnInit {
         //Registrar Dispositivo
         loadingManageRegister.dismiss();
         //Redigirir a la ruta HOME
-        setTimeout(()=>{
+        setTimeout(() => {
             this.navCtrl.navigateRoot(`/${CONFIG.HOME_ROUTE}`);
         }, 500);
     }
@@ -103,43 +104,43 @@ export class RegisterPage implements OnInit {
     }
     //Function para registrar usuario con Facebook
     async registerFBUser() {
-        await this.socialDataService.loginByFacebook();
-        this.socialDataService.fbLoginData.subscribe(async fbData => {
-            if (fbData) {
-                const user = this.socialDataService.getFacebookDataParsed(fbData);
-                //Añadir informacion dispositivo
-                const device = await this.notificationsService.getOneSignalIDSubscriptor();
-                user.device = device;
-                //Funcion Registro
-                this.authService.register(user).subscribe(async res => {
-                    await this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'facebook' }, res);
-                }, (error_http: HttpErrorResponse) => {
-                    this.errorService.manageHttpError(error_http, 'Ocurrio un error en el registro, intentalo más tarde');
-                });
-            }
-        }, (error_http: HttpErrorResponse) => {
-            this.errorService.manageHttpError(error_http, 'Fallo la conexión con Facebook');
-        });
+        const fbData = await this.socialDataService.loginByFacebook();
+        if (fbData) {
+            console.log('fb data', fbData)
+            const user = this.socialDataService.getFacebookDataMapped(fbData);
+            console.log({ fbData, user })
+            //Añadir informacion dispositivo
+            const device = await this.notificationsService.getOneSignalIDSubscriptor();
+            user.device = device;
+            //Funcion Registro
+            this.authService.register(user).subscribe(async res => {
+                await this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'facebook' }, res);
+            }, (error_http: HttpErrorResponse) => {
+                this.errorService.manageHttpError(error_http, 'Ocurrio un error en el registro, intentalo más tarde');
+            });
+        } else {
+            this.messagesService.showError('No se pudo obtener los datos por medio de Facebook');
+        }
+
     }
     // Función para registrar al usuario con Google
     async registerGoogleUser() {
-        await this.socialDataService.loginByGoogle();
-        this.socialDataService.googleLoginData.subscribe(async googleData => {
-            if (googleData) {
-                const user = await this.socialDataService.getGoogleDataParsed(googleData);
-                //Añadir informacion dispositivo
-                const device = await this.notificationsService.getOneSignalIDSubscriptor();
-                user.device = device;
-                //Funcion Registro
-                this.authService.register(user).subscribe(async res => {
-                    await this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'google' }, res);
-                }, (error_http: HttpErrorResponse) => {
-                    this.errorService.manageHttpError(error_http, 'No se pudo completar el registro, intentalo mas tarde');
-                });
-            }
-        }, (error_http: HttpErrorResponse) => {
-            this.errorService.manageHttpError(error_http, 'Fallo la conexión con Google');
-        });
+        const googleData = await this.socialDataService.loginByGoogle();
+        if (googleData) {
+            const user = this.socialDataService.getGoogleDataMapped(googleData);
+            console.log({ googleData, user })
+            //Añadir informacion dispositivo
+            const device = await this.notificationsService.getOneSignalIDSubscriptor();
+            user.device = device;
+            //Funcion Registro
+            this.authService.register(user).subscribe(async res => {
+                await this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'google' }, res);
+            }, (error_http: HttpErrorResponse) => {
+                this.errorService.manageHttpError(error_http, 'No se pudo completar el registro, intentalo mas tarde');
+            });
+        } else {
+            this.messagesService.showError('No se pudo obtener los datos por medio de Google');
+        }
     }
 
     // Función Crea el Formulario
@@ -147,24 +148,24 @@ export class RegisterPage implements OnInit {
         const patronContraseñaSinCaracterEspecial = /^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,100}$/;
         //Cargar Validaciones
         const validations = this.localDataService.getFormValidations();
-        
+
         const first_name = new FormControl('', Validators.compose([
             Validators.required,
             Validators.minLength(validations.first_name.minlength),
             Validators.pattern(validations.first_name.pattern)
         ]));
-       
+
         const last_name = new FormControl('', Validators.compose([
             Validators.required,
             Validators.minLength(validations.last_name.minlength),
             Validators.pattern(validations.last_name.pattern)
         ]));
-        
+
         const email = new FormControl('', Validators.compose([
             Validators.required,
             Validators.email
         ]));
-      
+
         const password = new FormControl('', Validators.compose([
             Validators.required,
             Validators.minLength(validations.password.minlength),

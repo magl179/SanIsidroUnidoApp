@@ -42,7 +42,7 @@ export class UploadImageComponent implements OnInit {
 
     async getUploadedImages() {
         this.returnUploadedImages.emit({
-            total_img: [...this.uploadedImages]
+            uploaded_images: [...this.uploadedImages]
         });
     }
 
@@ -90,8 +90,8 @@ export class UploadImageComponent implements OnInit {
         return blob;
     }
 
-    deleteImage(pos: any) {
-        this.uploadedImages.splice(pos, 1);
+    deleteImage(index: any) {
+        this.uploadedImages.splice(index, 1);
     }
 
     async uploadImage() {
@@ -106,6 +106,7 @@ export class UploadImageComponent implements OnInit {
                                 const imagenB64 = 'data:image/jpg;base64,' + base64data;
                                 this.uploadedImages.push(imagenB64);
                                 this.getUploadedImages()
+                                this.camera.cleanup();
                             }, () => {
                                 this.messageService.showError('Ocurrio un error al capturar la imagen');
                             });

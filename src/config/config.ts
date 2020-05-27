@@ -44,7 +44,7 @@ export const CONFIG: ICONFIG = {
     },
     REPORTS_SLUG: 'informe',
     SOCIAL_PROBLEMS_SLUG: 'problema',
-    VERSION: '1.0.3',
+    VERSION: '1.0.4',
     MESSAGE_APP_INFO: 'Por San Isidro Unido con ❤',
     MESSAGE_APP_URL: 'https://www.facebook.com/stalinmaza97',
     EVENT_BUTTON_MESSAGE: 'Asistir',

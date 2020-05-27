@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { UtilsService } from 'src/app/services/utils.service';
 import { MapService } from 'src/app/services/map.service';
 import { LocalizationService } from 'src/app/services/localization.service';
@@ -12,6 +12,7 @@ import { CONFIG } from 'src/config/config';
 import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from 'src/app/services/messages.service';
 import { Router } from '@angular/router';
+import { UploadImageComponent } from 'src/app/components/upload-image/upload-image.component';
 
 @Component({
     selector: 'app-social-problem-create',
@@ -20,6 +21,7 @@ import { Router } from '@angular/router';
 })
 export class SocialProblemCreatePage implements OnInit {
 
+    @ViewChild(UploadImageComponent) uploadImageComponent: UploadImageComponent;
     socialProblemForm: FormGroup;
     ubicationForm: FormGroup;
     errorMessages = null;
@@ -145,12 +147,13 @@ export class SocialProblemCreatePage implements OnInit {
     }
 
 
-    deleteImage(pos: any) {
-        this.socialProblemImages.splice(pos, 1);
+    deleteImage(index: number):void {
+        this.socialProblemImages.splice(index, 1);
+        this.uploadImageComponent.deleteImage(index);
     }
 
-    getUploadedImages(event) {
-        this.socialProblemImages = event.total_img;
+    getUploadedImages(event): void {
+        this.socialProblemImages = event.uploaded_images;
     }
 
     updateMapCoordinate(event: any) {

@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of, Observable } from 'rxjs';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
 import { GooglePlus as Google } from '@ionic-native/google-plus/ngx';
 import { Platform } from '@ionic/angular';
 import { HttpRequestService } from "./http-request.service";
 import { ErrorService } from './error.service';
 import { MessagesService } from './messages.service';
+import { IFacebookApiUser, IGoogleLoginResponse, IGoogleApiUser } from '../interfaces/models';
+import { catchError } from 'rxjs/operators';
 
 interface GoogleUser {
     sub: string;
@@ -36,10 +38,10 @@ export class SocialDataService {
     ) { }
 
     // Funcion para parsear los datos del login de google
-    getGoogleDataParsed(googleUser: GoogleUser) {
+    getGoogleDataMapped(googleUser: IGoogleApiUser) {
         const appUser = {
             first_name: googleUser.given_name,
-            last_name: googleUser.family_name,
+            last_name: googleUser.family_name || googleUser.given_name || '',
             email: googleUser.email,
             social_id: googleUser.sub,
             provider: 'google',
@@ -50,7 +52,7 @@ export class SocialDataService {
         return appUser;
     }
     // Funcion para parsear los datos del login de facebook
-    getFacebookDataParsed(fbUser: any) {
+    getFacebookDataMapped(fbUser: IFacebookApiUser) {
         const appUser = {
             first_name: fbUser.first_name,
             last_name: fbUser.last_name,
@@ -65,68 +67,67 @@ export class SocialDataService {
     }
 
     // Funcion para usar el API de Google para mostrar pantalla login google
-    async loginByGoogle() {
+    async loginByGoogle(): Promise<any> {
         if (this.platform.is('cordova')) {
             try {
-                const loginGoogle = await this.google.login({});
-                this.getGoogleData(loginGoogle);
+                const loginGoogle: IGoogleLoginResponse = await this.google.login({});
+                console.log('login google data', loginGoogle);
+                const profileGoogle: IGoogleApiUser = await this.getGoogleData(loginGoogle).toPromise();
+                console.log('profileGoogle', profileGoogle);
+                await this.closeGoogleSession();
+                return profileGoogle;
             } catch (error_http) {
-                this.errorService.manageHttpError(error_http, 'Error con la conexion a Google');
+                return null;
             }
         } else {
             this.messageService.showError('Error con la conexion a Google');
         }
     }
     // Funcion para usar el API de Facebook para mostrar pantalla login Facebook
-    async  loginByFacebook() {
+    async loginByFacebook(): Promise<IFacebookApiUser> {
         if (this.platform.is('cordova')) {
             const permisos = ['public_profile', 'email'];
-            try {
-                const respuestaLogin: FacebookLoginResponse = await this.facebook.login(permisos);
-                const userId = respuestaLogin.authResponse.userID;
-                const accessToken = respuestaLogin.authResponse.accessToken;
-                await this.getFacebookData(accessToken, userId, permisos);
-            } catch (error_http) {
-                this.errorService.manageHttpError(error_http, 'Ocurrio un error al conectarse con facebook');
+
+            const respuestaLogin: FacebookLoginResponse = await this.facebook.login(permisos);
+            console.log('respuestaLogin facebook', respuestaLogin)
+            const userId = respuestaLogin.authResponse.userID;
+            const accessToken = respuestaLogin.authResponse.accessToken;
+            const profile: IFacebookApiUser = await this.getFacebookData(accessToken, userId, permisos);
+            console.log('respuesta facebook profile login email', respuestaLogin)
+            if (!profile) {
+                return null;
             }
+            return profile
+
         } else {
             this.messageService.showError('La aplicación de facebook no esta disponible');
         }
     }
     // Function para llamar a la api de GRAPHQL y obtener los datos del perfil del usuario logueado
-    async getFacebookData(accessToken: string, userId: string, permisos: any) {
+    async getFacebookData(accessToken: string, userId: string, permisos: any): Promise<IFacebookApiUser> {
         try {
-            const url = `${userId}?fields=id,name,first_name,last_name,email,picture&access_token=${accessToken}`;
+            const url = `me?fields=id,name,first_name,last_name,email,picture&access_token=${accessToken}`;
             const profile: any = await this.facebook.api(url, permisos);
+            console.log('profile facebook', profile)
             profile.image = `https://graph.facebook.com/${userId}/picture?type=large`;
+            // profile.email = 
             if (profile !== null) {
-                this.fbLoginData.next(profile);
-                this.closeFacebookSession();
+                return profile;
             } else {
-                this.messageService.showError('No se pudo obtener los datos por medio de Facebook');
+                return null;
             }
         } catch (error_http) {
-            this.errorService.manageHttpError(error_http, 'No se pudieron obtener los datos de facebook');
+            return null;
         }
     }
     // Function para llamar a la api de Google y obtener los datos del perfil del usuario logueado
-    getGoogleData(googleLogin: any) {
-        try {
-            const url = `https://www.googleapis.com/oauth2/v3/userinfo?alt=json`;         
-            this.httpRequest.get(url, {}, { 
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${googleLogin.accessToken}`
-             }).subscribe(
-                async (profile: any) => {
-                    this.googleLoginData.next(profile);
-                    await this.closeGoogleSession();
-                },
-                (error_http: any) => {
-                    this.errorService.manageHttpError(error_http, 'No se pudieron obtener los datos de Google');
-                });
-        } catch (error_http) {
-            this.errorService.manageHttpError(error_http, 'No se pudieron obtener los datos de Google');
-        }
+    getGoogleData(googleLogin: any): Observable<any> {
+        const url = `https://www.googleapis.com/oauth2/v3/userinfo?alt=json`;
+        return this.httpRequest.get(url, {}, {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${googleLogin.accessToken}`
+        })
+            .pipe(catchError(() => of({})))
     }
 
     // Función para cerrar la sesión de google una vez obtenidos los datos

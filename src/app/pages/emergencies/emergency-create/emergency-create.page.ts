@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { UtilsService } from 'src/app/services/utils.service';
 import { MapService } from 'src/app/services/map.service';
 import { LocalizationService } from 'src/app/services/localization.service';
@@ -12,6 +12,7 @@ import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from 'src/app/services/messages.service';
 import { EventsService } from 'src/app/services/events.service';
 import { Router } from '@angular/router';
+import { UploadImageComponent } from 'src/app/components/upload-image/upload-image.component';
 
 @Component({
     selector: 'app-emergency-create',
@@ -21,6 +22,7 @@ import { Router } from '@angular/router';
 })
 export class EmergencyCreatePage implements OnInit {
 
+    @ViewChild(UploadImageComponent) uploadImageComponent: UploadImageComponent;
     emergencyImages = [];
     emergencyPostCoordinate: IUbication = {
         latitude: null,
@@ -76,12 +78,13 @@ export class EmergencyCreatePage implements OnInit {
     }
 
     getUploadedImages(event: any) {
-        this.emergencyImages = event.total_img;
-
+        this.emergencyImages = event.uploaded_images;
+        
     }
 
-    deleteImage(pos: any) {
-        this.emergencyImages.splice(pos, 1);
+    deleteImage(index: number) {
+        this.emergencyImages.splice(index, 1);
+        this.uploadImageComponent.deleteImage(index);
     }
 
     updateMapCoordinate(event: any) {

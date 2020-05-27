@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { UserService } from 'src/app/services/user.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -9,6 +9,7 @@ import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from 'src/app/services/messages.service';
 import { FormBuilder, FormControl, Validators, FormGroup } from '@angular/forms';
 import { LocalDataService } from 'src/app/services/local-data.service';
+import { UploadImageComponent } from 'src/app/components/upload-image/upload-image.component';
 
 @Component({
     selector: 'app-request-membership',
@@ -17,6 +18,7 @@ import { LocalDataService } from 'src/app/services/local-data.service';
 })
 export class RequestMembershipPage implements OnInit {
 
+    @ViewChild(UploadImageComponent) uploadImageComponent: UploadImageComponent;
     publicServiceImg = [];
     formSended = false;
     errorMessages = null;
@@ -67,11 +69,13 @@ export class RequestMembershipPage implements OnInit {
     }
 
     getUploadedImages(event: any) {
-        this.publicServiceImg = event.total_img;
+        this.publicServiceImg = event.uploaded_images;
+        
     }
 
-    deleteImage(pos: number) {
-        this.publicServiceImg.splice(pos, 1);
+    deleteImage(index: number) {
+        this.publicServiceImg.splice(index, 1);
+        this.uploadImageComponent.deleteImage(index);
     }
 
     sendRequestMembership() {
