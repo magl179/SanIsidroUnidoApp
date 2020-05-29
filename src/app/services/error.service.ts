@@ -11,9 +11,7 @@ export class ErrorService {
   async handleError(httpError: HttpErrorResponse) {
     // Verificar que el error HTTP ocurrio en el cliente
     if (httpError.error instanceof Error) {
-      // console.error("Ocurrio un error en el cliente", httpError.error);
     } else {
-      // console.error("Ocurrio un error en el servidor, intentalo más tarde", httpError)
     }
     return;
   }

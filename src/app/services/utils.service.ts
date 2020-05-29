@@ -40,12 +40,9 @@ export class UtilsService implements OnInit {
         if (this.platform.is('cordova')) { 
             this.iab.create(url, '_system');
         }else{
-            console.warn('is url', url)
             if(imagenIsURL(url)){
-                console.warn('is url')
                 window.open(url, '_blank');
             }else{
-                console.warn('is not url')
                 this.openBase64InNewTab(url);
             }
         }
@@ -74,10 +71,7 @@ export class UtilsService implements OnInit {
                 if(result.completed){
                     await this.showToast({message: 'Compartido Correctamente'});
                 }
-            }).catch(async(error_share) => {
-                console.error('Error al compartir', error_share);
-            //    this.showToast({message: 'No se pudo compartir'});
-            });
+            }).catch(async() => {});
         } else {
             if (navigator['share']) {
                 return await navigator['share']({
@@ -86,10 +80,7 @@ export class UtilsService implements OnInit {
                     url: publicacion.url || ''
                 }).then(async() => {
                     await this.showToast({message: 'Compartido Correctamente'});
-                }).catch(async(error_share) => {
-                    console.error('Error al compartir', error_share);
-                //    this.showToast({message: 'No se pudo compartir'});
-                });
+                }).catch(async() => {});
             } else {
                 await this.showToast({message: 'Tu dispositivo no soporta la función de compartir'});
             }

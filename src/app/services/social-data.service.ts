@@ -6,7 +6,7 @@ import { Platform } from '@ionic/angular';
 import { HttpRequestService } from "./http-request.service";
 import { ErrorService } from './error.service';
 import { MessagesService } from './messages.service';
-import { IFacebookApiUser, IGoogleLoginResponse, IGoogleApiUser } from '../interfaces/models';
+import { IFacebookApiUser, IGoogleLoginResponse, IGoogleApiUser, IFacebookPicture } from '../interfaces/models';
 import { catchError } from 'rxjs/operators';
 
 interface GoogleUser {
@@ -71,16 +71,24 @@ export class SocialDataService {
         if (this.platform.is('cordova')) {
             try {
                 const loginGoogle: IGoogleLoginResponse = await this.google.login({});
-                console.log('login google data', loginGoogle);
                 const profileGoogle: IGoogleApiUser = await this.getGoogleData(loginGoogle).toPromise();
-                console.log('profileGoogle', profileGoogle);
                 await this.closeGoogleSession();
                 return profileGoogle;
             } catch (error_http) {
                 return null;
             }
         } else {
-            this.messageService.showError('Error con la conexion a Google');
+            const dumpProfile: IGoogleApiUser = {
+                email_verified: false,
+                family_name: 'Jose',
+                given_name: 'Juan',
+                locale: 'es',
+                name: 'Juan Jose',
+                picture: '',
+                sub: '15',
+                email: null
+            };
+            return dumpProfile;
         }
     }
     // Funcion para usar el API de Facebook para mostrar pantalla login Facebook
@@ -89,18 +97,33 @@ export class SocialDataService {
             const permisos = ['public_profile', 'email'];
 
             const respuestaLogin: FacebookLoginResponse = await this.facebook.login(permisos);
-            console.log('respuestaLogin facebook', respuestaLogin)
             const userId = respuestaLogin.authResponse.userID;
             const accessToken = respuestaLogin.authResponse.accessToken;
             const profile: IFacebookApiUser = await this.getFacebookData(accessToken, userId, permisos);
-            console.log('respuesta facebook profile login email', respuestaLogin)
             if (!profile) {
                 return null;
             }
             return profile
-
         } else {
-            this.messageService.showError('La aplicación de facebook no esta disponible');
+            // this.messageService.showError('La aplicación de facebook no esta disponible');
+            const dumpPicture: IFacebookPicture = {
+                data: {
+                    height: 150,
+                    is_silhouette: false,
+                    url: '',
+                    width: 25
+                }
+            };
+            const dumpProfile: IFacebookApiUser = {
+                first_name: 'Juan',
+                id: '15',
+                last_name: 'Rodriguez',
+                name: 'Juan Rodriguez',
+                picture: dumpPicture,
+                email: null,
+                image: '',
+            };
+            return dumpProfile;
         }
     }
     // Function para llamar a la api de GRAPHQL y obtener los datos del perfil del usuario logueado
@@ -108,7 +131,6 @@ export class SocialDataService {
         try {
             const url = `me?fields=id,name,first_name,last_name,email,picture&access_token=${accessToken}`;
             const profile: any = await this.facebook.api(url, permisos);
-            console.log('profile facebook', profile)
             profile.image = `https://graph.facebook.com/${userId}/picture?type=large`;
             // profile.email = 
             if (profile !== null) {

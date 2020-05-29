@@ -39,6 +39,11 @@ export class FormAttendEmergencyModal implements OnInit {
         this.userName = this.AuthUser.first_name;
     }
 
+    preventEnterPressed($event: KeyboardEvent): void {
+        $event.preventDefault()
+        $event.stopPropagation()
+    }
+
     closeModal() {
         this.modalCtrl.dismiss({
             formulario_enviado: this.formWasSended

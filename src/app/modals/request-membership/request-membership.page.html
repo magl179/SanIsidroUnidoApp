@@ -19,7 +19,7 @@
             <ion-item class="input_item" lines="none">
                 <ion-label class="label-padding label-margin" position="stacked">Nombres</ion-label>
                 <div class="input-general-container">     
-                    <ion-input class="input-beatiful input-general"
+                    <ion-input class="input-beatiful input-general" (keydown.enter)="preventEnterPressed($event)"
                         formControlName="nombres" type="text">
                     </ion-input>
                 </div>
@@ -36,7 +36,7 @@
                 <ion-label class="label-padding label-margin" position="stacked">Teléfono
                 </ion-label>
                 <div class="input-general-container">     
-                    <ion-input class="input-beatiful input-general"
+                    <ion-input class="input-beatiful input-general" (keydown.enter)="preventEnterPressed($event)"
                         formControlName="telefono" type="phone">
                     </ion-input>
                 </div>
@@ -64,7 +64,7 @@
                 <ion-label class="label-padding label-margin" position="stacked">Nº Cédula
                 </ion-label>
                 <div class="input-general-container">     
-                    <ion-input class="input-beatiful input-general"
+                    <ion-input class="input-beatiful input-general" (keydown.enter)="preventEnterPressed($event)"
                         formControlName="cedula" type="text">
                     </ion-input>
                 </div>

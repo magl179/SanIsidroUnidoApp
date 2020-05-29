@@ -64,6 +64,11 @@ export class RequestMembershipPage implements OnInit {
          this.errorMessages = this.localDataService.getFormMessagesValidations(validations);
     }
 
+    preventEnterPressed($event: KeyboardEvent): void {
+        $event.preventDefault()
+        $event.stopPropagation()
+    }
+
     closeModal():void {
         this.modalCtrl.dismiss();
     }

@@ -6,7 +6,7 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { PostsService } from 'src/app/services/posts.service';
 import { ISocialProblemReported, IUbication } from 'src/app/interfaces/models';
-import { finalize} from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CONFIG } from 'src/config/config';
 import { ErrorService } from 'src/app/services/error.service';
@@ -131,8 +131,8 @@ export class SocialProblemCreatePage implements OnInit {
             //Ejecutar la deteccion de cambios de Angular de forma manual
             this.cdRef.detectChanges();
             const social_problem_subcategory = this.getSubcategoryById(this.socialProblemForm.value.subcategory);
-            if(social_problem_subcategory && social_problem_subcategory.length > 0){
-                setTimeout(()=>{
+            if (social_problem_subcategory && social_problem_subcategory.length > 0) {
+                setTimeout(() => {
                     this.router.navigateByUrl(`/social-problems/list/${social_problem_subcategory[0]}`);
                 }, 1000);
             }
@@ -142,12 +142,12 @@ export class SocialProblemCreatePage implements OnInit {
         });
     }
 
-    getSubcategoryById(id: number){
-        return this.subcategories.filter(subcategory=> subcategory.id == id).map(subcategory=> subcategory.slug)
+    getSubcategoryById(id: number) {
+        return this.subcategories.filter(subcategory => subcategory.id == id).map(subcategory => subcategory.slug)
     }
 
 
-    deleteImage(index: number):void {
+    deleteImage(index: number): void {
         this.socialProblemImages.splice(index, 1);
         this.uploadImageComponent.deleteImage(index);
     }
@@ -162,6 +162,11 @@ export class SocialProblemCreatePage implements OnInit {
             this.socialProblemCoordinate.longitude = event.longitude;
             this.getUserAddress(this.socialProblemCoordinate.latitude, this.socialProblemCoordinate.longitude);
         }
+    }
+
+    preventEnterPressed($event: KeyboardEvent): void {
+        $event.preventDefault()
+        $event.stopPropagation()
     }
 
     getUserAddress(latitud: number, longitud: number) {

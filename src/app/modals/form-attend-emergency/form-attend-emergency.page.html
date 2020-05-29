@@ -16,7 +16,7 @@
       <ion-item class="input_item" lines="none">
         <ion-label class="label-padding label-margin" position="stacked">Mótivo *</ion-label>
         <div class="container-textarea">   
-          <ion-textarea formControlName="reason" rows="5" autocomplete="on" autosize
+          <ion-textarea formControlName="reason" rows="5" autocomplete="on" autosize (keydown.enter)="preventEnterPressed($event)"
             type="text" clearOnEdit="false"></ion-textarea >
         </div>
       </ion-item>

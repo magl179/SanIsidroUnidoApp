@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { NavController, ModalController } from '@ionic/angular';
 import { UtilsService } from 'src/app/services/utils.service';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
@@ -15,6 +15,7 @@ import { CONFIG } from 'src/config/config';
 import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from 'src/app/services/messages.service';
 import { IFacebookApiUser } from 'src/app/interfaces/models';
+import { SocialEmailLoginModal } from 'src/app/modals/social-email-login/social-email-login.modal';
 
 @Component({
     selector: 'app-register',
@@ -41,7 +42,8 @@ export class RegisterPage implements OnInit {
         private socialDataService: SocialDataService,
         private localDataService: LocalDataService,
         private networkService: NetworkService,
-        private notificationsService: NotificationsService
+        private notificationsService: NotificationsService,
+        private modalCtrl: ModalController
     ) {
         this.createForm();
     }
@@ -106,12 +108,22 @@ export class RegisterPage implements OnInit {
     async registerFBUser() {
         const fbData = await this.socialDataService.loginByFacebook();
         if (fbData) {
-            console.log('fb data', fbData)
+
+            //Verificar Email
+            if (!fbData.email) {
+                const email = await this.presentModalSocialLogin();
+                if (!email) {
+                    this.messagesService.showError('Sin una dirección de correo no puedes registrarte');
+                    return;
+                }
+                fbData.email = email;
+                // return;
+            }
             const user = this.socialDataService.getFacebookDataMapped(fbData);
-            console.log({ fbData, user })
             //Añadir informacion dispositivo
             const device = await this.notificationsService.getOneSignalIDSubscriptor();
             user.device = device;
+            this.messagesService.showInfo('Verificando las credenciales')
             //Funcion Registro
             this.authService.register(user).subscribe(async res => {
                 await this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'facebook' }, res);
@@ -127,8 +139,19 @@ export class RegisterPage implements OnInit {
     async registerGoogleUser() {
         const googleData = await this.socialDataService.loginByGoogle();
         if (googleData) {
+
+            //Verificar Email
+            if (!googleData.email) {
+                const email = await this.presentModalSocialLogin();
+                if (!email) {
+                    this.messagesService.showError('Sin una dirección de correo no puedes registrarte');
+                    return;
+                }
+                googleData.email = email;
+                // return;
+            }
+            this.messagesService.showInfo('Verificando las credenciales')
             const user = this.socialDataService.getGoogleDataMapped(googleData);
-            console.log({ googleData, user })
             //Añadir informacion dispositivo
             const device = await this.notificationsService.getOneSignalIDSubscriptor();
             user.device = device;
@@ -142,6 +165,25 @@ export class RegisterPage implements OnInit {
             this.messagesService.showError('No se pudo obtener los datos por medio de Google');
         }
     }
+
+    async presentModalSocialLogin(): Promise<string> {
+        const modal = await this.modalCtrl.create({
+            component: SocialEmailLoginModal,
+            componentProps: {
+                title: 'Registro Social'
+            },
+            backdropDismiss: false
+        });
+        await modal.present();
+        const { data }: any = await modal.onWillDismiss();
+        const email = (data && data.email) ? data.email : null;
+        return email;
+    }
+
+    preventEnterPressed($event: KeyboardEvent): void {
+        $event.preventDefault()
+        $event.stopPropagation()
+      }
 
     // Función Crea el Formulario
     createForm() {

@@ -21,7 +21,7 @@
                                     <ion-label class="label-padding label-margin" position="stacked">Email
                                     </ion-label>
                                     <div class="input-general-container">     
-                                        <ion-input class="input-beatiful input-general" placeholder="john@gmail.com"
+                                        <ion-input class="input-beatiful input-general" placeholder="john@gmail.com" (keydown.enter)="preventEnterPressed($event)"
                                             formControlName="email" type="email" #first_field>
                                         </ion-input>
                                     </div>
@@ -56,6 +56,7 @@
                                     <div class="input-container">
                                         <ion-input class="input-beatiful" #passwordEyeLogin
                                             formControlName="password" placeholder="********"
+                                            (keydown.enter)="preventEnterPressed($event)"
                                             [type]="passwordTypeInput" clearOnEdit="false">
                                         </ion-input>
                                         <button item-end class="btn_eye_icon"

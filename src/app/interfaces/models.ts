@@ -402,15 +402,15 @@ export interface IFacebookApiUser {
     first_name: string;
     last_name: string;
     email?: string;
-    picture: Picture;
+    picture: IFacebookPicture;
     image?: string;
   }
   
-  interface Picture {
-    data: Data;
+  export interface IFacebookPicture {
+    data: IFacebookPictureData;
   }
   
-  interface Data {
+  export interface IFacebookPictureData {
     height: number;
     is_silhouette: boolean;
     url: string;

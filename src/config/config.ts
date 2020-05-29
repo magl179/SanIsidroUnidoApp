@@ -19,6 +19,7 @@ interface ICONFIG {
     MESSAGE_APP_URL: string;
     EVENT_BUTTON_MESSAGE: string;
     USE_FILE_URL: boolean;
+    URL_SOCIAL_LOGIN_NOT_EMAIL: string;
   }
 
 export const CONFIG: ICONFIG = {
@@ -48,6 +49,7 @@ export const CONFIG: ICONFIG = {
     MESSAGE_APP_INFO: 'Por San Isidro Unido con ❤',
     MESSAGE_APP_URL: 'https://www.facebook.com/stalinmaza97',
     EVENT_BUTTON_MESSAGE: 'Asistir',
-    USE_FILE_URL: true
+    USE_FILE_URL: true,
+    URL_SOCIAL_LOGIN_NOT_EMAIL: 'https://stalinmaza97.hashnode.dev/google-o-facebook-no-me-retorna-el-correo-de-registro-ckarljqi604tnbbs1bxqcuefp'
 }
 

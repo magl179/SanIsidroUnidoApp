@@ -307,9 +307,6 @@ export const formatRange = (initial_date: string, end_date: string, format="HH:m
     // Fecha Pasada, Fecha Actual
     initial_date = initial_date || new Date().toString();
     end_date = end_date || new Date().toString();
-    console.log(initial_date, end_date)
-    console.warn({initial_date, end_date});
-    console.log(parseISO(initial_date), parseISO(end_date))
     const initialTime = dateFormat(parseISO(initial_date), format, { locale: es });
     const endTime = dateFormat(parseISO(end_date), format, { locale: es });
     // Formatear Fecha
@@ -324,9 +321,6 @@ export const formatTimeRange = (initial_date: string, end_date: string, format="
     // Fecha Pasada, Fecha Actual
     initial_date = initial_date || new Date().toString();
     end_date = end_date || new Date().toString();
-    console.log(initial_date, end_date)
-    console.warn({initial_date, end_date});
-    console.log(parseISO(initial_date), parseISO(end_date))
     const initialTime = dateFormat(parseISO(initial_date), format, { locale: es });
     const endTime = dateFormat(parseISO(end_date), format, { locale: es });
     // Formatear Fecha

@@ -1,0 +1,46 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-title class="ion-text-center">{{title}}</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="closeModal()">
+                <ion-icon slot="icon-only" name="close"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <div>
+        <p class="info-dialog">
+            No pudimos obtener el email a tráves de tu red social, por favor ingresalo manualmente para poder completar
+            la operación. <a (click)="openLink()">Mas información.</a>
+        </p>
+    </div>
+
+    <form [formGroup]="socialEmailLoginForm">
+        <div class="item-form full">
+            <ion-item class="input_item" lines="none">
+                <ion-label class="label-padding label-margin" position="stacked">Email</ion-label>
+                <div class="input-general-container">
+                    <ion-input class="input-beatiful input-general" formControlName="email" type="text"
+                        (keydown.enter)="preventEnterPressed($event)">
+                    </ion-input>
+                </div>
+            </ion-item>
+        </div>
+        <div class="form-errors padding-lateral-small">
+            <p class="form-error"
+                *ngIf="socialEmailLoginForm.get('email').hasError('required') && socialEmailLoginForm.get('email').touched">
+                El Email es requerido
+            </p>
+            <p class="form-error"
+                *ngIf="socialEmailLoginForm.get('email').hasError('email') && socialEmailLoginForm.get('email').touched">
+                Ingresa un email válido
+            </p>
+        </div>
+    </form>
+
+    <ion-button class="" (click)="submitForm()" type="submit" expand="block" [disabled]="!socialEmailLoginForm.valid">
+        Guardar
+    </ion-button>
+</ion-content>

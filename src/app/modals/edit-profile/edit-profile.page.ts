@@ -71,6 +71,11 @@ export class EditProfilePage implements OnInit {
         });
     }
 
+    preventEnterPressed($event: KeyboardEvent): void {
+        $event.preventDefault()
+        $event.stopPropagation()
+      }
+
     // Función Crea el Formulario
     async createForm() {
         await this.loadUserData();

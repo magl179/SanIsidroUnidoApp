@@ -8,6 +8,9 @@ import { IonicModule } from '@ionic/angular';
 import { LoginPage } from './login.page';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SmComponentsModule } from 'src/app/components/sm-components.module';
+import { SocialEmailLoginModal } from 'src/app/modals/social-email-login/social-email-login.modal';
+import { SocialEmailLoginModule } from 'src/app/modals/social-email-login/social-email-login.module';
+
 const routes: Routes = [
   {
     path: '',
@@ -16,13 +19,17 @@ const routes: Routes = [
 ];
 
 @NgModule({
+  entryComponents: [
+    SocialEmailLoginModal
+  ],
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
         RouterModule.forChild(routes),
         ReactiveFormsModule,
-        SmComponentsModule
+        SmComponentsModule,
+        SocialEmailLoginModule
   ],
   declarations: [LoginPage]
 })

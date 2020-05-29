@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { NavController, ModalController } from '@ionic/angular';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { UtilsService } from 'src/app/services/utils.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -16,6 +16,7 @@ import { CONFIG } from 'src/config/config';
 import { ErrorService } from 'src/app/services/error.service';
 import { environment } from 'src/environments/environment';
 import { MessagesService } from 'src/app/services/messages.service';
+import { SocialEmailLoginModal } from 'src/app/modals/social-email-login/social-email-login.modal';
 
 @Component({
     selector: 'app-login',
@@ -38,6 +39,7 @@ export class LoginPage implements OnInit {
         private navCtrl: NavController,
         private utilsService: UtilsService,
         private authService: AuthService,
+        private modalCtrl: ModalController,
         private socialDataService: SocialDataService,
         private localDataService: LocalDataService,
         private messageService: MessagesService,
@@ -99,16 +101,42 @@ export class LoginPage implements OnInit {
         });
     }
 
-    async loginUserByFB() {
+    async presentModalSocialLogin(): Promise<string>{
+        const modal = await this.modalCtrl.create({
+            component: SocialEmailLoginModal,
+            componentProps: {
+                title: 'Login Social'
+            },
+            backdropDismiss: false
+        });
+        await modal.present();
+        const { data } : any = await modal.onWillDismiss();
+        const email = (data && data.email) ? data.email : null;
+        return email;
+    }
+
+    async loginUserByFB(): Promise<void> {
+        this.messageService.showInfo('Conectando con facebook ...');
         const fbData = await this.socialDataService.loginByFacebook();
         if (fbData) {
+            //Verificar Email
+            if(!fbData.email){
+                const email = await this.presentModalSocialLogin();
+                if(!email){
+                    this.messageService.showError('Sin una dirección de correo no puedes iniciar sesión');
+                    return
+                }
+                fbData.email = email;
+                // return;
+            }
+
             const user = this.socialDataService.getFacebookDataMapped(fbData);
             const { social_id, email } = user;
-            console.log({ fbData, user })
             //Añadir informacion dispositivo
             const device = await this.notificationsService.getOneSignalIDSubscriptor();
             user.device = device;
             //Funcion Login
+            this.messageService.showInfo('Verificando las credenciales')
             this.authService.login(user).subscribe(res => {
                 this.manageLogin({ provider: 'facebook', social_id, email }, res);
             }, (error_http: HttpErrorResponse) => {
@@ -119,16 +147,29 @@ export class LoginPage implements OnInit {
         }
     }
 
-    async loginUserByGoogle() {
+    async loginUserByGoogle(): Promise<void>  {
+        this.messageService.showInfo('Conectando con Google ...');
         const googleData = await this.socialDataService.loginByGoogle();
         if (googleData) {
+
+             //Verificar Email
+             if(!googleData.email){
+                const email = await this.presentModalSocialLogin();
+                if(!email){
+                    this.messageService.showError('Sin una dirección de correo no puedes iniciar sesión');
+                    return
+                }
+                googleData.email = email;
+                // return;
+            }
+
             const user = this.socialDataService.getGoogleDataMapped(googleData);
             const { social_id, email } = user;
-            console.log({ googleData, user })
             //Añadir informacion dispositivo
             const device = await this.notificationsService.getOneSignalIDSubscriptor();
             user.device = device;
             //Funcion Login
+            this.messageService.showInfo('Verificando las credenciales')
             this.authService.login(user).subscribe(async res => {
                 await this.manageLogin({ social_id, email, provider: 'google' }, res);
             }, (error_http: HttpErrorResponse) => {
@@ -139,6 +180,11 @@ export class LoginPage implements OnInit {
         }
 
     }
+
+    preventEnterPressed($event: KeyboardEvent): void {
+        $event.preventDefault()
+        $event.stopPropagation()
+      }
 
     forgotPassword() {
         this.utilsService.openInBrowser(`${environment.BASEURL}/password/reset`)

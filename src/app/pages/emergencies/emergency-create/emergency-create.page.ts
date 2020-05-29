@@ -95,6 +95,11 @@ export class EmergencyCreatePage implements OnInit {
         }
     }
 
+    preventEnterPressed($event: KeyboardEvent): void {
+        $event.preventDefault()
+        $event.stopPropagation()
+    }
+
     getUserAddress(latitud: number, longitud: number) {
         this.mapService.getAddress({
             lat: latitud,

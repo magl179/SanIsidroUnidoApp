@@ -9,7 +9,9 @@
                 <div class="item-form full">
                     <ion-item class="input_item" lines="none">
                         <ion-label class="label-padding" position="stacked">Titulo *</ion-label>
-                        <ion-input placeholder="Ingresa el título de tu reporte" class="input-beatiful"
+                        <ion-input placeholder="Ingresa el título de tu reporte" 
+                        (keydown.enter)="preventEnterPressed($event)"
+                        class="input-beatiful"
                             formControlName="title" type="email"></ion-input>
                     </ion-item>
                 </div>
@@ -23,7 +25,9 @@
                     <ion-item class="input_item" lines="none">
                         <ion-label class="label-padding" position="stacked">Descripción *</ion-label>
                         <ion-textarea class="input-beatiful text-area"
-                            placeholder="Ingresa la descripción de tu reporte" formControlName="description"
+                            placeholder="Ingresa la descripción de tu reporte" 
+                            (keydown.enter)="preventEnterPressed($event)"
+                            formControlName="description"
                             auto-grow="true"></ion-textarea>
                     </ion-item>
                 </div>
@@ -58,6 +62,7 @@
                             Ubicación *
                         </ion-label>
                         <ion-textarea
+                            (keydown.enter)="preventEnterPressed($event)"
                             placeholder="Ingresa una breve descripción para referenciar la ubicación de tu reporte"
                             class="input-beatiful text-area" formControlName="description_ubication" auto-grow="true">
                         </ion-textarea>

@@ -22,7 +22,7 @@
                                     <ion-label class="label-padding label-margin" position="stacked">Nombres
                                     </ion-label>
                                     <ion-input class="input-beatiful" placeholder="John" type="text"
-                                        formControlName="first_name" #first_field></ion-input>
+                                        formControlName="first_name" #first_field (keydown.enter)="preventEnterPressed($event)"></ion-input>
                                 </ion-item>
                             </div>
                             <div class="form-errors padding-lateral">
@@ -53,7 +53,7 @@
                                     <ion-label class="label-padding label-margin" position="stacked">Apellidos
                                     </ion-label>
                                     <ion-input class="input-beatiful" placeholder="Doe" type="text"
-                                        formControlName="last_name"></ion-input>
+                                        formControlName="last_name" (keydown.enter)="preventEnterPressed($event)"></ion-input>
                                 </ion-item>
                             </div>
                             <div class="form-errors padding-lateral">
@@ -84,7 +84,7 @@
                                     <ion-label class="label-padding label-margin" position="stacked">Correo Electrónico
                                     </ion-label>
                                     <ion-input class="input-beatiful" placeholder="john@gmail.com" type="text"
-                                        formControlName="email"></ion-input>
+                                        formControlName="email" (keydown.enter)="preventEnterPressed($event)"></ion-input>
                                 </ion-item>
                             </div>
                             <div class="form-errors padding-lateral">
@@ -117,6 +117,7 @@
                                         <ion-input class="input-beatiful input_relative" #passwordEyeRegister
                                             [type]="passwordTypeInput" placeholder="********" formControlName="password"
                                             clearOnEdit="false"
+                                            (keydown.enter)="preventEnterPressed($event)"
                                             maxlength="100">
                                         </ion-input>
                                         <button item-end class="btn_eye_icon" (click)="togglePasswordMode()">

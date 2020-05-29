@@ -87,6 +87,11 @@ export class ChangePasswordPage implements OnInit {
         this.modalCtrl.dismiss();
     }
 
+    preventEnterPressed($event: KeyboardEvent): void {
+        $event.preventDefault()
+        $event.stopPropagation()
+      }
+
     sendRequestChangePass() {
         this.messageService.showInfo('Enviando...')
         this.sending = true;
