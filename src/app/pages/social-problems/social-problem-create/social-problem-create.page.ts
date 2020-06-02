@@ -5,7 +5,7 @@ import { LocalizationService } from 'src/app/services/localization.service';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { PostsService } from 'src/app/services/posts.service';
-import { ISocialProblemReported, IUbication } from 'src/app/interfaces/models';
+import { ISocialProblemReported, IUbication, IUploadedImages, ISimpleCoordinates } from 'src/app/interfaces/models';
 import { finalize } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CONFIG } from 'src/config/config';
@@ -50,7 +50,7 @@ export class SocialProblemCreatePage implements OnInit {
         this.createForm();
     }
 
-    loadSubcategories() {
+    loadSubcategories(): void {
         this.postService.getSubcategoriesByCategory(CONFIG.SOCIAL_PROBLEMS_SLUG).subscribe(res => {
             this.subcategories = res.data;
             this.subcategoryName = res.data[0].name;
@@ -59,14 +59,14 @@ export class SocialProblemCreatePage implements OnInit {
         });
     }
 
-    seeImageDetail(url: string) {
+    seeImageDetail(url: string):void {
         this.utilsService.seeImageDetail(url, '');
     }
 
-    async ngOnInit() {
+    async ngOnInit(): Promise<void> {
         this.loadSubcategories();
 
-        await this.localizationService.getCoordinates().then((coordinates: any) => {
+        await this.localizationService.getCoordinates().then((coordinates: ISimpleCoordinates) => {
             this.socialProblemCoordinate.latitude = coordinates.latitude;
             this.socialProblemCoordinate.longitude = coordinates.longitude;
         }).catch(coordinates_error => {
@@ -75,7 +75,7 @@ export class SocialProblemCreatePage implements OnInit {
         });
     }
 
-    createForm() {
+    createForm(): void {
         const validations = this.localDataService.getFormValidations();
         const title = new FormControl('', Validators.compose([
             Validators.required
@@ -94,16 +94,19 @@ export class SocialProblemCreatePage implements OnInit {
         this.errorMessages = this.localDataService.getFormMessagesValidations(validations);
     }
 
-    async sendSocialProblem() {
+    async sendSocialProblem(): Promise<null> {
 
         if (this.socialProblemForm.valid !== true) {
-            return this.messageService.showInfo("Ingresa un titulo y una descripción");
+            this.messageService.showInfo("Ingresa un titulo y una descripción");
+            return null;
         }
         if (this.ubicationForm.valid !== true) {
-            return this.messageService.showInfo("Ingresa una descripción de tu ubicación");
+            this.messageService.showInfo("Ingresa una descripción de tu ubicación");
+            return null;
         }
         if (this.socialProblemCoordinate.address === null) {
-            return this.messageService.showInfo("No se pudo obtener tu ubicación");
+            this.messageService.showInfo("No se pudo obtener tu ubicación");
+            return null;
         }
 
         const loadingReportSocialProblem = await this.utilsService.createBasicLoading('Enviando Reporte');
@@ -125,7 +128,7 @@ export class SocialProblemCreatePage implements OnInit {
             finalize(() => {
                 loadingReportSocialProblem.dismiss()
             })
-        ).subscribe(async (res: any) => {
+        ).subscribe(() => {
             this.messageService.showSuccess("El Reporte fue enviado correctamente");
             this.formSended = true;
             //Ejecutar la deteccion de cambios de Angular de forma manual
@@ -142,7 +145,7 @@ export class SocialProblemCreatePage implements OnInit {
         });
     }
 
-    getSubcategoryById(id: number) {
+    getSubcategoryById(id: number): string[] {
         return this.subcategories.filter(subcategory => subcategory.id == id).map(subcategory => subcategory.slug)
     }
 
@@ -152,12 +155,12 @@ export class SocialProblemCreatePage implements OnInit {
         this.uploadImageComponent.deleteImage(index);
     }
 
-    getUploadedImages(event): void {
+    getUploadedImages(event: IUploadedImages): void {
         this.socialProblemImages = event.uploaded_images;
     }
 
-    updateMapCoordinate(event: any) {
-        if (event.lat !== null && event.lng !== null) {
+    updateMapCoordinate(event: ISimpleCoordinates): void {
+        if (event.latitude !== null && event.longitude !== null) {
             this.socialProblemCoordinate.latitude = event.latitude;
             this.socialProblemCoordinate.longitude = event.longitude;
             this.getUserAddress(this.socialProblemCoordinate.latitude, this.socialProblemCoordinate.longitude);
@@ -169,7 +172,7 @@ export class SocialProblemCreatePage implements OnInit {
         $event.stopPropagation()
     }
 
-    getUserAddress(latitud: number, longitud: number) {
+    getUserAddress(latitud: number, longitud: number): void {
         this.mapService.getAddress({
             lat: latitud,
             lng: longitud,
@@ -182,7 +185,7 @@ export class SocialProblemCreatePage implements OnInit {
         });
     }
 
-    changeSubcategoryName(event) {
+    changeSubcategoryName(event: CustomEvent): void {
         this.subcategoryName = this.subcategories.filter(subcategory => subcategory.id == event.detail.value).map(subcategory => subcategory.name);
     }
 

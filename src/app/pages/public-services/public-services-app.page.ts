@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavController } from "@ionic/angular";
 import { PublicService } from 'src/app/services/public.service';
 import { finalize } from 'rxjs/operators';
+import { ICategory } from 'src/app/interfaces/models';
 
 @Component({
     selector: 'siu-public-services-app',
@@ -10,7 +11,7 @@ import { finalize } from 'rxjs/operators';
 })
 export class PublicServicesAppPage implements OnInit {
 
-    publicServiceCategories: any[] = [];
+    publicServiceCategories: ICategory[] = [];
     categoriesLoaded = false;
     isGPSEnabled = false;
 

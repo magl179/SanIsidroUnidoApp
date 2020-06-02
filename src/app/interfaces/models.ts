@@ -1,3 +1,5 @@
+
+import { Control, Map } from 'leaflet';
 //INTERFACES RECIBIR DATOS
 interface IBasicResponse {
     code: number;
@@ -5,11 +7,51 @@ interface IBasicResponse {
     status: string;
     errors?: any[];
 }
+
+export interface IProgressEvent extends ProgressEvent{
+    target: any;
+}
+
+export interface ICustomEvent{
+    bubbles: boolean;
+    cancelBubble: boolean;
+    cancelable: boolean;
+    composed: boolean;
+    currentTarget: any;
+    data?: any;
+    defaultPrevented: boolean;
+    eventPhase: number;
+    isTrusted: boolean;
+    path?: any;
+    returnValue: boolean;
+    srcElement: any;
+    target: any;
+    timeStamp: number;
+    type: string;
+}
+
+export interface AppMarkers {
+    color: string;
+    iconName: string;
+    iconURL: string;
+    shadow: string;    
+}
+
+export interface ILeafletControl extends Control{
+    setWaypoints: any
+}
+
 export interface IRespuestaApiSIU extends IBasicResponse {
     data: any[];
 }
 export interface IRespuestaApiSIUSingle extends IBasicResponse {
     data: any;
+}
+
+export interface ICurrentLocation {
+    latitude: number;
+    longitude: number;
+    route?: any
 }
 
 export interface IRespuestaApiSIUPaginada extends IBasicResponse {
@@ -43,7 +85,7 @@ interface ILogEvent {
     responsible: string;
 }
 interface ILogEmergency {
-    attended_by: any, rechazed_by: any, rechazed_reason: string
+    attended_by: IUser, rechazed_by: IUser, rechazed_reason: string
 }
 interface ILogPost {
     approved_by: string;
@@ -58,16 +100,17 @@ export interface IReaction {
     created_at: string;
     updated_at: string;
     url_link: string;
+    user_id?: number;
 }
 
 export interface IResource {
     id: number;
-  url: string;
-  type: string;
-  post_id: number;
-  created_at: string;
-  updated_at: string;
-  url_link: string;
+    url: string;
+    type: string;
+    post_id: number;
+    created_at: string;
+    updated_at: string;
+    url_link: string;
 }
 
 //Interfaz Publicaciones
@@ -125,6 +168,7 @@ export interface I_ImagesApi {
     updated_at: string;
     url: string;
 }
+
 // Servicios Publicos
 export interface IPublicService {
     id: number;
@@ -169,7 +213,12 @@ export interface IMenuOptions {
     not_authenticated: IMenuComponent[];
 }
 
-interface IMenuComponent {
+export interface IEventLoad {
+    type: string;
+    data: any;
+}
+
+export interface IMenuComponent {
     icon: string;
     name: string;
     redirectTo: string;
@@ -200,6 +249,30 @@ export interface IMarkers {
 export interface ISimpleCoordinates {
     latitude: number;
     longitude: number;
+}
+
+export interface ISharePost {
+    title: string;
+    description: string;
+    image?: string | string[]
+    url?: string;
+}
+
+export interface ICheckPermission {
+    hasPermission: boolean;
+}
+
+export interface IEmergenciaRechazar {
+    motivo: string;
+    emergencia_id: number;
+}
+
+export interface IEmergenciaAtender {
+    emergencia_id: number;
+}
+
+export interface AppMapEvent {
+    loaded: boolean;
 }
 
 export interface INotificationApi {
@@ -274,7 +347,7 @@ interface IPosition {
     created_at?: string;
     updated_at?: string;
 }
-interface IRole {
+export interface IRole {
     id: number;
     name: string;
     slug: string;
@@ -282,12 +355,20 @@ interface IRole {
     created_at?: string;
     updated_at?: string;
     role_user?: IRoleUser;
+    pivot?: IRoleUser;
+    special: any;
+    mobile_app: boolean;
+    role_id?: number;
+    state: boolean;
+    user_id: number;
 }
 
 interface IRoleUser {
     user_id: number;
     role_id: number;
     position?: string;
+    created_at?: string;
+    updated_at?: string;
 }
 
 //Token Decodificado
@@ -404,21 +485,40 @@ export interface IFacebookApiUser {
     email?: string;
     picture: IFacebookPicture;
     image?: string;
-  }
-  
-  export interface IFacebookPicture {
+}
+
+export interface IFacebookPicture {
     data: IFacebookPictureData;
-  }
-  
-  export interface IFacebookPictureData {
+}
+
+export interface IUploadedImages {
+    uploaded_images: string[];
+}
+
+export interface GeolocationPosition {
+    coords: GeolocationCoordinate;
+    timestamp: number;
+}
+
+interface GeolocationCoordinate {
+    accuracy: number;
+    altitude: number;
+    altitudeAccuracy: number;
+    heading: number;
+    latitude: number;
+    longitude: number;
+    speed: number;
+}
+
+export interface IFacebookPictureData {
     height: number;
     is_silhouette: boolean;
     url: string;
     width: number;
-  }
+}
 
-  /*Google */
-  export interface IGoogleLoginResponse {
+/*Google */
+export interface IGoogleLoginResponse {
     accessToken: string;
     expires: number;
     expires_in: number;
@@ -428,9 +528,9 @@ export interface IFacebookApiUser {
     familyName: string;
     givenName: string;
     imageUrl: string;
-  }
+}
 
-  export interface IGoogleApiUser {
+export interface IGoogleApiUser {
     email?: string;
     email_verified: boolean;
     family_name: string;
@@ -439,4 +539,4 @@ export interface IFacebookApiUser {
     name: string;
     picture: string;
     sub: string;
-  }
+}

@@ -5,7 +5,7 @@ import { Directive, OnInit, TemplateRef, ViewContainerRef, Input } from "@angula
 })
 export class HasDeviceDirective implements OnInit{
 
-    @Input('appHasDevice') devices: any[] = [];
+    @Input('appHasDevice') devices = [];
 
   constructor(
   	private templateRef: TemplateRef<any>,

@@ -3,7 +3,7 @@ import { NavController } from "@ionic/angular";
 import { UtilsService } from 'src/app/services/utils.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { PostsService } from 'src/app/services/posts.service';
-import { IRespuestaApiSIUPaginada } from 'src/app/interfaces/models';
+import { IRespuestaApiSIUPaginada, IRespuestaApiSIUSingle, IResource, IEventLoad } from 'src/app/interfaces/models';
 import { finalize, map, catchError, pluck, exhaustMap, tap, distinctUntilChanged, startWith, skip, switchMap } from "rxjs/operators";
 import { ISocialProblem, IPostShare } from 'src/app/interfaces/models';
 import { checkLikePost } from 'src/app/helpers/user-helper';
@@ -62,13 +62,13 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        const peticionHttpBusqueda = (body: any) => {
+        const peticionHttpBusqueda = (body) => {
             return this.postsService.searchPosts(body)
                 .pipe(
                     pluck('data'),
                     map(data => {
                         const social_problems_to_map = data
-                        social_problems_to_map.forEach((social_problem: any) => {
+                        social_problems_to_map.forEach((social_problem) => {
                             social_problem = mapSocialProblem(social_problem);
                             const postLiked = checkLikePost(social_problem.reactions, this.AuthUser) || false;
                             social_problem.postLiked = postLiked;
@@ -92,12 +92,12 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
             if (token_decoded && token_decoded.user) {
                 this.AuthUser = token_decoded.user;
             }
-        }, (error_http: any) => {
+        }, (error_http: HttpErrorResponse) => {
             ;
             this.errorService.manageHttpError(error_http, 'No se pudo cargar la información del usuario');
         });
         this.loadSocialProblems(null, true);
-        this.events_app.socialProblemLikesEmitter.subscribe((social_problema_event: any) => {
+        this.events_app.socialProblemLikesEmitter.subscribe((social_problema_event) => {
             this.toggleLikes(social_problema_event.id, social_problema_event.reactions);
         });
 
@@ -119,7 +119,7 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
                 })),
                 switchMap(peticionHttpBusqueda),
             )
-            .subscribe((data: any[]) => {
+            .subscribe((data: ISocialProblem[]) => {
                 this.showNotFound = (data.length == 0) ? true : false;
                 this.socialProblemsFilter = [...data];
                 this.searchingSocialProblems = false;
@@ -150,7 +150,7 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
     //Eliminar o agregar like a una publicacion
     toggleLike(like: boolean, id: number) {
         if (like) {
-            this.postsService.sendDeleteDetailToPost(id).subscribe((res: any) => {
+            this.postsService.sendDeleteDetailToPost(id).subscribe((res: IRespuestaApiSIUSingle) => {
                 this.socialProblemsList.forEach(social_problem => {
                     if (social_problem.id === id) {
                         if (res.data.reactions) {
@@ -160,7 +160,7 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
                     }
                 });
                 this.socialProblemsFilter = [...this.socialProblemsList];
-            }, (error_http: any) => {
+            }, (error_http: HttpErrorResponse) => {
                 this.errorService.manageHttpError(error_http, 'El me gusta no pudo ser borrado');
             });
         } else {
@@ -169,7 +169,7 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
                 user_id: this.AuthUser.id,
                 post_id: id
             }
-            this.postsService.sendCreateDetailToPost(detailInfo).subscribe((res: any) => {
+            this.postsService.sendCreateDetailToPost(detailInfo).subscribe((res: IRespuestaApiSIUSingle) => {
                 this.socialProblemsList.forEach(social_problem => {
                     if (social_problem.id === id) {
                         if (res.data.reactions) {
@@ -186,12 +186,12 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
     }
 
     //Cargar los problemas sociales
-    loadSocialProblems(event: any = null, first_loading = false) {
+    loadSocialProblems(event: IEventLoad = null, first_loading = false) {
         this.postsService.getPostsBySubCategory(CONFIG.SOCIAL_PROBLEMS_SLUG, this.subcategory)
             .pipe(
                 map((res: IRespuestaApiSIUPaginada) => {
                     if (res && res.data) {
-                        res.data.forEach((social_problem: any) => {
+                        res.data.forEach((social_problem) => {
                             social_problem = mapSocialProblem(social_problem);
                             const postLiked = checkLikePost(social_problem.reactions, this.AuthUser) || false;
                             social_problem.postLiked = postLiked;
@@ -241,21 +241,21 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
             });
     }
     //Obtener datos con el Infinite Scroll
-    doInfiniteScroll(event: any) {
+    doInfiniteScroll(event: CustomEvent) {
         this.loadSocialProblems({
             type: 'infinite_scroll',
             data: event
         });
     }
     //Obtener datos con Refresher
-    doRefresh(event: any) {
+    doRefresh(event: CustomEvent) {
         this.loadSocialProblems({
             type: 'refresher',
             data: event
         });
     }
     //Ir al detalle de un problema socialc
-    postDetail(id: any) {
+    postDetail(id: number) {
         this.navCtrl.navigateForward(`/social-problems/list/${this.subcategory}/${id}`);
     }
     //Compartir el Problema Social
@@ -263,14 +263,14 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
         const sharePost: IPostShare = {
             title: post.title,
             description: cortarTextoConPuntos(post.description, 90),
-            image: getFirstPostImage(post),
+            image: getFirstPostImage(post.imagesArr),
             url: ''
 
         };
         await this.utilsService.shareSocial(sharePost);
     }
     //Obtener las imagenes de un post
-    getImages($imagesArray: any) {
+    getImages($imagesArray: IResource[]) {
         if ($imagesArray.length === 0) {
             return '';
         } else {
@@ -278,7 +278,7 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
         }
     }
     //Filtrar por Estado Atención
-    segmentChanged(event: any) {
+    segmentChanged(event: CustomEvent) {
         const value = (event.detail.value !== "") ? event.detail.value : "";
         this.segmentFilter$.next(value);
     }

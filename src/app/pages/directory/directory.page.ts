@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DirectivesService } from 'src/app/services/directives.service';
-import { IRespuestaApiSIU } from 'src/app/interfaces/models';
+import { IRespuestaApiSIU, IDirective } from 'src/app/interfaces/models';
 import { finalize, take, tap, distinctUntilChanged } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/services/error.service';
@@ -14,8 +14,8 @@ import { FormControl } from '@angular/forms';
 export class DirectoryPage implements OnInit {
 
     loadDirectives = false;
-    directivesList: any[] = [];
-    directivesFilter: any[] = [];
+    directivesList: IDirective[] = [];
+    directivesFilter: IDirective[] = [];
     directorySearchControl: FormControl;
     searchingDirectives = false;
 

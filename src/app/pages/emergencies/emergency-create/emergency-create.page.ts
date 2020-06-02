@@ -3,7 +3,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { MapService } from 'src/app/services/map.service';
 import { LocalizationService } from 'src/app/services/localization.service';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { IEmergencyReported, IUbication } from 'src/app/interfaces/models';
+import { IEmergencyReported, IUbication, ISimpleCoordinates, IUploadedImages } from 'src/app/interfaces/models';
 import { PostsService } from 'src/app/services/posts.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { finalize } from 'rxjs/operators';
@@ -50,8 +50,8 @@ export class EmergencyCreatePage implements OnInit {
         this.createForm();
     }
 
-    async ngOnInit() {
-        await this.localizationService.getCoordinates().then((coordinates: any) => {
+    async ngOnInit(): Promise<void> {
+        await this.localizationService.getCoordinates().then((coordinates: ISimpleCoordinates) => {
             this.emergencyPostCoordinate.latitude = coordinates.latitude;
             this.emergencyPostCoordinate.longitude = coordinates.longitude;
         }).catch(() => {
@@ -60,7 +60,7 @@ export class EmergencyCreatePage implements OnInit {
         });
     }
 
-    createForm() {
+    createForm():void {
         const validations = this.localDataService.getFormValidations();
         const title = new FormControl('', Validators.compose([
             Validators.required,
@@ -77,18 +77,17 @@ export class EmergencyCreatePage implements OnInit {
         this.errorMessages = this.localDataService.getFormMessagesValidations(validations);
     }
 
-    getUploadedImages(event: any) {
-        this.emergencyImages = event.uploaded_images;
-        
+    getUploadedImages(event: IUploadedImages): void {
+        this.emergencyImages = event.uploaded_images;        
     }
 
-    deleteImage(index: number) {
+    deleteImage(index: number):void {
         this.emergencyImages.splice(index, 1);
         this.uploadImageComponent.deleteImage(index);
     }
 
-    updateMapCoordinate(event: any) {
-        if (event.lat !== null && event.lng !== null) {
+    updateMapCoordinate(event: ISimpleCoordinates):void {
+        if (event.latitude !== null && event.latitude !== null) {
             this.emergencyPostCoordinate.latitude = event.latitude;
             this.emergencyPostCoordinate.longitude = event.longitude;
             this.getUserAddress(this.emergencyPostCoordinate.latitude, this.emergencyPostCoordinate.longitude);
@@ -100,7 +99,7 @@ export class EmergencyCreatePage implements OnInit {
         $event.stopPropagation()
     }
 
-    getUserAddress(latitud: number, longitud: number) {
+    getUserAddress(latitud: number, longitud: number): void {
         this.mapService.getAddress({
             lat: latitud,
             lng: longitud,
@@ -114,20 +113,23 @@ export class EmergencyCreatePage implements OnInit {
         });
     }
 
-    seeImageDetail(url: string) {
+    seeImageDetail(url: string): void {
         this.utilsService.seeImageDetail(url, '');
     }
 
-    async sendEmergencyReport() {
+    async sendEmergencyReport(): Promise<null> {
 
         if (this.emergencyForm.valid !== true) {
-            return this.messageService.showInfo("Ingresa un titulo y una descripción");
+            this.messageService.showInfo("Ingresa un titulo y una descripción");
+            return null;
         }
         if (this.ubicationForm.valid !== true) {
-            return this.messageService.showInfo("Ingresa una descripción de tu ubicación");
+            this.messageService.showInfo("Ingresa una descripción de tu ubicación");
+            return null;
         }
         if (this.emergencyPostCoordinate.address === null) {
-            return this.messageService.showInfo("No se pudo obtener tu ubicación");
+            this.messageService.showInfo("No se pudo obtener tu ubicación");
+            return null;
         }
 
         const loadingEmergencyReport = await this.utilsService.createBasicLoading('Enviando Reporte');
@@ -148,7 +150,7 @@ export class EmergencyCreatePage implements OnInit {
             finalize(() => {
                 loadingEmergencyReport.dismiss()
             })
-        ).subscribe(async (res: any) => {
+        ).subscribe(() => {
             this.messageService.showSuccess("El Reporte fue enviado correctamente");
             this.formSended = true;
             this.events_app.resetEmergenciesEmitter();
@@ -156,7 +158,6 @@ export class EmergencyCreatePage implements OnInit {
             setTimeout(() => {
                 this.router.navigateByUrl(`/emergencies/list`);
             }, 1000);
-
 
         }, (error_http: HttpErrorResponse) => {
             this.errorService.manageHttpError(error_http, 'Ocurrio un error al enviar tu reporte');

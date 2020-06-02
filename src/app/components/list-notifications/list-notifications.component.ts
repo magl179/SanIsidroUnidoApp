@@ -4,7 +4,7 @@ import { UserService } from 'src/app/services/user.service';
 import { take, map, distinctUntilChanged, tap, pluck, catchError, exhaustMap, startWith, skip } from 'rxjs/operators';
 import { MapNotification, getCurrentDate } from 'src/app/helpers/utils';
 import { PopoverController } from '@ionic/angular';
-import { INotificationApi } from 'src/app/interfaces/models';
+import { INotificationApi, ICustomEvent, IEventLoad } from 'src/app/interfaces/models';
 import { FormControl } from '@angular/forms';
 import { of, BehaviorSubject, combineLatest } from 'rxjs';
 
@@ -40,12 +40,12 @@ export class ListNotificationsComponent implements OnInit {
         this.usersService.resetPagination(this.usersService.PaginationKeys.NOTIFICATIONS);
 
 
-        const peticionHttpBusqueda = (body: any) => {
+        const peticionHttpBusqueda = (body) => {
             return this.usersService.getNotificationsUser(body)
                 .pipe(
                     pluck('data'),
                     map((data) => {
-                        data.forEach((noti: any) => {
+                        data.forEach((noti) => {
                             noti = MapNotification(noti);
                         });
                         return data;
@@ -72,7 +72,7 @@ export class ListNotificationsComponent implements OnInit {
                 })),
                 exhaustMap(peticionHttpBusqueda),
             )
-            .subscribe((data: any[]) => {
+            .subscribe((data) => {
                 this.notificationsList = [...data];
                 this.requestFinished = true;
                 return this.cargarNotificacionesSolicitadas();
@@ -85,18 +85,18 @@ export class ListNotificationsComponent implements OnInit {
         return ((indice + 1) !== this.notificationsRequested.length) ? 'full' : 'none';
     }
 
-    getNotifications(event: any = null, first_loading = false) {
+    getNotifications(event: IEventLoad = null) {
         this.usersService.getNotificationsUser().pipe(
             take(1),
             pluck('data'),
             map((data) => {
-                data.forEach((noti: any) => {
+                data.forEach((noti) => {
                     noti = MapNotification(noti);
                 });
                 return data;
             }),
             catchError(() => of([])),
-        ).subscribe((data: any[]) => {
+        ).subscribe((data: INotificationApi[]) => {
             if (event && event.data && event.data.target && event.data.target.complete) {
                 event.data.target.complete();
             }

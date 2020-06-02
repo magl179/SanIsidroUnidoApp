@@ -6,6 +6,7 @@ import { IUbication } from "src/app/interfaces/models";
 import { getJSON } from "src/app/helpers/utils";
 import { MapService } from 'src/app/services/map.service';
 import { CONFIG } from 'src/config/config';
+import { Marker } from 'leaflet';
 
 
 @Component({
@@ -25,7 +26,7 @@ export class SimpleMapComponent implements AfterViewInit {
         description: null
     };
     @Input() enableGesture = false;
-    map: any;
+    map;
     @ViewChild("simpleMap") mapDOM: ElementRef;
 
     constructor(
@@ -48,7 +49,7 @@ export class SimpleMapComponent implements AfterViewInit {
             zoomAnimation: false,
             markerZoomAnimation: false
         });
-        this.map.on('load', (e: any) => {
+        this.map.on('load', () => {
             L.control.scale().addTo(this.map);
         });
 
@@ -62,7 +63,7 @@ export class SimpleMapComponent implements AfterViewInit {
 
         
             const icon = await this.mapService.getCustomIcon('red');
-            let markerPosition: any;
+            let markerPosition: Marker;
             const leafletLat = L.latLng(this.coordsMap.latitude, this.coordsMap.longitude);
             if (icon) {
                 markerPosition = new L.Marker(leafletLat, { icon: icon });

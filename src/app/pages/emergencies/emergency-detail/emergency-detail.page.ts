@@ -48,11 +48,11 @@ export class EmergencyDetailPage implements OnInit {
         this.checkPoliciaRol();
     }
 
-    getEmergency(event?: any, resetEvents?: any) {
+    getEmergency() {
         this.emergencyLoaded = false;
         this.postsService.getEmergency(+this.id).pipe(
             take(1),
-            map((res: any) => {
+            map((res) => {
                 if (res && res.data) {
                     const emergency = res.data;
                     res.data = mapEmergency(emergency);
@@ -110,8 +110,6 @@ export class EmergencyDetailPage implements OnInit {
     }
 
     async onPoliciaDenyEmergency(){
-        //Ocultar botones, en este caso seria cambiar ispolicia rol
-       
         const modal = await this.modalCtrl.create({
             component: FormAttendEmergencyModal,
             componentProps: {

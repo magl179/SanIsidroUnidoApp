@@ -51,11 +51,11 @@ export class EventDetailPage implements OnInit {
         this.getEvent();
     }
 
-    getEvent(event?: any, resetEvents?: any) {
+    getEvent() {
         this.eventLoaded = false;
         this.postService.getEvent(+this.id).pipe(
             take(1),
-            map((res: any) => {
+            map((res: IRespuestaApiSIUSingle) => {
                 if (res && res.data) {
                     const event = res.data;
                     res.data = mapEvent(event);
@@ -118,7 +118,7 @@ export class EventDetailPage implements OnInit {
         const sharePost: IPostShare = {
             title: post.title,
             description: cortarTextoConPuntos(post.description, 90),
-            image: getFirstPostImage(post),
+            image: getFirstPostImage(post.imagesArr),
             url: ''
         };
         await this.utilsService.shareSocial(sharePost);

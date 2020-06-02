@@ -8,7 +8,7 @@ import { UtilsService } from "src/app/services/utils.service";
 })
 export class SlideshowImagesFullComponent implements OnInit {
 
-    @Input() listImages: any[] = [];
+    @Input() listImages: string[] = [];
     @Input() title = 'Imagen';
     @Input() ionSlideClass = '';
     @Input() ionSlidesClass = '';

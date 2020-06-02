@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavController } from "@ionic/angular";
 import { UtilsService } from 'src/app/services/utils.service';
-import { IPostShare } from 'src/app/interfaces/models';
+import { IPostShare, IRespuestaApiSIUSingle, IEventLoad } from 'src/app/interfaces/models';
 import { PostsService } from 'src/app/services/posts.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { finalize, map, catchError, pluck, distinctUntilChanged, tap, exhaustMap } from 'rxjs/operators';
@@ -63,7 +63,7 @@ export class EventsListPage implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        const peticionHttpBusqueda = (body: any) => {
+        const peticionHttpBusqueda = (body) => {
             if(body.title == ''){
                 return of([...this.eventsList])
             }
@@ -72,7 +72,7 @@ export class EventsListPage implements OnInit, OnDestroy {
                 pluck('data'),
                 map(data =>{
                     const events_to_map = data
-                    events_to_map.forEach((event: any) => {
+                    events_to_map.forEach((event) => {
                         event = mapEvent(event);
                         const postAssistance = checkLikePost(event.reactions, this.AuthUser) || false;
                         event.postAssistance = postAssistance;
@@ -94,7 +94,7 @@ export class EventsListPage implements OnInit, OnDestroy {
             }
         });
         this.loadEvents(null, true);
-        this.events_app.eventsLikesEmitter.subscribe((event_app: any) => {
+        this.events_app.eventsLikesEmitter.subscribe((event_app) => {
             this.toggleLikes(event_app.reactions, event_app.id);
         });
         this.eventControl.valueChanges
@@ -110,7 +110,7 @@ export class EventsListPage implements OnInit, OnDestroy {
             })),
             exhaustMap(peticionHttpBusqueda),
         )
-        .subscribe((data: any[]) => {
+        .subscribe((data: IEvent[]) => {
             this.showNotFound = (data.length == 0) ? true: false;
             this.eventsFiltered = [...data];
             this.searchingEvents = false;
@@ -148,7 +148,7 @@ export class EventsListPage implements OnInit, OnDestroy {
             return;
         }
         if (assistance) {
-            this.postsService.sendDeleteDetailToPost(id).subscribe((res: any) => {
+            this.postsService.sendDeleteDetailToPost(id).subscribe((res: IRespuestaApiSIUSingle) => {
                 this.eventsList.forEach(event => {
                     if (event.id == id) {
                         if (res.data.reactions) {
@@ -167,7 +167,7 @@ export class EventsListPage implements OnInit, OnDestroy {
                 user_id: this.AuthUser.id,
                 post_id: id
             }
-            this.postsService.sendCreateDetailToPost(detailInfo).subscribe((res: any) => {
+            this.postsService.sendCreateDetailToPost(detailInfo).subscribe((res: IRespuestaApiSIUSingle) => {
                 this.eventsList.forEach(event => {
                     if (event.id == id) {
                         if (res.data.reactions) {
@@ -187,7 +187,7 @@ export class EventsListPage implements OnInit, OnDestroy {
         const sharePost: IPostShare = {
             title: post.title,
             description: cortarTextoConPuntos(post.description),
-            image: getFirstPostImage(post)
+            image: getFirstPostImage(post.imagesArr)
         };
         await this.utilsService.shareSocial(sharePost);
     }
@@ -196,11 +196,11 @@ export class EventsListPage implements OnInit, OnDestroy {
         event.target.src = 'https://via.placeholder.com/600x300?text=SanIsidroImage';
     }
 
-    loadEvents(event: any = null, first_loading = false) {
+    loadEvents(event: IEventLoad = null, first_loading = false) {
         this.postsService.getPostsBySubCategory(CONFIG.EVENTS_SLUG, this.subcategory,{}, this.postsService.PaginationKeys.EVENTS_BY_SUBCATEGORY).pipe(
             map((res: IRespuestaApiSIUPaginada) => {
                 if (res && res.data) {
-                    res.data.forEach((event: any) => {
+                    res.data.forEach((event) => {
                         event = mapEvent(event);
                         const postAssistance = checkLikePost(event.reactions, this.AuthUser) || false;
                         event.postAssistance = postAssistance;
@@ -255,14 +255,14 @@ export class EventsListPage implements OnInit, OnDestroy {
         this.navCtrl.navigateForward(`/events/list/${this.subcategory}/${id}`);
     }
     //Obtener datos con el Infinite Scroll
-    getInfiniteScrollData(event: any) {
+    getInfiniteScrollData(event: CustomEvent) {
         this.loadEvents({
             type: 'infinite_scroll',
             data: event
         });
     }
     //Obtener datos con Refresher
-    doRefresh(event: any) {
+    doRefresh(event: CustomEvent) {
         this.loadEvents({
             type: 'refresher',
             data: event

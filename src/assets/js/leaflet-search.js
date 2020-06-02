@@ -557,7 +557,6 @@ L.Control.Search = L.Control.extend({
         retRecords[ self._getPath(layer.feature.properties,propName) ] = loc;
       }
       else {
-        //throw new Error("propertyName '"+propName+"' not found in marker"); 
         console.warn("propertyName '"+propName+"' not found in marker"); 
       }
     }
@@ -576,7 +575,6 @@ L.Control.Search = L.Control.extend({
         retRecords[ self._getPath(layer.feature.properties,propName) ] = loc;
       }
       else {
-        //throw new Error("propertyName '"+propName+"' not found in shape"); 
         console.warn("propertyName '"+propName+"' not found in shape"); 
       }
     }
@@ -597,7 +595,6 @@ L.Control.Search = L.Control.extend({
         }
       }
       else {
-        //throw new Error("propertyName '"+propName+"' not found in feature");
         console.warn("propertyName '"+propName+"' not found in feature"); 
       }
     }

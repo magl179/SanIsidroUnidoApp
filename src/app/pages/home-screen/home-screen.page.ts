@@ -1,7 +1,7 @@
 import { Component, OnInit, } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { LocalDataService } from 'src/app/services/local-data.service';
-import { ISlideTutorial } from 'src/app/interfaces/models';
+import { ISlideTutorial, ICustomEvent } from 'src/app/interfaces/models';
 import { UtilsService } from "src/app/services/utils.service";
 import { HttpErrorResponse } from "@angular/common/http";
 import { ErrorService } from 'src/app/services/error.service';
@@ -27,7 +27,7 @@ export class HomeScreenPage implements OnInit {
 
     async ngOnInit() {
         this.localDataService.getTutoSlides().subscribe(
-            (res: any) => {
+            (res: ISlideTutorial[]) => {
                 this.slides = res;
             }, (error_http: HttpErrorResponse) => {
                 this.errorService.manageHttpError(error_http, 'No se pudieron cargar las opciones del tutorial');
@@ -36,7 +36,7 @@ export class HomeScreenPage implements OnInit {
         await this.utilsService.disabledMenu();
     }
     
-     slideChange(event: any) {
+     slideChange(event: ICustomEvent ) {
         event.target.isBeginning().then(is_first_slide => {
             if (is_first_slide) {
                 event.target.lockSwipeToPrev(true);
@@ -53,7 +53,7 @@ export class HomeScreenPage implements OnInit {
         });
      }
     // Funcion cuando el slide carga
-    slidesLoaded(event: any) {
+    slidesLoaded(event: ICustomEvent) {
         event.target.lockSwipeToPrev(true);
     }
     //Funcion navegar hacia pagina de Login

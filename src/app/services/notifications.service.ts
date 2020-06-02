@@ -55,7 +55,7 @@ export class NotificationsService implements OnInit {
     }
 
     async initialConfig() {
-        this.events_appService.logoutAppEmitter.subscribe((event: any) => {
+        this.events_appService.logoutAppEmitter.subscribe(() => {
             this.logoutOnesignal();
         });
         //Configurar Onesignal en un Dispositivo
@@ -83,7 +83,7 @@ export class NotificationsService implements OnInit {
     }
     
     //Guardar ID Dispositivo en el Storage
-    async saveDeviceInfo(device_id: any) {
+    async saveDeviceInfo(device_id: string) {
         this.storage.set(USER_DEVICE_ID_STORAGE, device_id);
     }
     //Obtener ID Dispositivo en el Storage
@@ -120,7 +120,7 @@ export class NotificationsService implements OnInit {
                 phone_platform: this.userDevice.value.phone_platform
             };
             this.userService.sendRequestAddUserDevice(data)
-                .subscribe(async (res: any) => {
+                .subscribe(() => {
                     this.saveDeviceInfo(this.userDevice.value.phone_id);
                 }, (error_http: HttpErrorResponse) => {
                     this.errorService.manageHttpError(error_http, 'No pudimos agregar el dispositivo', false);
@@ -171,7 +171,7 @@ export class NotificationsService implements OnInit {
 
     logoutDeviceApi(deviceID){
         if (deviceID) {
-            this.userService.sendRequestDeleteUserPhoneDevice(deviceID).subscribe(async (res: any) => {
+            this.userService.sendRequestDeleteUserPhoneDevice(deviceID).subscribe(() => {
                 this.messageService.showSuccess('Dispositivo Desuscrito Correctamente');
             }, (error_http: HttpErrorResponse) => {
                 this.errorService.manageHttpError(error_http, 'Ocurrio un error al desuscribir el dispositivo');
@@ -212,8 +212,7 @@ export class NotificationsService implements OnInit {
     }
 
     async manageAppNotification(aditionalData: INotiList) {
-        //Verificar si tengo dato posts   
-        console.log('manage app notification', aditionalData)     
+        //Verificar si tengo dato posts       
         this.managePostNotification(aditionalData);
         
     }

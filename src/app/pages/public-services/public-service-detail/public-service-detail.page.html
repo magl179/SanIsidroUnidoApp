@@ -30,9 +30,9 @@
                     (publicServiceDetail.public_opening && publicServiceDetail.public_opening["close-time"]) ? publicServiceDetail.public_opening["close-time"]: ''}}
             </p>
         </div>
-        <div *ngIf="publicServiceDistance">
+        <div *ngIf="currentPosition">
             <p style="display:block;font-weight: bold;">Distancia:</p>
-            <p>El destino se encuentra a {{publicServiceDistance}} km desde tu ubicación
+            <p>El destino se encuentra a {{currentPosition.latitude | publicServiceDistancePipe: currentPosition.longitude: publicServiceDetail.ubication.latitude: publicServiceDetail.ubication.longitude }} km desde tu ubicación
                 actual</p>
         </div>
 

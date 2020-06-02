@@ -3,7 +3,7 @@ import { NavController } from "@ionic/angular";
 import { PostsService } from "src/app/services/posts.service";
 import { map, finalize } from 'rxjs/operators';
 import { mapCategory } from 'src/app/helpers/utils';
-import { ISubcategory, IRespuestaApiSIUSingle } from "src/app/interfaces/models";
+import { ISubcategory, IRespuestaApiSIUSingle, IRespuestaApiSIU } from "src/app/interfaces/models";
 import { CONFIG } from 'src/config/config';
 
 @Component({
@@ -40,7 +40,7 @@ export class EventsCategoriesPage implements OnInit {
             finalize(() => {
                 this.categoriesLoaded = true;
             })
-        ).subscribe((res : any) => {
+        ).subscribe((res : IRespuestaApiSIU) => {
             this.categories = res.data;
         });
     }

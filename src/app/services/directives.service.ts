@@ -16,9 +16,9 @@ export class DirectivesService {
 
     getDirectives(): Observable<any> {
         return this.httpRequest.get(`${environment.APIBASEURL}/directivos`).pipe(
-            map((res: any) => {
+            map((res) => {
             if (res && res.data) {
-                res.data.forEach((directive: any) => {
+                res.data.forEach((directive) => {
                     directive = mapUser(directive);
                 });
             }

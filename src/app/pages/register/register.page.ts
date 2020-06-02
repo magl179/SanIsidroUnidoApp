@@ -14,7 +14,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CONFIG } from 'src/config/config';
 import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from 'src/app/services/messages.service';
-import { IFacebookApiUser } from 'src/app/interfaces/models';
 import { SocialEmailLoginModal } from 'src/app/modals/social-email-login/social-email-login.modal';
 
 @Component({
@@ -61,7 +60,7 @@ export class RegisterPage implements OnInit {
         setInputFocus(this.passwordEye);
     }
 
-    async manageRegister(loginData, res) {
+    async manageRegister(res) {
         //Obtener Token y Usuario
         const loadingManageRegister = await this.utilsService.createBasicLoading('Obteniendo Respuesta...');
         loadingManageRegister.present();
@@ -99,7 +98,7 @@ export class RegisterPage implements OnInit {
                 loadingRegisterValidation.dismiss();
             })
         ).subscribe(async res => {
-            await this.manageRegister({ provider: 'formulario', email, password }, res);
+            await this.manageRegister(res);
         }, (error_http: HttpErrorResponse) => {
             this.errorService.manageHttpError(error_http, 'Ocurrio un error al completar el registro');
         });
@@ -126,7 +125,7 @@ export class RegisterPage implements OnInit {
             this.messagesService.showInfo('Verificando las credenciales')
             //Funcion Registro
             this.authService.register(user).subscribe(async res => {
-                await this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'facebook' }, res);
+                await this.manageRegister(res);
             }, (error_http: HttpErrorResponse) => {
                 this.errorService.manageHttpError(error_http, 'Ocurrio un error en el registro, intentalo más tarde');
             });
@@ -157,7 +156,7 @@ export class RegisterPage implements OnInit {
             user.device = device;
             //Funcion Registro
             this.authService.register(user).subscribe(async res => {
-                await this.manageRegister({ email: user.email, social_id: user.social_id, provider: 'google' }, res);
+                await this.manageRegister(res);
             }, (error_http: HttpErrorResponse) => {
                 this.errorService.manageHttpError(error_http, 'No se pudo completar el registro, intentalo mas tarde');
             });
@@ -175,7 +174,7 @@ export class RegisterPage implements OnInit {
             backdropDismiss: false
         });
         await modal.present();
-        const { data }: any = await modal.onWillDismiss();
+        const data: any = await modal.onWillDismiss();
         const email = (data && data.email) ? data.email : null;
         return email;
     }

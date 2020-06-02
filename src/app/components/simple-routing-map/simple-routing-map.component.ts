@@ -5,9 +5,10 @@ import { GestureHandling } from "leaflet-gesture-handling";
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MapService } from "src/app/services/map.service";
 import { environment } from 'src/environments/environment';
-import { IUbication } from "src/app/interfaces/models";
+import { IUbication, AppMapEvent, AppMarkers, ILeafletControl } from "src/app/interfaces/models";
 import { CONFIG } from 'src/config/config';
 import { MessagesService } from 'src/app/services/messages.service';
+import { Control, Map, Polyline, Marker } from 'leaflet';
 
 
 @Component({
@@ -27,24 +28,21 @@ export class SimpleRoutingMapComponent implements OnInit {
     @Input() simpleMap = false;
     @Input() targetUbicacionIcon = null;
 
-    @Input() currentCoordinate: any = null;
-    @Output() mapEvent = new EventEmitter();
+    @Input() currentCoordinate = null;
+    @Output() mapEvent = new EventEmitter<AppMapEvent>();
 
-
-    polylineRoute: any;
+    polylineRoute: Polyline;
     map: any;
-    mapMarkers: any[] = null;
+    mapMarkers: AppMarkers[] = null;
     mapIsLoaded = false;
     markersLayer = new L.LayerGroup();
-    routeControl: any;
-
+    routeControl: ILeafletControl;
     arrRoutesLatLng = [];
 
     constructor(
         private mapService: MapService,
         private messageService: MessagesService,
     ) {
-
     }
 
     async ngOnInit() { }
@@ -77,7 +75,7 @@ export class SimpleRoutingMapComponent implements OnInit {
             zoomControl: true
         });
         // Agregar Evento al Mapa cuando esta cargado
-        this.map.on('load', (e: any) => {
+        this.map.on('load', () => {
             this.mapIsLoaded = true;
             // Invalidar Tamanio
             this.map.invalidateSize();
@@ -100,10 +98,10 @@ export class SimpleRoutingMapComponent implements OnInit {
             this.setRoutingMachine(this.arrRoutesLatLng);
         }
         this.map.addLayer(this.markersLayer);
-        // Si obtuve coordenadas añadir el marcador
-        let currentPoint: any;
-        if (!this.simpleMap && this.currentCoordinate) {
-            const iconCurrent = (this.targetUbicacionIcon) ? this.mapService.createExternalIcon(this.targetUbicacionIcon) : await this.mapService.getCustomIcon('red');
+        // Añadir el marcador de mi posicion actual
+        let currentPoint: Marker;
+        if (this.currentCoordinate) {
+            const iconCurrent = await this.mapService.getCustomIcon('red');
             this.arrRoutesLatLng[0] = this.createLatLng(this.currentCoordinate.latitude, this.currentCoordinate.longitude);
             if (iconCurrent) {
                 currentPoint = new L.Marker(this.arrRoutesLatLng[0], { icon: iconCurrent, title: 'Mi Posición Actual' });
@@ -140,7 +138,7 @@ export class SimpleRoutingMapComponent implements OnInit {
 
     }
 
-    addPolyline(arrayCoordsLatLng: any) {
+    addPolyline(arrayCoordsLatLng) {
         this.polylineRoute = L.polyline(arrayCoordsLatLng,
             {
                 color: '#ee0033',
@@ -155,7 +153,7 @@ export class SimpleRoutingMapComponent implements OnInit {
         this.map.fitBounds(this.polylineRoute.getBounds());
     }
 
-    setRoutingMachine(arrCoords: any) {
+    setRoutingMachine(arrCoords) {
         this.routeControl = L.Routing.control({
             waypoints: arrCoords,
             show: false,
@@ -164,10 +162,6 @@ export class SimpleRoutingMapComponent implements OnInit {
             createMarker: function () { return null; }
         });
         this.routeControl.addTo(this.map);
-    }
-
-    updateRouteCoords(arrCoords: any[]) {
-        this.routeControl.setWaypoints(arrCoords);
     }
 
     createLatLng(latitude: number, longitude: number) {

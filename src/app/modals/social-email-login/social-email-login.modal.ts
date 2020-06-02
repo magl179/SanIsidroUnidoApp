@@ -1,6 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { LocalDataService } from 'src/app/services/local-data.service';
 import { ModalController } from '@ionic/angular';
 import { MessagesService } from 'src/app/services/messages.service';
 import { UtilsService } from 'src/app/services/utils.service';
@@ -13,7 +12,6 @@ import { CONFIG } from 'src/config/config';
 })
 export class SocialEmailLoginModal implements OnInit {
 
-  // @Input("title") title = 'Inicio por Red Social';
   public title: string = '';
   socialEmailLoginForm: FormGroup;
 

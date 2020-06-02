@@ -43,11 +43,11 @@ export class ReportDetailPage implements OnInit {
         this.getReport();
     }
 
-    getReport(event?: any, resetEvents?: any) {
+    getReport(): void {
         this.reportLoaded = false;
         this.postsService.getReport(+this.id).pipe(
             take(1),
-            map((res: any) => {
+            map((res: IRespuestaApiSIUSingle) => {
                 if (res && res.data) {
                     const report = res.data;
                     res.data = mapReport(report);

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IRespuestaApiSIUSingle } from 'src/app/interfaces/models';
+import { IRespuestaApiSIUSingle, ISimpleCoordinates, AppMapEvent } from 'src/app/interfaces/models';
 import { PublicService } from "src/app/services/public.service";
 import { take, finalize, flatMap } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -22,7 +22,6 @@ export class PublicServiceDetailPage implements OnInit {
     publicServiceLoaded = false;
     publicServiceDetail = null;
     mapLoaded = false;
-
     currentPosition = null;
 
     constructor(
@@ -33,16 +32,15 @@ export class PublicServiceDetailPage implements OnInit {
     ) {
     }
 
-    async ngOnInit() {
+    ngOnInit(): void {
         this.id = this.activatedRoute.snapshot.paramMap.get('id');
         this.category = this.activatedRoute.snapshot.paramMap.get('category');
        
         this.getPublicServiceDetail();
         this.backUrl = `/public-services/list/${this.category}`;
         if(!this.showSimpleMap){
-            this.localizationService.getCoordinates().then(coordinates=>{
-                this.currentPosition = coordinates;
-                return;
+            this.localizationService.getCoordinates().then((coordinates: ISimpleCoordinates)=>{
+                this.currentPosition = coordinates;               
             }).catch(()=>{
                 return null;
             });
@@ -51,7 +49,7 @@ export class PublicServiceDetailPage implements OnInit {
       
     }
 
-    getPublicServiceDetail() {
+    getPublicServiceDetail(): void {
         this.publicServiceLoaded = false;
         this.publicService.getPublicService(+this.id).pipe(
             take(1),
@@ -77,24 +75,9 @@ export class PublicServiceDetailPage implements OnInit {
         });
     }
 
-    manageMapEvent(event: any) {
+    manageMapEvent(event: AppMapEvent): void {
         if (event && event.loaded) {
             this.mapLoaded = true;
         }
     }
-
-    get publicServiceDistance(){
-        const currentLatitude = (this.publicServiceDetail.ubication && this.publicServiceDetail.ubication.latitude) ? this.publicServiceDetail.ubication.latitude: null;
-        const currentLongitude = (this.publicServiceDetail.ubication && this.publicServiceDetail.ubication.longitude) ? this.publicServiceDetail.ubication.longitude: null;
-        if(this.currentPosition && this.currentPosition.latitude && this.currentPosition.longitude){
-            return roundDecimal(
-                getDistanceInKm(
-                    this.currentPosition.latitude, 
-                    this.currentPosition.longitude, 
-                    currentLatitude, 
-                    currentLongitude));
-        }
-        return '';
-    }
-
 }

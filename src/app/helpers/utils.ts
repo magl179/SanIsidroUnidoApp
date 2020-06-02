@@ -2,7 +2,7 @@
 import { environment } from 'src/environments/environment';
 import { Observable, interval, throwError, of } from 'rxjs';
 import { retryWhen, flatMap } from 'rxjs/operators';
-import { ISubcategory } from 'src/app/interfaces/models';
+import { ISubcategory, IResource } from 'src/app/interfaces/models';
 import { CONFIG } from 'src/config/config';
 import { es } from 'date-fns/locale'
 import { parseISO, format as dateFormat } from 'date-fns';
@@ -19,7 +19,7 @@ export const GEOLOCATION_ERRORS = {
 export const getCurrentDate = () => dateFormat(new Date(), 'yyyy-MM-dd HH:mm:s');
 
 //Funcion para verificar si una variable es un JSON
-const isJSON = (str: any) => {
+const isJSON = (str: string) => {
     try {
         return JSON.parse(str) && !!str;
     } catch (e) {
@@ -39,7 +39,7 @@ export const getJSON = (variable: any) => {
 }
 
 
-export const setHeaders = (key: any, value: any) => {
+export const setHeaders = (key: string, value: any) => {
     const newHeaders = CONFIG.API_HEADERS;
     newHeaders[key] = value;
     return newHeaders;
@@ -50,7 +50,7 @@ const getValueKeyFromArrObj = (arr: object[], key: string) => {
     return arrFilter;
 }
 
-export const setFilterKeys = (filters: object, type: string, value: any) => {
+export const setFilterKeys = (filters: object, value: any) => {
     for (const prop in filters) {
         filters[prop] = value;
     }
@@ -94,7 +94,7 @@ export const searchInArrayObj = (items: any[], filter: { [key: string]: any }) =
     for (const prop in filter) {
         //Recorro el arreglo y verifico si existe esa propiedad 
         // y si existe si coincide con el valor solicitado
-        items.forEach((item: any) => {
+        items.forEach((item) => {
             const hasOwnProperty = item.hasOwnProperty(prop);
             const propMatch = item[prop] === filter[prop];
             if (hasOwnProperty && propMatch) {
@@ -105,7 +105,7 @@ export const searchInArrayObj = (items: any[], filter: { [key: string]: any }) =
     return match;
 }
 
-export const ramdomItem = (array: any[]) => {
+export const ramdomItem = (array = []) => {
     const valueRamdom = ramdomValue(array.length);
     const item = array[valueRamdom];
     return item;
@@ -139,13 +139,13 @@ export const getImageURL = (image_name: string) => {
     }
 }
 
-export const mapImagesApi = (images: any[]) => {
-    return images.map((image: any) => {
+export const mapImagesApi = (images: IResource[]) => {
+    return images.map((image: IResource) => {
         return image.url_link;
     });
 }
 
-export const mapUser = (user: any) => {
+export const mapUser = (user) => {
     return user;
 }
 
@@ -157,7 +157,7 @@ export const manageTwoFingerDrag = (event: any) => {
     }
 }
 
-export const MapNotification = (notification: any) => {
+export const MapNotification = (notification) => {
     if (notification && notification.user) {
         notification.user = mapUser(notification.user);
     }
@@ -169,11 +169,11 @@ export const getBackgroundApp = (image_url: string) => {
     return `linear-gradient(rgba(2, 2, 2, 0.58), rgba(2, 2, 2, 0.58)), url(${image_url})`;
 }
 
-export const isType = (type: any, val: any) => {
+export const isType = (type: string, val: any) => {
     return !!(val.constructor && val.constructor.name.toLowerCase() === type.toLowerCase());
 }
 
-export const mapEvent = (event: any) => {
+export const mapEvent = (event) => {
     event.ubication = getJSON(event.ubication);
     if (event.resources && event.resources.length > 0) {
         event.images = mapImagesApi(event.resources);
@@ -202,7 +202,7 @@ export const getRandomColor = () => {
     return ramdomItem(avalaibleColors);
 }
 
-export const getIosDateParsed = (date: any) => {
+export const getIosDateParsed = (date: string) => {
     const parsed = Date.parse(date);
     if (!isNaN(parsed)) {
         return parsed;
@@ -211,7 +211,7 @@ export const getIosDateParsed = (date: any) => {
 }
 
 
-export const mapEmergency = (emergency: any) => {
+export const mapEmergency = (emergency) => {
     emergency.ubication = getJSON(emergency.ubication);
     if (emergency.resources && emergency.resources.length > 0) {
         emergency.images = mapImagesApi(emergency.resources);
@@ -253,12 +253,12 @@ export const mapSocialProblem = (social_problem: any) => {
     return social_problem;
 }
 
-export const getFirstPostImage = (post: any) => {
-    if (!post.imagesArr) { return null; }
-    if (post.imagesArr.length == 0) {
+export const getFirstPostImage = (imagesArr: string[]) => {
+    if (!imagesArr) { return null; }
+    if (imagesArr.length == 0) {
         return null
     } else {
-        return post.imagesArr[0];
+        return imagesArr[0];
     }
 }
 
@@ -283,7 +283,7 @@ export const setInputFocus = (inputElement: any) => {
     }, 1);
 }
 
-export const getImagesPost = ($imagesArray: any[]) => {
+export const getImagesPost = ($imagesArray: IResource[]) => {
     if ($imagesArray) {
         if ($imagesArray.length === 0) {
             return '';

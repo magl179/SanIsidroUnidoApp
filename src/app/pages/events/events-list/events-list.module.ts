@@ -6,8 +6,6 @@ import { IonicModule } from '@ionic/angular';
 import { EventsListPage } from './events-list.page';
 import { SmComponentsModule } from 'src/app/components/sm-components.module';
 import { PipesModule } from 'src/app/pipes/pipes.module';
-import { SearchPage } from "src/app/modals/search/search.page";
-import { SearchPageModule } from "src/app/modals/search/search.module";
 import { DirectivesModule } from 'src/app/directives/directives.module';
 
 
@@ -19,20 +17,18 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    entryComponents: [
-        SearchPage
-    ],
+  entryComponents: [
+  ],
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-      SmComponentsModule,
-        DirectivesModule,
-        PipesModule,
-        ReactiveFormsModule,
-      SearchPageModule
+    SmComponentsModule,
+    DirectivesModule,
+    PipesModule,
+    ReactiveFormsModule,
   ],
   declarations: [EventsListPage]
 })
-export class EventsListPageModule {}
+export class EventsListPageModule { }

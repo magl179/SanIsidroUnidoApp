@@ -10,6 +10,7 @@ import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from 'src/app/services/messages.service';
 import { TelefonoValidator } from 'src/app/helpers/numero_telefono.validator';
 import { finalize } from 'rxjs/operators';
+import { ITokenDecoded } from 'src/app/interfaces/models';
 
 @Component({
     selector: 'modal-edit-profile',
@@ -41,7 +42,7 @@ export class EditProfilePage implements OnInit {
 
     async loadUserData() {
         //OBTENER INFORMACIÓN USUARIO AUTENTICADO, FORMA CORRECTA
-        const response_auth: any =  await this.authService.getTokenUserAuthenticated().catch(()=> null)
+        const response_auth: ITokenDecoded =  await this.authService.getTokenUserAuthenticated().catch(()=> null)
         if (response_auth) {
             this.AuthUser = response_auth.user;
         }

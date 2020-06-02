@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { UserService } from 'src/app/services/user.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { IRespuestaApiSIUSingle } from "src/app/interfaces/models";
+import { IRespuestaApiSIUSingle, IUploadedImages } from "src/app/interfaces/models";
 import { decodeToken } from 'src/app/helpers/auth-helper';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/services/error.service';
@@ -73,7 +73,7 @@ export class RequestMembershipPage implements OnInit {
         this.modalCtrl.dismiss();
     }
 
-    getUploadedImages(event: any) {
+    getUploadedImages(event: IUploadedImages) {
         this.publicServiceImg = event.uploaded_images;
         
     }
@@ -89,8 +89,6 @@ export class RequestMembershipPage implements OnInit {
             basic_service_image: imagen,
             ...this.requestMembershipForm.value
         }
-        console.warn('membersgip body', requestObj)
-        // return;
         this.userService.sendRequestUserMembership(requestObj).subscribe(async (res: IRespuestaApiSIUSingle) => {
             const token = res.data.token;
             const token_decoded = decodeToken(token);

@@ -55,7 +55,7 @@ export class UserPage implements OnInit {
 
     async ngOnInit() {
         this.authService.sessionAuthUser.pipe(
-                map((token_decoded: any) => {
+                map((token_decoded: ITokenDecoded) => {
                     if (token_decoded && token_decoded.user) {
                         token_decoded.user = mapUser(token_decoded.user);
                     }

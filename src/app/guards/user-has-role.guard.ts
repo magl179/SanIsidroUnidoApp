@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { hasRoles } from "src/app/helpers/user-helper";
 import { CONFIG } from 'src/config/config';
 import { getUserRoles } from 'src/app/helpers/user-helper';
+import { ITokenDecoded } from '../interfaces/models';
 
 @Injectable({
     providedIn: 'root'
@@ -17,7 +18,7 @@ export class UserHasRoleGuard implements CanLoad {
     ) { }
 
     async canLoad(): Promise<boolean> {
-        const tokenDecoded = await this.authService.getTokenUserAuthenticated();
+        const tokenDecoded: ITokenDecoded = await this.authService.getTokenUserAuthenticated();
         const roles = getUserRoles(tokenDecoded);
         const hasRole = hasRoles(roles, CONFIG.ALLOWED_ROLES_REPORT);
         if (hasRole) {

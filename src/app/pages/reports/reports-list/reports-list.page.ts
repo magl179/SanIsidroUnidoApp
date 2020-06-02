@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PostsService } from "src/app/services/posts.service";
 import { finalize, map, catchError, tap, distinctUntilChanged, exhaustMap, pluck } from 'rxjs/operators';
 import { NavController } from '@ionic/angular';
-import { IRespuestaApiSIUPaginada, IReport } from 'src/app/interfaces/models';
+import { IRespuestaApiSIUPaginada, IReport, IEventLoad } from 'src/app/interfaces/models';
 import { mapReport } from "src/app/helpers/utils";
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/services/error.service';
@@ -11,6 +11,11 @@ import { of } from 'rxjs';
 import { trigger,style,transition,animate,keyframes,query,stagger } from '@angular/animations';
 import { FormControl } from '@angular/forms';
 import { CONFIG } from 'src/config/config';
+
+interface BodyRequest {
+    category: string;
+    title: string;
+}
 
 @Component({
   selector: 'app-reports-list',
@@ -50,7 +55,7 @@ export class ReportsListPage implements OnInit, OnDestroy {
     
     ngOnInit() { 
 
-        const peticionHttpBusqueda = (body: any) => {
+        const peticionHttpBusqueda = (body: BodyRequest) => {
             if(body.title == ''){
                 return of([...this.reportsList])
             }
@@ -59,7 +64,7 @@ export class ReportsListPage implements OnInit, OnDestroy {
                 pluck('data'),
                 map(data =>{
                     const reports_to_map = data
-                    reports_to_map.forEach((report: any) => {
+                    reports_to_map.forEach((report) => {
                         report = mapReport(report);
                     });
                     return reports_to_map;
@@ -86,7 +91,7 @@ export class ReportsListPage implements OnInit, OnDestroy {
             })),
             exhaustMap(peticionHttpBusqueda),
         )
-        .subscribe((data: any[]) => {
+        .subscribe((data: IReport[]) => {
             this.showNotFound = (data.length == 0) ? true: false;
             this.reportsFiltered = [...data];
             this.searchingActivities = false;
@@ -107,12 +112,12 @@ export class ReportsListPage implements OnInit, OnDestroy {
         this.postsService.resetPagination(this.postsService.PaginationKeys.REPORTS);
     }
     
-    loadReports(event: any = null, first_loading=false) {
+    loadReports(event: IEventLoad = null, first_loading=false) {
         this.postsService.getReports().pipe(
             map((res: IRespuestaApiSIUPaginada) => {
                 if (res && res.data) {
                     const reports_to_map = res.data;
-                    reports_to_map.forEach((report: any) => {
+                    reports_to_map.forEach((report) => {
                         report = mapReport(report);
                     });
                 }
@@ -162,14 +167,14 @@ export class ReportsListPage implements OnInit, OnDestroy {
     }
 
     //Obtener datos con el Infinite Scroll
-    doInfiniteScroll(event: any) {
+    doInfiniteScroll(event: CustomEvent) {
         this.loadReports({
             type: 'infinite_scroll',
             data: event
         });
     }
     //Obtener datos con Refresher
-    doRefresh(event: any) {
+    doRefresh(event: CustomEvent) {
         this.loadReports({
             type: 'refresher',
             data: event

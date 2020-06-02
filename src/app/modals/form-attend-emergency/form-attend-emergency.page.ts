@@ -15,7 +15,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class FormAttendEmergencyModal implements OnInit {
 
     attendEmergencyForm: FormGroup;
-    user: any;
     userName = '';
     AuthUser: IUser;
     Emergency: IEmergency;

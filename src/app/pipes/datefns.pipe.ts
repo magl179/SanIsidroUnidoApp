@@ -8,7 +8,7 @@ import { es } from 'date-fns/locale'
 })
 export class DateFnsPipe implements PipeTransform {
 
-    transform(value: Date | number | string, format: string): any {
+    transform(value: Date | number | string, format: string): string {
         if(!value){
             return '';
         }

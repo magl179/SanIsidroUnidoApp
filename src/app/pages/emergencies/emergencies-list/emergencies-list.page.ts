@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavController } from "@ionic/angular";
 import { UtilsService } from "src/app/services/utils.service";
 import { PostsService } from "src/app/services/posts.service";
-import { IRespuestaApiSIUPaginada, ITokenDecoded } from "src/app/interfaces/models";
+import { IRespuestaApiSIUPaginada, ITokenDecoded, IResource } from "src/app/interfaces/models";
 import { finalize, map, catchError, pluck, distinctUntilChanged, tap, exhaustMap, share, startWith, skip, switchMap } from 'rxjs/operators';
 import { mapEmergency } from "src/app/helpers/utils";
 import { AuthService } from 'src/app/services/auth.service';
@@ -69,13 +69,13 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
 
     async ngOnInit() {
         //Peticion
-        const peticionHttpBusqueda = (body: any) => {
+        const peticionHttpBusqueda = (body) => {
             return this.postsService.searchPosts(body)
                 .pipe(
                     pluck('data'),
                     map(data => {
                         const emergencies_to_map = data
-                        emergencies_to_map.forEach((emergency: any) => {
+                        emergencies_to_map.forEach((emergency) => {
                             emergency = mapEmergency(emergency);
                         });
                         return emergencies_to_map;
@@ -103,7 +103,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         //Primera Carga
         this.loadEmergencies(null, true);
         //Simular Un Refresh cuando se crea nuevas emergencias
-        this.events_app.emergenciesEmitter.subscribe((event_app: any) => {
+        this.events_app.emergenciesEmitter.subscribe(() => {
             this.postsService.resetPagination(this.postsService.PaginationKeys.EMERGENCIES);
             this.loadEmergencies({
                 type: 'refresher',
@@ -129,7 +129,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
                 })),
                 switchMap(peticionHttpBusqueda),
             )
-            .subscribe((data: any[]) => {
+            .subscribe((data) => {
                 this.showNotFound = (data.length == 0) ? true : false;
                 this.emergenciesFiltered = [...data];
                 this.searchingEmergencies = false;
@@ -149,13 +149,13 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         }
     }
 
-    async loadEmergencies(event: any = null, first_loading = false) {
+    async loadEmergencies(event = null, first_loading = false) {
         const params = (this.isPolicia) ? { } : {}
 
         this.getEmergenciesFunction(params).pipe(
             map((res: IRespuestaApiSIUPaginada) => {
                 if (res && res.data) {
-                    res.data.forEach((emergency: any) => {
+                    res.data.forEach((emergency) => {
                         emergency = mapEmergency(emergency);
                     });
                 }
@@ -204,7 +204,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         });
     }
 
-    getImages($imagesArray: any[]) {
+    getImages($imagesArray: IResource[]) {
         if ($imagesArray) {
             if ($imagesArray.length === 0) {
                 return '';
@@ -220,21 +220,21 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         this.navCtrl.navigateForward(`/emergencies/list/${id}`);
     }
 
-    getInfiniteScrollData(event: any) {
+    getInfiniteScrollData(event) {
         this.loadEmergencies({
             type: 'infinite_scroll',
             data: event
         });
     }
     //Obtener datos con Refresher
-    doRefresh(event: any) {
+    doRefresh(event) {
         this.loadEmergencies({
             type: 'refresher',
             data: event
         });
     }
 
-    segmentChanged(event: any) {
+    segmentChanged(event: CustomEvent) {
         const value = (event.detail.value !== "") ? event.detail.value : "";
         this.segmentFilter$.next(value);
     }

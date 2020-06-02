@@ -88,7 +88,7 @@ export class HeaderBackComponent implements OnInit {
         // this.showNotiPopover(event);
     }
 
-    async showNotiPopover(evento: any) {
+    async showNotiPopover(evento) {
         const popover = await this.popoverCtrl.create({
             component: PopNotificationsComponent,
             event: evento,

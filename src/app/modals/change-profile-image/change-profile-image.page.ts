@@ -9,6 +9,7 @@ import { MessagesService } from 'src/app/services/messages.service';
 import { finalize } from 'rxjs/operators';
 import { UtilsService } from 'src/app/services/utils.service';
 import { UploadImageComponent } from 'src/app/components/upload-image/upload-image.component';
+import { IUploadedImages } from 'src/app/interfaces/models';
 
 @Component({
     selector: 'app-change-profile-image',
@@ -18,7 +19,7 @@ import { UploadImageComponent } from 'src/app/components/upload-image/upload-ima
 export class ChangeProfileImagePage implements OnInit {
     
     @ViewChild(UploadImageComponent) uploadImageComponent: UploadImageComponent;
-    profileUserImg: any[] = [];
+    profileUserImg: string[] = [];
     sending = false;
 
     constructor(
@@ -37,7 +38,7 @@ export class ChangeProfileImagePage implements OnInit {
         this.modalCtrl.dismiss();
     }
 
-    getUploadedImages(event: any) {
+    getUploadedImages(event: IUploadedImages) {
         this.profileUserImg = event.uploaded_images;
        
     }

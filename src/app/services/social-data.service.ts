@@ -71,7 +71,7 @@ export class SocialDataService {
         if (this.platform.is('cordova')) {
             try {
                 const loginGoogle: IGoogleLoginResponse = await this.google.login({});
-                const profileGoogle: IGoogleApiUser = await this.getGoogleData(loginGoogle).toPromise();
+                const profileGoogle: IGoogleApiUser = await this.getGoogleData(loginGoogle.accessToken).toPromise();
                 await this.closeGoogleSession();
                 return profileGoogle;
             } catch (error_http) {
@@ -127,10 +127,10 @@ export class SocialDataService {
         }
     }
     // Function para llamar a la api de GRAPHQL y obtener los datos del perfil del usuario logueado
-    async getFacebookData(accessToken: string, userId: string, permisos: any): Promise<IFacebookApiUser> {
+    async getFacebookData(accessToken: string, userId: string, permisos: string[]): Promise<IFacebookApiUser> {
         try {
             const url = `me?fields=id,name,first_name,last_name,email,picture&access_token=${accessToken}`;
-            const profile: any = await this.facebook.api(url, permisos);
+            const profile = await this.facebook.api(url, permisos);
             profile.image = `https://graph.facebook.com/${userId}/picture?type=large`;
             // profile.email = 
             if (profile !== null) {
@@ -143,11 +143,11 @@ export class SocialDataService {
         }
     }
     // Function para llamar a la api de Google y obtener los datos del perfil del usuario logueado
-    getGoogleData(googleLogin: any): Observable<any> {
+    getGoogleData(accessToken: string): Observable<any> {
         const url = `https://www.googleapis.com/oauth2/v3/userinfo?alt=json`;
         return this.httpRequest.get(url, {}, {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${googleLogin.accessToken}`
+            'Authorization': `Bearer ${accessToken}`
         })
             .pipe(catchError(() => of({})))
     }

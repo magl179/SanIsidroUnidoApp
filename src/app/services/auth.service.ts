@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { Observable, BehaviorSubject, from } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { IRegisterUser } from 'src/app/interfaces/models';
+import { IRegisterUser, ITokenDecoded } from 'src/app/interfaces/models';
 import { HttpRequestService } from "./http-request.service";
 import { setHeaders } from "src/app/helpers/utils";
 import { NavController } from "@ionic/angular";
@@ -42,7 +42,7 @@ export class AuthService {
 
     // ngOnInit
     async getTokenandUserLS() {
-        const getTokenLS = new Promise((resolve, reject) => {
+        const getTokenLS = new Promise((resolve) => {
             this.storage.get(TOKEN_ITEM_NAME).then(token_encoded => {
                 this.sessionAuthTokenSubject.next(token_encoded);
                 resolve(true);
@@ -60,7 +60,7 @@ export class AuthService {
     }
 
     // Iniciar Sesion del Usuario
-    login(loginData: any): Observable<any> {
+    login(loginData): Observable<any> {
         const headers = CONFIG.API_HEADERS;
         const urlApi = `${environment.APIBASEURL}/login`;
         return this.httpRequest.post(urlApi, loginData, headers);
@@ -72,7 +72,7 @@ export class AuthService {
         return this.httpRequest.post(urlApi, registerData, headers);
     }
     //COMPROBAR EN EL API SI TOKEN ES VÁLIDO
-    tokenIsValid(token: any) {
+    tokenIsValid(token: string) {
         const urlApi = `${environment.APIBASEURL}/verificar-token`;
         const headers = setHeaders(CONFIG.AUTHORIZATION_NAME, token)
         return this.httpRequest.post(urlApi, {}, headers);
@@ -131,11 +131,11 @@ export class AuthService {
         this.sessionAuthUserSubject.next(null);
     }
 
-    async saveUserInfo(token_encoded: any, token_decoded: any) {
+    async saveUserInfo(token_encoded: string, token_decoded: ITokenDecoded) {
         this.sessionAuthTokenSubject.next(token_encoded);
         this.sessionAuthUserSubject.next(token_decoded);
     }
-    async saveLocalStorageInfo(token_encoded: any, token_decoded: any) {
+    async saveLocalStorageInfo(token_encoded: string, token_decoded: ITokenDecoded) {
         this.storage.set(TOKEN_ITEM_NAME, token_encoded);
         this.storage.set(USER_ITEM_NAME, token_decoded);
     }
@@ -149,19 +149,18 @@ export class AuthService {
         return await getTokenLS;
     }
     //Obtener el usuario autenticado del Local Storage
-    async getTokenUserAuthenticated() {
-        const getTokenDecodedLS = new Promise((resolve, reject) => {
+    async getTokenUserAuthenticated(): Promise<any> {
+        return new Promise((resolve) => {
             this.storage.get(USER_ITEM_NAME).then(token_decoded => {
                 resolve(token_decoded);
             });
         });
-        return await getTokenDecodedLS;
     }
 
     getUserAuthRxjs():Observable<any> {
         return from(this.getTokenUserAuthenticated()).pipe(
-            map((resp: Response) => {
-              return resp;
+            map((response: ITokenDecoded) => {
+              return response;
             })
         )
     }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UtilsService } from 'src/app/services/utils.service';
 import { LocalDataService } from 'src/app/services/local-data.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { IHomeOptions } from 'src/app/interfaces/models';
+import { IHomeOptions, ITokenDecoded } from 'src/app/interfaces/models';
 import { NavController, ModalController } from '@ionic/angular';
 import { PruebasService } from 'src/app/services/pruebas.service';
 import { environment } from 'src/environments/environment';
@@ -30,7 +30,7 @@ export class HomeListPage implements OnInit {
      }
 
     async ngOnInit() {
-        this.authService.sessionAuthUser.subscribe((token_decoded: any) => {
+        this.authService.sessionAuthUser.subscribe((token_decoded: ITokenDecoded) => {
             if (token_decoded) {
                 this.sessionAuth = token_decoded;
             }

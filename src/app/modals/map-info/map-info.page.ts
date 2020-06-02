@@ -1,5 +1,5 @@
 import { Component, OnInit, Input} from '@angular/core';
-import { IPublicService } from "src/app/interfaces/models";
+import { IPublicService, ICurrentLocation } from "src/app/interfaces/models";
 import { ModalController } from '@ionic/angular';
 import { getDistanceInKm, roundDecimal } from 'src/app/helpers/utils';
 
@@ -11,8 +11,7 @@ import { getDistanceInKm, roundDecimal } from 'src/app/helpers/utils';
 export class MapInfoPage implements OnInit {
 
     @Input() mapPoint: IPublicService;
-    @Input() currentLocation: { latitude: number
-    longitude: number, route?: any};
+    @Input() currentLocation: ICurrentLocation;
 
     distancia = null;
 

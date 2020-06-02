@@ -1,7 +1,7 @@
 import { JwtHelperService } from "@auth0/angular-jwt";
 
 // Decodificar el Token
-export const decodeToken = (token: any) => {
+export const decodeToken = (token: string) => {
     let decodedToken = null;
     try {
         const helper = new JwtHelperService();
@@ -12,7 +12,7 @@ export const decodeToken = (token: any) => {
     return decodedToken;
 }
 // Validar si el token ha expirado
-export const tokenIsExpired = (token: any) => {
+export const tokenIsExpired = (token: string) => {
     const helper = new JwtHelperService();
     const isExpired = helper.isTokenExpired(token);
     return isExpired;

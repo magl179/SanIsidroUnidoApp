@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { Geolocation, Geoposition } from '@ionic-native/geolocation/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { Platform } from '@ionic/angular';
-import { ISimpleCoordinates } from 'src/app/interfaces/models';
+import { ISimpleCoordinates, GeolocationPosition, ICheckPermission } from 'src/app/interfaces/models';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { MessagesService } from './messages.service';
 
@@ -15,7 +15,7 @@ export class LocalizationService {
 
     misCoordenadas: ISimpleCoordinates = {
         latitude: null,
-        longitude: null
+        longitude: null,
     };
 
     constructor(
@@ -29,11 +29,7 @@ export class LocalizationService {
 
     getPositionWeb() {
         return new Promise((resolve, reject) => {
-            return navigator.geolocation.getCurrentPosition(resolve, reject, { 
-                enableHighAccuracy: true,
-                timeout: 5000,
-                maximumAge: 0
-            });
+            return navigator.geolocation.getCurrentPosition(resolve, reject, {});
         });
     }
 
@@ -86,14 +82,14 @@ export class LocalizationService {
     async getLocationCoordinates() {
         return new Promise(async (resolve, reject) => {
             if (this.platform.is('cordova')) {
-                return await this.getPositionNative().then((currentCoords: any) => {
+                return await this.getPositionNative().then((currentCoords: Geoposition) => {
                     this.misCoordenadas.latitude = currentCoords.coords.latitude;
                     this.misCoordenadas.longitude = currentCoords.coords.longitude;
                     resolve(this.misCoordenadas);
                 }).catch((error_coords) => reject(error_coords));
             } else {
                 if (navigator.geolocation) {
-                    return await this.getPositionWeb().then((currentCoords: any) => {
+                    return await this.getPositionWeb().then((currentCoords: GeolocationPosition) => {
                         this.misCoordenadas.latitude = currentCoords.coords.latitude;
                         this.misCoordenadas.longitude = currentCoords.coords.longitude;
                         resolve(this.misCoordenadas);
@@ -111,7 +107,7 @@ export class LocalizationService {
     async checkGPSPermissions() {
         return new Promise(async (resolve, reject) => {
             await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
-                async (result: any) => {
+                async (result: ICheckPermission) => {
                     if (result.hasPermission) {
                         resolve(this.askTurnOnGPS());
                     } else {
@@ -127,7 +123,7 @@ export class LocalizationService {
 
     async requestGPSPermission() {
         return new Promise(async (resolve, reject) => {
-            await this.locationAccuracy.canRequest().then(async (canRequest: any) => {
+            await this.locationAccuracy.canRequest().then(async (canRequest: boolean) => {
                 if (canRequest) {
                     resolve(this.askTurnOnGPS());
                 } else {
@@ -154,7 +150,8 @@ export class LocalizationService {
     async checkInitialGPSPermissions() {
         if (this.platform.is('cordova')) {
             //Verificar Permisos Android
-            const androidPermissions: any = await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION);
+            const androidPermissions = await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION);
+
             if (androidPermissions.hasPermission) {
                 this.messageService.showInfo('Tengo permisos GPS');
                 return;

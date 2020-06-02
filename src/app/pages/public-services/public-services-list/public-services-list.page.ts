@@ -34,7 +34,6 @@ import { trigger,style,transition,animate,keyframes,query,stagger } from '@angul
 })
 export class PublicServicesListPage implements OnInit {
 
-    publicServicesPoints: any[] = [];
     publicServices: IPublicService[] = [];
     filterPublicServices = [];
     publicServiceSelected = null;
@@ -42,7 +41,7 @@ export class PublicServicesListPage implements OnInit {
     markerSelected = false;
     publicServicesLoaded = false;
     category: string;
-    publicServicesFilter: any[] = [];
+    publicServicesFilter: IPublicService[] = [];
     publicServiceSearchControl: FormControl;
     searchingPublicServices = false;
 

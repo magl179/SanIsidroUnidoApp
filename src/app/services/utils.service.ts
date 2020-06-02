@@ -7,6 +7,7 @@ import { ToastOptions } from "@ionic/core";
 import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
 import { CONFIG } from 'src/config/config';
 import {imagenIsURL} from 'src/app/helpers/utils'
+import { ISharePost } from '../interfaces/models';
 
 @Injectable({
     providedIn: 'root'
@@ -53,8 +54,7 @@ export class UtilsService implements OnInit {
         newTab.document.body.innerHTML = `<img src="${data}" width="100px" height="100px">`;
     }
 
-    async shareSocial(publicacion: any) {
-
+    async shareSocial(publicacion: ISharePost): Promise<any> {
 
         const message_publication = `${publicacion.description} \n\n${CONFIG.MESSAGE_APP_INFO}\n`;
 

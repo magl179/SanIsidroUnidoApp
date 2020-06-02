@@ -2,7 +2,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { CONFIG } from 'src/config/config';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { IEmergencyReported, ISocialProblemReported, ICreateDetail } from 'src/app/interfaces/models';
+import { IEmergencyReported, ISocialProblemReported, ICreateDetail, IEmergenciaRechazar, IEmergenciaAtender } from 'src/app/interfaces/models';
 import { AuthService } from './auth.service';
 import { HttpRequestService } from "./http-request.service";
 import { IRespuestaApiSIUPaginada } from "src/app/interfaces/models";
@@ -92,11 +92,11 @@ export class PostsService implements OnInit {
         return this.httpRequest.post(`${environment.APIBASEURL}/emergencias`, emergencyPost, headers);
     }
     // Función para enviar una accion atender emergencia
-    sendPoliciaAtenderEmergencia(emergency_attended_data: any): Observable<any> {
+    sendPoliciaAtenderEmergencia(emergency_attended_data: IEmergenciaAtender): Observable<any> {
         const headers = setHeaders(CONFIG.AUTHORIZATION_NAME, this.AuthToken);
         return this.httpRequest.post(`${environment.APIBASEURL}/emergencias/atender`, emergency_attended_data, headers);
     }
-    sendPoliciaRechazarEmergencia(emergency_rechazed_data: any){
+    sendPoliciaRechazarEmergencia(emergency_rechazed_data: IEmergenciaRechazar){
         const headers = setHeaders(CONFIG.AUTHORIZATION_NAME, this.AuthToken);
         return this.httpRequest.post(`${environment.APIBASEURL}/emergencias/rechazar`, emergency_rechazed_data, headers);
     }

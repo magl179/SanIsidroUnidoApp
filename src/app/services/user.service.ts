@@ -130,7 +130,7 @@ export class UserService implements OnInit {
         return this.httpRequest.delete(`${environment.APIBASEURL}/usuarios/perfiles-sociales/${social_profile_id}`, {}, headers );
     }
     //Enviar solicitud para eliminar un perfil social de un usuario
-    sendRequestDeleteUserPhoneDevice(phone_id: any) {
+    sendRequestDeleteUserPhoneDevice(phone_id: string) {
         const headers = setHeaders(CONFIG.AUTHORIZATION_NAME, this.AuthToken);
         return this.httpRequest.delete(`${environment.APIBASEURL}/dispositivos/logout/${phone_id}`, {}, headers );
     }

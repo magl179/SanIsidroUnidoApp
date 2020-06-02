@@ -62,7 +62,7 @@ export class LoginPage implements OnInit {
         setInputFocus(this.passwordEye);
     }
 
-    async manageLogin(loginData: any, res: any) {
+    async manageLogin(res) {
         //Obtener Token y Usuario
         const loadingManageLogin = await this.utilsService.createBasicLoading('Obteniendo Respuesta');
         loadingManageLogin.present();
@@ -95,7 +95,7 @@ export class LoginPage implements OnInit {
                 loadingLoginValidation.dismiss()
             })
         ).subscribe((res: IRespuestaApiSIU) => {
-            this.manageLogin(loginData, res);
+            this.manageLogin(res);
         }, (error_http: HttpErrorResponse) => {
             this.errorService.manageHttpError(error_http, 'Ocurrio un error, intentalo más tarde')
         });
@@ -138,7 +138,7 @@ export class LoginPage implements OnInit {
             //Funcion Login
             this.messageService.showInfo('Verificando las credenciales')
             this.authService.login(user).subscribe(res => {
-                this.manageLogin({ provider: 'facebook', social_id, email }, res);
+                this.manageLogin(res);
             }, (error_http: HttpErrorResponse) => {
                 this.errorService.manageHttpError(error_http, 'Fallo la conexión con Facebook');
             });
@@ -171,7 +171,7 @@ export class LoginPage implements OnInit {
             //Funcion Login
             this.messageService.showInfo('Verificando las credenciales')
             this.authService.login(user).subscribe(async res => {
-                await this.manageLogin({ social_id, email, provider: 'google' }, res);
+                await this.manageLogin(res);
             }, (error_http: HttpErrorResponse) => {
                 this.errorService.manageHttpError(error_http, 'Ocurrio un error al conectar con Google');
             });

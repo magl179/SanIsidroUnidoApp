@@ -3,7 +3,7 @@ import { Platform, MenuController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { timer } from 'rxjs';
-import { IMenuOptions } from './interfaces/models';
+import { IMenuOptions, ITokenDecoded, IMenuComponent } from './interfaces/models';
 import { AlertController } from '@ionic/angular';
 import { AuthService } from './services/auth.service';
 import { NotificationsService } from './services/notifications.service';
@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
     isConnected = false;
     menuComponents: IMenuOptions;
     automaticClose = true;
-    sessionAuth: any = null;
+    sessionAuth: ITokenDecoded = null;
 
     constructor(
         private platform: Platform,
@@ -69,14 +69,10 @@ export class AppComponent implements OnInit {
             // this.navigationService.keepHistoryTracking();
         });
     }
-
-    onImageError(event: any){
-        event.target.src = 'assets/img/default/img_avatar.png';
-    }
     
     async checkUserLoggedIn() {
         this.authService.sessionAuthUser.pipe(
-            map((token_decoded: any) => {
+            map((token_decoded: ITokenDecoded) => {
                 if (token_decoded && token_decoded.user) {
                     token_decoded.user = mapUser(token_decoded.user);
                 }
@@ -128,18 +124,18 @@ export class AppComponent implements OnInit {
         await alert.present();
     }
 
-    toggleSection(component_name: string, index: any, hasChild: boolean) {
+    toggleSection(component_name: string, index: number, hasChild: boolean) {
         this.menuComponents[component_name][index].open = !this.menuComponents[component_name][index].open;
         if (this.automaticClose && this.menuComponents[component_name][index].open) {
             this.menuComponents[component_name]
-                .filter((item: any, itemIndex: number) => {
+                .filter((item: IMenuComponent, itemIndex: number) => {
                     if (hasChild) {
                         return itemIndex !== index && item.children.length > 0;
                     } else {
                         return item.children.length > 0;
                     }
                 })
-                .map((item: any) => item.open = false);
+                .map((item: IMenuComponent) => item.open = false);
         }
     }
 

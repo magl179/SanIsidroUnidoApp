@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { PublicServiceDetailPage } from './public-service-detail.page';
 import { PipesModule } from "src/app/pipes/pipes.module";
 import { SmComponentsModule } from "src/app/components/sm-components.module";
+import { PublicServiceDistancePipe } from '../pipes/public-service-distance.pipe';
 
 const routes: Routes = [
     {
@@ -25,6 +26,6 @@ const routes: Routes = [
         PipesModule,
         SmComponentsModule
     ],
-    declarations: [PublicServiceDetailPage]
+    declarations: [PublicServiceDetailPage, PublicServiceDistancePipe]
 })
 export class PublicServiceDetailPageModule { }

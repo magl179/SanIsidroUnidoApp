@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
 @Pipe({
   name: 'backgroundUrl'
@@ -8,7 +8,7 @@ export class BackgroundUrlPipe implements PipeTransform {
 
     constructor( private domSanitizer: DomSanitizer ) { }
 
-  transform(img: string): any {
+  transform(img: string): SafeStyle {
       const bgStyle = `
         background-image: url('${img}');
       `;

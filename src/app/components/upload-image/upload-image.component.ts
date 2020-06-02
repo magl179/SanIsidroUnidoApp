@@ -4,6 +4,7 @@ import { Platform } from '@ionic/angular';
 import { MessagesService } from 'src/app/services/messages.service';
 import { Observable, Observer } from 'rxjs';
 import { CONFIG } from 'src/config/config';
+import { IUploadedImages, ICustomEvent, IProgressEvent } from 'src/app/interfaces/models';
 
 let cameraOptions: CameraOptions = {
     quality: 75,
@@ -21,10 +22,8 @@ let cameraOptions: CameraOptions = {
 export class UploadImageComponent implements OnInit {
 
     @Input() maxImages = 3;
-    @Input() uploadedImages = [];
-    @Output() returnUploadedImages = new EventEmitter();
-    imagenB64: string;
-    imagejpg: string;
+    @Input() uploadedImages: string[] = [];
+    @Output() returnUploadedImages = new EventEmitter<IUploadedImages>();
 
     constructor(
         private camera: Camera,
@@ -32,21 +31,20 @@ export class UploadImageComponent implements OnInit {
         private platform: Platform
     ) { }
 
-    ngOnInit() {
+    ngOnInit(): void {
         cameraOptions.destinationType = (CONFIG.USE_FILE_URL) ? this.camera.DestinationType.FILE_URI: this.camera.DestinationType.DATA_URL;
-        // cameraOptions.destinationType = this.camera.DestinationType.DATA_URL;
         cameraOptions.encodingType = this.camera.EncodingType.JPEG;
         cameraOptions.mediaType = this.camera.MediaType.PICTURE;
         this.uploadedImages = [... this.uploadedImages];
     }
 
-    async getUploadedImages() {
+    async getUploadedImages(): Promise<void> {
         this.returnUploadedImages.emit({
             uploaded_images: [...this.uploadedImages]
         });
     }
 
-    loadImageFromGallery() {
+    loadImageFromGallery():void {
         cameraOptions.sourceType = this.camera.PictureSourceType.PHOTOLIBRARY;
         if (this.uploadedImages.length < this.maxImages) {
             this.uploadImage();
@@ -55,11 +53,7 @@ export class UploadImageComponent implements OnInit {
         }
     }
 
-    getUploadImagePercent() {
-        return (this.uploadedImages.length * 1) / (this.maxImages);
-    }
-
-    loadImageFromCamera() {
+    loadImageFromCamera():void {
         cameraOptions.sourceType = this.camera.PictureSourceType.CAMERA;
         if (this.uploadedImages.length < this.maxImages) {
             this.uploadImage();
@@ -68,7 +62,7 @@ export class UploadImageComponent implements OnInit {
         }
     }
 
-    dataURItoBlob(b64Data, contentType = 'image.jpg', sliceSize = 512) {
+    dataURItoBlob(b64Data, contentType = 'image.jpg', sliceSize = 512): Blob {
         contentType = contentType || '';
         var byteCharacters = atob(b64Data);
         var byteArrays = [];
@@ -90,11 +84,11 @@ export class UploadImageComponent implements OnInit {
         return blob;
     }
 
-    deleteImage(index: any) {
+    deleteImage(index: number): void {
         this.uploadedImages.splice(index, 1);
     }
 
-    async uploadImage() {
+    async uploadImage(): Promise<void> {
         if (this.platform.is('cordova')) {
             if (CONFIG.USE_FILE_URL) {
                 await this.camera.getPicture(cameraOptions)
@@ -139,17 +133,17 @@ export class UploadImageComponent implements OnInit {
         input.value = '';
         input.accept = "image/png,image/jpg,image/jpeg";
         input.multiple = true;
-        input.addEventListener("change", async (event_upload: any) => {
+        input.addEventListener("change", async (event_upload: ICustomEvent) => {
             if (event_upload.target.files && event_upload.target.files.length > 0) {
                 // Referencia a los archivos y convertirlos a un array
                 const eventFiles = event_upload.target.files;
                 let files_selected = Array.prototype.slice.call(eventFiles);
                 //Recorrer archivos y leerlos
                 await Promise.all(files_selected.map(async file => {
-                    return new Promise((resolve, reject) => {
+                    return new Promise((resolve) => {
                         var reader = new FileReader();
-                        reader.onload = (readerEvent: any) => {
-                            const content = readerEvent.target.result;
+                        reader.onload = (readerEvent: IProgressEvent) => {
+                            const content: string = readerEvent.target.result;
                             if (this.uploadedImages.length < this.maxImages) {
                                 this.uploadedImages.push(content);
                             }

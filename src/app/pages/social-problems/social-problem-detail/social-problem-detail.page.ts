@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { UtilsService } from 'src/app/services/utils.service';
 import { PostsService } from 'src/app/services/posts.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { IPostShare, ISocialProblem, IRespuestaApiSIUSingle } from "src/app/interfaces/models";
+import { IPostShare, ISocialProblem, IRespuestaApiSIUSingle, IResource } from "src/app/interfaces/models";
 import { ModalController } from "@ionic/angular";
 import { ImageDetailPage } from 'src/app/modals/image_detail/image_detail.page';
 import { finalize, map, take } from 'rxjs/operators';;
@@ -61,7 +61,7 @@ export class SocialProblemDetailPage implements OnInit {
         this.socialProblemLoaded = false;
         this.postService.getSocialProblem(+this.id).pipe(
             take(1),
-            map((res: any) => {
+            map((res: IRespuestaApiSIUSingle) => {
                 if (res && res.data) {
                     const social_problem = res.data;
                     res.data = mapSocialProblem(social_problem);
@@ -81,7 +81,7 @@ export class SocialProblemDetailPage implements OnInit {
         });
     }
 
-    getBGCover(image_cover: any) {
+    getBGCover(image_cover: string) {
         return `linear-gradient(to bottom, rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.23)), url('${image_cover}')`;
     }
 
@@ -97,7 +97,7 @@ export class SocialProblemDetailPage implements OnInit {
 
     toggleLike(like: boolean) {
         if (like) {
-            this.postService.sendDeleteDetailToPost(this.socialProblem.id).subscribe((res: any) => {
+            this.postService.sendDeleteDetailToPost(this.socialProblem.id).subscribe((res: IRespuestaApiSIUSingle) => {
                 if(res.data.reactions){
                     this.socialProblem.postLiked = false;
                     this.socialProblem.reactions = res.data.reactions;
@@ -112,7 +112,7 @@ export class SocialProblemDetailPage implements OnInit {
                 user_id: this.AuthUser.id,
                 post_id: this.socialProblem.id
             }
-            this.postService.sendCreateDetailToPost(detailInfo).subscribe((res: any) => {
+            this.postService.sendCreateDetailToPost(detailInfo).subscribe((res: IRespuestaApiSIUSingle) => {
                 if(res.data.reactions){
                     this.socialProblem.postLiked = true;
                     this.socialProblem.reactions = res.data.reactions;
@@ -128,13 +128,13 @@ export class SocialProblemDetailPage implements OnInit {
         const sharePost: IPostShare = {
             title: post.title,
             description: cortarTextoConPuntos(post.description, 80),
-            image: getFirstPostImage(post),
+            image: getFirstPostImage(post.imagesArr),
             url: ''
         };
         await this.utilsService.shareSocial(sharePost);
     }
 
-    getImages($imagesArray: any[]) {
+    getImages($imagesArray: IResource[]) {
         if ($imagesArray.length === 0) {
             return '';
         } else {
@@ -146,7 +146,7 @@ export class SocialProblemDetailPage implements OnInit {
         this.utilsService.seeImageDetail(image, 'Imagen Evento');
     }
 
-    emitLikeEvent(id: number, reactions: any = []) {
+    emitLikeEvent(id: number, reactions = []) {
         this.events_app.resetSocialProblemLikesEmmiter(id, reactions);
     }
 
