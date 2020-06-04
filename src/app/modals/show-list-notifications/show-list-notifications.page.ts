@@ -15,8 +15,12 @@ export class ShowListNotificationsPage implements OnInit {
   ngOnInit() {
   }
 
-  closeModal() {
+  closeModal(): void {
     this.modalCtrl.dismiss();
+}
+
+onRedireccion(){
+  this.closeModal();
 }
 
 }

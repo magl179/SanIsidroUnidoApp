@@ -24,16 +24,19 @@ import { MessagesService } from 'src/app/services/messages.service';
 export class EventDetailPage implements OnInit {
 
     id: string;
+    backUrl: string;
     eventLoaded = false;
     appNetworkConnection = false;
     AuthUser = null;
     eventButtonMessage = CONFIG.EVENT_BUTTON_MESSAGE;
     event: IEvent = null;
+    subcategory: string;
 
     constructor(
         private route: ActivatedRoute,
         private utilsService: UtilsService,
         private postService: PostsService,
+        private activatedRoute: ActivatedRoute,
         private messagesService: MessagesService,
         private events_app: EventsService,
         private errorService: ErrorService,
@@ -48,6 +51,9 @@ export class EventDetailPage implements OnInit {
                 this.AuthUser = token_decoded.user;
             }
         });
+        this.subcategory = this.activatedRoute.snapshot.paramMap.get('subcategory');
+        this.backUrl = `events/list/${this.subcategory}`
+        console.log('backUrl', this.backUrl)
         this.getEvent();
     }
 

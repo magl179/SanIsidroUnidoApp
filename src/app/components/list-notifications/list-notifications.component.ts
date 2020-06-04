@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { UserService } from 'src/app/services/user.service';
 import { take, map, distinctUntilChanged, tap, pluck, catchError, exhaustMap, startWith, skip } from 'rxjs/operators';
@@ -26,6 +26,7 @@ export class ListNotificationsComponent implements OnInit {
     notificationsList: INotificationApi[] = [];
     // notificationsFilter: INotificationApi[] = [];
     segmentFilter$ = new BehaviorSubject(null);
+    @Output() redireccion = new EventEmitter();
 
     constructor(
         private notiService: NotificationsService,
@@ -129,6 +130,8 @@ export class ListNotificationsComponent implements OnInit {
             this.markNotificationAsReaded(noti.id);
         }
         if (noti && noti.data) {
+            console.log('manageAppNotification data', noti.data)
+            this.redireccion.emit({redireccion: true});
             return this.notiService.manageAppNotification(noti.data);
         }
     }

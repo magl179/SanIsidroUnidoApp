@@ -55,9 +55,9 @@ export class NotificationsService implements OnInit {
     }
 
     async initialConfig() {
-        this.events_appService.logoutAppEmitter.subscribe(() => {
-            this.logoutOnesignal();
-        });
+        // this.events_appService.logoutAppEmitter.subscribe(() => {
+        //     this.logoutOnesignal();
+        // });
         //Configurar Onesignal en un Dispositivo
         if (this.platform.is('cordova')) {
             //obtener el onesginal_id y el firebaseid
@@ -69,10 +69,12 @@ export class NotificationsService implements OnInit {
             this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.Notification);
             //Funcion hacer algo cuando se recibe una notificación
             this.oneSignal.handleNotificationReceived().subscribe((myNotification) => {
+                console.log('myNotification received', myNotification);
                 this.manageNotificationReceived(myNotification);
             });
             //Funcion para hacer algo cuando una notificacion es recibida
             this.oneSignal.handleNotificationOpened().subscribe(async (myNotification) => {
+                console.log('myNotification opened', myNotification);
                 await this.manageNotificationOpened(myNotification.notification);
             });           
             //Función acabar la configuración de Onesignal
@@ -184,7 +186,7 @@ export class NotificationsService implements OnInit {
     async getOneSignalIDSubscriptor() {
         //Pedir acceso a notificaciones, en caso de no tenerlas
         if(this.platform.is('cordova')){
-            this.oneSignal.provideUserConsent(true);
+            // this.oneSignal.provideUserConsent(true);
             const deviceID = await this.oneSignal.getIds();
             const userDevice: IDeviceUser = {
                 user_id: null,
@@ -208,24 +210,29 @@ export class NotificationsService implements OnInit {
     async manageNotificationOpened(appNotification: OSNotification) {
         //Verificar si recibe data adicional
         const aditionalData = appNotification.payload.additionalData;
-        alert(JSON.stringify(aditionalData))
-        console.log('notification data', aditionalData)
+       
+        console.log('notification data opened', aditionalData)
         await this.manageAppNotification(aditionalData);
     }
 
     async manageAppNotification(aditionalData: INotiList) {
-        //Verificar si tengo dato posts       
+        //Verificar si tengo dato posts  
+        console.log('noti service data', aditionalData)     
         this.managePostNotification(aditionalData);
         
     }
     async managePostNotification(aditionalDataPost: INotiList) {
         const post = aditionalDataPost.post;
         let urlNavigate = null;
-
+        console.log('managePostNotification', aditionalDataPost)
+        console.log('post', post, post.id, post.category)
         if (post && post.id && post.category) {
+            this.messageService.showInfo('Procesando notificacion ...')
             //Switch de Opciones segun el slug del posts
+            console.log('switch case', post.category.slug.toLowerCase())
             switch (post.category.slug.toLowerCase()) {
                 case CONFIG.EMERGENCIES_SLUG: //caso posts emergencia creado
+
                     urlNavigate = `/emergencies/list/${post.id}`;
                     break;
                 case CONFIG.EVENTS_SLUG: //caso posts evento creado
@@ -251,11 +258,14 @@ export class NotificationsService implements OnInit {
                     urlNavigate = null;
                     break;
             }
+            console.log('urlNavigate', urlNavigate)
             if (urlNavigate) {
                 setTimeout(() => {
                     this.router.navigateByUrl(urlNavigate);
                 }, 1000);
             }
+        }else{
+            console.warn('sin redireccion')
         }
     }
 }

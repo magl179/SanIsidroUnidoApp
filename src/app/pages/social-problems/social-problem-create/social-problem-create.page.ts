@@ -73,6 +73,7 @@ export class SocialProblemCreatePage implements OnInit {
             this.socialProblemCoordinate.latitude = -0.24320783421726888;
             this.socialProblemCoordinate.longitude = -78.49732162261353;
         });
+        this.getUserAddress(this.socialProblemCoordinate.latitude, this.socialProblemCoordinate.longitude);
     }
 
     createForm(): void {

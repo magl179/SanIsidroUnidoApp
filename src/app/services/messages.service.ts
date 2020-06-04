@@ -17,6 +17,14 @@ export class MessagesService {
     return this.toastr.info(message, title);
   }
 
+  showPersistenceNoti(message: string, title = ''){
+    return this.toastr.info(message, title, {
+        closeButton: true,
+        timeOut: 90000,
+        positionClass: 'toast-top-right',
+        tapToDismiss: false
+    });
+  }
 
   showWarning(message: string, title = '') {
     return this.toastr.warning(message, title);

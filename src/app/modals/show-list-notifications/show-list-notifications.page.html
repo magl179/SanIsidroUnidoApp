@@ -11,5 +11,5 @@
       
 
 <ion-content>
-        <app-list-notifications class="show_all_notifications" [showListHeader]="false" [maxNotifications]="0"></app-list-notifications>
+        <app-list-notifications (redireccion)="onRedireccion()" class="show_all_notifications" [showListHeader]="false" [maxNotifications]="0"></app-list-notifications>
 </ion-content>

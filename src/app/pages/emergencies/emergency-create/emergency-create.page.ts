@@ -58,6 +58,8 @@ export class EmergencyCreatePage implements OnInit {
             this.emergencyPostCoordinate.latitude = -0.096076;
             this.emergencyPostCoordinate.longitude =  -78.503606;
         });
+        console.log('emergency on init', this.emergencyPostCoordinate)
+        this.getUserAddress(this.emergencyPostCoordinate.latitude, this.emergencyPostCoordinate.longitude);
     }
 
     createForm():void {
@@ -100,6 +102,7 @@ export class EmergencyCreatePage implements OnInit {
     }
 
     getUserAddress(latitud: number, longitud: number): void {
+        console.log('getUserAddress', latitud, longitud)
         this.mapService.getAddress({
             lat: latitud,
             lng: longitud,

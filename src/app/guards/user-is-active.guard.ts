@@ -28,7 +28,6 @@ export class UserIsActiveGuard implements CanLoad {
                         const activeRol = isRolActive(roles);
                         console.log('activeRol', activeRol)
                         if (!activeRol) {
-                            // alert('Usuario Inactivo, por favor inicie sesión')
                             this.authService.logout();
                             return false;
                             return true;
@@ -37,7 +36,6 @@ export class UserIsActiveGuard implements CanLoad {
                     }
                     return false;
                 } else {
-                    // alert('Usuario Inactivo, por favor inicie sesión')
                     this.authService.logout();
                     return false;
                     // return true;

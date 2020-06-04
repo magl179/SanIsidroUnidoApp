@@ -80,8 +80,14 @@ export class AppComponent implements OnInit {
             })
         ).subscribe(token_decoded => {
             this.sessionAuth = token_decoded;
+            console.log('sessionAuth', this.sessionAuth)
             if (token_decoded) {
                 this.authService.checkValidToken();
+                const email_verified_at = (this.sessionAuth && this.sessionAuth.user) ?this.sessionAuth && this.sessionAuth.user.email_verified_at: null;
+    
+                if(email_verified_at == "" || email_verified_at == null){
+                    this.messageService.showPersistenceNoti('Por favor verifica tu correo');
+                }
             }
         });
     }
