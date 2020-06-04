@@ -367,6 +367,7 @@ interface IRoleUser {
     user_id: number;
     role_id: number;
     position?: string;
+    state?: number;
     created_at?: string;
     updated_at?: string;
 }

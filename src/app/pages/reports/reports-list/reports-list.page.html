@@ -25,6 +25,9 @@
     <div *ngIf="!showLoading && reportsList.length > 0" [@listAnimation]>
         <!-- <ion-card class="report-container" *ngFor="let report of reportsList; let i = index;"> -->
         <ion-card class="report-container" *ngFor="let report of reportsFiltered; let i = index;">
+            <div class="post_cover" *ngIf="report.imagesArr && report.imagesArr.length > 0">
+                <img class="img" [src]="report.imagesArr[0]" (onerror)="event.target.src='assets/img/default/image_full.png'"/>
+            </div>
             <div class="ion-padding" style="display: flex;align-items:Center;">
                 <div class="left-section">
                     <img class="img-avatar" [src]="report.user.avatar_link"

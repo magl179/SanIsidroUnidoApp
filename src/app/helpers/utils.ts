@@ -2,7 +2,7 @@
 import { environment } from 'src/environments/environment';
 import { Observable, interval, throwError, of } from 'rxjs';
 import { retryWhen, flatMap } from 'rxjs/operators';
-import { ISubcategory, IResource } from 'src/app/interfaces/models';
+import { ISubcategory, IResource, IRole } from 'src/app/interfaces/models';
 import { CONFIG } from 'src/config/config';
 import { es } from 'date-fns/locale'
 import { parseISO, format as dateFormat } from 'date-fns';
@@ -86,6 +86,12 @@ export const filterDataInObject = (data: any[], filter: {}) => {
     });
     return new_data;
 }
+
+export const isRolActive = (roles: IRole[] ) =>{
+    const role = roles.filter(rol => rol.pivot && rol.pivot.state == 1);
+    if(role && role.length > 0){ return true}
+    return false;
+};
 
 //Recibe array objetos y un objeto con el valor a buscar y devuelve true/false si existe ese valor
 export const searchInArrayObj = (items: any[], filter: { [key: string]: any }) => {

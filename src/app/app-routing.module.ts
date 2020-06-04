@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { UserAuthenticatedGuard } from './guards/user-authenticated.guard';
+import { UserIsActiveGuard } from './guards/user-is-active.guard';
 
 const routes: Routes = [
     {
@@ -61,7 +62,7 @@ const routes: Routes = [
     {
         path: 'user-profile', //Pantalla del Perfil de Usuario
         loadChildren: './pages/user/user.module#UserPageModule',
-        canLoad: [UserAuthenticatedGuard]
+        canLoad: [UserAuthenticatedGuard, UserIsActiveGuard]
     },
     {
         path: '404', //Pantalla de Error

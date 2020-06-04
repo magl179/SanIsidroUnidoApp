@@ -7,11 +7,11 @@ import { CONFIG } from 'src/config/config';
 import { IUploadedImages, ICustomEvent, IProgressEvent } from 'src/app/interfaces/models';
 
 let cameraOptions: CameraOptions = {
-    quality: 75,
+    quality: 70,
     correctOrientation: true,
     saveToPhotoAlbum: false,
-    targetWidth: 300,
-    targetHeight: 300
+    targetWidth: 900,
+    targetHeight: 900,
 };
 
 @Component({
@@ -36,6 +36,7 @@ export class UploadImageComponent implements OnInit {
         cameraOptions.encodingType = this.camera.EncodingType.JPEG;
         cameraOptions.mediaType = this.camera.MediaType.PICTURE;
         this.uploadedImages = [... this.uploadedImages];
+        console.log('cameraOptions', cameraOptions)
     }
 
     async getUploadedImages(): Promise<void> {

@@ -69,7 +69,7 @@ export class SocialProblemCreatePage implements OnInit {
         await this.localizationService.getCoordinates().then((coordinates: ISimpleCoordinates) => {
             this.socialProblemCoordinate.latitude = coordinates.latitude;
             this.socialProblemCoordinate.longitude = coordinates.longitude;
-        }).catch(coordinates_error => {
+        }).catch(() => {
             this.socialProblemCoordinate.latitude = -0.24320783421726888;
             this.socialProblemCoordinate.longitude = -78.49732162261353;
         });

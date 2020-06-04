@@ -18,11 +18,15 @@
                     <ion-col size="12">
                         <form [formGroup]="registerForm">
                             <div class="item-form full">
-                                <ion-item class="input_item" lines="none">
+                                <ion-item class="input_item position-relative" lines="none">
                                     <ion-label class="label-padding label-margin" position="stacked">Nombres
                                     </ion-label>
                                     <ion-input class="input-beatiful" placeholder="John" type="text"
-                                        formControlName="first_name" #first_field (keydown.enter)="preventEnterPressed($event)"></ion-input>
+                                        formControlName="first_name" #first_field (keydown.enter)="preventEnterPressed($event)">
+                                    </ion-input>
+                                    <div class="validation-icon left" *ngIf="registerForm.get('first_name').valid">
+                                        <i class="fa fa-check"></i>
+                                    </div>
                                 </ion-item>
                             </div>
                             <div class="form-errors padding-lateral">
@@ -49,11 +53,15 @@
                                 </p>
                             </div>                            
                             <div class="item-form full">
-                                <ion-item class="input_item" lines="none">
+                                <ion-item class="input_item position-relative" lines="none">
                                     <ion-label class="label-padding label-margin" position="stacked">Apellidos
                                     </ion-label>
                                     <ion-input class="input-beatiful" placeholder="Doe" type="text"
-                                        formControlName="last_name" (keydown.enter)="preventEnterPressed($event)"></ion-input>
+                                        formControlName="last_name" (keydown.enter)="preventEnterPressed($event)">
+                                    </ion-input>
+                                    <div class="validation-icon left" *ngIf="registerForm.get('last_name').valid">
+                                        <i class="fa fa-check"></i>
+                                    </div>
                                 </ion-item>
                             </div>
                             <div class="form-errors padding-lateral">
@@ -80,11 +88,15 @@
                                 </p>
                             </div> 
                             <div class="item-formcfull">
-                                <ion-item class="input_item" lines="none">
+                                <ion-item class="input_item position-relative" lines="none">
                                     <ion-label class="label-padding label-margin" position="stacked">Correo Electrónico
                                     </ion-label>
                                     <ion-input class="input-beatiful" placeholder="john@gmail.com" type="text"
-                                        formControlName="email" (keydown.enter)="preventEnterPressed($event)"></ion-input>
+                                        formControlName="email" (keydown.enter)="preventEnterPressed($event)">
+                                    </ion-input>
+                                    <div class="validation-icon left" *ngIf="registerForm.get('email').valid">
+                                        <i class="fa fa-check"></i>
+                                    </div>
                                 </ion-item>
                             </div>
                             <div class="form-errors padding-lateral">
@@ -113,14 +125,17 @@
                                 <ion-item class="input_item" lines="none">
                                     <ion-label class="label-padding label-margin" position="stacked">Contraseña
                                     </ion-label>
-                                    <div class="input-container">
+                                    <div class="input-container position-relative">
                                         <ion-input class="input-beatiful input_relative" #passwordEyeRegister
                                             [type]="passwordTypeInput" placeholder="********" formControlName="password"
                                             clearOnEdit="false"
                                             (keydown.enter)="preventEnterPressed($event)"
                                             maxlength="100">
                                         </ion-input>
-                                        <button item-end class="btn_eye_icon" (click)="togglePasswordMode()">
+                                        <div class="validation-icon" *ngIf="registerForm.get('password').valid">
+                                            <i class="fa fa-check"></i>
+                                        </div>
+                                        <button item-end class="btn_eye_icon" (click)="togglePasswordMode()" [class.icon-left]="registerForm.get('password').valid">
                                             <ion-icon [name]="(passwordTypeInput === 'text')?'eye-off':'eye'">
                                             </ion-icon>
                                         </button>

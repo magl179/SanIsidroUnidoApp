@@ -208,6 +208,8 @@ export class NotificationsService implements OnInit {
     async manageNotificationOpened(appNotification: OSNotification) {
         //Verificar si recibe data adicional
         const aditionalData = appNotification.payload.additionalData;
+        alert(JSON.stringify(aditionalData))
+        console.log('notification data', aditionalData)
         await this.manageAppNotification(aditionalData);
     }
 

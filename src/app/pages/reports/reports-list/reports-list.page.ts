@@ -142,6 +142,7 @@ export class ReportsListPage implements OnInit, OnDestroy {
         ).subscribe((res: IRespuestaApiSIUPaginada) => {            
             let reportsList = [];
             reportsList = res.data;
+            console.log('reportsList', reportsList)
              //Evento Completar
              if(event && event.data && event.data.target && event.data.target.complete){
                 event.data.target.complete();
@@ -150,6 +151,7 @@ export class ReportsListPage implements OnInit, OnDestroy {
                 event.data.target.disabled = true;
             }  
             //Cargar Datos
+            console.log('event.type', event)
             if (event && event.type === 'refresher') {
                 this.reportsList.unshift(...reportsList);
                 this.reportsFiltered.unshift(...reportsList);

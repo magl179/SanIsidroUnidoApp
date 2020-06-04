@@ -6,9 +6,15 @@
     }
 }
 
-.report_created_at {
-    padding: .5em 0;
-}
+.post_cover{
+    background: #dfdfdf;
+    height: 150px;
+    .img{
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+  }
 
 ion-card {
     margin-bottom: 2em;

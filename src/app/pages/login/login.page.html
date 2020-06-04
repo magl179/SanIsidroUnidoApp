@@ -20,10 +20,13 @@
                                 <ion-item class="input_item" lines="none">
                                     <ion-label class="label-padding label-margin" position="stacked">Email
                                     </ion-label>
-                                    <div class="input-general-container">     
+                                    <div class="input-general-container position-relative">     
                                         <ion-input class="input-beatiful input-general" placeholder="john@gmail.com" (keydown.enter)="preventEnterPressed($event)"
                                             formControlName="email" type="email" #first_field>
                                         </ion-input>
+                                        <div class="validation-icon" *ngIf="loginForm.get('email').valid">
+                                            <i class="fa fa-check"></i>
+                                        </div>
                                     </div>
                                 </ion-item>
                             </div>
@@ -53,13 +56,16 @@
                                 <ion-item class="input_item" lines="none">
                                     <ion-label class="label-padding label-margin" position="stacked">Contraseña
                                     </ion-label>
-                                    <div class="input-container">
+                                    <div class="input-container position-relative">
                                         <ion-input class="input-beatiful" #passwordEyeLogin
                                             formControlName="password" placeholder="********"
                                             (keydown.enter)="preventEnterPressed($event)"
                                             [type]="passwordTypeInput" clearOnEdit="false">
                                         </ion-input>
-                                        <button item-end class="btn_eye_icon"
+                                        <div class="validation-icon" *ngIf="loginForm.get('password').valid">
+                                            <i class="fa fa-check"></i>
+                                        </div>
+                                        <button item-end class="btn_eye_icon icon-left"
                                             (click)="togglePasswordMode()">
                                             <ion-icon [name]="(passwordTypeInput === 'text')?'eye-off':'eye'"></ion-icon>
                                         </button>

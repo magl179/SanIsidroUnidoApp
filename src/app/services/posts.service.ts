@@ -170,7 +170,8 @@ export class PostsService implements OnInit {
         this.increasePagination(this.PaginationKeys.REPORTS);
         const tempParams = {
             category: CONFIG.REPORTS_SLUG,
-            page: this.getPagination(this.PaginationKeys.REPORTS)
+            page: this.getPagination(this.PaginationKeys.REPORTS),
+            state: 1
         }
         const requestParams = { ...params, ...tempParams };
         return this.httpRequest.get(`${environment.APIBASEURL}/publicaciones`,requestParams)
