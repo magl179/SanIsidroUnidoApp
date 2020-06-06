@@ -19,7 +19,7 @@
             <section class="report-detail__main">
                 <h1 class="main-section__title"> {{ report.title }}</h1>
             </section>
-            <div class="ion-padding" style="display: flex;align-items:Center;">
+            <div class="ion-padding user-section">
                 <div class="left-section">
                     <img class="img-avatar"
                         [src]="report.user.avatar_link" (onerror)="event.target.src='assets/img/default/img_avatar.png'"/>
@@ -47,6 +47,9 @@
                         </ion-label>
                         <ion-button (click)="openReportPDF(document)" slot="end">Abrir</ion-button>
                     </ion-item>
+                    <div class="" *ngIf="report.documentsArr.length == 0">
+                        <ion-label>No hay adjuntos disponibles</ion-label>
+                    </div>
                 </ion-list>
             </section>          
         </div>

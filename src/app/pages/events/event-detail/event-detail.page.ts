@@ -52,8 +52,7 @@ export class EventDetailPage implements OnInit {
             }
         });
         this.subcategory = this.activatedRoute.snapshot.paramMap.get('subcategory');
-        this.backUrl = `events/list/${this.subcategory}`
-        console.log('backUrl', this.backUrl)
+        this.backUrl = `events/list/${this.subcategory}`;
         this.getEvent();
     }
 

@@ -66,7 +66,9 @@ export class SimpleRoutingMapComponent implements OnInit {
         this.arrRoutesLatLng[0] = this.createLatLng(
             (this.currentCoordinate) ? this.currentCoordinate.latitude : null, 
             (this.currentCoordinate) ? this.currentCoordinate.longitude : null);
-        this.arrRoutesLatLng[1] = this.createLatLng(this.destinationCoords.latitude, this.destinationCoords.longitude);
+
+        this.arrRoutesLatLng[1] = this.createLatLng(
+            this.destinationCoords.latitude, this.destinationCoords.longitude);
         // Crear el Mapa
         this.map = L.map(this.id, {
             gestureHandling: this.enableGesture,

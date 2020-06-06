@@ -62,13 +62,13 @@
                 </div>
             </div>
             <ion-card-header class="post-header">
-                <ng-container *ngIf="emergency.additional_data && emergency.additional_data.post">
+                <ng-container *ngIf="emergency.additional_data">
                     <ion-card-subtitle class="post-status" [ngClass]="{
-                        'atendido': emergency.additional_data.post.status_attendance == 'atendido',
-                        'rechazado': emergency.additional_data.post.status_attendance == 'rechazado',
-                        '': emergency.additional_data.post.status_attendance == 'pendiente'
+                        'atendido': emergency.status_attendance == 'atendido',
+                        'rechazado': emergency.status_attendance == 'rechazado',
+                        '': emergency.status_attendance == 'pendiente'
                       }">
-                        {{ emergency.additional_data.post.status_attendance | titlecase }}
+                        {{ emergency.status_attendance | titlecase }}
                     </ion-card-subtitle>
                 </ng-container>
                 <ion-card-title class="post-title">

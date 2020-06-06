@@ -1,12 +1,10 @@
 import 'leaflet';
 declare let L: any;
 import { GestureHandling } from "leaflet-gesture-handling";
-import { Component, OnInit, EventEmitter, Input, Output, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import { LocalizationService } from "src/app/services/localization.service";
+import { Component, OnInit, EventEmitter, Input, Output, ViewChild, ElementRef } from '@angular/core';
 import { MapService } from "src/app/services/map.service";
 import { manageTwoFingerDrag } from 'src/app/helpers/utils';
 import { CONFIG } from 'src/config/config';
-import { Map, LatLngBoundsExpression, Marker } from 'leaflet';
 
 @Component({
     selector: 'single-map',

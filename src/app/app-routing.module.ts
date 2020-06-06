@@ -25,6 +25,7 @@ const routes: Routes = [
     {
         path: 'events', //Pantalla de Pagina de Eventos
         loadChildren: './pages/events/events.module#EventsPageModule',
+        canLoad: [UserAuthenticatedGuard]
     },
     {
         path: 'frequent-questions', //Pantalla de Pagina de Preguntas Frecuentes
@@ -54,15 +55,17 @@ const routes: Routes = [
     {
         path: 'reports', //Pantalla de Reportes
         loadChildren: './pages/reports/reports.module#ReportsPageModule',
+        canLoad: [UserAuthenticatedGuard]
     },
     {
         path: 'social-problems', //Pantalla de Problemas Sociales
         loadChildren: './pages/social-problems/social-problems.module#SocialProblemsPageModule',
+        canLoad: [UserAuthenticatedGuard]
     },
     {
         path: 'user-profile', //Pantalla del Perfil de Usuario
         loadChildren: './pages/user/user.module#UserPageModule',
-        canLoad: [UserAuthenticatedGuard, UserIsActiveGuard]
+        canLoad: [UserAuthenticatedGuard]
     },
     {
         path: '404', //Pantalla de Error

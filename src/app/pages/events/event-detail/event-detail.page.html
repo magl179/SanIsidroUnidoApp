@@ -80,8 +80,8 @@
                             <span class="icon-ubication">
                                 <ion-icon name="contact" class="social-problem-state"></ion-icon>
                             </span>
-                            <span *ngIf="event.additional_data && event.additional_data.event && event.additional_data.event.responsible">Responsable: {{ event.additional_data.event.responsible}}</span>
-                            <span *ngIf="!event.additional_data || !event.additional_data.event || !event.additional_data.event.responsible">No hay un responsable designado</span>
+                            <span *ngIf="event.additional_data && event.additional_data.responsible">Responsable: {{ event.additional_data.responsible}}</span>
+                            <span *ngIf="!event.additional_data || !event.additional_data.responsible">No hay un responsable designado</span>
                         </p>
                         <p class="item-info" *ngIf="event.reactions && event.reactions.length > 0">
                             <span class="icon-people">

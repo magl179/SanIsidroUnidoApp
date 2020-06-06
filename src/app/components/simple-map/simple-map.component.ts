@@ -20,10 +20,10 @@ export class SimpleMapComponent implements AfterViewInit {
     @Input() zoom = 14;
     @Input() className = '';
     @Input() coordsMap: IUbication = {
-        latitude: null,
-        longitude: null,
-        address: null,
-        description: null
+        latitude: CONFIG.DEFAULT_LOCATION.latitude,
+        longitude: CONFIG.DEFAULT_LOCATION.longitude,
+        address: CONFIG.DEFAULT_LOCATION.address,
+        description: CONFIG.DEFAULT_LOCATION.description
     };
     @Input() enableGesture = false;
     map;
@@ -41,7 +41,7 @@ export class SimpleMapComponent implements AfterViewInit {
         if (this.enableGesture) {
             L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
         }
-        
+
         this.coordsMap = getJSON(this.coordsMap);
         this.map = L.map(this.id, {
             gestureHandling: this.enableGesture,
@@ -61,17 +61,17 @@ export class SimpleMapComponent implements AfterViewInit {
             reuseTiles: true
         }).addTo(this.map);
 
-        
-            const icon = await this.mapService.getCustomIcon('red');
-            let markerPosition: Marker;
-            const leafletLat = L.latLng(this.coordsMap.latitude, this.coordsMap.longitude);
-            if (icon) {
-                markerPosition = new L.Marker(leafletLat, { icon: icon });
-            } else {
-                markerPosition = new L.Marker(leafletLat);
-            }
-            markerPosition.addTo(this.map).bindPopup('Ubicación del Punto');
-        
+
+        const icon = await this.mapService.getCustomIcon('red');
+        let markerPosition: Marker;
+        const leafletLat = L.latLng(this.coordsMap.latitude, this.coordsMap.longitude);
+        if (icon) {
+            markerPosition = new L.Marker(leafletLat, { icon: icon });
+        } else {
+            markerPosition = new L.Marker(leafletLat);
+        }
+        markerPosition.addTo(this.map).bindPopup('Ubicación del Punto');
+
     }
 
     onTwoFingerDrag(e) {

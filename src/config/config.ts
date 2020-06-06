@@ -20,6 +20,14 @@ interface ICONFIG {
     EVENT_BUTTON_MESSAGE: string;
     USE_FILE_URL: boolean;
     URL_SOCIAL_LOGIN_NOT_EMAIL: string;
+    DEFAULT_LOCATION: IDefaultLocation;
+  }
+
+  interface IDefaultLocation {
+    latitude: number;
+    longitude: number;
+    address: string;
+    description: string;
   }
 
 export const CONFIG: ICONFIG = {
@@ -50,6 +58,12 @@ export const CONFIG: ICONFIG = {
     MESSAGE_APP_URL: 'https://www.facebook.com/stalinmaza97',
     EVENT_BUTTON_MESSAGE: 'Asistir',
     USE_FILE_URL: true,
-    URL_SOCIAL_LOGIN_NOT_EMAIL: 'https://stalinmaza97.hashnode.dev/google-o-facebook-no-me-retorna-el-correo-de-registro-ckarljqi604tnbbs1bxqcuefp'
+    URL_SOCIAL_LOGIN_NOT_EMAIL: 'https://stalinmaza97.hashnode.dev/google-o-facebook-no-me-retorna-el-correo-de-registro-ckarljqi604tnbbs1bxqcuefp',
+    DEFAULT_LOCATION: {
+    latitude: -0.24320783421726888,
+    longitude: -78.49732162261353,
+    address: 'Casa barrial San Isidro de Puengasí, Quito, Pichincha, Ecuador',
+    description: ''
+    }
 }
 

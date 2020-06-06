@@ -185,21 +185,16 @@ export const mapEvent = (event) => {
         event.images = mapImagesApi(event.resources);
         event.imagesArr = getValueKeyFromArrObj(event.resources, 'url');
     }
-    const range_date = (event.additional_data && event.additional_data.event && event.additional_data.event.range_date) ? event.additional_data.event.range_date : null;
+    const range_date = (event.additional_data && event.additional_data.range_date) ? event.additional_data.range_date : null;
     if (range_date) {
         const my_start_date = (range_date.start_date) ? formatString(range_date.start_date, 'dd MMM yyyy'): '';
         const my_end_date = (range_date.end_date) ? formatString(range_date.end_date, 'dd MMM yyyy'): '';
         const my_start_time= (range_date.start_date && range_date.start_time) ? formatString(`${range_date.start_date} ${range_date.start_time}`, 'HH:mm'): '';
         const my_end_time= (range_date.end_date && range_date.end_time) ? formatString(`${range_date.end_date} ${range_date.end_time}`, 'HH:mm'): '';
-        event.range_short_date = `${my_start_date} al ${my_end_date}`;
-        event.range_short_time = `${my_start_time} - ${my_end_time}`;
+     
+        event.range_short_date = (my_start_date && my_end_date) ? `${my_start_date} al ${my_end_date}`: `${my_start_date}`;
+        event.range_short_time = (my_start_time && my_end_time) ? `${my_start_time} al ${my_end_time}`: `${my_start_time}`;
     }
-    if (range_date && range_date.start_date && range_date.end_date) {
-        event.hasRangeDate = true;
-    } else {
-        event.hasRangeDate = false;
-    }
-
     return event;
 }
 
@@ -226,6 +221,7 @@ export const mapEmergency = (emergency) => {
         emergency.imagesArr = [];
     }
 
+    emergency.status_attendance = (emergency.additional_data) ? emergency.additional_data.status_attendance: '';
     return emergency;
 }
 export const mapReport = (report: any) => {
@@ -255,6 +251,8 @@ export const mapSocialProblem = (social_problem: any) => {
     } else {
         social_problem.imagesArr = [];
     }
+
+    social_problem.status_attendance = (social_problem.additional_data) ? social_problem.additional_data.status_attendance: ''
 
     return social_problem;
 }

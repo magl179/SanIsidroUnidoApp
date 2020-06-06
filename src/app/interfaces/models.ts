@@ -73,21 +73,13 @@ interface IRangeDate {
 }
 
 interface IAdditionalData {
-    event?: ILogEvent;
-    emergency?: ILogEmergency;
-    post?: ILogPost;
-    problem?: any;
-    activity?: any;
-}
+    range_date?: IRangeDate;
+    responsible?: string;
 
-interface ILogEvent {
-    range_date: IRangeDate;
-    responsible: string;
-}
-interface ILogEmergency {
-    attended_by: IUser, rechazed_by: IUser, rechazed_reason: string
-}
-interface ILogPost {
+    attended_by?: IUser;
+    rechazed_by?: IUser;
+    rechazed_reason?: string
+
     approved_by: string;
     status_attendance: string;
 }
@@ -138,16 +130,19 @@ export interface IPost {
 }
 
 export interface IEmergency extends IPost {
+    status_attendance?: string;
 }
 
 export interface IReport extends IPost {
     fecha_creacion: string;
+    status_attendance?: string;
 }
 
 export interface ISocialProblem extends IPost {
     likes: number;
     postLiked?: boolean;
     fecha_creacion?: string;
+    status_attendance?: string;
 }
 export interface IEvent extends IPost {
     postAssistance?: boolean;
@@ -159,6 +154,7 @@ export interface IEvent extends IPost {
     range_short_date?: string;
     range_short_time?: string;
     fulldate?: string;
+    status_attendance?: string;
 }
 //Imagenes
 export interface I_ImagesApi {
@@ -434,9 +430,11 @@ interface IBaseReportSend {
 }
 
 export interface IEmergencyReported extends IBaseReportSend {
+    status_attendance?: string;
 }
 
 export interface ISocialProblemReported extends IBaseReportSend {
+    status_attendance?: string;
     subcategory_id?: number;
 }
 

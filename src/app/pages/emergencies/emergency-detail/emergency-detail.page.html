@@ -74,29 +74,29 @@
                             <span class="icon-people">
                                 <ion-icon name="pricetag" class="social-problem-state"></ion-icon>
                             </span>
-                            <span>Estado Atención:  {{ emergency.additional_data.post.status_attendance | titlecase }}</span>
+                            <span>Estado Atención:  {{ emergency.status_attendance | titlecase }}</span>
                         </p>
                         <p class="item-info"
-                            *ngIf="emergency.additional_data && emergency.additional_data.emergency && emergency.additional_data.emergency.rechazed_reason">
+                            *ngIf="emergency.additional_data && emergency.additional_data.rechazed_reason">
                             <span class="icon-people">
                                 <ion-icon name="list-box" class="social-problem-state"></ion-icon>
                             </span>
-                            <span>Motivo del Rechazo: {{emergency.additional_data.emergency.rechazed_reason}}</span>
+                            <span>Motivo del Rechazo: {{emergency.additional_data.rechazed_reason}}</span>
                         </p>
                         <p class="item-info"
-                            *ngIf="emergency.additional_data && emergency.additional_data.emergency && emergency.additional_data.emergency.rechazed_by">
+                            *ngIf="emergency.additional_data && emergency.additional_data.rechazed_by">
                             <span class="icon-people">
                                 <ion-icon name="list-box" class="social-problem-state"></ion-icon>
                             </span>
-                            <span>Rechazado por: {{emergency.additional_data.emergency.rechazed_by.fullname}}</span>
+                            <span>Rechazado por: {{emergency.additional_data.rechazed_by.fullname}}</span>
                         </p>
                         <p class="item-info"
-                            *ngIf="emergency.additional_data && emergency.additional_data.emergency && emergency.additional_data.emergency.attended_by">
+                            *ngIf="emergency.additional_data && emergency.additional_data.attended_by">
                             <span class="icon-people">
                                 <ion-icon name="list-box" class="social-problem-state"></ion-icon>
                             </span>
-                            <span>Atendido por: {{emergency.additional_data.emergency.attended_by.first_name}}
-                                {{emergency.additional_data.emergency.attended_by.last_name}}</span>
+                            <span>Atendido por: {{emergency.additional_data.attended_by.first_name}}
+                                {{emergency.additional_data.attended_by.last_name}}</span>
                         </p>
 
                     </div>
@@ -113,7 +113,7 @@
     </div>
 </ion-content>
 <ion-footer class="footer-fixed-posts"
-    *ngIf="emergency && isPoliciaRol && showPoliciaOptions && emergency.additional_data.post.status_attendance != 'atendido'">
+    *ngIf="emergency && isPoliciaRol && showPoliciaOptions && emergency.status_attendance != 'atendido'">
     <div class="social">
         <div class="social-options">
             <div class="social-button ion-activatable" (click)="onPoliciaAcceptEmergency()">

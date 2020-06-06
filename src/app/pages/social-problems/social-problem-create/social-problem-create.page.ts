@@ -27,9 +27,9 @@ export class SocialProblemCreatePage implements OnInit {
     errorMessages = null;
     socialProblemImages = [];
     socialProblemCoordinate: IUbication = {
-        latitude: null,
-        longitude: null,
-        address: null
+        latitude: CONFIG.DEFAULT_LOCATION.latitude,
+        longitude: CONFIG.DEFAULT_LOCATION.longitude,
+        address: CONFIG.DEFAULT_LOCATION.address
     };
     subcategories = [];
     formSended = false;

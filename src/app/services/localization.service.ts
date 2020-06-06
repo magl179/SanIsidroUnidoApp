@@ -6,6 +6,7 @@ import { Platform } from '@ionic/angular';
 import { ISimpleCoordinates, GeolocationPosition, ICheckPermission } from 'src/app/interfaces/models';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { MessagesService } from './messages.service';
+import { CONFIG } from 'src/config/config';
 
 
 @Injectable({
@@ -14,8 +15,8 @@ import { MessagesService } from './messages.service';
 export class LocalizationService {
 
     misCoordenadas: ISimpleCoordinates = {
-        latitude: -0.24320783421726888,
-        longitude: -78.49732162261353,
+        latitude: CONFIG.DEFAULT_LOCATION.latitude,
+        longitude: CONFIG.DEFAULT_LOCATION.longitude,
     };
 
     constructor(

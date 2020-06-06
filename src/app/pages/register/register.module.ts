@@ -9,6 +9,7 @@ import { RegisterPage } from './register.page';
 import { SmComponentsModule } from 'src/app/components/sm-components.module';
 import { SocialEmailLoginModal } from 'src/app/modals/social-email-login/social-email-login.modal';
 import { SocialEmailLoginModule } from 'src/app/modals/social-email-login/social-email-login.module';
+import { MatIconModule } from '@angular/material/icon';
 
 const routes: Routes = [
   {
@@ -25,6 +26,7 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
+    MatIconModule,
     RouterModule.forChild(routes),
     ReactiveFormsModule,
     SmComponentsModule,

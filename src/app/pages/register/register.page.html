@@ -25,7 +25,7 @@
                                         formControlName="first_name" #first_field (keydown.enter)="preventEnterPressed($event)">
                                     </ion-input>
                                     <div class="validation-icon left" *ngIf="registerForm.get('first_name').valid">
-                                        <i class="fa fa-check"></i>
+                                        <mat-icon aria-hidden="false" aria-label="Correcto">done</mat-icon>
                                     </div>
                                 </ion-item>
                             </div>
@@ -60,7 +60,7 @@
                                         formControlName="last_name" (keydown.enter)="preventEnterPressed($event)">
                                     </ion-input>
                                     <div class="validation-icon left" *ngIf="registerForm.get('last_name').valid">
-                                        <i class="fa fa-check"></i>
+                                        <mat-icon aria-hidden="false" aria-label="Correcto">done</mat-icon>
                                     </div>
                                 </ion-item>
                             </div>
@@ -95,7 +95,7 @@
                                         formControlName="email" (keydown.enter)="preventEnterPressed($event)">
                                     </ion-input>
                                     <div class="validation-icon left" *ngIf="registerForm.get('email').valid">
-                                        <i class="fa fa-check"></i>
+                                        <mat-icon aria-hidden="false" aria-label="Correcto">done</mat-icon>
                                     </div>
                                 </ion-item>
                             </div>
@@ -133,7 +133,7 @@
                                             maxlength="100">
                                         </ion-input>
                                         <div class="validation-icon" *ngIf="registerForm.get('password').valid">
-                                            <i class="fa fa-check"></i>
+                                            <mat-icon aria-hidden="false" aria-label="Correcto">done</mat-icon>
                                         </div>
                                         <button item-end class="btn_eye_icon" (click)="togglePasswordMode()" [class.icon-left]="registerForm.get('password').valid">
                                             <ion-icon [name]="(passwordTypeInput === 'text')?'eye-off':'eye'">

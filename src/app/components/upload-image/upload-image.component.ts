@@ -36,7 +36,6 @@ export class UploadImageComponent implements OnInit {
         cameraOptions.encodingType = this.camera.EncodingType.JPEG;
         cameraOptions.mediaType = this.camera.MediaType.PICTURE;
         this.uploadedImages = [... this.uploadedImages];
-        console.log('cameraOptions', cameraOptions)
     }
 
     async getUploadedImages(): Promise<void> {

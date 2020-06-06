@@ -13,6 +13,7 @@ import { MessagesService } from 'src/app/services/messages.service';
 import { EventsService } from 'src/app/services/events.service';
 import { Router } from '@angular/router';
 import { UploadImageComponent } from 'src/app/components/upload-image/upload-image.component';
+import { CONFIG } from 'src/config/config';
 
 @Component({
     selector: 'app-emergency-create',
@@ -25,9 +26,9 @@ export class EmergencyCreatePage implements OnInit {
     @ViewChild(UploadImageComponent) uploadImageComponent: UploadImageComponent;
     emergencyImages = [];
     emergencyPostCoordinate: IUbication = {
-        latitude: null,
-        longitude: null,
-        address: null
+        latitude: CONFIG.DEFAULT_LOCATION.latitude,
+        longitude: CONFIG.DEFAULT_LOCATION.longitude,
+        address: CONFIG.DEFAULT_LOCATION.address
     };
     emergencyForm: FormGroup;
     ubicationForm: FormGroup;
@@ -58,7 +59,6 @@ export class EmergencyCreatePage implements OnInit {
             this.emergencyPostCoordinate.latitude = -0.096076;
             this.emergencyPostCoordinate.longitude =  -78.503606;
         });
-        console.log('emergency on init', this.emergencyPostCoordinate)
         this.getUserAddress(this.emergencyPostCoordinate.latitude, this.emergencyPostCoordinate.longitude);
     }
 

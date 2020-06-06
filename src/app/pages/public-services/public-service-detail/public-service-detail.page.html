@@ -25,10 +25,14 @@
         </div>
         <div>
             <p style="display:block;font-weight: bold;">Horario Atención:</p>
-            <p>{{
-                (publicServiceDetail.public_opening && publicServiceDetail.public_opening["open-time"]) ? publicServiceDetail.public_opening["open-time"]: ''}} - {{
-                    (publicServiceDetail.public_opening && publicServiceDetail.public_opening["close-time"]) ? publicServiceDetail.public_opening["close-time"]: ''}}
+            <p *ngIf="publicServiceDetail.public_opening && publicServiceDetail.public_opening['open-time'] && publicServiceDetail.public_opening['close-time'] ; else sinHorarioAtencion" >
+                {{
+                publicServiceDetail.public_opening["open-time"] - publicServiceDetail.public_opening["close-time"]
+                }}
             </p>
+            <ng-template #sinHorarioAtencion>
+                <p>No disponible</p>
+            </ng-template>
         </div>
         <div *ngIf="currentPosition">
             <p style="display:block;font-weight: bold;">Distancia:</p>

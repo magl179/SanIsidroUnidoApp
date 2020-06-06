@@ -25,7 +25,7 @@
                                             formControlName="email" type="email" #first_field>
                                         </ion-input>
                                         <div class="validation-icon" *ngIf="loginForm.get('email').valid">
-                                            <i class="fa fa-check"></i>
+                                            <mat-icon aria-hidden="false" aria-label="Correcto">done</mat-icon>
                                         </div>
                                     </div>
                                 </ion-item>
@@ -63,7 +63,7 @@
                                             [type]="passwordTypeInput" clearOnEdit="false">
                                         </ion-input>
                                         <div class="validation-icon" *ngIf="loginForm.get('password').valid">
-                                            <i class="fa fa-check"></i>
+                                            <mat-icon aria-hidden="false" aria-label="Correcto">done</mat-icon>
                                         </div>
                                         <button item-end class="btn_eye_icon icon-left"
                                             (click)="togglePasswordMode()">
