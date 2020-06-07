@@ -2,7 +2,7 @@
     {
         "title": "Emergencias",
         "icon": "assets/img/svg/alarm.svg",
-        "url": "/emergencies/list",
+        "url": "/emergencies/categories",
         "isFunction": false,
         "valid_roles": ["morador", "policia"]
     },

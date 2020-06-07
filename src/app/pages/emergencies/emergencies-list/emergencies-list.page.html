@@ -1,11 +1,11 @@
 
 <!-- Cabecera -->
-<app-header-back [title]="(isPolicia) ? 'Emergencias': 'Mis Emergencias'" [search]="false"></app-header-back>
+<app-header-back [title]="(allPosts) ? 'Emergencias': 'Mis Emergencias'" [search]="false" backUrl="/emergencies/categories"></app-header-back>
 <!-- Contenido -->
 <ion-content padding>
     
     <!-- Filtro por Estado Atención -->
-    <ion-segment value="" scrollable (ionChange)="segmentChanged($event)">
+    <ion-segment value="" scrollable (ionChange)="segmentChanged($event)" *ngIf="showSegment">
         <ion-segment-button value="">
             <ion-icon color="blue-logo" name="document"></ion-icon>
             <ion-label>Todos</ion-label>

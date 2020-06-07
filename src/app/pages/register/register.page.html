@@ -24,9 +24,9 @@
                                     <ion-input class="input-beatiful" placeholder="John" type="text"
                                         formControlName="first_name" #first_field (keydown.enter)="preventEnterPressed($event)">
                                     </ion-input>
-                                    <div class="validation-icon left" *ngIf="registerForm.get('first_name').valid">
+                                    <!-- <div class="validation-icon left" *ngIf="registerForm.get('first_name').valid">
                                         <mat-icon aria-hidden="false" aria-label="Correcto">done</mat-icon>
-                                    </div>
+                                    </div> -->
                                 </ion-item>
                             </div>
                             <div class="form-errors padding-lateral">
@@ -59,9 +59,9 @@
                                     <ion-input class="input-beatiful" placeholder="Doe" type="text"
                                         formControlName="last_name" (keydown.enter)="preventEnterPressed($event)">
                                     </ion-input>
-                                    <div class="validation-icon left" *ngIf="registerForm.get('last_name').valid">
+                                    <!-- <div class="validation-icon left" *ngIf="registerForm.get('last_name').valid">
                                         <mat-icon aria-hidden="false" aria-label="Correcto">done</mat-icon>
-                                    </div>
+                                    </div> -->
                                 </ion-item>
                             </div>
                             <div class="form-errors padding-lateral">
@@ -94,9 +94,9 @@
                                     <ion-input class="input-beatiful" placeholder="john@gmail.com" type="text"
                                         formControlName="email" (keydown.enter)="preventEnterPressed($event)">
                                     </ion-input>
-                                    <div class="validation-icon left" *ngIf="registerForm.get('email').valid">
+                                    <!-- <div class="validation-icon left" *ngIf="registerForm.get('email').valid">
                                         <mat-icon aria-hidden="false" aria-label="Correcto">done</mat-icon>
-                                    </div>
+                                    </div> -->
                                 </ion-item>
                             </div>
                             <div class="form-errors padding-lateral">
@@ -132,9 +132,9 @@
                                             (keydown.enter)="preventEnterPressed($event)"
                                             maxlength="100">
                                         </ion-input>
-                                        <div class="validation-icon" *ngIf="registerForm.get('password').valid">
+                                        <!-- <div class="validation-icon" *ngIf="registerForm.get('password').valid">
                                             <mat-icon aria-hidden="false" aria-label="Correcto">done</mat-icon>
-                                        </div>
+                                        </div> -->
                                         <button item-end class="btn_eye_icon" (click)="togglePasswordMode()" [class.icon-left]="registerForm.get('password').valid">
                                             <ion-icon [name]="(passwordTypeInput === 'text')?'eye-off':'eye'">
                                             </ion-icon>

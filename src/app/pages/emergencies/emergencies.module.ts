@@ -29,6 +29,11 @@ const routes: Routes = [
                 path: 'list',
                 loadChildren: "./emergencies-list/emergencies-list.module#EmergenciesListPageModule",
                 canLoad: [UserAuthenticatedGuard]
+            },  
+            {
+                path: 'categories',
+                loadChildren: "./emergencies-categories/emergencies-categories.module#EmergenciesCategoriesPageModule",
+                canLoad: [UserAuthenticatedGuard]
             }     
         ]
     }

@@ -47,6 +47,7 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
     socialProblemControl: FormControl;
     searchingSocialProblems = false;
     segmentFilter$ = new BehaviorSubject(null);
+    postState = 1;
 
     constructor(
         private router: Router,
@@ -115,7 +116,8 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
                     category: CONFIG.SOCIAL_PROBLEMS_SLUG,
                     subcategory: this.subcategory,
                     title: combineValues[0],
-                    status_attendance: combineValues[1]
+                    status_attendance: combineValues[1],
+                    active: this.postState
                 })),
                 switchMap(peticionHttpBusqueda),
             )
@@ -280,6 +282,11 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
     //Filtrar por Estado Atención
     segmentChanged(event: CustomEvent) {
         const value = (event.detail.value !== "") ? event.detail.value : "";
+        if(value == 'rechazado'){
+            this.postState = 0
+        }else{
+            this.postState = 1;
+        }
         this.segmentFilter$.next(value);
     }
 

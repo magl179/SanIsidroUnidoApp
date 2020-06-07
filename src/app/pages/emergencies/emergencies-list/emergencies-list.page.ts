@@ -2,14 +2,14 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavController } from "@ionic/angular";
 import { UtilsService } from "src/app/services/utils.service";
 import { PostsService } from "src/app/services/posts.service";
-import { IRespuestaApiSIUPaginada, ITokenDecoded, IResource } from "src/app/interfaces/models";
-import { finalize, map, catchError, pluck, distinctUntilChanged, tap, exhaustMap, share, startWith, skip, switchMap } from 'rxjs/operators';
+import { IRespuestaApiSIUPaginada, ITokenDecoded, IResource, IUser } from "src/app/interfaces/models";
+import { finalize, map, catchError, pluck, distinctUntilChanged, tap, exhaustMap, share, startWith, skip, switchMap, takeUntil } from 'rxjs/operators';
 import { mapEmergency } from "src/app/helpers/utils";
 import { AuthService } from 'src/app/services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from "src/app/services/events.service";
 import { ErrorService } from 'src/app/services/error.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { of, BehaviorSubject, combineLatest, Subject } from 'rxjs';
 import { trigger, style, transition, animate, keyframes, query, stagger } from '@angular/animations';
 import { FormControl } from '@angular/forms';
@@ -35,7 +35,7 @@ import { CONFIG } from 'src/config/config';
 })
 export class EmergenciesListPage implements OnInit, OnDestroy {
 
-    AuthUser = null;
+    AuthUser: IUser = null;
     showloading = true;
     showNotFound = false;
     emergenciesList = [];
@@ -48,6 +48,10 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         police: '',
         user: ''
     };
+    postState = 1;
+    allPosts = false;
+    showSegment =  false;
+    private unsubscribe = new Subject<void>();
 
     constructor(
         private navCtrl: NavController,
@@ -55,6 +59,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         private utilsService: UtilsService,
         private errorService: ErrorService,
         private postsService: PostsService,
+        private activatedRoute: ActivatedRoute,
         private router: Router,
         private events_app: EventsService
     ) {
@@ -68,6 +73,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
     }
 
     async ngOnInit() {
+      
         //Peticion
         const peticionHttpBusqueda = (body) => {
             return this.postsService.searchPosts(body)
@@ -83,7 +89,8 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
                     catchError((error_http: HttpErrorResponse) => {
                         this.errorService.manageHttpError(error_http, '');
                         return of([])
-                    })
+                    }),
+                    takeUntil(this.unsubscribe)
                 )
         };
         //Verificar si es policia
@@ -94,14 +101,30 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
                 this.AuthUser = token_decoded.user;
             }
         });
+       
         //Si es Policia
-        if(this.isPolicia){
-            // this.extraData.police = this.AuthUser.id;
-        }else{
-            this.extraData.user = this.AuthUser.id;
-        }
-        //Primera Carga
-        this.loadEmergencies(null, true);
+        this.activatedRoute.queryParams.subscribe(params => {
+            // this.queryParam = params['all'];
+            this.allPosts = (params['all'] && params['all'] == 'all') ? true: false;
+            if(this.allPosts){
+                this.extraData.user = '';
+            }else{
+                this.extraData.user = this.AuthUser.id.toString();
+            }
+             //Policia
+            if(this.isPolicia){
+                this.showSegment = true;
+            }
+            else if(this.allPosts){
+                this.showSegment = false;
+            }
+            else{
+                this.showSegment = true;
+            }
+             //Primera Carga
+            this.loadEmergencies(null, true);
+        });
+       
         //Simular Un Refresh cuando se crea nuevas emergencias
         this.events_app.emergenciesEmitter.subscribe(() => {
             this.postsService.resetPagination(this.postsService.PaginationKeys.EMERGENCIES);
@@ -125,9 +148,13 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
                     category: CONFIG.EMERGENCIES_SLUG,
                     title: combineValues[0],
                     status_attendance: combineValues[1],
-                    ... this.extraData
+                    active: this.postState,
+                    // ... this.extraData,
+                    user: this.extraData.user,
+                    police: this.extraData.police
                 })),
                 switchMap(peticionHttpBusqueda),
+                takeUntil(this.unsubscribe)
             )
             .subscribe((data) => {
                 this.showNotFound = (data.length == 0) ? true : false;
@@ -136,23 +163,20 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
             });
     }
 
-    ngOnDestroy() {
-        //Desuscribirnos de los Observables al destruir el componente
-        this.postsService.resetPagination(this.postsService.PaginationKeys.EMERGENCIES);
-    }
-
-    getEmergenciesFunction(params = {}) {
-        if (this.isPolicia) {
-            return this.postsService.getEmergencies(params);
+    getEmergenciesFunction() {
+        const params = {active: this.postState}
+        if (this.isPolicia || this.allPosts) {
+            // return this.postsService.getEmergencies(params);
         } else {
-            return this.postsService.getEmergenciesByUser(params);
+            params['user'] = this.AuthUser.id;
+            // return this.postsService.getEmergenciesByUser(params);
         }
+        return this.postsService.getEmergencies(params);
     }
 
     async loadEmergencies(event = null, first_loading = false) {
-        const params = (this.isPolicia) ? { } : {}
-
-        this.getEmergenciesFunction(params).pipe(
+       
+        this.getEmergenciesFunction().pipe(
             map((res: IRespuestaApiSIUPaginada) => {
                 if (res && res.data) {
                     res.data.forEach((emergency) => {
@@ -178,6 +202,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
                 }
 
             }),
+            takeUntil(this.unsubscribe)
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let emergenciesApi = [];
             emergenciesApi = res.data;
@@ -236,10 +261,25 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
 
     segmentChanged(event: CustomEvent) {
         const value = (event.detail.value !== "") ? event.detail.value : "";
+        if(value == 'rechazado'){
+            this.postState = 0
+        }else{
+            this.postState = 1;
+        }
         this.segmentFilter$.next(value);
     }
 
+    ngOnDestroy() {
+        this.unsubscribe.next();
+        this.unsubscribe.complete();
+        this.postsService.resetPagination(this.postsService.PaginationKeys.EMERGENCIES);
+    }
 
+    ionViewWillLeave(){
+        this.unsubscribe.next();
+        this.unsubscribe.complete();
+        this.postsService.resetPagination(this.postsService.PaginationKeys.EMERGENCIES);
+    }
 
 
 }

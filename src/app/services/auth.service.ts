@@ -48,7 +48,7 @@ export class AuthService {
                 resolve(true);
             });
         });
-        const getUserLS = new Promise((resolve, reject) => {
+        const getUserLS = new Promise((resolve) => {
             this.storage.get(USER_ITEM_NAME).then(token_decoded => {
                 this.sessionAuthUserSubject.next(token_decoded);
                 resolve(true);

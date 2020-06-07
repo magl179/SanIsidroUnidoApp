@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from "@ionic/angular";
 import { PostsService } from "src/app/services/posts.service";
-import { map, finalize } from 'rxjs/operators';
+import { map, finalize, takeUntil } from 'rxjs/operators';
 import { mapCategory } from 'src/app/helpers/utils';
 import { ISubcategory, IRespuestaApiSIUSingle, IRespuestaApiSIU } from "src/app/interfaces/models";
 import { CONFIG } from 'src/config/config';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-social-problems-categories',
@@ -15,6 +16,7 @@ export class SocialProblemsCategoriesPage implements OnInit {
 
     categoriesLoaded = false;
     categories = [];
+    private unsubscribe = new Subject<void>();
     
     constructor(private navCtrl: NavController,
         private postsService: PostsService) { }
@@ -39,12 +41,16 @@ export class SocialProblemsCategoriesPage implements OnInit {
             }),
             finalize(() => {
                 this.categoriesLoaded = true;
-            })
+            }),
+            takeUntil(this.unsubscribe)
         ).subscribe((res : IRespuestaApiSIU) => {
             this.categories = res.data;
         });
     }
 
-    
+    ionViewWillLeave(){
+        this.unsubscribe.next();
+        this.unsubscribe.complete();
+    }
 
 }

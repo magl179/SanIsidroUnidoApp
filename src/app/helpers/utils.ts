@@ -87,9 +87,9 @@ export const filterDataInObject = (data: any[], filter: {}) => {
     return new_data;
 }
 
-export const isRolActive = (roles: IRole[] ) =>{
+export const isRolActive = (roles: IRole[]) => {
     const role = roles.filter(rol => rol.pivot && rol.pivot.state == 1);
-    if(role && role.length > 0){ return true}
+    if (role && role.length > 0) { return true }
     return false;
 };
 
@@ -187,13 +187,13 @@ export const mapEvent = (event) => {
     }
     const range_date = (event.additional_data && event.additional_data.range_date) ? event.additional_data.range_date : null;
     if (range_date) {
-        const my_start_date = (range_date.start_date) ? formatString(range_date.start_date, 'dd MMM yyyy'): '';
-        const my_end_date = (range_date.end_date) ? formatString(range_date.end_date, 'dd MMM yyyy'): '';
-        const my_start_time= (range_date.start_date && range_date.start_time) ? formatString(`${range_date.start_date} ${range_date.start_time}`, 'HH:mm'): '';
-        const my_end_time= (range_date.end_date && range_date.end_time) ? formatString(`${range_date.end_date} ${range_date.end_time}`, 'HH:mm'): '';
-     
-        event.range_short_date = (my_start_date && my_end_date) ? `${my_start_date} al ${my_end_date}`: `${my_start_date}`;
-        event.range_short_time = (my_start_time && my_end_time) ? `${my_start_time} al ${my_end_time}`: `${my_start_time}`;
+        const my_start_date = (range_date.start_date) ? formatString(range_date.start_date, 'dd MMM yyyy') : '';
+        const my_end_date = (range_date.end_date) ? formatString(range_date.end_date, 'dd MMM yyyy') : '';
+        const my_start_time = (range_date.start_date && range_date.start_time) ? formatString(`${range_date.start_date} ${range_date.start_time}`, 'HH:mm') : '';
+        const my_end_time = (range_date.end_date && range_date.end_time) ? formatString(`${range_date.end_date} ${range_date.end_time}`, 'HH:mm') : '';
+
+        event.range_short_date = (my_start_date && my_end_date) ? `${my_start_date} al ${my_end_date}` : `${my_start_date}`;
+        event.range_short_time = (my_start_time && my_end_time) ? `${my_start_time} al ${my_end_time}` : `${my_start_time}`;
     }
     return event;
 }
@@ -221,9 +221,26 @@ export const mapEmergency = (emergency) => {
         emergency.imagesArr = [];
     }
 
-    emergency.status_attendance = (emergency.additional_data) ? emergency.additional_data.status_attendance: '';
+    emergency.status_attendance = (emergency.additional_data) ? emergency.additional_data.status_attendance : '';
     return emergency;
 }
+
+export const cleanEmpty = (obj, defaults = [undefined, null, NaN, '']) => {
+    if (!defaults.length) return obj
+    if (defaults.includes(obj)) return
+
+    if (Array.isArray(obj))
+        return obj
+            .map(v => v && typeof v === 'object' ? cleanEmpty(v, defaults) : v)
+            .filter(v => !defaults.includes(v))
+
+    return Object.entries(obj).length
+        ? Object.entries(obj)
+            .map(([k, v]) => ([k, v && typeof v === 'object' ? cleanEmpty(v, defaults) : v]))
+            .reduce((a, [k, v]) => (defaults.includes(v) ? a : { ...a, [k]: v }), {})
+        : obj
+}
+
 export const mapReport = (report: any) => {
     report.ubication = getJSON(report.ubication);
     if (report.resources && report.resources.length > 0) {
@@ -252,7 +269,7 @@ export const mapSocialProblem = (social_problem: any) => {
         social_problem.imagesArr = [];
     }
 
-    social_problem.status_attendance = (social_problem.additional_data) ? social_problem.additional_data.status_attendance: ''
+    social_problem.status_attendance = (social_problem.additional_data) ? social_problem.additional_data.status_attendance : ''
 
     return social_problem;
 }
@@ -303,11 +320,11 @@ export const randomInteger = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export const formatString = (value_date: string, format="HH:mm") => {
+export const formatString = (value_date: string, format = "HH:mm") => {
     return dateFormat(parseISO(value_date), format, { locale: es })
 }
 
-export const formatRange = (initial_date: string, end_date: string, format="HH:mm"): string => {
+export const formatRange = (initial_date: string, end_date: string, format = "HH:mm"): string => {
     // Fecha Pasada, Fecha Actual
     initial_date = initial_date || new Date().toString();
     end_date = end_date || new Date().toString();
@@ -321,7 +338,7 @@ export const formatRange = (initial_date: string, end_date: string, format="HH:m
     }
 }
 
-export const formatTimeRange = (initial_date: string, end_date: string, format="HH:mm"): string => {
+export const formatTimeRange = (initial_date: string, end_date: string, format = "HH:mm"): string => {
     // Fecha Pasada, Fecha Actual
     initial_date = initial_date || new Date().toString();
     end_date = end_date || new Date().toString();

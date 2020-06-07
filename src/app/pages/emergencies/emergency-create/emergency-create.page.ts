@@ -102,7 +102,6 @@ export class EmergencyCreatePage implements OnInit {
     }
 
     getUserAddress(latitud: number, longitud: number): void {
-        console.log('getUserAddress', latitud, longitud)
         this.mapService.getAddress({
             lat: latitud,
             lng: longitud,

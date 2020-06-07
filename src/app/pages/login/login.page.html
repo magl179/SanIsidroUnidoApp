@@ -24,9 +24,9 @@
                                         <ion-input class="input-beatiful input-general" placeholder="john@gmail.com" (keydown.enter)="preventEnterPressed($event)"
                                             formControlName="email" type="email" #first_field>
                                         </ion-input>
-                                        <div class="validation-icon" *ngIf="loginForm.get('email').valid">
+                                        <!-- <div class="validation-icon" *ngIf="loginForm.get('email').valid">
                                             <mat-icon aria-hidden="false" aria-label="Correcto">done</mat-icon>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </ion-item>
                             </div>
@@ -62,9 +62,9 @@
                                             (keydown.enter)="preventEnterPressed($event)"
                                             [type]="passwordTypeInput" clearOnEdit="false">
                                         </ion-input>
-                                        <div class="validation-icon" *ngIf="loginForm.get('password').valid">
+                                        <!-- <div class="validation-icon" *ngIf="loginForm.get('password').valid">
                                             <mat-icon aria-hidden="false" aria-label="Correcto">done</mat-icon>
-                                        </div>
+                                        </div> -->
                                         <button item-end class="btn_eye_icon icon-left"
                                             (click)="togglePasswordMode()">
                                             <ion-icon [name]="(passwordTypeInput === 'text')?'eye-off':'eye'"></ion-icon>

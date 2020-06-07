@@ -6,7 +6,8 @@ import { IEmergencyReported, ISocialProblemReported, ICreateDetail, IEmergenciaR
 import { AuthService } from './auth.service';
 import { HttpRequestService } from "./http-request.service";
 import { IRespuestaApiSIUPaginada } from "src/app/interfaces/models";
-import { setHeaders } from 'src/app/helpers/utils';
+import { setHeaders, cleanEmpty } from 'src/app/helpers/utils';
+import { tap } from 'rxjs/operators';
 
 
 
@@ -143,7 +144,8 @@ export class PostsService implements OnInit {
         this.increasePagination(this.PaginationKeys.EMERGENCIES);
         const user_id = this.AuthUser.id;
         const mergeParams = { user_id, ...params };
-        return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${user_id}/emergencias?page=${this.getPagination(this.PaginationKeys.EMERGENCIES)}`, mergeParams);
+        const withoutEmptyParams = cleanEmpty(mergeParams);
+        return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${user_id}/emergencias?page=${this.getPagination(this.PaginationKeys.EMERGENCIES)}`, withoutEmptyParams);
     }
     // Función para obtener el listado de eventos publicados
     getEvents(params = {}): Observable<IRespuestaApiSIUPaginada> {
@@ -163,7 +165,8 @@ export class PostsService implements OnInit {
             page: this.getPagination(this.PaginationKeys.EMERGENCIES)            
         }
         const requestParams = { ...params, ...tempParams };
-        return this.httpRequest.get(`${environment.APIBASEURL}/publicaciones`,requestParams)
+        const withoutEmptyParams = cleanEmpty(requestParams);
+        return this.httpRequest.get(`${environment.APIBASEURL}/publicaciones`, withoutEmptyParams);
     }
     //Funcion para obtener el listado de informes registrados
     getReports(params = {}): Observable<IRespuestaApiSIUPaginada> {
@@ -213,9 +216,10 @@ export class PostsService implements OnInit {
         return this.httpRequest.get(url, requestParams);
     }
     // Función para buscar las publicaciones relacionadas a una categoria de una busqueda en especifico
-    searchPosts(params: object) {
+    searchPosts(search_params: object) {
         const url = `${environment.APIBASEURL}/publicaciones`;
-        return this.httpRequest.get(url, params);
+        const withoutEmptyParams = cleanEmpty(search_params);
+        return this.httpRequest.get(url, withoutEmptyParams);
     }
     // Función para filtrar las publicaciones de acuerdo a unos parametros
     filterPosts(filter_params: object, slugCategory: string) {

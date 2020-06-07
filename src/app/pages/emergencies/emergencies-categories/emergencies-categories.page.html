@@ -1,0 +1,17 @@
+<app-header-back title="Tipo"></app-header-back>
+<ion-content>
+    <ion-grid>
+        <ion-row style="justify-content: center;">
+            <ion-col *ngFor="let category of categories; let i = index;" size="6">
+                <ion-card style="box-shadow:none !important;" (click)="goToList(category.value)">
+                    <div style="padding: .5em;display: flex;align-items: center;flex-direction: column;">
+                        <div class="emergency-category" [style]="category.icon | backgroundUrl">
+                        </div>
+                        <h1 class="ion-text category-title">
+                            {{category.title}}</h1>
+                    </div>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>
