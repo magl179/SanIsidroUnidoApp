@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IRespuestaApiSIUSingle, ISimpleCoordinates, AppMapEvent } from 'src/app/interfaces/models';
+import { IRespuestaApiSIUSingle, ISimpleCoordinates, AppMapEvent, IPublicService } from 'src/app/interfaces/models';
 import { PublicService } from "src/app/services/public.service";
-import { take, finalize, flatMap } from 'rxjs/operators';
+import { take, finalize, flatMap, pluck } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LocalizationService } from "src/app/services/localization.service";
 import { getDistanceInKm, roundDecimal } from 'src/app/helpers/utils';
@@ -20,7 +20,7 @@ export class PublicServiceDetailPage implements OnInit {
     showSimpleMap = true;
     category: string;
     publicServiceLoaded = false;
-    publicServiceDetail = null;
+    publicServiceDetail: IPublicService = null;
     mapLoaded = false;
     currentPosition = null;
 
@@ -63,13 +63,15 @@ export class PublicServiceDetailPage implements OnInit {
                         }
                     }
                 }
+                console.log('mapa mapped', res)
                 return res;
             }),
+            pluck('data'),
             finalize(() => {
                 this.publicServiceLoaded = true;
             })
-        ).subscribe((res: IRespuestaApiSIUSingle) => {
-            this.publicServiceDetail = res.data;
+        ).subscribe((res: IPublicService) => {
+            this.publicServiceDetail = res;
         }, (error_http: HttpErrorResponse) => {
             this.errorService.manageHttpError(error_http, 'Ocurrio un error al cargar el detalle del servicio')
         });

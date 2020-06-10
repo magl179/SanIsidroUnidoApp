@@ -77,26 +77,25 @@
                             <span>Estado Atención:  {{ emergency.status_attendance | titlecase }}</span>
                         </p>
                         <p class="item-info"
-                            *ngIf="emergency.additional_data && emergency.additional_data.rechazed_reason">
+                            *ngIf="emergency.additional_data && emergency.additional_data.rechazed">
                             <span class="icon-people">
                                 <ion-icon name="list-box" class="social-problem-state"></ion-icon>
                             </span>
-                            <span>Motivo del Rechazo: {{emergency.additional_data.rechazed_reason}}</span>
+                            <span>Motivo del Rechazo: {{emergency.additional_data.rechazed.reason || 'No disponible'}} </span>
                         </p>
                         <p class="item-info"
-                            *ngIf="emergency.additional_data && emergency.additional_data.rechazed_by">
+                            *ngIf="emergency.additional_data && emergency.additional_data.rechazed && emergency.additional_data.rechazed.who">
                             <span class="icon-people">
                                 <ion-icon name="list-box" class="social-problem-state"></ion-icon>
                             </span>
-                            <span>Rechazado por: {{emergency.additional_data.rechazed_by.fullname}}</span>
+                            <span>Rechazado por: {{emergency.additional_data.rechazed.who.fullname}}</span>
                         </p>
-                        <p class="item-info"
-                            *ngIf="emergency.additional_data && emergency.additional_data.attended_by">
+                        <p class="item-info" *ngIf="emergency.additional_data && emergency.additional_data.attended && emergency.additional_data.attended.who">
                             <span class="icon-people">
                                 <ion-icon name="list-box" class="social-problem-state"></ion-icon>
                             </span>
-                            <span>Atendido por: {{emergency.additional_data.attended_by.first_name}}
-                                {{emergency.additional_data.attended_by.last_name}}</span>
+                            <span>Atendido por: {{emergency.additional_data.attended.who.first_name}}
+                                {{emergency.additional_data.attended.who.last_name}}</span>
                         </p>
 
                     </div>

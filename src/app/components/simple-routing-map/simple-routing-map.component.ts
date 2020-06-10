@@ -9,6 +9,7 @@ import { IUbication, AppMapEvent, AppMarkers, ILeafletControl } from "src/app/in
 import { CONFIG } from 'src/config/config';
 import { MessagesService } from 'src/app/services/messages.service';
 import { Control, Map, Polyline, Marker } from 'leaflet';
+import { MARKERS_ICONS } from 'src/app/config/markers_icons';
 
 
 @Component({
@@ -50,7 +51,7 @@ export class SimpleRoutingMapComponent implements OnInit {
 
     async ngAfterViewInit() {
         try {
-            this.mapMarkers = await this.mapService.getMarkers().toPromise();
+            this.mapMarkers = MARKERS_ICONS;
             // Inicializar el Mapa
             await this.initializeMap();
         } catch (map_error) {

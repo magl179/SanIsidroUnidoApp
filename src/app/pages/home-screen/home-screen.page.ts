@@ -5,6 +5,7 @@ import { ISlideTutorial, ICustomEvent } from 'src/app/interfaces/models';
 import { UtilsService } from "src/app/services/utils.service";
 import { HttpErrorResponse } from "@angular/common/http";
 import { ErrorService } from 'src/app/services/error.service';
+import { SLIDE_OPTIONS } from 'src/app/config/slide_items';
 
 @Component({
     selector: 'app-home-screen',
@@ -23,16 +24,11 @@ export class HomeScreenPage implements OnInit {
         private navCtrl: NavController,
         private errorService: ErrorService,
         public utilsService: UtilsService,
-        private localDataService: LocalDataService) { }
+        private localDataService: LocalDataService) { 
+            this.slides = SLIDE_OPTIONS;
+        }
 
-    async ngOnInit() {
-        this.localDataService.getTutoSlides().subscribe(
-            (res: ISlideTutorial[]) => {
-                this.slides = res;
-            }, (error_http: HttpErrorResponse) => {
-                this.errorService.manageHttpError(error_http, 'No se pudieron cargar las opciones del tutorial');
-            }
-        );
+    async ngOnInit() {        
         await this.utilsService.disabledMenu();
     }
     

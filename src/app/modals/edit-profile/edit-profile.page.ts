@@ -23,6 +23,7 @@ export class EditProfilePage implements OnInit {
     editProfileForm: FormGroup;
     errorMessages = null;
     sending = false;
+    isInvitado = false;
 
     constructor(
         private modalCtrl: ModalController,
@@ -37,6 +38,8 @@ export class EditProfilePage implements OnInit {
 
     async ngOnInit() {
         this.loadUserData();
+        //Verificar si es policia
+        this.isInvitado = await this.authService.userHasRole(['Invitado']);
         this.createForm();
     }
 
@@ -80,12 +83,16 @@ export class EditProfilePage implements OnInit {
     // Función Crea el Formulario
     async createForm() {
         await this.loadUserData();
+        console.log('is invitdo', this.isInvitado)
         const validations = this.localDataService.getFormValidations();
         // Campo Email
-        const first_name = new FormControl(this.AuthUser.first_name || '', Validators.compose([
+        const first_name = new FormControl(
+        {value: this.AuthUser.first_name || '',  disabled: (!this.isInvitado) ? true: false},
+        Validators.compose([
             Validators.required
         ]));
-        const last_name = new FormControl(this.AuthUser.last_name || '', Validators.compose([
+        const last_name = new FormControl({value: this.AuthUser.last_name || '',  disabled: (!this.isInvitado) ?true: false}, 
+        Validators.compose([
             Validators.required
         ]));
         const email = new FormControl(

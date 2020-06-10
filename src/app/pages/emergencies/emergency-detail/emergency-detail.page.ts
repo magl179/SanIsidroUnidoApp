@@ -122,10 +122,10 @@ export class EmergencyDetailPage implements OnInit {
         await modal.present();
         const { data } : any = await modal.onWillDismiss();
         if(data.formulario_enviado){
-            this.messagesService.showInfo("El Formulario se envio");
+            this.messagesService.showInfo("Formulario enviado correctamente");
             this.getEmergency();
         }else{
-            this.messagesService.showInfo("El Formulario no se envio");
+            this.messagesService.showInfo("Ocurrio un error al enviar el formulario, intentalo más tarde");
         }
     }
 

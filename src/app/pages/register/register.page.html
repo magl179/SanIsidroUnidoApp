@@ -132,9 +132,6 @@
                                             (keydown.enter)="preventEnterPressed($event)"
                                             maxlength="100">
                                         </ion-input>
-                                        <!-- <div class="validation-icon" *ngIf="registerForm.get('password').valid">
-                                            <mat-icon aria-hidden="false" aria-label="Correcto">done</mat-icon>
-                                        </div> -->
                                         <button item-end class="btn_eye_icon" (click)="togglePasswordMode()" [class.icon-left]="registerForm.get('password').valid">
                                             <ion-icon [name]="(passwordTypeInput === 'text')?'eye-off':'eye'">
                                             </ion-icon>
@@ -162,7 +159,7 @@
                                 </p>
                             </div>
                             <div padding>
-                                <ion-button (click)="registerUser()" [disabled]="!registerForm.valid" color="red-logo"
+                                <ion-button (click)="registerUser()" [disabled]="!registerForm.valid" color="blue-logo"
                                     type="submit" expand="block" class="ion-text-capitalize">
                                     Registrarme</ion-button>
                             </div>

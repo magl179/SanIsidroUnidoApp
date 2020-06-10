@@ -134,6 +134,11 @@ export class EmergencyCreatePage implements OnInit {
             return null;
         }
 
+        if (this.emergencyImages.length == 0) {
+            this.messageService.showInfo("Debes subir al menos una imagen acerca del reporte");
+            return null;
+        }
+
         const loadingEmergencyReport = await this.utilsService.createBasicLoading('Enviando Reporte');
 
         const ubication = this.emergencyPostCoordinate;
@@ -153,7 +158,7 @@ export class EmergencyCreatePage implements OnInit {
                 loadingEmergencyReport.dismiss()
             })
         ).subscribe(() => {
-            this.messageService.showSuccess("El Reporte fue enviado correctamente");
+            this.messageService.showSuccess("Reporte enviado correctamente, cuando sea aprobado lo podrás visualizar en el listado");
             this.formSended = true;
             this.events_app.resetEmergenciesEmitter();
             this.cdRef.detectChanges();

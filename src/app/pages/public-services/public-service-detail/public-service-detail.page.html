@@ -1,10 +1,11 @@
 <app-header-back title="Servicio" [backUrl]="backUrl" [showNoti]="false"></app-header-back>
 
 <ion-content class="ion-padding">
-     <!-- Mensaje si no esta el gps activado -->
-     <ng-container *ngIf="!showSimpleMap">
-         <app-localization-info gpsTextInfo="Por favor activa el GPS para poder visualizar correctamente el mapa"></app-localization-info>
-     </ng-container>
+    <!-- Mensaje si no esta el gps activado -->
+    <ng-container *ngIf="!showSimpleMap">
+        <app-localization-info gpsTextInfo="Por favor activa el GPS para poder visualizar correctamente el mapa">
+        </app-localization-info>
+    </ng-container>
     <!-- Loader mientras cargan datos -->
     <div class="loading-app" *ngIf="!publicServiceLoaded">
         <loader-app class="flex-column-center"></loader-app>
@@ -25,10 +26,9 @@
         </div>
         <div>
             <p style="display:block;font-weight: bold;">Horario Atención:</p>
-            <p *ngIf="publicServiceDetail.public_opening && publicServiceDetail.public_opening['open-time'] && publicServiceDetail.public_opening['close-time'] ; else sinHorarioAtencion" >
-                {{
-                publicServiceDetail.public_opening["open-time"] - publicServiceDetail.public_opening["close-time"]
-                }}
+            <p
+                *ngIf="publicServiceDetail.public_opening && publicServiceDetail.public_opening.open_time && publicServiceDetail.public_opening.close_time; else sinHorarioAtencion">
+                {{  publicServiceDetail.public_opening.open_time }} - {{ publicServiceDetail.public_opening.close_time }}
             </p>
             <ng-template #sinHorarioAtencion>
                 <p>No disponible</p>
@@ -36,14 +36,17 @@
         </div>
         <div *ngIf="currentPosition">
             <p style="display:block;font-weight: bold;">Distancia:</p>
-            <p>El destino se encuentra a {{currentPosition.latitude | publicServiceDistancePipe: currentPosition.longitude: publicServiceDetail.ubication.latitude: publicServiceDetail.ubication.longitude }} km desde tu ubicación
+            <p>El destino se encuentra a
+                {{currentPosition.latitude | publicServiceDistancePipe: currentPosition.longitude: publicServiceDetail.ubication.latitude: publicServiceDetail.ubication.longitude }}
+                km desde tu ubicación
                 actual</p>
         </div>
 
+        <p style="display:block;font-weight: bold;">Ubicación:</p>
         <simple-routing-map [zoom]="11" className="public-service-map" [simpleMap]="showSimpleMap"
             [targetUbicacionIcon]="(publicServiceDetail.subcategory && publicServiceDetail.subcategory.image_link)?publicServiceDetail.subcategory.image_link: null"
-            id="public-service-map-detail-{{id}}"
-            [destinationCoords]="publicServiceDetail.ubication" [usePolyline]="false"
-            (mapEvent)="manageMapEvent($event)" [enableGesture]="true" [currentCoordinate]="currentPosition"></simple-routing-map>
+            id="public-service-map-detail-{{id}}" [destinationCoords]="publicServiceDetail.ubication"
+            [usePolyline]="false" (mapEvent)="manageMapEvent($event)" [enableGesture]="true"
+            [currentCoordinate]="currentPosition"></simple-routing-map>
     </div>
 </ion-content>

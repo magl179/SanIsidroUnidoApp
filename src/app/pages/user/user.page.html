@@ -54,59 +54,63 @@
             </ion-row>
         </ion-grid>
         <!-- REDES SOCIALES ASOCIADAS -->
-        <div class="list-items-container"
-            *ngIf="UserSocialProfiles && UserSocialProfiles.length > 0">
-            <p class="title title_font">Redes Sociales Asociadas</p>
-            <div class="list-items">
-                <div class="list-item"
-                    *ngFor="let user_social_profile of UserSocialProfiles; let i = index">
-                    <div class="item-left">
-                        <img class="icon" src="/assets/img/svg/google.svg"
-                            *ngIf="(user_social_profile.provider | lowercase) === 'google'"/>
-                        <img class="icon" src="/assets/img/svg/facebook.svg"
-                            *ngIf="(user_social_profile.provider | lowercase) === 'facebook'"/>
-                        <span class="label">Stalin Maza</span>
-                    </div>
-                    <div class="item-right">
-                        <ion-button *ngIf="AuthUser.password !== null" color="light"
-                            class="ion-text-capitalize"
-                            (click)="removeSocialProfileToUser(user_social_profile.id)">Desconectar
-                        </ion-button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="flex-column-center"
-            *ngIf="userSocialProfilesLoaded && UserSocialProfiles.length === 0">
-            <p>No tienes redes sociales asociadas</p>
-        </div>
-        <!-- DISPOSITIVOS ASOCIADOS -->
-        <div class="list-items-container" *ngIf="UserDevices && UserDevices.length > 0">
-            <p class="title title_font">Dispositivos asociados</p>
-            <div class="list-items">
-                <div class="list-item" *ngFor="let user_device of UserDevices; let i = index">
-                    <div class="item-left">
-                        <img class="icon" src="/assets/img/svg/smartphone.svg"/>
-                        <div class="label">
-                            <p>{{user_device.phone_model}}</p>
-                            <p class="device_last_conexion">
-                                {{ (user_device.updated_at) ? (user_device.updated_at) : ''}}
-                            </p>
+        <ng-container *appHasRole="['morador', 'invitado']">
+            <div class="list-items-container"
+                *ngIf="UserSocialProfiles && UserSocialProfiles.length > 0">
+                <p class="title title_font">Redes Sociales Asociadas</p>
+                <div class="list-items">
+                    <div class="list-item"
+                        *ngFor="let user_social_profile of UserSocialProfiles; let i = index">
+                        <div class="item-left">
+                            <img class="icon" src="/assets/img/svg/google.svg"
+                                *ngIf="(user_social_profile.provider | lowercase) === 'google'"/>
+                            <img class="icon" src="/assets/img/svg/facebook.svg"
+                                *ngIf="(user_social_profile.provider | lowercase) === 'facebook'"/>
+                            <span class="label">Stalin Maza</span>
+                        </div>
+                        <div class="item-right">
+                            <ion-button *ngIf="AuthUser.password !== null" color="light"
+                                class="ion-text-capitalize"
+                                (click)="removeSocialProfileToUser(user_social_profile.id)">Desconectar
+                            </ion-button>
                         </div>
                     </div>
-                    <div class="item-right">
-                        <ion-button *ngIf="user_device.phone_id !== CurrentUserDevice.phone_id"
-                            color="light" class="ion-text-capitalize"
-                            (click)="removeUserDevice(user_device.id)">Desconectar</ion-button>
+                </div>
+            </div>
+    
+            <!-- <div class="flex-column-center"
+                *ngIf="userSocialProfilesLoaded && UserSocialProfiles.length === 0">
+                <p>No tienes redes sociales asociadas</p>
+            </div> -->
+        </ng-container>
+        <!-- DISPOSITIVOS ASOCIADOS -->
+        <ng-container  *appHasRole="['morador', 'invitado']">
+            <div class="list-items-container" *ngIf="UserDevices && UserDevices.length > 0">
+                <p class="title title_font">Dispositivos asociados</p>
+                <div class="list-items">
+                    <div class="list-item" *ngFor="let user_device of UserDevices; let i = index">
+                        <div class="item-left">
+                            <img class="icon" src="/assets/img/svg/smartphone.svg"/>
+                            <div class="label">
+                                <p>{{user_device.phone_model}}</p>
+                                <p class="device_last_conexion">
+                                    {{ (user_device.updated_at) ? (user_device.updated_at) : ''}}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="item-right">
+                            <ion-button *ngIf="user_device.phone_id !== CurrentUserDevice.phone_id"
+                                color="light" class="ion-text-capitalize"
+                                (click)="removeUserDevice(user_device.id)">Desconectar</ion-button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="flex-column-center"
-            *ngIf="userDevicesLoaded && UserDevices.length === 0">
-            <p>No tienes dispositivos asociados</p>
-        </div>
+    
+            <!-- <div class="flex-column-center"
+                *ngIf="userDevicesLoaded && UserDevices.length === 0">
+                <p>No tienes dispositivos asociados</p>
+            </div> -->
+        </ng-container>
     </div>
 </ion-content>

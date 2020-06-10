@@ -65,7 +65,7 @@
                                         <!-- <div class="validation-icon" *ngIf="loginForm.get('password').valid">
                                             <mat-icon aria-hidden="false" aria-label="Correcto">done</mat-icon>
                                         </div> -->
-                                        <button item-end class="btn_eye_icon icon-left"
+                                        <button item-end class="btn_eye_icon"
                                             (click)="togglePasswordMode()">
                                             <ion-icon [name]="(passwordTypeInput === 'text')?'eye-off':'eye'"></ion-icon>
                                         </button>
@@ -94,7 +94,7 @@
                                 <p (click)="forgotPassword()">¿Olvidaste tu contraseña?</p>
                             </div>
                             <div padding>
-                                <ion-button (click)="loginUser()" color="red-logo" type="submit"
+                                <ion-button (click)="loginUser()" color="blue-logo" type="submit"
                                     expand="block" [disabled]="!loginForm.valid" class="ion-text-capitalize">
                                     Iniciar Sesión
                                 </ion-button>

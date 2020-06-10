@@ -8,11 +8,11 @@ interface IBasicResponse {
     errors?: any[];
 }
 
-export interface IProgressEvent extends ProgressEvent{
+export interface IProgressEvent extends ProgressEvent {
     target: any;
 }
 
-export interface ICustomEvent{
+export interface ICustomEvent {
     bubbles: boolean;
     cancelBubble: boolean;
     cancelable: boolean;
@@ -34,10 +34,10 @@ export interface AppMarkers {
     color: string;
     iconName: string;
     iconURL: string;
-    shadow: string;    
+    shadow: string;
 }
 
-export interface ILeafletControl extends Control{
+export interface ILeafletControl extends Control {
     setWaypoints: any
 }
 
@@ -73,16 +73,14 @@ interface IRangeDate {
 }
 
 interface IAdditionalData {
-    range_date?: IRangeDate;
+    approved?: Approved;
+    rechazed?: Rechazed;
+    attended?: Approved;
+    status_attendance?: string;
     responsible?: string;
-
-    attended_by?: IUser;
-    rechazed_by?: IUser;
-    rechazed_reason?: string
-
-    approved_by: string;
-    status_attendance: string;
+    range_date?: IRangeDate;
 }
+
 
 export interface IReaction {
     id: number;
@@ -93,6 +91,17 @@ export interface IReaction {
     updated_at: string;
     url_link: string;
     user_id?: number;
+}
+
+interface Rechazed {
+    who?: IUser;
+    date?: string;
+    reason?: string;
+}
+
+interface Approved {
+    who?: IUser;
+    date?: string;
 }
 
 export interface IResource {
@@ -169,18 +178,25 @@ export interface I_ImagesApi {
 export interface IPublicService {
     id: number;
     name: string;
-    description: string;
     ubication: IUbication;
-    phones?: IPhones[];
-    subcategory?: ISubcategory;
-    created_at?: string;
-    updated_at?: string;
+    subcategory_id: number;
+    created_at: string;
+    updated_at: string;
+    email: string;
+    public_opening: IPublicOpening;
+    phones: IPhones[];
+    subcategory: ISubcategory;
 }
 //Telefonos Servicio Publico
 interface IPhones {
     id: number;
     public_service_id: number;
     phone_number: string;
+}
+
+interface IPublicOpening {
+    open_time: string;
+    close_time: string;
 }
 
 // Interfaces Extras

@@ -1,4 +1,4 @@
-{
+export const MENU_ITEMS_APP = {
     "authenticated": [{
             "icon": "ios-home",
             "name": "Inicio",

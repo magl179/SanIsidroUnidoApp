@@ -1,4 +1,4 @@
-[
+export const SLIDE_OPTIONS = [
     {
         "img": "/assets/images/group_of_people.jpg",
         "title": "San Isidro Unido",
@@ -29,4 +29,4 @@
         "title": "Lista las Publicaciones",
         "description": "Puedes ver un listado de los problemas sociales, las emergencias, los eventos y los reportes barriales para siempre estar enterado sobre lo que sucede en la comunidad."
     }
-]
+];

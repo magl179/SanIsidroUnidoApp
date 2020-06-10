@@ -8,12 +8,10 @@ import { AlertController } from '@ionic/angular';
 import { AuthService } from './services/auth.service';
 import { NotificationsService } from './services/notifications.service';
 import { NetworkService } from 'src/app/services/network.service';
-import { LocalDataService } from './services/local-data.service';
 import { mapUser } from "./helpers/utils";
 import { map} from 'rxjs/operators';
-import { NavigationService } from './services/navigation.service';
 import { MessagesService } from './services/messages.service';
-
+import { MENU_ITEMS_APP} from 'src/app/config/menu';
 
 @Component({
     selector: 'app-root',
@@ -31,11 +29,9 @@ export class AppComponent implements OnInit {
     constructor(
         private platform: Platform,
         private splashScreen: SplashScreen,
-        private localDataService: LocalDataService,
         private statusBar: StatusBar,
         private alertController: AlertController,
         private authService: AuthService,
-        private navigationService: NavigationService,
         private menuCtrl: MenuController,
         private pushNotificationService: NotificationsService,
         private networkService: NetworkService,
@@ -44,12 +40,10 @@ export class AppComponent implements OnInit {
         this.initializeApp();
     }
 
-    ngOnInit() { }
+    ngOnInit():void { }
 
-    async getMenuOptions() {
-        this.localDataService.getMenuOptions().subscribe((data: IMenuOptions) => {
-            this.menuComponents = data;
-        });
+    getMenuOptions():void {
+        this.menuComponents = MENU_ITEMS_APP
     }
 
     initializeApp() {
@@ -60,7 +54,7 @@ export class AppComponent implements OnInit {
                 this.splashScreen.hide();
             }
             await this.checkUserLoggedIn();
-            await this.getMenuOptions();
+            this.getMenuOptions();
             this.showAppsplash = false;
             timer(1500).subscribe(async () => {
                 await this.pushNotificationService.initialConfig();

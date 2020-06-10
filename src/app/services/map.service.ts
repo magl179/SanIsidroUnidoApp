@@ -3,6 +3,7 @@ import * as Leaflet from 'leaflet';
 import { IReverseGeocodeResponse } from 'src/app/interfaces/models';
 import { Observable } from 'rxjs';
 import { HttpRequestService } from "./http-request.service";
+import { MARKERS_ICONS } from '../config/markers_icons';
 
 
 const shadowIcon = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png';
@@ -17,14 +18,9 @@ export class MapService implements OnInit {
         private httpRequest: HttpRequestService
     ) { }
 
-    ngOnInit() {}
+    ngOnInit():void {}
 
-    //Función para obtener los marcadores personalizados
-    getMarkers() {
-        return this.httpRequest.get('assets/data/markers.json');
-    }
-
-    createExternalIcon(ownIconUrl){
+    createExternalIcon(ownIconUrl: string) {
         const iconMap = new Leaflet.Icon({
             iconUrl: ownIconUrl,
             shadowUrl: shadowIcon,
@@ -36,7 +32,7 @@ export class MapService implements OnInit {
         return iconMap;
     }
     //Funcion crear un icono con una imagen específica
-    createIcon(ownIconURL) {
+    createIcon(ownIconURL: string) {
         const iconMap = new Leaflet.Icon({
             iconUrl: ownIconURL,
             shadowUrl: shadowIcon,
@@ -48,15 +44,15 @@ export class MapService implements OnInit {
         return iconMap;
     }
     //Función obtener un icono de un color en especifico
-    async getCustomIcon(color) {
+    async getCustomIcon(color: string) {
         let markerIcon = null;
-        const markerData = await this.getMarkers().toPromise();
+        const markerData = MARKERS_ICONS;
         if (markerData) {
             const iconData = markerData.filter((dataMarker) => {
                 return dataMarker.color === color;
             });
             if (iconData && iconData.length > 0) {
-                markerIcon = await this.createIcon(iconData[0].iconURL);
+                markerIcon = this.createIcon(iconData[0].iconURL);
             }
         }
         return markerIcon;

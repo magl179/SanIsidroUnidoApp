@@ -8,20 +8,7 @@ import { CedulaValidator } from '../helpers/cedula.validator';
 export class LocalDataService {
 
     constructor(
-        private httpRequest: HttpRequestService
     ) { }
-
-    getMenuOptions() {
-        return this.httpRequest.get('/assets/data/menu.json');
-    }
-
-    getTutoSlides() {
-        return this.httpRequest.get('/assets/data/tuto_slides.json');
-    }
-    
-    getHomeOptions() {
-        return this.httpRequest.get('/assets/data/home_options.json');
-    }
 
     getFormValidations(){
         return {

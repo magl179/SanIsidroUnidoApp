@@ -1,4 +1,4 @@
-[
+export const MARKERS_ICONS = [
     {
         "color": "red",
         "iconName": "marker-icon-2x-red.png",
@@ -47,4 +47,4 @@
         "iconURL": "/assets/img/markers/locate.png",
         "shadow": ""
     }
-]
+];

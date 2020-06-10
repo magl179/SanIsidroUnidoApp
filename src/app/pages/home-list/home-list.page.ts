@@ -7,6 +7,7 @@ import { NavController, ModalController } from '@ionic/angular';
 import { PruebasService } from 'src/app/services/pruebas.service';
 import { environment } from 'src/environments/environment';
 import { RequestMembershipPage } from 'src/app/modals/request-membership/request-membership.page';
+import { HOME_OPTIONS } from 'src/app/config/home_options';
 
 @Component({
     selector: 'app-home-list',
@@ -35,10 +36,7 @@ export class HomeListPage implements OnInit {
                 this.sessionAuth = token_decoded;
             }
         });
-        this.localDataService.getHomeOptions()
-        .subscribe((data: IHomeOptions[]) => {
-            this.servicesList = data;
-        });
+        this.servicesList = HOME_OPTIONS;
         await this.utilsService.enableMenu();
     }
     

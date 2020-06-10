@@ -1,4 +1,4 @@
-[ 
+export const HOME_OPTIONS = [ 
     {
         "title": "Emergencias",
         "icon": "assets/img/svg/alarm.svg",
