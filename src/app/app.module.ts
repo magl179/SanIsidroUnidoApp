@@ -54,7 +54,7 @@ import { WebView } from '@ionic-native/ionic-webview/ngx';
         ToastrModule.forRoot({
             positionClass: 'toast-bottom-right',
             preventDuplicates: true,
-            timeOut: 1000,
+            timeOut: 1800,
         }),
         BrowserAnimationsModule,
         IonicModule.forRoot(),

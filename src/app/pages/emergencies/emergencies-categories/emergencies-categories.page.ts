@@ -23,7 +23,8 @@ export class EmergenciesCategoriesPage implements OnInit {
 
     constructor(
         private router: Router,
-        private authService: AuthService
+        private authService: AuthService,
+        private navCtrl: NavController
     ) { }
 
     async ngOnInit() {
@@ -35,7 +36,9 @@ export class EmergenciesCategoriesPage implements OnInit {
     }
 
     goToList(value: string) {
-        this.router.navigate(['/emergencies/list'], { queryParams: { all: value } });
+        this.navCtrl.navigateForward('/emergencies/list', {
+            queryParams: { all: value }
+        });
     }
 
 

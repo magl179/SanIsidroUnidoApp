@@ -2,7 +2,7 @@ import { Injectable, EventEmitter, OnInit } from '@angular/core';
 import { OneSignal, OSNotification, OSNotificationPayload } from '@ionic-native/onesignal/ngx';
 import { environment } from 'src/environments/environment';
 import { BehaviorSubject } from 'rxjs';
-import { Platform } from '@ionic/angular';
+import { Platform, NavController } from '@ionic/angular';
 import { UserService } from './user.service';
 import { AuthService } from './auth.service';
 import { IDeviceUser, INotiList } from 'src/app/interfaces/models';
@@ -46,7 +46,8 @@ export class NotificationsService implements OnInit {
         private authService: AuthService,
         private storage: Storage,
         private router: Router,
-        private events_appService: EventsService
+        private events_appService: EventsService,
+        private navCtrl: NavController
     ) {
         this.loadUser();
     }
@@ -261,7 +262,7 @@ export class NotificationsService implements OnInit {
             console.log('urlNavigate', urlNavigate)
             if (urlNavigate) {
                 setTimeout(() => {
-                    this.router.navigateByUrl(urlNavigate);
+                    this.navCtrl.navigateForward(urlNavigate);
                 }, 1000);
             }
         }else{

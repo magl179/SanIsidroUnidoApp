@@ -13,6 +13,7 @@ import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from 'src/app/services/messages.service';
 import { Router } from '@angular/router';
 import { UploadImageComponent } from 'src/app/components/upload-image/upload-image.component';
+import { NavController } from '@ionic/angular';
 
 @Component({
     selector: 'app-social-problem-create',
@@ -45,7 +46,8 @@ export class SocialProblemCreatePage implements OnInit {
         private localizationService: LocalizationService,
         private localDataService: LocalDataService,
         private postService: PostsService,
-        private router: Router
+        private router: Router,
+        private navCtrl: NavController
     ) {
         this.createForm();
     }
@@ -142,7 +144,7 @@ export class SocialProblemCreatePage implements OnInit {
             const social_problem_subcategory = this.getSubcategoryById(this.socialProblemForm.value.subcategory);
             if (social_problem_subcategory && social_problem_subcategory.length > 0) {
                 setTimeout(() => {
-                    this.router.navigateByUrl(`/social-problems/list/${social_problem_subcategory[0]}`);
+                    this.navCtrl.navigateBack(`/social-problems/list/${social_problem_subcategory[0]}`);
                 }, 1000);
             }
 

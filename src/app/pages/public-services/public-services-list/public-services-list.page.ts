@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { UtilsService } from 'src/app/services/utils.service';
 import { IPublicService } from 'src/app/interfaces/models';
 import { ModalController, NavController } from "@ionic/angular";
-import { MapInfoPage } from "src/app/modals/map-info/map-info.page";
 import { finalize, take, map, tap, distinctUntilChanged } from 'rxjs/operators';
 import { IRespuestaApiSIU } from "src/app/interfaces/models";
 import { getRandomColor } from 'src/app/helpers/utils';
@@ -98,23 +97,6 @@ export class PublicServicesListPage implements OnInit {
             this.errorService.manageHttpError(error_http, 'Ocurrio un error al cargar el listado de serviciós públicos')
         });
     }
-
-    async lanzarModal() {
-        if(this.publicServiceSelected && this.markerSelected){
-            const modal = await this.modalCtrl.create({
-                component: MapInfoPage,
-                componentProps: {
-                    mapPoint: this.publicServiceSelected,
-                    pais: 'Ecuador',
-                    currentLocation: this.currentLocation
-                }
-            });
-            await modal.present();    
-            const { data } = await modal.onDidDismiss();
-        }
-
-    }
-
 
     goToDetail(id: number) {
         const url = `/public-services/list/${this.category}/${id}`;

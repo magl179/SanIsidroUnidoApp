@@ -22,8 +22,7 @@ const routes: Routes = [
             {
                 path: 'create',
                 loadChildren: './emergency-create/emergency-create.module#EmergencyCreatePageModule',
-                canLoad: [UserAuthenticatedGuard, UserHasRoleGuard],
-                data: { roles: ['morador_afiliado'] }
+                canLoad: [UserAuthenticatedGuard, UserHasRoleGuard]
             },
             {
                 path: 'list',

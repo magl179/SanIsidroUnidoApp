@@ -14,6 +14,7 @@ import { EventsService } from 'src/app/services/events.service';
 import { Router } from '@angular/router';
 import { UploadImageComponent } from 'src/app/components/upload-image/upload-image.component';
 import { CONFIG } from 'src/config/config';
+import { NavController } from '@ionic/angular';
 
 @Component({
     selector: 'app-emergency-create',
@@ -39,6 +40,7 @@ export class EmergencyCreatePage implements OnInit {
         private utilsService: UtilsService,
         private cdRef: ChangeDetectorRef,
         private router: Router,
+        private navCtrl: NavController,
         private mapService: MapService,
         private messageService: MessagesService,
         private errorService: ErrorService,
@@ -163,7 +165,7 @@ export class EmergencyCreatePage implements OnInit {
             this.events_app.resetEmergenciesEmitter();
             this.cdRef.detectChanges();
             setTimeout(() => {
-                this.router.navigateByUrl(`/emergencies/list`);
+                this.navCtrl.navigateBack(`/emergencies/list`);
             }, 1000);
 
         }, (error_http: HttpErrorResponse) => {

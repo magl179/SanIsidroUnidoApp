@@ -6,13 +6,11 @@ import { IonicModule } from '@ionic/angular';
 import { SocialProblemsPage } from './social-problems.page';
 import { UserAuthenticatedGuard } from 'src/app/guards/user-authenticated.guard';
 import { UserHasRoleGuard } from 'src/app/guards/user-has-role.guard';
-// import { CONFIG } from 'src/config/config';
 import { DirectivesModule } from 'src/app/directives/directives.module';
 
 const routes: Routes = [
     {
         path: '',
-        // redirectTo: '/social-problems/categories',
         component: SocialProblemsPage,
         children: [
             {
@@ -23,12 +21,12 @@ const routes: Routes = [
             {
                 path: 'create',
                 loadChildren: "./social-problem-create/social-problem-create.module#SocialProblemCreatePageModule",
-                canLoad: [UserAuthenticatedGuard, UserHasRoleGuard],
-                data: { roles: ['morador_afiliado'] }
+                canLoad: [UserAuthenticatedGuard, UserHasRoleGuard]
             },
             {
                 path: 'list/:subcategory',
-                loadChildren: './social-problems-list/social-problems-list.module#SocialProblemsListPageModule', canLoad: [UserAuthenticatedGuard]
+                loadChildren: './social-problems-list/social-problems-list.module#SocialProblemsListPageModule',
+                canLoad: [UserAuthenticatedGuard]
             },
             {
                 path: 'list/:subcategory/:id',

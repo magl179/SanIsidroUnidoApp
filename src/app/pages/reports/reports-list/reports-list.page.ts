@@ -98,12 +98,6 @@ export class ReportsListPage implements OnInit, OnDestroy {
         });
     }
 
-    redirectToSearch(){
-        this.navCtrl.navigateRoot("/reports/search", {
-            queryParams: { redirectUrl: this.router.url }
-        });
-    }
-
     postDetail(id: number) {
         this.navCtrl.navigateForward(`/reports/list/${id}`);
     }

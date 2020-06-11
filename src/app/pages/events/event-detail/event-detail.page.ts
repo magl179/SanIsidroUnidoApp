@@ -41,8 +41,8 @@ export class EventDetailPage implements OnInit {
         private events_app: EventsService,
         private errorService: ErrorService,
         private modalCtrl: ModalController,
-        private authService: AuthService) { 
-        }
+        private authService: AuthService) {
+    }
 
     ngOnInit() {
         this.id = this.route.snapshot.paramMap.get('id');
@@ -77,25 +77,25 @@ export class EventDetailPage implements OnInit {
                     this.event.postAssistance = checkLikePost(this.event.reactions, this.AuthUser);
                 }
             }
-        },(error_http: HttpErrorResponse) => {
-            this.errorService.manageHttpError(error_http,'No se pudo guardar su asistencia');
+        }, (error_http: HttpErrorResponse) => {
+            this.errorService.manageHttpError(error_http, 'No se pudo guardar su asistencia');
         });
     }
 
     toggleAssistance(assistance: boolean) {
-        if(!this.AuthUser){
+        if (!this.AuthUser) {
             this.messagesService.showInfo('Debes iniciar sesión para realizar esta acción');
             return;
         }
         if (assistance) {
             this.postService.sendDeleteDetailToPost(this.event.id).subscribe(res => {
-                if(res.data.reactions){
+                if (res.data.reactions) {
                     this.event.postAssistance = false;
                     this.event.reactions = res.data.reactions;
                     this.emitAssistanceEvent(this.event.id, res.data.reactions);
                 }
             }, (error_http: HttpErrorResponse) => {
-                this.errorService.manageHttpError(error_http,'No se pudo borrar su asistencia' );
+                this.errorService.manageHttpError(error_http, 'No se pudo borrar su asistencia');
             });
         } else {
             const detailInfo = {
@@ -104,13 +104,13 @@ export class EventDetailPage implements OnInit {
                 post_id: this.event.id
             }
             this.postService.sendCreateDetailToPost(detailInfo).subscribe(res => {
-                if(res.data.reactions){
+                if (res.data.reactions) {
                     this.event.postAssistance = true;
                     this.event.reactions = res.data.reactions;
                     this.emitAssistanceEvent(this.event.id, res.data.reactions);
                 }
             }, (error_http: HttpErrorResponse) => {
-                this.errorService.manageHttpError(error_http,'No se pudo guardar su asistencia' );
+                this.errorService.manageHttpError(error_http, 'No se pudo guardar su asistencia');
             });
         }
     }

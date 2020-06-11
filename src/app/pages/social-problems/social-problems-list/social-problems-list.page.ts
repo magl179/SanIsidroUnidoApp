@@ -128,12 +128,6 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
             });
     }
 
-    redirectToSearch() {
-        this.navCtrl.navigateRoot("/social-problems/search", {
-            queryParams: { redirectUrl: this.router.url }
-        });
-    }
-
     toggleLikes(social_problem_id: number, reactions = []) {
         const newSocialProblems = this.socialProblemsList.map((social_problem) => {
             if (social_problem.id == social_problem_id) {

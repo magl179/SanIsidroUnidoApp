@@ -66,12 +66,6 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         this.emergencyControl = new FormControl();
     }
 
-    redirectToSearch() {
-        this.navCtrl.navigateRoot("/emergencies/search", {
-            queryParams: { redirectUrl: this.router.url }
-        });
-    }
-
     async ngOnInit() {
       
         //Peticion

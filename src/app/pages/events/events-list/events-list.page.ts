@@ -15,7 +15,7 @@ import { MessagesService } from 'src/app/services/messages.service';
 import { CONFIG } from 'src/config/config';
 import { Router, ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
-import { trigger,style,transition,animate,keyframes,query,stagger } from '@angular/animations';
+import { trigger, style, transition, animate, keyframes, query, stagger } from '@angular/animations';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -24,17 +24,17 @@ import { FormControl } from '@angular/forms';
     styleUrls: ['./events-list.page.scss'],
     animations: [
         trigger('listAnimation', [
-          transition('* => *', [
-            query(':enter', style({ opacity: 0 }), {optional: true}),
-            query(':enter', stagger('300ms', [
-              animate('1s ease-in', keyframes([
-                style({opacity: 0, transform: 'translateY(-75%)', offset: 0}),
-                style({opacity: .5, transform: 'translateY(35px)',  offset: 0.3}),
-                style({opacity: 1, transform: 'translateY(0)',     offset: 1.0}),
-              ]))]), {optional: true}),
-          ])
+            transition('* => *', [
+                query(':enter', style({ opacity: 0 }), { optional: true }),
+                query(':enter', stagger('300ms', [
+                    animate('1s ease-in', keyframes([
+                        style({ opacity: 0, transform: 'translateY(-75%)', offset: 0 }),
+                        style({ opacity: .5, transform: 'translateY(35px)', offset: 0.3 }),
+                        style({ opacity: 1, transform: 'translateY(0)', offset: 1.0 }),
+                    ]))]), { optional: true }),
+            ])
         ])
-      ]
+    ]
 })
 export class EventsListPage implements OnInit, OnDestroy {
 
@@ -45,7 +45,7 @@ export class EventsListPage implements OnInit, OnDestroy {
     AuthUser = null;
     eventButtonMessage = CONFIG.EVENT_BUTTON_MESSAGE;
     eventControl: FormControl;
-    searchingEvents= false;
+    searchingEvents = false;
     subcategory: string;
 
     constructor(
@@ -64,26 +64,26 @@ export class EventsListPage implements OnInit, OnDestroy {
 
     ngOnInit() {
         const peticionHttpBusqueda = (body) => {
-            if(body.title == ''){
+            if (body.title == '') {
                 return of([...this.eventsList])
             }
             return this.postsService.searchPosts(body)
-            .pipe(
-                pluck('data'),
-                map(data =>{
-                    const events_to_map = data
-                    events_to_map.forEach((event) => {
-                        event = mapEvent(event);
-                        const postAssistance = checkLikePost(event.reactions, this.AuthUser) || false;
-                        event.postAssistance = postAssistance;
-                    });
-                    return events_to_map;
-                }),
-                catchError((error_http: HttpErrorResponse) => {
-                    this.errorService.manageHttpError(error_http, '');
-                    return of([])
-                })
-            )
+                .pipe(
+                    pluck('data'),
+                    map(data => {
+                        const events_to_map = data
+                        events_to_map.forEach((event) => {
+                            event = mapEvent(event);
+                            const postAssistance = checkLikePost(event.reactions, this.AuthUser) || false;
+                            event.postAssistance = postAssistance;
+                        });
+                        return events_to_map;
+                    }),
+                    catchError((error_http: HttpErrorResponse) => {
+                        this.errorService.manageHttpError(error_http, '');
+                        return of([])
+                    })
+                )
         }
         this.subcategory = this.activatedRoute.snapshot.paramMap.get('subcategory');
         this.postsService.resetPagination(this.postsService.PaginationKeys.EVENTS);
@@ -98,30 +98,30 @@ export class EventsListPage implements OnInit, OnDestroy {
             this.toggleLikes(event_app.reactions, event_app.id);
         });
         this.eventControl.valueChanges
-        .pipe(
-            distinctUntilChanged(),
-            tap(() => {
-                this.searchingEvents = true;
-            }),
-            map(search => ({
-                category: CONFIG.EVENTS_SLUG,
-                title: search,
-                subcategory: this.subcategory,
-            })),
-            exhaustMap(peticionHttpBusqueda),
-        )
-        .subscribe((data: IEvent[]) => {
-            this.showNotFound = (data.length == 0) ? true: false;
-            this.eventsFiltered = [...data];
-            this.searchingEvents = false;
-        });
+            .pipe(
+                distinctUntilChanged(),
+                tap(() => {
+                    this.searchingEvents = true;
+                }),
+                map(search => ({
+                    category: CONFIG.EVENTS_SLUG,
+                    title: search,
+                    subcategory: this.subcategory,
+                })),
+                exhaustMap(peticionHttpBusqueda),
+            )
+            .subscribe((data: IEvent[]) => {
+                this.showNotFound = (data.length == 0) ? true : false;
+                this.eventsFiltered = [...data];
+                this.searchingEvents = false;
+            });
     }
 
     ionViewWillLeave() { this.postsService.resetPagination(this.postsService.PaginationKeys.EVENTS_BY_SUBCATEGORY); }
 
     toggleLikes(reactions = [], event_id: number) {
         const newEventsList = this.eventsList.map((event) => {
-            if(event.id == event_id){
+            if (event.id == event_id) {
                 event.reactions = reactions;
             }
             event.postAssistance = checkLikePost(event.reactions, this.AuthUser) || false;
@@ -129,12 +129,6 @@ export class EventsListPage implements OnInit, OnDestroy {
         });
         this.eventsList = [...newEventsList];
         this.eventsFiltered = [...this.eventsList];
-    }
-
-    redirectToSearch() {
-        this.navCtrl.navigateRoot("/events/search", {
-            queryParams: { redirectUrl: this.router.url }
-        });
     }
 
     ngOnDestroy() {
@@ -192,12 +186,12 @@ export class EventsListPage implements OnInit, OnDestroy {
         await this.utilsService.shareSocial(sharePost);
     }
 
-    onImageError(event: any){
+    onImageError(event: any) {
         event.target.src = 'https://via.placeholder.com/600x300?text=SanIsidroImage';
     }
 
     loadEvents(event: IEventLoad = null, first_loading = false) {
-        this.postsService.getPostsBySubCategory(CONFIG.EVENTS_SLUG, this.subcategory,{}, this.postsService.PaginationKeys.EVENTS_BY_SUBCATEGORY).pipe(
+        this.postsService.getPostsBySubCategory(CONFIG.EVENTS_SLUG, this.subcategory, {}, this.postsService.PaginationKeys.EVENTS_BY_SUBCATEGORY).pipe(
             map((res: IRespuestaApiSIUPaginada) => {
                 if (res && res.data) {
                     res.data.forEach((event) => {
@@ -206,7 +200,7 @@ export class EventsListPage implements OnInit, OnDestroy {
                         event.postAssistance = postAssistance;
                     });
                 }
-                if(res && res.data && res.data.length == 0){
+                if (res && res.data && res.data.length == 0) {
                     this.postsService.resetPaginationEmpty(this.postsService.PaginationKeys.EVENTS_BY_SUBCATEGORY)
                 }
                 return res;
