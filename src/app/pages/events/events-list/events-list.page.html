@@ -56,21 +56,21 @@
                 </ion-card-content>
             </div>
             <div class="event__footer social">
-                <div class="social-content" *ngIf="event.reactions.length > 0">
+                <!-- <div class="social-content" *ngIf="event.reactions.length > 0">
                     <span>
                         A {{event.reactions.length}}
                         {{(event.reactions.length === 1) ? 'vecino le interesa asistir' : 'vecinos les interesa asistir'}}
                     </span>
-                </div>
+                </div> -->
                 <div class="social-options">
-                    <div class="social-button ion-activatable" [class.active]="event.postAssistance"
+                    <!-- <div class="social-button ion-activatable" [class.active]="event.postAssistance"
                         (click)="toggleAssistance(event.postAssistance, event.id)">
                         <ion-icon class="assistance" name="star"></ion-icon>
                         <span>
                             {{eventButtonMessage}}
                         </span>
                         <ion-ripple-effect></ion-ripple-effect>
-                    </div>
+                    </div> -->
                     <div class="social-button ion-activatable" (click)="sharePost(event)">
                         <ion-icon class="share" name="share"></ion-icon>
                         <span><i class="fa fa-share"></i>Compartir</span>

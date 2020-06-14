@@ -56,9 +56,6 @@ export class NotificationsService implements OnInit {
     }
 
     async initialConfig() {
-        // this.events_appService.logoutAppEmitter.subscribe(() => {
-        //     this.logoutOnesignal();
-        // });
         //Configurar Onesignal en un Dispositivo
         if (this.platform.is('cordova')) {
             //obtener el onesginal_id y el firebaseid

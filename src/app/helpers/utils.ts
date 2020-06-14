@@ -164,9 +164,13 @@ export const manageTwoFingerDrag = (event: any) => {
 }
 
 export const MapNotification = (notification) => {
-    if (notification && notification.user) {
-        notification.user = mapUser(notification.user);
+    if (notification && notification.notification_user) {
+        notification.notification_user = mapUser(notification.notification_user);
     }
+    if(notification && notification.neighbor){
+        notification.notification_user = mapUser(notification.neighbor);
+    }
+    console.log('notification mapeada', notification)
     return notification;
 }
 

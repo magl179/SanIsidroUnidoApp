@@ -301,6 +301,7 @@ export interface INotificationApi {
 export interface INotiList {
     title?: string;
     message?: string;
+    neighbor?: INotificationUser;
     notification_user?: INotificationUser;
     post?: IPost;
 }

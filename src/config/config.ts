@@ -53,7 +53,7 @@ export const CONFIG: ICONFIG = {
     },
     REPORTS_SLUG: 'informe',
     SOCIAL_PROBLEMS_SLUG: 'problema',
-    VERSION: '1.0.7',
+    VERSION: '1.0.8',
     MESSAGE_APP_INFO: 'Por San Isidro Unido con ❤',
     MESSAGE_APP_URL: 'http://sanisidrosmdev.herokuapp.com',
     EVENT_BUTTON_MESSAGE: 'Asistir',
@@ -63,7 +63,7 @@ export const CONFIG: ICONFIG = {
     latitude: -0.24320783421726888,
     longitude: -78.49732162261353,
     address: 'Casa barrial San Isidro de Puengasí, Quito, Pichincha, Ecuador',
-    description: ''
+    description: 'Frente a la Policia Municipal'
     }
 }
 

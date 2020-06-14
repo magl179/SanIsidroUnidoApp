@@ -10,12 +10,11 @@ import { tokenIsExpired } from 'src/app/helpers/auth-helper';
 import { IRespuestaApiSIUSingle } from "src/app/interfaces/models";
 import { CONFIG } from 'src/config/config';
 import { MessagesService } from './messages.service';
-import { EventsService } from './events.service';
 import { getUserRoles, hasRoles } from 'src/app/helpers/user-helper';
 import { map } from 'rxjs/operators';
 
-const TOKEN_ITEM_NAME = "accessToken";
-const USER_ITEM_NAME = "currentUser";
+const TOKEN_ITEM_NAME = "siuAccessToken";
+const USER_ITEM_NAME = "siuCurrentUser";
 
 @Injectable({
     providedIn: 'root'
@@ -31,8 +30,7 @@ export class AuthService {
         private storage: Storage,
         private navCtrl: NavController,
         private httpRequest: HttpRequestService,
-        private messageService: MessagesService,
-        private events_appService: EventsService
+        private messageService: MessagesService
     ) {
 
         this.storage.ready().then(async () => {
@@ -55,8 +53,6 @@ export class AuthService {
             });
         });
         return await Promise.all([getTokenLS, getUserLS]);
-
-
     }
 
     // Iniciar Sesion del Usuario
@@ -84,16 +80,15 @@ export class AuthService {
         if(message !== ''){
             this.messageService.showInfo(message);
         }
-        this.events_appService.emitLogoutEvent();
         setTimeout(()=>{
             this.navCtrl.navigateRoot('/home-screen', { replaceUrl: true });
         }, 700);
     }
 
-    async redirectToLogin(message = ''){
+    async redirectToLogin(){
         this.cleanLocalStorage();
         this.cleanAuthInfo();
-        this.navCtrl.navigateRoot('/home-screen');
+        this.navCtrl.navigateRoot('/home-screen', { replaceUrl: true });
     }
     //VERIFICAR SI SE DEBE CHECKEAR VALIDEZ TOKEN
     async checkValidToken() {

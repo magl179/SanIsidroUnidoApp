@@ -54,7 +54,7 @@
             </ion-row>
         </ion-grid>
         <!-- REDES SOCIALES ASOCIADAS -->
-        <ng-container *appHasRole="['morador', 'invitado']">
+        <ng-container *appHasRole="['invitado']">
             <div class="list-items-container"
                 *ngIf="UserSocialProfiles && UserSocialProfiles.length > 0">
                 <p class="title title_font">Redes Sociales Asociadas</p>
@@ -78,10 +78,6 @@
                 </div>
             </div>
     
-            <!-- <div class="flex-column-center"
-                *ngIf="userSocialProfilesLoaded && UserSocialProfiles.length === 0">
-                <p>No tienes redes sociales asociadas</p>
-            </div> -->
         </ng-container>
         <!-- DISPOSITIVOS ASOCIADOS -->
         <ng-container  *appHasRole="['morador', 'invitado']">
@@ -106,11 +102,6 @@
                     </div>
                 </div>
             </div>
-    
-            <!-- <div class="flex-column-center"
-                *ngIf="userDevicesLoaded && UserDevices.length === 0">
-                <p>No tienes dispositivos asociados</p>
-            </div> -->
         </ng-container>
     </div>
 </ion-content>
