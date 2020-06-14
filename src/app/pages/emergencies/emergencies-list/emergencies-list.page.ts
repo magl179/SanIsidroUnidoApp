@@ -70,6 +70,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
       
         //Peticion
         const peticionHttpBusqueda = (body) => {
+            console.log('peticion body', body)
             return this.postsService.searchPosts(body)
                 .pipe(
                     pluck('data'),
@@ -105,6 +106,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
             }else{
                 this.extraData.user = this.AuthUser.id.toString();
             }
+            console.log('this.extraData', this.extraData)
              //Policia
             if(this.isPolicia){
                 this.showSegment = true;
@@ -129,12 +131,12 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         })
         //Buscador       
         combineLatest(
-            this.emergencyControl.valueChanges.pipe(startWith('')),
-            this.segmentFilter$.asObservable(),
+            this.emergencyControl.valueChanges.pipe(startWith(''), distinctUntilChanged()),
+            this.segmentFilter$.asObservable().pipe(distinctUntilChanged()),
         )
             .pipe(
-                distinctUntilChanged(),
                 skip(1),
+                tap((val) => console.log('combine lastes',  val)),
                 tap((val) => {
                     this.searchingEmergencies = true;
                 }),
@@ -143,7 +145,6 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
                     title: combineValues[0],
                     status_attendance: combineValues[1],
                     active: this.postState,
-                    // ... this.extraData,
                     user: this.extraData.user,
                     police: this.extraData.police
                 })),
@@ -160,11 +161,10 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
     getEmergenciesFunction() {
         const params = {active: this.postState}
         if (this.isPolicia || this.allPosts) {
-            // return this.postsService.getEmergencies(params);
         } else {
             params['user'] = this.AuthUser.id;
-            // return this.postsService.getEmergenciesByUser(params);
         }
+        console.log('getEmergenciesFunction', params)
         return this.postsService.getEmergencies(params);
     }
 
@@ -260,6 +260,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         }else{
             this.postState = 1;
         }
+        console.log('segment changed', value)
         this.segmentFilter$.next(value);
     }
 

@@ -112,7 +112,7 @@
     </div>
 </ion-content>
 <ion-footer class="footer-fixed-posts"
-    *ngIf="emergency && isPoliciaRol && showPoliciaOptions && emergency.status_attendance != 'atendido'">
+    *ngIf="emergency && isPoliciaRol && showPoliciaOptions && emergency.status_attendance != 'atendido' &&  emergency.status_attendance != 'rechazado'">
     <div class="social">
         <div class="social-options">
             <div class="social-button ion-activatable" (click)="onPoliciaAcceptEmergency()">

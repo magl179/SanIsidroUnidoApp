@@ -6,7 +6,7 @@ import { CONFIG } from 'src/config/config';
 import { IEditProfile } from 'src/app/interfaces/models';
 import { IDeviceUser } from 'src/app/interfaces/models';
 import { HttpRequestService } from "./http-request.service";
-import { setHeaders } from 'src/app/helpers/utils';
+import { setHeaders, cleanEmpty } from 'src/app/helpers/utils';
 
 @Injectable({
     providedIn: 'root'
@@ -75,9 +75,10 @@ export class UserService implements OnInit {
     getNotificationsUser(params = {}) {
         const user_id = this.AuthUser.id;
         this.increasePagination(this.PaginationKeys.NOTIFICATIONS);
+        const withoutEmptyParams = cleanEmpty(params);
         return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${user_id}/notificaciones`, {
             page: this.getPagination(this.PaginationKeys.NOTIFICATIONS),
-            ...params
+            ...withoutEmptyParams
         });
     }
     // Obtener los dispositivos de un usuario

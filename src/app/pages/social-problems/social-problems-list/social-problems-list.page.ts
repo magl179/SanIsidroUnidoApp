@@ -103,11 +103,10 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
         });
 
         combineLatest(
-            this.socialProblemControl.valueChanges.pipe(startWith('')),
-            this.segmentFilter$.asObservable()
+            this.socialProblemControl.valueChanges.pipe(startWith(''), distinctUntilChanged()),
+            this.segmentFilter$.asObservable().pipe(distinctUntilChanged())
         )
             .pipe(
-                distinctUntilChanged(),
                 skip(1),
                 tap((val) => {
                     this.searchingSocialProblems = true;

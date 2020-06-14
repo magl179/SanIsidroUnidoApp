@@ -57,13 +57,12 @@ export class ListNotificationsComponent implements OnInit {
 
         // this.notificationControl.valueChanges
         combineLatest(
-            this.notificationControl.valueChanges.pipe(startWith('')),
-            this.segmentFilter$.asObservable(),
+            this.notificationControl.valueChanges.pipe(startWith(''), distinctUntilChanged()),
+            this.segmentFilter$.asObservable().pipe(distinctUntilChanged()),
         )
             .pipe(
-                distinctUntilChanged(),
                 skip(1),
-                tap((val) => {
+                tap(() => {
                     this.requestFinished = false;
                 }),
                 map(combineValues => ({

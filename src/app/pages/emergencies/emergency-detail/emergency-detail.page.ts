@@ -64,6 +64,7 @@ export class EmergencyDetailPage implements OnInit {
             })
         ).subscribe((res: IRespuestaApiSIUSingle) => {
             this.emergency = res.data;
+            console.log('this.emergency ', this.emergency)
         },(error_http: HttpErrorResponse) => {
             this.errorService.manageHttpError(error_http, 'Ocurrio un error al traer el detalle de la emergencia');
         });
