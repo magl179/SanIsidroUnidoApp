@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { UserAuthenticatedGuard } from './guards/user-authenticated.guard';
-import { UserIsActiveGuard } from './guards/user-is-active.guard';
+import { UserIsLoggedGuard } from './guards/user-is-logged.guard';
 
 const routes: Routes = [
     {
         path: '',
-        redirectTo: '/home-list',
+        redirectTo: '/home-screen',
         pathMatch: 'full'
     },
     {
@@ -37,7 +37,8 @@ const routes: Routes = [
     },
     {
         path: 'home-screen', //Pantalla Slider al Inicio App
-        loadChildren: './pages/home-screen/home-screen.module#HomeScreenPageModule'
+        loadChildren: './pages/home-screen/home-screen.module#HomeScreenPageModule',
+        canLoad: []
     },
     {
         path: 'login', //Pantalla de Login

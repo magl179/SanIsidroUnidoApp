@@ -61,6 +61,11 @@ body {
     }
 }
 
-.popover-app-notifications .popover-content {
-    --min-width: 350px !important;
+
+/*SOLO MOSTRAR PRIMER ERROR FORMS*/
+.form-error {
+    display: none;
+}
+.form-errors .form-error:first-child {
+    display: block !important;
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Platform, MenuController } from '@ionic/angular';
+import { Platform, MenuController, NavController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { timer } from 'rxjs';
@@ -12,6 +12,7 @@ import { mapUser } from "./helpers/utils";
 import { map} from 'rxjs/operators';
 import { MessagesService } from './services/messages.service';
 import { MENU_ITEMS_APP} from 'src/app/config/menu';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-root',
@@ -30,6 +31,7 @@ export class AppComponent implements OnInit {
         private platform: Platform,
         private splashScreen: SplashScreen,
         private statusBar: StatusBar,
+        private navCtrl: NavController,
         private alertController: AlertController,
         private authService: AuthService,
         private menuCtrl: MenuController,
@@ -48,6 +50,7 @@ export class AppComponent implements OnInit {
 
     initializeApp() {
         this.platform.ready().then(async () => {
+            
             await this.checkInitialStateNetwork();
             if (this.platform.is('cordova')) {
                 this.statusBar.styleDefault();
@@ -59,8 +62,12 @@ export class AppComponent implements OnInit {
             timer(1500).subscribe(async () => {
                 await this.pushNotificationService.initialConfig();
             });
-            // this.backgroundMode.enable();
-            // this.navigationService.keepHistoryTracking();
+            //Redirigir con sesión iniciada
+            const tokenExists = await this.authService.isAuthenticated();
+            // if(tokenExists){
+            if(tokenExists && environment.production){
+                this.navCtrl.navigateBack(`/home-list`)
+            }
         });
     }
     

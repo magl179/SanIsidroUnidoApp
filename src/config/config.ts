@@ -38,7 +38,8 @@ export const CONFIG: ICONFIG = {
     AUTHORIZATION_NAME: 'Authorization',
     EMERGENCIES_SLUG: 'emergencia',
     EVENTS_SLUG: 'evento',
-    HOME_ROUTE: 'home-list',    
+    HOME_ROUTE: 'home-list',  
+    // INITIAL_ROUTE  
     IMAGE_ASSETS: 'imagenes',
     PUBLIC_SERVICE_SLUG: 'servicio-publico',
     MAPLAYERS: {

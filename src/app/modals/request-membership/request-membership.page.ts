@@ -71,7 +71,7 @@ export class RequestMembershipPage implements OnInit {
         ]));
 
         const telefono = new FormControl(
-        {value: (user) ? user.number_phone: '', disabled: true}, 
+        {value: (user) ? user.number_phone: ''}, 
         Validators.compose([
             Validators.required,
             Validators.minLength(7),
