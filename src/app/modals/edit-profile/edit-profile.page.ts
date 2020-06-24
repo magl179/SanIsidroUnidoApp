@@ -83,15 +83,14 @@ export class EditProfilePage implements OnInit {
     // Función Crea el Formulario
     async createForm() {
         await this.loadUserData();
-        console.log('is invitdo', this.isInvitado)
         const validations = this.localDataService.getFormValidations();
         // Campo Email
         const first_name = new FormControl(
-        {value: this.AuthUser.first_name || '',  disabled: (!this.isInvitado) ? true: false},
+        {value: this.AuthUser.first_name || '',  disabled: false},
         Validators.compose([
             Validators.required
         ]));
-        const last_name = new FormControl({value: this.AuthUser.last_name || '',  disabled: (!this.isInvitado) ?true: false}, 
+        const last_name = new FormControl({value: this.AuthUser.last_name || '',  disabled:  false}, 
         Validators.compose([
             Validators.required
         ]));
@@ -102,6 +101,7 @@ export class EditProfilePage implements OnInit {
         // Campo Contraseña
         const number_phone = new FormControl(this.AuthUser.number_phone || '',
             Validators.compose([
+                Validators.required,
                 Validators.minLength(validations.number_phone.minlength),
                 Validators.maxLength(validations.number_phone.maxlength),
                 TelefonoValidator

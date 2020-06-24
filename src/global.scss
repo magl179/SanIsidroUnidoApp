@@ -65,6 +65,8 @@ body {
 /*SOLO MOSTRAR PRIMER ERROR FORMS*/
 .form-error {
     display: none;
+    margin-top: 2px;
+    margin-bottom: 2px;
 }
 .form-errors .form-error:first-child {
     display: block !important;

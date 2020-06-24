@@ -4,7 +4,7 @@
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-title class="ion-text-center">{{title}}</ion-title>
-        <ng-container *appHasRole="['morador', 'policia']">
+        <ng-container *appHasRole="['morador', 'policia', 'invitado']">
             <ion-buttons slot="end" *ngIf="showNoti">
                 <ion-button size="large" slot="icon-only" (click)="showNotifications($event)">
                     <ion-icon class="icon_noti" [name]="notificationsIcon"></ion-icon>

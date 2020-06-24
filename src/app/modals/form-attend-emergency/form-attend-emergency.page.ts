@@ -56,7 +56,7 @@ export class FormAttendEmergencyModal implements OnInit {
         const body = {motivo, emergencia_id
         };
         this.postsService.sendPoliciaRechazarEmergencia(body).subscribe((res:any)=> {
-            this.messagesService.showInfo("Se envio correctamente tu motivo");
+            this.messagesService.showInfo("Haz rechazado correctamente este reporte");
             this.formWasSended = true;
             setTimeout(()=>{
                 this.closeModal();

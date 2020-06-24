@@ -60,7 +60,7 @@ export class ChangeProfileImagePage implements OnInit {
             this.authService.saveUserInfo(token, token_decoded);
             this.authService.saveLocalStorageInfo(token, token_decoded);
             this.messageService.showSuccess('Imagen Actualizada Correctamente');
-            // this.formSended = true;
+         
             setTimeout(()=>{
                 this.closeModal();
             }, 500);

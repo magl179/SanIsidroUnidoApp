@@ -85,7 +85,6 @@ export class HeaderBackComponent implements OnInit {
 
     async showNotifications(event): Promise<void>{
         return await this.showListNotificationsModal();
-        // this.showNotiPopover(event);
     }
 
     async showNotiPopover(evento) {

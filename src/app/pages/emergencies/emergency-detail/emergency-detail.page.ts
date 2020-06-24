@@ -64,7 +64,6 @@ export class EmergencyDetailPage implements OnInit {
             })
         ).subscribe((res: IRespuestaApiSIUSingle) => {
             this.emergency = res.data;
-            console.log('this.emergency ', this.emergency)
         },(error_http: HttpErrorResponse) => {
             this.errorService.manageHttpError(error_http, 'Ocurrio un error al traer el detalle de la emergencia');
         });
@@ -123,7 +122,7 @@ export class EmergencyDetailPage implements OnInit {
         await modal.present();
         const { data } : any = await modal.onWillDismiss();
         if(data.formulario_enviado){
-            this.messagesService.showInfo("Formulario enviado correctamente");
+            // this.messagesService.showInfo("Formulario enviado correctamente");
             this.getEmergency();
         }else{
             this.messagesService.showInfo("Ocurrio un error al enviar el formulario, intentalo más tarde");

@@ -71,7 +71,6 @@ export class LocalizationService {
     async getCoordinates() {
         return await new Promise(async (resolve, reject) => {
             this.getLocationCoordinates().then(response_coords=>{
-                console.log('response_coords get coordinates', response_coords)
                 resolve(response_coords);
             }).catch((error_coordinate)=>{
                 reject(error_coordinate);                

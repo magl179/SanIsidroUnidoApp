@@ -412,3 +412,19 @@ export const cortarTextoConPuntos = (texto: string, limite: number = 30) => {
     }
     return texto;
 }
+
+export const resolveApiError = (error: any): string => {
+    if (typeof error !== 'string') {
+        const properties = Object.getOwnPropertyNames(error);
+        for (var i = 0; i < properties.length; i++) {
+            const value = error[properties[i]];
+            if (typeof value === 'boolean') {
+                return ''
+            } else {
+                return resolveApiError(value);
+            }
+         }
+    } else {
+        return error;
+    }
+}

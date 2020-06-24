@@ -64,7 +64,6 @@ export class AppComponent implements OnInit {
             });
             //Redirigir con sesión iniciada
             const tokenExists = await this.authService.isAuthenticated();
-            // if(tokenExists){
             if(tokenExists && environment.production){
                 this.navCtrl.navigateBack(`/home-list`)
             }

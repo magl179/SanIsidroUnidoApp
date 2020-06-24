@@ -63,7 +63,6 @@ export class PublicServiceDetailPage implements OnInit {
                         }
                     }
                 }
-                console.log('mapa mapped', res)
                 return res;
             }),
             pluck('data'),

@@ -310,12 +310,6 @@ export interface INotificationUser extends IUser {
     pivot?: IRole[];
 }
 
-// export interface INotificationPost {
-//     title: string;
-//     message: string;
-//     post?: IPost;
-// }
-
 export interface INotiPostOpen {
     subcategory?: string;
     category: string;

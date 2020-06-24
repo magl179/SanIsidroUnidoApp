@@ -25,10 +25,9 @@ export class HeaderComponent implements OnInit {
         private modalCtrl: ModalController
     ) { }
 
-    ngOnInit() { }
+    ngOnInit():void { }
 
-    showNotifications(event){
-        // this.showNotiPopover(event)
+    showNotifications(){
         return this.showListNotificationsModal();
     }
 
@@ -77,17 +76,4 @@ export class HeaderComponent implements OnInit {
         });
         await modal.present();
     }
-
-    // async showListNotificationsModal() {
-    //     await this.popoverCtrl.dismiss();
-    //     const modal = await this.modalCtrl.create({
-    //         component: ShowListNotificationsPage,
-    //         componentProps: {
-    //             nombre: 'Stalin',
-    //             pais: 'Ecuador'
-    //         }
-    //     });
-    //     await modal.present();
-    // }
-
 }

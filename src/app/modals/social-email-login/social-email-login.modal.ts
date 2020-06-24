@@ -37,7 +37,6 @@ export class SocialEmailLoginModal implements OnInit {
   }
 
   submitForm() {
-    // event.preventDefault();
     if(!this.socialEmailLoginForm.valid){
       return this.messagesService.showWarning('Debes ingresar una dirección de correo');
     }

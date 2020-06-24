@@ -2,6 +2,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { Router, Event, NavigationEnd } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { filter } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +28,9 @@ export class NavigationService implements OnInit {
         )
         .subscribe(
             ( event: NavigationEnd ) => {
-                console.warn("route:", event.url);
+                if(environment.production){
+                    console.warn("route:", event.url);
+                }
             }
         )
     ;

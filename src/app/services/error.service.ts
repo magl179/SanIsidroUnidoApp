@@ -25,7 +25,6 @@ export class ErrorService {
 
   async manageHttpError(httpError: HttpErrorResponse, defaultMessage: string, showMessage=true){
     const online = navigator.onLine;
-    console.error('SIU LOG ERROR', httpError);
     if(!showMessage){
       return;
     }

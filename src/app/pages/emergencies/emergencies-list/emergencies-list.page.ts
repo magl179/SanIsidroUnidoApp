@@ -70,7 +70,6 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
       
         //Peticion
         const peticionHttpBusqueda = (body) => {
-            console.log('peticion body', body)
             return this.postsService.searchPosts(body)
                 .pipe(
                     pluck('data'),
@@ -106,7 +105,6 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
             }else{
                 this.extraData.user = this.AuthUser.id.toString();
             }
-            console.log('this.extraData', this.extraData)
              //Policia
             if(this.isPolicia){
                 this.showSegment = true;
@@ -136,8 +134,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         )
             .pipe(
                 skip(1),
-                tap((val) => console.log('combine lastes',  val)),
-                tap((val) => {
+                tap(() => {
                     this.searchingEmergencies = true;
                 }),
                 map(combineValues => ({
@@ -164,7 +161,6 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         } else {
             params['user'] = this.AuthUser.id;
         }
-        console.log('getEmergenciesFunction', params)
         return this.postsService.getEmergencies(params);
     }
 
@@ -260,7 +256,6 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         }else{
             this.postState = 1;
         }
-        console.log('segment changed', value)
         this.segmentFilter$.next(value);
     }
 

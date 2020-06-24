@@ -47,6 +47,7 @@ export class RequestMembershipPage implements OnInit {
                 return token_decoded;
             })
         ).subscribe(token_decoded => {
+            console.log('token_decoded', token_decoded)
             this.sessionAuth = token_decoded;
             this.createForm();
         });
@@ -71,7 +72,7 @@ export class RequestMembershipPage implements OnInit {
         ]));
 
         const telefono = new FormControl(
-        {value: (user) ? user.number_phone: ''}, 
+        {value: (user) ? user.number_phone: '', disabled: false}, 
         Validators.compose([
             Validators.required,
             Validators.minLength(7),
