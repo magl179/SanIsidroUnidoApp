@@ -36,10 +36,7 @@ export const CONFIG: ICONFIG = {
     SHOW_BEATIFUL_ROUTES: false,
     ALLOWED_ROLES_REPORT: ['morador', 'policia'],
     AUTHORIZATION_NAME: 'Authorization',
-    EMERGENCIES_SLUG: 'emergencia',
-    EVENTS_SLUG: 'evento',
-    HOME_ROUTE: 'home-list',  
-    // INITIAL_ROUTE  
+    HOME_ROUTE: 'home-list',
     IMAGE_ASSETS: 'imagenes',
     PUBLIC_SERVICE_SLUG: 'servicio-publico',
     MAPLAYERS: {
@@ -52,6 +49,8 @@ export const CONFIG: ICONFIG = {
             ATRIBUTION: '&copy; <a target=_blank" href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }
     },
+    EMERGENCIES_SLUG: 'emergencia',
+    EVENTS_SLUG: 'evento',
     REPORTS_SLUG: 'informe',
     SOCIAL_PROBLEMS_SLUG: 'problema',
     VERSION: '1.0.8',

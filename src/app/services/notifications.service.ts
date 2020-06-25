@@ -221,26 +221,26 @@ export class NotificationsService implements OnInit {
     }
     async managePostNotification(aditionalDataPost: INotiList) {
         const post = aditionalDataPost.post;
-        let urlNavigate = null;
+        var urlNavigate = null;
         console.log('managePostNotification', aditionalDataPost)
         console.log('post', post, post.id, post.category)
         if (post && post.id && post.category) {
             this.messageService.showInfo('Procesando notificacion ...')
             //Switch de Opciones segun el slug del posts
-            console.log('switch case', post.category.slug.toLowerCase())
-            switch (post.category.slug.toLowerCase()) {
+            const slug = post.category.slug.toLowerCase();
+            console.log('switch case slug', slug)
+            switch(slug) {
                 case CONFIG.EMERGENCIES_SLUG: //caso posts emergencia creado
-
                     urlNavigate = `/emergencies/list/${post.id}`;
+                    console.log('case urlNavigate EMERGENCIES_SLUG', urlNavigate)
                     break;
-                case CONFIG.EVENTS_SLUG: //caso posts evento creado
-                    // urlNavigate = `/events/detail/${post.id}`;
-                    // break;
+                case CONFIG.EVENTS_SLUG: //caso posts evento creado                   
                     if (post.subcategory) {
                         urlNavigate = `/events/list/${post.subcategory.slug}/${post.id}`;
                     } else {
                         urlNavigate = `events/categories`;
                     }
+                    console.log('case urlNavigate EVENTS_SLUG', urlNavigate)
                     break;
                 case CONFIG.SOCIAL_PROBLEMS_SLUG: // caso posts problema social
                     if (post.subcategory) {
@@ -248,11 +248,14 @@ export class NotificationsService implements OnInit {
                     } else {
                         urlNavigate = `/social-problems/categories`;
                     }
+                    console.log('case urlNavigate SOCIAL_PROBLEMS_SLUG', urlNavigate)
                     break;
                 case CONFIG.REPORTS_SLUG: //caso reporte o informe
                     urlNavigate = `/reports/list/${post.id}`;
+                    console.log('case urlNavigate REPORTS_SLUG', urlNavigate)
                     break;
                 default:
+                    console.log('case urlNavigate DEFAULT', urlNavigate)
                     urlNavigate = null;
                     break;
             }
@@ -260,7 +263,7 @@ export class NotificationsService implements OnInit {
             if (urlNavigate) {
                 setTimeout(() => {
                     this.navCtrl.navigateForward(urlNavigate);
-                }, 1000);
+                }, 700);
             }
         }else{
             console.warn('sin redireccion')
