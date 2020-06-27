@@ -47,7 +47,6 @@ export class RequestMembershipPage implements OnInit {
                 return token_decoded;
             })
         ).subscribe(token_decoded => {
-            console.log('token_decoded', token_decoded)
             this.sessionAuth = token_decoded;
             this.createForm();
         });

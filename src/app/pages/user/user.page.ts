@@ -5,11 +5,11 @@ import { EditProfilePage } from 'src/app/modals/edit-profile/edit-profile.page';
 import { ChangePasswordPage } from 'src/app/modals/change-password/change-password.page';
 import { ChangeProfileImagePage } from 'src/app/modals/change-profile-image/change-profile-image.page';
 import { NotificationsService } from 'src/app/services/notifications.service';
-import { IRespuestaApiSIU, ITokenDecoded, IRespuestaApiSIUSingle, IDeviceUser } from "src/app/interfaces/models";
+import { IRespuestaApiSIU, ITokenDecoded, IRespuestaApiSIUSingle, IDeviceUser, IEventLoad } from "src/app/interfaces/models";
 import { UserService } from 'src/app/services/user.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { getUserDevice } from 'src/app/helpers/user-helper';
-import { finalize, map } from 'rxjs/operators';
+import { finalize, map, pluck } from 'rxjs/operators';
 import { getImageURL, mapUser } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/services/error.service';
@@ -55,19 +55,19 @@ export class UserPage implements OnInit {
 
     async ngOnInit() {
         this.authService.sessionAuthUser.pipe(
-                map((token_decoded: ITokenDecoded) => {
-                    if (token_decoded && token_decoded.user) {
-                        token_decoded.user = mapUser(token_decoded.user);
-                    }
-                    return token_decoded;
-                }),    
-        ).subscribe(async(token_decoded: ITokenDecoded) => {
+            map((token_decoded: ITokenDecoded) => {
+                if (token_decoded && token_decoded.user) {
+                    token_decoded.user = mapUser(token_decoded.user);
+                }
+                return token_decoded;
+            }),
+        ).subscribe(async (token_decoded: ITokenDecoded) => {
             if (token_decoded && token_decoded.user) {
                 this.AuthUser = token_decoded.user;
                 this.getUserSocialProfiles();
                 this.getUserDevices();
                 this.notificationsService.getUserDevice().subscribe(userdevice => {
-                    if(userdevice){
+                    if (userdevice) {
                         this.CurrentUserDevice = getUserDevice(this.UserDevices, userdevice);
                     }
                 }, (error_http: HttpErrorResponse) => {
@@ -75,9 +75,9 @@ export class UserPage implements OnInit {
                 });
             }
         });
-     }
+    }
 
-    getUserSocialProfiles(){
+    getUserSocialProfiles() {
         this.userService.getSocialProfilesUser().pipe(
             finalize(() => {
                 this.userSocialProfilesLoaded = true;
@@ -85,7 +85,7 @@ export class UserPage implements OnInit {
         ).subscribe((res: IRespuestaApiSIU) => {
             if (res.data) {
                 this.UserSocialProfiles = res.data;
-                
+
             }
         }, (error_http: HttpErrorResponse) => {
             this.errorService.manageHttpError(error_http, 'Ocurrio un error al obtener tus perfiles sociales');
@@ -100,7 +100,7 @@ export class UserPage implements OnInit {
         ).subscribe((res: IRespuestaApiSIU) => {
             if (res.data) {
                 this.UserDevices = res.data;
-                
+
             }
         }, (error_http: HttpErrorResponse) => {
             this.errorService.manageHttpError(error_http, 'Ocurrio un error al obtener la información de tus dispositivos');
@@ -156,12 +156,12 @@ export class UserPage implements OnInit {
         this.userService.sendRequestDeleteSocialProfile(social_profile_id).subscribe(async (res: IRespuestaApiSIUSingle) => {
             this.getUserSocialProfiles();
             this.messageService.showSuccess("El Perfil Social fue desconectado correctamente");
-        },(error_http: HttpErrorResponse) => {
+        }, (error_http: HttpErrorResponse) => {
             this.errorService.manageHttpError(error_http, 'El Perfil Social no se pudo desconectar');
         });
     }
 
-    seeProfileImageDetail(url: string, title = 'Imagen de Perfil'){
+    seeProfileImageDetail(url: string, title = 'Imagen de Perfil') {
         this.utilsService.seeImageDetail(url, title);
     }
 

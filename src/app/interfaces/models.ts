@@ -343,7 +343,29 @@ export interface IUser {
     social_profiles?: ISocialProfile[];
     roles?: IRole[];
     avatar_link?: string;
+    memberships?: IMembership[];
 }
+
+interface IMembership {
+    id: number;
+    identity_card: string;
+    basic_service_image: string;
+    status_attendance: string;
+    responsible: IResponsible;
+    user_id: number;
+    created_at: string;
+    updated_at: string;
+  }
+  
+  interface IResponsible {
+    approved: Approved;
+    rechazed: Rechazed;
+  }
+  
+
+
+
+
 export interface IDirective extends IUser {
     position: IPosition[];
 }

@@ -2,17 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { Platform, MenuController, NavController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { timer } from 'rxjs';
+import { timer, of } from 'rxjs';
 import { IMenuOptions, ITokenDecoded, IMenuComponent } from './interfaces/models';
 import { AlertController } from '@ionic/angular';
 import { AuthService } from './services/auth.service';
 import { NotificationsService } from './services/notifications.service';
 import { NetworkService } from 'src/app/services/network.service';
 import { mapUser } from "./helpers/utils";
-import { map} from 'rxjs/operators';
+import { map, tap, concatMap, mergeAll, pluck, catchError} from 'rxjs/operators';
 import { MessagesService } from './services/messages.service';
 import { MENU_ITEMS_APP} from 'src/app/config/menu';
 import { environment } from 'src/environments/environment';
+import { UserService } from './services/user.service';
 
 @Component({
     selector: 'app-root',
@@ -33,6 +34,7 @@ export class AppComponent implements OnInit {
         private statusBar: StatusBar,
         private navCtrl: NavController,
         private alertController: AlertController,
+        private userService: UserService,
         private authService: AuthService,
         private menuCtrl: MenuController,
         private pushNotificationService: NotificationsService,

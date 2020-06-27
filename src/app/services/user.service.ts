@@ -67,6 +67,12 @@ export class UserService implements OnInit {
     getAllPagination() {
         return { ...this.currentPagination };
     }
+
+    getProfile(){
+        const user_id = this.AuthUser.id;
+        return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${user_id}?roles`);
+    }
+
     //Obtener la información de un usuario
     getUserInfo(id: number): Observable<any> {
         return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${id}`);
@@ -86,6 +92,12 @@ export class UserService implements OnInit {
         const user_id = this.AuthUser.id;
         return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${user_id}/perfiles-sociales`);
     }
+
+    getMembershipsByUser(user_id) {
+        // const user_id = this.AuthUser.id;
+        return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${user_id}/membresias`);
+    }
+
     getDevicesUser() {
         const user_id = this.AuthUser.id;;
         return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${user_id}/dispositivos`);

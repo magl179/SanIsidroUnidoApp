@@ -19,8 +19,8 @@
                         </a>
                     </ion-col>
                 </ng-container>
-                <ng-container>
-                    <ion-col size="6" class="service_item" *appHasRole="['invitado']">
+                <ng-container *appHasRole="['invitado']">
+                    <ion-col size="6" class="service_item" *appCanRequestMembership>
                         <ion-card (click)="openRequestAfiliationModal()">
                             <div class="icon">
                                     <h2 class="title">Solicitar Afiliación</h2>

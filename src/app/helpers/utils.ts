@@ -170,7 +170,6 @@ export const MapNotification = (notification) => {
     if(notification && notification.neighbor){
         notification.notification_user = mapUser(notification.neighbor);
     }
-    console.log('notification mapeada', notification)
     return notification;
 }
 
