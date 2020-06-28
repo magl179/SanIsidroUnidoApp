@@ -45,6 +45,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { AuthService } from './services/auth.service';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
+import { NgFallimgModule } from 'ng-fallimg';
 
 @NgModule({
     declarations: [AppComponent],
@@ -55,6 +56,9 @@ import { WebView } from '@ionic-native/ionic-webview/ngx';
             positionClass: 'toast-bottom-right',
             preventDuplicates: true,
             timeOut: 1800,
+        }),
+        NgFallimgModule.forRoot({
+            default: 'assets/img/default/img_avatar.png',
         }),
         BrowserAnimationsModule,
         IonicModule.forRoot(),

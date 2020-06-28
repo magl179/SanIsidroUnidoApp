@@ -152,6 +152,7 @@ export const mapImagesApi = (images: IResource[]) => {
 }
 
 export const mapUser = (user) => {
+    // user.avatar_link = 'https://documentation.onesignal.com/v';
     return user;
 }
 
