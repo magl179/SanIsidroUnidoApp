@@ -23,7 +23,7 @@
                         <div class="picture_thumbnail">
                             <img class="img-thumbnail circle img_image_border"
                                 [src]="(publicService.subcategory && publicService.subcategory.image_link)? publicService.subcategory.image_link:null"
-                                (onerror)="event.target.src='assets/img/default/not-found.jpg'"/>
+                                (error)="imgError($event)"/>
                         </div>
                         <ion-card-header>
                             <ion-card-title>{{publicService.name}}</ion-card-title>

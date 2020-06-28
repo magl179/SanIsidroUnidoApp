@@ -152,7 +152,6 @@ export const mapImagesApi = (images: IResource[]) => {
 }
 
 export const mapUser = (user) => {
-    // user.avatar_link = 'https://documentation.onesignal.com/v';
     return user;
 }
 
@@ -165,11 +164,11 @@ export const manageTwoFingerDrag = (event: any) => {
 }
 
 export const MapNotification = (notification) => {
-    if (notification && notification.notification_user) {
-        notification.notification_user = mapUser(notification.notification_user);
+    if (notification && notification.data && notification.data.notification_user) {
+        notification.data.notification_user = mapUser(notification.data.notification_user);
     }
-    if(notification && notification.neighbor){
-        notification.notification_user = mapUser(notification.neighbor);
+    if(notification && notification.data && notification.data.neighbor){
+        notification.data.notification_user = mapUser(notification.data.neighbor);
     }
     return notification;
 }

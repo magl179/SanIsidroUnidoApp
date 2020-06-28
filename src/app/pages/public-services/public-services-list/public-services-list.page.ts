@@ -54,6 +54,10 @@ export class PublicServicesListPage implements OnInit {
         this.publicServiceSearchControl = new FormControl();
     }
 
+    imgError(event, url="assets/img/default/not-found.jpg"): void {
+        event.target.src = url;
+    }
+
     async ngOnInit() {
         this.category = this.activatedRoute.snapshot.paramMap.get('category'); 
         this.loadPublicServices();

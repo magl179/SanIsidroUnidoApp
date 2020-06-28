@@ -20,6 +20,10 @@ export class SlideshowImagesFullComponent implements OnInit {
     constructor(
         private utilsService: UtilsService
     ) { }
+
+    imgError(event): void {
+        event.target.src = 'assets/img/default/image_full.png'
+    }
     
     slideOpts:any = {};
 

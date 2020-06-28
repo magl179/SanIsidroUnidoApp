@@ -44,6 +44,10 @@ export class AppComponent implements OnInit {
         this.initializeApp();
     }
 
+    imgError(event): void {
+        event.target.src = 'assets/img/default/img_avatar.png'
+    }
+
     ngOnInit():void { }
 
     getMenuOptions():void {

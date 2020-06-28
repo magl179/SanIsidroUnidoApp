@@ -28,7 +28,7 @@
     <div *ngIf="!showLoading  && eventsFiltered.length > 0" [@listAnimation]>
         <ion-card class="event" *ngFor="let event of eventsFiltered; let i = index;">
             <div class="post_cover" *ngIf="event.imagesArr && event.imagesArr.length > 0">
-                <img class="img" [src]="event.imagesArr[0]" (onerror)="event.target.src='assets/img/default/image_full.png'"/>
+                <img class="img" [src]="event.imagesArr[0]" (error)="imgError($event)"/>
             </div>
             <div class="event__header" (click)="postDetail(event.id)">
                 <ion-card-header class="main-section-header">

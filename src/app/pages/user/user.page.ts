@@ -53,6 +53,10 @@ export class UserPage implements OnInit {
         return getImageURL(image_name);
     }
 
+    imgError(event): void {
+        event.target.src = 'assets/img/default/img_avatar.png'
+    }
+
     async ngOnInit() {
         this.authService.sessionAuthUser.pipe(
             map((token_decoded: ITokenDecoded) => {

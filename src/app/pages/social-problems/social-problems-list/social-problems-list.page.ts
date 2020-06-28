@@ -49,6 +49,10 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
     segmentFilter$ = new BehaviorSubject(null);
     postState = 1;
 
+    imgError(event, url: string = 'assets/img/default/image_full.png'): void {
+        event.target.src = url;
+    }
+
     constructor(
         private router: Router,
         private errorService: ErrorService,
@@ -182,7 +186,7 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
 
     //Cargar los problemas sociales
     loadSocialProblems(event: IEventLoad = null, first_loading = false) {
-        this.postsService.getPostsBySubCategory(CONFIG.SOCIAL_PROBLEMS_SLUG, this.subcategory)
+        this.postsService.getPostsBySubCategory(CONFIG.SOCIAL_PROBLEMS_SLUG, this.subcategory, { active: this.postState})
             .pipe(
                 map((res: IRespuestaApiSIUPaginada) => {
                     if (res && res.data) {

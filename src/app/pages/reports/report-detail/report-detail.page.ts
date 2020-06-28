@@ -32,6 +32,10 @@ export class ReportDetailPage implements OnInit {
         private utilsService: UtilsService
     ) { }
 
+    imgError(event, url: string = 'assets/img/default/img_avatar.png'): void {
+        event.target.src = url;
+    }
+
     ngOnInit() {
 
         this.id = this.route.snapshot.paramMap.get('id');

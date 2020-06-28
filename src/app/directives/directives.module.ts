@@ -5,7 +5,7 @@ import { HasDeviceDirective } from './has-device.directive';
 import { CanRequestMembershipDirective } from './can-request-membership.directive';
 
 @NgModule({
-  declarations: [HasRoleDirective, HasDeviceDirective, CanRequestMembershipDirective],
+  declarations: [HasRoleDirective, HasDeviceDirective, CanRequestMembershipDirective,],
   imports: [
     CommonModule
     ],

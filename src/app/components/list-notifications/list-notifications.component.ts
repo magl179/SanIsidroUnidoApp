@@ -166,4 +166,8 @@ export class ListNotificationsComponent implements OnInit {
         this.segmentFilter$.next(value);
     }
 
+    imgError(event): void {
+        event.target.src = 'assets/img/default/img_avatar.png'
+    }
+
 }

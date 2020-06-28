@@ -26,6 +26,10 @@ export class DirectoryPage implements OnInit {
         this.directorySearchControl = new FormControl();
      }
 
+     imgError(event): void {
+        event.target.src = 'assets/img/default/image_full.png'
+    }
+
     async ngOnInit() {
         this.loadDirectoryInfo();
         this.directorySearchControl.valueChanges

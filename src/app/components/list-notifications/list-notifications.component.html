@@ -30,8 +30,9 @@
      <ng-container *ngIf="requestFinished && notificationsRequested && notificationsRequested.length > 0">
          <ion-item [lines]="getLinesState(i)" *ngFor="let noti of notificationsRequested; let i = index;" (click)="manageNoti(noti)" [attr.data-noti_id]="noti.id">
              <ion-avatar class="notification-avatar" slot="start" *ngIf="noti.data && noti.data.notification_user">
-                 <img [src]="noti.data.notification_user.avatar_link" fallimg />
+                 <img [src]="noti.data.notification_user.avatar_link" (error)="imgError($event)"/>
              </ion-avatar>
+             
              <ion-label class="notifications_description">
                  <h3 class="author" *ngIf="noti.data.notification_user">
                      {{ noti.data.notification_user.first_name}} {{noti.data.notification_user.last_name}}

@@ -50,7 +50,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
     };
     postState = 1;
     allPosts = false;
-    showSegment =  false;
+    showSegment = false;
     private unsubscribe = new Subject<void>();
 
     constructor(
@@ -67,7 +67,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
     }
 
     async ngOnInit() {
-      
+
         //Peticion
         const peticionHttpBusqueda = (body) => {
             return this.postsService.searchPosts(body)
@@ -95,30 +95,30 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
                 this.AuthUser = token_decoded.user;
             }
         });
-       
+
         //Si es Policia
         this.activatedRoute.queryParams.subscribe(params => {
             // this.queryParam = params['all'];
-            this.allPosts = (params['all'] && params['all'] == 'all') ? true: false;
-            if(this.allPosts){
+            this.allPosts = (params['all'] && params['all'] == 'all') ? true : false;
+            if (this.allPosts) {
                 this.extraData.user = '';
-            }else{
+            } else {
                 this.extraData.user = this.AuthUser.id.toString();
             }
-             //Policia
-            if(this.isPolicia){
+            //Policia
+            if (this.isPolicia) {
                 this.showSegment = true;
             }
-            else if(this.allPosts){
+            else if (this.allPosts) {
                 this.showSegment = false;
             }
-            else{
+            else {
                 this.showSegment = true;
             }
-             //Primera Carga
+            //Primera Carga
             this.loadEmergencies(null, true);
         });
-       
+
         //Simular Un Refresh cuando se crea nuevas emergencias
         this.events_app.emergenciesEmitter.subscribe(() => {
             this.postsService.resetPagination(this.postsService.PaginationKeys.EMERGENCIES);
@@ -155,8 +155,13 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
             });
     }
 
+    imgError(event, url = "assets/img/default/image_full.png"): void {
+
+        event.target.src = url;
+    }
+
     getEmergenciesFunction() {
-        const params = {active: this.postState}
+        const params = { active: this.postState }
         if (this.isPolicia || this.allPosts) {
         } else {
             params['user'] = this.AuthUser.id;
@@ -165,7 +170,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
     }
 
     async loadEmergencies(event = null, first_loading = false) {
-       
+
         this.getEmergenciesFunction().pipe(
             map((res: IRespuestaApiSIUPaginada) => {
                 if (res && res.data) {
@@ -251,9 +256,9 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
 
     segmentChanged(event: CustomEvent) {
         const value = (event.detail.value !== "") ? event.detail.value : "";
-        if(value == 'rechazado'){
+        if (value == 'rechazado') {
             this.postState = 0
-        }else{
+        } else {
             this.postState = 1;
         }
         this.segmentFilter$.next(value);
@@ -265,7 +270,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         this.postsService.resetPagination(this.postsService.PaginationKeys.EMERGENCIES);
     }
 
-    ionViewWillLeave(){
+    ionViewWillLeave() {
         this.unsubscribe.next();
         this.unsubscribe.complete();
         this.postsService.resetPagination(this.postsService.PaginationKeys.EMERGENCIES);

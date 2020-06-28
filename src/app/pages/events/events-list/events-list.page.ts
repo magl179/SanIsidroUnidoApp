@@ -62,6 +62,10 @@ export class EventsListPage implements OnInit, OnDestroy {
         this.eventControl = new FormControl();
     }
 
+    imgError(event, url="assets/img/default/image_full.png"): void {
+        event.target.src = url;
+    }
+
     ngOnInit() {
         const peticionHttpBusqueda = (body) => {
             if (body.title == '') {
