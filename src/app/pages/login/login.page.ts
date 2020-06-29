@@ -95,6 +95,7 @@ export class LoginPage implements OnInit {
                 loadingLoginValidation.dismiss()
             })
         ).subscribe((res: IRespuestaApiSIU) => {
+            this.authService.setMethodLogin('formulario');
             this.manageLogin(res);
         }, (error_http: HttpErrorResponse) => {
             this.errorService.manageHttpError(error_http, 'Ocurrio un error, intentalo más tarde')
@@ -138,6 +139,7 @@ export class LoginPage implements OnInit {
             //Funcion Login
             this.messageService.showInfo('Verificando las credenciales')
             this.authService.login(user).subscribe(res => {
+                this.authService.setMethodLogin('facebook');
                 this.manageLogin(res);
             }, (error_http: HttpErrorResponse) => {
                 this.errorService.manageHttpError(error_http, 'Fallo la conexión con Facebook');
@@ -171,6 +173,7 @@ export class LoginPage implements OnInit {
             //Funcion Login
             this.messageService.showInfo('Verificando las credenciales')
             this.authService.login(user).subscribe(async res => {
+                this.authService.setMethodLogin('google');
                 await this.manageLogin(res);
             }, (error_http: HttpErrorResponse) => {
                 this.errorService.manageHttpError(error_http, 'Ocurrio un error al conectar con Google');

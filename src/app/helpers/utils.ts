@@ -147,7 +147,7 @@ export const getImageURL = (image_name: string) => {
 
 export const mapImagesApi = (images: IResource[]) => {
     return images.map((image: IResource) => {
-        return image.url_link;
+        return image.url;
     });
 }
 
@@ -219,7 +219,7 @@ export const mapEmergency = (emergency) => {
     emergency.ubication = getJSON(emergency.ubication);
     if (emergency.resources && emergency.resources.length > 0) {
         emergency.images = mapImagesApi(emergency.resources);
-        emergency.imagesArr = getValueKeyFromArrObj(emergency.resources, 'url_link');
+        emergency.imagesArr = getValueKeyFromArrObj(emergency.resources, 'url');
     } else {
         emergency.imagesArr = [];
     }
@@ -251,8 +251,8 @@ export const mapReport = (report: any) => {
         const documentsResources = report.resources.filter(resource => resource.type === 'document');
         report.images = imagesResources;
         report.documents = documentsResources;
-        report.imagesArr = getValueKeyFromArrObj(imagesResources, 'url_link');
-        report.documentsArr = getValueKeyFromArrObj(documentsResources, 'url_link');
+        report.imagesArr = getValueKeyFromArrObj(imagesResources, 'url');
+        report.documentsArr = getValueKeyFromArrObj(documentsResources, 'url');
     } else {
         report.images = [];
         report.documents = [];
@@ -267,7 +267,7 @@ export const mapSocialProblem = (social_problem: any) => {
     social_problem.ubication = getJSON(social_problem.ubication);
     if (social_problem.resources && social_problem.resources.length > 0) {
         social_problem.images = mapImagesApi(social_problem.resources);
-        social_problem.imagesArr = getValueKeyFromArrObj(social_problem.resources, 'url_link');
+        social_problem.imagesArr = getValueKeyFromArrObj(social_problem.resources, 'url');
     } else {
         social_problem.imagesArr = [];
     }

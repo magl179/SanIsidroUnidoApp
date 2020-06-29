@@ -89,7 +89,6 @@ export interface IReaction {
     post_id: number;
     created_at: string;
     updated_at: string;
-    url_link: string;
     user_id?: number;
 }
 
@@ -111,7 +110,6 @@ export interface IResource {
     post_id: number;
     created_at: string;
     updated_at: string;
-    url_link: string;
 }
 
 //Interfaz Publicaciones
@@ -343,7 +341,6 @@ export interface IUser {
     devices?: IDeviceUser[];
     social_profiles?: ISocialProfile[];
     roles?: IRole[];
-    avatar_link?: string;
     memberships?: IMembership[];
 }
 
@@ -499,7 +496,6 @@ export interface ISubcategory {
     updated_at?: string;
     icon?: string;
     image?: string;
-    image_link?: string;
 }
 //Ubicacion
 export interface IUbication {

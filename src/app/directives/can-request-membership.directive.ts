@@ -24,14 +24,17 @@ export class CanRequestMembershipDirective implements OnInit {
 
         if (canMakeMembership) {
           this.isVisible = true;
-          this.viewContainer.createEmbeddedView(this.templateRef);;
+          this.viewContainer.createEmbeddedView(this.templateRef);
+          return;
         } else {
           this.isVisible = false;
-          this.viewContainer.clear()
+          this.viewContainer.clear();
+          return;
         }
       } else {
         this.isVisible = false;
         this.viewContainer.clear();
+        return;
       }
     });
   }

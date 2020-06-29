@@ -84,13 +84,14 @@ export class AppComponent implements OnInit {
                 }
                 return token_decoded;
             })
-        ).subscribe(token_decoded => {
+        ).subscribe(async token_decoded => {
             this.sessionAuth = token_decoded;
             if (token_decoded) {
                 this.authService.checkValidToken();
+                const login_method = await this.authService.getMethodLogin();
                 const email_verified_at = (this.sessionAuth && this.sessionAuth.user) ?this.sessionAuth && this.sessionAuth.user.email_verified_at: null;
     
-                if(email_verified_at == "" || email_verified_at == null){
+                if((email_verified_at == "" || email_verified_at == null && login_method == 'formulario')){
                     this.messageService.showPersistenceNoti('Por favor verifica tu correo');
                 }
             }

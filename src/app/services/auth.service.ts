@@ -15,6 +15,7 @@ import { map } from 'rxjs/operators';
 
 const TOKEN_ITEM_NAME = "siuAccessToken";
 const USER_ITEM_NAME = "siuCurrentUser";
+const METHOD_LOGIN_NAME = "siuMethodLogin";
 
 @Injectable({
     providedIn: 'root'
@@ -77,12 +78,25 @@ export class AuthService {
     async logout(message = 'Tu sesión expiro, inicia sesión por favor') {
         this.cleanLocalStorage();
         this.cleanAuthInfo();
+        this.removeMethodLogin();
         if(message !== ''){
             this.messageService.showInfo(message);
         }
         setTimeout(()=>{
             this.navCtrl.navigateRoot('/home-screen', { replaceUrl: true });
         }, 700);
+    }
+
+    setMethodLogin(tipo: string){
+        this.storage.set(METHOD_LOGIN_NAME, tipo);
+    }
+
+    async getMethodLogin(){
+        return await this.storage.get(METHOD_LOGIN_NAME);
+    }
+
+    removeMethodLogin(){
+        this.storage.remove(METHOD_LOGIN_NAME)
     }
 
     async redirectToLogin(){

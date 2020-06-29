@@ -98,6 +98,7 @@ export class RegisterPage implements OnInit {
                 loadingRegisterValidation.dismiss();
             })
         ).subscribe(async res => {
+            this.authService.setMethodLogin('formulario');
             await this.manageRegister(res);
         }, (error_http: HttpErrorResponse) => {
             this.errorService.manageHttpError(error_http, 'Ocurrio un error al completar el registro');
@@ -125,6 +126,7 @@ export class RegisterPage implements OnInit {
             this.messagesService.showInfo('Verificando las credenciales')
             //Funcion Registro
             this.authService.register(user).subscribe(async res => {
+                this.authService.setMethodLogin('facebook');
                 await this.manageRegister(res);
             }, (error_http: HttpErrorResponse) => {
                 this.errorService.manageHttpError(error_http, 'Ocurrio un error en el registro, intentalo más tarde');
@@ -156,6 +158,7 @@ export class RegisterPage implements OnInit {
             user.device = device;
             //Funcion Registro
             this.authService.register(user).subscribe(async res => {
+                this.authService.setMethodLogin('google');
                 await this.manageRegister(res);
             }, (error_http: HttpErrorResponse) => {
                 this.errorService.manageHttpError(error_http, 'No se pudo completar el registro, intentalo mas tarde');

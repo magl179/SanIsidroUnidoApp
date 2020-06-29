@@ -102,6 +102,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
             this.allPosts = (params['all'] && params['all'] == 'all') ? true : false;
             if (this.allPosts) {
                 this.extraData.user = '';
+                // this.s
             } else {
                 this.extraData.user = this.AuthUser.id.toString();
             }

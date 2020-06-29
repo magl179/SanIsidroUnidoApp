@@ -53,7 +53,7 @@
             <div class="ion-padding" style="display: flex;align-items:center;" *ngIf="isPolicia">
                 <div class="left-section">
                     <img style="width: 50px;height:50px;border-radius:50%;"
-                        [src]="emergency.user.avatar_link" (error)="imgError($event, 'assets/img/default/img_avatar.png')"/>
+                        [src]="emergency.user.avatar" (error)="imgError($event, 'assets/img/default/img_avatar.png')"/>
                 </div>
                 <div class="right-section" style="margin-left: 1rem">
                     <p style="color: var(--ion-color-dark);margin-bottom: .7em;">
