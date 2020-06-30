@@ -8,6 +8,8 @@ import { PruebasService } from 'src/app/services/pruebas.service';
 import { environment } from 'src/environments/environment';
 import { RequestMembershipPage } from 'src/app/modals/request-membership/request-membership.page';
 import { HOME_OPTIONS } from 'src/app/config/home_options';
+import { chechUserCanRequestMembership } from 'src/app/helpers/utils';
+import { MessagesService } from '../../services/messages.service';
 
 @Component({
     selector: 'app-home-list',
@@ -26,7 +28,8 @@ export class HomeListPage implements OnInit {
         private localDataService: LocalDataService,
         private authService: AuthService,
         private pruebasService: PruebasService,
-        private modalCtrl: ModalController
+        private modalCtrl: ModalController,
+        private messageService: MessagesService
     ) {
      }
 
@@ -61,14 +64,20 @@ export class HomeListPage implements OnInit {
     }
 
     async openRequestAfiliationModal(){
-        const modal = await this.modalCtrl.create({
-            component: RequestMembershipPage,
-            componentProps: {
-                nombre: 'Stalin',
-                pais: 'Ecuador'
-            }
-        });
-        await modal.present();
+
+        if(chechUserCanRequestMembership(this.sessionAuth)){
+            const modal = await this.modalCtrl.create({
+                component: RequestMembershipPage,
+                componentProps: {
+                    nombre: 'Stalin',
+                    pais: 'Ecuador'
+                }
+            });
+            await modal.present();
+        }else{
+            this.messageService.showWarning('No puedes realizar una petición de afiliación');
+        }
+
     }
     
 

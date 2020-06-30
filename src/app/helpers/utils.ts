@@ -6,6 +6,7 @@ import { ISubcategory, IResource, IRole } from 'src/app/interfaces/models';
 import { CONFIG } from 'src/config/config';
 import { es } from 'date-fns/locale'
 import { parseISO, format as dateFormat } from 'date-fns';
+import { ITokenDecoded } from '../interfaces/models';
 
 const REGEX_URL = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
 
@@ -85,6 +86,12 @@ export const filterDataInObject = (data: any[], filter: {}) => {
         return true;
     });
     return new_data;
+}
+
+export const chechUserCanRequestMembership = (token_decoded: ITokenDecoded) => {
+    const memberships = (token_decoded && token_decoded.user && token_decoded.user.memberships) ? token_decoded.user.memberships.filter(membership => membership.status_attendance == "aprobado") : [];
+    const canMakeMembership = (memberships && memberships.length == 0) ? true : false;
+    return canMakeMembership;
 }
 
 export const isRolActive = (roles: IRole[]) => {

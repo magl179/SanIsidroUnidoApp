@@ -70,12 +70,14 @@ export class UserService implements OnInit {
 
     getProfile(){
         const user_id = this.AuthUser.id;
-        return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${user_id}?roles`);
+        const headers = setHeaders(CONFIG.AUTHORIZATION_NAME, this.AuthToken);
+        return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${user_id}?roles`, {}, headers);
     }
 
     //Obtener la información de un usuario
     getUserInfo(id: number): Observable<any> {
-        return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${id}`);
+        const headers = setHeaders(CONFIG.AUTHORIZATION_NAME, this.AuthToken);
+        return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${id}`, {}, headers);
     }
     // Obtener las notificaciones de un usuario
     getNotificationsUser(params = {}) {
@@ -90,17 +92,19 @@ export class UserService implements OnInit {
     // Obtener los dispositivos de un usuario
     getSocialProfilesUser() {
         const user_id = this.AuthUser.id;
-        return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${user_id}/perfiles-sociales`);
+        const headers = setHeaders(CONFIG.AUTHORIZATION_NAME, this.AuthToken);
+        return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${user_id}/perfiles-sociales`, {}, headers);
     }
 
     getMembershipsByUser(user_id) {
-        // const user_id = this.AuthUser.id;
-        return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${user_id}/membresias`);
+        const headers = setHeaders(CONFIG.AUTHORIZATION_NAME, this.AuthToken);
+        return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${user_id}/membresias`, {}, headers);
     }
 
     getDevicesUser() {
         const user_id = this.AuthUser.id;;
-        return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${user_id}/dispositivos`);
+        const headers = setHeaders(CONFIG.AUTHORIZATION_NAME, this.AuthToken);
+        return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${user_id}/dispositivos`, {}, headers);
     }
     //Enviar una solicitud de cambio de contraseña
     sendChangeUserPassRequest(newPassword: string): Observable<any> {

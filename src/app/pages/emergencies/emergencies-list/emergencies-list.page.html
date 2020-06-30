@@ -3,7 +3,6 @@
 <app-header-back [title]="(allPosts) ? 'Emergencias': 'Mis Emergencias'" [search]="false" backUrl="/emergencies/categories"></app-header-back>
 <!-- Contenido -->
 <ion-content padding>
-    
     <!-- Filtro por Estado Atención -->
     <ion-segment value="" scrollable (ionChange)="segmentChanged($event)" *ngIf="showSegment">
         <ion-segment-button value="">
@@ -25,11 +24,11 @@
     </ion-segment>
     
     <!-- Refresher de los Datos -->
-    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <!-- <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content pullingIcon="arrow-dropdown" refreshingSpinner="circles"
             refreshingText="Cargando Publicaciones...">
         </ion-refresher-content>
-    </ion-refresher>
+    </ion-refresher> -->
      <!-- Problemas Sociales Searchbar -->
      <ion-searchbar mode="ios" type="text" placeholder="Buscar Emergencias" [animated]="true"
      [formControl]="emergencyControl"></ion-searchbar>

@@ -484,6 +484,7 @@ export interface ICategory {
     description: string;
     created_at?: string;
     updated_at?: string;
+    icon: string;
 }
 //SubCategoria
 export interface ISubcategory {

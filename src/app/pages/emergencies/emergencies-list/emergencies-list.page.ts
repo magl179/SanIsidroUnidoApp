@@ -44,11 +44,16 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
     searchingEmergencies = false;
     emergencyControl: FormControl;
     segmentFilter$ = new BehaviorSubject(null);
-    extraData = {
+
+    filters$ = new BehaviorSubject({
         police: '',
-        user: ''
-    };
-    postState = 1;
+        user: '',
+        category: CONFIG.EMERGENCIES_SLUG,
+        title: '',
+        status_attendance: '',
+        active: 1
+    });
+
     allPosts = false;
     showSegment = false;
     private unsubscribe = new Subject<void>();
@@ -96,26 +101,41 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
             }
         });
 
+        this.filters$.asObservable().subscribe(filters => {
+            console.log('filters change', filters);
+        })
+
         //Si es Policia
         this.activatedRoute.queryParams.subscribe(params => {
-            // this.queryParam = params['all'];
+            
             this.allPosts = (params['all'] && params['all'] == 'all') ? true : false;
-            if (this.allPosts) {
-                this.extraData.user = '';
-                // this.s
-            } else {
-                this.extraData.user = this.AuthUser.id.toString();
-            }
+            let status_attendance = '';
             //Policia
-            if (this.isPolicia) {
-                this.showSegment = true;
-            }
-            else if (this.allPosts) {
+            if (this.allPosts) {
                 this.showSegment = false;
-            }
-            else {
+                status_attendance = 'atendido';
+                console.log('todos los posts', status_attendance);
+            } else {
                 this.showSegment = true;
             }
+            if (this.allPosts && this.isPolicia) {
+                this.showSegment = false;
+                status_attendance = '';
+                console.log('is policia');
+            }
+
+            if (!this.allPosts && !this.isPolicia) {
+                this.showSegment = true;
+                status_attendance = '';
+                console.log('no es todos los posts ni es policia');
+            }
+
+            if (this.allPosts) {
+                this.filters$.next({ ... this.filters$.value, user: '', status_attendance });
+            } else {
+                this.filters$.next({ ... this.filters$.value, user: this.AuthUser.id.toString() })
+            }
+
             //Primera Carga
             this.loadEmergencies(null, true);
         });
@@ -128,24 +148,15 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
                 data: event
             });
         })
-        //Buscador       
-        combineLatest(
-            this.emergencyControl.valueChanges.pipe(startWith(''), distinctUntilChanged()),
-            this.segmentFilter$.asObservable().pipe(distinctUntilChanged()),
-        )
+        //Buscador   
+        this.filters$.asObservable()
             .pipe(
+                tap(val => console.log('values of antes skip', val)),
                 skip(1),
                 tap(() => {
                     this.searchingEmergencies = true;
                 }),
-                map(combineValues => ({
-                    category: CONFIG.EMERGENCIES_SLUG,
-                    title: combineValues[0],
-                    status_attendance: combineValues[1],
-                    active: this.postState,
-                    user: this.extraData.user,
-                    police: this.extraData.police
-                })),
+                tap(val => console.log('values of', val)),
                 switchMap(peticionHttpBusqueda),
                 takeUntil(this.unsubscribe)
             )
@@ -157,17 +168,11 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
     }
 
     imgError(event, url = "assets/img/default/image_full.png"): void {
-
         event.target.src = url;
     }
 
     getEmergenciesFunction() {
-        const params = { active: this.postState }
-        if (this.isPolicia || this.allPosts) {
-        } else {
-            params['user'] = this.AuthUser.id;
-        }
-        return this.postsService.getEmergencies(params);
+        return this.postsService.getEmergencies(this.filters$.value);
     }
 
     async loadEmergencies(event = null, first_loading = false) {
@@ -258,11 +263,10 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
     segmentChanged(event: CustomEvent) {
         const value = (event.detail.value !== "") ? event.detail.value : "";
         if (value == 'rechazado') {
-            this.postState = 0
+            this.filters$.next({ ...this.filters$.value, active: 0, status_attendance: value });
         } else {
-            this.postState = 1;
+            this.filters$.next({ ...this.filters$.value, active: 1, status_attendance: value });
         }
-        this.segmentFilter$.next(value);
     }
 
     ngOnDestroy() {
