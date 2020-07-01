@@ -17,7 +17,7 @@ export class EmergenciesCategoriesPage implements OnInit {
 
     categoriesLoaded = false;
     categories = [
-        { title: 'Todas', value: 'all', icon: 'assets/img/svg/list.svg' },
+        { title: 'Todas', value: 'all', icon_link: 'assets/img/svg/list.svg' },
     ];
     isPolicia = false;
 
@@ -31,7 +31,7 @@ export class EmergenciesCategoriesPage implements OnInit {
         //Verificar si es policia
         this.isPolicia = await this.authService.userHasRole(['Policia']);
         if(!this.isPolicia){
-            this.categories.push({ title: 'Mis Emergencias', value: 'mias', icon: 'assets/img/svg/files-and-folders.svg' });
+            this.categories.push({ title: 'Mis Emergencias', value: 'mias', icon_link: 'assets/img/svg/files-and-folders.svg' });
         }
     }
 

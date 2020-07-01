@@ -10,7 +10,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from "src/app/services/events.service";
 import { ErrorService } from 'src/app/services/error.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { of, BehaviorSubject, combineLatest, Subject } from 'rxjs';
+import { of, BehaviorSubject, combineLatest, Subject, Observable } from 'rxjs';
 import { trigger, style, transition, animate, keyframes, query, stagger } from '@angular/animations';
 import { FormControl } from '@angular/forms';
 import { CONFIG } from 'src/config/config';
@@ -101,7 +101,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
             }
         });
 
-        this.filters$.asObservable().subscribe(filters => {
+        this.notifyFilters().subscribe(filters => {
             console.log('filters change', filters);
         })
 
@@ -149,7 +149,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
             });
         })
         //Buscador   
-        this.filters$.asObservable()
+        this.notifyFilters()
             .pipe(
                 tap(val => console.log('values of antes skip', val)),
                 skip(1),
@@ -157,8 +157,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
                     this.searchingEmergencies = true;
                 }),
                 tap(val => console.log('values of', val)),
-                switchMap(peticionHttpBusqueda),
-                takeUntil(this.unsubscribe)
+                switchMap(peticionHttpBusqueda)
             )
             .subscribe((data) => {
                 this.showNotFound = (data.length == 0) ? true : false;
@@ -281,5 +280,8 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         this.postsService.resetPagination(this.postsService.PaginationKeys.EMERGENCIES);
     }
 
+    notifyFilters(): Observable<any>{
+        return this.filters$.asObservable().pipe(share());
+    }
 
 }

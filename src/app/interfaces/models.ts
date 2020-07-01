@@ -106,6 +106,7 @@ interface Approved {
 export interface IResource {
     id: number;
     url: string;
+    url_link: string;
     type: string;
     post_id: number;
     created_at: string;
@@ -331,9 +332,9 @@ export interface IUser {
     email: string;
     email_verified_at?: string;
     avatar?: string;
+    avatar_link?: string;
     password?: string;
     state: number;
-    basic_service_image?: string;
     number_phone?: string;
     position_id?: number;
     created_at?: string;
@@ -348,6 +349,7 @@ interface IMembership {
     id: number;
     identity_card: string;
     basic_service_image: string;
+    basic_service_image_link: string;
     status_attendance: string;
     responsible: IResponsible;
     user_id: number;

@@ -57,6 +57,10 @@
                 *ngIf="requestMembershipForm.get('telefono').hasError('maxlength') && requestMembershipForm.get('telefono').touched">
                 El télefono debe contener máximo 10 caracteres
             </p>
+            <p class="form-error"
+                *ngIf="requestMembershipForm.get('telefono').hasError('pattern') && requestMembershipForm.get('telefono').touched">
+                El télefono debe contener solo numeros
+            </p>
         </div>
        
         <div class="item-form full">
@@ -74,6 +78,10 @@
             <p class="form-error"
                 *ngIf="requestMembershipForm.get('cedula').hasError('requied') && requestMembershipForm.get('cedula').touched">
                 La cédula es requerida
+            </p>
+            <p class="form-error"
+                *ngIf="requestMembershipForm.get('cedula').hasError('maxlength') && requestMembershipForm.get('cedula').touched">
+                La cédula debe tener máximo 10 caracteres
             </p>
             <p class="form-error"
                 *ngIf="requestMembershipForm.get('cedula').hasError('cedulaValida') && requestMembershipForm.get('cedula').touched">

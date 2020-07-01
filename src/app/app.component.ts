@@ -86,6 +86,7 @@ export class AppComponent implements OnInit {
             })
         ).subscribe(async token_decoded => {
             this.sessionAuth = token_decoded;
+            console.log('sessionAuth', this.sessionAuth);
             if (token_decoded) {
                 this.authService.checkValidToken();
                 const login_method = await this.authService.getMethodLogin();

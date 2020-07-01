@@ -13,10 +13,10 @@
             <ion-icon color="green-logo" name="checkbox"></ion-icon>
             <ion-label>Atendidos</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="pendiente">
+        <!-- <ion-segment-button value="pendiente">
             <ion-icon color="yellow-logo" name="clock"></ion-icon>
             <ion-label>Pendientes</ion-label>
-        </ion-segment-button>
+        </ion-segment-button> -->
         <ion-segment-button value="rechazado">
             <ion-icon color="red-logo" name="close-circle-outline"></ion-icon>
             <ion-label>Rechazadas</ion-label>
@@ -52,7 +52,7 @@
             <div class="ion-padding" style="display: flex;align-items:center;" *ngIf="isPolicia">
                 <div class="left-section">
                     <img style="width: 50px;height:50px;border-radius:50%;"
-                        [src]="emergency.user.avatar" (error)="imgError($event, 'assets/img/default/img_avatar.png')"/>
+                        [src]="emergency.user.avatar_link" (error)="imgError($event, 'assets/img/default/img_avatar.png')"/>
                 </div>
                 <div class="right-section" style="margin-left: 1rem">
                     <p style="color: var(--ion-color-dark);margin-bottom: .7em;">

@@ -102,7 +102,7 @@ export class UserService implements OnInit {
     }
 
     getDevicesUser() {
-        const user_id = this.AuthUser.id;;
+        const user_id = this.AuthUser.id;
         const headers = setHeaders(CONFIG.AUTHORIZATION_NAME, this.AuthToken);
         return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${user_id}/dispositivos`, {}, headers);
     }

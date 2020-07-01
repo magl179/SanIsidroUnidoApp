@@ -106,6 +106,10 @@
                     <simple-map className="emergency-map" id="emergency-map-detail-{{id}}"
                         [coordsMap]="emergency.ubication" [zoom]="16" [enableGesture]="true">
                     </simple-map>
+                    <p class="map-title">Ubicación Referencia: </p>
+                    <p>
+                        {{ (emergency.ubication) ? emergency.ubication.description : ''}}
+                    </p>
                 </div>
             </div>
         </div>

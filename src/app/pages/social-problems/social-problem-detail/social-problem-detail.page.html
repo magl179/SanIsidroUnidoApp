@@ -92,6 +92,10 @@
                     id="social-problem-detail-{{id}}" [coordsMap]="socialProblem.ubication" [enableGesture]="true"
                     [zoom]="16">
                 </simple-map>
+                <p class="map-title">Ubicación Referencia: </p>
+                    <p>
+                        {{ (socialProblem.ubication) ? socialProblem.ubication.description : ''}}
+                    </p>
             </div>
         </div>
     </div>

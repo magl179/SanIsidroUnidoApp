@@ -225,7 +225,9 @@ export class NotificationsService implements OnInit {
         console.log('managePostNotification', aditionalDataPost)
         console.log('post', post, post.id, post.category)
         if (post && post.id && post.category) {
-            this.messageService.showInfo('Procesando notificacion ...')
+            if(environment.production){
+                this.messageService.showInfo('Procesando notificacion ...')
+            }
             //Switch de Opciones segun el slug del posts
             const slug = post.category.slug.toLowerCase();
             console.log('switch case slug', slug)

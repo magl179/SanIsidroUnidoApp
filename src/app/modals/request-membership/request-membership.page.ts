@@ -67,6 +67,7 @@ export class RequestMembershipPage implements OnInit {
 
         const cedula = new FormControl('', Validators.compose([
             Validators.required,
+            Validators.maxLength(10),
             validations.cedula.pattern
         ]));
 
@@ -75,7 +76,8 @@ export class RequestMembershipPage implements OnInit {
         Validators.compose([
             Validators.required,
             Validators.minLength(7),
-            Validators.maxLength(10)
+            Validators.maxLength(10),
+            Validators.pattern(/^[0-9]\d*$/)
         ]));
         // Añado Propiedades al Form
         this.requestMembershipForm = this.formBuilder.group({ nombres, cedula, telefono });

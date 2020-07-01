@@ -193,7 +193,7 @@ export const mapEvent = (event) => {
     event.ubication = getJSON(event.ubication);
     if (event.resources && event.resources.length > 0) {
         event.images = mapImagesApi(event.resources);
-        event.imagesArr = getValueKeyFromArrObj(event.resources, 'url');
+        event.imagesArr = getValueKeyFromArrObj(event.resources, 'url_link');
     }
     const range_date = (event.additional_data && event.additional_data.range_date) ? event.additional_data.range_date : null;
     if (range_date) {
@@ -226,7 +226,7 @@ export const mapEmergency = (emergency) => {
     emergency.ubication = getJSON(emergency.ubication);
     if (emergency.resources && emergency.resources.length > 0) {
         emergency.images = mapImagesApi(emergency.resources);
-        emergency.imagesArr = getValueKeyFromArrObj(emergency.resources, 'url');
+        emergency.imagesArr = getValueKeyFromArrObj(emergency.resources, 'url_link');
     } else {
         emergency.imagesArr = [];
     }
@@ -258,8 +258,8 @@ export const mapReport = (report: any) => {
         const documentsResources = report.resources.filter(resource => resource.type === 'document');
         report.images = imagesResources;
         report.documents = documentsResources;
-        report.imagesArr = getValueKeyFromArrObj(imagesResources, 'url');
-        report.documentsArr = getValueKeyFromArrObj(documentsResources, 'url');
+        report.imagesArr = getValueKeyFromArrObj(imagesResources, 'url_link');
+        report.documentsArr = getValueKeyFromArrObj(documentsResources, 'url_link');
     } else {
         report.images = [];
         report.documents = [];
@@ -274,7 +274,7 @@ export const mapSocialProblem = (social_problem: any) => {
     social_problem.ubication = getJSON(social_problem.ubication);
     if (social_problem.resources && social_problem.resources.length > 0) {
         social_problem.images = mapImagesApi(social_problem.resources);
-        social_problem.imagesArr = getValueKeyFromArrObj(social_problem.resources, 'url');
+        social_problem.imagesArr = getValueKeyFromArrObj(social_problem.resources, 'url_link');
     } else {
         social_problem.imagesArr = [];
     }

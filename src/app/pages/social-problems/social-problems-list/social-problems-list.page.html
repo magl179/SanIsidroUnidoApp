@@ -11,10 +11,10 @@
             <ion-icon color="green-logo" name="checkbox"></ion-icon>
             <ion-label>Atendidos</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="pendiente">
+        <!-- <ion-segment-button value="pendiente">
             <ion-icon color="yellow-logo" name="clock"></ion-icon>
             <ion-label>Pendientes</ion-label>
-        </ion-segment-button>
+        </ion-segment-button> -->
         <ion-segment-button value="rechazado">
             <ion-icon color="red-logo" name="close-circle-outline"></ion-icon>
             <ion-label>Rechazadas</ion-label>
@@ -50,7 +50,7 @@
             <div (click)="postDetail(socialProblem.id)">
                 <div class="ion-padding" style="display: flex;align-items:Center;">
                     <div class="left-section">
-                        <img class="img-avatar" [src]="socialProblem.user.avatar"
+                        <img class="img-avatar" [src]="socialProblem.user.avatar_link"
                         (error)="imgError('assets/img/default/img_avatar.png')"/>
                     </div>
                     <div class="right-section" style="margin-left: 1rem">

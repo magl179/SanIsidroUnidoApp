@@ -100,6 +100,10 @@
                     <simple-map className="event-map" id="eventMap-detail-{{id}}"
                         [coordsMap]="event.ubication" [zoom]="16" [enableGesture]="true">
                     </simple-map>
+                    <p class="map-title">Ubicación Referencia: </p>
+                    <p>
+                        {{ (event.ubication) ? event.ubication.description : ''}}
+                    </p>
                 </div>
             </div>
         </div>
