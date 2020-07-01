@@ -220,11 +220,11 @@ export class NotificationsService implements OnInit {
         
     }
     async managePostNotification(aditionalDataPost: INotiList) {
-        const post = aditionalDataPost.post;
+        const post = (aditionalDataPost) ? aditionalDataPost.post: null;
         var urlNavigate = null;
-        console.log('managePostNotification', aditionalDataPost)
-        console.log('post', post, post.id, post.category)
+        console.log('managePostNotification', aditionalDataPost, post)
         if (post && post.id && post.category) {
+            console.log(post, post.id, post.category)
             if(environment.production){
                 this.messageService.showInfo('Procesando notificacion ...')
             }
@@ -267,8 +267,15 @@ export class NotificationsService implements OnInit {
                     this.navCtrl.navigateForward(urlNavigate);
                 }, 700);
             }
-        }else{
-            console.warn('sin redireccion')
+        }
+
+
+        const accion = aditionalDataPost.action;
+        switch(accion){
+            case 'logout': 
+                this.authService.logout();
+            default:
+                console.log('no action')
         }
     }
 }

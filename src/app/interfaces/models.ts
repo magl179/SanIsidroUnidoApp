@@ -304,6 +304,7 @@ export interface INotiList {
     neighbor?: INotificationUser;
     notification_user?: INotificationUser;
     post?: IPost;
+    action?: string;
 }
 
 export interface INotificationUser extends IUser {
