@@ -177,7 +177,7 @@ export const MapNotification = (notification) => {
     if(notification && notification.data && notification.data.neighbor){
         notification.data.notification_user = mapUser(notification.data.neighbor);
     }
-    notification.data.action = 'logout';
+    // notification.data.action = 'logout';
     return notification;
 }
 
