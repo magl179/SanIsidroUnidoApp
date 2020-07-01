@@ -81,13 +81,14 @@ export class UserService implements OnInit {
     }
     // Obtener las notificaciones de un usuario
     getNotificationsUser(params = {}) {
+        const headers = setHeaders(CONFIG.AUTHORIZATION_NAME, this.AuthToken);
         const user_id = this.AuthUser.id;
         this.increasePagination(this.PaginationKeys.NOTIFICATIONS);
         const withoutEmptyParams = cleanEmpty(params);
         return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${user_id}/notificaciones`, {
             page: this.getPagination(this.PaginationKeys.NOTIFICATIONS),
             ...withoutEmptyParams
-        });
+        }, headers);
     }
     // Obtener los dispositivos de un usuario
     getSocialProfilesUser() {
