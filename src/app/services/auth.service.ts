@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { Observable, BehaviorSubject, from } from 'rxjs';
+import { Observable, BehaviorSubject, from, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IRegisterUser, ITokenDecoded } from 'src/app/interfaces/models';
 import { HttpRequestService } from "./http-request.service";
@@ -11,7 +11,7 @@ import { IRespuestaApiSIUSingle } from "src/app/interfaces/models";
 import { CONFIG } from 'src/config/config';
 import { MessagesService } from './messages.service';
 import { getUserRoles, hasRoles } from 'src/app/helpers/user-helper';
-import { map } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 
 const TOKEN_ITEM_NAME = "siuAccessToken";
 const USER_ITEM_NAME = "siuCurrentUser";
@@ -20,12 +20,13 @@ const METHOD_LOGIN_NAME = "siuMethodLogin";
 @Injectable({
     providedIn: 'root'
 })
-export class AuthService {
+export class AuthService implements OnDestroy{
 
     sessionAuthUserSubject = new BehaviorSubject(null);
     sessionAuthTokenSubject = new BehaviorSubject(null);
-    sessionAuthUser = this.sessionAuthUserSubject.asObservable();
-    sessionAuthToken = this.sessionAuthTokenSubject.asObservable();
+    private unsubscribe = new Subject<void>();
+    sessionAuthUser = this.sessionAuthUserSubject.asObservable().pipe(takeUntil(this.unsubscribe));
+    sessionAuthToken = this.sessionAuthTokenSubject.asObservable().pipe(takeUntil(this.unsubscribe));
 
     constructor(
         private storage: Storage,
@@ -37,6 +38,12 @@ export class AuthService {
         this.storage.ready().then(async () => {
             await this.getTokenandUserLS();
         });
+    }
+
+    ngOnDestroy() {
+        this.unsubscribe.next();
+        this.unsubscribe.complete();
+        console.log('auth service on destroy')
     }
 
     // ngOnInit
