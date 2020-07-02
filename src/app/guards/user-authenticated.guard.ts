@@ -21,7 +21,7 @@ export class UserAuthenticatedGuard implements CanLoad {
         if (tokenDecoded) {
             return true;
         } else {
-            this.navCtrl.navigateBack(`/home-screen`)
+            this.navCtrl.navigateRoot(`/home-screen`)
             return false;
         }
     }

@@ -168,7 +168,7 @@ export class EmergencyCreatePage implements OnInit {
             this.events_app.resetEmergenciesEmitter();
             this.cdRef.detectChanges();
             setTimeout(() => {
-                this.navCtrl.navigateBack(`/emergencies/list`);
+                this.navCtrl.navigateRoot(`/emergencies/list`);
             }, 1000);
 
         }, (error_http: HttpErrorResponse) => {

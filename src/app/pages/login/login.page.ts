@@ -31,7 +31,7 @@ export class LoginPage implements OnInit {
     passwordTypeInput = 'password';
     loginForm: FormGroup;
     errorMessages = null;
-    backUrl: string;
+    backUrl: string = `/home-screen`;
 
     constructor(
         public formBuilder: FormBuilder,
@@ -50,7 +50,6 @@ export class LoginPage implements OnInit {
     }
 
     async ngOnInit() {
-        this.backUrl = `/home-screen`;
         this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
             this.appNetworkConnection = connected;
         });
@@ -213,7 +212,7 @@ export class LoginPage implements OnInit {
 
     //Funcion para navegar a pagina de registro
     goToRegister() {
-        this.navCtrl.navigateForward('/register', { animated: true });
+        this.navCtrl.navigateRoot('/register', { animated: true });
     }
 
 

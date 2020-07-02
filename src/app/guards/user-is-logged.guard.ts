@@ -22,7 +22,7 @@ export class UserIsLoggedGuard implements CanLoad {
         if (!tokenDecoded) {
             return true;
         } else {
-            this.navCtrl.navigateBack(`/${CONFIG.HOME_ROUTE}`)
+            this.navCtrl.navigateRoot(`/${CONFIG.HOME_ROUTE}`)
             return false;
         }
     }

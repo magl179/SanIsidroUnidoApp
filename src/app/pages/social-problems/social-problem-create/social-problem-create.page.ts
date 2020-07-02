@@ -147,7 +147,7 @@ export class SocialProblemCreatePage implements OnInit {
             const social_problem_subcategory = this.getSubcategoryById(this.socialProblemForm.value.subcategory);
             if (social_problem_subcategory && social_problem_subcategory.length > 0) {
                 setTimeout(() => {
-                    this.navCtrl.navigateBack(`/social-problems/list/${social_problem_subcategory[0]}`);
+                    this.navCtrl.navigateRoot(`/social-problems/list/${social_problem_subcategory[0]}`);
                 }, 1000);
             }
 

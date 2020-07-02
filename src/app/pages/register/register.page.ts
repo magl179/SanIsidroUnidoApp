@@ -224,7 +224,7 @@ export class RegisterPage implements OnInit {
 
     //Funcion para navegar a pagina de login
     goToLogin() {
-        this.navCtrl.navigateForward('/login', { animated: true });
+        this.navCtrl.navigateRoot('/login', { animated: true });
     }
 
 }

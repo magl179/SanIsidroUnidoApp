@@ -106,6 +106,11 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
             console.log('filters change', filters);
         })
 
+        this.emergencyControl.valueChanges.pipe(startWith(''), distinctUntilChanged())
+        .subscribe(value =>{
+             this.filters$.next({ ... this.filters$.value, title: value })
+        });
+
         //Si es Policia
         this.activatedRoute.queryParams.subscribe(params => {
             

@@ -54,11 +54,11 @@ export class HomeScreenPage implements OnInit {
     }
     //Funcion navegar hacia pagina de Login
     goToLogin() {
-        this.navCtrl.navigateForward('/login');
+        this.navCtrl.navigateRoot('/login');
     }
     //Funcion para navegar a pagina de registro
     goToRegister() {
-        this.navCtrl.navigateForward('/register', {animated: true});
+        this.navCtrl.navigateRoot('/register', {animated: true});
     }
     goToHome(){
         this.navCtrl.navigateRoot('/home-list')
