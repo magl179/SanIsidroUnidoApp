@@ -36,7 +36,7 @@ import { CONFIG } from 'src/config/config';
 export class EmergenciesListPage implements OnInit, OnDestroy {
 
     AuthUser: IUser = null;
-    showloading = true;
+    showloading = false;
     showNotFound = false;
     emergenciesList = [];
     emergenciesFiltered = [];
@@ -73,7 +73,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
     }
 
     async ngOnInit() {
-
+        this.showloading = true;
         //Peticion
         const peticionHttpBusqueda = (body) => {
             return this.postsService.searchPosts(body)
@@ -144,20 +144,20 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         });
 
         //Simular Un Refresh cuando se crea nuevas emergencias
-        this.events_app.emergenciesEmitter.subscribe(() => {
+        /*this.events_app.emergenciesEmitter.subscribe(() => {
             this.postsService.resetPagination(this.postsService.PaginationKeys.EMERGENCIES);
             this.loadEmergencies({
                 type: 'refresher',
                 data: event
             });
-        })
+        })*/
         //Buscador   
         this.notifyFilters()
             .pipe(
                 tap(val => console.log('values of antes skip', val)),
                 skip(1),
                 tap(() => {
-                    this.searchingEmergencies = true;
+                    this.showloading = true;
                 }),
                 tap(val => console.log('values of', val)),
                 switchMap(peticionHttpBusqueda),
@@ -165,7 +165,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
             .subscribe((data) => {
                 this.showNotFound = (data.length == 0) ? true : false;
                 this.emergenciesFiltered = [...data];
-                this.searchingEmergencies = false;
+                this.showloading = false;
             });
     }
 
@@ -196,17 +196,11 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
                 this.postsService.resetPaginationEmpty(this.postsService.PaginationKeys.EMERGENCIES);
                 return of({ data: [] })
             }),
-            finalize(() => {
-                if (first_loading && this.emergenciesList.length === 0) {
-                    this.showNotFound = true;
-                }
-
-            }),
             takeUntil(this.unsubscribe)
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let emergenciesApi = [];
             emergenciesApi = res.data;
-            this.showloading = false;
+            
             //Evento Completar
             if (event && event.data && event.data.target && event.data.target.complete) {
                 event.data.target.complete();
@@ -214,6 +208,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
             if (event && event.data && event.data.target && event.data.target.complete && emergenciesApi.length == 0) {
                 event.data.target.disabled = true;
             }
+            this.showloading = false;
             if (event && event.type == 'refresher') {
                 this.emergenciesList.unshift(...emergenciesApi);
                 this.emergenciesFiltered.unshift(...emergenciesApi);

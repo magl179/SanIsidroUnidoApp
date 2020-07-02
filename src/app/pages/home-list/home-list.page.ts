@@ -18,7 +18,7 @@ import { MessagesService } from '../../services/messages.service';
 })
 export class HomeListPage implements OnInit {
 
-    servicesList: IHomeOptions[] = [];
+    servicesList: IHomeOptions[] = HOME_OPTIONS;
     sessionAuth = null;
     production = environment.production;
 
@@ -39,7 +39,7 @@ export class HomeListPage implements OnInit {
                 this.sessionAuth = token_decoded;
             }
         });
-        this.servicesList = HOME_OPTIONS;
+        //this.servicesList = HOME_OPTIONS;
         await this.utilsService.enableMenu();
     }
     

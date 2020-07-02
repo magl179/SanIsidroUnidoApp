@@ -119,7 +119,7 @@ export class RequestMembershipPage implements OnInit {
             this.formSended = true;
             setTimeout(() => {
                 this.closeModal();
-            }, 500);
+            }, 100);
         }, (error_http: HttpErrorResponse) => {
             this.errorService.manageHttpError(error_http, 'La solicitud no ha podido ser enviada');
         });

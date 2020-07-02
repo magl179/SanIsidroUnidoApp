@@ -32,9 +32,9 @@
      <!-- Problemas Sociales Searchbar -->
      <ion-searchbar mode="ios" type="text" placeholder="Buscar Emergencias" [animated]="true"
      [formControl]="emergencyControl"></ion-searchbar>
-    <div class="loading-app" *ngIf="searchingEmergencies">
+    <!--<div class="loading-app" *ngIf="searchingEmergencies">
         <loader-app class="flex-column-center" message="Buscando..."></loader-app>
-    </div>
+    </div> -->
     <!-- Mensaje cuando no hay datos disponibles-->
     <app-no-results-found class="ion-padding" *ngIf="showNotFound && emergenciesFiltered.length === 0"
         message="No existen emergencias disponibles"></app-no-results-found>
