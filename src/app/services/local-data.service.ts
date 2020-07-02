@@ -58,12 +58,17 @@ export class LocalDataService {
             title: {
                 required: true,
                 minlength: 3,
-                maxlength: 15
+                maxlength: 150
             },
             description: {
                 required: true,
                 minlength: 8,
                 maxlength: 30
+            },
+            ubication: {
+                description: {
+                    maxlength: 1024
+                }
             }
         }
     }

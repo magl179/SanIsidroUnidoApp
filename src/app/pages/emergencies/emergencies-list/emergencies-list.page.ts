@@ -51,7 +51,8 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         category: CONFIG.EMERGENCIES_SLUG,
         title: '',
         status_attendance: '',
-        active: 1
+        active: 1,
+        is_police: null
     });
 
     allPosts = false;
@@ -110,6 +111,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
             
             this.allPosts = (params['all'] && params['all'] == 'all') ? true : false;
             let status_attendance = '';
+            let isPolice = null;
             //Policia
             if (this.allPosts) {
                 this.showSegment = false;
@@ -122,6 +124,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
                 this.showSegment = false;
                 status_attendance = '';
                 console.log('is policia');
+                isPolice = 1;
             }
 
             if (!this.allPosts && !this.isPolicia) {
@@ -131,9 +134,9 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
             }
 
             if (this.allPosts) {
-                this.filters$.next({ ... this.filters$.value, user: '', status_attendance });
+                this.filters$.next({ ... this.filters$.value, user: '', status_attendance, is_police: isPolice });
             } else {
-                this.filters$.next({ ... this.filters$.value, user: this.AuthUser.id.toString() })
+                this.filters$.next({ ... this.filters$.value, user: this.AuthUser.id.toString(), is_police: isPolice })
             }
 
             //Primera Carga
@@ -157,7 +160,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
                     this.searchingEmergencies = true;
                 }),
                 tap(val => console.log('values of', val)),
-                switchMap(peticionHttpBusqueda)
+                switchMap(peticionHttpBusqueda),
             )
             .subscribe((data) => {
                 this.showNotFound = (data.length == 0) ? true : false;
@@ -194,9 +197,6 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
                 return of({ data: [] })
             }),
             finalize(() => {
-                if (first_loading) {
-                    this.showloading = false;
-                }
                 if (first_loading && this.emergenciesList.length === 0) {
                     this.showNotFound = true;
                 }
@@ -206,6 +206,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let emergenciesApi = [];
             emergenciesApi = res.data;
+            this.showloading = false;
             //Evento Completar
             if (event && event.data && event.data.target && event.data.target.complete) {
                 event.data.target.complete();

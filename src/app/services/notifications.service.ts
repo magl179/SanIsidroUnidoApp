@@ -223,37 +223,38 @@ export class NotificationsService implements OnInit {
         const post = (aditionalDataPost) ? aditionalDataPost.post: null;
         var urlNavigate = null;
         console.log('managePostNotification', aditionalDataPost, post)
-        if (post && post.id && post.category) {
-            console.log(post, post.id, post.category)
+        if (post && post.id && post.category_slug) {
             if(environment.production){
                 this.messageService.showInfo('Procesando notificacion ...')
             }
             //Switch de Opciones segun el slug del posts
-            const slug = post.category.slug.toLowerCase();
-            console.log('switch case slug', slug)
-            switch(slug) {
+            const id_post = post.id;
+            const slug_category = post.category_slug.toLowerCase();
+            const slug_subcategory = post.subcategory_slug.toLowerCase();
+            console.log('switch case slug', slug_category)
+            switch(slug_category) {
                 case CONFIG.EMERGENCIES_SLUG: //caso posts emergencia creado
-                    urlNavigate = `/emergencies/list/${post.id}`;
+                    urlNavigate = `/emergencies/list/${id_post}`;
                     console.log('case urlNavigate EMERGENCIES_SLUG', urlNavigate)
                     break;
                 case CONFIG.EVENTS_SLUG: //caso posts evento creado                   
-                    if (post.subcategory) {
-                        urlNavigate = `/events/list/${post.subcategory.slug}/${post.id}`;
+                    if (slug_subcategory) {
+                        urlNavigate = `/events/list/${slug_subcategory}/${id_post}`;
                     } else {
                         urlNavigate = `events/categories`;
                     }
                     console.log('case urlNavigate EVENTS_SLUG', urlNavigate)
                     break;
                 case CONFIG.SOCIAL_PROBLEMS_SLUG: // caso posts problema social
-                    if (post.subcategory) {
-                        urlNavigate = `/social-problems/list/${post.subcategory.slug}/${post.id}`;
+                    if (slug_subcategory) {
+                        urlNavigate = `/social-problems/list/${slug_subcategory}/${id_post}`;
                     } else {
                         urlNavigate = `/social-problems/categories`;
                     }
                     console.log('case urlNavigate SOCIAL_PROBLEMS_SLUG', urlNavigate)
                     break;
                 case CONFIG.REPORTS_SLUG: //caso reporte o informe
-                    urlNavigate = `/reports/list/${post.id}`;
+                    urlNavigate = `/reports/list/${id_post}`;
                     console.log('case urlNavigate REPORTS_SLUG', urlNavigate)
                     break;
                 default:

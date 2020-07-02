@@ -135,6 +135,8 @@ export interface IPost {
     reactions?: IReaction[],
     images?: I_ImagesApi[];
     imagesArr: string[];
+    subcategory_slug?: string;
+    category_slug?: string;
 }
 
 export interface IEmergency extends IPost {
@@ -297,6 +299,8 @@ export interface INotificationApi {
     updated_at: string;
 }
 
+
+
 export interface INotiList {
     title?: string;
     message?: string;
@@ -305,6 +309,8 @@ export interface INotiList {
     notification_user?: INotificationUser;
     post?: IPost;
     action?: string;
+    category_slug?: string;
+    subcategory_slug?: string;
 }
 
 export interface INotificationUser extends IUser {

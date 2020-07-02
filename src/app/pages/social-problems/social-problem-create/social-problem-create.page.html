@@ -19,6 +19,9 @@
                         *ngIf="socialProblemForm.get('title').hasError('required') && socialProblemForm.get('title').touched">
                         {{errorMessages.title.required.message}}
                     </p>
+                    <p class="form-error"
+                    *ngIf="socialProblemForm.get('description').hasError('required') && socialProblemForm.get('description').touched">
+                    {{errorMessages.title.maxlength.message}}
                 </div>
                 <div class="item-form full">
                     <ion-item class="input_item" lines="none">
@@ -32,6 +35,10 @@
                     <p class="form-error"
                         *ngIf="socialProblemForm.get('description').hasError('required') && socialProblemForm.get('description').touched">
                         {{errorMessages.description.required.message}}
+                    </p>
+                    <p class="form-error"
+                        *ngIf="socialProblemForm.get('description').hasError('maxlength') && socialProblemForm.get('description').touched">
+                        {{errorMessages.description.maxlength.message}}
                     </p>
                 </div>
 

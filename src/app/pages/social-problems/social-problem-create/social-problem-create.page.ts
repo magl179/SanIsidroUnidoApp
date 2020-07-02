@@ -81,13 +81,16 @@ export class SocialProblemCreatePage implements OnInit {
     createForm(): void {
         const validations = this.localDataService.getFormValidations();
         const title = new FormControl('', Validators.compose([
-            Validators.required
+            Validators.required,
+            Validators.maxLength(validations.title.maxlength)
         ]));
         const description = new FormControl('', Validators.compose([
-            Validators.required
+            Validators.required,
+            Validators.maxLength(validations.description.maxlength)
         ]));
         const description_ubication = new FormControl('', Validators.compose([
-            Validators.required
+            Validators.required,
+            Validators.maxLength(validations.ubication.description.maxlength)
         ]));
         const subcategory = new FormControl('', Validators.compose([
             Validators.required

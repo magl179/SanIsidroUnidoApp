@@ -68,12 +68,15 @@ export class EmergencyCreatePage implements OnInit {
         const validations = this.localDataService.getFormValidations();
         const title = new FormControl('', Validators.compose([
             Validators.required,
+            Validators.maxLength(validations.title.maxlength)
         ]));
         const description = new FormControl('', Validators.compose([
             Validators.required,
+            Validators.maxLength(validations.description.maxlength)
         ]));
         const description_ubication = new FormControl('', Validators.compose([
             Validators.required,
+            Validators.maxLength(validations.ubication.description.maxlength)
         ]));
 
         this.emergencyForm = this.formBuilder.group({ title, description });

@@ -8,11 +8,13 @@ import { UserAuthenticatedGuard } from 'src/app/guards/user-authenticated.guard'
 import { UserHasRoleGuard } from 'src/app/guards/user-has-role.guard';
 import { CONFIG } from 'src/config/config';
 import { DirectivesModule } from 'src/app/directives/directives.module';
+import { UserHasRoleMoradorGuard } from 'src/app/guards/user-has-role-morador.guard';
 
 const routes: Routes = [
     {
         path: '',
         component: EmergenciesPage,
+        canLoad: [],
         children: [
             {
                 path: 'list/:id',
@@ -22,7 +24,7 @@ const routes: Routes = [
             {
                 path: 'create',
                 loadChildren: './emergency-create/emergency-create.module#EmergencyCreatePageModule',
-                canLoad: [UserAuthenticatedGuard, UserHasRoleGuard]
+                canLoad: [UserAuthenticatedGuard]
             },
             {
                 path: 'list',

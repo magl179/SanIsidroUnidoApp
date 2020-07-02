@@ -166,7 +166,6 @@ export class LoginPage implements OnInit {
             }
 
             const user = this.socialDataService.getGoogleDataMapped(googleData);
-            const { social_id, email } = user;
             //Añadir informacion dispositivo
             const device = await this.notificationsService.getOneSignalIDSubscriptor();
             user.device = device;

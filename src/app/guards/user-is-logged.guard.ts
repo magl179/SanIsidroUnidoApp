@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanLoad, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { NavController } from '@ionic/angular';
+import { CONFIG } from 'src/config/config';
 
 @Injectable({
     providedIn: 'root'
@@ -21,7 +22,7 @@ export class UserIsLoggedGuard implements CanLoad {
         if (!tokenDecoded) {
             return true;
         } else {
-            this.navCtrl.navigateBack(`/home-list`)
+            this.navCtrl.navigateBack(`/${CONFIG.HOME_ROUTE}`)
             return false;
         }
     }

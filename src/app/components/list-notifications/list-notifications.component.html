@@ -34,9 +34,12 @@
              </ion-avatar>
              
              <ion-label class="notifications_description">
-                 <h3 class="author" *ngIf="noti.data.notification_user">
-                     {{ noti.data.notification_user.first_name}} {{noti.data.notification_user.last_name}}
+                 <h3 class="title" *ngIf="noti.data">
+                     {{ noti.data.title}}
                  </h3>
+                 <!-- <h3 class="author" *ngIf="noti.data.notification_user">
+                     {{ noti.data.notification_user.first_name}} {{noti.data.notification_user.last_name}}
+                 </h3> -->
                  <p class="description ion-text-wrap">
                      {{ (noti.data.description) ? noti.data.description : 'No hay una descripción disponible'}}
                  </p>

@@ -10,7 +10,7 @@ import { ITokenDecoded } from '../interfaces/models';
 @Injectable({
     providedIn: 'root'
 })
-export class UserHasRoleGuard implements CanLoad {
+export class UserHasRolePoliciaGuard implements CanLoad {
 
     constructor(
         private navCtrl: NavController,
@@ -20,7 +20,8 @@ export class UserHasRoleGuard implements CanLoad {
     async canLoad(): Promise<boolean> {
         const tokenDecoded: ITokenDecoded = await this.authService.getTokenUserAuthenticated();
         const roles = getUserRoles(tokenDecoded);
-        const hasRole = hasRoles(roles, CONFIG.ALLOWED_ROLES_REPORT);
+        const hasRole = hasRoles(roles, ['policia']);
+        console.log('user has role policia', hasRole);
         if (hasRole) {
             return true;
         } else {
