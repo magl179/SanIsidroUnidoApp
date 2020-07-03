@@ -60,7 +60,10 @@ export class LocalizationService {
         return new Promise(async(resolve) => {
             await this.diagnostic.isLocationEnabled()
             .then((enabled)=>resolve(enabled))
-            .catch(()=>resolve(false));
+                .catch(() => {
+                    this.messageService.showWarning('Por favor activa tu GPS');
+                    resolve(false)
+            });
         });
     }
 
@@ -98,7 +101,7 @@ export class LocalizationService {
                         reject(error_coords);
                     });
                 }else{
-                    this.messageService.showInfo("No hay navigator geolocation");
+                    this.messageService.showInfo("tu dispositivo no tiene disponible la geolocalizacion");
                     return resolve(null);
                 }
             }
