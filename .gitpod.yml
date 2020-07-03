@@ -1,2 +1,23 @@
 ports:
   - port: 8100
+tasks:
+  - init: npm && npm install -g @angular/cli && npm install -g @ionic/cli && npm install  
+    command: ionic serve --prod
+github:
+  prebuilds:
+    # enable for the master/default branch (defaults to true)
+    master: false
+    # enable for all branches in this repo (defaults to false)
+    branches: true
+    # enable for pull requests coming from this repo (defaults to true)
+    pullRequests: false
+    # enable for pull requests coming from forks (defaults to false)
+    pullRequestsFromForks: false
+    # add a check to pull requests (defaults to true)
+    addCheck: true
+    # add a "Review in Gitpod" button as a comment to pull requests (defaults to false)
+    addComment: true
+    # add a "Review in Gitpod" button to the pull request's description (defaults to false)
+    addBadge: false
+    # add a label once the prebuild is ready to pull requests (defaults to false)
+    addLabel: false
