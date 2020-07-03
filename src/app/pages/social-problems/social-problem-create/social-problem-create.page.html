@@ -138,7 +138,7 @@
             <p class="preview-text">
                 Categoria: {{ (subcategoryName) ? subcategoryName: 'No has escogido categoria'}}
             </p>
-            <h5 class="ion-padding ion-text-center">
+            <h5 class="ion-padding ion-text-center" *ngIf="socialProblemForm.valid && ubicationForm.valid && socialProblemCoordinate.address && socialProblemImages.length > 0">
                 Listo, ahora ya puedes enviar tu reporte
             </h5>
             <h3>{{socialProblemForm.get('title').value || 'Ingresa un Titulo'}}</h3>

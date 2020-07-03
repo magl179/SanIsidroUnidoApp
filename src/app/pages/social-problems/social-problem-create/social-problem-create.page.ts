@@ -141,10 +141,18 @@ export class SocialProblemCreatePage implements OnInit {
             })
         ).subscribe(() => {
             this.messageService.showSuccess("Reporte enviado correctamente, cuando sea aprobado lo podrás visualizar en el listado");
-            this.formSended = true;
             //Ejecutar la deteccion de cambios de Angular de forma manual
-            this.cdRef.detectChanges();
+           
             const social_problem_subcategory = this.getSubcategoryById(this.socialProblemForm.value.subcategory);
+
+              //Resetear datos al enviar
+            this.socialProblemForm.reset();
+            this.ubicationForm.reset();
+            this.socialProblemImages = [];
+            this.socialProblemCoordinate.address = null;
+            this.formSended = false;
+            this.cdRef.detectChanges();
+            
             if (social_problem_subcategory && social_problem_subcategory.length > 0) {
                 setTimeout(() => {
                     this.navCtrl.navigateRoot(`/social-problems/list/${social_problem_subcategory[0]}`);

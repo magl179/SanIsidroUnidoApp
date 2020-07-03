@@ -164,9 +164,17 @@ export class EmergencyCreatePage implements OnInit {
             })
         ).subscribe(() => {
             this.messageService.showSuccess("Reporte enviado correctamente, cuando sea aprobado lo podrás visualizar en el listado");
-            this.formSended = true;
+          
             this.events_app.resetEmergenciesEmitter();
             this.cdRef.detectChanges();
+
+            //Resetear datos al enviar
+            this.emergencyForm.reset();
+            this.ubicationForm.reset();
+            this.emergencyImages = [];
+            this.emergencyPostCoordinate.address = null;
+            this.formSended = false;
+
             setTimeout(() => {
                 this.navCtrl.navigateRoot(`/emergencies/list`);
             }, 1000);

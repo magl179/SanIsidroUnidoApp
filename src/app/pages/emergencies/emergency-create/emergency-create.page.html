@@ -122,7 +122,7 @@
         </mat-step>
         <!-- Paso Final -->
         <mat-step>
-            <h5 class="ion-padding ion-text-center">
+            <h5 class="ion-padding ion-text-center" *ngIf="emergencyForm.valid && ubicationForm.valid && emergencyPostCoordinate.address && emergencyImages.length > 0">
                 Listo, ahora ya puedes enviar tu reporte
             </h5>
             <h3>{{emergencyForm.get('title').value || 'Ingresa un Titulo'}}</h3>
