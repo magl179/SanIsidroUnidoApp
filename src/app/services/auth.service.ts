@@ -36,17 +36,14 @@ export class AuthService implements OnDestroy{
     ) {
 
         // this.storage.
-        this.storage.ready().then(() => {
-            this.getTokenandUserLS().then(res=>{
-                console.log('then data', res)
-            });
+        this.storage.ready().then(async() => {
+            await this.getTokenandUserLS();
         });
     }
 
     ngOnDestroy() {
         this.unsubscribe.next();
         this.unsubscribe.complete();
-        console.log('auth service on destroy')
     }
 
     // ngOnInit

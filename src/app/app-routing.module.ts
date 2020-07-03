@@ -34,12 +34,12 @@ const routes: Routes = [
     {
         path: 'home-list', //Pantalla Home Items Menu App
         loadChildren: './pages/home-list/home-list.module#HomeListPageModule',
-        canLoad: [UserAuthenticatedGuard]
+        canLoad: []
     },
     {
         path: 'home-screen', //Pantalla Slider al Inicio App
         loadChildren: './pages/home-screen/home-screen.module#HomeScreenPageModule',
-        canLoad: [UserIsLoggedGuard]
+        canLoad: []
     },
     {
         path: 'login', //Pantalla de Login

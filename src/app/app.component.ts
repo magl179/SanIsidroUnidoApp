@@ -46,11 +46,7 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit(): void { }
-
-    // getMenuOptions():void {
-    //     this.menuComponents = MENU_ITEMS_APP
-    // }
-
+ 
     initializeApp() {
         this.platform.ready().then(async () => {
             if (this.platform.is('cordova')) {
@@ -58,7 +54,7 @@ export class AppComponent implements OnInit {
                 this.splashScreen.hide();
             }
 
-            this.checkUserLoggedIn();
+            await this.checkUserLoggedIn();
             timer(500).subscribe(async () => {
                 await this.pushNotificationService.initialConfig();
             });
