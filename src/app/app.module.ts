@@ -51,24 +51,25 @@ import { WebView } from '@ionic-native/ionic-webview/ngx';
     entryComponents: [PopNotificationsComponent, ShowListNotificationsPage, ImageDetailPage],
     imports: [
         BrowserModule,
+        IonicModule.forRoot(),
+        HttpClientModule,
+        IonicStorageModule.forRoot(),
         ToastrModule.forRoot({
             positionClass: 'toast-bottom-right',
             preventDuplicates: true,
             timeOut: 1800,
         }),      
         BrowserAnimationsModule,
-        IonicModule.forRoot(),
         AppRoutingModule,
-        HttpClientModule,
         SmComponentsModule,
         ReactiveFormsModule,
-        IonicStorageModule.forRoot(),
         ShowListNotificationsPageModule,
         PipesModule,
         DirectivesModule,
         ImageDetailPageModule
     ],
     providers: [
+        AuthService,
         StatusBar,
         SplashScreen,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
@@ -94,8 +95,7 @@ import { WebView } from '@ionic-native/ionic-webview/ngx';
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptorService,
             multi: true
-        },
-        AuthService
+        }
     ],
     bootstrap: [AppComponent]
 })

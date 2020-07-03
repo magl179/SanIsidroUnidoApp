@@ -32,18 +32,15 @@
      <!-- Problemas Sociales Searchbar -->
      <ion-searchbar mode="ios" type="text" placeholder="Buscar Emergencias" [animated]="true"
      [formControl]="emergencyControl"></ion-searchbar>
-    <!--<div class="loading-app" *ngIf="searchingEmergencies">
-        <loader-app class="flex-column-center" message="Buscando..."></loader-app>
-    </div> -->
     <!-- Mensaje cuando no hay datos disponibles-->
-    <app-no-results-found class="ion-padding" *ngIf="showNotFound && emergenciesFiltered.length === 0"
+    <app-no-results-found class="ion-padding" *ngIf="requestStatus == 'not-found'"
         message="No existen emergencias disponibles"></app-no-results-found>
     <!-- Tarjetas de Animacion mientras se cargan los datos-->
-    <div class="loading-app" *ngIf="showloading">
+    <div class="loading-app" *ngIf="requestStatus == 'loading'">
         <loader-app class="flex-column-center"></loader-app>
     </div>
     <!-- Posts con Datos -->
-    <div *ngIf="!showloading  && emergenciesFiltered.length > 0" [@listAnimation]>
+    <div *ngIf="emergenciesFiltered.length > 0" [@listAnimation]>
         <!-- Posts Filtrados con Datos -->
         <ion-card class="emergency" *ngFor="let emergency of emergenciesFiltered; let i = index;">
             <div class="post_cover" *ngIf="emergency.imagesArr && emergency.imagesArr.length > 0">

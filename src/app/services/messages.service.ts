@@ -20,7 +20,7 @@ export class MessagesService {
   showPersistenceNoti(message: string, title = ''){
     return this.toastr.info(message, title, {
         closeButton: true,
-        timeOut: 90000,
+        timeOut: 9000,
         positionClass: 'toast-top-right',
         tapToDismiss: false
     });

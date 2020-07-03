@@ -28,7 +28,8 @@
             <p style="display:block;font-weight: bold;">Horario Atención:</p>
             <p
                 *ngIf="publicServiceDetail.public_opening && publicServiceDetail.public_opening.open_time && publicServiceDetail.public_opening.close_time; else sinHorarioAtencion">
-                {{  publicServiceDetail.public_opening.open_time }} - {{ publicServiceDetail.public_opening.close_time }}
+                {{  publicServiceDetail.public_opening.open_time }} -
+                {{ publicServiceDetail.public_opening.close_time }}
             </p>
             <ng-template #sinHorarioAtencion>
                 <p>No disponible</p>
@@ -48,5 +49,7 @@
             id="public-service-map-detail-{{id}}" [destinationCoords]="publicServiceDetail.ubication"
             [usePolyline]="false" (mapEvent)="manageMapEvent($event)" [enableGesture]="true"
             [currentCoordinate]="currentPosition"></simple-routing-map>
+        <p style="display:block;font-weight: bold;">Ubicación Referencia:</p>
+        <p *ngIf="publicServiceDetail.ubication">{{publicServiceDetail.ubication.description}}</p>
     </div>
 </ion-content>

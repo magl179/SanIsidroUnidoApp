@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { Observable, BehaviorSubject, from, Subject } from 'rxjs';
+import { Observable, BehaviorSubject, from, Subject, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IRegisterUser, ITokenDecoded } from 'src/app/interfaces/models';
 import { HttpRequestService } from "./http-request.service";
@@ -35,8 +35,11 @@ export class AuthService implements OnDestroy{
         private messageService: MessagesService
     ) {
 
-        this.storage.ready().then(async () => {
-            await this.getTokenandUserLS();
+        // this.storage.
+        this.storage.ready().then(() => {
+            this.getTokenandUserLS().then(res=>{
+                console.log('then data', res)
+            });
         });
     }
 

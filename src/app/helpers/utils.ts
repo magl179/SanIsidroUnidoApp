@@ -174,7 +174,7 @@ export const MapNotification = (notification) => {
     if (notification && notification.data && notification.data.notification_user) {
         notification.data.notification_user = mapUser(notification.data.notification_user);
     }
-    if(notification && notification.data && notification.data.neighbor){
+    if (notification && notification.data && notification.data.neighbor) {
         notification.data.notification_user = mapUser(notification.data.neighbor);
     }
     // notification.data.action = 'logout';
@@ -269,6 +269,13 @@ export const mapReport = (report: any) => {
     }
 
     return report;
+}
+
+export const closeModalsOpened = () => {
+    var modals = document.getElementsByTagName("ion-modal");
+    [].forEach.call(modals, function (el: any) {
+        el.parentNode.removeChild(el);
+    });
 }
 
 export const mapSocialProblem = (social_problem: any) => {
@@ -430,7 +437,7 @@ export const resolveApiError = (error: any): string => {
             } else {
                 return resolveApiError(value);
             }
-         }
+        }
     } else {
         return error;
     }

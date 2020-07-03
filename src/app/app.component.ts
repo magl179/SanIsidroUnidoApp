@@ -9,9 +9,9 @@ import { AuthService } from './services/auth.service';
 import { NotificationsService } from './services/notifications.service';
 import { NetworkService } from 'src/app/services/network.service';
 import { mapUser } from "./helpers/utils";
-import { map, tap, concatMap, mergeAll, pluck, catchError} from 'rxjs/operators';
+import { map, tap, concatMap, mergeAll, pluck, catchError, skip } from 'rxjs/operators';
 import { MessagesService } from './services/messages.service';
-import { MENU_ITEMS_APP} from 'src/app/config/menu';
+import { MENU_ITEMS_APP } from 'src/app/config/menu';
 import { environment } from 'src/environments/environment';
 import { UserService } from './services/user.service';
 
@@ -22,20 +22,17 @@ import { UserService } from './services/user.service';
 })
 export class AppComponent implements OnInit {
 
-    showAppsplash = true;
     isConnected = false;
-    menuComponents: IMenuOptions;
+    menuComponents: IMenuOptions = MENU_ITEMS_APP;
     automaticClose = true;
     sessionAuth: ITokenDecoded = null;
 
     constructor(
+        private authService: AuthService,
         private platform: Platform,
         private splashScreen: SplashScreen,
         private statusBar: StatusBar,
-        private navCtrl: NavController,
         private alertController: AlertController,
-        private userService: UserService,
-        private authService: AuthService,
         private menuCtrl: MenuController,
         private pushNotificationService: NotificationsService,
         private networkService: NetworkService,
@@ -48,36 +45,29 @@ export class AppComponent implements OnInit {
         event.target.src = 'assets/img/default/img_avatar.png'
     }
 
-    ngOnInit():void { }
+    ngOnInit(): void { }
 
-    getMenuOptions():void {
-        this.menuComponents = MENU_ITEMS_APP
-    }
+    // getMenuOptions():void {
+    //     this.menuComponents = MENU_ITEMS_APP
+    // }
 
     initializeApp() {
         this.platform.ready().then(async () => {
-            
-            await this.checkInitialStateNetwork();
             if (this.platform.is('cordova')) {
                 this.statusBar.styleDefault();
                 this.splashScreen.hide();
             }
-            await this.checkUserLoggedIn();
-            this.getMenuOptions();
-            this.showAppsplash = false;
-            timer(1000).subscribe(async () => {
+
+            this.checkUserLoggedIn();
+            timer(500).subscribe(async () => {
                 await this.pushNotificationService.initialConfig();
             });
-            //Redirigir con sesión iniciada
-            //const tokenExists = await this.authService.isAuthenticated();
-            /*if(tokenExists && environment.production){
-                this.navCtrl.navigateRoot(`/home-list`)
-            }*/
         });
     }
-    
-    async checkUserLoggedIn() {
+
+    checkUserLoggedIn() {
         this.authService.sessionAuthUser.pipe(
+            skip(1),
             map((token_decoded: ITokenDecoded) => {
                 if (token_decoded && token_decoded.user) {
                     token_decoded.user = mapUser(token_decoded.user);
@@ -90,9 +80,9 @@ export class AppComponent implements OnInit {
             if (token_decoded) {
                 this.authService.checkValidToken();
                 const login_method = await this.authService.getMethodLogin();
-                const email_verified_at = (this.sessionAuth && this.sessionAuth.user) ?this.sessionAuth && this.sessionAuth.user.email_verified_at: null;
-    
-                if((email_verified_at == "" || email_verified_at == null && login_method == 'formulario')){
+                const email_verified_at = (this.sessionAuth && this.sessionAuth.user) ? this.sessionAuth && this.sessionAuth.user.email_verified_at : null;
+
+                if ((email_verified_at == "" || email_verified_at == null && login_method == 'formulario')) {
                     this.messageService.showPersistenceNoti('Por favor verifica tu correo');
                 }
             }
@@ -153,12 +143,16 @@ export class AppComponent implements OnInit {
     }
 
     async checkInitialStateNetwork() {
-        this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
-            this.isConnected = connected;
-            if (!this.isConnected) {
-                this.messageService.showInfo('Por favor enciende tu conexión a Internet');
-            }
-        });
+        this.networkService.getNetworkStatus()
+            // .pipe(
+            //     takeUntil(this.unsubscribe)
+            // )
+            .subscribe((connected: boolean) => {
+                this.isConnected = connected;
+                if (!this.isConnected) {
+                    this.messageService.showInfo('Por favor enciende tu conexión a Internet');
+                }
+            });
     }
 
 }

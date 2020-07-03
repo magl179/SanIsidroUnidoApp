@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Platform, NavController } from '@ionic/angular';
 import { UserService } from './user.service';
 import { AuthService } from './auth.service';
-import { IDeviceUser, INotiList } from 'src/app/interfaces/models';
+import { IDeviceUser, INotiList, ITokenDecoded } from 'src/app/interfaces/models';
 import { Device } from '@ionic-native/device/ngx';
 import { CONFIG } from 'src/config/config';
 import { MessagesService } from './messages.service';
@@ -14,6 +14,8 @@ import { Storage } from '@ionic/storage'
 import { Router } from '@angular/router';
 import { EventsService } from './events.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { closeModalsOpened } from '../helpers/utils';
+import { getUserRoles, hasRoles } from '../helpers/user-helper';
 
 const USER_DEVICE_ID_STORAGE = "siuDevice";
 
@@ -74,14 +76,14 @@ export class NotificationsService implements OnInit {
             this.oneSignal.handleNotificationOpened().subscribe(async (myNotification) => {
                 console.log('myNotification opened', myNotification);
                 await this.manageNotificationOpened(myNotification.notification);
-            });           
+            });
             //Función acabar la configuración de Onesignal
             this.oneSignal.endInit();
             // Obtener el ID De Subscriptor de este dispositivo
             this.getOneSignalIDSubscriptor();
         }
     }
-    
+
     //Guardar ID Dispositivo en el Storage
     async saveDeviceInfo(device_id: string) {
         this.storage.set(USER_DEVICE_ID_STORAGE, device_id);
@@ -141,22 +143,22 @@ export class NotificationsService implements OnInit {
         }
     }
 
-    setEmailOnesignal(email: string){
+    setEmailOnesignal(email: string) {
         if (this.platform.is('cordova')) {
             this.oneSignal.setEmail(email);
         }
     }
-    logOutEmailOnesignal(){
+    logOutEmailOnesignal() {
         if (this.platform.is('cordova')) {
             this.oneSignal.logoutEmail();
         }
     }
 
-    toggleOnesignalSubscription(){
+    toggleOnesignalSubscription() {
         this.onesignalSubscription = !this.onesignalSubscription;
-        if(this.onesignalSubscription){
+        if (this.onesignalSubscription) {
             this.messageService.showSuccess('Te has suscrito a las notificaciones :)');
-        }else{
+        } else {
             this.messageService.showWarning('Te has desuscrito a las notificaciones :(');
         }
         this.oneSignal.setSubscription(this.onesignalSubscription);
@@ -169,7 +171,7 @@ export class NotificationsService implements OnInit {
         }
     }
 
-    logoutDeviceApi(deviceID){
+    logoutDeviceApi(deviceID) {
         if (deviceID) {
             this.userService.sendRequestDeleteUserPhoneDevice(deviceID).subscribe(() => {
                 this.messageService.showSuccess('Dispositivo Desuscrito Correctamente');
@@ -183,7 +185,7 @@ export class NotificationsService implements OnInit {
     // Función para Obtener ID de Suscriptor de Onesignal
     async getOneSignalIDSubscriptor() {
         //Pedir acceso a notificaciones, en caso de no tenerlas
-        if(this.platform.is('cordova')){
+        if (this.platform.is('cordova')) {
             // this.oneSignal.provideUserConsent(true);
             const deviceID = await this.oneSignal.getIds();
             const userDevice: IDeviceUser = {
@@ -196,7 +198,7 @@ export class NotificationsService implements OnInit {
             };
             this.userDevice.next(userDevice);
             return userDevice;
-        }else{
+        } else {
             return null;
         }
     }
@@ -208,31 +210,39 @@ export class NotificationsService implements OnInit {
     async manageNotificationOpened(appNotification: OSNotification) {
         //Verificar si recibe data adicional
         const aditionalData = appNotification.payload.additionalData;
-       
+
         console.log('notification data opened', aditionalData)
         await this.manageAppNotification(aditionalData);
     }
 
     async manageAppNotification(aditionalData: INotiList) {
         //Verificar si tengo dato posts  
-        console.log('noti service data', aditionalData)     
+        console.log('noti service data', aditionalData)
         this.managePostNotification(aditionalData);
-        
+
     }
     async managePostNotification(aditionalDataPost: INotiList) {
-        const post = (aditionalDataPost) ? aditionalDataPost.post: null;
+        const post = (aditionalDataPost) ? aditionalDataPost.post : null;
         var urlNavigate = null;
-        console.log('managePostNotification', aditionalDataPost, post)
-        if (post && post.id && post.category_slug) {
-            if(environment.production){
-                this.messageService.showInfo('Procesando notificacion ...')
-            }
+        console.log('managePostNotification', aditionalDataPost, post);
+
+
+        const category = (post && post.category_slug) ? post.category_slug : (post && post.category) ? post.category.slug : '';
+        const subcategory = (post && post.subcategory_slug) ? post.subcategory_slug : (post && post.subcategory) ? post.subcategory.slug : '';
+
+        const id_post = (post) ? post.id : null;
+        const slug_category = (category) ? category.toLowerCase() : '';
+        const slug_subcategory = (subcategory) ? subcategory.toLowerCase() : '';
+
+        if (post && id_post && slug_category) {
             //Switch de Opciones segun el slug del posts
-            const id_post = post.id;
-            const slug_category = post.category_slug.toLowerCase();
-            const slug_subcategory = post.subcategory_slug.toLowerCase();
+
+            console.log('id_post', id_post)
+            console.log('slug_category', slug_category)
+            console.log('slug_category', slug_category)
+
             console.log('switch case slug', slug_category)
-            switch(slug_category) {
+            switch (slug_category) {
                 case CONFIG.EMERGENCIES_SLUG: //caso posts emergencia creado
                     urlNavigate = `/emergencies/list/${id_post}`;
                     console.log('case urlNavigate EMERGENCIES_SLUG', urlNavigate)
@@ -264,6 +274,7 @@ export class NotificationsService implements OnInit {
             }
             console.log('urlNavigate', urlNavigate)
             if (urlNavigate) {
+                closeModalsOpened();
                 setTimeout(() => {
                     this.navCtrl.navigateForward(urlNavigate);
                 }, 700);
@@ -272,9 +283,19 @@ export class NotificationsService implements OnInit {
 
 
         const accion = aditionalDataPost.action;
-        switch(accion){
-            case 'logout': 
-                this.authService.logout();
+
+
+
+        switch (accion) {
+            case 'logout':
+                let tokenDecoded: ITokenDecoded = await this.authService.getTokenUserAuthenticated();
+                let roles = getUserRoles(tokenDecoded);
+                let hasRoleInvitado = hasRoles(roles, ['invitado']);
+                closeModalsOpened();
+                console.log('hasRoleInvitado', hasRoleInvitado)
+                if (hasRoleInvitado) {
+                    this.authService.logout();
+                }           
             default:
                 console.log('no action')
         }

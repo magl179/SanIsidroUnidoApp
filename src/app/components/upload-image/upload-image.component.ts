@@ -7,11 +7,11 @@ import { CONFIG } from 'src/config/config';
 import { IUploadedImages, ICustomEvent, IProgressEvent } from 'src/app/interfaces/models';
 
 let cameraOptions: CameraOptions = {
-    quality: 70,
+    quality: 60,
     correctOrientation: true,
     saveToPhotoAlbum: false,
-    targetWidth: 900,
-    targetHeight: 900,
+    targetWidth: 300,
+    targetHeight: 300,
 };
 
 @Component({

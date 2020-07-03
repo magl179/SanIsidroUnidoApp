@@ -115,11 +115,11 @@ export class RequestMembershipPage implements OnInit {
             const token_decoded = decodeToken(token);
             this.authService.saveUserInfo(token, token_decoded);
             this.authService.saveLocalStorageInfo(token, token_decoded);
-            this.messageService.showSuccess("Solicitud Enviada Correctamente");
+            this.messageService.showSuccess(res.message);
             this.formSended = true;
             setTimeout(() => {
                 this.closeModal();
-            }, 100);
+            }, 150);
         }, (error_http: HttpErrorResponse) => {
             this.errorService.manageHttpError(error_http, 'La solicitud no ha podido ser enviada');
         });
