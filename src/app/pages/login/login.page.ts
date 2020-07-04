@@ -89,7 +89,8 @@ export class LoginPage implements OnInit {
         const device = await this.notificationsService.getOneSignalIDSubscriptor();
         loginData.device = device;
         //Funcion Login
-        this.authService.login(loginData).pipe(
+        this.authService.login(loginData)
+        .pipe(
             finalize(() => {
                 loadingLoginValidation.dismiss()
             })

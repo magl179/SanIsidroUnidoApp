@@ -95,7 +95,6 @@ export class SocialDataService {
     async loginByFacebook(): Promise<IFacebookApiUser> {
         if (this.platform.is('cordova')) {
             const permisos = ['public_profile', 'email'];
-
             const respuestaLogin: FacebookLoginResponse = await this.facebook.login(permisos);
             const userId = respuestaLogin.authResponse.userID;
             const accessToken = respuestaLogin.authResponse.accessToken;

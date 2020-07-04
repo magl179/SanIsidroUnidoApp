@@ -39,7 +39,7 @@ const routes: Routes = [
     {
         path: 'home-screen', //Pantalla Slider al Inicio App
         loadChildren: './pages/home-screen/home-screen.module#HomeScreenPageModule',
-        canLoad: []
+        canLoad: [UserIsLoggedGuard]
     },
     {
         path: 'login', //Pantalla de Login

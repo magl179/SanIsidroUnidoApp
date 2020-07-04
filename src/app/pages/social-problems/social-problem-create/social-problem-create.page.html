@@ -42,7 +42,7 @@
                     </p>
                 </div>
 
-                <div class="item-form padding-top" *ngIf="subcategories.length > 0">
+                <div class="item-form padding-top" *ngIf="subcategories.length > 0; else noCategoriasDisponibles">
                     <ion-item lines="none" class="small-font">
                         <ion-label class="label-padding">Categoria *</ion-label>
                         <ion-select formControlName="subcategory" placeholder="Escoge una categoría"
@@ -53,6 +53,11 @@
                         </ion-select>
                     </ion-item>
                 </div>
+                <ng-template #noCategoriasDisponibles>
+                    <div class="no-categories">
+                        No hay categorias disponibles
+                    </div>
+                </ng-template>
                 <div class="form-errors padding-lateral">
                     <p class="form-error"
                         *ngIf="socialProblemForm.get('subcategory').hasError('required') && socialProblemForm.get('subcategory').touched">

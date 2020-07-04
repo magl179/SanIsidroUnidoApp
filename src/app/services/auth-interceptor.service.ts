@@ -17,6 +17,7 @@ import {
 } from "rxjs/operators";
 
 import { ErrorService } from "src/app/services/error.service";
+import { NetworkService } from './network.service';
 
 @Injectable({
     providedIn: "root"
@@ -28,6 +29,7 @@ export class AuthInterceptorService implements HttpInterceptor {
 
     constructor(
         private authService: AuthService,
+        private networkService: NetworkService,
         private errorService: ErrorService
     ) { }
 
@@ -35,23 +37,36 @@ export class AuthInterceptorService implements HttpInterceptor {
         req: HttpRequest<any>,
         next: HttpHandler
     ): Observable<HttpEvent<any>> {
+
         //Clonar la Request
         const request = req.clone();
-        //Manejar la Request
-        return next.handle(request).pipe(
-            this.http_retry(this.numIntentos),
-            map(data => {
-                return data;
-            }),
-            catchError((httpError: HttpErrorResponse) => {
-                of(async () => await this.errorService.handleError(httpError));
-                if (httpError.status === 401) {
-                    this.authService.logout();
-                }
 
-                return throwError(httpError);
-            })
-        );
+        const isOnline = this.networkService.getNetworkValue();
+        // Verificar la conexión de Internet
+        if (!isOnline) {
+            // Enviar una respuesta de error si no hay internet disponible
+            return Observable.throw(new HttpErrorResponse({ error: 'No hay una conexión a internet disponible' }));
+
+        } else {
+            //Manejar la Request
+            return next.handle(request).pipe(
+                this.http_retry(this.numIntentos),
+                map(data => {
+                    return data;
+                }),
+                catchError((httpError: HttpErrorResponse) => {
+                    of(async () => await this.errorService.handleError(httpError));
+                    if (httpError.status === 401) {
+                        this.authService.logout();
+                    }
+
+                    return throwError(httpError);
+                })
+            );
+        }
+
+
+
     }
 
     http_retry<T>(maxRetry: number = 2, delayMs: number = 2000) {
@@ -78,6 +93,6 @@ export class AuthInterceptorService implements HttpInterceptor {
     }
 
 
-    
+
 
 }

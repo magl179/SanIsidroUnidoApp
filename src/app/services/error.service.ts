@@ -34,12 +34,12 @@ export class ErrorService {
     }
     if (httpError && httpError.error instanceof Error) {
       // Verificar que el error HTTP ocurrio en el cliente
-      return await this.showHttpError(defaultMessage || "Ocurrio un error, intentalo más tarde");
+      return await this.showHttpError(defaultMessage || "Ha ocurrido un error, intentalo más tarde");
     } else {
       if (httpError && httpError.error && httpError.error.message) {
         return await this.showHttpError( httpError.error.message );
       } else {
-        return await this.showHttpError("Ocurrio un error en el servidor, intentalo más tarde");
+        return await this.showHttpError("Ha ocurrido un error, intentalo más tarde");
       }
     }
   }
