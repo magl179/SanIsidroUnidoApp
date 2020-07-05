@@ -39,7 +39,6 @@ export class HomeListPage implements OnInit {
                 this.sessionAuth = token_decoded;
             }
         });
-        //this.servicesList = HOME_OPTIONS;
         await this.utilsService.enableMenu();
     }
     

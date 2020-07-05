@@ -40,7 +40,7 @@
         <loader-app class="flex-column-center"></loader-app>
     </div>
     <!-- Posts con Datos -->
-    <div *ngIf="emergenciesFiltered.length > 0" [@listAnimation]>
+    <div *ngIf="requestStatus == '' && emergenciesFiltered.length > 0" [@listAnimation]>
         <!-- Posts Filtrados con Datos -->
         <ion-card class="emergency" *ngFor="let emergency of emergenciesFiltered; let i = index;">
             <div class="post_cover" *ngIf="emergency.imagesArr && emergency.imagesArr.length > 0">

@@ -12,20 +12,16 @@
      <!-- Eventos Searchbar -->
      <ion-searchbar mode="ios" type="text" placeholder="Buscar Eventos" [animated]="true"
      [formControl]="eventControl"></ion-searchbar>
-       <!-- Loading mientras se realiza la busqueda -->
-    <div class="loading-app" *ngIf="searchingEvents">
-        <loader-app class="flex-column-center" message="Buscando..."></loader-app>
-    </div>
     <!-- Mensaje si datos no cargan o son tamaño 0 -->
-    <app-no-results-found *ngIf="showNotFound && eventsFiltered.length === 0"
+    <app-no-results-found *ngIf="requestStatus == 'not-found'"
         message="No hay eventos disponibles"></app-no-results-found>
     <!-- Tarjetas Animacion hasta cargar datos-->
-     <div class="loading-app" *ngIf="showLoading">
+     <div class="loading-app" *ngIf="requestStatus == 'loading'">
         <loader-app class="flex-column-center"></loader-app>
     </div>
     
     <!-- Tarjeta Datos Cargados y Disponibles -->
-    <div *ngIf="!showLoading  && eventsFiltered.length > 0" [@listAnimation]>
+    <div *ngIf="requestStatus == '' && eventsFiltered.length > 0" [@listAnimation]>
         <ion-card class="event" *ngFor="let event of eventsFiltered; let i = index;">
             <div class="post_cover" *ngIf="event.imagesArr && event.imagesArr.length > 0">
                 <img class="img" [src]="event.imagesArr[0]" (error)="imgError($event)"/>

@@ -38,14 +38,12 @@ import { FormControl } from '@angular/forms';
 })
 export class EventsListPage implements OnInit, OnDestroy {
 
-    showLoading = true;
-    showNotFound = false;
+    requestStatus = '';
     eventsList: IEvent[] = [];
     eventsFiltered: IEvent[] = [];
     AuthUser = null;
     eventButtonMessage = CONFIG.EVENT_BUTTON_MESSAGE;
     eventControl: FormControl;
-    searchingEvents = false;
     subcategory: string;
 
     constructor(
@@ -105,7 +103,7 @@ export class EventsListPage implements OnInit, OnDestroy {
             .pipe(
                 distinctUntilChanged(),
                 tap(() => {
-                    this.searchingEvents = true;
+                    this.requestStatus = 'loading';
                 }),
                 map(search => ({
                     category: CONFIG.EVENTS_SLUG,
@@ -115,9 +113,13 @@ export class EventsListPage implements OnInit, OnDestroy {
                 exhaustMap(peticionHttpBusqueda),
             )
             .subscribe((data: IEvent[]) => {
-                this.showNotFound = (data.length == 0) ? true : false;
+                this.requestStatus = '';
                 this.eventsFiltered = [...data];
-                this.searchingEvents = false;
+                if(this.eventsFiltered.length == 0){
+                    this.requestStatus = 'not-found';
+                }else{
+                    this.requestStatus = '';
+                }
             });
     }
 
@@ -195,6 +197,7 @@ export class EventsListPage implements OnInit, OnDestroy {
     }
 
     loadEvents(event: IEventLoad = null, first_loading = false) {
+        this.requestStatus = 'loading';
         this.postsService.getPostsBySubCategory(CONFIG.EVENTS_SLUG, this.subcategory, {}, this.postsService.PaginationKeys.EVENTS_BY_SUBCATEGORY).pipe(
             map((res: IRespuestaApiSIUPaginada) => {
                 if (res && res.data) {
@@ -213,14 +216,6 @@ export class EventsListPage implements OnInit, OnDestroy {
                 this.errorService.manageHttpError(error_http, 'Ocurrio un error al traer el listado de eventos', false);
                 this.postsService.resetPaginationEmpty(this.postsService.PaginationKeys.EVENTS);
                 return of({ data: [] })
-            }),
-            finalize(() => {
-                if (first_loading) {
-                    this.showLoading = false;
-                }
-                if (first_loading && this.eventsList.length === 0) {
-                    this.showNotFound = true;
-                }
             })
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let eventsApi = [];
@@ -236,14 +231,29 @@ export class EventsListPage implements OnInit, OnDestroy {
             if (event && event.type === 'refresher') {
                 this.eventsList.unshift(...eventsApi);
                 this.eventsFiltered.unshift(...eventsApi);
+                if(this.eventsFiltered.length == 0){
+                    this.requestStatus = 'not-found';
+                }else{
+                    this.requestStatus = '';
+                }
                 return;
             } else if (event && event.type == 'infinite_scroll') {
                 this.eventsList.push(...eventsApi);
                 this.eventsFiltered.push(...eventsApi);
+                if(this.eventsFiltered.length == 0){
+                    this.requestStatus = 'not-found';
+                }else{
+                    this.requestStatus = '';
+                }
                 return;
             } else {
                 this.eventsList.push(...eventsApi);
                 this.eventsFiltered.push(...eventsApi);
+                if(this.eventsFiltered.length == 0){
+                    this.requestStatus = 'not-found';
+                }else{
+                    this.requestStatus = '';
+                }
                 return;
             }
         });

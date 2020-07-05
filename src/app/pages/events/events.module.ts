@@ -4,15 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { EventsPage } from './events.page';
-// import { CONFIG } from 'src/config/config';
 import { UserAuthenticatedGuard } from 'src/app/guards/user-authenticated.guard';
 
 const routes: Routes = [
     {
         path: '',
         component: EventsPage,
-        // loadChildren: "./events-categories/events-categories.module#EventsCategoriesPageModule",
-        // canLoad: [UserAuthenticatedGuard],
         children: [
             {
                 path: 'categories',

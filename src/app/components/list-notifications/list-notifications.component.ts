@@ -21,10 +21,8 @@ export class ListNotificationsComponent implements OnInit {
     @Input() maxNotifications = 0;
     notificationControl: FormControl;
     requestFinished = false;
-    // searchingNotifications = false;
     notificationsRequested: INotificationApi[] = [];
     notificationsList: INotificationApi[] = [];
-    // notificationsFilter: INotificationApi[] = [];
     segmentFilter$ = new BehaviorSubject(null);
     @Output() redireccion = new EventEmitter();
 
@@ -55,7 +53,6 @@ export class ListNotificationsComponent implements OnInit {
                 )
         }
 
-        // this.notificationControl.valueChanges
         combineLatest(
             this.notificationControl.valueChanges.pipe(startWith(''), distinctUntilChanged()),
             this.segmentFilter$.asObservable().pipe(distinctUntilChanged()),
@@ -129,7 +126,6 @@ export class ListNotificationsComponent implements OnInit {
             this.markNotificationAsReaded(noti.id);
         }
         if (noti && noti.data) {
-            console.log('manageAppNotification data', noti.data)
             this.redireccion.emit({redireccion: true});
             return this.notiService.manageAppNotification(noti.data);
         }

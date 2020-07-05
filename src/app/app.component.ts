@@ -53,9 +53,8 @@ export class AppComponent implements OnInit {
                 this.statusBar.styleDefault();
                 this.splashScreen.hide();
             }
-
             await this.checkUserLoggedIn();
-            timer(500).subscribe(async () => {
+            timer(1600).subscribe(async () => {
                 await this.pushNotificationService.initialConfig();
             });
         });
@@ -72,7 +71,6 @@ export class AppComponent implements OnInit {
             })
         ).subscribe(async token_decoded => {
             this.sessionAuth = token_decoded;
-            console.log('sessionAuth', this.sessionAuth);
             if (token_decoded) {
                 this.authService.checkValidToken();
                 const login_method = await this.authService.getMethodLogin();
@@ -140,9 +138,6 @@ export class AppComponent implements OnInit {
 
     async checkInitialStateNetwork() {
         this.networkService.getNetworkStatus()
-            // .pipe(
-            //     takeUntil(this.unsubscribe)
-            // )
             .subscribe((connected: boolean) => {
                 this.isConnected = connected;
                 if (!this.isConnected) {

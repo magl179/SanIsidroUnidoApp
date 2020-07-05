@@ -104,7 +104,6 @@ export class SocialDataService {
             }
             return profile
         } else {
-            // this.messageService.showError('La aplicación de facebook no esta disponible');
             const dumpPicture: IFacebookPicture = {
                 data: {
                     height: 150,
@@ -131,7 +130,6 @@ export class SocialDataService {
             const url = `me?fields=id,name,first_name,last_name,email,picture&access_token=${accessToken}`;
             const profile = await this.facebook.api(url, permisos);
             profile.image = `https://graph.facebook.com/${userId}/picture?type=large`;
-            // profile.email = 
             if (profile !== null) {
                 return profile;
             } else {

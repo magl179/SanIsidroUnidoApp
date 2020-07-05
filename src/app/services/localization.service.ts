@@ -67,8 +67,8 @@ export class LocalizationService {
         });
     }
 
-    getPositionNative() {
-        return this.geolocation.getCurrentPosition({});
+    async getPositionNative() {
+        return await this.geolocation.getCurrentPosition({});
     }
 
     async getCoordinates() {
@@ -80,8 +80,6 @@ export class LocalizationService {
             });
         });
     }
-
-
 
     async getLocationCoordinates() {
         return new Promise(async (resolve, reject) => {

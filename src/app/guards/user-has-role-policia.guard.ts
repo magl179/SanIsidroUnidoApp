@@ -21,7 +21,7 @@ export class UserHasRolePoliciaGuard implements CanLoad {
         const tokenDecoded: ITokenDecoded = await this.authService.getTokenUserAuthenticated();
         const roles = getUserRoles(tokenDecoded);
         const hasRole = hasRoles(roles, ['policia']);
-        console.log('user has role policia', hasRole);
+        
         if (hasRole) {
             return true;
         } else {

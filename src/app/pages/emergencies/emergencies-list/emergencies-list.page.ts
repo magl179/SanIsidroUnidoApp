@@ -118,14 +118,12 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
             if (this.allPosts) {
                 this.showSegment = false;
                 status_attendance = 'atendido';
-                console.log('todos los posts', status_attendance);
             } else {
                 this.showSegment = true;
             }
             if (this.allPosts && this.isPolicia) {
                 this.showSegment = false;
                 status_attendance = '';
-                console.log('is policia');
                 isPolice = 1;
                 active = null;
             }
@@ -133,7 +131,6 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
             if (!this.allPosts && !this.isPolicia) {
                 this.showSegment = true;
                 status_attendance = '';
-                console.log('no es todos los posts ni es policia');
             }
 
             if (this.allPosts) {
@@ -204,7 +201,6 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let emergenciesApi = [];
             emergenciesApi = res.data;
-            console.log('emergenciesApi', emergenciesApi)
            
             //Evento Completar
             if (event && event.data && event.data.target && event.data.target.complete) {

@@ -77,20 +77,20 @@
                             <span>Estado Atención:  {{ emergency.status_attendance | titlecase }}</span>
                         </p>
                         <p class="item-info"
-                            *ngIf="emergency.additional_data && emergency.additional_data.rechazed">
+                            *ngIf="emergency.additional_data && emergency.additional_data.rechazed && emergency.additional_data.rechazed.reason && emergency.additional_data.rechazed.reason != ''">
                             <span class="icon-people">
                                 <ion-icon name="list-box" class="social-problem-state"></ion-icon>
                             </span>
                             <span>Motivo del Rechazo: {{emergency.additional_data.rechazed.reason || 'No disponible'}} </span>
                         </p>
                         <p class="item-info"
-                            *ngIf="emergency.additional_data && emergency.additional_data.rechazed && emergency.additional_data.rechazed.who">
+                            *ngIf="emergency.additional_data && emergency.additional_data.rechazed && emergency.additional_data.rechazed.who && emergency.additional_data.rechazed.who != ''">
                             <span class="icon-people">
                                 <ion-icon name="list-box" class="social-problem-state"></ion-icon>
                             </span>
                             <span>Rechazado por: {{emergency.additional_data.rechazed.who.fullname}}</span>                            
                         </p>
-                        <p class="item-info" *ngIf="emergency.additional_data && emergency.additional_data.attended && emergency.additional_data.attended.who">
+                        <p class="item-info" *ngIf="emergency.additional_data && emergency.additional_data.attended && emergency.additional_data.attended.who && emergency.additional_data.attended.who != ''">
                             <span class="icon-people">
                                 <ion-icon name="list-box" class="social-problem-state"></ion-icon>
                             </span>

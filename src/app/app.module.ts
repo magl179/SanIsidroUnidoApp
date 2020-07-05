@@ -32,7 +32,7 @@ import { ShowListNotificationsPage } from './modals/show-list-notifications/show
 import { ShowListNotificationsPageModule } from './modals/show-list-notifications/show-list-notifications.module';
 import { PipesModule } from './pipes/pipes.module';
 import { DirectivesModule } from './directives/directives.module';
-// Interceptores
+
 import { AuthInterceptorService } from 'src/app/services/auth-interceptor.service';
 import { ImageDetailPage } from "./modals/image_detail/image_detail.page";
 import { ImageDetailPageModule } from './modals/image_detail/image_detail.module';

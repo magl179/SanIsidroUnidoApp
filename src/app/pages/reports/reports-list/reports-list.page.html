@@ -11,18 +11,18 @@
     <ion-searchbar mode="ios" type="text" placeholder="Buscar Actividades" [animated]="true"
         [formControl]="socialActivityControl"></ion-searchbar>
     <!-- Loading mientras se realiza la busqueda -->
-    <div class="loading-app" *ngIf="searchingActivities">
+    <!-- <div class="loading-app" *ngIf="requestStatus == 'loading'">
         <loader-app class="flex-column-center" message="Buscando..."></loader-app>
-    </div>
+    </div> -->
     <!-- Mensaje si falla traer datos o datos son 0 -->
-    <app-no-results-found *ngIf="showNotFound && reportsFiltered.length === 0" message="No hay reportes disponibles"
+    <app-no-results-found *ngIf="requestStatus == 'not-found'" message="No hay reportes disponibles"
         class="ion-padding"></app-no-results-found>
     <!-- Animación al cargar los datos -->
-    <div class="loading-app" *ngIf="showLoading">
+    <div class="loading-app" *ngIf="requestStatus == 'loading'">
         <loader-app class="flex-column-center"></loader-app>
     </div>
     <!-- Tarjetas con Información de los Reportes -->
-    <div *ngIf="!showLoading && reportsList.length > 0" [@listAnimation]>
+    <div *ngIf="requestStatus == '' && reportsList.length > 0" [@listAnimation]>
         <!-- <ion-card class="report-container" *ngFor="let report of reportsList; let i = index;"> -->
         <ion-card class="report-container" *ngFor="let report of reportsFiltered; let i = index;">
             <div class="post_cover" *ngIf="report.imagesArr && report.imagesArr.length > 0">

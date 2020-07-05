@@ -117,7 +117,6 @@ export class RegisterPage implements OnInit {
                     return;
                 }
                 fbData.email = email;
-                // return;
             }
             const user = this.socialDataService.getFacebookDataMapped(fbData);
             //Añadir informacion dispositivo
@@ -149,7 +148,6 @@ export class RegisterPage implements OnInit {
                     return;
                 }
                 googleData.email = email;
-                // return;
             }
             this.messagesService.showInfo('Verificando las credenciales')
             const user = this.socialDataService.getGoogleDataMapped(googleData);
@@ -189,7 +187,6 @@ export class RegisterPage implements OnInit {
 
     // Función Crea el Formulario
     createForm() {
-        // const patronContraseñaSinCaracterEspecial = /^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,100}$/;
         const patronContraseñaSinCaracterEspecial = /^(?=\D*\d)(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z]).{8,100}$/;
         //Cargar Validaciones
         const validations = this.localDataService.getFormValidations();

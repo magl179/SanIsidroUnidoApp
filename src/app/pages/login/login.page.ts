@@ -128,7 +128,6 @@ export class LoginPage implements OnInit {
                     return
                 }
                 fbData.email = email;
-                // return;
             }
 
             const user = this.socialDataService.getFacebookDataMapped(fbData);
@@ -162,7 +161,6 @@ export class LoginPage implements OnInit {
                     return
                 }
                 googleData.email = email;
-                // return;
             }
 
             const user = this.socialDataService.getGoogleDataMapped(googleData);

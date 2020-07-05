@@ -21,7 +21,6 @@ export class UserHasRoleInvitadoGuard implements CanLoad {
         const tokenDecoded: ITokenDecoded = await this.authService.getTokenUserAuthenticated();
         const roles = getUserRoles(tokenDecoded);
         const hasRole = hasRoles(roles, ['invitado']);
-        console.log('user has role invitado', hasRole);
         if (hasRole) {
             return true;
         } else {

@@ -69,12 +69,10 @@ export class NotificationsService implements OnInit {
             this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.Notification);
             //Funcion hacer algo cuando se recibe una notificación
             this.oneSignal.handleNotificationReceived().subscribe((myNotification) => {
-                console.log('myNotification received', myNotification);
                 this.manageNotificationReceived(myNotification);
             });
             //Funcion para hacer algo cuando una notificacion es recibida
             this.oneSignal.handleNotificationOpened().subscribe(async (myNotification) => {
-                console.log('myNotification opened', myNotification);
                 await this.manageNotificationOpened(myNotification.notification);
             });
             //Función acabar la configuración de Onesignal
@@ -224,8 +222,6 @@ export class NotificationsService implements OnInit {
     async managePostNotification(aditionalDataPost: INotiList) {
         const post = (aditionalDataPost) ? aditionalDataPost.post : null;
         var urlNavigate = null;
-        console.log('managePostNotification', aditionalDataPost, post);
-
 
         const category = (post && post.category_slug) ? post.category_slug : (post && post.category) ? post.category.slug : '';
         const subcategory = (post && post.subcategory_slug) ? post.subcategory_slug : (post && post.subcategory) ? post.subcategory.slug : '';

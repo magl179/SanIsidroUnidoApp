@@ -38,14 +38,12 @@ import { FormControl } from '@angular/forms';
 })
 export class SocialProblemsListPage implements OnInit, OnDestroy {
 
-    showLoading = true;
-    showNotFound = false;
+    requestStatus = '';
     subcategory: string;
     AuthUser = null;
     socialProblemsList: ISocialProblem[] = [];
     socialProblemsFilter: ISocialProblem[] = [];
     socialProblemControl: FormControl;
-    searchingSocialProblems = false;
     segmentFilter$ = new BehaviorSubject(null);
     postState = 1;
 
@@ -113,7 +111,7 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
             .pipe(
                 skip(1),
                 tap((val) => {
-                    this.searchingSocialProblems = true;
+                    this.requestStatus = 'loading';
                 }),
                 map(combineValues => ({
                     category: CONFIG.SOCIAL_PROBLEMS_SLUG,
@@ -125,9 +123,13 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
                 switchMap(peticionHttpBusqueda),
             )
             .subscribe((data: ISocialProblem[]) => {
-                this.showNotFound = (data.length == 0) ? true : false;
+                this.requestStatus = '';
                 this.socialProblemsFilter = [...data];
-                this.searchingSocialProblems = false;
+                if(this.socialProblemsFilter.length == 0){
+                    this.requestStatus = 'not-found';
+                }else{
+                    this.requestStatus = '';
+                }
             });
     }
 
@@ -186,6 +188,7 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
 
     //Cargar los problemas sociales
     loadSocialProblems(event: IEventLoad = null, first_loading = false) {
+        this.requestStatus = 'loading';
         this.postsService.getPostsBySubCategory(CONFIG.SOCIAL_PROBLEMS_SLUG, this.subcategory, { active: this.postState})
             .pipe(
                 map((res: IRespuestaApiSIUPaginada) => {
@@ -205,14 +208,6 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
                     this.errorService.manageHttpError(error_http, 'Ocurrio un error al traer el listado de problemas sociales', false);
                     this.postsService.resetPaginationEmpty(this.postsService.PaginationKeys.SOCIAL_PROBLEMS_BY_SUBCATEGORY);
                     return of({ data: [] })
-                }),
-                finalize(() => {
-                    if (first_loading) {
-                        this.showLoading = false;
-                    }
-                    if (first_loading && this.socialProblemsList.length === 0) {
-                        this.showNotFound = true;
-                    }
                 })
             ).subscribe((res: IRespuestaApiSIUPaginada) => {
                 let socialProblems = [];
@@ -229,13 +224,30 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
                 if (event && event.type === 'refresher') {
                     this.socialProblemsList.unshift(...socialProblems);
                     this.socialProblemsFilter.unshift(...socialProblems);
+                    if(this.socialProblemsFilter.length == 0){
+                        this.requestStatus = 'not-found';
+                    }else{
+                        this.requestStatus = '';
+                    }
                     return;
                 } else if (event && event.type == 'infinite_scroll') {
                     this.socialProblemsList.push(...socialProblems);
                     this.socialProblemsFilter.push(...socialProblems);
+                    if(this.socialProblemsFilter.length == 0){
+                        this.requestStatus = 'not-found';
+                    }else{
+                        this.requestStatus = '';
+                    }
+                    return;
                 } else {
                     this.socialProblemsList.push(...socialProblems);
                     this.socialProblemsFilter.push(...socialProblems);
+                    if(this.socialProblemsFilter.length == 0){
+                        this.requestStatus = 'not-found';
+                    }else{
+                        this.requestStatus = '';
+                    }
+                    return;
                 }
             });
     }

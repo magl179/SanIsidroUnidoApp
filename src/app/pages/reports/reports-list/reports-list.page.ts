@@ -37,12 +37,10 @@ interface BodyRequest {
 })
 export class ReportsListPage implements OnInit, OnDestroy {
 
+    requestStatus = '';
     reportsList: IReport[] = [];
     reportsFiltered: IReport[] = [];
-    showLoading = true;
-    showNotFound = false;
     socialActivityControl: FormControl;
-    searchingActivities = false;
 
     constructor(
         private postsService: PostsService,
@@ -81,13 +79,14 @@ export class ReportsListPage implements OnInit, OnDestroy {
         }
 
         this.postsService.resetPagination(this.postsService.PaginationKeys.REPORTS);
+        
         this.loadReports(null, true);
 
         this.socialActivityControl.valueChanges
             .pipe(
                 distinctUntilChanged(),
                 tap(() => {
-                    this.searchingActivities = true;
+                    this.requestStatus = 'loading';
                 }),
                 map(search => ({
                     category: CONFIG.REPORTS_SLUG,
@@ -96,9 +95,13 @@ export class ReportsListPage implements OnInit, OnDestroy {
                 exhaustMap(peticionHttpBusqueda),
             )
             .subscribe((data: IReport[]) => {
-                this.showNotFound = (data.length == 0) ? true : false;
+                this.requestStatus = '';
                 this.reportsFiltered = [...data];
-                this.searchingActivities = false;
+                if(this.reportsFiltered.length == 0){
+                    this.requestStatus = 'not-found';
+                }else{
+                    this.requestStatus = '';
+                }
             });
     }
 
@@ -111,6 +114,7 @@ export class ReportsListPage implements OnInit, OnDestroy {
     }
 
     loadReports(event: IEventLoad = null, first_loading = false) {
+        this.requestStatus = 'loading';
         this.postsService.getReports().pipe(
             map((res: IRespuestaApiSIUPaginada) => {
                 if (res && res.data) {
@@ -128,18 +132,11 @@ export class ReportsListPage implements OnInit, OnDestroy {
                 this.errorService.manageHttpError(error_http, 'Ocurrio un error al traer el listado de actividades barriales', false);
                 this.postsService.resetPaginationEmpty(this.postsService.PaginationKeys.REPORTS);
                 return of({ data: [] })
-            }),
-            finalize(() => {
-                if (first_loading) {
-                    this.showLoading = false;
-                }
-                if (first_loading && this.reportsList.length === 0) {
-                    this.showNotFound = true;
-                }
             })
         ).subscribe((res: IRespuestaApiSIUPaginada) => {
             let reportsList = [];
             reportsList = res.data;
+            this.requestStatus = '';
             //Evento Completar
             if (event && event.data && event.data.target && event.data.target.complete) {
                 event.data.target.complete();
@@ -151,14 +148,29 @@ export class ReportsListPage implements OnInit, OnDestroy {
             if (event && event.type === 'refresher') {
                 this.reportsList.unshift(...reportsList);
                 this.reportsFiltered.unshift(...reportsList);
+                if(this.reportsFiltered.length == 0){
+                    this.requestStatus = 'not-found';
+                }else{
+                    this.requestStatus = '';
+                }
                 return;
             } else if (event && event.type == 'infinite_scroll') {
                 this.reportsList.push(...reportsList);
                 this.reportsFiltered.push(...reportsList);
+                if(this.reportsFiltered.length == 0){
+                    this.requestStatus = 'not-found';
+                }else{
+                    this.requestStatus = '';
+                }
                 return;
             } else {
                 this.reportsList.push(...reportsList);
                 this.reportsFiltered.unshift(...reportsList);
+                if(this.reportsFiltered.length == 0){
+                    this.requestStatus = 'not-found';
+                }else{
+                    this.requestStatus = '';
+                }
                 return;
             }
         });
