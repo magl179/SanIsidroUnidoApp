@@ -214,8 +214,7 @@ export class NotificationsService implements OnInit {
     }
 
     async manageAppNotification(aditionalData: INotiList) {
-        //Verificar si tengo dato posts  
-        console.log('noti service data', aditionalData)
+        //Verificar si tengo dato adicional  
         this.managePostNotification(aditionalData);
 
     }
@@ -232,16 +231,14 @@ export class NotificationsService implements OnInit {
 
         if (post && id_post && slug_category) {
             //Switch de Opciones segun el slug del posts
-
-            console.log('id_post', id_post)
-            console.log('slug_category', slug_category)
-            console.log('slug_category', slug_category)
-
-            console.log('switch case slug', slug_category)
+            // console.log('id_post', id_post)
+            // console.log('slug_category', slug_category)
+            // console.log('slug_category', slug_category)
+            // console.log('switch case slug', slug_category)
             switch (slug_category) {
                 case CONFIG.EMERGENCIES_SLUG: //caso posts emergencia creado
                     urlNavigate = `/emergencies/list/${id_post}`;
-                    console.log('case urlNavigate EMERGENCIES_SLUG', urlNavigate)
+                    // console.log('case urlNavigate EMERGENCIES_SLUG', urlNavigate)
                     break;
                 case CONFIG.EVENTS_SLUG: //caso posts evento creado                   
                     if (slug_subcategory) {
@@ -249,7 +246,7 @@ export class NotificationsService implements OnInit {
                     } else {
                         urlNavigate = `events/categories`;
                     }
-                    console.log('case urlNavigate EVENTS_SLUG', urlNavigate)
+                    // console.log('case urlNavigate EVENTS_SLUG', urlNavigate)
                     break;
                 case CONFIG.SOCIAL_PROBLEMS_SLUG: // caso posts problema social
                     if (slug_subcategory) {
@@ -257,30 +254,28 @@ export class NotificationsService implements OnInit {
                     } else {
                         urlNavigate = `/social-problems/categories`;
                     }
-                    console.log('case urlNavigate SOCIAL_PROBLEMS_SLUG', urlNavigate)
+                    // console.log('case urlNavigate SOCIAL_PROBLEMS_SLUG', urlNavigate)
                     break;
                 case CONFIG.REPORTS_SLUG: //caso reporte o informe
                     urlNavigate = `/reports/list/${id_post}`;
-                    console.log('case urlNavigate REPORTS_SLUG', urlNavigate)
+                    // console.log('case urlNavigate REPORTS_SLUG', urlNavigate)
                     break;
                 default:
-                    console.log('case urlNavigate DEFAULT', urlNavigate)
+                    // console.log('case urlNavigate DEFAULT', urlNavigate)
                     urlNavigate = null;
                     break;
             }
-            console.log('urlNavigate', urlNavigate)
+            // console.log('urlNavigate', urlNavigate)
             if (urlNavigate) {
-                closeModalsOpened();
+                
                 setTimeout(() => {
                     this.navCtrl.navigateForward(urlNavigate);
-                }, 700);
+                    closeModalsOpened();
+                }, 1200);
             }
         }
 
-
         const accion = aditionalDataPost.action;
-
-
 
         switch (accion) {
             case 'logout':
@@ -288,12 +283,12 @@ export class NotificationsService implements OnInit {
                 let roles = getUserRoles(tokenDecoded);
                 let hasRoleInvitado = hasRoles(roles, ['invitado']);
                 closeModalsOpened();
-                console.log('hasRoleInvitado', hasRoleInvitado)
+                // console.log('hasRoleInvitado', hasRoleInvitado)
                 if (hasRoleInvitado) {
                     this.authService.logout();
                 }           
             default:
-                console.log('no action')
+                return;
         }
     }
 }

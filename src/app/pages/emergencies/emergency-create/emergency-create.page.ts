@@ -27,9 +27,9 @@ export class EmergencyCreatePage implements OnInit {
     @ViewChild(UploadImageComponent) uploadImageComponent: UploadImageComponent;
     emergencyImages = [];
     emergencyPostCoordinate: IUbication = {
-        latitude: CONFIG.DEFAULT_LOCATION.latitude,
-        longitude: CONFIG.DEFAULT_LOCATION.longitude,
-        address: CONFIG.DEFAULT_LOCATION.address
+        latitude: null,
+        longitude: null,
+        address: ''
     };
     emergencyForm: FormGroup;
     ubicationForm: FormGroup;
@@ -48,20 +48,26 @@ export class EmergencyCreatePage implements OnInit {
         public events_app: EventsService,
         private localizationService: LocalizationService,
         private postService: PostsService,
-        private localDataService: LocalDataService
+        private localDataService: LocalDataService,
     ) {
         this.createForm();
     }
 
     async ngOnInit(): Promise<void> {
-        await this.localizationService.getCoordinates().then((coordinates: ISimpleCoordinates) => {
+    }
+
+    ionViewDidEnter(){
+        this.localizationService.getCoordinates().then((coordinates: ISimpleCoordinates) => {
             this.emergencyPostCoordinate.latitude = coordinates.latitude;
             this.emergencyPostCoordinate.longitude = coordinates.longitude;
+            this.cdRef.detectChanges();
+            this.getUserAddress(coordinates.latitude, coordinates.longitude);
         }).catch(() => {
-            this.emergencyPostCoordinate.latitude = -0.096076;
-            this.emergencyPostCoordinate.longitude =  -78.503606;
+            this.emergencyPostCoordinate.latitude = CONFIG.DEFAULT_LOCATION.latitude;
+            this.emergencyPostCoordinate.longitude =  CONFIG.DEFAULT_LOCATION.longitude;
+            this.cdRef.detectChanges();
+            this.getUserAddress(this.emergencyPostCoordinate.latitude, this.emergencyPostCoordinate.longitude);
         });
-        this.getUserAddress(this.emergencyPostCoordinate.latitude, this.emergencyPostCoordinate.longitude);
     }
 
     createForm():void {

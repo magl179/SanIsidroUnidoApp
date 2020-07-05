@@ -75,9 +75,11 @@
         <!-- Paso 2 -->
         <mat-step>
             <h5 class="ion-padding ion-text-center">Selecciona la ubicación del reporte</h5>
-            <single-map id="socialProblemReportMap" [zoomMap]="17" [latitude]="socialProblemCoordinate.latitude"
-                [longitude]="socialProblemCoordinate.longitude" [enableGesture]="false"
-                (returnCoordinateChoosen)="updateMapCoordinate($event)"></single-map>
+            <ng-container *ngIf="socialProblemCoordinate.latitude && socialProblemCoordinate.longitude">
+                <single-map id="socialProblemReportMap" [zoomMap]="17" [latitude]="socialProblemCoordinate.latitude"
+                    [longitude]="socialProblemCoordinate.longitude" [enableGesture]="false"
+                    (returnCoordinateChoosen)="updateMapCoordinate($event)"></single-map>
+            </ng-container>
             <p class="name-ubication-pt preview-text" *ngIf="socialProblemCoordinate.address">Tu
                 Dirección es:
                 {{socialProblemCoordinate.address}}</p>

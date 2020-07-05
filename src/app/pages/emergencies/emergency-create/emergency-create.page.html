@@ -55,10 +55,12 @@
         <!-- Paso 2 -->
         <mat-step>
             <h5 class="ion-padding ion-text-center">Selecciona la ubicación del reporte</h5>
-            <single-map id="emergencyReportMap" [zoomMap]="17" [latitude]="emergencyPostCoordinate.latitude"
-                [longitude]="emergencyPostCoordinate.longitude" [enableGesture]="false"
-                (returnCoordinateChoosen)="updateMapCoordinate($event)">
-            </single-map>
+            <ng-container *ngIf="emergencyPostCoordinate.latitude && emergencyPostCoordinate.longitude">
+                <single-map id="emergencyReportMap" [zoomMap]="17" [latitude]="emergencyPostCoordinate.latitude"
+                    [longitude]="emergencyPostCoordinate.longitude" [enableGesture]="false"
+                    (returnCoordinateChoosen)="updateMapCoordinate($event)">
+                </single-map>
+            </ng-container>
             <p *ngIf="emergencyPostCoordinate.address" class="name-ubication-pt">Tu
                 Dirección es:
                 {{emergencyPostCoordinate.address}}</p>

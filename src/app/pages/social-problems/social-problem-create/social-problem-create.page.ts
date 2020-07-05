@@ -11,7 +11,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CONFIG } from 'src/config/config';
 import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from 'src/app/services/messages.service';
-import { Router } from '@angular/router';
 import { UploadImageComponent } from 'src/app/components/upload-image/upload-image.component';
 import { NavController } from '@ionic/angular';
 
@@ -28,9 +27,9 @@ export class SocialProblemCreatePage implements OnInit {
     errorMessages = null;
     socialProblemImages = [];
     socialProblemCoordinate: IUbication = {
-        latitude: CONFIG.DEFAULT_LOCATION.latitude,
-        longitude: CONFIG.DEFAULT_LOCATION.longitude,
-        address: CONFIG.DEFAULT_LOCATION.address
+        latitude: null,
+        longitude: null,
+        address: ''
     };
     subcategories = [];
     formSended = false;
@@ -46,7 +45,6 @@ export class SocialProblemCreatePage implements OnInit {
         private localizationService: LocalizationService,
         private localDataService: LocalDataService,
         private postService: PostsService,
-        private router: Router,
         private navCtrl: NavController
     ) {
         this.createForm();
@@ -67,15 +65,20 @@ export class SocialProblemCreatePage implements OnInit {
 
     async ngOnInit(): Promise<void> {
         this.loadSubcategories();
+    }
 
-        await this.localizationService.getCoordinates().then((coordinates: ISimpleCoordinates) => {
+    ionViewDidEnter(){
+        this.localizationService.getCoordinates().then((coordinates: ISimpleCoordinates) => {
             this.socialProblemCoordinate.latitude = coordinates.latitude;
             this.socialProblemCoordinate.longitude = coordinates.longitude;
+            this.cdRef.detectChanges();
+            this.getUserAddress(coordinates.latitude, coordinates.longitude);
         }).catch(() => {
-            this.socialProblemCoordinate.latitude = -0.24320783421726888;
-            this.socialProblemCoordinate.longitude = -78.49732162261353;
+            this.socialProblemCoordinate.latitude = CONFIG.DEFAULT_LOCATION.latitude;
+            this.socialProblemCoordinate.longitude = CONFIG.DEFAULT_LOCATION.longitude;
+            this.cdRef.detectChanges();
+            this.getUserAddress(this.socialProblemCoordinate.latitude, this.socialProblemCoordinate.longitude);
         });
-        this.getUserAddress(this.socialProblemCoordinate.latitude, this.socialProblemCoordinate.longitude);
     }
 
     createForm(): void {

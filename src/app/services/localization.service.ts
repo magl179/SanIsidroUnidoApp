@@ -27,25 +27,18 @@ export class LocalizationService {
         private platform: Platform,
         private messageService: MessagesService,
     ) { }
+    //Abrir localizacion
+    openLocalizationSettings() {
+        return this.diagnostic.switchToLocationSettings();
+    }
 
+    //Posicion Web
     getPositionWeb() {
         return new Promise((resolve, reject) => {
             return navigator.geolocation.getCurrentPosition(resolve, reject, {});
         });
     }
-
-    async checkGPSEnabled() {
-        if (this.platform.is('cordova')) {
-            return await this.checkGPSNativeEnable();
-        } else {
-            return await this.checkGPSWebEnable();
-        }
-    }
-
-    openLocalizationSettings() {
-        return this.diagnostic.switchToLocationSettings();
-    }
-
+    //GPS WEB
     async checkGPSWebEnable() {
         return new Promise((resolve) => {
             navigator.geolocation.getCurrentPosition(() => {
@@ -56,39 +49,140 @@ export class LocalizationService {
         });
     }
 
+    //Verificar GPS Nativo
     async checkGPSNativeEnable() {
-        return new Promise(async(resolve) => {
+        return new Promise(async (resolve, reject) => {
             await this.diagnostic.isLocationEnabled()
-            .then((enabled)=>resolve(enabled))
+                .then((isEnabled) => {
+                    if (isEnabled === false) {
+                        resolve(false)
+                    } else {
+                        resolve(true)
+                    }
+                })
                 .catch(() => {
                     this.messageService.showWarning('Por favor activa tu GPS');
-                    resolve(false)
+                    reject(false)
+                });
+        });
+    }
+
+    // Verificar GPS Activado
+    async checkGPSEnabled() {
+        if (this.platform.is('cordova')) {
+            return await this.checkGPSNativeEnable();
+        } else {
+            return await this.checkGPSWebEnable();
+        }
+    }
+
+    //Verificar si el servicio de localización esta activo o no
+    async locationStatus() {
+        return new Promise((resolve, reject) => {
+            this.diagnostic.isLocationEnabled().then((isEnabled) => {
+                if (isEnabled === false) {
+                    resolve(false);
+                } else if (isEnabled === true) {
+                    resolve(true);
+                }
+            })
+            .catch((e) => {
+                reject(false);
             });
         });
     }
 
-    async getPositionNative() {
-        return await this.geolocation.getCurrentPosition({});
+    //Verificar localizacion habilitada
+    async checkLocationNativeEnabled() {
+        return new Promise((resolve, reject) => {
+            this.diagnostic.isLocationEnabled().then((isEnabled) => {
+                if (isEnabled === false) {
+                    this.messageService.showInfo('Por favor enciende el GPS');
+                    resolve(false);
+                } else if (isEnabled === true) {
+                    this.checkGPSPermission().then((response) => {
+                        resolve(true)
+                    })
+                        .catch((e) => {
+                            reject(false);
+                        });
+                }
+            })
+                .catch((e) => {
+                    this.messageService.showInfo('Por favor habilita la localización');
+                    reject(false);
+                });
+        });
     }
-
-    async getCoordinates() {
-        return await new Promise(async (resolve, reject) => {
-            this.getLocationCoordinates().then(response_coords=>{
-                resolve(response_coords);
-            }).catch((error_coordinate)=>{
-                reject(error_coordinate);                
+    // Verificar si la aplicación tiene acceso al GPS
+    async checkGPSPermission() {
+        return new Promise((resolve, reject) => {
+            this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
+                result => {
+                    if (result.hasPermission) {
+                        //Si se tiene permiso se pide acceder al GPS Dialogo
+                        this.askToTurnOnGPS().then((response) => {
+                            resolve(true);
+                        }).catch(() => reject(false));
+                    } else {
+                        //Si no tiene permisos, se piden los permisos
+                        this.requestGPSPermission().then(() => {
+                            resolve(true);
+                        }).catch(() => reject(false));
+                    }
+                },
+                err => {
+                    alert(err);
+                    reject(false);
+                });
+        });
+    }
+    
+    //Obtener localización
+    async requestGPSPermission() {
+        return new Promise((resolve, reject) => {
+            this.locationAccuracy.canRequest().then((canRequest: boolean) => {
+                if (canRequest) {
+                    resolve(true);
+                } else {
+                    //Mostrar el dialogo para solicitar el GPS
+                    this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(() => {
+                        // Llamar al método para encender al GPS
+                        this.askToTurnOnGPS().then((response) => {
+                            resolve(true);
+                        }).catch(() => reject(false));
+                    },
+                        error => {
+                            reject(false);
+                        });
+                }
             });
         });
     }
 
-    async getLocationCoordinates() {
+    //Preguntar habilitar el GPS Celular
+    async askToTurnOnGPS() {
+        return new Promise((resolve, reject) => {
+            this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(async () => {
+                resolve(true);
+            }).catch(() => reject(false));
+        });
+    }
+
+    //Obtener localización de coordenadas
+    async getCoordinates(): Promise<any> {
         return new Promise(async (resolve, reject) => {
             if (this.platform.is('cordova')) {
-                return await this.getPositionNative().then((currentCoords: Geoposition) => {
-                    this.misCoordenadas.latitude = currentCoords.coords.latitude;
-                    this.misCoordenadas.longitude = currentCoords.coords.longitude;
-                    resolve(this.misCoordenadas);
-                }).catch((error_coords) => reject(error_coords));
+                await this.requestGPSPermission();
+                setTimeout(async() => {
+                return await this.getNativeLocationCoordinates().then((native_coords: ISimpleCoordinates) => {
+                        this.misCoordenadas.latitude = native_coords.latitude;
+                        this.misCoordenadas.longitude = native_coords.longitude;
+                        resolve(this.misCoordenadas);
+                    }).catch((error_coords) => {
+                        reject(error_coords)
+                    });
+                }, 1000);
             } else {
                 if (navigator.geolocation) {
                     return await this.getPositionWeb().then((currentCoords: GeolocationPosition) => {
@@ -98,7 +192,7 @@ export class LocalizationService {
                     }).catch(error_coords => {
                         reject(error_coords);
                     });
-                }else{
+                } else {
                     this.messageService.showInfo("tu dispositivo no tiene disponible la geolocalizacion");
                     return resolve(null);
                 }
@@ -106,69 +200,18 @@ export class LocalizationService {
         });
     }
 
-    async checkGPSPermissions() {
-        return new Promise(async (resolve, reject) => {
-            await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
-                async (result: ICheckPermission) => {
-                    if (result.hasPermission) {
-                        resolve(this.askTurnOnGPS());
-                    } else {
-                        resolve(this.requestGPSPermission());
-                    }
-
-                }
-            ).catch(error_permissions => {
-                reject(error_permissions);
+    //Obtener localización nativa con el plugin de cordova
+    async getNativeLocationCoordinates() {
+        return new Promise((resolve, reject) => {
+            this.geolocation.getCurrentPosition().then((resp) => {
+                this.misCoordenadas.latitude = resp.coords.latitude;
+                this.misCoordenadas.longitude = resp.coords.longitude;
+                resolve(this.misCoordenadas);
+            }).catch(() => {
+                this.misCoordenadas.latitude = CONFIG.DEFAULT_LOCATION.latitude;
+                this.misCoordenadas.longitude = CONFIG.DEFAULT_LOCATION.longitude;
+                reject(this.misCoordenadas);
             });
         });
-    }
-
-    async requestGPSPermission() {
-        return new Promise(async (resolve, reject) => {
-            await this.locationAccuracy.canRequest().then(async (canRequest: boolean) => {
-                if (canRequest) {
-                    resolve(this.askTurnOnGPS());
-                } else {
-                    this.messageService.showInfo("Por favor habilita el acceso de la aplicación a la geolocalización");
-                    reject('Por favor habilita el acceso de la aplicación a la geolocalización');
-                }
-            }).catch(error_location => {
-                reject(error_location);
-            });
-        });
-    }
-
-    //Solicitar al usuario que encienda el GPS
-    async askTurnOnGPS() {
-        return new Promise(async (resolve, reject) => {
-            await this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
-                () => {
-                    resolve(true);
-                }
-            ).catch((error_gps) => reject(error_gps));
-        });
-    }
-
-    async checkInitialGPSPermissions() {
-        if (this.platform.is('cordova')) {
-            //Verificar Permisos Android
-            const androidPermissions = await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION);
-
-            if (androidPermissions.hasPermission) {
-                this.messageService.showInfo('Tengo permisos GPS');
-                return;
-            }
-            //Verificar si puedo pedir Localizacion
-            const canRequestLocation = await this.locationAccuracy.canRequest();
-            if (canRequestLocation) {
-                this.messageService.showInfo('puedo pedir encender GPS');
-                return;
-            } else {
-                this.messageService.showInfo('Por favor habilita el acceso de la aplicación a la geolocalización');
-                return;
-            }
-        } else {
-            return;
-        }
     }
 }

@@ -17,8 +17,8 @@ export class SingleMapComponent implements OnInit {
     @Input() className = '';
     @Input() zoomMap = 15;
     @Input() enableGesture = false;
-    @Input() latitude: number;
-    @Input() longitude: number;
+    @Input() latitude: number = -0.2188216;
+    @Input() longitude: number = -78.5135489;
     @Output() returnCoordinateChoosen = new EventEmitter();
 
     map: any;
@@ -54,7 +54,8 @@ export class SingleMapComponent implements OnInit {
             L.control.scale().addTo(this.map);
             this.mapIsLoaded = true;
         });
-        this.map.setView([this.latitude || -0.2188216, this.longitude || -78.5135489], this.zoomMap);
+        
+        this.map.setView([this.latitude, this.longitude], this.zoomMap);
 
         L.tileLayer(CONFIG.MAPLAYERS.GOOGLE.URL, {
             attribution: CONFIG.MAPLAYERS.GOOGLE.ATRIBUTION,
@@ -89,10 +90,6 @@ export class SingleMapComponent implements OnInit {
         setTimeout(() => {
             this.map.fitBounds([leafletLatLng]);
         }, 1000);
-
-        if (this.latitude && this.longitude) {
-            this.sendMarkerCoordinate();
-        }
     }
 
     // Cuando se lance el evento click en la plantilla llamaremos a este método
