@@ -1,7 +1,7 @@
 import { Injectable, EventEmitter, OnInit } from '@angular/core';
 import { OneSignal, OSNotification, OSNotificationPayload } from '@ionic-native/onesignal/ngx';
 import { environment } from 'src/environments/environment';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { Platform, NavController } from '@ionic/angular';
 import { UserService } from './user.service';
 import { AuthService } from './auth.service';
@@ -16,6 +16,8 @@ import { EventsService } from './events.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { closeModalsOpened } from '../helpers/utils';
 import { getUserRoles, hasRoles } from '../helpers/user-helper';
+import { PostsService } from './posts.service';
+import { catchError, pluck } from 'rxjs/operators';
 
 const USER_DEVICE_ID_STORAGE = "siuDevice";
 
@@ -49,6 +51,7 @@ export class NotificationsService implements OnInit {
         private storage: Storage,
         private router: Router,
         private events_appService: EventsService,
+        private postService: PostsService,
         private navCtrl: NavController
     ) {
         this.loadUser();
@@ -222,8 +225,41 @@ export class NotificationsService implements OnInit {
         const post = (aditionalDataPost) ? aditionalDataPost.post : null;
         var urlNavigate = null;
 
-        const category = (post && post.category_slug) ? post.category_slug : (post && post.category) ? post.category.slug : '';
-        const subcategory = (post && post.subcategory_slug) ? post.subcategory_slug : (post && post.subcategory) ? post.subcategory.slug : '';
+        let category = (post && post.category_slug) ? post.category_slug : (post && post.category) ? post.category.slug : '';
+        let subcategory = (post && post.subcategory_slug) ? post.subcategory_slug : (post && post.subcategory) ? post.subcategory.slug : '';
+
+        //Añadir Slug Propio segun id
+        if(post && category== '' && post.category_id == 1 && CONFIG.USE_IDS_NOTIFICATION){
+            category = 'informe';
+        }
+
+        if(post && category== '' && post.category_id == 3 && CONFIG.USE_IDS_NOTIFICATION){
+            category = 'evento';
+            const subcategory_api = await this.postService.getSubcategoriesByCategory(category).pipe(
+                pluck('data'),
+                catchError(() => of({}))
+            ).toPromise();
+            const subcategory_obj = subcategory_api.filter(subcategory => subcategory.id == post.subcategory_id)
+            if(subcategory_obj && subcategory_obj.length > 0 ){
+                subcategory = subcategory_obj[0].slug;
+            }
+        }
+        //en caso de categoria de emergencia
+        if(post && category== '' && post.category_id == 4 && CONFIG.USE_IDS_NOTIFICATION){
+            category = 'emergencia';
+        }
+        //en caso de categoria de problema
+        if(post && category== '' && post.category_id == 5 && CONFIG.USE_IDS_NOTIFICATION){
+            category = 'problema';
+            const subcategory_api = await this.postService.getSubcategoriesByCategory(category).pipe(
+                pluck('data'),
+                catchError(() => of([]))
+            ).toPromise();
+            const subcategory_obj = subcategory_api.filter(subcategory => subcategory.id == post.subcategory_id)
+            if(subcategory_obj && subcategory_obj.length > 0 ){
+                subcategory = subcategory_obj[0].slug;
+            }
+        }
 
         const id_post = (post) ? post.id : null;
         const slug_category = (category) ? category.toLowerCase() : '';
@@ -231,17 +267,22 @@ export class NotificationsService implements OnInit {
 
         if (post && id_post && slug_category) {
             //Switch de Opciones segun el slug del posts
-            // console.log('id_post', id_post)
-            // console.log('slug_category', slug_category)
-            // console.log('slug_category', slug_category)
+            console.log('id_post', id_post)
+            console.log('slug_category', slug_category)
+            console.log('slug_subcategory', slug_subcategory)
             // console.log('switch case slug', slug_category)
             switch (slug_category) {
                 case CONFIG.EMERGENCIES_SLUG: //caso posts emergencia creado
                     urlNavigate = `/emergencies/list/${id_post}`;
+                    // if(post.state == 1){
+                    //     urlNavigate = `/reports/list/${id_post}`;
+                    // }else{
+                    //     urlNavigate = null;
+                    // }
                     // console.log('case urlNavigate EMERGENCIES_SLUG', urlNavigate)
                     break;
                 case CONFIG.EVENTS_SLUG: //caso posts evento creado                   
-                    if (slug_subcategory) {
+                    if (slug_subcategory && post.state == 1) {
                         urlNavigate = `/events/list/${slug_subcategory}/${id_post}`;
                     } else {
                         urlNavigate = `events/categories`;
@@ -249,7 +290,7 @@ export class NotificationsService implements OnInit {
                     // console.log('case urlNavigate EVENTS_SLUG', urlNavigate)
                     break;
                 case CONFIG.SOCIAL_PROBLEMS_SLUG: // caso posts problema social
-                    if (slug_subcategory) {
+                    if (slug_subcategory && post.state == 1) {
                         urlNavigate = `/social-problems/list/${slug_subcategory}/${id_post}`;
                     } else {
                         urlNavigate = `/social-problems/categories`;
@@ -257,7 +298,11 @@ export class NotificationsService implements OnInit {
                     // console.log('case urlNavigate SOCIAL_PROBLEMS_SLUG', urlNavigate)
                     break;
                 case CONFIG.REPORTS_SLUG: //caso reporte o informe
-                    urlNavigate = `/reports/list/${id_post}`;
+                    if(post.state == 1){
+                        urlNavigate = `/reports/list/${id_post}`;
+                    }else{
+                        urlNavigate = null;
+                    }
                     // console.log('case urlNavigate REPORTS_SLUG', urlNavigate)
                     break;
                 default:
@@ -271,7 +316,7 @@ export class NotificationsService implements OnInit {
                 setTimeout(() => {
                     this.navCtrl.navigateForward(urlNavigate);
                     closeModalsOpened();
-                }, 1200);
+                }, 1500);
             }
         }
 

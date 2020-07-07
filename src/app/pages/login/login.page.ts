@@ -68,15 +68,15 @@ export class LoginPage implements OnInit {
         const token = res.data;
         const token_decoded = decodeToken(token);
         //Guardar Datos Token
-        this.authService.saveUserInfo(token, token_decoded);
         this.authService.saveLocalStorageInfo(token, token_decoded);
+        this.authService.saveUserInfo(token, token_decoded);
         //Registrar Dispositivo
         this.loginForm.reset();
         //Redirigir Usuario
         loadingManageLogin.dismiss();
         setTimeout(() => {
             this.navCtrl.navigateRoot(`/${CONFIG.HOME_ROUTE}`);
-        }, 500);
+        }, 900);
     }
 
     async loginUser() {

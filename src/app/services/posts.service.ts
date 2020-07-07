@@ -130,6 +130,7 @@ export class PostsService implements OnInit {
     getPosts(slug: string, key: string) {
         return this.httpRequest.get(`${environment.APIBASEURL}/publicaciones`, {
             "category": slug,
+            "active": 1,
             "page": this.getPagination[key]
         });
     }
@@ -143,9 +144,9 @@ export class PostsService implements OnInit {
     getEmergenciesByUser(params = {}) {
         this.increasePagination(this.PaginationKeys.EMERGENCIES);
         const user_id = this.AuthUser.id;
-        const mergeParams = { user_id, ...params };
+        const mergeParams = { user_id, active: 1, page: this.getPagination(this.PaginationKeys.EMERGENCIES), ...params };
         const withoutEmptyParams = cleanEmpty(mergeParams);
-        return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${user_id}/emergencias?page=${this.getPagination(this.PaginationKeys.EMERGENCIES)}`, withoutEmptyParams);
+        return this.httpRequest.get(`${environment.APIBASEURL}/usuarios/${user_id}/emergencias`, withoutEmptyParams);
     }
     // Función para obtener el listado de eventos publicados
     getEvents(params = {}): Observable<IRespuestaApiSIUPaginada> {
@@ -153,6 +154,7 @@ export class PostsService implements OnInit {
         const tempParams = {
             category: CONFIG.EVENTS_SLUG,
             page: this.getPagination(this.PaginationKeys.EVENTS),
+            active: 1
         }
         const requestParams = { ...params, ...tempParams };
         return this.httpRequest.get(`${environment.APIBASEURL}/publicaciones`,requestParams)
@@ -174,7 +176,7 @@ export class PostsService implements OnInit {
         const tempParams = {
             category: CONFIG.REPORTS_SLUG,
             page: this.getPagination(this.PaginationKeys.REPORTS),
-            state: 1
+            active: 1
         }
         const requestParams = { ...params, ...tempParams };
         return this.httpRequest.get(`${environment.APIBASEURL}/publicaciones`,requestParams)
@@ -209,6 +211,7 @@ export class PostsService implements OnInit {
         const tempParams = {
             "category": category,
             "subcategory": subcategory,
+            'active': 1,
             "page": this.getPagination(pageKey),
         };
         const requestParams = { ...params, ...tempParams };

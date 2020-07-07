@@ -19,6 +19,7 @@ interface ICONFIG {
     MESSAGE_APP_URL: string;
     EVENT_BUTTON_MESSAGE: string;
     USE_FILE_URL: boolean;
+    USE_IDS_NOTIFICATION: boolean;
     URL_SOCIAL_LOGIN_NOT_EMAIL: string;
     DEFAULT_LOCATION: IDefaultLocation;
   }
@@ -49,11 +50,12 @@ export const CONFIG: ICONFIG = {
             ATRIBUTION: '&copy; <a target=_blank" href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }
     },
+    USE_IDS_NOTIFICATION: true,
     EMERGENCIES_SLUG: 'emergencia',
     EVENTS_SLUG: 'evento',
     REPORTS_SLUG: 'informe',
     SOCIAL_PROBLEMS_SLUG: 'problema',
-    VERSION: '1.0.9',
+    VERSION: '1.0.10',
     MESSAGE_APP_INFO: 'Por San Isidro Unido con ❤',
     MESSAGE_APP_URL: 'http://sanisidrosmdev.herokuapp.com',
     EVENT_BUTTON_MESSAGE: 'Asistir',

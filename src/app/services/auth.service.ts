@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { Observable, BehaviorSubject, from, Subject, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -11,7 +11,7 @@ import { IRespuestaApiSIUSingle } from "src/app/interfaces/models";
 import { CONFIG } from 'src/config/config';
 import { MessagesService } from './messages.service';
 import { getUserRoles, hasRoles } from 'src/app/helpers/user-helper';
-import { map, takeUntil } from 'rxjs/operators';
+import { map, takeUntil, distinctUntilChanged, share } from 'rxjs/operators';
 
 const TOKEN_ITEM_NAME = "siuAccessToken";
 const USER_ITEM_NAME = "siuCurrentUser";
@@ -20,25 +20,38 @@ const METHOD_LOGIN_NAME = "siuMethodLogin";
 @Injectable({
     providedIn: 'root'
 })
-export class AuthService implements OnDestroy{
+export class AuthService implements OnInit, OnDestroy{
 
     sessionAuthUserSubject = new BehaviorSubject(null);
     sessionAuthTokenSubject = new BehaviorSubject(null);
     private unsubscribe = new Subject<void>();
-    sessionAuthUser = this.sessionAuthUserSubject.asObservable().pipe(takeUntil(this.unsubscribe));
-    sessionAuthToken = this.sessionAuthTokenSubject.asObservable().pipe(takeUntil(this.unsubscribe));
+    sessionAuthUser = this.sessionAuthUserSubject.asObservable()
+    // .pipe(share())
+    // .pipe(distinctUntilChanged());
+    sessionAuthToken = this.sessionAuthTokenSubject.asObservable()
+    // .pipe(share())
+    // .pipe(distinctUntilChanged());
 
     constructor(
         private storage: Storage,
         private navCtrl: NavController,
         private httpRequest: HttpRequestService,
+        // pr
         private messageService: MessagesService
     ) {
 
-        // this.storage.
+        console.warn('auth service construct')
         this.storage.ready().then(async() => {
             await this.getTokenandUserLS();
         });
+    }
+
+    ngOnInit(){
+        this.sessionAuthUserSubject
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(res=>{
+            console.log('sesion auth change', res)
+        })
     }
 
     ngOnDestroy() {
@@ -50,6 +63,7 @@ export class AuthService implements OnDestroy{
     async getTokenandUserLS() {
         const getTokenLS = new Promise((resolve) => {
             this.storage.get(TOKEN_ITEM_NAME).then(token_encoded => {
+                console.log('get token iten name', token_encoded)
                 this.sessionAuthTokenSubject.next(token_encoded);
                 resolve(true);
             });
@@ -61,6 +75,8 @@ export class AuthService implements OnDestroy{
             });
         });
         return await Promise.all([getTokenLS, getUserLS]);
+
+       
     }
 
     // Iniciar Sesion del Usuario
@@ -107,8 +123,8 @@ export class AuthService implements OnDestroy{
     }
 
     async redirectToLogin(){
-        this.cleanLocalStorage();
         this.cleanAuthInfo();
+        this.cleanLocalStorage();
         this.navCtrl.navigateRoot('/home-screen', { replaceUrl: true });
     }
     //VERIFICAR SI SE DEBE CHECKEAR VALIDEZ TOKEN
@@ -145,6 +161,8 @@ export class AuthService implements OnDestroy{
     cleanAuthInfo() {
         this.sessionAuthTokenSubject.next(null);
         this.sessionAuthUserSubject.next(null);
+        // this.sessionAuthTokenSubject.complete();
+        // this.sessionAuthUserSubject.complete();
     }
 
     async saveUserInfo(token_encoded: string, token_decoded: ITokenDecoded) {

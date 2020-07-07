@@ -7,11 +7,11 @@ import { CONFIG } from 'src/config/config';
 import { IUploadedImages, ICustomEvent, IProgressEvent } from 'src/app/interfaces/models';
 
 let cameraOptions: CameraOptions = {
-    quality: 60,
+    quality: 90,
     correctOrientation: true,
     saveToPhotoAlbum: false,
-    targetWidth: 300,
-    targetHeight: 300,
+    targetWidth: 600,
+    targetHeight: 600,
 };
 
 @Component({
@@ -23,6 +23,7 @@ export class UploadImageComponent implements OnInit {
 
     @Input() maxImages = 3;
     @Input() uploadedImages: string[] = [];
+    @Input() quality: number = 85;
     @Output() returnUploadedImages = new EventEmitter<IUploadedImages>();
 
     constructor(
@@ -35,6 +36,7 @@ export class UploadImageComponent implements OnInit {
         cameraOptions.destinationType = (CONFIG.USE_FILE_URL) ? this.camera.DestinationType.FILE_URI: this.camera.DestinationType.DATA_URL;
         cameraOptions.encodingType = this.camera.EncodingType.JPEG;
         cameraOptions.mediaType = this.camera.MediaType.PICTURE;
+        cameraOptions.quality = this.quality;
         this.uploadedImages = [... this.uploadedImages];
     }
 

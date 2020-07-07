@@ -109,6 +109,7 @@ export class EventsListPage implements OnInit, OnDestroy {
                     category: CONFIG.EVENTS_SLUG,
                     title: search,
                     subcategory: this.subcategory,
+                    active: 1
                 })),
                 exhaustMap(peticionHttpBusqueda),
             )
@@ -197,7 +198,9 @@ export class EventsListPage implements OnInit, OnDestroy {
     }
 
     loadEvents(event: IEventLoad = null, first_loading = false) {
-        this.requestStatus = 'loading';
+        if(!event){
+            this.requestStatus = 'loading';
+        }
         this.postsService.getPostsBySubCategory(CONFIG.EVENTS_SLUG, this.subcategory, {}, this.postsService.PaginationKeys.EVENTS_BY_SUBCATEGORY).pipe(
             map((res: IRespuestaApiSIUPaginada) => {
                 if (res && res.data) {

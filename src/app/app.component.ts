@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Platform, MenuController, NavController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -34,6 +34,7 @@ export class AppComponent implements OnInit {
         private statusBar: StatusBar,
         private alertController: AlertController,
         private menuCtrl: MenuController,
+        private cdRef: ChangeDetectorRef,
         private pushNotificationService: NotificationsService,
         private networkService: NetworkService,
         private messageService: MessagesService,
@@ -45,7 +46,12 @@ export class AppComponent implements OnInit {
         event.target.src = 'assets/img/default/img_avatar.png'
     }
 
-    ngOnInit(): void { }
+    async ngOnInit(): Promise<void> {
+        console.log('app component on init')
+        setTimeout(() =>{
+            this.checkUserLoggedIn();
+        }, 1200)
+     }
  
     initializeApp() {
         this.platform.ready().then(async () => {
@@ -53,7 +59,8 @@ export class AppComponent implements OnInit {
                 this.statusBar.styleDefault();
                 this.splashScreen.hide();
             }
-            await this.checkUserLoggedIn();
+            console.log('initialize app')
+            this.checkUserLoggedIn();
             timer(1600).subscribe(async () => {
                 await this.pushNotificationService.initialConfig();
             });
@@ -71,6 +78,7 @@ export class AppComponent implements OnInit {
             })
         ).subscribe(async token_decoded => {
             this.sessionAuth = token_decoded;
+            console.log('app component', this.sessionAuth)
             if (token_decoded) {
                 this.authService.checkValidToken();
                 const login_method = await this.authService.getMethodLogin();
@@ -80,6 +88,7 @@ export class AppComponent implements OnInit {
                     this.messageService.showPersistenceNoti('Por favor verifica tu correo');
                 }
             }
+            this.cdRef.detectChanges();
         });
     }
 

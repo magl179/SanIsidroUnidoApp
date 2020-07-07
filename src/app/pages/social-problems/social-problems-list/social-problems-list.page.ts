@@ -188,7 +188,9 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
 
     //Cargar los problemas sociales
     loadSocialProblems(event: IEventLoad = null, first_loading = false) {
-        this.requestStatus = 'loading';
+        if(!event){
+            this.requestStatus = 'loading';
+        }
         this.postsService.getPostsBySubCategory(CONFIG.SOCIAL_PROBLEMS_SLUG, this.subcategory, { active: this.postState})
             .pipe(
                 map((res: IRespuestaApiSIUPaginada) => {

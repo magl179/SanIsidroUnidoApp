@@ -108,7 +108,7 @@
         </ion-row>
     </ion-grid>
     
-    <app-upload-image [uploadedImages]="publicServiceImg" [maxImages]="1"
+    <app-upload-image [uploadedImages]="publicServiceImg" [quality]="90" [maxImages]="1"
         (returnUploadedImages)="getUploadedImages($event)"></app-upload-image>
     <ion-button class="btn_send_request_membership" expand="block" (click)="sendRequestMembership()"
         [disabled]="publicServiceImg.length === 0 || formSended || !requestMembershipForm.valid">

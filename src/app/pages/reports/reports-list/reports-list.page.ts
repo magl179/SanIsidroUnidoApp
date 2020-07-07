@@ -90,7 +90,8 @@ export class ReportsListPage implements OnInit, OnDestroy {
                 }),
                 map(search => ({
                     category: CONFIG.REPORTS_SLUG,
-                    title: search
+                    title: search,
+                    active: 1
                 })),
                 exhaustMap(peticionHttpBusqueda),
             )
@@ -114,7 +115,9 @@ export class ReportsListPage implements OnInit, OnDestroy {
     }
 
     loadReports(event: IEventLoad = null, first_loading = false) {
-        this.requestStatus = 'loading';
+        if(!event){
+            this.requestStatus = 'loading';
+        }
         this.postsService.getReports().pipe(
             map((res: IRespuestaApiSIUPaginada) => {
                 if (res && res.data) {

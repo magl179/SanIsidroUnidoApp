@@ -131,6 +131,7 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
             if (!this.allPosts && !this.isPolicia) {
                 this.showSegment = true;
                 status_attendance = '';
+                active = null;
             }
 
             if (this.allPosts) {
@@ -179,7 +180,9 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
     }
 
     async loadEmergencies(event = null, first_loading = false) {
-        this.requestStatus = 'loading';
+        if(!event){
+            this.requestStatus = 'loading';
+        }
         this.getEmergenciesFunction().pipe(
             map((res: IRespuestaApiSIUPaginada) => {
                 if (res && res.data) {
@@ -299,7 +302,8 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
     }
 
     notifyFilters(): Observable<any>{
-        return this.filters$.asObservable().pipe(share());
+        return this.filters$.asObservable().pipe();
+        // return this.filters$.asObservable().pipe(share());
     }
 
 }

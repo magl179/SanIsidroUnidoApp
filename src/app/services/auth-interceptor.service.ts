@@ -24,7 +24,7 @@ import { NetworkService } from './network.service';
 })
 export class AuthInterceptorService implements HttpInterceptor {
 
-    private statusCodeAvoid = [401];
+    private statusCodeAvoid = [401, 403];
     private numIntentos = 1;
 
     constructor(
@@ -56,7 +56,10 @@ export class AuthInterceptorService implements HttpInterceptor {
                 }),
                 catchError((httpError: HttpErrorResponse) => {
                     of(async () => await this.errorService.handleError(httpError));
-                    if (httpError.status === 401) {
+                    console.log('httpError.status', httpError.status )
+                    if (this.statusCodeAvoid.includes(
+                        httpError.status 
+                    )) {
                         this.authService.logout();
                     }
 

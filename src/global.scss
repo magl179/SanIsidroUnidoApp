@@ -73,3 +73,8 @@ body {
 .form-errors .form-error:first-child {
     display: block !important;
 }
+
+p, h2, h3, h4, span, h1{
+    word-break: break-all;
+    white-space: pre-line;
+}
