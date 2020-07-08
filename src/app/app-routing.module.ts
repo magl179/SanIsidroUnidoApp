@@ -20,12 +20,12 @@ const routes: Routes = [
     {
         path: 'emergencies', //Pantalla de Pagina de Emergencias
         loadChildren: './pages/emergencies/emergencies.module#EmergenciesPageModule',
-        canLoad: [UserAuthenticatedGuard]
+        canActivate: [UserAuthenticatedGuard]
     },
     {
         path: 'events', //Pantalla de Pagina de Eventos
         loadChildren: './pages/events/events.module#EventsPageModule',
-        canLoad: [UserAuthenticatedGuard]
+        canActivate: [UserAuthenticatedGuard]
     },
     {
         path: 'frequent-questions', //Pantalla de Pagina de Preguntas Frecuentes
@@ -34,12 +34,12 @@ const routes: Routes = [
     {
         path: 'home-list', //Pantalla Home Items Menu App
         loadChildren: './pages/home-list/home-list.module#HomeListPageModule',
-        canLoad: []
+        canActivate: []
     },
     {
         path: 'home-screen', //Pantalla Slider al Inicio App
         loadChildren: './pages/home-screen/home-screen.module#HomeScreenPageModule',
-        canLoad: [UserIsLoggedGuard]
+        canActivate: [UserIsLoggedGuard]
     },
     {
         path: 'login', //Pantalla de Login
@@ -57,17 +57,17 @@ const routes: Routes = [
     {
         path: 'reports', //Pantalla de Reportes
         loadChildren: './pages/reports/reports.module#ReportsPageModule',
-        canLoad: [UserAuthenticatedGuard]
+        canActivate: [UserAuthenticatedGuard]
     },
     {
         path: 'social-problems', //Pantalla de Problemas Sociales
         loadChildren: './pages/social-problems/social-problems.module#SocialProblemsPageModule',
-        canLoad: [UserAuthenticatedGuard]
+        canActivate: [UserAuthenticatedGuard]
     },
     {
         path: 'user-profile', //Pantalla del Perfil de Usuario
         loadChildren: './pages/user/user.module#UserPageModule',
-        canLoad: [UserAuthenticatedGuard]
+        canActivate: [UserAuthenticatedGuard]
     },
     {
         path: '404', //Pantalla de Error

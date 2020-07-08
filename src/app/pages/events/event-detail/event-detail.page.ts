@@ -58,7 +58,7 @@ export class EventDetailPage implements OnInit {
 
     getEvent() {
         this.eventLoaded = false;
-        this.postService.getEvent(+this.id).pipe(
+        this.postService.getEvent(+this.id, {active: 1}).pipe(
             take(1),
             map((res: IRespuestaApiSIUSingle) => {
                 if (res && res.data) {

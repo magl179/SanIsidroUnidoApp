@@ -1,11 +1,10 @@
-import { Component, OnInit, } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { LocalDataService } from 'src/app/services/local-data.service';
 import { ISlideTutorial, ICustomEvent } from 'src/app/interfaces/models';
 import { UtilsService } from "src/app/services/utils.service";
-import { HttpErrorResponse } from "@angular/common/http";
-import { ErrorService } from 'src/app/services/error.service';
 import { SLIDE_OPTIONS } from 'src/app/config/slide_items';
+import { AuthService } from 'src/app/services/auth.service';
+import { CONFIG } from 'src/config/config';
 
 @Component({
     selector: 'app-home-screen',
@@ -22,14 +21,21 @@ export class HomeScreenPage implements OnInit {
 
     constructor(
         private navCtrl: NavController,
-        private errorService: ErrorService,
         public utilsService: UtilsService,
-        private localDataService: LocalDataService) { 
+        ) { 
             this.slides = SLIDE_OPTIONS;
+            //Sesión de Usuario cuando tiene token
+            // this.authService.sessionAuthUser
+            // .subscribe(token_decoded => {
+            //     if(token_decoded){
+            //         this.navCtrl.navigateRoot(`/${CONFIG.HOME_ROUTE}`);
+            //     }
+            //     this.cdRef.detectChanges();
+            // });
         }
 
     async ngOnInit() {        
-        await this.utilsService.disabledMenu();
+        await this.utilsService.disabledMenu(); 
     }
     
      slideChange(event: ICustomEvent ) {

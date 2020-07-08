@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UtilsService } from 'src/app/services/utils.service';
 import { IPublicService } from 'src/app/interfaces/models';
 import { ModalController, NavController } from "@ionic/angular";
-import { finalize, take, map, tap, distinctUntilChanged } from 'rxjs/operators';
+import { finalize, take, map, tap, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 import { IRespuestaApiSIU } from "src/app/interfaces/models";
 import { getRandomColor } from 'src/app/helpers/utils';
 import { PublicService } from 'src/app/services/public.service';
@@ -63,6 +63,7 @@ export class PublicServicesListPage implements OnInit {
         this.loadPublicServices();
         this.publicServiceSearchControl.valueChanges
         .pipe(
+            debounceTime(400),
             tap(() => {
                 this.searchingPublicServices = true;
             }),

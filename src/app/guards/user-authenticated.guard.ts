@@ -1,23 +1,23 @@
 import { Injectable } from '@angular/core';
-import { CanLoad, Router } from '@angular/router';
+import { CanActivate } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { NavController } from '@ionic/angular';
 
 @Injectable({
     providedIn: 'root'
 })
-export class UserAuthenticatedGuard implements CanLoad {
+export class UserAuthenticatedGuard implements CanActivate {
 
     constructor(
         private authService: AuthService,
-        private router: Router,
         private navCtrl: NavController
     ) {
 
     }
 
-    async canLoad(): Promise<boolean> {
+    async canActivate(): Promise<boolean> {
         const tokenDecoded = await this.authService.isAuthenticated();
+        console.log('tokenDecoded',)
         if (tokenDecoded) {
             return true;
         } else {

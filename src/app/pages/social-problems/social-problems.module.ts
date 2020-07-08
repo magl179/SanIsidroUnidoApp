@@ -16,22 +16,22 @@ const routes: Routes = [
             {
                 path: 'categories',
                 loadChildren: "./social-problems-categories/social-problems-categories.module#SocialProblemsCategoriesPageModule",
-                canLoad: [UserAuthenticatedGuard]
+                canActivate: [UserAuthenticatedGuard]
             },
             {
                 path: 'create',
                 loadChildren: "./social-problem-create/social-problem-create.module#SocialProblemCreatePageModule",
-                canLoad: [UserAuthenticatedGuard, UserHasRoleGuard]
+                canActivate: [UserAuthenticatedGuard, UserHasRoleGuard]
             },
             {
                 path: 'list/:subcategory',
                 loadChildren: './social-problems-list/social-problems-list.module#SocialProblemsListPageModule',
-                canLoad: [UserAuthenticatedGuard]
+                canActivate: [UserAuthenticatedGuard]
             },
             {
                 path: 'list/:subcategory/:id',
                 loadChildren: './social-problem-detail/social-problem-detail.module#SocialProblemDetailPageModule',
-                canLoad: [UserAuthenticatedGuard]
+                canActivate: [UserAuthenticatedGuard]
             },
         ]
     }

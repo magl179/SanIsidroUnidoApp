@@ -14,27 +14,26 @@ const routes: Routes = [
     {
         path: '',
         component: EmergenciesPage,
-        canLoad: [],
         children: [
             {
                 path: 'list/:id',
                 loadChildren: './emergency-detail/emergency-detail.module#EmergencyDetailPageModule',
-                canLoad: [UserAuthenticatedGuard]
+                canActivate: [UserAuthenticatedGuard]
             },
             {
                 path: 'create',
                 loadChildren: './emergency-create/emergency-create.module#EmergencyCreatePageModule',
-                canLoad: [UserAuthenticatedGuard]
+                canActivate: [UserAuthenticatedGuard]
             },
             {
                 path: 'list',
                 loadChildren: "./emergencies-list/emergencies-list.module#EmergenciesListPageModule",
-                canLoad: [UserAuthenticatedGuard]
+                canActivate: [UserAuthenticatedGuard]
             },  
             {
                 path: 'categories',
                 loadChildren: "./emergencies-categories/emergencies-categories.module#EmergenciesCategoriesPageModule",
-                canLoad: [UserAuthenticatedGuard]
+                canActivate: [UserAuthenticatedGuard]
             }     
         ]
     }

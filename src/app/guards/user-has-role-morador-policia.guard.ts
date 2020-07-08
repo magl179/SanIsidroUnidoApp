@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanLoad } from '@angular/router';
+import { CanActivate } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
 import { hasRoles } from "src/app/helpers/user-helper";
@@ -10,14 +10,14 @@ import { ITokenDecoded } from '../interfaces/models';
 @Injectable({
     providedIn: 'root'
 })
-export class UserHasRoleMoradorPoliciaGuard implements CanLoad {
+export class UserHasRoleMoradorPoliciaGuard implements CanActivate {
 
     constructor(
         private navCtrl: NavController,
         private authService: AuthService
     ) { }
 
-    async canLoad(): Promise<boolean> {
+    async canActivate(): Promise<boolean> {
         const tokenDecoded: ITokenDecoded = await this.authService.getTokenUserAuthenticated();
         const roles = getUserRoles(tokenDecoded);
         const hasRole = hasRoles(roles, ['morador', 'policia']);

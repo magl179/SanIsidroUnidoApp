@@ -4,7 +4,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { PostsService } from 'src/app/services/posts.service';
 import { IRespuestaApiSIUPaginada, IRespuestaApiSIUSingle, IResource, IEventLoad } from 'src/app/interfaces/models';
-import { finalize, map, catchError, pluck, exhaustMap, tap, distinctUntilChanged, startWith, skip, switchMap } from "rxjs/operators";
+import { finalize, map, catchError, pluck, exhaustMap, tap, distinctUntilChanged, startWith, skip, switchMap, debounceTime } from "rxjs/operators";
 import { ISocialProblem, IPostShare } from 'src/app/interfaces/models';
 import { checkLikePost } from 'src/app/helpers/user-helper';
 import { mapSocialProblem, cortarTextoConPuntos, getFirstPostImage } from "src/app/helpers/utils";
@@ -45,6 +45,7 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
     socialProblemsFilter: ISocialProblem[] = [];
     socialProblemControl: FormControl;
     segmentFilter$ = new BehaviorSubject(null);
+    search$ = new BehaviorSubject(null);
     postState = 1;
 
     imgError(event, url: string = 'assets/img/default/image_full.png'): void {
@@ -64,8 +65,13 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
         this.socialProblemControl = new FormControl();
     }
 
+    search(value){
+        this.search$.next(value);
+    }
+
     ngOnInit() {
         const peticionHttpBusqueda = (body) => {
+            console.log('body', body)
             return this.postsService.searchPosts(body)
                 .pipe(
                     pluck('data'),
@@ -105,12 +111,12 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
         });
 
         combineLatest(
-            this.socialProblemControl.valueChanges.pipe(startWith(''), distinctUntilChanged()),
+            this.socialProblemControl.valueChanges.pipe(startWith(''), debounceTime(400),distinctUntilChanged()),
             this.segmentFilter$.asObservable().pipe(distinctUntilChanged())
         )
             .pipe(
                 skip(1),
-                tap((val) => {
+                tap(() => {
                     this.requestStatus = 'loading';
                 }),
                 map(combineValues => ({

@@ -49,7 +49,7 @@ export class ReportDetailPage implements OnInit {
 
     getReport(): void {
         this.reportLoaded = false;
-        this.postsService.getReport(+this.id).pipe(
+        this.postsService.getReport(+this.id, {active: 1}).pipe(
             take(1),
             map((res: IRespuestaApiSIUSingle) => {
                 if (res && res.data) {

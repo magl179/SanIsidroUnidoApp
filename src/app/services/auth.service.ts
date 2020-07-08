@@ -11,7 +11,7 @@ import { IRespuestaApiSIUSingle } from "src/app/interfaces/models";
 import { CONFIG } from 'src/config/config';
 import { MessagesService } from './messages.service';
 import { getUserRoles, hasRoles } from 'src/app/helpers/user-helper';
-import { map, takeUntil, distinctUntilChanged, share } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 
 const TOKEN_ITEM_NAME = "siuAccessToken";
 const USER_ITEM_NAME = "siuCurrentUser";
@@ -26,17 +26,12 @@ export class AuthService implements OnInit, OnDestroy{
     sessionAuthTokenSubject = new BehaviorSubject(null);
     private unsubscribe = new Subject<void>();
     sessionAuthUser = this.sessionAuthUserSubject.asObservable()
-    // .pipe(share())
-    // .pipe(distinctUntilChanged());
     sessionAuthToken = this.sessionAuthTokenSubject.asObservable()
-    // .pipe(share())
-    // .pipe(distinctUntilChanged());
 
     constructor(
         private storage: Storage,
         private navCtrl: NavController,
         private httpRequest: HttpRequestService,
-        // pr
         private messageService: MessagesService
     ) {
 
@@ -174,8 +169,8 @@ export class AuthService implements OnInit, OnDestroy{
         this.storage.set(USER_ITEM_NAME, token_decoded);
     }
     //Verificar si el usuario esta autenticado, es decir tiene su datos en el local storage
-    async isAuthenticated() {
-        const getTokenLS = new Promise((resolve, reject) => {
+    async isAuthenticated(): Promise<any> {
+        const getTokenLS = new Promise((resolve) => {
             this.storage.get(TOKEN_ITEM_NAME).then(token_encoded => {
                 resolve(token_encoded);
             });

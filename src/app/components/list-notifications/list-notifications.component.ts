@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { UserService } from 'src/app/services/user.service';
-import { take, map, distinctUntilChanged, tap, pluck, catchError, exhaustMap, startWith, skip } from 'rxjs/operators';
+import { take, map, distinctUntilChanged, tap, pluck, catchError, exhaustMap, startWith, skip, debounceTime } from 'rxjs/operators';
 import { MapNotification, getCurrentDate } from 'src/app/helpers/utils';
 import { PopoverController } from '@ionic/angular';
 import { INotificationApi, ICustomEvent, IEventLoad } from 'src/app/interfaces/models';
@@ -54,7 +54,7 @@ export class ListNotificationsComponent implements OnInit {
         }
 
         combineLatest(
-            this.notificationControl.valueChanges.pipe(startWith(''), distinctUntilChanged()),
+            this.notificationControl.valueChanges.pipe(startWith(''), debounceTime(400), distinctUntilChanged()),
             this.segmentFilter$.asObservable().pipe(distinctUntilChanged()),
         )
             .pipe(

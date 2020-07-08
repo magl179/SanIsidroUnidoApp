@@ -3,7 +3,7 @@ import { NavController } from "@ionic/angular";
 import { UtilsService } from "src/app/services/utils.service";
 import { PostsService } from "src/app/services/posts.service";
 import { IRespuestaApiSIUPaginada, ITokenDecoded, IResource, IUser } from "src/app/interfaces/models";
-import { map, catchError, pluck, distinctUntilChanged, tap, share, startWith, skip, switchMap, takeUntil } from 'rxjs/operators';
+import { map, catchError, pluck, distinctUntilChanged, tap, share, startWith, skip, switchMap, takeUntil, debounceTime } from 'rxjs/operators';
 import { mapEmergency } from "src/app/helpers/utils";
 import { AuthService } from 'src/app/services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -74,7 +74,6 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
 
     async ngOnInit() {
        
-        //Peticion
         const peticionHttpBusqueda = (body) => {
             return this.postsService.searchPosts(body)
                 .pipe(
@@ -102,7 +101,9 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
             }
         });
 
-        this.emergencyControl.valueChanges.pipe(startWith(''), distinctUntilChanged())
+        this.emergencyControl.valueChanges.pipe(startWith(''),
+        debounceTime(400),
+        distinctUntilChanged())
         .subscribe(value =>{
              this.filters$.next({ ... this.filters$.value, title: value })
         });
@@ -141,19 +142,9 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
             }
 
             //Primera Carga
-            // this.showloading = true;
             this.loadEmergencies(null, true);
         });
         
-
-        //Simular Un Refresh cuando se crea nuevas emergencias
-        /*this.events_app.emergenciesEmitter.subscribe(() => {
-            this.postsService.resetPagination(this.postsService.PaginationKeys.EMERGENCIES);
-            this.loadEmergencies({
-                type: 'refresher',
-                data: event
-            });
-        })*/
         //Buscador   
         this.notifyFilters()
             .pipe(
@@ -303,7 +294,6 @@ export class EmergenciesListPage implements OnInit, OnDestroy {
 
     notifyFilters(): Observable<any>{
         return this.filters$.asObservable().pipe();
-        // return this.filters$.asObservable().pipe(share());
     }
 
 }

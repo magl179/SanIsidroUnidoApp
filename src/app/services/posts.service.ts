@@ -120,8 +120,8 @@ export class PostsService implements OnInit {
     }
     //METODOS GET
     //Función para obtener detalle publicaciones
-    getPostDetail(slug: string, id: number) {
-        return this.httpRequest.get(`${environment.APIBASEURL}/publicaciones/${id}`);
+    getPostDetail(id: number, params={}) {
+        return this.httpRequest.get(`${environment.APIBASEURL}/publicaciones/${id}`, params);
     }
     //Función para obtener detalle publicaciones
     getApiPosts(params: Object) {
@@ -182,24 +182,25 @@ export class PostsService implements OnInit {
         return this.httpRequest.get(`${environment.APIBASEURL}/publicaciones`,requestParams)
     }
     // Función para obtener el detalle de un problema social
-    getSocialProblem(id: number): Observable<any> {
+    getSocialProblem(id: number, params = {}): Observable<any> {
         const socialProblemsSlug = CONFIG.SOCIAL_PROBLEMS_SLUG;
-        return this.getPostDetail(socialProblemsSlug, id);
+        return this.getPostDetail(id, params);
     }
     // Función para obtener el detalle de un evento
-    getEvent(id: number): Observable<any> {
+    getEvent(id: number, params = {}): Observable<any> {
         const eventsSlug = CONFIG.EVENTS_SLUG;
-        return this.getPostDetail(eventsSlug, id);
+        console.log('get events params', params)
+        return this.getPostDetail(id, params);
     }
     // Función para obtener el detalle de una emergencia
-    getEmergency(id: number): Observable<any> {
+    getEmergency(id: number, params = {}): Observable<any> {
         const emergenciesSlug = CONFIG.EMERGENCIES_SLUG;
-        return this.getPostDetail(emergenciesSlug, id);
+        return this.getPostDetail(id, params);
     }
     // Función para obtener el detalle de un informe
-    getReport(id: number): Observable<any> {
+    getReport(id: number, params = {}): Observable<any> {
         const reportsSlug = CONFIG.REPORTS_SLUG;
-        return this.getPostDetail(reportsSlug, id);
+        return this.getPostDetail(id, params);
     }
     // Función para obtener el listado de subcategorias de una categoria
     getSubcategoriesByCategory(category: string): Observable<any> {

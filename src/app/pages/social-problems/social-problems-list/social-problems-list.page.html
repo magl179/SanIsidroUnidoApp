@@ -27,7 +27,13 @@
     </ion-refresher> -->
      <!-- Problemas Sociales Searchbar -->
      <ion-searchbar mode="ios" type="text" placeholder="Buscar Problemas Sociales" [animated]="true"
-     [formControl]="socialProblemControl"></ion-searchbar>
+     [formControl]="socialProblemControl"
+     ></ion-searchbar>
+     <!-- <ion-searchbar mode="ios" type="text" placeholder="Buscar Problemas Sociales" [animated]="true"
+     [formControl]="socialProblemControl"
+     #siuSearchBar
+     (keyup.enter)="search(siuSearchBar.value)"
+     ></ion-searchbar> -->
     <!-- Mensaje si datos no cargan o son tamaño 0 -->
     <app-no-results-found *ngIf="requestStatus == 'not-found'"
         message="No hay problemas sociales disponibles"></app-no-results-found>

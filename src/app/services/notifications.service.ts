@@ -165,13 +165,6 @@ export class NotificationsService implements OnInit {
         this.oneSignal.setSubscription(this.onesignalSubscription);
     }
 
-    async logoutOnesignal() {
-        if (this.platform.is('cordova')) {
-            const onesignalDevice = await this.oneSignal.getIds();
-            const deviceID = onesignalDevice.userId;
-        }
-    }
-
     logoutDeviceApi(deviceID) {
         if (deviceID) {
             this.userService.sendRequestDeleteUserPhoneDevice(deviceID).subscribe(() => {
@@ -265,7 +258,10 @@ export class NotificationsService implements OnInit {
         const slug_category = (category) ? category.toLowerCase() : '';
         const slug_subcategory = (subcategory) ? subcategory.toLowerCase() : '';
 
-        if (post && id_post && slug_category) {
+        //Traer post 
+        const postApi = await this.postService.getPostDetail(post.id).pipe(pluck('data'), catchError(() => of({}))).toPromise();
+
+        if (postApi && id_post && slug_category) {
             //Switch de Opciones segun el slug del posts
             console.log('id_post', id_post)
             console.log('slug_category', slug_category)
@@ -274,43 +270,35 @@ export class NotificationsService implements OnInit {
             switch (slug_category) {
                 case CONFIG.EMERGENCIES_SLUG: //caso posts emergencia creado
                     urlNavigate = `/emergencies/list/${id_post}`;
-                    // if(post.state == 1){
-                    //     urlNavigate = `/reports/list/${id_post}`;
-                    // }else{
-                    //     urlNavigate = null;
-                    // }
-                    // console.log('case urlNavigate EMERGENCIES_SLUG', urlNavigate)
                     break;
                 case CONFIG.EVENTS_SLUG: //caso posts evento creado                   
-                    if (slug_subcategory && post.state == 1) {
+                    if (slug_subcategory && postApi.state == 1) {
                         urlNavigate = `/events/list/${slug_subcategory}/${id_post}`;
                     } else {
-                        urlNavigate = `events/categories`;
+                        urlNavigate = null;
+                        // urlNavigate = `events/categories`;
                     }
-                    // console.log('case urlNavigate EVENTS_SLUG', urlNavigate)
                     break;
                 case CONFIG.SOCIAL_PROBLEMS_SLUG: // caso posts problema social
-                    if (slug_subcategory && post.state == 1) {
+                    if (slug_subcategory && postApi.state == 1) {
                         urlNavigate = `/social-problems/list/${slug_subcategory}/${id_post}`;
                     } else {
-                        urlNavigate = `/social-problems/categories`;
+                        urlNavigate = null;
+                        // urlNavigate = `/social-problems/categories`;
                     }
-                    // console.log('case urlNavigate SOCIAL_PROBLEMS_SLUG', urlNavigate)
                     break;
                 case CONFIG.REPORTS_SLUG: //caso reporte o informe
-                    if(post.state == 1){
+                    if(postApi.state == 1){
                         urlNavigate = `/reports/list/${id_post}`;
                     }else{
                         urlNavigate = null;
                     }
-                    // console.log('case urlNavigate REPORTS_SLUG', urlNavigate)
                     break;
                 default:
-                    // console.log('case urlNavigate DEFAULT', urlNavigate)
                     urlNavigate = null;
                     break;
             }
-            // console.log('urlNavigate', urlNavigate)
+
             if (urlNavigate) {
                 
                 setTimeout(() => {
@@ -328,7 +316,6 @@ export class NotificationsService implements OnInit {
                 let roles = getUserRoles(tokenDecoded);
                 let hasRoleInvitado = hasRoles(roles, ['invitado']);
                 closeModalsOpened();
-                // console.log('hasRoleInvitado', hasRoleInvitado)
                 if (hasRoleInvitado) {
                     this.authService.logout();
                 }           

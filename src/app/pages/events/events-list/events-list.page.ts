@@ -4,7 +4,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { IPostShare, IRespuestaApiSIUSingle, IEventLoad } from 'src/app/interfaces/models';
 import { PostsService } from 'src/app/services/posts.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { finalize, map, catchError, pluck, distinctUntilChanged, tap, exhaustMap } from 'rxjs/operators';
+import { finalize, map, catchError, pluck, distinctUntilChanged, tap, exhaustMap, debounceTime } from 'rxjs/operators';
 import { IEvent, IRespuestaApiSIUPaginada } from "src/app/interfaces/models";
 import { checkLikePost } from 'src/app/helpers/user-helper';
 import { mapEvent, cortarTextoConPuntos, getFirstPostImage } from 'src/app/helpers/utils';
@@ -66,9 +66,6 @@ export class EventsListPage implements OnInit, OnDestroy {
 
     ngOnInit() {
         const peticionHttpBusqueda = (body) => {
-            if (body.title == '') {
-                return of([...this.eventsList])
-            }
             return this.postsService.searchPosts(body)
                 .pipe(
                     pluck('data'),
@@ -101,6 +98,7 @@ export class EventsListPage implements OnInit, OnDestroy {
         });
         this.eventControl.valueChanges
             .pipe(
+                debounceTime(400),
                 distinctUntilChanged(),
                 tap(() => {
                     this.requestStatus = 'loading';

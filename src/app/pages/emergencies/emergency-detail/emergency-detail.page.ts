@@ -96,10 +96,6 @@ export class EmergencyDetailPage implements OnInit {
 
     //POLICIA COMUNITARIO
     onPoliciaAcceptEmergency(){
-        //cambiar estado evento a atendido
-        //guardar usuario que va a atender
-        //el back notificar al usuario que tal policia le va a atender
-        //informar si se guardo o no el dato
         this.postsService.sendPoliciaAtenderEmergencia({emergencia_id: this.emergency.id}).subscribe((res:any)=> {
             this.messagesService.showInfo("Has aceptado atender la emergencia");
             this.showPoliciaOptions = false;
@@ -122,7 +118,6 @@ export class EmergencyDetailPage implements OnInit {
         await modal.present();
         const { data } : any = await modal.onWillDismiss();
         if(data.formulario_enviado){
-            // this.messagesService.showInfo("Formulario enviado correctamente");
             this.getEmergency();
         }else{
             this.messagesService.showInfo("Ocurrio un error al enviar el formulario, intentalo más tarde");

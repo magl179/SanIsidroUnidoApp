@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanLoad } from "@angular/router";
+import { CanActivate } from "@angular/router";
 import { Observable } from 'rxjs';
 import { AuthService } from "src/app/services/auth.service";
 import { map, take } from 'rxjs/operators';
@@ -10,7 +10,7 @@ import { MessagesService } from '../services/messages.service';
     providedIn: 'root'
 })
 
-export class UserIsActiveGuard implements CanLoad {
+export class UserIsActiveGuard implements CanActivate {
 
     constructor(
         private authService: AuthService,
@@ -18,7 +18,7 @@ export class UserIsActiveGuard implements CanLoad {
     ) {
     }
 
-    canLoad(): Observable<boolean> {
+    canActivate(): Observable<boolean> {
         const userObservable = this.authService.sessionAuthUser;
         return userObservable.pipe(
             map(token_decoded => {

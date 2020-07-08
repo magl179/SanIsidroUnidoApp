@@ -1,4 +1,4 @@
-import { NgModule  } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -53,12 +53,15 @@ import { WebView } from '@ionic-native/ionic-webview/ngx';
         BrowserModule,
         IonicModule.forRoot(),
         HttpClientModule,
-        IonicStorageModule.forRoot(),
+        IonicStorageModule.forRoot({
+            name: '__siuDB',
+            driverOrder: ['indexeddb', 'sqlite', 'websql']
+        }),
         ToastrModule.forRoot({
             positionClass: 'toast-bottom-right',
             preventDuplicates: true,
             timeOut: 1800,
-        }),      
+        }),
         BrowserAnimationsModule,
         AppRoutingModule,
         SmComponentsModule,
@@ -73,6 +76,11 @@ import { WebView } from '@ionic-native/ionic-webview/ngx';
         StatusBar,
         SplashScreen,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptorService,
+            multi: true
+        },
         AndroidPermissions,
         Geolocation,
         Camera,
@@ -91,11 +99,6 @@ import { WebView } from '@ionic-native/ionic-webview/ngx';
         WebView,
         InAppBrowser,
         Diagnostic,
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: AuthInterceptorService,
-            multi: true
-        }
     ],
     bootstrap: [AppComponent]
 })

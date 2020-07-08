@@ -1,19 +1,17 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { Platform, MenuController, NavController } from '@ionic/angular';
+import { Platform, MenuController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { timer, of } from 'rxjs';
+import { timer, } from 'rxjs';
 import { IMenuOptions, ITokenDecoded, IMenuComponent } from './interfaces/models';
 import { AlertController } from '@ionic/angular';
 import { AuthService } from './services/auth.service';
 import { NotificationsService } from './services/notifications.service';
 import { NetworkService } from 'src/app/services/network.service';
 import { mapUser } from "./helpers/utils";
-import { map, tap, concatMap, mergeAll, pluck, catchError, skip } from 'rxjs/operators';
+import { map, skip } from 'rxjs/operators';
 import { MessagesService } from './services/messages.service';
 import { MENU_ITEMS_APP } from 'src/app/config/menu';
-import { environment } from 'src/environments/environment';
-import { UserService } from './services/user.service';
 
 @Component({
     selector: 'app-root',
@@ -47,7 +45,6 @@ export class AppComponent implements OnInit {
     }
 
     async ngOnInit(): Promise<void> {
-        console.log('app component on init')
         setTimeout(() =>{
             this.checkUserLoggedIn();
         }, 1200)
@@ -59,9 +56,9 @@ export class AppComponent implements OnInit {
                 this.statusBar.styleDefault();
                 this.splashScreen.hide();
             }
-            console.log('initialize app')
+
             this.checkUserLoggedIn();
-            timer(1600).subscribe(async () => {
+            timer(1400).subscribe(async () => {
                 await this.pushNotificationService.initialConfig();
             });
         });
@@ -78,7 +75,7 @@ export class AppComponent implements OnInit {
             })
         ).subscribe(async token_decoded => {
             this.sessionAuth = token_decoded;
-            console.log('app component', this.sessionAuth)
+
             if (token_decoded) {
                 this.authService.checkValidToken();
                 const login_method = await this.authService.getMethodLogin();

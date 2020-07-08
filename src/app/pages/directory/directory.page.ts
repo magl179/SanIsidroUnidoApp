@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DirectivesService } from 'src/app/services/directives.service';
 import { IRespuestaApiSIU, IDirective } from 'src/app/interfaces/models';
-import { finalize, take, tap, distinctUntilChanged } from 'rxjs/operators';
+import { finalize, take, tap, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/services/error.service';
 import { FormControl } from '@angular/forms';
@@ -34,6 +34,7 @@ export class DirectoryPage implements OnInit {
         this.loadDirectoryInfo();
         this.directorySearchControl.valueChanges
         .pipe(
+            debounceTime(400),
             tap(() => {
                 this.searchingDirectives = true;
             }),

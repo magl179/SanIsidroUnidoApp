@@ -59,7 +59,7 @@ export class SocialProblemDetailPage implements OnInit {
     //Obtener el detalle de un problema social
     getSocialProblem() {
         this.socialProblemLoaded = false;
-        this.postService.getSocialProblem(+this.id).pipe(
+        this.postService.getSocialProblem(+this.id, {active: 1}).pipe(
             take(1),
             map((res: IRespuestaApiSIUSingle) => {
                 if (res && res.data) {

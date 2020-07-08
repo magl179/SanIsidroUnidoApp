@@ -14,7 +14,7 @@ const routes: Routes = [
             {
                 path: 'categories',
                 loadChildren: "./events-categories/events-categories.module#EventsCategoriesPageModule",
-                canLoad: [UserAuthenticatedGuard]
+                canActivate: [UserAuthenticatedGuard]
             },
             {
                 path: 'list/:subcategory',

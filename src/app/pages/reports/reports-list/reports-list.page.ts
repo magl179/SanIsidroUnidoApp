@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PostsService } from "src/app/services/posts.service";
-import { finalize, map, catchError, tap, distinctUntilChanged, exhaustMap, pluck } from 'rxjs/operators';
+import { finalize, map, catchError, tap, distinctUntilChanged, exhaustMap, pluck, debounceTime } from 'rxjs/operators';
 import { NavController } from '@ionic/angular';
 import { IRespuestaApiSIUPaginada, IReport, IEventLoad } from 'src/app/interfaces/models';
 import { mapReport } from "src/app/helpers/utils";
@@ -58,9 +58,6 @@ export class ReportsListPage implements OnInit, OnDestroy {
     ngOnInit() {
 
         const peticionHttpBusqueda = (body: BodyRequest) => {
-            if (body.title == '') {
-                return of([...this.reportsList])
-            }
             return this.postsService.searchPosts(body)
                 .pipe(
                     pluck('data'),
@@ -84,6 +81,7 @@ export class ReportsListPage implements OnInit, OnDestroy {
 
         this.socialActivityControl.valueChanges
             .pipe(
+                debounceTime(400),
                 distinctUntilChanged(),
                 tap(() => {
                     this.requestStatus = 'loading';
