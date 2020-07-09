@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpErrorResponse } from "@angular/common/http";
 import { MessagesService } from './messages.service';
+import { resolveApiError } from '../helpers/utils';
 
 @Injectable({
   providedIn: "root"
@@ -32,6 +33,10 @@ export class ErrorService {
       // No Internet connection
       return await this.showHttpError("Por favor activa tu conexión a internet");
     }
+    if(httpError.error && httpError.error.errors){
+        return this.messageService.showError(resolveApiError( httpError.error.errors));
+    }
+    
     if (httpError && httpError.error instanceof Error) {
       // Verificar que el error HTTP ocurrio en el cliente
       return await this.showHttpError(defaultMessage || "Ha ocurrido un error, intentalo más tarde");

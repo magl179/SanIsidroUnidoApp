@@ -55,7 +55,7 @@ export const CONFIG: ICONFIG = {
     EVENTS_SLUG: 'evento',
     REPORTS_SLUG: 'informe',
     SOCIAL_PROBLEMS_SLUG: 'problema',
-    VERSION: '1.0.10',
+    VERSION: '1.0.11',
     MESSAGE_APP_INFO: 'Por San Isidro Unido con ❤',
     MESSAGE_APP_URL: 'http://sanisidrosmdev.herokuapp.com',
     EVENT_BUTTON_MESSAGE: 'Asistir',
