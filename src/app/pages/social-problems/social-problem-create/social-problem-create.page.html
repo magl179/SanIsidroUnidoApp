@@ -20,7 +20,7 @@
                         {{errorMessages.title.required.message}}
                     </p>
                     <p class="form-error"
-                    *ngIf="socialProblemForm.get('description').hasError('required') && socialProblemForm.get('description').touched">
+                    *ngIf="socialProblemForm.get('title').hasError('maxlength') && socialProblemForm.get('title').touched">
                     {{errorMessages.title.maxlength.message}}
                 </div>
                 <div class="item-form full">
@@ -99,7 +99,11 @@
                 <div class="form-errors">
                     <p class="form-error"
                         *ngIf="ubicationForm.get('description_ubication').hasError('required') && ubicationForm.get('description_ubication').touched">
-                        {{errorMessages.description.required.message}}
+                        {{errorMessages.ubication.description.required.message}}
+                    </p>
+                    <p class="form-error"
+                        *ngIf="ubicationForm.get('description_ubication').hasError('maxlength') && ubicationForm.get('description_ubication').touched">
+                        {{errorMessages.ubication.description.maxlength.message}}
                     </p>
                 </div>
             </form>

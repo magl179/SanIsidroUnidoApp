@@ -12,6 +12,7 @@ import { CONFIG } from 'src/config/config';
 import { MessagesService } from './messages.service';
 import { getUserRoles, hasRoles } from 'src/app/helpers/user-helper';
 import { map, takeUntil } from 'rxjs/operators';
+import { EventsService } from './events.service';
 
 const TOKEN_ITEM_NAME = "siuAccessToken";
 const USER_ITEM_NAME = "siuCurrentUser";
@@ -32,21 +33,15 @@ export class AuthService implements OnInit, OnDestroy{
         private storage: Storage,
         private navCtrl: NavController,
         private httpRequest: HttpRequestService,
-        private messageService: MessagesService
+        private messageService: MessagesService,
+        private eventsService: EventsService
     ) {
-
-        console.warn('auth service construct')
         this.storage.ready().then(async() => {
             await this.getTokenandUserLS();
         });
     }
 
     ngOnInit(){
-        this.sessionAuthUserSubject
-        .pipe(takeUntil(this.unsubscribe))
-        .subscribe(res=>{
-            console.log('sesion auth change', res)
-        })
     }
 
     ngOnDestroy() {
@@ -58,7 +53,6 @@ export class AuthService implements OnInit, OnDestroy{
     async getTokenandUserLS() {
         const getTokenLS = new Promise((resolve) => {
             this.storage.get(TOKEN_ITEM_NAME).then(token_encoded => {
-                console.log('get token iten name', token_encoded)
                 this.sessionAuthTokenSubject.next(token_encoded);
                 resolve(true);
             });
@@ -94,6 +88,8 @@ export class AuthService implements OnInit, OnDestroy{
     }
     //CERRAR SESION del usuario, borrando los datos del local storage
     async logout(message = 'Tu sesión expiro, inicia sesión por favor') {
+        this.eventsService.logoutDevice.emit({disconnect: true});
+        // return;
         this.cleanLocalStorage();
         this.cleanAuthInfo();
         this.removeMethodLogin();
@@ -128,7 +124,7 @@ export class AuthService implements OnInit, OnDestroy{
             const itemToken = await this.storage.get(TOKEN_ITEM_NAME);
             const isTokenExpired = tokenIsExpired(itemToken);
             if (itemToken && isTokenExpired) {
-                this.tokenIsValid(itemToken).subscribe(async(res: IRespuestaApiSIUSingle) => {
+                return this.tokenIsValid(itemToken).subscribe(async(res: IRespuestaApiSIUSingle) => {
                     if (res.data && res.data.token) {
                         if (res.data.token === 'invalid') {
                             await this.logout();
@@ -139,7 +135,7 @@ export class AuthService implements OnInit, OnDestroy{
                     } else {
                         return;
                     }
-                }, err => {
+                }, () => {
                     return;
                 });
             } else {
@@ -156,8 +152,6 @@ export class AuthService implements OnInit, OnDestroy{
     cleanAuthInfo() {
         this.sessionAuthTokenSubject.next(null);
         this.sessionAuthUserSubject.next(null);
-        // this.sessionAuthTokenSubject.complete();
-        // this.sessionAuthUserSubject.complete();
     }
 
     async saveUserInfo(token_encoded: string, token_decoded: ITokenDecoded) {

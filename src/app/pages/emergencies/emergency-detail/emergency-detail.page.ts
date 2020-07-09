@@ -117,6 +117,9 @@ export class EmergencyDetailPage implements OnInit {
         });
         await modal.present();
         const { data } : any = await modal.onWillDismiss();
+        if(data.cancel){
+            return;
+        }
         if(data.formulario_enviado){
             this.getEmergency();
         }else{

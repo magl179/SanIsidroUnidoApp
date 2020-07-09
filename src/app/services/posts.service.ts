@@ -168,7 +168,9 @@ export class PostsService implements OnInit {
         }
         const requestParams = { ...params, ...tempParams };
         const withoutEmptyParams = cleanEmpty(requestParams);
-        return this.httpRequest.get(`${environment.APIBASEURL}/publicaciones`, withoutEmptyParams);
+        return this.httpRequest.get(`${environment.APIBASEURL}/publicaciones`, withoutEmptyParams)
+        .pipe(           
+        );
     }
     //Funcion para obtener el listado de informes registrados
     getReports(params = {}): Observable<IRespuestaApiSIUPaginada> {
@@ -183,23 +185,18 @@ export class PostsService implements OnInit {
     }
     // Función para obtener el detalle de un problema social
     getSocialProblem(id: number, params = {}): Observable<any> {
-        const socialProblemsSlug = CONFIG.SOCIAL_PROBLEMS_SLUG;
         return this.getPostDetail(id, params);
     }
     // Función para obtener el detalle de un evento
     getEvent(id: number, params = {}): Observable<any> {
-        const eventsSlug = CONFIG.EVENTS_SLUG;
-        console.log('get events params', params)
         return this.getPostDetail(id, params);
     }
     // Función para obtener el detalle de una emergencia
     getEmergency(id: number, params = {}): Observable<any> {
-        const emergenciesSlug = CONFIG.EMERGENCIES_SLUG;
         return this.getPostDetail(id, params);
     }
     // Función para obtener el detalle de un informe
     getReport(id: number, params = {}): Observable<any> {
-        const reportsSlug = CONFIG.REPORTS_SLUG;
         return this.getPostDetail(id, params);
     }
     // Función para obtener el listado de subcategorias de una categoria

@@ -42,10 +42,18 @@ export class FormAttendEmergencyModal implements OnInit {
         $event.preventDefault()
         $event.stopPropagation()
     }
+    
+    onClose(){
+        this.modalCtrl.dismiss({
+            formulario_enviado: this.formWasSended,
+            cancel: true
+        });
+    }
 
     closeModal() {
         this.modalCtrl.dismiss({
-            formulario_enviado: this.formWasSended
+            formulario_enviado: this.formWasSended,
+            cancel: false
         });
     }
 

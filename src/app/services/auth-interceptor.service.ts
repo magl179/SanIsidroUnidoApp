@@ -18,6 +18,7 @@ import {
 
 import { ErrorService } from "src/app/services/error.service";
 import { NetworkService } from './network.service';
+import { EventsService } from './events.service';
 
 @Injectable({
     providedIn: "root"
@@ -30,7 +31,8 @@ export class AuthInterceptorService implements HttpInterceptor {
     constructor(
         private authService: AuthService,
         private networkService: NetworkService,
-        private errorService: ErrorService
+        private errorService: ErrorService,
+        private eventsService: EventsService
     ) { }
 
     intercept(
@@ -56,7 +58,6 @@ export class AuthInterceptorService implements HttpInterceptor {
                 }),
                 catchError((httpError: HttpErrorResponse) => {
                     of(async () => await this.errorService.handleError(httpError));
-                    console.log('httpError.status', httpError.status )
                     if (this.statusCodeAvoid.includes(
                         httpError.status 
                     )) {

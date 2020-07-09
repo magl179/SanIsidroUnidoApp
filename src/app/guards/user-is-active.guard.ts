@@ -5,6 +5,7 @@ import { AuthService } from "src/app/services/auth.service";
 import { map, take } from 'rxjs/operators';
 import { isRolActive } from '../helpers/utils';
 import { MessagesService } from '../services/messages.service';
+import { EventsService } from '../services/events.service';
 
 @Injectable({
     providedIn: 'root'

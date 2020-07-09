@@ -37,15 +37,19 @@
                             <span class="icon-fulldate">
                                 <ion-icon name="calendar"></ion-icon>
                             </span>
-                            <span class="main-section-info__description">
+                            <span class="main-section-info__date">
                                 {{ event.range_short_date }} 
                             </span>
                         </p>
                     <p class="main-section-info__item">
-                        <span class="icon-ubication">
+                        <!-- <span class="icon-ubication">
                             <ion-icon name="pin"></ion-icon>
                         </span>
-                        <span class="description">
+                        <span class="ubication">
+                            {{ (event.ubication && event.ubication.address) ? event.ubication.address : 'Direccion no encontrada' }}
+                        </span> -->
+                        <ion-icon class="icon-ubication" name="pin"></ion-icon>
+                        <span class="ubication-info">
                             {{ (event.ubication && event.ubication.address) ? event.ubication.address : 'Direccion no encontrada' }}
                         </span>
                     </p>

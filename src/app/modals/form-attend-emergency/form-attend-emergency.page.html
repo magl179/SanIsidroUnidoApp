@@ -3,7 +3,7 @@
     <ion-toolbar color="primary">
       <ion-title class="ion-text-center">Rechazar Atención Emergencia</ion-title>
       <ion-buttons slot="end" class="buttons-end">
-        <ion-icon name="close" slot="icon-only" (click)="closeModal()">          
+        <ion-icon name="close" slot="icon-only" (click)="onClose()">          
         </ion-icon>
       </ion-buttons>
     </ion-toolbar>
@@ -20,6 +20,15 @@
             type="text" clearOnEdit="false"></ion-textarea >
         </div>
       </ion-item>
+      <div class="form-errors padding-lateral">
+        <p class="form-error"
+            *ngIf="attendEmergencyForm.get('reason').hasError('required') && attendEmergencyForm.get('reason').touched">
+            El mótivo es requerido
+        </p>
+        <p class="form-error"
+        *ngIf="attendEmergencyForm.get('reason').hasError('maxlength') && attendEmergencyForm.get('reason').touched">
+        El mótivo debe tener máximo 300 carácteres
+    </div>
       <div class="item-info info-padding">
         <p>
            Solo puedes ingresar máximo 300 caracteres

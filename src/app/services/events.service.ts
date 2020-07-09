@@ -1,9 +1,9 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable, EventEmitter, OnDestroy } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EventsService {
+export class EventsService implements OnDestroy{
 
     socialProblemEmitter = new EventEmitter();
     socialProblemLikesEmitter = new EventEmitter();
@@ -11,8 +11,15 @@ export class EventsService {
     eventsLikesEmitter = new EventEmitter();
     emergenciesEmitter = new EventEmitter();
     logoutAppEmitter = new EventEmitter();
+    logoutDevice = new EventEmitter();
 
-    constructor() { }
+    constructor() { 
+        this.logoutDevice = new EventEmitter();
+    }
+
+    ngOnDestroy(){
+        this.logoutDevice.complete();
+    }
 
     emitLogoutEvent(){
         this.logoutAppEmitter.emit({

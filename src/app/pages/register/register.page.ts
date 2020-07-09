@@ -194,23 +194,27 @@ export class RegisterPage implements OnInit {
         const first_name = new FormControl('', Validators.compose([
             Validators.required,
             Validators.minLength(validations.first_name.minlength),
+            Validators.maxLength(validations.first_name.maxlength),
             Validators.pattern(validations.first_name.pattern)
         ]));
 
         const last_name = new FormControl('', Validators.compose([
             Validators.required,
             Validators.minLength(validations.last_name.minlength),
+            Validators.maxLength(validations.last_name.maxlength),
             Validators.pattern(validations.last_name.pattern)
         ]));
 
         const email = new FormControl('', Validators.compose([
             Validators.required,
+            Validators.maxLength(validations.email.maxlength),
             Validators.email
         ]));
 
         const password = new FormControl('', Validators.compose([
             Validators.required,
             Validators.minLength(validations.password.minlength),
+            Validators.maxLength(validations.password.maxlength),
             Validators.pattern(patronContraseñaSinCaracterEspecial)
         ]));
         // Añado Propiedades al Forms

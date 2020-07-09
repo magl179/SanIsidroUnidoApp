@@ -71,7 +71,6 @@ export class SocialProblemsListPage implements OnInit, OnDestroy {
 
     ngOnInit() {
         const peticionHttpBusqueda = (body) => {
-            console.log('body', body)
             return this.postsService.searchPosts(body)
                 .pipe(
                     pluck('data'),

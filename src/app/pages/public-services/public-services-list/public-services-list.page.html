@@ -31,7 +31,7 @@
                         <ion-card-content class="public-service-content">
                             <div>
                                 <p class="ion-text content-text" *ngIf="publicService.ubication.address; else direccionDefecto">
-                                    {{ publicService.ubication.address | truncate: 50}}
+                                    {{ publicService.ubication.address | truncate: 80}}
                                 </p>
                                 <ng-template #direccionDefecto>
                                     <p class="ion-text content-text">

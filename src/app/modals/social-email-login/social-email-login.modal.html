@@ -34,6 +34,10 @@
                 El Email es requerido
             </p>
             <p class="form-error"
+                *ngIf="socialEmailLoginForm.get('email').hasError('maxlength') && socialEmailLoginForm.get('email').touched">
+                Ingresa máximo 150 carácteres
+            </p>
+            <p class="form-error"
                 *ngIf="socialEmailLoginForm.get('email').hasError('email') && socialEmailLoginForm.get('email').touched">
                 Ingresa un email válido
             </p>

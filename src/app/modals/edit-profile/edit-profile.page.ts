@@ -11,6 +11,7 @@ import { MessagesService } from 'src/app/services/messages.service';
 import { TelefonoValidator } from 'src/app/helpers/numero_telefono.validator';
 import { finalize } from 'rxjs/operators';
 import { ITokenDecoded } from 'src/app/interfaces/models';
+import { resolveApiError } from 'src/app/helpers/utils';
 
 @Component({
     selector: 'modal-edit-profile',
@@ -71,7 +72,7 @@ export class EditProfilePage implements OnInit {
                 this.closeModal();
             }, 500);
         },(error_http: HttpErrorResponse) => {
-            this.errorService.manageHttpError(error_http, 'Tus datos no se pudieron actualizar');
+            this.messageService.showError(resolveApiError( (error_http.error && error_http.error.errors) ? error_http.error.errors: error_http.message));
         });
     }
 
@@ -88,11 +89,13 @@ export class EditProfilePage implements OnInit {
         const first_name = new FormControl(
         {value: this.AuthUser.first_name || '',  disabled: false},
         Validators.compose([
-            Validators.required
+            Validators.required,
+            Validators.maxLength(validations.first_name.maxlength)
         ]));
         const last_name = new FormControl({value: this.AuthUser.last_name || '',  disabled:  false}, 
         Validators.compose([
-            Validators.required
+            Validators.required,
+            Validators.maxLength(validations.last_name.maxlength)
         ]));
         const email = new FormControl(
             {value: this.AuthUser.email || '', disabled: true}, Validators.compose([

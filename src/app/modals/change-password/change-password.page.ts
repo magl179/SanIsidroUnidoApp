@@ -60,10 +60,12 @@ export class ChangePasswordPage implements OnInit {
         const validations = this.localDataService.getFormValidations();
         // Campos Formulario
         const password = new FormControl('', Validators.compose([
-            Validators.required
+            Validators.required,
+            Validators.maxLength(validations.password.maxlength)
         ]));
         const password_confirm = new FormControl('', Validators.compose([
-            Validators.required
+            Validators.required,
+            Validators.maxLength(validations.password_confirm.maxlength)
         ]));
         // Añado Propiedades al Formulario
         this.changePassForm = this.formBuilder.group({password, password_confirm}, {

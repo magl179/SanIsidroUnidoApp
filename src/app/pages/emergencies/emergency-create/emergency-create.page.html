@@ -41,7 +41,7 @@
                         {{errorMessages.description.required.message}}
                     </p>
                     <p class="form-error"
-                    *ngIf="emergencyForm.get('description').hasError('required') && emergencyForm.get('description').touched">
+                    *ngIf="emergencyForm.get('description').hasError('maxlength') && emergencyForm.get('description').touched">
                     {{errorMessages.description.maxlength.message}}
                 </p>
                 </div>
@@ -81,7 +81,11 @@
                 <div class="form-errors padding-lateral">
                     <p class="form-error"
                         *ngIf="ubicationForm.get('description_ubication').hasError('required') && ubicationForm.get('description_ubication').touched">
-                        {{errorMessages.description.required.message}}
+                        {{errorMessages.ubication.description.required.message}}
+                    </p>
+                    <p class="form-error"
+                        *ngIf="ubicationForm.get('description_ubication').hasError('maxlength') && ubicationForm.get('description_ubication').touched">
+                        {{errorMessages.ubication.description.maxlength.message}}
                     </p>
                 </div>
             </form>

@@ -28,9 +28,11 @@ export class SocialEmailLoginModal implements OnInit {
 
   createForm(): void {
     //Cargar Validaciones
+    // const vl
     const email = new FormControl('', Validators.compose([
       Validators.required,
-      Validators.email
+      Validators.email,
+      Validators.maxLength(150)
     ]));
     // Añado Propiedades al Form
     this.socialEmailLoginForm = this.formBuilder.group({ email });

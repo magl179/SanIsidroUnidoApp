@@ -24,6 +24,10 @@
                     *ngIf="editProfileForm.get('first_name').hasError('required') && editProfileForm.get('first_name').touched">
                     {{errorMessages.first_name.required.message}}
                 </p>
+                <p class="form-error"
+                    *ngIf="editProfileForm.get('first_name').hasError('maxlength') && editProfileForm.get('first_name').touched">
+                    {{errorMessages.first_name.maxlength.message}}
+                </p>
             </div>
             <div class="item-info">
                 <p>
@@ -41,6 +45,10 @@
                 <p class="form-error"
                     *ngIf="editProfileForm.get('last_name').hasError('required') && editProfileForm.get('last_name').touched">
                     {{errorMessages.last_name.required.message}}
+                </p>
+                <p class="form-error"
+                    *ngIf="editProfileForm.get('last_name').hasError('maxlength') && editProfileForm.get('last_name').touched">
+                    {{errorMessages.last_name.maxlength.message}}
                 </p>
             </div>
             <div class="item-info">

@@ -71,15 +71,15 @@
                                 </p>
                                 <p class="form-error"
                                     *ngIf="registerForm.get('last_name').hasError('minlength') && registerForm.get('last_name').touched">
-                                    {{errorMessages.lastname.minlength.message}}
+                                    {{errorMessages.last_name.minlength.message}}
                                 </p>
                                 <p class="form-error"
                                     *ngIf="registerForm.get('last_name').hasError('maxlength') && registerForm.get('last_name').touched">
-                                    {{errorMessages.lastname.maxlength.message}}
+                                    {{errorMessages.last_name.maxlength.message}}
                                 </p>
                                 <p class="form-error"
                                     *ngIf="registerForm.get('last_name').hasError('pattern') && registerForm.get('last_name').touched">
-                                    {{errorMessages.lastname.pattern.message}}
+                                    {{errorMessages.last_name.pattern.message}}
                                 </p>
                             </div>
                             <div class="item-info">
@@ -147,6 +147,10 @@
                                 <p class="form-error"
                                     *ngIf="registerForm.get('password').hasError('minlength') && registerForm.get('password').touched">
                                     {{errorMessages.password.minlength.message}}
+                                </p>
+                                <p class="form-error"
+                                    *ngIf="registerForm.get('password').hasError('maxlength') && registerForm.get('password').touched">
+                                    {{errorMessages.password.maxlength.message}}
                                 </p>
                                 <p class="form-error"
                                     *ngIf="registerForm.get('password').hasError('pattern') && registerForm.get('password').touched">

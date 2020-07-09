@@ -5,19 +5,19 @@ import { BehaviorSubject, of } from 'rxjs';
 import { Platform, NavController } from '@ionic/angular';
 import { UserService } from './user.service';
 import { AuthService } from './auth.service';
-import { IDeviceUser, INotiList, ITokenDecoded } from 'src/app/interfaces/models';
+import { IDeviceUser, ITokenDecoded, INotiList } from 'src/app/interfaces/models';
 import { Device } from '@ionic-native/device/ngx';
 import { CONFIG } from 'src/config/config';
 import { MessagesService } from './messages.service';
 import { ErrorService } from './error.service';
 import { Storage } from '@ionic/storage'
 import { Router } from '@angular/router';
-import { EventsService } from './events.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { closeModalsOpened } from '../helpers/utils';
 import { getUserRoles, hasRoles } from '../helpers/user-helper';
 import { PostsService } from './posts.service';
 import { catchError, pluck } from 'rxjs/operators';
+import { EventsService} from 'src/app/services/events.service';
 
 const USER_DEVICE_ID_STORAGE = "siuDevice";
 
@@ -49,12 +49,14 @@ export class NotificationsService implements OnInit {
         private userService: UserService,
         private authService: AuthService,
         private storage: Storage,
-        private router: Router,
-        private events_appService: EventsService,
         private postService: PostsService,
-        private navCtrl: NavController
+        private navCtrl: NavController,
+        private eventsEmitterService: EventsService
     ) {
         this.loadUser();
+        this.eventsEmitterService.logoutDevice.subscribe(async() =>{
+            await this.logoutUserDevice();
+        });
     }
 
     ngOnInit() {
@@ -131,6 +133,18 @@ export class NotificationsService implements OnInit {
         }
     }
 
+    async logoutUserDevice(){
+        const userDevice = this.userDevice.getValue();
+        const phone_id = (userDevice && userDevice.phone_id) ? userDevice.phone_id: null;
+
+        const response = await this.logoutDeviceApi(phone_id)
+        .pipe(
+            catchError(() => of('Error al enviar peticion'))
+        )
+        .toPromise();
+        return response;
+    }
+
     activateOnesignalSubscription() {
         //Activar notificaciones
         if (this.platform.is('cordova')) {
@@ -166,13 +180,7 @@ export class NotificationsService implements OnInit {
     }
 
     logoutDeviceApi(deviceID) {
-        if (deviceID) {
-            this.userService.sendRequestDeleteUserPhoneDevice(deviceID).subscribe(() => {
-                this.messageService.showSuccess('Dispositivo Desuscrito Correctamente');
-            }, (error_http: HttpErrorResponse) => {
-                this.errorService.manageHttpError(error_http, 'Ocurrio un error al desuscribir el dispositivo');
-            });
-        }
+            return this.userService.sendRequestDeleteUserPhoneDevice(deviceID);
     }
 
 
@@ -204,8 +212,6 @@ export class NotificationsService implements OnInit {
     async manageNotificationOpened(appNotification: OSNotification) {
         //Verificar si recibe data adicional
         const aditionalData = appNotification.payload.additionalData;
-
-        console.log('notification data opened', aditionalData)
         await this.manageAppNotification(aditionalData);
     }
 
@@ -215,99 +221,104 @@ export class NotificationsService implements OnInit {
 
     }
     async managePostNotification(aditionalDataPost: INotiList) {
+
+        //Manejar evento de POST
         const post = (aditionalDataPost) ? aditionalDataPost.post : null;
-        var urlNavigate = null;
+        if(post){
 
-        let category = (post && post.category_slug) ? post.category_slug : (post && post.category) ? post.category.slug : '';
-        let subcategory = (post && post.subcategory_slug) ? post.subcategory_slug : (post && post.subcategory) ? post.subcategory.slug : '';
-
-        //Añadir Slug Propio segun id
-        if(post && category== '' && post.category_id == 1 && CONFIG.USE_IDS_NOTIFICATION){
-            category = 'informe';
-        }
-
-        if(post && category== '' && post.category_id == 3 && CONFIG.USE_IDS_NOTIFICATION){
-            category = 'evento';
-            const subcategory_api = await this.postService.getSubcategoriesByCategory(category).pipe(
-                pluck('data'),
-                catchError(() => of({}))
-            ).toPromise();
-            const subcategory_obj = subcategory_api.filter(subcategory => subcategory.id == post.subcategory_id)
-            if(subcategory_obj && subcategory_obj.length > 0 ){
-                subcategory = subcategory_obj[0].slug;
+            var urlNavigate = null;
+    
+            let category = (post && post.category_slug) ? post.category_slug : (post && post.category) ? post.category.slug : '';
+            let subcategory = (post && post.subcategory_slug) ? post.subcategory_slug : (post && post.subcategory) ? post.subcategory.slug : '';
+    
+            //Añadir Slug Propio segun id
+            if(post && category== '' && post.category_id == 1 && CONFIG.USE_IDS_NOTIFICATION){
+                category = 'informe';
             }
-        }
-        //en caso de categoria de emergencia
-        if(post && category== '' && post.category_id == 4 && CONFIG.USE_IDS_NOTIFICATION){
-            category = 'emergencia';
-        }
-        //en caso de categoria de problema
-        if(post && category== '' && post.category_id == 5 && CONFIG.USE_IDS_NOTIFICATION){
-            category = 'problema';
-            const subcategory_api = await this.postService.getSubcategoriesByCategory(category).pipe(
-                pluck('data'),
-                catchError(() => of([]))
-            ).toPromise();
-            const subcategory_obj = subcategory_api.filter(subcategory => subcategory.id == post.subcategory_id)
-            if(subcategory_obj && subcategory_obj.length > 0 ){
-                subcategory = subcategory_obj[0].slug;
+    
+            if(post && category== '' && post.category_id == 3 && CONFIG.USE_IDS_NOTIFICATION){
+                category = 'evento';
+                const subcategory_api = await this.postService.getSubcategoriesByCategory(category).pipe(
+                    pluck('data'),
+                    catchError(() => of({}))
+                ).toPromise();
+                const subcategory_obj = subcategory_api.filter(subcategory => subcategory.id == post.subcategory_id)
+                if(subcategory_obj && subcategory_obj.length > 0 ){
+                    subcategory = subcategory_obj[0].slug;
+                }
             }
-        }
-
-        const id_post = (post) ? post.id : null;
-        const slug_category = (category) ? category.toLowerCase() : '';
-        const slug_subcategory = (subcategory) ? subcategory.toLowerCase() : '';
-
-        //Traer post 
-        const postApi = await this.postService.getPostDetail(post.id).pipe(pluck('data'), catchError(() => of({}))).toPromise();
-
-        if (postApi && id_post && slug_category) {
-            //Switch de Opciones segun el slug del posts
-            console.log('id_post', id_post)
-            console.log('slug_category', slug_category)
-            console.log('slug_subcategory', slug_subcategory)
-            // console.log('switch case slug', slug_category)
-            switch (slug_category) {
-                case CONFIG.EMERGENCIES_SLUG: //caso posts emergencia creado
-                    urlNavigate = `/emergencies/list/${id_post}`;
-                    break;
-                case CONFIG.EVENTS_SLUG: //caso posts evento creado                   
-                    if (slug_subcategory && postApi.state == 1) {
-                        urlNavigate = `/events/list/${slug_subcategory}/${id_post}`;
-                    } else {
+            //en caso de categoria de emergencia
+            if(post && category== '' && post.category_id == 4 && CONFIG.USE_IDS_NOTIFICATION){
+                category = 'emergencia';
+            }
+            //en caso de categoria de problema
+            if(post && category== '' && post.category_id == 5 && CONFIG.USE_IDS_NOTIFICATION){
+                category = 'problema';
+                const subcategory_api = await this.postService.getSubcategoriesByCategory(category).pipe(
+                    pluck('data'),
+                    catchError(() => of([]))
+                ).toPromise();
+                const subcategory_obj = subcategory_api.filter(subcategory => subcategory.id == post.subcategory_id)
+                if(subcategory_obj && subcategory_obj.length > 0 ){
+                    subcategory = subcategory_obj[0].slug;
+                }
+            }
+    
+            const id_post = (post) ? post.id : null;
+            const slug_category = (category) ? category.toLowerCase() : '';
+            const slug_subcategory = (subcategory) ? subcategory.toLowerCase() : '';
+    
+            //Traer post 
+            const postApi = await this.postService.getPostDetail(post.id).pipe(pluck('data'), catchError(() => of({}))).toPromise();
+    
+            if (postApi && id_post && slug_category) {
+                //Switch de Opciones segun el slug del posts
+                console.log('id_post', id_post)
+                console.log('slug_category', slug_category)
+                console.log('slug_subcategory', slug_subcategory)
+                switch (slug_category) {
+                    case CONFIG.EMERGENCIES_SLUG: //caso posts emergencia creado
+                        urlNavigate = `/emergencies/list/${id_post}`;
+                        break;
+                    case CONFIG.EVENTS_SLUG: //caso posts evento creado                   
+                        if (slug_subcategory && postApi.state == 1) {
+                            urlNavigate = `/events/list/${slug_subcategory}/${id_post}`;
+                        } else {
+                            urlNavigate = null;
+                            // urlNavigate = `events/categories`;
+                        }
+                        break;
+                    case CONFIG.SOCIAL_PROBLEMS_SLUG: // caso posts problema social
+                        if (slug_subcategory && postApi.state == 1) {
+                            urlNavigate = `/social-problems/list/${slug_subcategory}/${id_post}`;
+                        } else {
+                            urlNavigate = null;
+                            // urlNavigate = `/social-problems/categories`;
+                        }
+                        break;
+                    case CONFIG.REPORTS_SLUG: //caso reporte o informe
+                        if(postApi.state == 1){
+                            urlNavigate = `/reports/list/${id_post}`;
+                        }else{
+                            urlNavigate = null;
+                        }
+                        break;
+                    default:
                         urlNavigate = null;
-                        // urlNavigate = `events/categories`;
-                    }
-                    break;
-                case CONFIG.SOCIAL_PROBLEMS_SLUG: // caso posts problema social
-                    if (slug_subcategory && postApi.state == 1) {
-                        urlNavigate = `/social-problems/list/${slug_subcategory}/${id_post}`;
-                    } else {
-                        urlNavigate = null;
-                        // urlNavigate = `/social-problems/categories`;
-                    }
-                    break;
-                case CONFIG.REPORTS_SLUG: //caso reporte o informe
-                    if(postApi.state == 1){
-                        urlNavigate = `/reports/list/${id_post}`;
-                    }else{
-                        urlNavigate = null;
-                    }
-                    break;
-                default:
-                    urlNavigate = null;
-                    break;
-            }
-
-            if (urlNavigate) {
-                
-                setTimeout(() => {
-                    this.navCtrl.navigateForward(urlNavigate);
-                    closeModalsOpened();
-                }, 1500);
+                        break;
+                }
+    
+                if (urlNavigate) {
+                    
+                    setTimeout(() => {
+                        this.navCtrl.navigateForward(urlNavigate);
+                        closeModalsOpened();
+                    }, 1500);
+                }
             }
         }
 
+        //Manejar tipo de acción
         const accion = aditionalDataPost.action;
 
         switch (accion) {

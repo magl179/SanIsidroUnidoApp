@@ -30,18 +30,10 @@
                 margin-right: .7rem;
                 font-size: 1rem;
               }
-              .description {
+              .description, .date, .ubication {
                 line-height: 1.5rem;
               }
-              .icon-fulldate {
-                color: var(--ion-color-primary);
-              }
-              .icon-ubication {
-                color: var(--ion-color-orange);
-              }
-              .icon-people {
-                color: var(--ion-color-primary);
-              }
+              
             }
             p{
               font-size: .92em;
@@ -68,6 +60,18 @@
       font-size: 25px;
     }
     
+}
+
+.icon-ubication {
+  color: var(--ion-color-orange);
+}
+
+.icon-fulldate {
+  color: var(--ion-color-primary);
+}
+
+.icon-people {
+  color: var(--ion-color-primary);
 }
 
 ion-card{

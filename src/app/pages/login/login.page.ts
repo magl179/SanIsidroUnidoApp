@@ -197,11 +197,13 @@ export class LoginPage implements OnInit {
         // Campo Email
         const email = new FormControl('', Validators.compose([
             Validators.required,
-            Validators.email
+            Validators.email,
+            Validators.maxLength(validations.email.maxlength)
         ]));
         // Campo Contraseña
         const password = new FormControl('', Validators.compose([
-            Validators.required
+            Validators.required,
+            Validators.maxLength(validations.password.maxlength)
         ]));
         // Añado Propiedades al Form
         this.loginForm = this.formBuilder.group({ email, password });

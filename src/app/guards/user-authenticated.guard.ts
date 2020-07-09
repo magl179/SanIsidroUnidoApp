@@ -17,7 +17,6 @@ export class UserAuthenticatedGuard implements CanActivate {
 
     async canActivate(): Promise<boolean> {
         const tokenDecoded = await this.authService.isAuthenticated();
-        console.log('tokenDecoded',)
         if (tokenDecoded) {
             return true;
         } else {

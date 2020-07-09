@@ -83,7 +83,7 @@
                 </ion-card-header>
                 <ion-card-content class="post-content">
                     <p class="post-description">
-                        {{socialProblem.description}}
+                        {{socialProblem.description | truncate: 140}}
                     </p>
                 </ion-card-content>
             </div>

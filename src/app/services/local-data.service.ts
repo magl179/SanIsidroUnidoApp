@@ -20,34 +20,36 @@ export class LocalDataService {
             },
             first_name: {
                 required: true,
-                minlength: 3,
-                maxlength: 20,
+                minlength: 2,
+                maxlength: 25,
                 pattern: /^[a-zA-ZáéñÑíóúÁÉÍÓÚ ]+[a-zA-ZáéíñÑóúÁÉÍÓÚ ]+$/
             },
             last_name: {
                 required: true,
-                minlength: 4,
-                maxlength: 20,
+                minlength: 2,
+                maxlength: 25,
                 pattern: /^[a-zA-ZáéñÑíóúÁÉÍÓÚ ]+[a-zA-ZáéíñÑóúÁÉÍÓÚ ]+$/
             },
             email: {
                 required: true,
                 minlength: 10,
-                maxlength: 20
+                maxlength: 60
             },
             password: {
                 required: true,
                 minlength: 8,
-                maxlength: 20,
+                maxlength: 60,
                 pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,20}$/
             },
             password_confirm: {
                 required: true,
-                minlength: 8
+                minlength: 8,
+                maxlength: 60,
             },
             confirmPassword: {
                 required: true,
-                minlength: 8
+                minlength: 8,
+                maxlength: 60,
             },
             number_phone: {
                 required: true,
@@ -62,13 +64,24 @@ export class LocalDataService {
             },
             description: {
                 required: true,
-                minlength: 8,
-                maxlength: 30
+                minlength: 3,
+                maxlength: 1024
             },
             ubication: {
                 description: {
+                    required: true,
                     maxlength: 1024
                 }
+            },
+            category: {
+                required: true,
+                minlength: 3,
+                maxlength: 40
+            },
+            subcategory: {
+                required: true,
+                minlength: 3,
+                maxlength: 40
             }
         }
     }
@@ -125,7 +138,7 @@ export class LocalDataService {
                     message: `El Email debe contener al menos ${validations.email.minlength} caracteres`
                 },
                 maxlength: {
-                    message: `El Email debe contener máximo ${validations.email.minlength} caracteres`
+                    message: `El Email debe contener máximo ${validations.email.maxlength} caracteres`
                 },
                 pattern: {
                     message: `Ingresa un email válido`
@@ -142,7 +155,7 @@ export class LocalDataService {
                     message: `La Contraseña debe contener al menos ${validations.password.minlength} caracteres`
                 },
                 maxlength: {
-                    message: `La Contraseña debe contener máximo ${validations.password.minlength} caracteres`
+                    message: `La Contraseña debe contener máximo ${validations.password.maxlength} caracteres`
                 },
                 pattern: {
                     message: `Ingresa una contraseña segura`
@@ -151,6 +164,12 @@ export class LocalDataService {
             password_confirm: {
                 required: {
                     message: 'La confirmación de contraseña es obligatoria'
+                },
+                minlength: {
+                    message: `La confirmación de contraseña debe contener al menos ${validations.password.minlength} caracteres`
+                },
+                maxlength: {
+                    message: `La confirmación de contraseña debe contener máximo ${validations.password.maxlength} caracteres`
                 },
                 mustMatch: {
                     message: `Las contraseñas no coinciden`
@@ -178,10 +197,10 @@ export class LocalDataService {
                     message: 'El Título es Obligatorio'
                 },
                 minlength: {
-                    message: `El Título debe contener al menos ${validations.password.minlength} caracteres`
+                    message: `El Título debe contener al menos ${validations.title.minlength} caracteres`
                 },
                 maxlength: {
-                    message: `El Título debe contener máximo ${validations.password.minlength} caracteres`
+                    message: `El Título debe contener máximo ${validations.title.maxlength} caracteres`
                 }
             },
             description: {
@@ -189,10 +208,10 @@ export class LocalDataService {
                     message: 'La descripción es Obligatoria'
                 },
                 minlength: {
-                    message: `La descripción debe contener al menos ${validations.password.minlength} caracteres`
+                    message: `La descripción debe contener al menos ${validations.description.minlength} caracteres`
                 },
                 maxlength: {
-                    message: `La descripción debe contener máximo ${validations.password.minlength} caracteres`
+                    message: `La descripción debe contener máximo ${validations.description.maxlength} caracteres`
                 }
             },
             category: {
@@ -200,10 +219,10 @@ export class LocalDataService {
                     message: 'La Categoria es Obligatoria'
                 },
                 minlength: {
-                    message: `La Categoria debe contener al menos ${validations.password.minlength} caracteres`
+                    message: `La Categoria debe contener al menos ${validations.category.minlength} caracteres`
                 },
                 maxlength: {
-                    message: `La Categoria debe contener máximo ${validations.password.minlength} caracteres`
+                    message: `La Categoria debe contener máximo ${validations.category.maxlength} caracteres`
                 }
             },
             subcategory: {
@@ -211,15 +230,25 @@ export class LocalDataService {
                     message: 'La Subcategoria es Obligatoria'
                 },
                 minlength: {
-                    message: `La Subcategoria debe contener al menos ${validations.password.minlength} caracteres`
+                    message: `La Subcategoria debe contener al menos ${validations.subcategory.minlength} caracteres`
                 },
                 maxlength: {
-                    message: `La Subcategoria debe contener máximo ${validations.password.minlength} caracteres`
+                    message: `La Subcategoria debe contener máximo ${validations.subcategory.maxlength} caracteres`
                 }
             },
             termconditions: {
                 required: {
                     message: 'Por favor acepta los términos y condiciones'
+                }
+            },
+            ubication: {
+                description: {
+                    required: {
+                        message: `La descripción es requerida`
+                    },
+                    maxlength: {
+                        message: `La descripción debe contener máximo ${validations.ubication.description.maxlength} caracteres`
+                    }
                 }
             }
         }
