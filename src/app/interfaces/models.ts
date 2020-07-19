@@ -135,6 +135,7 @@ export interface IPost {
     reactions?: IReaction[],
     images?: I_ImagesApi[];
     imagesArr: string[];
+    phonesStr: string;
     subcategory_slug?: string;
     category_slug?: string;
 }

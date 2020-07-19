@@ -11,25 +11,14 @@ import { CONFIG } from 'src/config/config';
 })
 export class AboutPage implements OnInit {
     isConnected = true;
-    CurrentUserDevice: IDeviceUser = {
-        id: null,
-        phone_id: null,
-        user_id: null
-    };
     config = CONFIG;
     constructor(
-        private notiService: NotificationsService,
         private networkService: NetworkService,
     ) {
 
     }
 
-    async ngOnInit() {
-        this.notiService.getUserDevice().subscribe(userdevice => {
-            if(userdevice){
-                this.CurrentUserDevice = userdevice;
-            }
-        });
+    async ngOnInit() {      
         this.networkService.getNetworkStatus().subscribe((connected: boolean) => {
             this.isConnected = connected;
         });

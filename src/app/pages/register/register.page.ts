@@ -82,10 +82,10 @@ export class RegisterPage implements OnInit {
         const loadingRegisterValidation = await this.utilsService.createBasicLoading('Registrando Usuario');
         loadingRegisterValidation.present();
         // Datos Formulario Registro
-        const first_name = this.registerForm.value.first_name;
-        const last_name = this.registerForm.value.last_name;
-        const email = this.registerForm.value.email;
-        const password = this.registerForm.value.password;
+        const first_name = this.registerForm.value.first_name.trim();
+        const last_name = this.registerForm.value.last_name.trim();
+        const email = this.registerForm.value.email.trim();
+        const password = this.registerForm.value.password.trim();
         const user = {
             first_name, last_name, email, password, social_id: null, provider: 'formulario', device: null
         };

@@ -1,13 +1,13 @@
 import { Injectable, EventEmitter, OnInit } from '@angular/core';
 import { OneSignal, OSNotification, OSNotificationPayload } from '@ionic-native/onesignal/ngx';
 import { environment } from 'src/environments/environment';
-import { BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject, of, Observable } from 'rxjs';
 import { Platform, NavController } from '@ionic/angular';
 import { UserService } from './user.service';
 import { AuthService } from './auth.service';
 import { IDeviceUser, ITokenDecoded, INotiList } from 'src/app/interfaces/models';
 import { Device } from '@ionic-native/device/ngx';
-import { CONFIG } from 'src/config/config';
+import { CONFIG, USER_DEVICE_DEFAULT } from 'src/config/config';
 import { MessagesService } from './messages.service';
 import { ErrorService } from './error.service';
 import { Storage } from '@ionic/storage'
@@ -19,15 +19,6 @@ import { PostsService } from './posts.service';
 import { catchError, pluck } from 'rxjs/operators';
 import { EventsService} from 'src/app/services/events.service';
 
-const USER_DEVICE_ID_STORAGE = "siuDevice";
-
-const USER_DEVICE_DEFAULT: IDeviceUser = {
-    id: null,
-    user_id: null,
-    phone_id: '',
-    phone_model: '',
-    phone_platform: ''
-};
 
 @Injectable({
     providedIn: 'root'
@@ -87,26 +78,13 @@ export class NotificationsService implements OnInit {
         }
     }
 
-    //Guardar ID Dispositivo en el Storage
-    async saveDeviceInfo(device_id: string) {
-        this.storage.set(USER_DEVICE_ID_STORAGE, device_id);
-    }
-    //Obtener ID Dispositivo en el Storage
-    async getUserDeviceInfo() {
-        const getUserDeviceID = new Promise((resolve, reject) => {
-            this.storage.get(USER_DEVICE_ID_STORAGE).then(user_device => {
-                resolve(user_device);
-            });
-        });
-        return await getUserDeviceID;
-    }
-
+      
     //Retornar la información del dispositivo del usuario como un observable
-    getUserDevice() {
+    getUserDevice(): Observable<IDeviceUser> {
         return this.userDevice.asObservable();
     }
     //Carga la información del usuario autenticado
-    loadUser() {
+    loadUser():void {
         this.authService.sessionAuthUser.subscribe(res => {
             if (res) {
                 this.AuthUser = res.user;
@@ -126,9 +104,8 @@ export class NotificationsService implements OnInit {
             };
             this.userService.sendRequestAddUserDevice(data)
                 .subscribe(() => {
-                    this.saveDeviceInfo(this.userDevice.value.phone_id);
                 }, (error_http: HttpErrorResponse) => {
-                    this.errorService.manageHttpError(error_http, 'No pudimos agregar el dispositivo', false);
+                    this.errorService.manageHttpError(error_http, 'No se pudo añadir el dispositivo', false);
                 });
         }
     }
@@ -201,7 +178,7 @@ export class NotificationsService implements OnInit {
             this.userDevice.next(userDevice);
             return userDevice;
         } else {
-            return null;
+            return USER_DEVICE_DEFAULT;
         }
     }
 
@@ -225,17 +202,13 @@ export class NotificationsService implements OnInit {
         //Manejar evento de POST
         const post = (aditionalDataPost) ? aditionalDataPost.post : null;
         if(post){
-
             var urlNavigate = null;
-    
             let category = (post && post.category_slug) ? post.category_slug : (post && post.category) ? post.category.slug : '';
-            let subcategory = (post && post.subcategory_slug) ? post.subcategory_slug : (post && post.subcategory) ? post.subcategory.slug : '';
-    
+            let subcategory = (post && post.subcategory_slug) ? post.subcategory_slug : (post && post.subcategory) ? post.subcategory.slug : '';    
             //Añadir Slug Propio segun id
             if(post && category== '' && post.category_id == 1 && CONFIG.USE_IDS_NOTIFICATION){
                 category = 'informe';
-            }
-    
+            }    
             if(post && category== '' && post.category_id == 3 && CONFIG.USE_IDS_NOTIFICATION){
                 category = 'evento';
                 const subcategory_api = await this.postService.getSubcategoriesByCategory(category).pipe(
@@ -273,9 +246,7 @@ export class NotificationsService implements OnInit {
     
             if (postApi && id_post && slug_category) {
                 //Switch de Opciones segun el slug del posts
-                console.log('id_post', id_post)
-                console.log('slug_category', slug_category)
-                console.log('slug_subcategory', slug_subcategory)
+                console.log('datos noti', {id_post, slug_category, slug_subcategory})
                 switch (slug_category) {
                     case CONFIG.EMERGENCIES_SLUG: //caso posts emergencia creado
                         urlNavigate = `/emergencies/list/${id_post}`;

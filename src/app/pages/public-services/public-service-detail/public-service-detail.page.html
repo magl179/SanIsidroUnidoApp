@@ -25,6 +25,11 @@
             </p>
         </div>
         <div>
+            <p style="display:block;font-weight: bold;">Número(s) de Teléfono:</p>
+            <p>{{(publicServiceDetail.phonesStr) ? publicServiceDetail.phonesStr: 'No disponible'}}
+            </p>
+        </div>
+        <div>
             <p style="display:block;font-weight: bold;">Horario Atención:</p>
             <p
                 *ngIf="publicServiceDetail.public_opening && publicServiceDetail.public_opening.open_time && publicServiceDetail.public_opening.close_time; else sinHorarioAtencion">

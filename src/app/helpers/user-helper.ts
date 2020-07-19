@@ -47,21 +47,3 @@ export const isActive = async (authUser) => {
     }
     return isActive;
 }
-
-export const getUserDevice = (devices: IDeviceUser[], device_user) => {
-    const objNull = {
-        id: null,
-        phone_id: null,
-        user_id: null
-    };
-    if (devices && devices.length > 0) {
-        const userDevicesFilter = devices.filter((device: IDeviceUser) => device.phone_id === device_user.phone_id);
-        if (userDevicesFilter.length === 0) {
-            return objNull;
-        } else {
-            return userDevicesFilter[0];
-        }
-    } else {
-        return objNull;
-    }
-}

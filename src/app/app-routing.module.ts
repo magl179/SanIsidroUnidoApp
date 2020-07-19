@@ -43,7 +43,8 @@ const routes: Routes = [
     },
     {
         path: 'login', //Pantalla de Login
-        loadChildren: './pages/login/login.module#LoginPageModule'
+        loadChildren: './pages/login/login.module#LoginPageModule',
+        canActivate: [UserIsLoggedGuard]
     },
     {
         path: 'public-services', //Pantalla de Servicios Públicos
@@ -53,6 +54,7 @@ const routes: Routes = [
     {
         path: 'register', //Pantalla de Registro
         loadChildren: './pages/register/register.module#RegisterPageModule',
+        canActivate: [UserIsLoggedGuard]
     },
     {
         path: 'reports', //Pantalla de Reportes

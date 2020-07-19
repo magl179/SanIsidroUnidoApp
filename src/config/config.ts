@@ -1,4 +1,5 @@
 import { IMAPLAYERS } from './config.model';
+import { IDeviceUser } from '../app/interfaces/models';
 
 interface ICONFIG {
     ALLOWED_ROLES_SIGN_IN: string[];
@@ -68,4 +69,14 @@ export const CONFIG: ICONFIG = {
     description: 'Frente a la Policia Municipal'
     }
 }
+
+
+export const USER_DEVICE_DEFAULT: IDeviceUser = {
+    id: null,
+    user_id: null,
+    phone_model: '',
+    phone_id: '',
+    // phone_id: '',
+    phone_platform: ''
+};
 

@@ -82,8 +82,8 @@ export class LoginPage implements OnInit {
     async loginUser() {
         const loadingLoginValidation = await this.utilsService.createBasicLoading('Validando Credenciales');
         loadingLoginValidation.present();
-        const email = this.loginForm.value.email;
-        const password = this.loginForm.value.password;
+        const email = this.loginForm.value.email.trim();
+        const password = this.loginForm.value.password.trim();
         const loginData = { email, password, provider: 'formulario', device: null };
         //Añadir informacion dispositivo
         const device = await this.notificationsService.getOneSignalIDSubscriptor();

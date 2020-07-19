@@ -76,6 +76,12 @@
                             </span>
                             <span>{{ (event.ubication && event.ubication.address) ? event.ubication.address : 'Direccion no encontrada' }}</span>
                         </p>
+                        <p class="item-info" *ngIf="event.phonesStr">
+                            <span class="icon-phones">
+                                <ion-icon name="call"></ion-icon>
+                            </span>
+                            <span>{{ event.phonesStr }}</span>
+                        </p>
                         <p class="item-info">
                             <span class="icon-ubication">
                                 <ion-icon name="contact" class="social-problem-state"></ion-icon>

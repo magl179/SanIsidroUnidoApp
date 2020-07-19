@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IRespuestaApiSIUSingle, ISimpleCoordinates, AppMapEvent, IPublicService } from 'src/app/interfaces/models';
 import { PublicService } from "src/app/services/public.service";
-import { take, finalize, flatMap, pluck } from 'rxjs/operators';
+import { take, finalize, flatMap, pluck, catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LocalizationService } from "src/app/services/localization.service";
 import { getDistanceInKm, roundDecimal } from 'src/app/helpers/utils';
 import { ErrorService } from 'src/app/services/error.service';
+import { of } from 'rxjs';
 
 @Component({
     selector: 'siu-public-service-detail',
@@ -55,6 +56,10 @@ export class PublicServiceDetailPage implements OnInit {
             take(1),
             flatMap(async (res: IRespuestaApiSIUSingle) => {
                 if (res && res.data) {
+                    res.data.phonesStr = null;
+                    if(res.data.phones && res.data.phones.length > 0){
+                        res.data.phonesStr = res.data.phones.map(phone => phone.phone_number).toString().replace(/,/gi, ' - ');
+                    }
                     if (res.data.ubication.latitude && res.data.ubication.longitude && this.currentPosition ) {
                         if(!this.showSimpleMap){
                             res.data.distance = roundDecimal(getDistanceInKm(this.currentPosition.latitude, this.currentPosition.longitude, res.data.ubication.latitude, res.data.ubication.longitude));
@@ -66,13 +71,13 @@ export class PublicServiceDetailPage implements OnInit {
                 return res;
             }),
             pluck('data'),
-            finalize(() => {
-                this.publicServiceLoaded = true;
-            })
+            catchError((error_http: HttpErrorResponse) => {
+                this.errorService.manageHttpError(error_http, 'Ocurrio un error al cargar el detalle del servicio')
+                return of(null);
+            }),
         ).subscribe((res: IPublicService) => {
             this.publicServiceDetail = res;
-        }, (error_http: HttpErrorResponse) => {
-            this.errorService.manageHttpError(error_http, 'Ocurrio un error al cargar el detalle del servicio')
+            this.publicServiceLoaded = true;
         });
     }
 

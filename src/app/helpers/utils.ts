@@ -196,6 +196,12 @@ export const mapEvent = (event) => {
         event.images = mapImagesApi(event.resources);
         event.imagesArr = getValueKeyFromArrObj(event.resources, 'url_link');
     }
+   
+    event.phonesStr = null;
+    if(event.phones && event.phones.length > 0){
+        event.phonesStr = event.phones.map(phone => phone.phone_number).toString().replace(/,/gi, ' - ');
+    }
+
     const range_date = (event.additional_data && event.additional_data.range_date) ? event.additional_data.range_date : null;
     if (range_date) {
         const my_start_date = (range_date.start_date) ? formatString(range_date.start_date, 'dd MMM yyyy') : '';

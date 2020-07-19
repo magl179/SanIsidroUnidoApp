@@ -110,6 +110,7 @@ export class RequestMembershipPage implements OnInit {
             basic_service_image: imagen,
             ...this.requestMembershipForm.value
         }
+        this.formSended = true;
         this.userService.sendRequestUserMembership(requestObj).subscribe(async (res: IRespuestaApiSIUSingle) => {
             const token = res.data.token;
             const token_decoded = decodeToken(token);
@@ -121,6 +122,7 @@ export class RequestMembershipPage implements OnInit {
                 this.closeModal();
             }, 150);
         }, (error_http: HttpErrorResponse) => {
+            this.formSended = false;
             this.errorService.manageHttpError(error_http, 'La solicitud no ha podido ser enviada');
         });
     }

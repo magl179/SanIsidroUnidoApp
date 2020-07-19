@@ -8,12 +8,14 @@ import { NotificationsService } from 'src/app/services/notifications.service';
 import { IRespuestaApiSIU, ITokenDecoded, IRespuestaApiSIUSingle, IDeviceUser, IEventLoad } from "src/app/interfaces/models";
 import { UserService } from 'src/app/services/user.service';
 import { UtilsService } from 'src/app/services/utils.service';
-import { getUserDevice } from 'src/app/helpers/user-helper';
-import { finalize, map, pluck } from 'rxjs/operators';
+import { map, pluck, catchError } from 'rxjs/operators';
 import { getImageURL, mapUser } from 'src/app/helpers/utils';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from 'src/app/services/error.service';
 import { MessagesService } from 'src/app/services/messages.service';
+import { of } from 'rxjs';
+import { ISocialProfile } from '../../interfaces/models';
+import { USER_DEVICE_DEFAULT } from 'src/config/config';
 
 @Component({
     selector: 'app-user',
@@ -24,19 +26,16 @@ export class UserPage implements OnInit {
 
     sizeOptions = 4;
     AuthUser = null;
-    UserDevices = [];
+    userDevices = [];
     UserSocialProfiles = [];
-    CurrentUserDevice: IDeviceUser = {
-        id: null,
-        phone_id: null,
-        user_id: null
-    };
+    currentUserDevice: IDeviceUser = USER_DEVICE_DEFAULT;
     statusUserProfilesRequest = {
         completed: false,
         success: false
     };
     userDevicesLoaded = false;
     userSocialProfilesLoaded = false;
+    loginMethod = "";
 
     constructor(
         private authService: AuthService,
@@ -45,7 +44,7 @@ export class UserPage implements OnInit {
         private utilsService: UtilsService,
         private messageService: MessagesService,
         private errorService: ErrorService,
-        private notificationsService: NotificationsService
+        public notificationsService: NotificationsService
     ) {
     }
 
@@ -71,43 +70,28 @@ export class UserPage implements OnInit {
                 this.getUserSocialProfiles();
                 this.getUserDevices();
                 this.notificationsService.getUserDevice().subscribe(userdevice => {
-                    if (userdevice) {
-                        this.CurrentUserDevice = getUserDevice(this.UserDevices, userdevice);
-                    }
+                    this.currentUserDevice = userdevice;
                 }, (error_http: HttpErrorResponse) => {
                     this.errorService.manageHttpError(error_http, 'Ocurrio un error al obtener tus dispositivos asociados');
                 });
             }
+            this.loginMethod = await this.authService.getMethodLogin();
         });
     }
 
     getUserSocialProfiles() {
-        this.userService.getSocialProfilesUser().pipe(
-            finalize(() => {
-                this.userSocialProfilesLoaded = true;
-            })
-        ).subscribe((res: IRespuestaApiSIU) => {
-            if (res.data) {
-                this.UserSocialProfiles = res.data;
-
-            }
-        }, (error_http: HttpErrorResponse) => {
-            this.errorService.manageHttpError(error_http, 'Ocurrio un error al obtener tus perfiles sociales');
+        this.userService.getSocialProfilesUser()        
+        .subscribe((res: ISocialProfile[]) => {
+            this.UserSocialProfiles = res;
+            this.userSocialProfilesLoaded = true;
         });
     }
 
-    getUserDevices() {
-        this.userService.getDevicesUser().pipe(
-            finalize(() => {
-                this.userDevicesLoaded = true;
-            })
-        ).subscribe((res: IRespuestaApiSIU) => {
-            if (res.data) {
-                this.UserDevices = res.data;
-
-            }
-        }, (error_http: HttpErrorResponse) => {
-            this.errorService.manageHttpError(error_http, 'Ocurrio un error al obtener la información de tus dispositivos');
+    getUserDevices():void {
+        this.userService.getDevicesUser()       
+        .subscribe((res: IDeviceUser[]) => {
+            this.userDevices = res;
+            this.userDevicesLoaded = true;
         });
     }
 
@@ -147,7 +131,10 @@ export class UserPage implements OnInit {
     }
 
     //Funcion remover dispositivo asociado a un usuario en la API
-    removeUserDevice(device_id: number) {
+    removeUserDevice(device_id: number):void {
+        if(!device_id){
+            return;
+        }
         this.userService.sendRequestDeleteUserDevice(device_id).subscribe(async (res: IRespuestaApiSIUSingle) => {
             this.getUserDevices();
             this.messageService.showSuccess("Dispositivo eliminado Correctamente");
@@ -157,7 +144,8 @@ export class UserPage implements OnInit {
     }
 
     removeSocialProfileToUser(social_profile_id) {
-        this.userService.sendRequestDeleteSocialProfile(social_profile_id).subscribe(async (res: IRespuestaApiSIUSingle) => {
+        this.userService.sendRequestDeleteSocialProfile(social_profile_id)
+        .subscribe(async (res: IRespuestaApiSIU) => {
             this.getUserSocialProfiles();
             this.messageService.showSuccess("El Perfil Social fue desconectado correctamente");
         }, (error_http: HttpErrorResponse) => {
