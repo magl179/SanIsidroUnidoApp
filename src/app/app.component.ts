@@ -45,9 +45,9 @@ export class AppComponent implements OnInit {
     }
 
     async ngOnInit(): Promise<void> {
-        setTimeout(() =>{
-            this.checkUserLoggedIn();
-        }, 1200)
+    //     setTimeout(() =>{
+    //         this.checkUserLoggedIn();
+    //     }, 1200)
      }
  
     initializeApp() {
@@ -56,9 +56,8 @@ export class AppComponent implements OnInit {
                 this.statusBar.styleDefault();
                 this.splashScreen.hide();
             }
-
             this.checkUserLoggedIn();
-            timer(1400).subscribe(async () => {
+            timer(2000).subscribe(async () => {
                 await this.pushNotificationService.initialConfig();
             });
         });

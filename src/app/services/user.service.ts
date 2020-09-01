@@ -169,7 +169,10 @@ export class UserService implements OnInit {
     //Enviar solicitud para eliminar un perfil social de un usuario
     sendRequestDeleteUserPhoneDevice(phone_id: string) {
         const headers = setHeaders(CONFIG.AUTHORIZATION_NAME, this.AuthToken);
-        return this.httpRequest.delete(`${environment.APIBASEURL}/usuarios/dispositivos/logout/${phone_id}`, {}, headers );
+        if(phone_id){
+            return this.httpRequest.delete(`${environment.APIBASEURL}/usuarios/dispositivos/logout/${phone_id}`, {}, headers );
+        }
+        return of(null)
     }
 
     readNotification(id: number){

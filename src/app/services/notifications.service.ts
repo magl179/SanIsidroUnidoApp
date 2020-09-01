@@ -52,6 +52,7 @@ export class NotificationsService implements OnInit {
 
     ngOnInit() {
     }
+    
 
     async initialConfig() {
         //Configurar Onesignal en un Dispositivo
@@ -175,10 +176,15 @@ export class NotificationsService implements OnInit {
                 phone_platform: this.device.platform || 'Sistema Generico',
                 description: `${this.device.platform} ${this.device.model}`
             };
-            this.userDevice.next(userDevice);
+            // console.log('userDevice')
+            if(!userDevice.phone_id || userDevice.phone_id == ""){
+                this.userDevice.next(null);
+            }else{
+                this.userDevice.next(userDevice);
+            }
             return userDevice;
         } else {
-            return USER_DEVICE_DEFAULT;
+            return null;
         }
     }
 
