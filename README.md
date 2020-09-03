@@ -49,3 +49,85 @@ La Aplicación Móvil permitira a los usuarios:
 
 ### Mejoras en iOS
 https://reviblog.net/2017/09/06/como-mejorar-el-rendimiento-de-ionic-en-ios-y-solucion-al-problema-de-las-peticiones-http-cors/
+
+
+# Ionic Versión 1
+
+Ionic:
+
+   ionic (Ionic CLI)             : 4.12.0 (C:\Users\stali\AppData\Roaming\npm\node_modules\ionic)
+   Ionic Framework               : @ionic/angular 4.5.0
+   @angular-devkit/build-angular : 0.13.9
+   @angular-devkit/schematics    : 7.3.9
+   @angular/cli                  : 7.3.9
+   @ionic/angular-toolkit        : 1.5.1
+
+Cordova:
+
+   cordova (Cordova CLI) : 9.0.0 (cordova-lib@9.0.1)
+   Cordova Platforms     : android - copia 8.1.0, android 8.1.0, android_2, android_3
+   Cordova Plugins       : cordova-plugin-ionic-keyboard 2.1.3, cordova-plugin-ionic-webview 4.2.1, (and 19 other plugins)
+
+System:
+
+   Android SDK Tools : 26.1.1 (C:\smprograms\android\sdk)
+   NodeJS            : v12.13.1 (C:\smprograms\nodejsnvm\node.exe)
+   npm               : 6.12.1
+   OS                : Windows 10
+
+Ionic Versión 2
+Ionic:
+
+   Ionic CLI                     : 6.11.7 (C:\Users\stali\AppData\Roaming\npm\node_modules\@ionic\cli)
+   Ionic Framework               : @ionic/angular 4.5.0
+   @angular-devkit/build-angular : 0.13.9
+   @angular-devkit/schematics    : 7.3.9
+   @angular/cli                  : 7.3.9
+   @ionic/angular-toolkit        : 1.5.1
+
+Cordova:
+
+   Cordova CLI       : 9.0.0 (cordova-lib@9.0.1)
+   Cordova Platforms : android - copia 8.1.0, android 8.1.0, android_2, android_3
+   Cordova Plugins   : cordova-plugin-ionic-keyboard 2.1.3, cordova-plugin-ionic-webview 4.2.1, (and 19 other plugins)
+
+Utility:
+
+   cordova-res : not installed
+   native-run  : not installed
+
+System:
+
+   Android SDK Tools : 26.1.1 (C:\smprograms\android\sdk)
+   NodeJS            : v12.13.1 (C:\smprograms\nodejsnvm\node.exe)
+   npm               : 6.12.1
+   OS                : Windows 10
+
+   Ionic Versión 3
+
+   Ionic:
+
+   Ionic CLI                     : 6.11.7 (C:\Users\stali\AppData\Roaming\npm\node_modules\@ionic\cli)
+   Ionic Framework               : @ionic/angular 4.11.10
+   @angular-devkit/build-angular : 0.13.10
+   @angular-devkit/schematics    : 7.3.10
+   @angular/cli                  : 7.3.10
+   @ionic/angular-toolkit        : 1.5.1
+
+Cordova:
+
+   Cordova CLI       : 10.0.0
+   Cordova Platforms : android 9.0.0
+   Cordova Plugins   : cordova-plugin-ionic-keyboard 2.2.0, cordova-plugin-ionic-webview 4.2.1, (and 21 other plugins)
+
+Utility:
+
+   cordova-res : 0.15.1
+   native-run  : not installed
+
+System:
+
+   Android SDK Tools : 26.1.1 (C:\smprograms\android\sdk)
+   NodeJS            : v12.13.1 (C:\smprograms\nodejsnvm\node.exe)
+   npm               : 6.12.1
+   OS                : Windows 10

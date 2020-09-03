@@ -17,7 +17,7 @@ import { closeModalsOpened } from '../helpers/utils';
 import { getUserRoles, hasRoles } from '../helpers/user-helper';
 import { PostsService } from './posts.service';
 import { catchError, pluck } from 'rxjs/operators';
-import { EventsService} from 'src/app/services/events.service';
+import { EventsService } from 'src/app/services/events.service';
 
 
 @Injectable({
@@ -45,14 +45,14 @@ export class NotificationsService implements OnInit {
         private eventsEmitterService: EventsService
     ) {
         this.loadUser();
-        this.eventsEmitterService.logoutDevice.subscribe(async() =>{
+        this.eventsEmitterService.logoutDevice.subscribe(async () => {
             await this.logoutUserDevice();
         });
     }
 
     ngOnInit() {
     }
-    
+
 
     async initialConfig() {
         //Configurar Onesignal en un Dispositivo
@@ -79,13 +79,13 @@ export class NotificationsService implements OnInit {
         }
     }
 
-      
+
     //Retornar la información del dispositivo del usuario como un observable
     getUserDevice(): Observable<IDeviceUser> {
         return this.userDevice.asObservable();
     }
     //Carga la información del usuario autenticado
-    loadUser():void {
+    loadUser(): void {
         this.authService.sessionAuthUser.subscribe(res => {
             if (res) {
                 this.AuthUser = res.user;
@@ -111,15 +111,15 @@ export class NotificationsService implements OnInit {
         }
     }
 
-    async logoutUserDevice(){
+    async logoutUserDevice() {
         const userDevice = this.userDevice.getValue();
-        const phone_id = (userDevice && userDevice.phone_id) ? userDevice.phone_id: null;
+        const phone_id = (userDevice && userDevice.phone_id) ? userDevice.phone_id : null;
 
         const response = await this.logoutDeviceApi(phone_id)
-        .pipe(
-            catchError(() => of('Error al enviar peticion'))
-        )
-        .toPromise();
+            .pipe(
+                catchError(() => of('Error al enviar peticion'))
+            )
+            .toPromise();
         return response;
     }
 
@@ -158,7 +158,11 @@ export class NotificationsService implements OnInit {
     }
 
     logoutDeviceApi(deviceID) {
+        if (deviceID) {
             return this.userService.sendRequestDeleteUserPhoneDevice(deviceID);
+        } else {
+            return of(null)
+        }
     }
 
 
@@ -166,7 +170,6 @@ export class NotificationsService implements OnInit {
     async getOneSignalIDSubscriptor() {
         //Pedir acceso a notificaciones, en caso de no tenerlas
         if (this.platform.is('cordova')) {
-            // this.oneSignal.provideUserConsent(true);
             const deviceID = await this.oneSignal.getIds();
             const userDevice: IDeviceUser = {
                 user_id: null,
@@ -177,12 +180,13 @@ export class NotificationsService implements OnInit {
                 description: `${this.device.platform} ${this.device.model}`
             };
             // console.log('userDevice')
-            if(!userDevice.phone_id || userDevice.phone_id == ""){
+            if (!userDevice.phone_id || userDevice.phone_id == "") {
                 this.userDevice.next(null);
-            }else{
+                return null;
+            } else {
                 this.userDevice.next(userDevice);
+                return userDevice;
             }
-            return userDevice;
         } else {
             return null;
         }
@@ -207,52 +211,52 @@ export class NotificationsService implements OnInit {
 
         //Manejar evento de POST
         const post = (aditionalDataPost) ? aditionalDataPost.post : null;
-        if(post){
+        if (post) {
             var urlNavigate = null;
             let category = (post && post.category_slug) ? post.category_slug : (post && post.category) ? post.category.slug : '';
-            let subcategory = (post && post.subcategory_slug) ? post.subcategory_slug : (post && post.subcategory) ? post.subcategory.slug : '';    
+            let subcategory = (post && post.subcategory_slug) ? post.subcategory_slug : (post && post.subcategory) ? post.subcategory.slug : '';
             //Añadir Slug Propio segun id
-            if(post && category== '' && post.category_id == 1 && CONFIG.USE_IDS_NOTIFICATION){
+            if (post && category == '' && post.category_id == 1 && CONFIG.USE_IDS_NOTIFICATION) {
                 category = 'informe';
-            }    
-            if(post && category== '' && post.category_id == 3 && CONFIG.USE_IDS_NOTIFICATION){
+            }
+            if (post && category == '' && post.category_id == 3 && CONFIG.USE_IDS_NOTIFICATION) {
                 category = 'evento';
                 const subcategory_api = await this.postService.getSubcategoriesByCategory(category).pipe(
                     pluck('data'),
                     catchError(() => of({}))
                 ).toPromise();
                 const subcategory_obj = subcategory_api.filter(subcategory => subcategory.id == post.subcategory_id)
-                if(subcategory_obj && subcategory_obj.length > 0 ){
+                if (subcategory_obj && subcategory_obj.length > 0) {
                     subcategory = subcategory_obj[0].slug;
                 }
             }
             //en caso de categoria de emergencia
-            if(post && category== '' && post.category_id == 4 && CONFIG.USE_IDS_NOTIFICATION){
+            if (post && category == '' && post.category_id == 4 && CONFIG.USE_IDS_NOTIFICATION) {
                 category = 'emergencia';
             }
             //en caso de categoria de problema
-            if(post && category== '' && post.category_id == 5 && CONFIG.USE_IDS_NOTIFICATION){
+            if (post && category == '' && post.category_id == 5 && CONFIG.USE_IDS_NOTIFICATION) {
                 category = 'problema';
                 const subcategory_api = await this.postService.getSubcategoriesByCategory(category).pipe(
                     pluck('data'),
                     catchError(() => of([]))
                 ).toPromise();
                 const subcategory_obj = subcategory_api.filter(subcategory => subcategory.id == post.subcategory_id)
-                if(subcategory_obj && subcategory_obj.length > 0 ){
+                if (subcategory_obj && subcategory_obj.length > 0) {
                     subcategory = subcategory_obj[0].slug;
                 }
             }
-    
+
             const id_post = (post) ? post.id : null;
             const slug_category = (category) ? category.toLowerCase() : '';
             const slug_subcategory = (subcategory) ? subcategory.toLowerCase() : '';
-    
+
             //Traer post 
             const postApi = await this.postService.getPostDetail(post.id).pipe(pluck('data'), catchError(() => of({}))).toPromise();
-    
+
             if (postApi && id_post && slug_category) {
                 //Switch de Opciones segun el slug del posts
-                console.log('datos noti', {id_post, slug_category, slug_subcategory})
+                console.log('datos noti', { id_post, slug_category, slug_subcategory })
                 switch (slug_category) {
                     case CONFIG.EMERGENCIES_SLUG: //caso posts emergencia creado
                         urlNavigate = `/emergencies/list/${id_post}`;
@@ -274,9 +278,9 @@ export class NotificationsService implements OnInit {
                         }
                         break;
                     case CONFIG.REPORTS_SLUG: //caso reporte o informe
-                        if(postApi.state == 1){
+                        if (postApi.state == 1) {
                             urlNavigate = `/reports/list/${id_post}`;
-                        }else{
+                        } else {
                             urlNavigate = null;
                         }
                         break;
@@ -284,9 +288,9 @@ export class NotificationsService implements OnInit {
                         urlNavigate = null;
                         break;
                 }
-    
+
                 if (urlNavigate) {
-                    
+
                     setTimeout(() => {
                         this.navCtrl.navigateForward(urlNavigate);
                         closeModalsOpened();
@@ -306,7 +310,7 @@ export class NotificationsService implements OnInit {
                 closeModalsOpened();
                 if (hasRoleInvitado) {
                     this.authService.logout();
-                }           
+                }
             default:
                 return;
         }
