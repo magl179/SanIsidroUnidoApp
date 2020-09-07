@@ -44,11 +44,8 @@ export class AppComponent implements OnInit {
         event.target.src = 'assets/img/default/img_avatar.png'
     }
 
-    async ngOnInit(): Promise<void> {
-    //     setTimeout(() =>{
-    //         this.checkUserLoggedIn();
-    //     }, 1200)
-     }
+    ngOnInit(): void {
+    }
  
     initializeApp() {
         this.platform.ready().then(async () => {

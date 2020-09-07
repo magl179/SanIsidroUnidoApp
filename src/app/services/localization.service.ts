@@ -86,9 +86,9 @@ export class LocalizationService {
                     resolve(true);
                 }
             })
-            .catch((e) => {
-                reject(false);
-            });
+                .catch((e) => {
+                    reject(false);
+                });
         });
     }
 
@@ -137,7 +137,7 @@ export class LocalizationService {
                 });
         });
     }
-    
+
     //Obtener localización
     async requestGPSPermission() {
         return new Promise((resolve, reject) => {
@@ -174,15 +174,15 @@ export class LocalizationService {
         return new Promise(async (resolve, reject) => {
             if (this.platform.is('cordova')) {
                 await this.requestGPSPermission();
-                setTimeout(async() => {
-                return await this.getNativeLocationCoordinates().then((native_coords: ISimpleCoordinates) => {
+                setTimeout(async () => {
+                    return await this.getNativeLocationCoordinates().then((native_coords: ISimpleCoordinates) => {
                         this.misCoordenadas.latitude = native_coords.latitude;
                         this.misCoordenadas.longitude = native_coords.longitude;
                         resolve(this.misCoordenadas);
                     }).catch((error_coords) => {
                         reject(error_coords)
                     });
-                }, 1000);
+                }, 700);
             } else {
                 if (navigator.geolocation) {
                     return await this.getPositionWeb().then((currentCoords: GeolocationPosition) => {

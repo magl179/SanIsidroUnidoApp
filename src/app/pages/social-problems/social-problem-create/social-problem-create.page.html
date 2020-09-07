@@ -1,6 +1,6 @@
 <app-header title="Reportar Problema" [showBackButton]="false"></app-header>
 
-<ion-content padding>
+<ion-content class="ion-padding">
     <mat-horizontal-stepper linear="true" #stepper_social_problems>
         <!-- Paso1 -->
         <mat-step>
@@ -64,7 +64,7 @@
                         {{errorMessages.category.required.message}}
                     </p>
                 </div>
-                <div padding>
+                <div class="ion-padding">
                     <ion-button [disabled]="!socialProblemForm.valid" color="blue-logo" type="submit" expand="block"
                         (click)="stepper_social_problems.next()">
                         Siguiente
@@ -138,7 +138,7 @@
             <app-upload-image [uploadedImages]="socialProblemImages" [maxImages]="2"
                 (returnUploadedImages)="getUploadedImages($event)">
             </app-upload-image>
-            <div padding>
+            <div class="ion-padding">
                 <ion-button color="blue-logo" type="submit" expand="block" (click)="stepper_social_problems.next()">
                     Siguiente
                 </ion-button>

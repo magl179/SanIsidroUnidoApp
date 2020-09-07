@@ -154,12 +154,9 @@ export class SocialProblemCreatePage implements OnInit {
             this.socialProblemImages = [];
             this.socialProblemCoordinate.address = null;
             this.formSended = false;
-            this.cdRef.detectChanges();
-            
+            this.cdRef.detectChanges();      
             if (social_problem_subcategory && social_problem_subcategory.length > 0) {
-                setTimeout(() => {
                     this.navCtrl.navigateRoot(`/social-problems/list/${social_problem_subcategory[0]}`);
-                }, 1000);
             }
 
         }, (error_http: HttpErrorResponse) => {

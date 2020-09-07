@@ -68,9 +68,7 @@ export class EditProfilePage implements OnInit {
             this.authService.saveUserInfo(token, token_decoded);
             this.authService.saveLocalStorageInfo(token, token_decoded);
             this.messageService.showSuccess('Tus datos fueron actualizados correctamente');
-            setTimeout(()=>{
-                this.closeModal();
-            }, 500);
+            this.closeModal();
         },(error_http: HttpErrorResponse) => {
             this.messageService.showError(resolveApiError( (error_http.error && error_http.error.errors) ? error_http.error.errors: error_http.message));
         });

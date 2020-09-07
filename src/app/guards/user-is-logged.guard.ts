@@ -19,6 +19,7 @@ export class UserIsLoggedGuard implements CanActivate {
 
     async canActivate(): Promise<boolean> {
         const token = await this.authService.isAuthenticated();
+        console.log('token', token)
         if(token){
             this.navCtrl.navigateRoot(`/${CONFIG.HOME_ROUTE}`)
             return false;

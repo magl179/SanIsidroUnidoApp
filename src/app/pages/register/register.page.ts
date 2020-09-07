@@ -73,9 +73,7 @@ export class RegisterPage implements OnInit {
         //Registrar Dispositivo
         loadingManageRegister.dismiss();
         //Redigirir a la ruta HOME
-        setTimeout(() => {
-            this.navCtrl.navigateRoot(`/${CONFIG.HOME_ROUTE}`);
-        }, 900);
+        this.navCtrl.navigateRoot(`/${CONFIG.HOME_ROUTE}`);
     }
     //Function registrar al usuario por formulario
     async registerUser() {

@@ -1,6 +1,6 @@
 <app-header-back title="Reportar Emergencia" [showBackButton]="false"></app-header-back>
 
-<ion-content padding>
+<ion-content class="ion-padding">
     <mat-horizontal-stepper linear="true" #stepper_emergencies>
         <!-- Paso 1 -->
         <mat-step>
@@ -45,7 +45,7 @@
                     {{errorMessages.description.maxlength.message}}
                 </p>
                 </div>
-                <div padding>
+                <div class="ion-padding">
                     <ion-button [disabled]="!emergencyForm.valid" color="blue-logo" type="submit" expand="block"
                         (click)="stepper_emergencies.next()">Siguiente
                     </ion-button>
@@ -120,7 +120,7 @@
                 (returnUploadedImages)="getUploadedImages($event)">
             </app-upload-image>
 
-            <div padding>
+            <div class="ion-padding">
                 <ion-button color="blue-logo" type="submit" expand="block" (click)="stepper_emergencies.next()">
                     Siguiente
                 </ion-button>

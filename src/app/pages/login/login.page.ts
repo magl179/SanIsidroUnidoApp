@@ -74,9 +74,7 @@ export class LoginPage implements OnInit {
         this.loginForm.reset();
         //Redirigir Usuario
         loadingManageLogin.dismiss();
-        setTimeout(() => {
-            this.navCtrl.navigateRoot(`/${CONFIG.HOME_ROUTE}`);
-        }, 900);
+        this.navCtrl.navigateRoot(`/${CONFIG.HOME_ROUTE}`);
     }
 
     async loginUser() {
@@ -98,6 +96,7 @@ export class LoginPage implements OnInit {
             this.authService.setMethodLogin('formulario');
             this.manageLogin(res);
         }, (error_http: HttpErrorResponse) => {
+            console.log('error_http', error_http)
             this.errorService.manageHttpError(error_http, 'Ocurrio un error, intentalo más tarde')
         });
     }

@@ -98,7 +98,7 @@ export class AuthService implements OnInit, OnDestroy{
         }
         setTimeout(()=>{
             this.navCtrl.navigateRoot('/home-screen', { replaceUrl: true });
-        }, 700);
+        }, 400);
     }
 
     setMethodLogin(tipo: string){

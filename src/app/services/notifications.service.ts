@@ -294,7 +294,7 @@ export class NotificationsService implements OnInit {
                     setTimeout(() => {
                         this.navCtrl.navigateForward(urlNavigate);
                         closeModalsOpened();
-                    }, 1500);
+                    }, 750);
                 }
             }
         }

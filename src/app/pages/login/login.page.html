@@ -18,7 +18,7 @@
                         <form [formGroup]="loginForm">
                             <div class="item-form full">
                                 <ion-item class="input_item" lines="none">
-                                    <ion-label class="label-padding label-margin" position="stacked">Email
+                                    <ion-label class="label-padding label-margin" position="stacked">Email *
                                     </ion-label>
                                     <div class="input-general-container position-relative">     
                                         <ion-input class="input-beatiful input-general" placeholder="john@gmail.com" (keydown.enter)="preventEnterPressed($event)"
@@ -54,7 +54,7 @@
                             </div>
                             <div class="item-form full">
                                 <ion-item class="input_item" lines="none">
-                                    <ion-label class="label-padding label-margin" position="stacked">Contraseña
+                                    <ion-label class="label-padding label-margin" position="stacked">Contraseña *
                                     </ion-label>
                                     <div class="input-container position-relative">
                                         <ion-input class="input-beatiful" #passwordEyeLogin
@@ -95,7 +95,7 @@
                                     <span  (click)="forgotPassword()">¿Olvidaste tu contraseña?</span>
                                 </p>
                             </div>
-                            <div padding>
+                            <div class="ion-padding">
                                 <ion-button (click)="loginUser()" color="blue-logo" type="submit"
                                     expand="block" [disabled]="!loginForm.valid" class="ion-text-capitalize">
                                     Iniciar Sesión
@@ -110,7 +110,7 @@
                             tus redes sociales</p>
                     </ion-col>
                 </ion-row>
-                <ion-row justify-content-center class="padding-lateral">
+                <ion-row class="padding-lateral ion-justify-content-center">
                     <ion-col size="6">
                         <ion-button class="google-btn-alt" (click)="loginUserByGoogle()"
                             color="google-alt" expand="block">

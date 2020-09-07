@@ -180,11 +180,7 @@ export class EmergencyCreatePage implements OnInit {
             this.emergencyImages = [];
             this.emergencyPostCoordinate.address = null;
             this.formSended = false;
-
-            setTimeout(() => {
-                this.navCtrl.navigateRoot(`/emergencies/list`);
-            }, 1000);
-
+            this.navCtrl.navigateRoot(`/emergencies/list`);
         }, (error_http: HttpErrorResponse) => {
             this.errorService.manageHttpError(error_http, 'Ocurrio un error al enviar tu reporte');
         });

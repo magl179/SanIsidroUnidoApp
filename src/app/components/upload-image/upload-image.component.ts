@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { Platform } from '@ionic/angular';
 import { MessagesService } from 'src/app/services/messages.service';
-import { Observable, Observer } from 'rxjs';
+import { Observable, Observer, Subscription } from 'rxjs';
 import { CONFIG } from 'src/config/config';
 import { IUploadedImages, ICustomEvent, IProgressEvent } from 'src/app/interfaces/models';
 
@@ -19,12 +19,13 @@ let cameraOptions: CameraOptions = {
     templateUrl: './upload-image.component.html',
     styleUrls: ['./upload-image.component.scss'],
 })
-export class UploadImageComponent implements OnInit {
+export class UploadImageComponent implements OnInit, OnDestroy {
 
     @Input() maxImages = 3;
     @Input() uploadedImages: string[] = [];
     @Input() quality: number = 85;
     @Output() returnUploadedImages = new EventEmitter<IUploadedImages>();
+    private notifyToUnsubscribe: Subscription; 
 
     constructor(
         private camera: Camera,
@@ -38,6 +39,13 @@ export class UploadImageComponent implements OnInit {
         cameraOptions.mediaType = this.camera.MediaType.PICTURE;
         cameraOptions.quality = this.quality;
         this.uploadedImages = [... this.uploadedImages];
+    }
+
+    ngOnDestroy(){
+        console.log('on destroy image uplodad')
+        if(this.notifyToUnsubscribe){
+            this.notifyToUnsubscribe.unsubscribe();
+        }
     }
 
     async getUploadedImages(): Promise<void> {
@@ -98,7 +106,7 @@ export class UploadImageComponent implements OnInit {
                         (imgFileUri) => {
                             const imgURL = (<any>window).Ionic.WebView.convertFileSrc(imgFileUri);
                             this.messageService.showInfo('Procesando imagen, por favor espere')
-                            this.getBase64ImageFromURL(imgURL).subscribe(base64data => {
+                            this.notifyToUnsubscribe = this.getBase64ImageFromURL(imgURL).subscribe(base64data => {
                                 const imagenB64 = 'data:image/jpg;base64,' + base64data;
                                 this.uploadedImages.push(imagenB64);
                                 this.getUploadedImages()

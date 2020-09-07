@@ -31,10 +31,8 @@ export class UserIsActiveGuard implements CanActivate {
                 isActive =isRolActive(roles);
                 if(!isActive){
                     this.messagesService.showInfo('Usuario no tiene permisos, por favor contactese con el administrador')
-                    setTimeout(()=>{
                         this.authService.logout();
-                        return false
-                    }, 1000)
+                        return false;
                 }
                 return true
             }),

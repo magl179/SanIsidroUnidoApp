@@ -118,9 +118,7 @@ export class RequestMembershipPage implements OnInit {
             this.authService.saveLocalStorageInfo(token, token_decoded);
             this.messageService.showSuccess(res.message);
             this.formSended = true;
-            setTimeout(() => {
-                this.closeModal();
-            }, 150);
+            this.closeModal();
         }, (error_http: HttpErrorResponse) => {
             this.formSended = false;
             this.errorService.manageHttpError(error_http, 'La solicitud no ha podido ser enviada');

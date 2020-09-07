@@ -89,7 +89,7 @@ export class SingleMapComponent implements OnInit {
 
         setTimeout(() => {
             this.map.fitBounds([leafletLatLng]);
-        }, 1000);
+        }, 800);
     }
 
     // Cuando se lance el evento click en la plantilla llamaremos a este método

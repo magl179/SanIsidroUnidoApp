@@ -14,7 +14,7 @@ export class LocalizationInfoComponent implements OnInit {
     constructor(
         private localizationService: LocalizationService,
         private platform: Platform
-        ) { }
+    ) { }
 
     async ngOnInit() {
         await this.checkGPSEnable();
@@ -25,12 +25,10 @@ export class LocalizationInfoComponent implements OnInit {
         this.isGPSEnabled = (coords) ? true : false;
     }
 
-    openSwitchLocation(){
-        if(this.platform.is('cordova')){
+    openSwitchLocation() {
+        if (this.platform.is('cordova')) {
             this.localizationService.openLocalizationSettings();
-            setTimeout(async()=>{
-                this.isGPSEnabled = true;
-            }, 1000);
+            this.isGPSEnabled = true;
         }
     }
 

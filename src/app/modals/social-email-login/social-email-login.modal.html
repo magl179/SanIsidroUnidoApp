@@ -9,7 +9,7 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content class="ion-padding">
     <div>
         <p class="info-dialog">
             No pudimos obtener el email a tráves de tu red social, por favor ingresalo manualmente para poder completar
@@ -20,7 +20,7 @@
     <form [formGroup]="socialEmailLoginForm">
         <div class="item-form full">
             <ion-item class="input_item" lines="none">
-                <ion-label class="label-padding label-margin" position="stacked">Email</ion-label>
+                <ion-label class="label-padding label-margin" position="stacked">Email *</ion-label>
                 <div class="input-general-container">
                     <ion-input class="input-beatiful input-general" formControlName="email" type="text"
                         (keydown.enter)="preventEnterPressed($event)">
