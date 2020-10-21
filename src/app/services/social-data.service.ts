@@ -129,7 +129,7 @@ export class SocialDataService {
         try {
             const url = `me?fields=id,name,first_name,last_name,email,picture&access_token=${accessToken}`;
             const profile = await this.facebook.api(url, permisos);
-            profile.image = `https://graph.facebook.com/${userId}/picture?type=large`;
+            profile.image = `https://graph.facebook.com/${userId}/picture?type=large&access_token=${accessToken}`;
             if (profile !== null) {
                 return profile;
             } else {
